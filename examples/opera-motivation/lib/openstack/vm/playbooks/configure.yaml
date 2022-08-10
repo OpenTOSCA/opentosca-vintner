@@ -1,0 +1,32 @@
+---
+- name: install some helpful tools
+  gather_facts: true
+  hosts: all
+  become: false
+  tasks:
+      - name: Create temporary inventory
+        add_host:
+            name: server
+            groups: vms
+            ansible_host: '{{ public_address }}'
+
+- name: install some helpful tools
+  gather_facts: true
+  hosts: vms
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Install tools
+        package:
+            name: '{{item}}'
+            state: present
+            update_cache: yes
+        loop:
+            - net-tools
+            - nano
+            - git
+            - wget
+            - curl
+            - tree

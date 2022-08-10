@@ -1,0 +1,130 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    node.runtime:
+        derived_from: tosca.nodes.SoftwareComponent
+        properties:
+            env_type:
+                type: string
+                default: local
+            ssh_user:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::ssh_user'}
+            ssh_key_file:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::ssh_key_file'}
+            public_address:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [node.application]
+        interfaces:
+            Standard:
+                create:
+                    implementation: >
+                        ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} 'curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -' &&
+                        ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} 'sudo apt-get install -y nodejs' &&
+                        ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} 'sudo mkdir -p /var/lib/node-applications' &&
+                        ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} 'sudo npm install pm2@latest -g'
+
+    node.application:
+        derived_from: tosca.nodes.Root
+        properties:
+            env_type:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::env_type'}
+
+            application_name:
+                type: string
+
+            application_directory:
+                type: string
+                required: false
+                default: {concat: ['/var/lib/node-applications/', {get_property: [SELF, application_name]}]}
+
+            DB_DIALECT:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_dialect'}
+
+            DB_NAME:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+
+            DB_USERNAME:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::user'}
+
+            DB_PASSWORD:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::password'}
+
+            DB_ADDRESS:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::public_address'}
+
+            vm_ssh_user:
+                type: string
+
+            vm_ssh_key_file:
+                type: string
+
+            vm_public_address:
+                type: string
+
+            gcp_service_account_file:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+            - database:
+                  capability: tosca.capabilities.Endpoint.Database
+                  relationship: tosca.relationships.ConnectsTo
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation: |
+                            if [ "{{ SELF.env_type }}" = "gcp" ];
+                            then gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} &&
+
+                                TMP_DIR=/tmp/$(date +%s) &&
+                                echo TMP_DIR $TMP_DIR &&
+                                mkdir $TMP_DIR &&
+
+                                tar -zxvf {{ 'project' | get_dir }}/ensemble/files/application.tar.gz --directory $TMP_DIR &&
+
+                                echo APP_YAML $TMP_DIR/app.yaml &&
+                                echo 'runtime: nodejs14' >> $TMP_DIR/app.yaml &&
+                                echo 'service: {{ SELF.application_name }}' >> $TMP_DIR/app.yaml &&
+                                echo 'env_variables:' >> $TMP_DIR/app.yaml &&
+                                echo '  DB_DIALECT: {{ SELF.DB_DIALECT }}' >> $TMP_DIR/app.yaml &&
+                                echo '  DB_NAME: {{ SELF.DB_NAME }}' >> $TMP_DIR/app.yaml &&
+                                echo '  DB_USERNAME: {{ SELF.DB_USERNAME }}' >> $TMP_DIR/app.yaml &&
+                                echo '  DB_PASSWORD: {{ SELF.DB_PASSWORD }}' >> $TMP_DIR/app.yaml &&
+                                echo '  DB_ADDRESS: {{ SELF.DB_ADDRESS }}' >> $TMP_DIR/app.yaml &&
+
+                                gcloud app deploy $TMP_DIR --quiet;
+
+                            elif [ "{{ SELF.env_type}}" = "local" ];
+                            then
+                                scp -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ 'project' | get_dir }}/ensemble/files/application.tar.gz {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }}:/tmp  &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'sudo mkdir -p {{ SELF.application_directory }} && sudo tar -zxvf /tmp/application.tar.gz --directory {{ SELF.application_directory }}' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "export DB_DIALECT={{ SELF.DB_DIALECT }}" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "export DB_NAME={{ SELF.DB_NAME }}" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "export DB_USERNAME={{ SELF.DB_USERNAME }}" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "export DB_PASSWORD={{ SELF.DB_PASSWORD }}" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "export DB_ADDRESS={{ SELF.DB_ADDRESS }}" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'echo "npm start" | sudo tee -a {{ SELF.application_directory }}/start.sh' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'cd {{ SELF.application_directory }} && sudo npm install --unsafe-perm' &&
+                                ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} 'cd {{ SELF.application_directory }} && sudo pm2 start --name {{ SELF.application_name }} start.sh';
+
+                            else
+                                echo {{SELF.env_type}} is not a valid env_type &&
+                                exit 1;
+                            fi

@@ -1,0 +1,10 @@
+---
+- name: Delete GCP Cloud SQL Instance
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }}'
+
+      - name: Delete Instnace
+        shell: 'gcloud sql instances delete {{ instance_name }} --quiet'

@@ -1,0 +1,36 @@
+# Allow any assets
+!docs/docs/assets
+
+# IDE
+.idea
+.code
+
+# env
+.env*
+
+# typescript
+build
+node_modules
+yarn-error.log
+.DS_STORE
+
+# opera
+*.opera
+
+# docs
+docs/site
+docs/__pycache__
+
+# examples
+*inputs.yaml
+*inputs.yml
+
+# python virtual environments
+*.venv
+
+# binaries
+dist
+
+# tests
+!tests/tmp/.gitkeep
+tests/tmp

@@ -1,0 +1,39 @@
+/**
+ * Tables Full Width
+ */
+.md-typeset__table {
+    min-width: 100%;
+}
+
+.md-typeset table:not([class]) {
+    display: table;
+}
+
+
+/**
+ * Checkmark Color
+ */
+/*
+.md-typeset [type=checkbox]:checked+.task-list-indicator:before {
+    background-color: var(--md-accent-fg-color);
+}
+*/
+
+/**
+ * Code Blocks Full Width in Content Tabs on Mobile
+ * See https://github.com/squidfunk/mkdocs-material/issues/4072
+ */
+@media (max-width: 720px) {
+    .md-typeset .tabbed-block code {
+        margin: 0 -0.8rem;
+    }
+}
+
+.shadow {
+    filter: drop-shadow(0 0.2rem 0.25rem rgba(0, 0, 0, 0.2))
+}
+
+/* Disable Navbar Shadow */
+.md-header {
+    box-shadow: none;
+}

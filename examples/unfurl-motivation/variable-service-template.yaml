@@ -1,0 +1,169 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+imports:
+    - lib/gcp.yaml
+    - lib/node.yaml
+    - lib/openstack.yaml
+    - lib/sqlite.yaml
+
+topology_template:
+    inputs:
+        release:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        db_password:
+            type: string
+
+        vm_network:
+            type: string
+
+        vm_security_group:
+            type: string
+
+        vm_key_name:
+            type: string
+
+        vm_ssh_user:
+            type: string
+
+        vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    variability:
+        inputs:
+            mode:
+                type: string
+
+        presets:
+            dev:
+                name: Development
+                description: Deploy the application on a private cloud
+                inputs:
+                    mode: dev
+            prod:
+                name: Production
+                description: Deploy the application on a public cloud
+                inputs:
+                    mode: prod
+
+        expressions:
+            is_dev: {equal: [{get_variability_input: mode}, dev]}
+            is_prod: {equal: [{get_variability_input: mode}, prod]}
+
+    node_templates:
+        application:
+            type: node.application
+            properties:
+                application_name: application
+                vm_ssh_user: {get_input: vm_ssh_user}
+                vm_ssh_key_file: {get_input: vm_ssh_key_file}
+                vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+            requirements:
+                - host:
+                      node: dev_runtime
+                      conditions: {get_variability_expression: is_dev}
+                - host:
+                      node: prod_runtime
+                      conditions: {get_variability_expression: is_prod}
+                - database:
+                      node: dev_database
+                      conditions: {get_variability_expression: is_dev}
+                - database:
+                      node: prod_database
+                      conditions: {get_variability_expression: is_prod}
+
+        prod_runtime:
+            type: gcp.appengine.engine
+            conditions: {get_variability_expression: is_prod}
+            requirements:
+                - host: gcp
+
+        prod_database:
+            type: gcp.sql.db
+            conditions: {get_variability_expression: is_prod}
+            properties:
+                user: {eval: '.::.requirements::[.name=host]::.target::user'}
+                password: {eval: '.::.requirements::[.name=host]::.target::password'}
+            requirements:
+                - host: prod_dbms
+
+        prod_dbms:
+            type: gcp.sql.dbms
+            conditions: {get_variability_expression: is_prod}
+            properties:
+                instance_name: {concat: [{get_input: release}, '-', dbms]}
+                password: {get_input: db_password}
+            requirements:
+                - host: gcp
+
+        gcp:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}
+
+        dev_runtime:
+            type: node.runtime
+            conditions: {get_variability_expression: is_dev}
+            requirements:
+                - host: dev_vm
+
+        dev_database:
+            type: sqlite.db
+            conditions: {get_variability_expression: is_dev}
+            properties:
+                database_name: {concat: [{get_input: release}, '-', db]}
+            requirements:
+                - host: dev_vm
+
+        dev_vm:
+            type: openstack.vm
+            conditions: {get_variability_expression: is_dev}
+            properties:
+                port: 80
+                instance_name: {concat: [{get_input: release}, '-', private-vm]}
+                network: {get_input: vm_network}
+                security_group: {get_input: vm_security_group}
+                key_name: {get_input: vm_key_name}
+                ssh_user: {get_input: vm_ssh_user}
+                ssh_key_file: {get_input: vm_ssh_key_file}
+            requirements:
+                - host: os
+
+        os:
+            type: openstack.provider
+            properties:
+                region_name: {get_input: os_region_name}
+                auth_type: {get_input: os_auth_type}
+                auth_url: {get_input: os_auth_url}
+                identity_api_version: {get_input: os_identity_api_version}
+                interface: {get_input: os_interface}
+                application_credential_id: {get_input: os_application_credential_id}
+                application_credential_secret: {get_input: os_application_credential_secret}

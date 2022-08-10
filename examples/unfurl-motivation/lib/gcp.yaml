@@ -1,0 +1,160 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    gcp.provider:
+        derived_from: tosca.nodes.Root
+        properties:
+            region:
+                type: string
+
+            service_account_file:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [gcp.sql.dbms, gcp.appengine.engine]
+        interfaces:
+            Standard:
+                create: echo dummy
+
+    gcp.sql.dbms:
+        derived_from: tosca.nodes.Root
+        properties:
+            instance_name:
+                type: string
+
+            instance_tier:
+                type: string
+                default: db-f1-micro
+
+            database_version:
+                type: string
+                default: MYSQL_5_7
+
+            password:
+                type: string
+
+            user:
+                type: string
+                default: root
+
+            authorized_networks:
+                type: string
+                default: '0.0.0.0/0'
+
+            region:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::region'}
+
+            service_account_file:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
+
+        attributes:
+            public_address:
+                type: string
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [gcp.sql.db]
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Standard:
+                create:
+                    implementation: >
+                        gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }} &&
+                        gcloud services enable sqladmin.googleapis.com >/dev/null &&
+                        gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --async --format=json | gcloud beta sql operations wait $(jq --raw-output '.name') >/dev/null &&
+                        gcloud sql users set-password root --host=% --instance {{ SELF.instance_name }} --password {{ SELF.password }} >/dev/null &&
+                        gcloud sql instances describe {{ SELF.instance_name }} --format=json
+                    inputs:
+                        resultTemplate:
+                            attributes:
+                                public_address: '{{ (stdout | from_json).ipAddresses[0].ipAddress }}'
+                delete:
+                    implementation: |
+                        gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} &&
+                        gcloud sql instances delete {{ SELF.instance_name }} --quiet
+
+    gcp.sql.db:
+        derived_from: tosca.nodes.Root
+        properties:
+            database_name:
+                type: string
+                default: db
+
+            database_dialect:
+                type: string
+                default: mysql
+
+            instance_name:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::instance_name'}
+
+            public_address:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+
+            service_account_file:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
+
+        capabilities:
+            database:
+                type: tosca.capabilities.Endpoint.Database
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Standard:
+                create:
+                    implementation: >
+                        gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} &&
+                        gcloud sql databases create {{ SELF.database_name }} --instance {{ SELF.instance_name }}
+                not_delete:
+                    implementation: >
+                        gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} &&
+                        gcloud sql databases delete {{ SELF.database_name }} --instance {{ SELF.instance_name }}
+
+    gcp.appengine.engine:
+        derived_from: tosca.nodes.Root
+        properties:
+            env_type:
+                type: string
+                default: gcp
+
+            region:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::region'}
+
+            service_account_file:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation: >
+                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} &&
+                            gcloud services enable cloudbuild.googleapis.com || true &&
+                            gcloud services enable appengine.googleapis.com || true &&
+                            gcloud app create --region {{ SELF.region }} || true

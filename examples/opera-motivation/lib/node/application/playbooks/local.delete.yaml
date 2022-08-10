@@ -1,0 +1,16 @@
+---
+- name: delete node application
+  gather_facts: false
+  hosts: all
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: stop node applicaiton
+        shell: 'pm2 delete {{ application_name }}'
+
+      - name: remove application directory
+        file:
+            dest: '{{ application_directory }}'
+            state: absent

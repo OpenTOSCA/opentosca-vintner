@@ -1,0 +1,6 @@
+---
+- import_playbook: gcp.create.yaml
+  when: env_type == "gcp"
+
+- import_playbook: local.create.yaml
+  when: env_type == "local"

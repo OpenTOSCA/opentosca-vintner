@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+      - name: Remove file
+        file:
+            path: /tmp/vintner-getting-started.txt
+            state: absent

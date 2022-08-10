@@ -1,0 +1,42 @@
+---
+- name: create node application
+  gather_facts: false
+  hosts: all
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Create application directory
+        file:
+            path: '{{ application_directory }}'
+            state: directory
+
+      - name: Extract deployment artifact in application directory
+        unarchive:
+            src: '{{ artifact_file }}'
+            dest: '{{ application_directory }}'
+
+      - name: install
+        shell: 'sudo npm install'
+        args:
+            chdir: '{{ application_directory }}'
+
+      - name: create .env file
+        copy:
+            dest: '{{ application_directory }}/env.sh'
+            content: ''
+            mode: a+x
+
+      - name: configure env .env file
+        lineinfile:
+            dest: '{{ application_directory }}/env.sh'
+            state: present
+            line: 'export {{ item.key }}={{ item.value }}'
+        loop: '{{ application_environment | dict2items  }}'
+
+      - name: start node application
+        shell: 'source env.sh && pm2 start --name {{ application_name }} "npm start"'
+        args:
+            chdir: '{{ application_directory }}'
+            executable: /bin/bash

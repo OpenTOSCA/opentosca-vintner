@@ -1,0 +1,54 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    sqlite.db:
+        derived_from: tosca.nodes.Root
+        properties:
+            database_name:
+                type: string
+
+            database_dialect:
+                type: string
+                default: sqlite
+
+            database_file:
+                type: string
+                default: {concat: ['/var/lib/sqlite-databases/', {get_property: [SELF, database_name]}, '.db']}
+
+            public_address:
+                type: string
+                default: {get_property: [SELF, database_file]}
+
+            ssh_user:
+                type: string
+                default: {get_property: [SELF, host, ssh_user]}
+
+            ssh_key_file:
+                type: string
+                default: {get_property: [SELF, host, ssh_key_file]}
+
+        capabilities:
+            database:
+                type: tosca.capabilities.Endpoint.Database
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Standard:
+                inputs:
+                    database_name:
+                        type: string
+                        value: {get_property: [SELF, database_name]}
+
+                    database_file:
+                        type: string
+                        value: {get_property: [SELF, database_file]}
+
+                    ssh_user: {value: {get_property: [SELF, ssh_user]}, type: string}
+                    ssh_key_file: {value: {get_property: [SELF, ssh_key_file]}, type: string}
+
+                operations:
+                    create: db/playbooks/create.yaml

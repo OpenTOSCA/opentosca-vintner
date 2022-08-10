@@ -1,0 +1,20 @@
+release: abcdefghijklmnopqr
+
+gcp_region: europe-west3
+gcp_service_account_file: /home/stoetzms/opera/service-account.json
+
+db_password: hallo
+
+vm_network: public-belwue
+vm_security_groups: default
+vm_key_name: default
+vm_ssh_user: ubuntu
+vm_ssh_key_file: /home/stoetzms/.ssh/bwcloud-default
+
+os_auth_type: v3applicationcredential
+os_auth_url: https://idm02.bw-cloud.org:5000/v3
+os_identity_api_version: '3'
+os_region_name: Mannheim
+os_interface: public
+os_application_credential_id: '******'
+os_application_credential_secret: '******'

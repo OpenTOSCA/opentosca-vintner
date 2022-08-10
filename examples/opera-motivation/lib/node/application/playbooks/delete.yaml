@@ -1,0 +1,6 @@
+---
+- import_playbook: gcp.delete.yaml
+  when: env_type == "gcp"
+
+- import_playbook: local.delete.yaml
+  when: env_type == "local"

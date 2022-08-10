@@ -1,0 +1,5 @@
+dist
+build
+docs/docs/assets
+node_modules
+docs/docs/javascripts

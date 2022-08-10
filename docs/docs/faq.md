@@ -1,0 +1,10 @@
+# FAQ 
+
+## Is Vintner an Orchestrator? 
+
+No, Vintner is not an orchestrator.
+But it is possible to deploy application using orchestrator plugins.
+
+## Under which license is Vintner available?
+
+This project is licensed under [Apache-2.0](https://opensource.org/licenses/Apache-2.0){target=_blank}.

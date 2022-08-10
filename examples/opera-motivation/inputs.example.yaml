@@ -1,0 +1,21 @@
+release: abcdefgh
+
+gcp_region: europe-west3
+gcp_service_account_file: '***********************'
+
+root_password: some-secret
+
+private_vm_network: public-belwue
+private_vm_security_groups: default
+private_vm_key_name: default
+
+private_vm_ssh_user: ubuntu
+private_vm_ssh_key_file: '***********************'
+
+os_auth_type: v3applicationcredential
+os_auth_url: https://idm02.bw-cloud.org:5000/v3
+os_identity_api_version: '3'
+os_region_name: Mannheim
+os_interface: public
+os_application_credential_id: '***********************'
+os_application_credential_secret: '***********************'

@@ -1,0 +1,33 @@
+---
+- name: Create GCP Cloud SQL Instance
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }}'
+
+      # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
+      - name: Enable Cloud SQL Admin API
+        shell: 'gcloud services enable sqladmin.googleapis.com'
+
+      # https://cloud.google.com/sql/docs/mysql/create-instance
+      - name: Create Instance
+        shell: 'gcloud sql instances create {{ instance_name }} --tier {{ instance_tier }} --region {{ region }} --database-version={{ database_version }} --authorized-networks {{ authorized_networks }} --async'
+        register: create_command
+
+      - name: Wait until instance is created
+        shell: 'gcloud beta sql operations wait {{ (create_command.stdout | from_yaml).name }}'
+
+      # https://cloud.google.com/sql/docs/mysql/create-instance
+      - name: Set Root Password
+        shell: 'gcloud sql users set-password root --host=% --instance {{ instance_name }} --password {{ root_password }}'
+
+      # https://cloud.google.com/sdk/gcloud/reference/sql/instances/describe
+      - name: Get Instance Information
+        shell: 'gcloud sql instances describe {{ instance_name }}'
+        register: instance_info
+
+      - name: Set Attributes
+        set_stats:
+            data:
+                public_address: '{{ (instance_info.stdout | from_yaml).ipAddresses[0].ipAddress }}'

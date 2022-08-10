@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "target": "ES2021",
+        "moduleResolution": "node",
+        "module": "CommonJS"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}

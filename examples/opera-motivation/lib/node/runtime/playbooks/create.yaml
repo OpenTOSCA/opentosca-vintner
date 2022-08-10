@@ -1,0 +1,29 @@
+---
+- name: create nodejs
+  gather_facts: true
+  hosts: all
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: download install script
+        get_url:
+            url: https://deb.nodesource.com/setup_14.x
+            dest: /tmp/nodesource_setup.sh
+            mode: a+x
+
+      - name: setup source
+        shell: bash /tmp/nodesource_setup.sh
+
+      - name: install package
+        apt:
+            name: nodejs
+
+      - name: Create applications directory
+        file:
+            path: /var/lib/node-applications/
+            state: directory
+
+      - name: Install pm2
+        shell: npm install pm2@latest -g

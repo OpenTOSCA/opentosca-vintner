@@ -1,0 +1,119 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    node.runtime:
+        derived_from: tosca.nodes.SoftwareComponent
+        properties:
+            env_type:
+                type: string
+                default: local
+            ssh_user:
+                type: string
+                description: The username that will be used to connect to the created VM
+                default: {get_property: [SELF, host, ssh_user]}
+            ssh_key_file:
+                type: string
+                description: Path to the local SSH private key file that will be used for the ssh connection to the VM
+                default: {get_property: [SELF, host, ssh_key_file]}
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [node.application]
+        interfaces:
+            Standard:
+                type: tosca.interfaces.node.lifecycle.Standard
+                inputs:
+                    ssh_user: {value: {get_property: [SELF, ssh_user]}, type: string}
+                    ssh_key_file: {value: {get_property: [SELF, ssh_key_file]}, type: string}
+                operations:
+                    create: runtime/playbooks/create.yaml
+
+    node.application:
+        derived_from: tosca.nodes.Root
+        properties:
+            application_name:
+                type: string
+
+            application_directory:
+                type: string
+                required: false
+                default: {concat: ['/var/lib/node-applications/', {get_property: [SELF, application_name]}]}
+
+            application_environment:
+                type: tosca.datatypes.json
+
+            artifact_file:
+                type: string
+                default: {get_artifact: [SELF, artifact_file]}
+
+            vm_ssh_user:
+                type: string
+
+            vm_ssh_key_file:
+                type: string
+
+            gcp_service_account_file:
+                type: string
+
+        attributes:
+            public_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+            - database:
+                  capability: tosca.capabilities.Endpoint.Database
+                  relationship: tosca.relationships.ConnectsTo
+
+        interfaces:
+            Standard:
+                inputs:
+                    env_type:
+                        type: string
+                        value: {get_property: [SELF, host, env_type]}
+
+                    application_name:
+                        type: string
+                        value: {get_property: [SELF, application_name]}
+
+                    application_directory:
+                        type: string
+                        value: {get_property: [SELF, application_directory]}
+
+                    artifact_file:
+                        type: string
+                        default: {get_property: [SELF, artifact_file]}
+
+                    application_environment:
+                        type: string
+                        default: {get_property: [SELF, application_environment]}
+
+                    ssh_user:
+                        type: string
+                        value: {get_property: [SELF, vm_ssh_user]}
+
+                    ssh_key_file:
+                        type: string
+                        value: {get_property: [SELF, vm_ssh_key_file]}
+
+                    gcp_service_account_file:
+                        type: string
+                        value: {get_property: [SELF, gcp_service_account_file]}
+
+                operations:
+                    create:
+                        implementation:
+                            primary: application/playbooks/create.yaml
+                            dependencies:
+                                - application/playbooks/files/app.yaml.j2
+                                - application/playbooks/gcp.create.yaml
+                                - application/playbooks/local.create.yaml
+                    delete:
+                        implementation:
+                            primary: application/playbooks/delete.yaml
+                            dependencies:
+                                - application/playbooks/gcp.delete.yaml
+                                - application/playbooks/local.delete.yaml
