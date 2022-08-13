@@ -16,11 +16,11 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
-export function firstValue<K, V>(map: {[key: string]: V}): V {
+export function firstValue<K, V>(map: { [key: string]: V }): V {
     return Object.values(map).values().next().value
 }
 
-export function firstKey<K, V>(map: {[key: string]: V}): string {
+export function firstKey<K, V>(map: { [key: string]: V }): string {
     return Object.keys(map).values().next().value
 }
 
@@ -48,4 +48,32 @@ export function joinNotNull(array: string[], separator: string) {
 
 export function filterNotNull(array: any[]) {
     return array.filter(x => x !== undefined && x !== null)
+}
+
+export function prettyBytes(bytes?: number) {
+    if (bytes === undefined) return
+    const kb = bytes / 1000
+    const mb = kb / 1000
+    return kb > 1000 ? `${prettyNumber(mb)} mb` : `${prettyNumber(Math.round(kb))} kb`
+}
+
+export function prettyMilliseconds(ms?: number) {
+    if (ms === undefined) return
+    const s = ms / 1000
+    return ms > 1000 ? `${s.toFixed(3)} s` : `${ms.toFixed(3)} ms`
+}
+
+export function prettyNumber(number?: number) {
+    if (number === undefined) return
+    if (Number.isInteger(number)) return number.toLocaleString('en')
+    return number.toLocaleString('en', {maximumFractionDigits: 3, minimumFractionDigits: 3})
+}
+
+export function getMedianFromSorted(array: number[]) {
+    const mid = Math.floor(array.length / 2)
+    return array.length % 2 ? array[mid] : (array[mid] + array[mid - 1]) / 2
+}
+
+export function toBoolean(data: string | boolean) {
+    return data === 'true' || data === true
 }

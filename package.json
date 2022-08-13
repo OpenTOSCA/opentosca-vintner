@@ -62,7 +62,7 @@
         "test": "yarn test:local",
         "test:local": "mocha --require ts-node/register tests/**/*.ts",
         "test:docker": "docker build .",
-        "benchmark": "yarn ts-node tests/benchmark.ts",
+        "benchmark": "yarn cli setup benchmark",
         "server:start": "node -r dotenv/config -r ts-node/register src/cli/index.ts server start",
         "server:serve": "nodemon -r dotenv/config --ext \"ts,json\" src/cli/index.ts server start",
         "docs:install": "cd docs && pip install -r requirements.txt",
