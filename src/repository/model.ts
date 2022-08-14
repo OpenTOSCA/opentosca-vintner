@@ -197,6 +197,16 @@ export class Model {
             )
         }
 
+        if (validator.hasProperty(condition, 'implies')) {
+            const first = this.evaluateVariabilityConditionRunner(condition.implies[0])
+            validator.ensureBoolean(first)
+
+            const second = this.evaluateVariabilityConditionRunner(condition.implies[1])
+            validator.ensureBoolean(first)
+
+            return first ? second : true
+        }
+
         if (validator.hasProperty(condition, 'add')) {
             return condition.add.reduce((sum: number, element) => {
                 const value = this.evaluateVariabilityConditionRunner(element)

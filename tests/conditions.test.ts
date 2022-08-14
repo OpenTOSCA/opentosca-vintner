@@ -101,6 +101,30 @@ it('xor: all true -> false', () => {
     expect(result).to.equal(false)
 })
 
+it('implies: all true -> true', () => {
+    const model = new Model({} as any)
+    const result = model.evaluateVariabilityConditionRunner({implies: [true, true]})
+    expect(result).to.equal(true)
+})
+
+it('implies: left true and right false -> false', () => {
+    const model = new Model({} as any)
+    const result = model.evaluateVariabilityConditionRunner({implies: [true, false]})
+    expect(result).to.equal(false)
+})
+
+it('implies: left false and right false -> true', () => {
+    const model = new Model({} as any)
+    const result = model.evaluateVariabilityConditionRunner({implies: [false, false]})
+    expect(result).to.equal(true)
+})
+
+it('implies: left false and right true -> true', () => {
+    const model = new Model({} as any)
+    const result = model.evaluateVariabilityConditionRunner({implies: [false, true]})
+    expect(result).to.equal(true)
+})
+
 it('add: correct -> true', () => {
     const model = new Model({} as any)
     const result = model.evaluateVariabilityConditionRunner({add: [10, 1, 1, 1, 1, 1]})
