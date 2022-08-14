@@ -69,6 +69,41 @@ opens the home directory
     ```
 
 
+## setup benchmark
+
+benchmarks the variability resolver
+
+=== "CLI"
+    ```shell
+    vintner setup benchmark 
+    ```
+=== "cURL"
+    ```shell
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/benchmark
+    ```
+
+=== "JavaScript"
+    ```javascript
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/benchmark")
+    ```
+
+=== "Python"
+    ```python
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/benchmark")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| no-io |  false  | boolean | disable read and writes to the filesystem |
+| seeds |  false  | numbers... | seed for generating service templates (default: [10,250,500,1000,2500,5000,10000]) |
+| runs |  false  | number | number of measurements for each test (default: 10) |
+| latex |  false  | boolean | plot results as latex (default: false) |
+| markdown |  false  | boolean | plot results as markdown (default: false) |
+
 ## orchestrators enable
 
 enables an orchestrator plugin

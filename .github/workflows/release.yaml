@@ -36,7 +36,7 @@ jobs:
               run: yarn licenses:check
 
             - name: (TEST) Run Tests
-              run: yarn test:local
+              run: yarn test
 
             - name: (BUILD) Build Project
               run: yarn build
@@ -108,5 +108,5 @@ jobs:
             - name: (DOCS) Generate Interface Page
               run: yarn interface:generate
 
-            - name: (DOCS) Deploy GitHub Pages
-              run: cd docs && mkdocs gh-deploy --force
+            - name: (DOCS) Deploy Docs
+              run: yarn docs:deploy
