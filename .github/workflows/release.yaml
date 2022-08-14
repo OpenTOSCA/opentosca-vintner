@@ -30,7 +30,7 @@ jobs:
               run: yarn lint:check
 
             - name: (TEST) Check Prettier
-              run: yarn pretty:check
+              run: yarn style:check
 
             - name: (TEST) Check Licenses
               run: yarn licenses:check
