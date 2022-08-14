@@ -154,12 +154,13 @@ example_group:
 
 The following _Boolean Operators_ can be used inside a _Variability Expression_.
 
-| Keyname | Input                   | Output  | Description |
-| ------- | ----------------------- | ------- |--|
-| and     | List(BooleanExpression) | Boolean | Evaluates if all values are `true`. |
-| or      | List(BooleanExpression) | Boolean | Evaluates if at least one value is `true`. |
-| not     | BooleanExpression       | Boolean | Negates the given value.  |
-| xor     | List(BooleanExpression) | Boolean | Evaluates if exactly one value is `true`.  |
+| Keyname | Input                   | Output  | Description                                        |
+| ------- | ----------------------- | ------- |----------------------------------------------------|
+| and     | List(BooleanExpression) | Boolean | Evaluates if all values are `true`.                |
+| or      | List(BooleanExpression) | Boolean | Evaluates if at least one value is `true`.         |
+| not     | BooleanExpression       | Boolean | Negates the given value.                           |
+| xor     | List(BooleanExpression) | Boolean | Evaluates if exactly one value is `true`.          |
+| implies | Tuple(BooleanExpression, BoolenExpression) | Boolean | Evaluates if first value implies the second value. |
 
 ## Arithmetic Operators
 

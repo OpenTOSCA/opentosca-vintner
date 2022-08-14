@@ -28,6 +28,7 @@ export type VariabilityExpression =
           or?: VariabilityExpression[]
           not?: VariabilityExpression
           xor?: VariabilityExpression[]
+          implies?: [VariabilityExpression, VariabilityExpression]
 
           // Arithmetic operators
           add?: VariabilityExpression[]
