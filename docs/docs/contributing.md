@@ -1,7 +1,7 @@
 # Contributing
 
 Contributions are very much welcome. 
-But please follow our guidelines.
+But please follow our guidelines and read the [development guidelines]({{ fix_url('development')}}){target=_blank}.
 
 ## Branch Naming Convention
 
@@ -11,6 +11,11 @@ Branches should be names as follows
 - `feature/short-title` for features
 - `refactor/short-title` for refactoring
 - `project/short-title` for thesis, EnPro or StuPro
+
+
+## Squash and Merge
+
+Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
 
 ## Signed Commits
 
