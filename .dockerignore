@@ -1,2 +1,4 @@
 node_modules
 Dockerfile
+docs/site
+docs/__pycache__
