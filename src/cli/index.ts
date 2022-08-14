@@ -3,7 +3,7 @@ import hae from './hae'
 import config from './config'
 import Controller from '../controller'
 import * as files from '../utils/files'
-import {toBoolean} from "../utils/utils";
+import {toBoolean} from '../utils/utils'
 
 const program = new Command()
 
@@ -42,16 +42,17 @@ setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
     .option('--no-io', 'disable read and writes to the filesystem')
-    .addOption(new Option('--seeds [numbers...]', 'seed for generating service templates').default([10, 250, 500, 1000, 2500, 5000, 10000]))
+    .addOption(
+        new Option('--seeds [numbers...]', 'seed for generating service templates').default([
+            10, 250, 500, 1000, 2500, 5000, 10000,
+        ])
+    )
     .addOption(new Option('--runs [number]', 'number of measurements for each test').default(10))
     .option('--latex', 'plot results as latex', false)
     .option('--markdown', 'plot results as markdown', false)
     .action(
         hae(async options => {
-            await Controller.setup.benchmark({
-                ...options,
-                ios: options.io ? [false, true] : [false],
-            })
+            await Controller.setup.benchmark(options)
         })
     )
 

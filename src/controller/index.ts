@@ -21,7 +21,7 @@ import openInstance from './instances/open'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
-import benchmarkSetup from "./setup/benchmark";
+import benchmarkSetup from './setup/benchmark'
 
 const Controller = {
     instances: {

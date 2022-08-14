@@ -188,19 +188,19 @@ To fix lint problems, run the following command
 yarn lint:fix
 ```
 
-## Pretty
+## Codestyle
 
 [Prettier](https://prettier.io){target=_blank} is used to format code.
 To prettify typescript, run the following command
 
 ```
-yarn pretty:check
+yarn style:check
 ```
 
 To fix pretty problems, run the following command
 
 ```
-yarn pretty:fix
+yarn style:fix
 ```
 
 ## Licenses

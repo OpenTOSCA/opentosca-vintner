@@ -1,14 +1,13 @@
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from "../../specification/service-template";
-import {Model} from "../../repository/model";
-import {countLines, getSize, loadFile, storeFile, temporaryFile} from "../../utils/files";
-import {getMedianFromSorted, prettyBytes, prettyMilliseconds, prettyNumber} from "../../utils/utils";
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
+import {Model} from '../../repository/model'
+import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
+import {getMedianFromSorted, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
 
 type BenchmarkArguments = {
     io: boolean
-    ios: boolean[],
-    seeds: number[],
-    runs: number,
-    latex: boolean,
+    seeds: number[]
+    runs: number
+    latex: boolean
     markdown: boolean
 }
 
@@ -24,8 +23,7 @@ type Result = {
 
 type Results = Result[]
 
-export default async function(options: BenchmarkArguments) {
-
+export default async function (options: BenchmarkArguments) {
     console.log('Running benchmark with following options', options)
 
     const benchmark = new Benchmark(options)
@@ -35,11 +33,9 @@ export default async function(options: BenchmarkArguments) {
 
     if (options.markdown) console.log('\n', benchmark.toMarkdown())
     if (options.latex) console.log('\n', benchmark.toLatex())
-
 }
 
 class Benchmark {
-
     private readonly options: BenchmarkArguments
     private results: Results = []
 
@@ -50,7 +46,7 @@ class Benchmark {
     run() {
         this.results = []
 
-        for (const io of this.options.ios) {
+        for (const io of this.options.io ? [false, true] : [false]) {
             for (const seed of this.options.seeds) {
                 const measurements = []
                 const serviceTemplate = this.constructServiceTemplate(seed)
@@ -104,7 +100,6 @@ class Benchmark {
         return this.results
     }
 
-
     constructServiceTemplate(seed: number): ServiceTemplate {
         const serviceTemplate: ServiceTemplate = {
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
@@ -152,7 +147,6 @@ class Benchmark {
         return serviceTemplate
     }
 
-
     getResults() {
         return this.results
     }
@@ -165,17 +159,17 @@ class Benchmark {
         this.results.forEach((result, index) => {
             data.push(
                 '|' +
-                [
-                    index + 1,
-                    result.seed,
-                    result.templates,
-                    result.median,
-                    result.median_per_template,
-                    result.IO,
-                    result.file_size || '',
-                    result.file_lines || '',
-                ].join(' | ') +
-                '|'
+                    [
+                        index + 1,
+                        result.seed,
+                        result.templates,
+                        result.median,
+                        result.median_per_template,
+                        result.IO,
+                        result.file_size || '',
+                        result.file_lines || '',
+                    ].join(' | ') +
+                    '|'
             )
         })
 
@@ -208,5 +202,4 @@ class Benchmark {
 
         return data.join('\n')
     }
-
 }

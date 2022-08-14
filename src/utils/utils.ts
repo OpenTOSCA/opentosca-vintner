@@ -16,11 +16,11 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
-export function firstValue<K, V>(map: { [key: string]: V }): V {
+export function firstValue<K, V>(map: {[key: string]: V}): V {
     return Object.values(map).values().next().value
 }
 
-export function firstKey<K, V>(map: { [key: string]: V }): string {
+export function firstKey<K, V>(map: {[key: string]: V}): string {
     return Object.keys(map).values().next().value
 }
 
