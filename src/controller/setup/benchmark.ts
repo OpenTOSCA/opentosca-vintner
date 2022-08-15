@@ -1,7 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
 import {Model} from '../../repository/model'
 import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
-import {getMedianFromSorted, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
+import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
 
 type BenchmarkArguments = {
     io: boolean
@@ -72,7 +72,7 @@ class Benchmark {
                     if (io) storeFile(output, model.getServiceTemplate())
 
                     const end = process.hrtime(start)
-                    const duration = (end[0] * 1000000000 + end[1]) / 1000000
+                    const duration = hrtime2ms(end)
 
                     if (io) {
                         size = getSize(input)
