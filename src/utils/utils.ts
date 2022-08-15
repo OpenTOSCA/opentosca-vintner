@@ -16,6 +16,11 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
+export function toList<T>(data: T | T[]): T[] {
+    if (Array.isArray(data)) return data
+    return [data]
+}
+
 export function firstValue<K, V>(map: {[key: string]: V}): V {
     return Object.values(map).values().next().value
 }
@@ -38,8 +43,8 @@ export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {
     }
 }
 
-export function deepCopy(obj: any) {
-    return JSON.parse(JSON.stringify(obj))
+export function deepCopy<T>(obj: T): T {
+    return JSON.parse(JSON.stringify(obj)) as T
 }
 
 export function prettyJSON(obj: any) {

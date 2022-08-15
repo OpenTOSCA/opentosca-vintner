@@ -56,6 +56,9 @@ export type VariabilityExpression =
           length?: [VariabilityExpression, VariabilityExpression]
           min_length?: [VariabilityExpression, VariabilityExpression]
           max_length?: [VariabilityExpression, VariabilityExpression]
+
+          // Cache
+          cached_result?: boolean
       }
     | string
     | number

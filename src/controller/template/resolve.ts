@@ -3,6 +3,7 @@ import {Model} from '../../repository/model'
 import {InputAssignmentMap} from '../../specification/topology-template'
 import {Instance} from '../../repository/instances'
 import * as files from '../../utils/files'
+import {VariabilityResolver} from '../../repository/resolver'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -25,22 +26,20 @@ export default async function (options: TemplateResolveArguments) {
     if (!output) throw new Error('Either instance or output must be set')
 
     // Load service template
-    const model = new Model(files.loadFile<ServiceTemplate>(template))
+    const resolver = new VariabilityResolver(files.loadFile<ServiceTemplate>(template))
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
 
     // Ensure correct TOSCA definitions version
-    model.ensureCompatibility()
+    resolver.ensureCompatibility()
 
     // Resolve variability
-    model.resolveVariability()
+    resolver.resolve()
 
     // Check consistency
-    model.checkConsistency()
+    resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
-    model.finalize()
-
-    const service = model.getServiceTemplate()
+    const service = resolver.transform()
     files.storeFile(output, service)
 }

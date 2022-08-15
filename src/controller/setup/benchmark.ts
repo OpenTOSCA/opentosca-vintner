@@ -2,6 +2,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/se
 import {Model} from '../../repository/model'
 import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
+import {VariabilityResolver} from '../../repository/resolver'
 
 type BenchmarkArguments = {
     io?: boolean
@@ -43,13 +44,21 @@ export default async function (options: BenchmarkArguments) {
 
                 if (io) storeFile(input, serviceTemplate)
 
+                /**
                 const model = new Model(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
                     .setVariabilityInputs({mode: 'present'})
                     .resolveVariability()
                     .checkConsistency()
                     .finalize()
+                 **/
 
-                if (io) storeFile(output, model.getServiceTemplate())
+                const result = new VariabilityResolver(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
+                    .setVariabilityInputs({mode: 'present'})
+                    .resolve()
+                    .checkConsistency()
+                    .transform()
+
+                if (io) storeFile(output, result)
 
                 const end = process.hrtime(start)
                 const duration = hrtime2ms(end)
@@ -129,6 +138,7 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
         serviceTemplate.topology_template.relationship_templates[`relationship_${i}_removed`] = {
             type: `relationship_type_${i}_removed`,
         }
+
         serviceTemplate.topology_template.variability.expressions[`condition_${i}_removed`] = {
             equal: [{get_variability_input: 'mode'}, `absent`],
         }
