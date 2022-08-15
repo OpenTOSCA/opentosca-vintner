@@ -42,6 +42,10 @@ export function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
 }
 
+export function prettyJSON(obj: any) {
+    return JSON.stringify(obj, null, 4)
+}
+
 export function joinNotNull(array: string[], separator: string) {
     return filterNotNull(array).join(separator)
 }

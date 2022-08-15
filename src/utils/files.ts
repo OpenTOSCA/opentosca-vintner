@@ -50,6 +50,7 @@ export function storeFile(file: string, data: any | string) {
 
 export function stringify(obj: any) {
     return yaml.dump(obj, {
+        indent: 4,
         styles: {
             '!!null': 'empty',
         },

@@ -22,6 +22,8 @@ export class Model {
         // Check presence of each node (and cleanup)
         for (const name in this.getNodeTemplates()) {
             if (!this.checkNodePresence(name, true)) this.deleteNodeTemplate(name)
+            // TODO: cleanup relationship templates of this specific node?
+            // TODO: conditions on relationship templates?
         }
 
         // Check presence of each relationship (and cleanup)
