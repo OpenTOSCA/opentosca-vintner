@@ -77,3 +77,7 @@ export function getMedianFromSorted(array: number[]) {
 export function toBoolean(data: string | boolean) {
     return data === 'true' || data === true
 }
+
+export function hrtime2ms(data: [number, number]) {
+    return (data[0] * 1000000000 + data[1]) / 1000000
+}
