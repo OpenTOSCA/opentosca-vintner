@@ -140,10 +140,15 @@ export class VariabilityResolver {
                 if (validator.isString(member)) {
                     this.nodesMap[member]?.groups.push(group)
                 } else {
-                    this.nodesMap[member[0]]?.relations.forEach(relation => {
-                        if (relation.name === member[1]) relation.groups.push(group)
-                        return true
-                    })
+                    if (validator.isString(member[1])) {
+                        this.nodesMap[member[0]]?.relations.forEach(relation => {
+                            if (relation.name === member[1]) relation.groups.push(group)
+                        })
+                    }
+
+                    if (validator.isNumber(member[1])) {
+                        this.nodesMap[member[0]]?.relations[member[1]]?.groups.push(group)
+                    }
                 }
             })
         })

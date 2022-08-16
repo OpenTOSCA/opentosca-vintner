@@ -4,4 +4,4 @@
  */
 export type GroupType = {}
 
-export type GroupMember = string | [string, string]
+export type GroupMember = string | [string, string] | [string, number]

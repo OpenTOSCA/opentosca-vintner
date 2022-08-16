@@ -4,7 +4,7 @@ topology_template:
     groups:
         with_conditions:
             type: tosca.groups.Root
-            members: [magic, [magic, magic], [application, magic]]
+            members: [magic, [magic, 0], [application, magic]]
             conditions: false
 
         without_conditions:

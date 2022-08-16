@@ -44,7 +44,9 @@ first:
     properties:
         content: 'First Textfile has been selected!'
     requirements:
-        - host: localhost
+        - host: 
+            node: localhost
+            conditions: {get_variability_expression: is_first}
 
 second:
     type: textfile
@@ -52,7 +54,9 @@ second:
     properties:
         content: 'Second Textfile has been selected!'
     requirements:
-        - host: localhost
+        - host: 
+            node: localhost
+            conditions: {get_variability_expression: is_second}
 ```
 
 We decide that the first textfile should be deployed.
