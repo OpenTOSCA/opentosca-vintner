@@ -1,8 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
-import {Model} from '../../repository/model'
 import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
-import {VariabilityResolver} from '../../repository/resolver'
+import {VariabilityResolver} from '../template/resolve'
 
 type BenchmarkArguments = {
     io?: boolean
@@ -43,14 +42,6 @@ export default async function (options: BenchmarkArguments) {
                 const start = process.hrtime()
 
                 if (io) storeFile(input, serviceTemplate)
-
-                /**
-                const model = new Model(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
-                    .setVariabilityInputs({mode: 'present'})
-                    .resolveVariability()
-                    .checkConsistency()
-                    .finalize()
-                 **/
 
                 const result = new VariabilityResolver(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
                     .setVariabilityInputs({mode: 'present'})
