@@ -47,8 +47,8 @@ export default function (options: TemplateResolveArguments) {
 
 type Element = {
     name: string
-    conditions: VariabilityExpression[]
     present?: boolean
+    conditions: VariabilityExpression[]
     groups: Group[]
 }
 
@@ -223,11 +223,10 @@ export class VariabilityResolver {
             }
 
             // Delete requirement assignment which are not present
-            nodeTemplate.requirements = nodeTemplate.requirements?.filter(map => {
-                const relationName = utils.firstKey(map)
+            nodeTemplate.requirements = nodeTemplate.requirements?.filter((map, index) => {
                 const assignment = utils.firstValue(map)
                 if (!validator.isString(assignment)) delete assignment.conditions
-                return node.relations.find(relation => relation.name === relationName).present
+                return node.relations[index].present
             })
         })
 

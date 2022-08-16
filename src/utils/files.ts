@@ -12,6 +12,14 @@ export function exists(file: string) {
     return fs.existsSync(file)
 }
 
+export function assertFile(file: string) {
+    if (!isFile(file)) throw new Error(`File "${file}" does not exist`)
+}
+
+export function assertDirectory(dir: string) {
+    if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
+}
+
 export function isFile(path: string) {
     return exists(path) && fs.lstatSync(path).isFile()
 }
@@ -35,7 +43,7 @@ export function isLink(path: string) {
 }
 
 export function loadFile<T>(file: string) {
-    if (!isFile(file)) throw new Error(`File ${file} does not exist`)
+    assertFile(file)
     return yaml.load(fs.readFileSync(path.resolve(file), 'utf-8')) as T
 }
 

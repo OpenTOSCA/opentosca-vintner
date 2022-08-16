@@ -4,14 +4,17 @@ import {ServiceTemplate} from '../src/specification/service-template'
 import {expect} from 'chai'
 import Controller from '../src/controller'
 
-export function getDefaultTest({preset, error}: {preset?: string; error?: string}) {
+export function getDefaultTest({preset, error, example}: {preset?: string; error?: string; example?: string}) {
     return async function () {
         const dir = path.join(__dirname, this.test.title)
-        const outputPath = files.temporaryFile()
+        files.assertDirectory(dir)
+
+        const output = files.temporaryFile()
         function fn() {
             Controller.template.resolve({
-                template: getDefaultVariableServiceTemplate(dir),
-                output: outputPath,
+                template: getVariableServiceTemplate({dir, example}),
+                inputs: getDefaultInputs(dir),
+                output,
                 preset,
             })
         }
@@ -20,15 +23,23 @@ export function getDefaultTest({preset, error}: {preset?: string; error?: string
             expect(fn).to.throw(error)
         } else {
             await fn()
-            const result = files.loadFile<ServiceTemplate>(outputPath)
+            const result = files.loadFile<ServiceTemplate>(output)
             const expected = readDefaultExpect(dir)
             expect(result).to.deep.equal(expected)
         }
     }
 }
 
-export function getDefaultVariableServiceTemplate(dir: string) {
-    return path.join(dir, 'variable-service-template.yaml')
+export function getVariableServiceTemplate({dir, example}: {dir: string; example?: string}) {
+    const base = example ? ['examples', example] : [dir]
+    const file = path.join(...base, 'variable-service-template.yaml')
+    files.assertFile(file)
+    return file
+}
+
+export function getDefaultInputs(dir: string) {
+    const file = path.join(dir, 'inputs.yaml')
+    if (files.isFile(file)) return file
 }
 
 export function readDefaultExpect(dir: string) {
