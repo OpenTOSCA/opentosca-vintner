@@ -24,6 +24,8 @@ docs/__pycache__
 # examples
 *inputs.yaml
 *inputs.yml
+!tests/**/inputs.yaml
+!tests/**/inputs.yml
 
 # python virtual environments
 *.venv

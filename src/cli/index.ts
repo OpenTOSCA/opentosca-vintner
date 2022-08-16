@@ -4,6 +4,7 @@ import config from './config'
 import Controller from '../controller'
 import * as files from '../utils/files'
 import {toBoolean} from '../utils/utils'
+import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
 
 const program = new Command()
 
@@ -52,7 +53,10 @@ setup
     .option('--markdown [boolean]', 'plot results as markdown', false)
     .action(
         hae(async options => {
-            await Controller.setup.benchmark(options)
+            const results = await Controller.setup.benchmark(options)
+            console.table(results)
+            if (options.markdown) console.log('\n', benchmark2markdown(results))
+            if (options.latex) console.log('\n', benchmark2latex(results, options))
         })
     )
 

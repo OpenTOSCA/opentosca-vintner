@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - lib/gcp/types.yaml
@@ -56,27 +56,6 @@ topology_template:
         os_application_credential_secret:
             type: string
 
-    variability:
-        inputs:
-            mode:
-                type: string
-
-        presets:
-            dev:
-                name: Development
-                description: Deploy the application on a private cloud
-                inputs:
-                    mode: dev
-            prod:
-                name: Production
-                description: Deploy the application on a public cloud
-                inputs:
-                    mode: prod
-
-        expressions:
-            is_dev: {equal: [{get_variability_input: mode}, dev]}
-            is_prod: {equal: [{get_variability_input: mode}, prod]}
-
     node_templates:
         application:
             type: node.application
@@ -94,50 +73,10 @@ topology_template:
             requirements:
                 - host:
                       node: dev_runtime
-                      conditions: {get_variability_expression: is_dev}
-                - host:
-                      node: prod_runtime
-                      conditions: {get_variability_expression: is_prod}
                 - database:
                       node: dev_database
-                      conditions: {get_variability_expression: is_dev}
-                - database:
-                      node: prod_database
-                      conditions: {get_variability_expression: is_prod}
             artifacts:
                 artifact_file: files/application.tar.gz
-
-        prod_runtime:
-            type: gcp.appengine.engine
-            conditions: {get_variability_expression: is_prod}
-            requirements:
-                - host:
-                      node: gcp
-                      conditions: {get_variability_expression: is_prod}
-
-        prod_database:
-            type: gcp.sql.db
-            conditions: {get_variability_expression: is_prod}
-            properties:
-                database_name: db
-                instance_name: {get_property: [SELF, host, instance_name]}
-                public_address: {get_attribute: [SELF, host, public_address]}
-            requirements:
-                - host:
-                      node: gcp_dbms
-                      conditions: {get_variability_expression: is_prod}
-
-        gcp_dbms:
-            type: gcp.sql.dbms
-            conditions: {get_variability_expression: is_prod}
-            properties:
-                instance_name: {concat: [{get_input: release}, '-', dbms]}
-                root_password: {get_input: root_password}
-                authorized_networks: '0.0.0.0/0'
-            requirements:
-                - host:
-                      node: gcp
-                      conditions: {get_variability_expression: is_prod}
 
         gcp:
             type: gcp.provider
@@ -147,25 +86,20 @@ topology_template:
 
         dev_runtime:
             type: node.runtime
-            conditions: {get_variability_expression: is_dev}
             requirements:
                 - host:
                       node: private_vm
-                      conditions: {get_variability_expression: is_dev}
 
         dev_database:
             type: sqlite.db
-            conditions: {get_variability_expression: is_dev}
             properties:
                 database_name: {concat: [{get_input: release}, '-', db]}
             requirements:
                 - host:
                       node: private_vm
-                      conditions: {get_variability_expression: is_dev}
 
         private_vm:
             type: openstack.vm
-            conditions: {get_variability_expression: is_dev}
             properties:
                 ports: [80]
                 name: {concat: [{get_input: release}, '-', private-vm]}
@@ -179,7 +113,6 @@ topology_template:
             requirements:
                 - host:
                       node: openstack
-                      conditions: {get_variability_expression: is_dev}
 
         openstack:
             type: openstack.provider

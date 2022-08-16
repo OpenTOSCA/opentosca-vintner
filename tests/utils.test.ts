@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../src/utils/utils'
+import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber, toList} from '../src/utils/utils'
 
 it('median of array of even length', () => {
     const median = getMedianFromSorted([1, 2])
@@ -64,4 +64,14 @@ it('hrtime2ms', () => {
 it('hrtime2ms', () => {
     const result = hrtime2ms([1, 1000000])
     expect(result).to.equal(1001)
+})
+
+it('toList: single element', () => {
+    const result = toList(1)
+    expect(result).to.eql([1])
+})
+
+it('toList: list', () => {
+    const result = toList([1])
+    expect(result).to.eql([1])
 })
