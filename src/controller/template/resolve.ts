@@ -14,7 +14,7 @@ export type TemplateResolveArguments = {
     output?: string
 }
 
-export default async function (options: TemplateResolveArguments) {
+export default function (options: TemplateResolveArguments) {
     let instance: Instance | undefined
     if (options.instance) instance = new Instance(options.instance)
 
@@ -74,9 +74,14 @@ export class VariabilityResolver {
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
     private relations: Relation[] = []
+    private relationships: {[name: string]: Relation[]} = {}
 
     constructor(serviceTemplate: ServiceTemplate) {
         this._serviceTemplate = utils.deepCopy(serviceTemplate)
+
+        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(
+            name => (this.relationships[name] = [])
+        )
 
         Object.entries(serviceTemplate.topology_template?.node_templates || {}).forEach(([nodeName, nodeTemplate]) => {
             const node: Node = {
@@ -103,8 +108,25 @@ export class VariabilityResolver {
                 }
                 this.relations.push(relation)
                 node.relations.push(relation)
+
+                if (!validator.isString(assignment)) {
+                    if (validator.isString(assignment.relationship)) {
+                        const relationship = this.relationships[assignment.relationship]
+                        if (validator.isUndefined(relationship))
+                            throw new Error(
+                                `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
+                            )
+
+                        relationship.push(relation)
+                    }
+                }
             })
         })
+
+        // Ensure that each relationship is at least used in one relation
+        for (const relationship of Object.entries(this.relationships)) {
+            if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
+        }
 
         Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([groupName, groupTemplate]) => {
             if (groupTemplate.conditions === undefined) return
@@ -209,7 +231,11 @@ export class VariabilityResolver {
             })
         })
 
-        // TODO: filter relationship templates
+        // Delete all relationship templates which have no present relations
+        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
+            if (this.relationships[name].every(relation => !relation.present))
+                delete serviceTemplate.topology_template.relationship_templates[name]
+        })
 
         // Delete all groups that have conditions assigned
         Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
