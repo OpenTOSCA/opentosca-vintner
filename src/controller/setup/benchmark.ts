@@ -33,7 +33,7 @@ export default async function (options: BenchmarkArguments) {
             let lines
 
             for (let run = 0; run < options.runs; run++) {
-                console.log(`Running`, {io, seed, run})
+                console.log(`Running `, {io, seed, run})
 
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
@@ -60,6 +60,8 @@ export default async function (options: BenchmarkArguments) {
                     size = getSize(input)
                     lines = countLines(input)
                 }
+
+                console.log(`Finished`, {io, seed, run, duration})
 
                 measurements.push(duration)
             }
