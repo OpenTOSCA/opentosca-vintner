@@ -51,17 +51,17 @@ it('prettyNumber: should return 8,000,000.120', () => {
     expect(result).to.equal('8,000,000.120')
 })
 
-it('hrtime2ms', () => {
+it('hrtime2ms: 1000 ms', () => {
     const result = hrtime2ms([1, 0])
     expect(result).to.equal(1000)
 })
 
-it('hrtime2ms', () => {
+it('hrtime2ms: 1000.000001 ms', () => {
     const result = hrtime2ms([1, 1])
     expect(result).to.equal(1000.000001)
 })
 
-it('hrtime2ms', () => {
+it('hrtime2ms: 1001 ms', () => {
     const result = hrtime2ms([1, 1000000])
     expect(result).to.equal(1001)
 })

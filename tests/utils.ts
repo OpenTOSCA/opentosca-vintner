@@ -3,6 +3,7 @@ import * as files from '../src/utils/files'
 import {ServiceTemplate} from '../src/specification/service-template'
 import {expect} from 'chai'
 import Controller from '../src/controller'
+import {VariabilityResolver} from '../src/controller/template/resolve'
 
 export function getDefaultTest({preset, error, example}: {preset?: string; error?: string; example?: string}) {
     return async function () {
@@ -44,4 +45,8 @@ export function getDefaultInputs(dir: string) {
 
 export function readDefaultExpect(dir: string) {
     return files.loadFile<ServiceTemplate>(path.join(dir, 'expected-service-template.yaml'))
+}
+
+export function getDefaultVariabilityResolver() {
+    return new VariabilityResolver({} as any)
 }
