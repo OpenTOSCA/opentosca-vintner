@@ -27,7 +27,8 @@ export default function (options: TemplateResolveArguments) {
     if (!output) throw new Error('Either instance or output must be set')
 
     // Load service template
-    const resolver = new VariabilityResolver(files.loadFile<ServiceTemplate>(template))
+    const serviceTemplate = files.loadFile<ServiceTemplate>(template)
+    const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
 
@@ -41,8 +42,9 @@ export default function (options: TemplateResolveArguments) {
     resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
-    const service = resolver.transform()
-    files.storeFile(output, service)
+    resolver.transformInPlace()
+
+    files.storeFile(output, serviceTemplate)
 }
 
 type Element = {
@@ -77,7 +79,7 @@ export class VariabilityResolver {
     private relationships: {[name: string]: Relation[]} = {}
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this._serviceTemplate = utils.deepCopy(serviceTemplate)
+        this._serviceTemplate = serviceTemplate
 
         Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(
             name => (this.relationships[name] = [])
@@ -208,46 +210,45 @@ export class VariabilityResolver {
         return this
     }
 
-    transform() {
-        // Deep copy original service template
-        const serviceTemplate = utils.deepCopy(this._serviceTemplate)
-
+    transformInPlace() {
         // Set TOSCA definitions version
-        serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
+        this._serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
         // Delete variability definition
-        delete serviceTemplate.topology_template?.variability
+        delete this._serviceTemplate.topology_template?.variability
 
         // Delete node templates which are not present
-        Object.entries(serviceTemplate.topology_template?.node_templates || {}).forEach(([nodeName, nodeTemplate]) => {
-            const node = this.nodesMap[nodeName]
-            if (node.present) {
-                delete serviceTemplate.topology_template.node_templates[nodeName].conditions
-            } else {
-                delete serviceTemplate.topology_template.node_templates[nodeName]
-            }
+        Object.entries(this._serviceTemplate.topology_template?.node_templates || {}).forEach(
+            ([nodeName, nodeTemplate]) => {
+                const node = this.nodesMap[nodeName]
+                if (node.present) {
+                    delete this._serviceTemplate.topology_template.node_templates[nodeName].conditions
+                } else {
+                    delete this._serviceTemplate.topology_template.node_templates[nodeName]
+                }
 
-            // Delete requirement assignment which are not present
-            nodeTemplate.requirements = nodeTemplate.requirements?.filter((map, index) => {
-                const assignment = utils.firstValue(map)
-                if (!validator.isString(assignment)) delete assignment.conditions
-                return node.relations[index].present
-            })
-        })
+                // Delete requirement assignment which are not present
+                nodeTemplate.requirements = nodeTemplate.requirements?.filter((map, index) => {
+                    const assignment = utils.firstValue(map)
+                    if (!validator.isString(assignment)) delete assignment.conditions
+                    return node.relations[index].present
+                })
+            }
+        )
 
         // Delete all relationship templates which have no present relations
-        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
+        Object.keys(this._serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
             if (this.relationships[name].every(relation => !relation.present))
-                delete serviceTemplate.topology_template.relationship_templates[name]
+                delete this._serviceTemplate.topology_template.relationship_templates[name]
         })
 
         // Delete all groups that have conditions assigned
-        Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
+        Object.entries(this._serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
             if (template.conditions == undefined) return
-            delete serviceTemplate.topology_template?.groups[name]
+            delete this._serviceTemplate.topology_template?.groups[name]
         })
 
-        return serviceTemplate
+        return this._serviceTemplate
     }
 
     ensureCompatibility() {

@@ -29,12 +29,14 @@ export default async function (options: BenchmarkArguments) {
     for (const io of options.io ? [false, true] : [false]) {
         for (const seed of options.seeds) {
             const measurements = []
-            const serviceTemplate = generateBenchmarkServiceTemplate(seed)
             let size
             let lines
 
             for (let run = 0; run < options.runs; run++) {
                 console.log(`Running`, {io, seed, run})
+
+                // Service template is transformed in-place!
+                const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
                 const input = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input.yaml`)
                 const output = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output.yaml`)
@@ -47,7 +49,7 @@ export default async function (options: BenchmarkArguments) {
                     .setVariabilityInputs({mode: 'present'})
                     .resolve()
                     .checkConsistency()
-                    .transform()
+                    .transformInPlace()
 
                 if (io) storeFile(output, result)
 
