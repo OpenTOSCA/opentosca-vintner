@@ -428,18 +428,18 @@ export class VariabilityResolver {
             return this.evaluateVariabilityCondition(this.getVariabilityExpression(condition.get_variability_condition))
         }
 
-        if (validator.hasProperty(condition, 'get_presence')) {
+        if (validator.hasProperty(condition, 'get_element_presence')) {
             let element
-            if (validator.isArray(condition.get_presence)) {
-                const first = this.evaluateVariabilityExpression(condition.get_presence[0])
+            if (validator.isArray(condition.get_element_presence)) {
+                const first = this.evaluateVariabilityExpression(condition.get_element_presence[0])
                 validator.ensureString(first)
 
-                const second = this.evaluateVariabilityExpression(condition.get_presence[1])
+                const second = this.evaluateVariabilityExpression(condition.get_element_presence[1])
                 validator.ensureStringOrNumber(second)
 
                 element = [first, second]
             } else {
-                element = this.evaluateVariabilityExpression(condition.get_presence)
+                element = this.evaluateVariabilityExpression(condition.get_element_presence)
                 validator.ensureString(element)
             }
 
