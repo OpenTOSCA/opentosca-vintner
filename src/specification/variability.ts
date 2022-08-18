@@ -41,7 +41,7 @@ export type VariabilityExpression =
           get_variability_expression?: VariabilityExpression
           get_variability_input?: VariabilityExpression
           get_variability_condition?: VariabilityExpression
-          get_presence?: VariabilityExpression | [VariabilityExpression, VariabilityExpression]
+          get_element_presence?: VariabilityExpression | [VariabilityExpression, VariabilityExpression]
           concat?: VariabilityExpression[]
           join?: [VariabilityExpression[], string]
           token?: [VariabilityExpression, string, number]

@@ -136,10 +136,10 @@ This condition must evaluate to true otherwise the respective group elements are
 
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                                |
-|------------| --------- |----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template (which must be unique). |
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.         |
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
+|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
 
 The following example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
 
@@ -178,14 +178,15 @@ The following _Arithmetic Operators_ can be used inside a _Variability Expressio
 
 The following _Intrinsic Functions_ can be used inside a _Variability Expression_.
 
-| Keyname                    | Input                                       | Output  | Description                                                                                             |
-|----------------------------| ------------------------------------------- |---------|---------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                      | Any     | Returns the value of a Variability Input.                                                               |
-| get_variability_expression | String                                      | Any     | Returns the value of the Variability Expression.                                                        |
-| get_variability_condition  | String                                      | Boolean | Returns the value of the Variability Condition.                                                         |
-| concat                     | List(ValueExpression)                       | String  | Concatenates the given values.                                                                          |
-| join                       | Tuple(List(ValueExpression), String)        | String  | Joins the given values using the provided delimiter.                                                    |
-| token                      | Tuple(ValueExpression, String, Number) | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index. |
+| Keyname                    | Input                                                             | Output                                                                                                                             | Description                                                                                             |
+|----------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                                            | Any                                                                                                                                | Returns the value of a Variability Input.                                                               |
+| get_variability_expression | String                                                            | Any                                                                                                                                | Returns the value of the Variability Expression.                                                        |
+| get_variability_condition  | String                                                            | Boolean                                                                                                                            | Returns the value of the Variability Condition.                                                         |
+| get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                         |
+| concat                     | List(ValueExpression)                                             | String                                                                                                                             | Concatenates the given values.                                                                          |
+| join                       | Tuple(List(ValueExpression), String)                              | String                                                                                                                             | Joins the given values using the provided delimiter.                                                    |
+| token                      | Tuple(ValueExpression, String, Number)                            | String                                                                                                                             | Splits a given value by the provided delimiter and returns the element specified by the provided index. |
 
 ## Constraint Operators
 
