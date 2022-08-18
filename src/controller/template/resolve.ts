@@ -5,6 +5,7 @@ import * as files from '../../utils/files'
 import {VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
+import {GroupMember} from '../../specification/group-type'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -156,6 +157,11 @@ export class VariabilityResolver {
         })
     }
 
+    getElement(member: GroupMember) {
+        if (validator.isString(member)) return this.nodesMap[member]
+        return this.nodesMap[member[0]].relations[member[1]]
+    }
+
     resolve() {
         for (const node of this.nodes) {
             node.present = this.checkPresence(node)
@@ -169,6 +175,7 @@ export class VariabilityResolver {
     }
 
     checkPresence(element: Element) {
+        if (validator.hasProperty(element, 'present')) return element.present
         const conditions = element.conditions
         element.groups.forEach(group => conditions.push(...group.conditions))
         return utils.filterNotNull(conditions).every(condition => this.evaluateVariabilityCondition(condition))
@@ -419,6 +426,24 @@ export class VariabilityResolver {
         if (validator.hasProperty(condition, 'get_variability_condition')) {
             validator.ensureString(condition.get_variability_condition)
             return this.evaluateVariabilityCondition(this.getVariabilityExpression(condition.get_variability_condition))
+        }
+
+        if (validator.hasProperty(condition, 'get_presence')) {
+            let element
+            if (validator.isArray(condition.get_presence)) {
+                const first = this.evaluateVariabilityExpression(condition.get_presence[0])
+                validator.ensureString(first)
+
+                const second = this.evaluateVariabilityExpression(condition.get_presence[1])
+                validator.ensureStringOrNumber(second)
+
+                element = [first, second]
+            } else {
+                element = this.evaluateVariabilityExpression(condition.get_presence)
+                validator.ensureString(element)
+            }
+
+            return this.checkPresence(this.getElement(element))
         }
 
         if (validator.hasProperty(condition, 'concat')) {
