@@ -291,27 +291,31 @@ export class VariabilityResolver {
     }
 
     evaluateVariabilityCondition(condition: VariabilityExpression): boolean {
-        const result = this.evaluateVariabilityConditionRunner(condition)
+        const result = this.evaluateVariabilityExpression(condition)
         validator.ensureBoolean(result)
         return result
     }
 
-    evaluateVariabilityConditionRunner(
-        condition: VariabilityExpression
-    ): boolean | string | number | VariabilityExpression {
+    evaluateVariabilityExpression(condition: VariabilityExpression): boolean | string | number {
+        if (validator.isObject(condition)) {
+            if (validator.hasProperty(condition, 'cached_result')) return condition.cached_result
+            const result = this.evaluateVariabilityExpressionRunner(condition)
+            condition.cached_result = result
+            return result
+        }
+
+        return this.evaluateVariabilityExpressionRunner(condition)
+    }
+
+    evaluateVariabilityExpressionRunner(condition: VariabilityExpression): boolean | string | number {
         if (validator.isUndefined(condition)) throw new Error(`Received condition that is undefined or null`)
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
         if (validator.isNumber(condition)) return condition
 
-        // TODO: cache results
-        if (validator.hasProperty(condition, 'cached_result')) {
-            return condition.cached_result
-        }
-
         if (validator.hasProperty(condition, 'and')) {
             return condition.and.every(element => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureBoolean(value)
                 return value
             })
@@ -319,14 +323,14 @@ export class VariabilityResolver {
 
         if (validator.hasProperty(condition, 'or')) {
             return condition.or.some(element => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureBoolean(value)
                 return value
             })
         }
 
         if (validator.hasProperty(condition, 'not')) {
-            const value = this.evaluateVariabilityConditionRunner(condition.not)
+            const value = this.evaluateVariabilityExpression(condition.not)
             validator.ensureBoolean(value)
             return !value
         }
@@ -334,7 +338,7 @@ export class VariabilityResolver {
         if (validator.hasProperty(condition, 'xor')) {
             return (
                 condition.xor.reduce((count: number, element) => {
-                    const value = this.evaluateVariabilityConditionRunner(element)
+                    const value = this.evaluateVariabilityExpression(element)
                     validator.ensureBoolean(value)
                     if (value) count++
                     return count
@@ -343,58 +347,58 @@ export class VariabilityResolver {
         }
 
         if (validator.hasProperty(condition, 'implies')) {
-            const first = this.evaluateVariabilityConditionRunner(condition.implies[0])
+            const first = this.evaluateVariabilityExpression(condition.implies[0])
             validator.ensureBoolean(first)
 
-            const second = this.evaluateVariabilityConditionRunner(condition.implies[1])
+            const second = this.evaluateVariabilityExpression(condition.implies[1])
             validator.ensureBoolean(first)
 
             return first ? second : true
         }
 
         if (validator.hasProperty(condition, 'add')) {
-            return condition.add.reduce((sum: number, element) => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+            return condition.add.reduce<number>((sum, element) => {
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureNumber(value)
                 return sum + value
             }, 0)
         }
 
         if (validator.hasProperty(condition, 'sub')) {
-            const first = this.evaluateVariabilityConditionRunner(condition.sub[0])
+            const first = this.evaluateVariabilityExpression(condition.sub[0])
             validator.ensureNumber(first)
 
-            return condition.sub.slice(1).reduce((difference: number, element) => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+            return condition.sub.slice(1).reduce<number>((difference, element) => {
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureNumber(value)
                 return difference - value
             }, first)
         }
 
         if (validator.hasProperty(condition, 'mul')) {
-            return condition.mul.reduce((product: number, element) => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+            return condition.mul.reduce<number>((product, element) => {
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureNumber(value)
                 return product * value
             }, 1)
         }
 
         if (validator.hasProperty(condition, 'div')) {
-            const first = this.evaluateVariabilityConditionRunner(condition.div[0])
+            const first = this.evaluateVariabilityExpression(condition.div[0])
             validator.ensureNumber(first)
 
-            return condition.div.slice(1).reduce((quotient: number, element) => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+            return condition.div.slice(1).reduce<number>((quotient, element) => {
+                const value = this.evaluateVariabilityExpression(element)
                 validator.ensureNumber(value)
                 return quotient / value
             }, first)
         }
 
         if (validator.hasProperty(condition, 'mod')) {
-            const first = this.evaluateVariabilityConditionRunner(condition.mod[0])
+            const first = this.evaluateVariabilityExpression(condition.mod[0])
             validator.ensureNumber(first)
 
-            const second = this.evaluateVariabilityConditionRunner(condition.mod[1])
+            const second = this.evaluateVariabilityExpression(condition.mod[1])
             validator.ensureNumber(second)
 
             return first % second
@@ -402,12 +406,12 @@ export class VariabilityResolver {
 
         if (validator.hasProperty(condition, 'get_variability_input')) {
             validator.ensureString(condition.get_variability_input)
-            return this.evaluateVariabilityConditionRunner(this.getVariabilityInput(condition.get_variability_input))
+            return this.evaluateVariabilityExpression(this.getVariabilityInput(condition.get_variability_input))
         }
 
         if (validator.hasProperty(condition, 'get_variability_expression')) {
             validator.ensureString(condition.get_variability_expression)
-            return this.evaluateVariabilityConditionRunner(
+            return this.evaluateVariabilityExpression(
                 this.getVariabilityExpression(condition.get_variability_expression)
             )
         }
@@ -418,15 +422,15 @@ export class VariabilityResolver {
         }
 
         if (validator.hasProperty(condition, 'concat')) {
-            return condition.concat.map(c => this.evaluateVariabilityConditionRunner(c)).join('')
+            return condition.concat.map(c => this.evaluateVariabilityExpression(c)).join('')
         }
 
         if (validator.hasProperty(condition, 'join')) {
-            return condition.join[0].map(c => this.evaluateVariabilityConditionRunner(c)).join(condition.join[1])
+            return condition.join[0].map(c => this.evaluateVariabilityExpression(c)).join(condition.join[1])
         }
 
         if (validator.hasProperty(condition, 'token')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.token[0])
+            const element = this.evaluateVariabilityExpression(condition.token[0])
             validator.ensureString(element)
             const token = condition.token[1]
             const index = condition.token[2]
@@ -434,79 +438,79 @@ export class VariabilityResolver {
         }
 
         if (validator.hasProperty(condition, 'equal')) {
-            const first = this.evaluateVariabilityConditionRunner(condition.equal[0])
+            const first = this.evaluateVariabilityExpression(condition.equal[0])
             return condition.equal.every(element => {
-                const value = this.evaluateVariabilityConditionRunner(element)
+                const value = this.evaluateVariabilityExpression(element)
                 return value === first
             })
         }
 
         if (validator.hasProperty(condition, 'greater_than')) {
             return (
-                this.evaluateVariabilityConditionRunner(condition.greater_than[0]) >
-                this.evaluateVariabilityConditionRunner(condition.greater_than[1])
+                this.evaluateVariabilityExpression(condition.greater_than[0]) >
+                this.evaluateVariabilityExpression(condition.greater_than[1])
             )
         }
 
         if (validator.hasProperty(condition, 'greater_or_equal')) {
             return (
-                this.evaluateVariabilityConditionRunner(condition.greater_or_equal[0]) >=
-                this.evaluateVariabilityConditionRunner(condition.greater_or_equal[1])
+                this.evaluateVariabilityExpression(condition.greater_or_equal[0]) >=
+                this.evaluateVariabilityExpression(condition.greater_or_equal[1])
             )
         }
 
         if (validator.hasProperty(condition, 'less_than')) {
             return (
-                this.evaluateVariabilityConditionRunner(condition.less_than[0]) <
-                this.evaluateVariabilityConditionRunner(condition.less_than[1])
+                this.evaluateVariabilityExpression(condition.less_than[0]) <
+                this.evaluateVariabilityExpression(condition.less_than[1])
             )
         }
 
         if (validator.hasProperty(condition, 'less_or_equal')) {
             return (
-                this.evaluateVariabilityConditionRunner(condition.less_or_equal[0]) <=
-                this.evaluateVariabilityConditionRunner(condition.less_or_equal[1])
+                this.evaluateVariabilityExpression(condition.less_or_equal[0]) <=
+                this.evaluateVariabilityExpression(condition.less_or_equal[1])
             )
         }
 
         if (validator.hasProperty(condition, 'in_range')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.in_range[0])
+            const element = this.evaluateVariabilityExpression(condition.in_range[0])
             const lower = condition.in_range[1][0]
             const upper = condition.in_range[1][1]
             return lower <= element && element <= upper
         }
 
         if (validator.hasProperty(condition, 'valid_values')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.valid_values[0])
-            const valid = condition.valid_values[1].map(c => this.evaluateVariabilityConditionRunner(c))
+            const element = this.evaluateVariabilityExpression(condition.valid_values[0])
+            const valid = condition.valid_values[1].map(c => this.evaluateVariabilityExpression(c))
             return valid.includes(element)
         }
 
         if (validator.hasProperty(condition, 'length')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.length[0])
+            const element = this.evaluateVariabilityExpression(condition.length[0])
             validator.ensureString(element)
 
-            const length = this.evaluateVariabilityConditionRunner(condition.length[1])
+            const length = this.evaluateVariabilityExpression(condition.length[1])
             validator.ensureNumber(length)
 
             return element.length === length
         }
 
         if (validator.hasProperty(condition, 'min_length')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.min_length[0])
+            const element = this.evaluateVariabilityExpression(condition.min_length[0])
             validator.ensureString(element)
 
-            const length = this.evaluateVariabilityConditionRunner(condition.min_length[1])
+            const length = this.evaluateVariabilityExpression(condition.min_length[1])
             validator.ensureNumber(length)
 
             return element.length >= length
         }
 
         if (validator.hasProperty(condition, 'max_length')) {
-            const element = this.evaluateVariabilityConditionRunner(condition.max_length[0])
+            const element = this.evaluateVariabilityExpression(condition.max_length[0])
             validator.ensureString(element)
 
-            const length = this.evaluateVariabilityConditionRunner(condition.max_length[1])
+            const length = this.evaluateVariabilityExpression(condition.max_length[1])
             validator.ensureNumber(length)
 
             return element.length <= length

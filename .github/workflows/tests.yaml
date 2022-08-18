@@ -10,6 +10,9 @@ jobs:
         name: Tests
         runs-on: ubuntu-latest
         steps:
+            - name: (PREPARE) Set up QEMU
+              uses: docker/setup-qemu-action@v2
+
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
 
