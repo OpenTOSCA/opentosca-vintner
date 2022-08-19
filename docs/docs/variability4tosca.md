@@ -13,6 +13,8 @@ Such a _Service Template_ is also called _Variable Service Template_.
 | ------------------------- | --------- | ------ |--------------------------------------------------------------------------|
 | tosca_definitions_version | yes       | String | The required TOSCA Definitions Version. Must be `tosca_variability_1_0`. |
 
+The version is expected to be set to `tosca_simple_1_3` when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
 
 ## Topology Template Definition
 
@@ -59,6 +61,9 @@ variability:
         is_dev: {equal: [{get_variability_input: mode}, dev]}
         is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
+
+This definition is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
 
 ## Variability Preset Definition
 
@@ -110,6 +115,9 @@ prod_database:
     conditions: {get_variability_expression: is_prod}
 ```
 
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+
 ## Requirement Assignment Definition
 
 A _Requirement Assignment_ can additionally contain a _Variability Condition_.
@@ -129,6 +137,8 @@ requirements:
           conditions: {get_variability_expression: is_dev}
 ```
 
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
 ## Group Template Definition
 
 A _Group Template_ can additionally contain a _Variability Condition_.
@@ -145,10 +155,30 @@ The following example contains the group `example_group` whose elements are the 
 
 ```
 example_group:
-    type: tosca.groups.Root
+    type: variability.groups.Conditional
     members: [prod_database, [application, prod_connects_to]]
     conditions: {get_variability_expression: is_prod}
 ```
+
+## Normative Group Types
+
+There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
+The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.Conditional` should derive from.
+These groups are expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+```
+variability.groups.Root
+    derived_from: tosca.groups.Root
+```
+
+The second _Group Type_ should be used when a group has variability definitions assigned.
+
+```
+variability.groups.Conditional
+    derived_from: variability.groups.Root
+    conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
+```
+
 
 ## Boolean Operators
 
