@@ -1,6 +1,6 @@
 import {PropertyAssignmentMap} from './node-template'
 import {VariabilityExpression} from './variability'
-import {GroupMember} from './group-type'
+import {GroupMember, TOSCA_GROUP_TYPES} from './group-type'
 
 /**
  * Group Template
@@ -8,7 +8,7 @@ import {GroupMember} from './group-type'
  **/
 
 export type GroupTemplate = {
-    type: string
+    type: TOSCA_GROUP_TYPES
     members: GroupMember[]
     properties?: PropertyAssignmentMap
     conditions?: VariabilityExpression | VariabilityExpression[]

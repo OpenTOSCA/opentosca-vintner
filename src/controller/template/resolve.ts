@@ -5,7 +5,7 @@ import * as files from '../../utils/files'
 import {VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
-import {GroupMember} from '../../specification/group-type'
+import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -249,10 +249,14 @@ export class VariabilityResolver {
                 delete this._serviceTemplate.topology_template.relationship_templates[name]
         })
 
-        // Delete all groups that have conditions assigned
+        // Delete all variability groups
         Object.entries(this._serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
-            if (template.conditions == undefined) return
-            delete this._serviceTemplate.topology_template?.groups[name]
+            if (
+                [TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT, TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL].includes(
+                    template.type
+                )
+            )
+                delete this._serviceTemplate.topology_template?.groups[name]
         })
 
         return this._serviceTemplate
