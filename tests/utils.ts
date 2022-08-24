@@ -13,7 +13,7 @@ export function getDefaultTest({preset, error, example}: {preset?: string; error
         const output = files.temporaryFile()
         function fn() {
             Controller.template.resolve({
-                template: getVariableServiceTemplate({dir, example}),
+                template: getDefaultVariableServiceTemplate({dir, example}),
                 inputs: getDefaultInputs(dir),
                 output,
                 preset,
@@ -31,7 +31,7 @@ export function getDefaultTest({preset, error, example}: {preset?: string; error
     }
 }
 
-export function getVariableServiceTemplate({dir, example}: {dir: string; example?: string}) {
+export function getDefaultVariableServiceTemplate({dir, example}: {dir: string; example?: string}) {
     const base = example ? ['examples', example] : [dir]
     const file = path.join(...base, 'variable-service-template.yaml')
     files.assertFile(file)
