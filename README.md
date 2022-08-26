@@ -1,6 +1,7 @@
 # OpenTOSCA Vintner
 
 [![release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://www.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OpenTOSCA/opentosca-vintner&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Platforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20Windows-606c38.svg)](https://vintner.opentosca.org)
 [![TOSCA](https://img.shields.io/badge/TOSCA-1.3-important.svg)](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
