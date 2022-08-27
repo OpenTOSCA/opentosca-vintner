@@ -16,7 +16,7 @@ A Concept for Modeling Different Deployment Variants of a Composite Application 
 
   - [Documentation](https://vintner.opentosca.org)
   - [Getting Started](https://vintner.opentosca.org/getting-started)
-  - [Motivation Scenario](https://vintner.opentosca.org/motivation)
+  - [Motivating Scenario](https://vintner.opentosca.org/motivation)
   - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
   - [CLI Documentation](https://vintner.opentosca.org/interface)
   - [REST API Documentation](https://vintner.opentosca.org/interface)

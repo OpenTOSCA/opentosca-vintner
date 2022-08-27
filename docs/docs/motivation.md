@@ -1,10 +1,10 @@
-# Motivation Scenario
+# Motivating Scenario
 
-In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivation scenario.
+In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivating scenario.
 
 <figure markdown>
-  ![Motivation Scenario](assets/images/motivation.png){ width="700" }
-  <figcaption>Figure 1: Motivation Scenario</figcaption>
+  ![Motivating Scenario](assets/images/motivation.png){ width="700" }
+  <figcaption>Figure 1: Motivating Scenario</figcaption>
 </figure>
 
 ## Environment
@@ -41,7 +41,7 @@ vintner orchestrators enable --orchestrator opera
 
 ## Deployment
 
-Deploy the development variant of the motivation scenario.
+Deploy the development variant of the motivating scenario.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
 An example for the deployment inputs is given in [`examples/opera-motivation/inputs.example.yaml`]({{ get_repo_url('examples/opera-motivation/inputs.example.yaml') }}){target=_blank}
 
