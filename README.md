@@ -1,4 +1,11 @@
-# OpenTOSCA Vintner
+<div style='background-color: black; border-radius: 4pt; padding: 12pt; text-align: center; font-size: 18pt; font-weight: bold'>
+
+OpenTOSCA <i>Vintner</i>
+
+</div>
+
+
+<div align="center">
 
 [![release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://www.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OpenTOSCA/opentosca-vintner&amp;utm_campaign=Badge_Grade)
@@ -10,12 +17,14 @@
 
 A Concept for Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
 
-- [Documentation](https://vintner.opentosca.org)
-- [Getting Started](https://vintner.opentosca.org/getting-started)
-- [Motivation Scenario](https://vintner.opentosca.org/motivation)
-- [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
-- [CLI Documentation](https://vintner.opentosca.org/interface)
-- [REST API Documentation](https://vintner.opentosca.org/interface)
+</div>
+
+  - [Documentation](https://vintner.opentosca.org)
+  - [Getting Started](https://vintner.opentosca.org/getting-started)
+  - [Motivation Scenario](https://vintner.opentosca.org/motivation)
+  - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
+  - [CLI Documentation](https://vintner.opentosca.org/interface)
+  - [REST API Documentation](https://vintner.opentosca.org/interface)
 
 # Haftungsausschluss
 
