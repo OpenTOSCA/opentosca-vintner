@@ -11,9 +11,6 @@ In the following, we provide a detailed step-by-step tutorial to deploy the deve
 
 We expect that the following is installed on a Linux machine.
 
-- [x] [Git](https://git-scm.com){target=_blank}
-- [x] [Node.js](https://nodejs.org){target=_blank}
-- [x] [Yarn](https://classic.yarnpkg.com/lang/en){target=_blank}
 - [x] [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=_blank}
 - [x] [Google Cloud CLI](https://cloud.google.com/sdk/gcloud){target=_blank}
 - [x] [Ansible Galaxy Collection `openstack.cloud`](https://galaxy.ansible.com/openstack/cloud){target=_blank}
