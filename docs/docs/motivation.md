@@ -24,7 +24,7 @@ First, install the tool.
 For more information see [Installation]({{ fix_url('installation')}}){target=_blank}.
 
 ```
-curl -sL https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
 vintner setup init

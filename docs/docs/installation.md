@@ -6,7 +6,7 @@ You might add the binary to your PATH.
 
 The following example shows the installation on Linux.
 ```
-curl -sL https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
 vintner setup init
