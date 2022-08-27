@@ -1,4 +1,4 @@
-![logo.svg](https://vintner.opentosca.org)
+[![OpenTOSCA Vintner](logo.svg)](https://vintner.opentosca.org)
 
 <div align="center">
 
