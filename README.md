@@ -1,9 +1,4 @@
-<div style='background-color: black; border-radius: 4pt; padding: 12pt; text-align: center; font-size: 18pt; font-weight: bold'>
-
-OpenTOSCA <i>Vintner</i>
-
-</div>
-
+<img src="logo.svg">
 
 <div align="center">
 
