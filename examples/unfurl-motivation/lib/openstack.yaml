@@ -109,6 +109,8 @@ node_types:
                 operations:
                     create:
                         implementation: |
+                            set -e
+
                             export OS_AUTH_TYPE={{ SELF.auth_type }}
                             export OS_AUTH_URL={{ SELF.auth_url }}
                             export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }}
@@ -130,6 +132,8 @@ node_types:
 
                     delete:
                         implementation: |
+                            set -e
+
                             export OS_AUTH_TYPE={{ SELF.auth_type }}
                             export OS_AUTH_URL={{ SELF.auth_url }}
                             export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }}

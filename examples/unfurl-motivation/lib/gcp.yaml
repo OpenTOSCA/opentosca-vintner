@@ -69,6 +69,7 @@ node_types:
                 operations:
                     create:
                         implementation: |
+                            set -e
                             gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud services enable sqladmin.googleapis.com >/dev/null
                             gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --async --format=json | gcloud beta sql operations wait $(jq --raw-output '.name') >/dev/null
@@ -81,6 +82,7 @@ node_types:
                                     public_address: '{{ (stdout | from_json).ipAddresses[0].ipAddress }}'
                     delete:
                         implementation: |
+                            set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud sql instances delete {{ SELF.instance_name }} --quiet
                         inputs:
@@ -123,6 +125,7 @@ node_types:
                 operations:
                     create:
                         implementation: |
+                            set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud sql databases create {{ SELF.database_name }} --instance {{ SELF.instance_name }}
                         inputs:
@@ -130,6 +133,7 @@ node_types:
 
                     delete:
                         implementation: |
+                            set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud sql databases delete {{ SELF.database_name }} --instance {{ SELF.instance_name }}
                         inputs:
@@ -164,6 +168,7 @@ node_types:
                 operations:
                     create:
                         implementation: |
+                            set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud services enable cloudbuild.googleapis.com || true
                             gcloud services enable appengine.googleapis.com || true
