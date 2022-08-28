@@ -3,34 +3,6 @@ import {VariabilityResolver} from '../src/controller/template/resolve'
 import {VariabilityExpression} from '../src/specification/variability'
 import {getDefaultVariabilityResolver} from './utils'
 
-it('expression name -> true', () => {
-    const resolver = new VariabilityResolver({
-        topology_template: {
-            variability: {
-                expressions: {
-                    name: true,
-                },
-            },
-        },
-    } as any)
-    const result = resolver.evaluateVariabilityCondition({get_variability_expression: 'name'})
-    expect(result).to.equal(true)
-})
-
-it('condition name -> true', () => {
-    const resolver = new VariabilityResolver({
-        topology_template: {
-            variability: {
-                expressions: {
-                    name: true,
-                },
-            },
-        },
-    } as any)
-    const result = resolver.evaluateVariabilityCondition({get_variability_condition: 'name'})
-    expect(result).to.equal(true)
-})
-
 it('and: true -> true', () => {
     const resolver = getDefaultVariabilityResolver()
     const result = resolver.evaluateVariabilityExpression({and: [true, true, true, true]})
@@ -163,11 +135,67 @@ it('mod: 1 -> true', () => {
     expect(result).to.equal(1)
 })
 
+it('get_variability_expression: name -> correct', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            variability: {
+                expressions: {
+                    name: 'Miles',
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityExpression({get_variability_expression: 'name'})
+    expect(result).to.equal('Miles')
+})
+
 it('get_variability_input', () => {
     const resolver = getDefaultVariabilityResolver()
     resolver.setVariabilityInputs({hello: 'world'})
     const result = resolver.evaluateVariabilityExpression({get_variability_input: 'hello'})
     expect(result).to.equal('world')
+})
+
+it('get_variability_condition: name -> correct', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            variability: {
+                expressions: {
+                    name: true,
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_variability_condition: 'name'})
+    expect(result).to.equal(true)
+})
+
+it('get_element_presence: present', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    conditions: true,
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: 'node'})
+    expect(result).to.equal(true)
+})
+
+it('get_element_presence: absent', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    conditions: false,
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: 'node'})
+    expect(result).to.equal(false)
 })
 
 it('concat', () => {
