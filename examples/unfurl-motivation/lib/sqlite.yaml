@@ -56,5 +56,14 @@ node_types:
             Standard:
                 operations:
                     create:
-                        implementation: >
-                            ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.host_public_address }} 'sudo apt-get update -y && sudo apt-get install sqlite3 -y && sudo mkdir -p {{ SELF.database_directory }} && sudo sqlite3 {{ SELF.database_file }} "VACUUM";'
+                        implementation: |
+                            set -e
+
+                            ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.host_public_address }} <<EOF
+                                sudo apt-get update -y
+                                sudo apt-get install sqlite3 -y
+                                sudo mkdir -p {{ SELF.database_directory }}
+                                sudo sqlite3 {{ SELF.database_file }} "VACUUM";
+                            EOF
+                        inputs:
+                            keeplines: true

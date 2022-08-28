@@ -32,7 +32,8 @@ node_types:
 
         interfaces:
             Standard:
-                create: echo dummy
+                operations:
+                    create: echo 'Nothing to do here'
 
     openstack.vm:
         derived_from: tosca.nodes.Compute
@@ -105,33 +106,43 @@ node_types:
 
         interfaces:
             Standard:
-                create:
-                    implementation: >
-                        export OS_AUTH_TYPE={{ SELF.auth_type }} &&
-                        export OS_AUTH_URL={{ SELF.auth_url }} &&
-                        export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }} &&
-                        export OS_REGION_NAME={{ SELF.region_name }} &&
-                        export OS_INTERFACE={{ SELF.interface }} &&
-                        export OS_APPLICATION_CREDENTIAL_ID={{ SELF.application_credential_id }} &&
-                        export OS_APPLICATION_CREDENTIAL_SECRET={{ SELF.application_credential_secret }} &&
-                        openstack security group create {{ SELF.instance_name }} >/dev/null &&
-                        openstack security group rule create --protocol tcp --dst-port {{ SELF.port }} --remote-ip 0.0.0.0/0 --ingress --ethertype IPv4 {{ SELF.instance_name }} >/dev/null &&
-                        openstack server create --flavor {{ SELF.flavor }} --image "{{ SELF.image }}" --key-name {{ SELF.key_name }} --security-group {{ SELF.security_group }} --security-group {{ SELF.instance_name }} --wait {{ SELF.instance_name }} >/dev/null &&
-                        sleep 15 &&
-                        openstack server show {{ SELF.instance_name }} --format=json
-                    inputs:
-                        resultTemplate:
-                            attributes:
-                                public_address: '{{ (stdout | from_json).addresses[SELF.network][0] }}'
+                operations:
+                    create:
+                        implementation: |
+                            set -e
 
-                delete:
-                    implementation: >
-                        export OS_AUTH_TYPE={{ SELF.auth_type }} &&
-                        export OS_AUTH_URL={{ SELF.auth_url }} &&
-                        export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }} &&
-                        export OS_REGION_NAME={{ SELF.region_name }} &&
-                        export OS_INTERFACE={{ SELF.interface }} &&
-                        export OS_APPLICATION_CREDENTIAL_ID={{ SELF.application_credential_id }} &&
-                        export OS_APPLICATION_CREDENTIAL_SECRET={{ SELF.application_credential_secret }} &&
-                        openstack server delete --wait {{ SELF.instance_name }} && 
-                        openstack security group delete {{ SELF.instance_name }}
+                            export OS_AUTH_TYPE={{ SELF.auth_type }}
+                            export OS_AUTH_URL={{ SELF.auth_url }}
+                            export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }}
+                            export OS_REGION_NAME={{ SELF.region_name }}
+                            export OS_INTERFACE={{ SELF.interface }}
+                            export OS_APPLICATION_CREDENTIAL_ID={{ SELF.application_credential_id }}
+                            export OS_APPLICATION_CREDENTIAL_SECRET={{ SELF.application_credential_secret }}
+
+                            openstack security group create {{ SELF.instance_name }} >/dev/null
+                            openstack security group rule create --protocol tcp --dst-port {{ SELF.port }} --remote-ip 0.0.0.0/0 --ingress --ethertype IPv4 {{ SELF.instance_name }} >/dev/null
+                            openstack server create --flavor {{ SELF.flavor }} --image "{{ SELF.image }}" --key-name {{ SELF.key_name }} --security-group {{ SELF.security_group }} --security-group {{ SELF.instance_name }} --wait {{ SELF.instance_name }} >/dev/null
+                            sleep 60
+                            openstack server show {{ SELF.instance_name }} --format=json
+                        inputs:
+                            keeplines: true
+                            resultTemplate:
+                                attributes:
+                                    public_address: '{{ (stdout | from_json).addresses[SELF.network][0] }}'
+
+                    delete:
+                        implementation: |
+                            set -e
+
+                            export OS_AUTH_TYPE={{ SELF.auth_type }}
+                            export OS_AUTH_URL={{ SELF.auth_url }}
+                            export OS_IDENTITY_API_VERSION={{ SELF.identity_api_version }}
+                            export OS_REGION_NAME={{ SELF.region_name }}
+                            export OS_INTERFACE={{ SELF.interface }}
+                            export OS_APPLICATION_CREDENTIAL_ID={{ SELF.application_credential_id }}
+                            export OS_APPLICATION_CREDENTIAL_SECRET={{ SELF.application_credential_secret }}
+
+                            openstack server delete --wait {{ SELF.instance_name }}
+                            openstack security group delete {{ SELF.instance_name }}
+                        inputs:
+                            keeplines: true
