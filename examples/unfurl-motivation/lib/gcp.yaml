@@ -72,7 +72,7 @@ node_types:
                             set -e
                             gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }}
                             gcloud services enable sqladmin.googleapis.com >/dev/null
-                            gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --async --format=json | gcloud beta sql operations wait $(jq --raw-output '.name') >/dev/null
+                            gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --async --format=json | gcloud beta sql operations wait --timeout unlimited $(jq --raw-output '.name') >/dev/null
                             gcloud sql users set-password root --host=% --instance {{ SELF.instance_name }} --password {{ SELF.password }} >/dev/null
                             gcloud sql instances describe {{ SELF.instance_name }} --format=json
                         inputs:
