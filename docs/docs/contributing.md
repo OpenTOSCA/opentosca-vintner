@@ -8,6 +8,7 @@ But please follow our guidelines and read the [development guidelines]({{ fix_ur
 Branches should be names as follows
 
 - `fix/short-title` for bug fixes
+- `docs/short-title` for documentations
 - `feature/short-title` for features
 - `refactor/short-title` for refactoring
 - `project/short-title` for thesis, EnPro or StuPro

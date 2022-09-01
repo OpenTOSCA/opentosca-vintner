@@ -16,16 +16,24 @@ yarn --frozen-lockfile
 
 We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank} or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
 Both are [for free](https://www.jetbrains.com/community/education/#students){target=_blank} for students.
-Open the Project Settings using `Ctrl + Alt + A` and configure ESLint and Prettier Settings as given in the figures below with the following pattern.
+Open the Project Settings using `Ctrl + Alt + S` to configure ESLint and Prettier.
+
+ESLint should be configured as given in the figure below with the following pattern.
 
 ```
-{**/*,*}.{ts,json,yaml,yml}
+{**/*,*}.{ts}
 ```
 
 <figure markdown>
   ![IntelliJ ESLint Settings](assets/images/intellij-eslint.png){class=shadow}
   <figcaption>Figure 1: IntelliJ ESLint Settings</figcaption>
 </figure>
+
+Prettier should be configured as given in the figure below with the following pattern.
+
+```
+{**/*,*}.{ts,json,yaml,yml}
+```
 
 <figure markdown>
   ![IntelliJ Prettier Settings](assets/images/intellij-prettier.png){class=shadow}
