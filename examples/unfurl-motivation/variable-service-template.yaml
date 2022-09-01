@@ -77,7 +77,7 @@ topology_template:
             is_prod: {equal: [{get_variability_input: mode}, prod]}
 
     node_templates:
-        application:
+        web_component:
             type: node.application
             properties:
                 application_name: application

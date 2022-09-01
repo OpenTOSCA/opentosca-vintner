@@ -56,7 +56,7 @@ topology_template:
             type: string
 
     node_templates:
-        application:
+        web_component:
             type: node.application
             properties:
                 application_name: application
