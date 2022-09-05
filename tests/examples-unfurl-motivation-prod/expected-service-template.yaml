@@ -99,14 +99,3 @@ topology_template:
             properties:
                 region: {get_input: gcp_region}
                 service_account_file: {get_input: gcp_service_account_file}
-
-        os:
-            type: openstack.provider
-            properties:
-                region_name: {get_input: os_region_name}
-                auth_type: {get_input: os_auth_type}
-                auth_url: {get_input: os_auth_url}
-                identity_api_version: {get_input: os_identity_api_version}
-                interface: {get_input: os_interface}
-                application_credential_id: {get_input: os_application_credential_id}
-                application_credential_secret: {get_input: os_application_credential_secret}

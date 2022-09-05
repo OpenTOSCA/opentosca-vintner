@@ -171,6 +171,7 @@ topology_template:
 
         os:
             type: openstack.provider
+            conditions: {get_variability_expression: is_dev}
             properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}
