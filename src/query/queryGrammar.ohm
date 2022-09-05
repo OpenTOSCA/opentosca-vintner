@@ -1,11 +1,15 @@
 Query {
   Main = Expression end
   Expression = From Select
+  MatchExpression = From Match
 
   From = fromLiteral ident
   Select = selectLiteral Step+
   Step = path Condition?
   Condition = "[" Value comparison Value "]"
+  Match = Node (Relationship Node)*
+  Node = "(" Step+ ")"
+  Relationship = "-[" ident "]->"
 
   Value = literal | path | ident
 
@@ -13,10 +17,9 @@ Query {
   selectLiteral = "SELECT"
 
   comparison = ("=" | "!=" | ">=" | "<=" | ">" | "<")
-  path = ident ( "." (ident | string) )*
+  path = ident ("." ident)*
   ident = letter (alnum | "_" | "-")*
-  literal = string | float | digit | bool | null
-  null = "null" | "NULL"
+  literal = string | float | digit | bool
   bool = "true" | "false" | "TRUE" | "FALSE"
   string
     = "'" (~"'" any)* "'"
