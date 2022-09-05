@@ -1,5 +1,5 @@
 Query {
-  Main = Expression end
+  Main = (Expression | MatchExpression) end
   Expression = From Select
   MatchExpression = From Match
 
@@ -7,13 +7,14 @@ Query {
   Select = selectLiteral Step+
   Step = path Condition?
   Condition = "[" Value comparison Value "]"
-  Match = Node (Relationship Node)*
+  Match = matchLiteral Node (Relationship Node)*
   Node = "(" Step+ ")"
   Relationship = "-[" ident "]->"
 
   Value = literal | path | ident
 
   fromLiteral = "FROM"
+  matchLiteral = "MATCH"
   selectLiteral = "SELECT"
 
   comparison = ("=" | "!=" | ">=" | "<=" | ">" | "<")
