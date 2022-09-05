@@ -1,0 +1,25 @@
+Query {
+  Main = Expression end
+  Expression = From Select
+
+  From = fromLiteral ident
+  Select = selectLiteral Step+
+  Step = path Condition?
+  Condition = "[" Value comparison Value "]"
+
+  Value = literal | path | ident
+
+  fromLiteral = "FROM"
+  selectLiteral = "SELECT"
+
+  comparison = ("=" | "!=" | ">=" | "<=" | ">" | "<")
+  path = ident ( "." (ident | string) )*
+  ident = letter (alnum | "_" | "-")*
+  literal = string | float | digit | bool | null
+  null = "null" | "NULL"
+  bool = "true" | "false" | "TRUE" | "FALSE"
+  string
+    = "'" (~"'" any)* "'"
+    | "\"" (~"\"" any)* "\""
+  float   = digit? "." digit+
+}

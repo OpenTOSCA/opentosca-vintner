@@ -95,6 +95,15 @@ initOrchestrators
         })
     )
 
+const query = program.command('query').description('executes a query')
+
+query
+    .command('execute')
+    .requiredOption('--query <string>', 'path to query')
+    .action(hae(async options => {
+        await Controller.query.query(options)
+    }))
+
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
