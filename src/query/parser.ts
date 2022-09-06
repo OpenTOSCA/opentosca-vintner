@@ -17,8 +17,11 @@ export class Parser {
         MatchExpression(from, match) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST()}
         },
-        From(_, template) {
-            return {type: 'From', value: template.buildAST()}
+        FromTemplate(_, template) {
+            return {type: 'From', template: template.buildAST()}
+        },
+        FromInstance(_, template, __, instance) {
+            return {type: 'From', template: template.buildAST(), instance: instance.buildAST()}
         },
         Select(_, step) {
             return {type: 'Select', value: step.buildAST().join()}
@@ -29,7 +32,7 @@ export class Parser {
         Condition(a_, value1, comparison, value2, b_) {
             return {type: 'Comparison', value: value1.buildAST() + comparison.buildAST() + value2.buildAST()}
         },
-        Match(node1, relationship, node2) {
+        Match(_, node1, relationship, node2) {
             return {type: 'Match', node1: node1.buildAST(), relationship: relationship, node2: node2.buildAST()}
         },
         Node(start, node, end) {

@@ -1,9 +1,10 @@
 Query {
   Main = (Expression | MatchExpression) end
-  Expression = From Select
-  MatchExpression = From Match
+  Expression = (FromInstance | FromTemplate) Select
+  MatchExpression = (FromInstance | FromTemplate) Match
 
-  From = fromLiteral ident
+  FromInstance = fromLiteral ident "/" ident
+  FromTemplate = fromLiteral ident
   Select = selectLiteral Step+
   Step = path Condition?
   Condition = "[" Value comparison Value "]"

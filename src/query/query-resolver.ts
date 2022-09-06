@@ -1,10 +1,13 @@
 import {Parser} from './parser';
 import * as files from '../utils/files';
 import {Template} from '../repository/templates';
+import {Instance} from '../repository/instances';
 
 type Expression = {
     type: string
     value: string
+    template: string
+    instance: string
     from: Expression
     select: Expression
 }
@@ -42,12 +45,15 @@ export class QueryResolver {
 
     /** Loads the template or instance in the FROM clause */
     evaluateFrom(expression: Expression) {
-        const path = expression.value
         let serviceTemplate
         try {
-            serviceTemplate = files.loadFile(new Template(path).getVariableServiceTemplatePath())
+            if (expression.instance) {
+                serviceTemplate = new Instance(expression.instance).getServiceTemplate()
+            } else {
+                serviceTemplate = new Template(expression.template).getVariableServiceTemplate()
+            }
         } catch (error) {
-            console.error(`Could not locate service template ${path}`)
+            console.error('Could not locate service template')
         }
         return serviceTemplate
     }
