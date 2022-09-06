@@ -1,29 +1,24 @@
 import {Parser} from './parser';
-import * as files from '../utils/files';
 import {Template} from '../repository/templates';
 import {Instance} from '../repository/instances';
-
-type Expression = {
-    type: string
-    value: string
-    template: string
-    instance: string
-    from: Expression
-    select: Expression
-}
+import {
+    ConditionExpression,
+    Expression,
+    FromExpression,
+    SelectExpression
+} from '../specification/query-type';
 
 export class QueryResolver {
 
     resolve(query: string) {
         const parser = new Parser
         let tree
-        let result
         try {
             tree = parser.getAST(query)
         } catch (e) {
             console.error(e.message)
         }
-        console.log("Got the following AST: ")
+        console.log("Generated the following AST: ")
         console.log(JSON.stringify(tree, null, 4))
 
         return this.evaluate(tree);
@@ -44,7 +39,7 @@ export class QueryResolver {
     }
 
     /** Loads the template or instance in the FROM clause */
-    evaluateFrom(expression: Expression) {
+    evaluateFrom(expression: FromExpression) {
         let serviceTemplate
         try {
             if (expression.instance) {
@@ -58,8 +53,44 @@ export class QueryResolver {
         return serviceTemplate
     }
 
-    evaluateSelect(data: Object, expression: Expression) {
-        return this.resolvePath(expression.value, data)
+    evaluateSelect(data: Object, expression: SelectExpression) {
+        let result = data
+        for (const i of expression.path) {
+            if (i.condition) {
+                if (i.path == "*") {
+                    for (const j in result) {
+                        if (!this.evaluateCondition(result[j], i.condition)) {
+                            delete result[j]
+                        }
+                    }
+                } else {
+                    result = this.evaluateCondition(result[i.path], i.condition)
+                }
+            } else {
+                result = result[i.path]
+            }
+        }
+        return result
+    }
+
+    evaluateCondition(data: Object, condition: ConditionExpression) {
+        const {variable, value, operator} = condition
+        const property = this.resolvePath(variable, data)
+        switch (operator) {
+            case '=':
+                return ((property == value)? data : null)
+            case '!=':
+                return ((property !== value)? data : null)
+            case '>=':
+                return ((property >= value)? data : null)
+            case '>':
+                return ((property > value)? data : null)
+            case '<=':
+                return ((property <= value)? data : null)
+            case '<':
+                return ((property < value)? data : null)
+        }
+        return null
     }
 
     resolvePath(path, obj) {

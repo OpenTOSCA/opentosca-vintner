@@ -5,22 +5,24 @@ Query {
 
   FromInstance = fromLiteral ident "/" ident
   FromTemplate = fromLiteral ident
-  Select = selectLiteral Step+
-  Step = path Condition?
+  Select = selectLiteral (CondStep | Step) ("." (CondStep | Step))*
+  Step = ident
+  CondStep = (asterisk | ident) Condition
   Condition = "[" Value comparison Value "]"
   Match = matchLiteral Node (Relationship Node)*
   Node = "(" Step+ ")"
   Relationship = "-[" ident "]->"
 
-  Value = literal | path | ident
+  Value = path | literal
 
   fromLiteral = "FROM"
   matchLiteral = "MATCH"
   selectLiteral = "SELECT"
 
+  asterisk = "*"
   comparison = ("=" | "!=" | ">=" | "<=" | ">" | "<")
-  path = ident ("." ident)*
   ident = letter (alnum | "_" | "-")*
+  path = letter (alnum | "_" | "-" | ".")*
   literal = string | float | digit | bool
   bool = "true" | "false" | "TRUE" | "FALSE"
   string

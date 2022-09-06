@@ -1,5 +1,6 @@
 import ohm from 'ohm-js';
 import * as fs from 'fs';
+import {Expression, FromExpression, SelectExpression, StepExpression} from '../specification/query-type';
 
 export class Parser {
 
@@ -11,26 +12,29 @@ export class Parser {
         Main(a, _) {
             return a.buildAST()
         },
-        Expression(from, select) {
+        Expression(from, select): Expression {
             return {type: 'Expression', from: from.buildAST(), select: select.buildAST()}
         },
         MatchExpression(from, match) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST()}
         },
-        FromTemplate(_, template) {
+        FromTemplate(_, template): FromExpression {
             return {type: 'From', template: template.buildAST()}
         },
-        FromInstance(_, template, __, instance) {
+        FromInstance(_, template, __, instance): FromExpression {
             return {type: 'From', template: template.buildAST(), instance: instance.buildAST()}
         },
-        Select(_, step) {
-            return {type: 'Select', value: step.buildAST().join()}
+        Select(_, firstStep, __, nextSteps): SelectExpression {
+            return {type: 'Select', path: [firstStep.buildAST()].concat(nextSteps.buildAST())}
         },
-        Step(path, condition) {
-            return path.buildAST()
+        Step(path): StepExpression {
+            return {type: 'Step', path: path.buildAST()}
         },
-        Condition(a_, value1, comparison, value2, b_) {
-            return {type: 'Comparison', value: value1.buildAST() + comparison.buildAST() + value2.buildAST()}
+        CondStep(path, condition): StepExpression {
+            return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
+        },
+        Condition(a_, variable, operator, value, b_) {
+            return {type: 'Comparison', variable: variable.buildAST(), operator: operator.buildAST(), value: value.buildAST()}
         },
         Match(_, node1, relationship, node2) {
             return {type: 'Match', node1: node1.buildAST(), relationship: relationship, node2: node2.buildAST()}
@@ -47,9 +51,6 @@ export class Parser {
         comparison(v) {
             return v.sourceString
         },
-        path(a, b, c) {
-            return [a, c].map((v) => v.sourceString).join('')
-        },
         ident(a, b) {
             return [a, b].map((v) => v.sourceString).join('')
         },
@@ -65,8 +66,17 @@ export class Parser {
         float(a, b, c) {
             return parseFloat(a + b + c)
         },
+        path(a, b) {
+            return [a, b].map((v) => v.sourceString).join('')
+        },
+        asterisk(v) {
+            return '*'
+        },
         _iter(...children) {
             return children.map(c => c.buildAST());
+        },
+        _terminal() {
+            return ''
         }
     }
 
