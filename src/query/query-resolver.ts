@@ -1,5 +1,5 @@
 import {Parser} from './parser';
-import {Template} from '../repository/templates';
+import {Template, Templates} from '../repository/templates';
 import {Instance} from '../repository/instances';
 import {
     ConditionExpression,
@@ -30,27 +30,34 @@ export class QueryResolver {
      * @return result The data that matches the expression
      */
     evaluate(expression: Expression) {
-        let result
-
-        result = this.evaluateFrom(expression.from)
-        result = this.evaluateSelect(result, expression.select)
-
-        return result
+        const results = []
+        const templates = this.evaluateFrom(expression.from)
+        for (const t of templates) {
+            const result = this.evaluateSelect(t.template, expression.select)
+            if (result) {
+                results.push({name: t.name, result: result})
+            }
+        }
+        return results
     }
 
     /** Loads the template or instance in the FROM clause */
     evaluateFrom(expression: FromExpression) {
-        let serviceTemplate
+        const serviceTemplates = []
         try {
             if (expression.instance) {
-                serviceTemplate = new Instance(expression.instance).getServiceTemplate()
+                serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance).getServiceTemplate()})
+            } else if (expression.template == '*') {
+                for (const t of Templates.all()) {
+                    serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
+                }
             } else {
-                serviceTemplate = new Template(expression.template).getVariableServiceTemplate()
+                serviceTemplates.push({name: expression.template, template:new Template(expression.template).getVariableServiceTemplate()})
             }
         } catch (error) {
             console.error('Could not locate service template')
         }
-        return serviceTemplate
+        return serviceTemplates
     }
 
     evaluateSelect(data: Object, expression: SelectExpression) {
@@ -67,7 +74,7 @@ export class QueryResolver {
                     result = this.evaluateCondition(result[i.path], i.condition)
                 }
             } else {
-                result = result[i.path]
+                result = (Object.getOwnPropertyDescriptor(result, i.path)) ? result[i.path] : null
             }
         }
         return result

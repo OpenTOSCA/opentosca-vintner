@@ -4,7 +4,7 @@ Query {
   MatchExpression = (FromInstance | FromTemplate) Match
 
   FromInstance = fromLiteral ident "/" ident
-  FromTemplate = fromLiteral ident
+  FromTemplate = fromLiteral (asterisk | ident)
   Select = selectLiteral (CondStep | Step) ("." (CondStep | Step))*
   Step = ident
   CondStep = (asterisk | ident) Condition
