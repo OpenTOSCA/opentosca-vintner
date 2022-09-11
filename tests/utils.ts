@@ -5,7 +5,19 @@ import {expect} from 'chai'
 import Controller from '../src/controller'
 import {VariabilityResolver} from '../src/controller/template/resolve'
 
-export function getDefaultTest({preset, error, example}: {preset?: string; error?: string; example?: string}) {
+export function getDefaultTest({
+    preset,
+    error,
+    example,
+    pruneRelations,
+    disableConsistencyCheck,
+}: {
+    preset?: string
+    error?: string
+    example?: string
+    pruneRelations?: boolean
+    disableConsistencyCheck?: boolean
+}) {
     return async function () {
         const dir = path.join(__dirname, this.test.title)
         files.assertDirectory(dir)
@@ -17,6 +29,8 @@ export function getDefaultTest({preset, error, example}: {preset?: string; error
                 inputs: getDefaultInputs(dir),
                 output,
                 preset,
+                pruneRelations,
+                disableConsistencyCheck,
             })
         }
 

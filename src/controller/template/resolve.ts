@@ -13,6 +13,8 @@ export type TemplateResolveArguments = {
     preset?: string
     inputs?: string
     output?: string
+    pruneRelations?: boolean
+    disableConsistencyCheck?: boolean
 }
 
 export default function (options: TemplateResolveArguments) {
@@ -32,6 +34,7 @@ export default function (options: TemplateResolveArguments) {
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
+        .setPruneRelations(options.pruneRelations)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -40,7 +43,7 @@ export default function (options: TemplateResolveArguments) {
     resolver.resolve()
 
     // Check consistency
-    resolver.checkConsistency()
+    if (!options.disableConsistencyCheck) resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
     resolver.transformInPlace()
@@ -73,6 +76,7 @@ export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
 
     private _variabilityInputs?: InputAssignmentMap
+    private pruneRelations = false
 
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
@@ -163,22 +167,36 @@ export class VariabilityResolver {
     }
 
     resolve() {
-        for (const node of this.nodes) {
-            node.present = this.checkPresence(node)
-        }
-
-        for (const relation of this.relations) {
-            relation.present = this.checkPresence(relation)
-        }
-
+        for (const node of this.nodes) this.checkPresence(node)
+        for (const relation of this.relations) this.checkPresence(relation)
         return this
     }
 
-    checkPresence(element: Element) {
+    // TODO: prune only if element has no conditions assigned?
+    // TODO: add documentation
+    checkPresence(element: Node | Relation) {
+        // Check if presence already has been evaluated
         if (validator.hasProperty(element, 'present')) return element.present
+
+        // Check if relation is pruned
+        if (this.pruneRelations && validator.hasProperty(element, 'source')) {
+            //if (!this.checkPresence(this.getElement(element.source))) return false
+            this.checkPresence(this.getElement(element.source))
+            if (validator.hasProperty(element, 'present')) return element.present
+        }
+
+        // Evaluate assigned conditions
         const conditions = element.conditions
         element.groups.forEach(group => conditions.push(...group.conditions))
-        return utils.filterNotNull(conditions).every(condition => this.evaluateVariabilityCondition(condition))
+        const present = utils.filterNotNull(conditions).every(condition => this.evaluateVariabilityCondition(condition))
+        element.present = present
+
+        // Prune relations of node if node is not present and pruneRelations is enabled
+        if (this.pruneRelations && validator.hasProperty(element, 'relations') && !present) {
+            element.relations.forEach(relation => (relation.present = false))
+        }
+
+        return present
     }
 
     checkConsistency() {
@@ -280,6 +298,11 @@ export class VariabilityResolver {
 
     setVariabilityInputs(inputs: InputAssignmentMap) {
         this._variabilityInputs = {...this._variabilityInputs, ...inputs}
+        return this
+    }
+
+    setPruneRelations(value?: boolean) {
+        this.pruneRelations = value
         return this
     }
 

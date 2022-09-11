@@ -126,6 +126,8 @@ template
     .requiredOption('--template <string>', 'path to variable service template')
     .option('--preset [string]', 'name of the variability preset set')
     .option('--inputs [string]', 'path to the variability inputs')
+    .option('--prune-relations [boolean]', 'prune relation if node template is not present')
+    .option('--disable-consistency-check [boolean]', 'disable consistency check')
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae(async options => {

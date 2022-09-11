@@ -3,6 +3,7 @@ import {getDefaultTest} from './utils'
 it('node', getDefaultTest({}))
 
 it('requirement-assignment', getDefaultTest({}))
+it('requirement-assignment-prune', getDefaultTest({pruneRelations: true}))
 
 it('groups', getDefaultTest({}))
 
@@ -13,6 +14,7 @@ it('preset', getDefaultTest({preset: 'two'}))
 it('tosca-definitions-version', getDefaultTest({}))
 
 it('relationship', getDefaultTest({}))
+it('relationship-prune', getDefaultTest({pruneRelations: true}))
 
 it(
     'relationship-throw-undefined',

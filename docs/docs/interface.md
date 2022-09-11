@@ -307,6 +307,8 @@ resolves variability
 | template |  true  | string | path to variable service template |
 | preset |  false  | string | name of the variability preset set |
 | inputs |  false  | string | path to the variability inputs |
+| prune-relations |  false  | boolean | prune relation if node template is not present |
+| disable-consistency-check |  false  | boolean | disable consistency check |
 | output |  true  | string | path of the output |
 
 ## templates list
