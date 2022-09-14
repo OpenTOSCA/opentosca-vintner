@@ -8,12 +8,12 @@
 <%- description %>
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     <%- usage -%> <%- options.filter(o => o.mandatory).map(o => `--${o.option} \${${o.option.toUpperCase()}}`).join(' ') %>
     ```
 <% if (!cliOnly) { -%>
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
 <% if (options.filter(o => o.mandatory).length !== 0) {-%>
@@ -23,7 +23,7 @@
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
 <% if (options.filter(o => o.mandatory).length !== 0) { -%>
     await axios.post(SERVER_ADDRESS + "/<%- commands.join('/') -%>", {
@@ -35,7 +35,7 @@
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
 <% if (options.filter(o => o.mandatory).length !== 0) { -%>
     requests.post(SERVER_ADDRESS + "/<%- commands.join('/') -%>", json={
