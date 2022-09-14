@@ -4,7 +4,7 @@ This document specifies _Dynamic Deployment Artifacts_ which are supposed to be 
 The intention is to build variants of _Deployment Artifacts_ which are specific for the application.
 The specification is under active development.
 
-To build _Dynamic Deployment Artifacts_ a `build` management operation is defined for `tosca.interfaces.node.lifecycle.Variability`.
+To build _Dynamic Deployment Artifacts_ a `build` management operation is defined for the `tosca.interfaces.node.lifecycle.Variability` interface.
 This management operation can be used in several stages.
 Artifacts can be build during modeling when packaging the application as CSAR, right before the deployment process or during deployment.
 The implementation of the `build` management operation can start, e.g., a build pipeline and set a reference such as a Docker Tag as attribute of the respective _Node Template_.
@@ -15,3 +15,6 @@ tosca.interfaces.node.lifecycle.Variability
 +    build:
 +        description: Builds a Deployment Artifact
 ```
+
+A rough idea has been also mentioned in
+[TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969505){target=_blank}.
