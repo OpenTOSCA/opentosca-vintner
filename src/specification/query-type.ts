@@ -11,6 +11,13 @@ export type FromExpression = {
     instance?: string
 }
 
+export type PredicateExpression = {
+    type: 'Predicate'
+    a: Object
+    operator?: string
+    b?: Object
+}
+
 export type SelectExpression = {
     type: 'Select'
     path: StepExpression[]
@@ -19,7 +26,7 @@ export type SelectExpression = {
 export type StepExpression = {
     type: 'Step'
     path: string
-    condition?: ConditionExpression
+    condition?: PredicateExpression
 }
 
 export type ConditionExpression = {

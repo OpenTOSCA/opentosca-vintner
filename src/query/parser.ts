@@ -1,6 +1,13 @@
 import ohm from 'ohm-js';
 import * as fs from 'fs';
-import {Expression, FromExpression, SelectExpression, StepExpression} from '../specification/query-type';
+import {
+    ConditionExpression,
+    Expression,
+    FromExpression,
+    PredicateExpression,
+    SelectExpression,
+    StepExpression
+} from '../specification/query-type';
 
 export class Parser {
 
@@ -30,11 +37,17 @@ export class Parser {
         Step(path): StepExpression {
             return {type: 'Step', path: path.buildAST()}
         },
-        CondStep(path, condition): StepExpression {
+        StepCond(path, _, condition, __): StepExpression {
             return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
         },
-        Condition(a_, variable, operator, value, b_) {
-            return {type: 'Comparison', variable: variable.buildAST(), operator: operator.buildAST(), value: value.buildAST()}
+        Predicate_multi(a, v, b): PredicateExpression {
+            return {type: 'Predicate', a: a.buildAST(), operator: v.sourceString, b: b.buildAST()}
+        },
+        Predicate_single(a): PredicateExpression {
+            return {type: 'Predicate', a: a.buildAST()}
+        },
+        Condition(variable, operator, value): ConditionExpression{
+            return {type: 'Condition', variable: variable.buildAST(), operator: operator.buildAST(), value: value.buildAST()}
         },
         Match(_, node1, relationship, node2) {
             return {type: 'Match', node1: node1.buildAST(), relationship: relationship, node2: node2.buildAST()}

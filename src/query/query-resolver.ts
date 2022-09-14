@@ -4,7 +4,7 @@ import {Instance} from '../repository/instances';
 import {
     ConditionExpression,
     Expression,
-    FromExpression,
+    FromExpression, PredicateExpression,
     SelectExpression
 } from '../specification/query-type';
 
@@ -17,6 +17,7 @@ export class QueryResolver {
             tree = parser.getAST(query)
         } catch (e) {
             console.error(e.message)
+            process.exit(0);
         }
         console.log("Generated the following AST: ")
         console.log(JSON.stringify(tree, null, 4))
@@ -66,18 +67,32 @@ export class QueryResolver {
             if (i.condition) {
                 if (i.path == "*") {
                     for (const j in result) {
-                        if (!this.evaluateCondition(result[j], i.condition)) {
+                        if (!this.evaluatePredicate(result[j], i.condition)) {
                             delete result[j]
                         }
                     }
                 } else {
-                    result = this.evaluateCondition(result[i.path], i.condition)
+                    result = this.evaluatePredicate(result[i.path], i.condition)
                 }
             } else {
                 result = (Object.getOwnPropertyDescriptor(result, i.path)) ? result[i.path] : null
             }
         }
         return result
+    }
+
+    evaluatePredicate(data: Object, predicate: PredicateExpression) {
+        const {a, operator, b} = predicate
+        if (operator == null) {
+            return this.evaluateCondition(data, a as ConditionExpression)
+        } else if (operator == 'AND') {
+            return this.evaluatePredicate(data, a as PredicateExpression)
+            && this.evaluatePredicate(data, b as PredicateExpression)
+        } else if (operator == 'OR') {
+            return this.evaluatePredicate(data, a as PredicateExpression)
+                || this.evaluatePredicate(data, b as PredicateExpression)
+        }
+        return null
     }
 
     evaluateCondition(data: Object, condition: ConditionExpression) {
