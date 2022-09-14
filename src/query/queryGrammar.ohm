@@ -32,4 +32,7 @@ Query {
     = "'" (~"'" any)* "'"
     | "\"" (~"\"" any)* "\""
   float   = digit? "." digit+
+
+  comment = "/*" (~"*/" any)* "*/"
+  space += comment
 }
