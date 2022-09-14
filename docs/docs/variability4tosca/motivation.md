@@ -1,6 +1,9 @@
 # Motivating Scenario
 
 In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivating scenario.
+The motivating scenario is a simple composite application that consists a web component and database.
+This application can be deployed in different variants.
+During development the application should be deployed on a single virtual machine whereas during production an elastic deployment is required and, therefore, the application is deployed on GCP.
 
 <figure markdown>
   ![Motivating Scenario]({{ fix_url('assets/images/motivation.png') }}){ width="700" }
@@ -18,7 +21,7 @@ We expect that the following is installed on a Linux machine.
 ## Preparation
 
 First, install OpenTOSCA Vintner.
-For more information see [Installation]({{ fix_url('installation')}}){target=_blank}.
+For more information see [Installation]({{ fix_url(fix_url('installation'))}}){target=_blank}.
 
 ```
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
@@ -32,7 +35,7 @@ vintner setup init
 We currently support xOpera and Unfurl.
 Since both can only be installed on Linux, we implemented a WSL integration for both.
 In our case, we run on a Linux machine and use xOpera.
-For more information see [Orchestrators]({{ fix_url('orchestrators')}}){target=_blank}.
+For more information see [Orchestrators]({{ fix_url(fix_url('orchestrators'))}}){target=_blank}.
 
 ```
 vintner orchestrators init opera

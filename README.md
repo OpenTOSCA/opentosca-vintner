@@ -1,4 +1,4 @@
-[![OpenTOSCA Vintner](assets/logo.svg)](https://vintner.opentosca.org)
+[![OpenTOSCA Vintner](assets/logo.png)](https://vintner.opentosca.org)
 
 <div align="center">
 
@@ -10,14 +10,15 @@
 [![Plugins](https://img.shields.io/badge/Orchestrators-xOpera%20%7C%20Unfurl-blueviolet.svg)](https://vintner.opentosca.org)
 [![OpenTOSCA](https://img.shields.io/badge/OpenTOSCA-%E2%9D%A4%EF%B8%8F-ff69b4)](https://opentosca.org)
 
-A Concept for Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
+OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
+Preprocessing includes, e.g., the resolving of variability.
 
 </div>
 
   - [Documentation](https://vintner.opentosca.org)
   - [Getting Started](https://vintner.opentosca.org/getting-started)
-  - [Motivating Scenario](https://vintner.opentosca.org/motivation)
-  - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
+  - [Variability4TOSCA Motivating Scenario](https://vintner.opentosca.org/variability4tosca/motivation)
+  - [Variability4TOSCA Specification](https://vintner.opentosca.org/variability4tosca/specification)
   - [CLI Documentation](https://vintner.opentosca.org/interface)
   - [REST API Documentation](https://vintner.opentosca.org/interface)
 
