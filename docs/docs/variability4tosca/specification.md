@@ -39,7 +39,7 @@ A _Variability Definition_ defines _Variability Inputs_, _Variability Presets_, 
 The following example contains a _Variability Definition_ which declares the _Variability Input_ `mode` and two _Variability Conditions_ `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
 Furthermore, two _Variability Presets_ `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
-```
+```linenums="1"
 variability:
     inputs:
         mode:
@@ -82,7 +82,7 @@ A _Variability Expression_ is an expression which consists of operators and func
 For example, the following expression returns the total amount of costs. 
 This result might be used inside a _Variability Condition_ to ensure that the deployment costs are within a specific budget.
 
-```
+```linenums="1"
 expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_input: costs_offering_b}]}
 ```
 
@@ -93,7 +93,7 @@ A _Variability Condition_ is a _Variability Expression_ that returns a boolean.
 Allowed operators and functions are listed below.
 For example, the following condition evaluates to true if the _Variability Input_ `mode` equals `prod`.
 
-```
+```linenums="1"
 is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
 
@@ -109,7 +109,7 @@ These conditions must evaluate to true otherwise the respective _Node Template_ 
 
 The following example contains a _Node Template_ that has a _Variability Condition_ assigned.
 
-```
+```linenums="1"
 prod_database:
     type: gcp.sql.db
     conditions: {get_variability_expression: is_prod}
@@ -130,7 +130,7 @@ These conditions must evaluate to true otherwise the respective relationship is 
 
 The following example contains a _Requirement Assignment_ that has a _Variability Condition_ assigned.
 
-```
+```linenums="1"
 requirements:
     - host:
           node: dev_runtime
@@ -153,7 +153,7 @@ Furthermore, group elements can be _Node Templates_ and _Requirement Assignments
 
 The following example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
 
-```
+```linenums="1"
 example_group:
     type: variability.groups.Conditional
     members: [prod_database, [application, prod_connects_to]]
@@ -165,20 +165,38 @@ example_group:
 There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
 The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.Conditional` should derive from.
 
-```
+```linenums="1"
 variability.groups.Root
     derived_from: tosca.groups.Root
 ```
 
 The second _Group Type_ should be used when a group has variability definitions assigned.
 
-```
+```linenums="1"
 variability.groups.Conditional
     derived_from: variability.groups.Root
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```
 
 These groups are expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+## Normative Interface Types
+
+The following normative interfaces define a management interface for nodes and relationships.
+Currently, no management operations are defined. 
+The definition is intended to be extended in other specifications.
+
+### Variability Management Interface for Nodes
+```linenums="1"
+tosca.interfaces.node.management.Variability:
+    derived_from: tosca.interfaces.Root
+```
+
+### Variability Management Interface for Relationships
+```linenums="1"
+tosca.interfaces.relationship.management.Variability:
+    derived_from: tosca.interfaces.Root
+```
 
 ## Boolean Operators
 

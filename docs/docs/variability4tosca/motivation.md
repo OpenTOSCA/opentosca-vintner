@@ -23,7 +23,7 @@ We expect that the following is installed on a Linux machine.
 First, install OpenTOSCA Vintner.
 For more information see [Installation]({{ fix_url(fix_url('installation'))}}){target=_blank}.
 
-```
+```linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
@@ -37,7 +37,7 @@ Since both can only be installed on Linux, we implemented a WSL integration for 
 In our case, we run on a Linux machine and use xOpera.
 For more information see [Orchestrators]({{ fix_url(fix_url('orchestrators'))}}){target=_blank}.
 
-```
+```linenums="1"
 vintner orchestrators init opera
 vintner orchestrators enable --orchestrator opera
 ```
@@ -48,7 +48,7 @@ Deploy the development variant of the motivating scenario.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
 An example for the deployment inputs is given in [`examples/opera-motivation/inputs.example.yaml`]({{ get_repo_url('examples/opera-motivation/inputs.example.yaml') }}){target=_blank}
 
-```
+```linenums="1"
 # Add variable service template
 vintner templates import --template motivation --path motivation
 
@@ -71,7 +71,7 @@ vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 Cleanup the deployment.
 Therefore, undeploy the instance and cleanup the filesystem.
 
-```
+```linenums="1"
 # Undeploy instance
 vintner instances undeploy --instance motivation
 

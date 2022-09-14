@@ -34,6 +34,16 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
     font-size: 11pt;
 }
 
+/* Code Linenumbers */
+.highlighttable .linenos {
+    font-size: 11pt;
+}
+
+.linenos {
+    font-size: 11pt;
+}
+
+
 .md-tabs__link {
     font-size: 12pt;
 }
