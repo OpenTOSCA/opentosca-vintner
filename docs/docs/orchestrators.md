@@ -6,6 +6,7 @@ Configure and enable your orchestrator as follows.
 We expect, that the orchestrator is already installed.
 For more information see [Interface]({{ fix_url('interface')}}){target=_blank}.
 
+## Opera
 === "Opera"
     ```
     vintner orchestrators init opera
@@ -18,6 +19,7 @@ For more information see [Interface]({{ fix_url('interface')}}){target=_blank}.
     vintner orchestrators enable --orchestrator opera-wsl
     ```
 
+## Unfurl
 === "Unfurl"
     ```
     vintner orchestrators init unfurl

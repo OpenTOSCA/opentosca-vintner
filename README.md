@@ -37,5 +37,5 @@ and assume any risks associated with Your exercise of permissions under this Lic
 
 # Acknowledgements
 
-This project is developed for the purpose of research by the [Institute of Architecture of Application Systems (IAAS)](https://www.iaas.uni-stuttgart.de) of the [University of Stuttgart, Germany](https://www.uni-stuttgart.de).
+This project is developed for the purpose of research by the [Institute of Architecture of Application Systems (IAAS)](https://www.iaas.uni-stuttgart.de) and the [Institute of Software Engineering (ISTE)](https://www.iste.uni-stuttgart.de) of the [University of Stuttgart, Germany](https://www.uni-stuttgart.de).
 The development is partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de/Navigation/EN/Home/home.html) as part of the [Software-Defined Car (SofDCar)](https://sofdcar.de) project (19S21002).
