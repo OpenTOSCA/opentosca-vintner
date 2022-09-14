@@ -1,8 +1,8 @@
-# Variability4TOSCA Specification 1.0
+# Variability4TOSCA Specification 1.0 Release Candidate
 
-This document specifies the TOSCA extension _Variability4TOSCA_.
-The extension is based on [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+This document specifies _Variability4TOSCA_ which extends [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank} with conditional elements.
 In the following, we discuss the differences.
+The specification is under active development.
 
 ## Service Template Definition
 
@@ -100,8 +100,8 @@ is_prod: {equal: [{get_variability_input: mode}, prod]}
 
 ## Node Template Definition
 
-A _Node Template_ can additionally contain a _Variability Condition_.
-This condition must evaluate to true otherwise the respective _Node Template_ is not present.
+A _Node Template_ can additionally contain _Variability Conditions_.
+These conditions must evaluate to true otherwise the respective _Node Template_ is not present.
 
 | Keyname    | Mandatory | Type                           | Description                        |
 |------------| --------- | ------------------------------ |------------------------------------|
@@ -120,8 +120,8 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 
 ## Requirement Assignment Definition
 
-A _Requirement Assignment_ can additionally contain a _Variability Condition_.
-This condition must evaluate to true otherwise the respective relationship is not present.
+A _Requirement Assignment_ can additionally contain _Variability Conditions_.
+These conditions must evaluate to true otherwise the respective relationship is not present.
 
 | Keyname   | Mandatory | Type                           | Description                        |
 | --------- | --------- | ------------------------------ |------------------------------------|
@@ -141,8 +141,8 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 
 ## Group Template Definition
 
-A _Group Template_ can additionally contain a _Variability Condition_.
-This condition must evaluate to true otherwise the respective group elements are not present.
+A _Group Template_ can additionally contain _Variability Conditions_.
+These conditions must evaluate to true otherwise the respective group members are not present.
 
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
 
@@ -164,7 +164,6 @@ example_group:
 
 There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
 The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.Conditional` should derive from.
-These groups are expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ```
 variability.groups.Root
@@ -179,6 +178,7 @@ variability.groups.Conditional
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```
 
+These groups are expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Boolean Operators
 

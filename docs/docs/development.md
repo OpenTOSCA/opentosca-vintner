@@ -25,7 +25,7 @@ ESLint should be configured as given in the figure below with the following patt
 ```
 
 <figure markdown>
-  ![IntelliJ ESLint Settings](assets/images/intellij-eslint.png){class=shadow}
+  ![IntelliJ ESLint Settings]({{ fix_url('assets/images/intellij-eslint.png') }}){class=shadow}
   <figcaption>Figure 1: IntelliJ ESLint Settings</figcaption>
 </figure>
 
@@ -36,7 +36,7 @@ Prettier should be configured as given in the figure below with the following pa
 ```
 
 <figure markdown>
-  ![IntelliJ Prettier Settings](assets/images/intellij-prettier.png){class=shadow}
+  ![IntelliJ Prettier Settings]({{ fix_url('assets/images/intellij-prettier.png') }}){class=shadow}
   <figcaption>Figure 2: IntelliJ Prettier Settings</figcaption>
 </figure>
 
@@ -196,16 +196,16 @@ To fix lint problems, run the following command
 yarn lint:fix
 ```
 
-## Codestyle
+## Code Style
 
 [Prettier](https://prettier.io){target=_blank} is used to format code.
-To prettify typescript, run the following command
+To check the code style, run the following command
 
 ```
 yarn style:check
 ```
 
-To fix pretty problems, run the following command
+To fix code style problems, run the following command
 
 ```
 yarn style:fix
