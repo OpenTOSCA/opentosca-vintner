@@ -4,7 +4,7 @@ import {
     ConditionExpression,
     Expression,
     FromExpression,
-    PredicateExpression,
+    PredicateExpression, RelationshipExpression,
     SelectExpression,
     StepExpression
 } from '../specification/query-type';
@@ -22,23 +22,29 @@ export class Parser {
         Expression(from, select): Expression {
             return {type: 'Expression', from: from.buildAST(), select: select.buildAST()}
         },
-        MatchExpression(from, match) {
-            return {type: 'Expression', from: from.buildAST(), match: match.buildAST()}
-        },
-        FromTemplate(_, template): FromExpression {
-            return {type: 'From', template: template.buildAST()}
+        MatchExpression(from, match, select) {
+            return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
         },
         FromInstance(_, template, __, instance): FromExpression {
             return {type: 'From', template: template.buildAST(), instance: instance.buildAST()}
         },
-        Select(_, firstStep, __, nextSteps): SelectExpression {
-            return {type: 'Select', path: [firstStep.buildAST()].concat(nextSteps.buildAST())}
+        FromTemplate(_, template): FromExpression {
+            return {type: 'From', template: template.buildAST()}
+        },
+        Select(_, path): SelectExpression {
+            return {type: 'Select', path: path.buildAST()}
+        },
+        Path(firstStep, __, nextSteps) {
+            return [firstStep.buildAST()].concat(nextSteps.buildAST())
         },
         Step(path): StepExpression {
             return {type: 'Step', path: path.buildAST()}
         },
-        StepCond(path, _, condition, __): StepExpression {
+        StepCond(path, condition): StepExpression {
             return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
+        },
+        PredicateExpression(_, p, __): PredicateExpression {
+            return p.buildAST()
         },
         Predicate_multi(a, v, b): PredicateExpression {
             return {type: 'Predicate', a: a.buildAST(), operator: v.sourceString, b: b.buildAST()}
@@ -46,17 +52,26 @@ export class Parser {
         Predicate_single(a): PredicateExpression {
             return {type: 'Predicate', a: a.buildAST()}
         },
-        Condition(variable, operator, value): ConditionExpression{
-            return {type: 'Condition', variable: variable.buildAST(), operator: operator.buildAST(), value: value.buildAST()}
+        Condition(shortcut, variable, operator, value): ConditionExpression {
+            return {
+                type: 'Condition',
+                variable: getShortcut(shortcut.sourceString).concat(variable.buildAST()),
+                operator: operator.buildAST(),
+                value: value.buildAST()
+            }
         },
-        Match(_, node1, relationship, node2) {
-            return {type: 'Match', node1: node1.buildAST(), relationship: relationship, node2: node2.buildAST()}
+        Match(_, start, steps) {
+            return {type: 'Match', start: start.buildAST(), steps: steps.buildAST()}
         },
-        Node(start, node, end) {
-            return {type: 'Node', node: node.buildAST()}
+        MatchStep(relationship, target) {
+            return {type: 'MatchStep', relationship: relationship.buildAST(), target: target.buildAST()}
         },
-        Relationship(start, name, end) {
-            return {type: 'relationship', value: name}
+        Node(_, name, __, nodeType, predicate, ___) {
+            return (predicate.sourceString != "")? {type: 'Node', name: name.sourceString, nodeType: nodeType.sourceString, predicate: predicate.buildAST()}
+                : {type: 'Node', name: name.sourceString, nodeType: nodeType.sourceString}
+        },
+        Relationship(_, name, __, value, ___): RelationshipExpression {
+            return {type: 'Relationship', kind: 'To', name: name.sourceString, value: value.sourceString}
         },
         Value(v) {
             return v.buildAST()
@@ -114,5 +129,20 @@ export class Parser {
             throw new Error(`Unable to parse query: \n ${match.message}`)
         }
         return tree
+    }
+}
+
+function getShortcut(shortcut: string) {
+    switch (shortcut) {
+        case '#':
+            return 'properties.'
+        case '@':
+            return 'attributes.'
+        case '$':
+            return 'requirements.'
+        case '%':
+            return 'capabilities.'
+        default:
+            return ''
     }
 }

@@ -4,7 +4,7 @@ import {Instance} from '../repository/instances';
 import {
     ConditionExpression,
     Expression,
-    FromExpression, PredicateExpression,
+    FromExpression, MatchExpression, NodeExpression, PredicateExpression,
     SelectExpression
 } from '../specification/query-type';
 
@@ -34,7 +34,11 @@ export class QueryResolver {
         const results = []
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
-            const result = this.evaluateSelect(t.template, expression.select)
+            let result = t.template
+            if (expression.match != null) {
+                result = this.evaluateMatch(result, expression.match)
+            }
+            result = this.evaluateSelect(result, expression.select)
             if (result) {
                 results.push({name: t.name, result: result})
             }
@@ -56,7 +60,7 @@ export class QueryResolver {
                 serviceTemplates.push({name: expression.template, template:new Template(expression.template).getVariableServiceTemplate()})
             }
         } catch (error) {
-            console.error('Could not locate service template')
+            console.error(`Could not locate service template ${expression.template}`)
         }
         return serviceTemplates
     }
@@ -77,6 +81,32 @@ export class QueryResolver {
             } else {
                 result = (Object.getOwnPropertyDescriptor(result, i.path)) ? result[i.path] : null
             }
+        }
+        return result
+    }
+
+    evaluateMatch(data: Object, expression: MatchExpression) {
+        const matchingNodes = [{name: expression.start.name, data: this.evaluateNode(data, expression.start)}]
+        for (let i = 0; i < expression.steps.length; i++) {
+            matchingNodes.push({
+                name: expression.steps[i].target.name,
+                data: this.evaluateNode(data, expression.steps[i].target)
+            })
+        }
+        return matchingNodes
+    }
+
+    evaluateMatchStep(result: Object, step: string) {
+        return result
+    }
+
+    evaluateNode(node: Object, expression: NodeExpression) {
+        console.log("Evaluate " + expression.name)
+        let result
+        const path = 'topology_template.node_templates'
+        result = this.resolvePath(path, node)
+        if (expression.predicate) {
+            result = this.evaluatePredicate(result, expression.predicate)
         }
         return result
     }
