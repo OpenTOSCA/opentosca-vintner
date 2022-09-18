@@ -7,7 +7,7 @@ Query {
   FromTemplate = fromLiteral (asterisk | ident)
   Select = selectLiteral Path
   Path = (StepCond | Step) ("." (StepCond | Step))*
-  Step = ident
+  Step = asterisk | ident
   StepCond = (asterisk | ident) PredicateExpression
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi

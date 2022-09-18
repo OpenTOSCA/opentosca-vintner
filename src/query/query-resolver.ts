@@ -5,7 +5,7 @@ import {
     ConditionExpression,
     Expression,
     FromExpression, MatchExpression, NodeExpression, PredicateExpression,
-    SelectExpression
+    SelectExpression, StepExpression
 } from '../specification/query-type';
 
 export class QueryResolver {
@@ -68,18 +68,10 @@ export class QueryResolver {
     evaluateSelect(data: Object, expression: SelectExpression) {
         let result = data
         for (const i of expression.path) {
-            if (i.condition) {
-                if (i.path == "*") {
-                    for (const j in result) {
-                        if (!this.evaluatePredicate(result[j], i.condition)) {
-                            delete result[j]
-                        }
-                    }
-                } else {
-                    result = this.evaluatePredicate(result[i.path], i.condition)
-                }
+            if (i.path == "*") {
+                result = this.evaluateWildcard(result, i.condition)
             } else {
-                result = (Object.getOwnPropertyDescriptor(result, i.path)) ? result[i.path] : null
+                result = this.evaluateStep(result, i)
             }
         }
         return result
@@ -143,6 +135,33 @@ export class QueryResolver {
                 return ((property < value)? data : null)
         }
         return null
+    }
+
+    evaluateWildcard(data: Object, condition?: PredicateExpression) {
+        const result = []
+        for (const node of Object.values(data)) {
+            if (condition) {
+                if (this.evaluatePredicate(node, condition))
+                    result.push(node)
+            } else {
+                result.push(node)
+            }
+        }
+        return result
+    }
+
+    evaluateStep(data: Object, step: StepExpression) {
+        if (Array.isArray(data)) {
+            const result = []
+            for (const node of data) {
+                if (Object.getOwnPropertyDescriptor(node, step.path)) {
+                    result.push(node[step.path])
+                }
+            }
+            return result
+        } else {
+            return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : null
+        }
     }
 
     resolvePath(path, obj) {
