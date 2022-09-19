@@ -1,12 +1,8 @@
 import ohm from 'ohm-js';
 import * as fs from 'fs';
 import {
-    ConditionExpression,
-    Expression,
-    FromExpression,
-    PredicateExpression, RelationshipExpression,
-    SelectExpression,
-    StepExpression
+    ConditionExpression, Expression, FromExpression, PredicateExpression, RelationshipExpression,
+    SelectExpression, StepExpression
 } from '../specification/query-type';
 
 export class Parser {
@@ -42,6 +38,12 @@ export class Parser {
         },
         StepCond(path, condition): StepExpression {
             return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
+        },
+        Group(_, __, groupName, ___): StepExpression {
+            return {type: 'Group', path: groupName.sourceString}
+        },
+        Policy(_, __, policyName, ___): StepExpression {
+            return {type: 'Policy', path: policyName.sourceString}
         },
         PredicateExpression(_, p, __): PredicateExpression {
             return p.buildAST()

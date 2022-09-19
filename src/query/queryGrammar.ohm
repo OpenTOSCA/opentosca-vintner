@@ -5,10 +5,14 @@ Query {
 
   FromInstance = fromLiteral ident "/" ident
   FromTemplate = fromLiteral (asterisk | ident)
+
   Select = selectLiteral Path
-  Path = (StepCond | Step) ("." (StepCond | Step))*
+  Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))*
   Step = asterisk | ident
   StepCond = (asterisk | ident) PredicateExpression
+  Group = groupLiteral "(" ident ")"
+  Policy = policyLiteral "(" ident ")"
+
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
@@ -21,7 +25,9 @@ Query {
   Value = path | literal
 
   fromLiteral = "FROM"
+  groupLiteral = "GROUP"
   matchLiteral = "MATCH"
+  policyLiteral = "POLTARGET"
   selectLiteral = "SELECT"
 
   asterisk = "*"

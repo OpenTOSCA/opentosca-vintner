@@ -38,7 +38,12 @@ export class QueryResolver {
             if (expression.match != null) {
                 result = this.evaluateMatch(result, expression.match)
             }
-            result = this.evaluateSelect(result, expression.select)
+            try {
+                result = this.evaluateSelect(result, expression.select)
+            } catch (e) {
+                console.error(e.message)
+                result = null
+            }
             if (result) {
                 results.push({name: t.name, result: result})
             }
@@ -68,7 +73,11 @@ export class QueryResolver {
     evaluateSelect(data: Object, expression: SelectExpression) {
         let result = data
         for (const i of expression.path) {
-            if (i.path == "*") {
+            if (i.type == 'Group') {
+                result = this.evaluateGroup(result, i.path)
+            } else if (i.type == 'Policy') {
+                result = this.evaluatePolicy(result, i.path)
+            } else if (i.path == "*") {
                 result = this.evaluateWildcard(result, i.condition)
             } else {
                 result = this.evaluateStep(result, i)
@@ -162,6 +171,30 @@ export class QueryResolver {
         } else {
             return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : null
         }
+    }
+
+    evaluateGroup(data: Object, name: string) {
+        const groupNodes = data['topology_template']['groups']?.[name]?.['members']
+        if (groupNodes == undefined) {
+            throw new Error(`Could not find group ${name}`)
+        }
+        const result = []
+        for (const i of groupNodes) {
+            result.push(data['topology_template']['node_templates'][i])
+        }
+        return result;
+    }
+
+    evaluatePolicy(data: Object, name: string) {
+        const policyNodes = data['topology_template']['policies']?.[0]?.[name]?.['targets']
+        if (policyNodes == undefined) {
+            throw new Error(`Could not find policy ${name}`)
+        }
+        const result = []
+        for (const i of policyNodes) {
+            result.push(data['topology_template']['node_templates'][i])
+        }
+        return result;
     }
 
     resolvePath(path, obj) {

@@ -51,7 +51,7 @@ export type SelectExpression = {
 }
 
 export type StepExpression = {
-    type: 'Step'
+    type: 'Step' | 'Group' | 'Policy'
     path: string
     condition?: PredicateExpression
 }
