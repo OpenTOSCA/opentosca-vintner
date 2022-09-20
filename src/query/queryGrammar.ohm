@@ -42,7 +42,7 @@ Query {
     = "'" (~"'" any)* "'"
     | "\"" (~"\"" any)* "\""
   float   = digit? "." digit+
-
-  comment = "/*" (~"*/" any)* "*/"
-  space += comment
+  singleComment = "//" (~"\n" any)*
+  multiComment = "/*" (~"*/" any)* "*/"
+  space := singleComment | multiComment | ...
 }
