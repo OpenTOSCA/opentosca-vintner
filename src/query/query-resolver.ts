@@ -127,6 +127,9 @@ export class QueryResolver {
     }
 
     evaluateCondition(data: Object, condition: ConditionExpression) {
+        if (condition.type == 'Existence') {
+            return (Object.getOwnPropertyDescriptor(data, condition.variable)) ? data : null
+        }
         const {variable, value, operator} = condition
         const property = this.resolvePath(variable, data)
         switch (operator) {
@@ -178,9 +181,9 @@ export class QueryResolver {
         if (groupNodes == undefined) {
             throw new Error(`Could not find group ${name}`)
         }
-        const result = []
+        const result = {}
         for (const i of groupNodes) {
-            result.push(data['topology_template']['node_templates'][i])
+            result[i] = data['topology_template']['node_templates'][i]
         }
         return result;
     }
@@ -190,9 +193,9 @@ export class QueryResolver {
         if (policyNodes == undefined) {
             throw new Error(`Could not find policy ${name}`)
         }
-        const result = []
+        const result = {}
         for (const i of policyNodes) {
-            result.push(data['topology_template']['node_templates'][i])
+            result[i] = data['topology_template']['node_templates'][i]
         }
         return result;
     }

@@ -57,8 +57,8 @@ export type StepExpression = {
 }
 
 export type ConditionExpression = {
-    type: 'Condition'
-    operator: string
+    type: 'Comparison' | 'Existence'
     variable: string
-    value: string
+    operator?: string
+    value?: string
 }

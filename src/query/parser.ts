@@ -54,12 +54,18 @@ export class Parser {
         Predicate_single(a): PredicateExpression {
             return {type: 'Predicate', a: a.buildAST()}
         },
-        Condition(shortcut, variable, operator, value): ConditionExpression {
+        Condition_comparison(shortcut, variable, operator, value): ConditionExpression {
             return {
-                type: 'Condition',
+                type: 'Comparison',
                 variable: getShortcut(shortcut.sourceString).concat(variable.buildAST()),
                 operator: operator.buildAST(),
                 value: value.buildAST()
+            }
+        },
+        Condition_existence(shortcut, variable): ConditionExpression {
+            return {
+                type: 'Existence',
+                variable: getShortcut(shortcut.sourceString).concat(variable.buildAST())
             }
         },
         Match(_, start, steps) {

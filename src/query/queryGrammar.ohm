@@ -16,7 +16,8 @@ Query {
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
-  Condition = shortcut? Value comparison Value
+  Condition = shortcut? Value comparison Value -- comparison
+            | shortcut? Value -- existence
   Match = matchLiteral Node MatchStep*
   MatchStep = Relationship Node
   Node = "(" ident? (":" ident)? PredicateExpression? ")"
