@@ -3,7 +3,7 @@ export type Expression = {
     value?: string
     from: FromExpression
     match?: MatchExpression
-    select: SelectExpression
+    select: SelectExpression[]
 }
 
 export type FromExpression = {

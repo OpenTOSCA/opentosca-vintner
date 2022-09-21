@@ -1,12 +1,12 @@
 Query {
   Main = (Expression | MatchExpression) end
-  Expression = (FromInstance | FromTemplate) Select
+  Expression = (FromInstance | FromTemplate) selectLiteral Select ("," Select)*
   MatchExpression = (FromInstance | FromTemplate) Match Select
 
   FromInstance = fromLiteral ident "/" ident
   FromTemplate = fromLiteral (asterisk | ident)
 
-  Select = selectLiteral Path
+  Select = Path
   Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))*
   Step = asterisk | ident
   StepCond = (asterisk | ident) PredicateExpression

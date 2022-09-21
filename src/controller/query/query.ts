@@ -11,7 +11,10 @@ export default async function executeQuery(options: QueryTemplateArguments) {
     if (results.length > 0) {
         for (const r of results)
             if (r.result) {
-                console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
+                // Flatten the result if it is only one element
+                const result = (r.result.length == 1)? r.result[0] : r.result
+                console.log("\nResults in " + r.name + ": \n" + JSON.stringify(result, null, 4))
+                // storeFile("test.yaml", stringify(result))
             }
     } else {
         console.log('No results found.')

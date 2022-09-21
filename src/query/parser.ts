@@ -15,8 +15,8 @@ export class Parser {
         Main(a, _) {
             return a.buildAST()
         },
-        Expression(from, select): Expression {
-            return {type: 'Expression', from: from.buildAST(), select: select.buildAST()}
+        Expression(from, _, select, __, selectAdd): Expression {
+            return {type: 'Expression', from: from.buildAST(), select: [select.buildAST()].concat(selectAdd.buildAST())}
         },
         MatchExpression(from, match, select) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
@@ -27,7 +27,7 @@ export class Parser {
         FromTemplate(_, template): FromExpression {
             return {type: 'From', template: template.buildAST()}
         },
-        Select(_, path): SelectExpression {
+        Select(path): SelectExpression {
             return {type: 'Select', path: path.buildAST()}
         },
         Path(firstStep, __, nextSteps) {

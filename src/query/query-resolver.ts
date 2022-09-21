@@ -34,18 +34,19 @@ export class QueryResolver {
         const results = []
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
-            let result = t.template
+            let result = []
             if (expression.match != null) {
                 result = this.evaluateMatch(result, expression.match)
             }
             try {
-                result = this.evaluateSelect(result, expression.select)
+                for (const s of expression.select)
+                    result.push(this.evaluateSelect(t.template, s))
             } catch (e) {
                 console.error(e.message)
                 result = null
             }
             if (result) {
-                results.push({name: t.name, result: result})
+                results.push({name: t.name, result: result.flat()})
             }
         }
         return results
