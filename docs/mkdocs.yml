@@ -65,6 +65,7 @@ nav:
     - orchestrators.md
     - Variability4TOSCA: variability4tosca.md
     - interface.md
+    - query.md
     - dependencies.md
     - development.md
     - contributing.md
