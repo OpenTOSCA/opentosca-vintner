@@ -1,0 +1,101 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+imports:
+    - lib/gcp.yaml
+    - lib/node.yaml
+    - lib/openstack.yaml
+    - lib/sqlite.yaml
+
+topology_template:
+    inputs:
+        release:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        db_password:
+            type: string
+
+        vm_network:
+            type: string
+
+        vm_security_group:
+            type: string
+
+        vm_key_name:
+            type: string
+
+        vm_ssh_user:
+            type: string
+
+        vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        web_component:
+            type: node.application
+            properties:
+                application_name: application
+                vm_ssh_user: {get_input: vm_ssh_user}
+                vm_ssh_key_file: {get_input: vm_ssh_key_file}
+                vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+            requirements:
+                - host:
+                      node: prod_runtime
+                - database:
+                      node: prod_database
+
+        prod_runtime:
+            type: gcp.appengine.engine
+            requirements:
+                - host:
+                      node: gcp
+
+        prod_database:
+            type: gcp.sql.db
+            properties:
+                user: {eval: '.::.requirements::[.name=host]::.target::user'}
+                password: {eval: '.::.requirements::[.name=host]::.target::password'}
+            requirements:
+                - host:
+                      node: prod_dbms
+
+        prod_dbms:
+            type: gcp.sql.dbms
+            properties:
+                instance_name: {concat: [{get_input: release}, '-', dbms]}
+                password: {get_input: db_password}
+            requirements:
+                - host:
+                      node: gcp
+
+        gcp:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}

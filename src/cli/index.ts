@@ -1,8 +1,10 @@
-import {Command} from 'commander'
+import {Command, Option} from 'commander'
 import hae from './hae'
 import config from './config'
 import Controller from '../controller'
 import * as files from '../utils/files'
+import {toBoolean} from '../utils/utils'
+import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
 
 const program = new Command()
 
@@ -34,6 +36,27 @@ setup
     .action(
         hae(async () => {
             await Controller.setup.open()
+        })
+    )
+
+setup
+    .command('benchmark')
+    .description('benchmarks the variability resolver')
+    .option('--no-io [boolean]', 'disable read and writes to the filesystem')
+    .addOption(
+        new Option('--seeds [numbers...]', 'seed for generating service templates').default([
+            10, 250, 500, 1000, 2500, 5000, 10000,
+        ])
+    )
+    .addOption(new Option('--runs [number]', 'number of measurements for each test').default(10))
+    .option('--latex [boolean]', 'plot results as latex', false)
+    .option('--markdown [boolean]', 'plot results as markdown', false)
+    .action(
+        hae(async options => {
+            const results = await Controller.setup.benchmark(options)
+            console.table(results)
+            if (options.markdown) console.log('\n', benchmark2markdown(results))
+            if (options.latex) console.log('\n', benchmark2latex(results, options))
         })
     )
 

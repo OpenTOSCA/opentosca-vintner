@@ -12,7 +12,10 @@ async function main() {
 
     function collectData(commands: string[]) {
         const command = `node build/cli/index.js ${commands.join(' ')} --help`
-        const raw: string[] = execSync(command).toString().split('\n')
+        const raw: string[] = execSync(command)
+            .toString()
+            .replace(/\(default:\n */gm, '(default: ')
+            .split('\n')
 
         const usage = raw[0].slice(7).slice(0, -10)
         const description = raw[2]

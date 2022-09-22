@@ -28,6 +28,7 @@ export type VariabilityExpression =
           or?: VariabilityExpression[]
           not?: VariabilityExpression
           xor?: VariabilityExpression[]
+          implies?: [VariabilityExpression, VariabilityExpression]
 
           // Arithmetic operators
           add?: VariabilityExpression[]
@@ -38,8 +39,9 @@ export type VariabilityExpression =
 
           // Intrinsic functions
           get_variability_expression?: VariabilityExpression
-          get_variability_input?: any
+          get_variability_input?: VariabilityExpression
           get_variability_condition?: VariabilityExpression
+          get_element_presence?: VariabilityExpression | [VariabilityExpression, VariabilityExpression]
           concat?: VariabilityExpression[]
           join?: [VariabilityExpression[], string]
           token?: [VariabilityExpression, string, number]
@@ -55,6 +57,9 @@ export type VariabilityExpression =
           length?: [VariabilityExpression, VariabilityExpression]
           min_length?: [VariabilityExpression, VariabilityExpression]
           max_length?: [VariabilityExpression, VariabilityExpression]
+
+          // Cache
+          cached_result?: boolean | string | number
       }
     | string
     | number

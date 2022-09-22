@@ -1,0 +1,111 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/gcp/types.yaml
+    - lib/openstack/types.yaml
+    - lib/sqlite/types.yaml
+    - lib/node/types.yaml
+
+topology_template:
+    inputs:
+        release:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        root_password:
+            type: string
+
+        private_vm_network:
+            type: string
+
+        private_vm_security_groups:
+            type: string
+
+        private_vm_key_name:
+            type: string
+
+        private_vm_ssh_user:
+            type: string
+
+        private_vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        web_component:
+            type: node.application
+            properties:
+                application_name: application
+                application_environment:
+                    DB_DIALECT: {get_property: [SELF, database, database_dialect]}
+                    DB_NAME: {get_property: [SELF, database, database_name]}
+                    DB_USERNAME: root
+                    DB_PASSWORD: {get_input: root_password}
+                    DB_ADDRESS: {get_property: [SELF, database, public_address]}
+                vm_ssh_user: {get_input: private_vm_ssh_user}
+                vm_ssh_key_file: {get_input: private_vm_ssh_key_file}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+            requirements:
+                - host:
+                      node: prod_runtime
+                - database:
+                      node: prod_database
+            artifacts:
+                artifact_file: files/application.tar.gz
+
+        prod_runtime:
+            type: gcp.appengine.engine
+            requirements:
+                - host:
+                      node: gcp
+
+        prod_database:
+            type: gcp.sql.db
+            properties:
+                database_name: db
+                instance_name: {get_property: [SELF, host, instance_name]}
+                public_address: {get_attribute: [SELF, host, public_address]}
+            requirements:
+                - host:
+                      node: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.sql.dbms
+            properties:
+                instance_name: {concat: [{get_input: release}, '-', dbms]}
+                root_password: {get_input: root_password}
+                authorized_networks: '0.0.0.0/0'
+            requirements:
+                - host:
+                      node: gcp
+
+        gcp:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}

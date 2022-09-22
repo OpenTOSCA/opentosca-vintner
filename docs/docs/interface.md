@@ -8,24 +8,24 @@
 initialises the filesystem
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner setup init 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/setup/init
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/setup/init")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/setup/init")
     ```
@@ -36,24 +36,24 @@ initialises the filesystem
 cleans up the filesystem
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner setup clean 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/setup/clean
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/setup/clean")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/setup/clean")
     ```
@@ -64,21 +64,56 @@ cleans up the filesystem
 opens the home directory
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner setup open 
     ```
 
+
+## setup benchmark
+
+benchmarks the variability resolver
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup benchmark 
+    ```
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/benchmark
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/benchmark")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/benchmark")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| no-io |  false  | boolean | disable read and writes to the filesystem |
+| seeds |  false  | numbers... | seed for generating service templates (default: [10,250,500,1000,2500,5000,10000]) |
+| runs |  false  | number | number of measurements for each test (default: 10) |
+| latex |  false  | boolean | plot results as latex (default: false) |
+| markdown |  false  | boolean | plot results as markdown (default: false) |
 
 ## orchestrators enable
 
 enables an orchestrator plugin
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner orchestrators enable --orchestrator ${ORCHESTRATOR}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"orchestrator": "${ORCHESTRATOR}"}' \
@@ -86,7 +121,7 @@ enables an orchestrator plugin
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/orchestrators/enable", {
 		orchestrator: ORCHESTRATOR
@@ -94,7 +129,7 @@ enables an orchestrator plugin
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/enable", json={
 		"orchestrator": ORCHESTRATOR
@@ -110,24 +145,24 @@ enables an orchestrator plugin
 initializes opera plugin
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner orchestrators init opera 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/orchestrators/init/opera
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/orchestrators/init/opera")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/opera")
     ```
@@ -142,24 +177,24 @@ initializes opera plugin
 initializes opera-wsl plugin
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner orchestrators init opera-wsl 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/orchestrators/init/opera-wsl
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/orchestrators/init/opera-wsl")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/opera-wsl")
     ```
@@ -174,24 +209,24 @@ initializes opera-wsl plugin
 initializes unfurl plugin
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner orchestrators init unfurl 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/orchestrators/init/unfurl
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/orchestrators/init/unfurl")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/unfurl")
     ```
@@ -206,24 +241,24 @@ initializes unfurl plugin
 initializes unfurl-wsl plugin
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner orchestrators init unfurl-wsl 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/orchestrators/init/unfurl-wsl
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/orchestrators/init/unfurl-wsl")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/unfurl-wsl")
     ```
@@ -238,11 +273,11 @@ initializes unfurl-wsl plugin
 resolves variability
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner template resolve --template ${TEMPLATE} --output ${OUTPUT}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
@@ -250,7 +285,7 @@ resolves variability
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/resolve", {
 		template: TEMPLATE,
@@ -259,7 +294,7 @@ resolves variability
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/resolve", json={
 		"template": TEMPLATE,
@@ -279,24 +314,24 @@ resolves variability
 lists all templates
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner templates list 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/templates/list
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/templates/list")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/list")
     ```
@@ -307,11 +342,11 @@ lists all templates
 imports a new template
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner templates import --template ${TEMPLATE} --path ${PATH}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"template": "${TEMPLATE}", "path": "${PATH}"}' \
@@ -319,7 +354,7 @@ imports a new template
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/templates/import", {
 		template: TEMPLATE,
@@ -328,7 +363,7 @@ imports a new template
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/import", json={
 		"template": TEMPLATE,
@@ -346,7 +381,7 @@ imports a new template
 opens template directory in a file browser
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner templates open --template ${TEMPLATE}
     ```
 
@@ -359,11 +394,11 @@ opens template directory in a file browser
 inspects the variable service template
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner templates inspect --template ${TEMPLATE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"template": "${TEMPLATE}"}' \
@@ -371,7 +406,7 @@ inspects the variable service template
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/templates/inspect", {
 		template: TEMPLATE
@@ -379,7 +414,7 @@ inspects the variable service template
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/inspect", json={
 		"template": TEMPLATE
@@ -395,11 +430,11 @@ inspects the variable service template
 deletes a template
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner templates delete --template ${TEMPLATE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"template": "${TEMPLATE}"}' \
@@ -407,7 +442,7 @@ deletes a template
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/templates/delete", {
 		template: TEMPLATE
@@ -415,7 +450,7 @@ deletes a template
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/delete", json={
 		"template": TEMPLATE
@@ -431,24 +466,24 @@ deletes a template
 lists all instances
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances list 
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             ${SERVER_ADDRESS}/instances/list
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/list")
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/list")
     ```
@@ -459,11 +494,11 @@ lists all instances
 creates a new instance
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances create --instance ${INSTANCE} --template ${TEMPLATE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
@@ -471,7 +506,7 @@ creates a new instance
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/create", {
 		instance: INSTANCE,
@@ -480,7 +515,7 @@ creates a new instance
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/create", json={
 		"instance": INSTANCE,
@@ -498,7 +533,7 @@ creates a new instance
 opens template directory in a file browser
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances open --instance ${INSTANCE}
     ```
 
@@ -511,11 +546,11 @@ opens template directory in a file browser
 resolves variability
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances resolve --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -523,7 +558,7 @@ resolves variability
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/resolve", {
 		instance: INSTANCE
@@ -531,7 +566,7 @@ resolves variability
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/resolve", json={
 		"instance": INSTANCE
@@ -549,11 +584,11 @@ resolves variability
 inspects variability-resolved service template
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances inspect --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -561,7 +596,7 @@ inspects variability-resolved service template
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/inspect", {
 		instance: INSTANCE
@@ -569,7 +604,7 @@ inspects variability-resolved service template
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/inspect", json={
 		"instance": INSTANCE
@@ -585,11 +620,11 @@ inspects variability-resolved service template
 deploys instance
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances deploy --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -597,7 +632,7 @@ deploys instance
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/deploy", {
 		instance: INSTANCE
@@ -605,7 +640,7 @@ deploys instance
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/deploy", json={
 		"instance": INSTANCE
@@ -622,11 +657,11 @@ deploys instance
 updates instance
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances update --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -634,7 +669,7 @@ updates instance
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/update", {
 		instance: INSTANCE
@@ -642,7 +677,7 @@ updates instance
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/update", json={
 		"instance": INSTANCE
@@ -659,11 +694,11 @@ updates instance
 undeploys instance
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances undeploy --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -671,7 +706,7 @@ undeploys instance
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/undeploy", {
 		instance: INSTANCE
@@ -679,7 +714,7 @@ undeploys instance
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/undeploy", json={
 		"instance": INSTANCE
@@ -695,11 +730,11 @@ undeploys instance
 deletes instance
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner instances delete --instance ${INSTANCE}
     ```
 === "cURL"
-    ```shell
+    ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}"}' \
@@ -707,7 +742,7 @@ deletes instance
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/delete", {
 		instance: INSTANCE
@@ -715,7 +750,7 @@ deletes instance
     ```
 
 === "Python"
-    ```python
+    ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/delete", json={
 		"instance": INSTANCE
@@ -731,7 +766,7 @@ deletes instance
 starts the server
 
 === "CLI"
-    ```shell
+    ```shell linenums="1"
     vintner server start 
     ```
 

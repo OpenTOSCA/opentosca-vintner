@@ -10,6 +10,11 @@ export function ensureString(element: unknown): asserts element is string {
     if (!isString(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a string`)
 }
 
+export function ensureStringOrNumber(element: unknown): asserts element is string {
+    if (!isString(element) && !isNumber(element))
+        throw new Error(`Element "${JSON.stringify(element)}" is neither a string nor a number`)
+}
+
 export function isBoolean(element: unknown): element is boolean {
     return typeof element === 'boolean'
 }

@@ -1,26 +1,17 @@
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../src/specification/service-template'
-import {Model} from '../src/repository/model'
-import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../src/utils/files'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
+import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
+import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
+import {VariabilityResolver} from '../template/resolve'
 
-const config = {
-    ios: [false, true],
-    seeds: [10, 250, 500, 1000, 2500, 5000, 10000],
-    //seeds: [10, 250, 500],
-    runs: 10,
+type BenchmarkArguments = {
+    io?: boolean
+    seeds: number[]
+    runs: number
+    latex?: boolean
+    markdown?: boolean
 }
 
-const result = benchmark()
-
-console.log()
-plotMarkdown(result)
-
-console.log()
-plotLatex(result)
-
-console.log()
-console.table(result)
-
-type Result = {
+export type BenchmarkResult = {
     IO: boolean
     seed: string
     templates: string
@@ -29,21 +20,23 @@ type Result = {
     file_size: string
     file_lines: string
 }
+export type BenchmarkResults = BenchmarkResult[]
 
-type Results = Result[]
+export default async function (options: BenchmarkArguments) {
+    console.log('Running benchmark with following options', options)
 
-function benchmark() {
-    const results: Results = []
-
-    for (const io of config.ios) {
-        for (const seed of config.seeds) {
+    const results: BenchmarkResults = []
+    for (const io of options.io ? [false, true] : [false]) {
+        for (const seed of options.seeds) {
             const measurements = []
-            const serviceTemplate = constructServiceTemplate(seed)
             let size
             let lines
 
-            for (let run = 0; run < config.runs; run++) {
-                console.log(`Running`, {io, seed, run})
+            for (let run = 0; run < options.runs; run++) {
+                console.log(`Running `, {io, seed, run})
+
+                // Service template is transformed in-place!
+                const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
                 const input = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input.yaml`)
                 const output = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output.yaml`)
@@ -52,63 +45,45 @@ function benchmark() {
 
                 if (io) storeFile(input, serviceTemplate)
 
-                const model = new Model(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
+                const result = new VariabilityResolver(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
                     .setVariabilityInputs({mode: 'present'})
-                    .resolveVariability()
+                    .resolve()
                     .checkConsistency()
-                    .finalize()
+                    .transformInPlace()
 
-                if (io) storeFile(output, model.getServiceTemplate())
+                if (io) storeFile(output, result)
 
                 const end = process.hrtime(start)
-                const duration = (end[0] * 1000000000 + end[1]) / 1000000
+                const duration = hrtime2ms(end)
 
                 if (io) {
                     size = getSize(input)
                     lines = countLines(input)
                 }
 
+                console.log(`Finished`, {io, seed, run, duration})
+
                 measurements.push(duration)
             }
-            measurements.sort()
-            const median = (measurements[config.runs / 2 - 1] + measurements[config.runs / 2]) / 2
+
+            const median = getMedianFromSorted(measurements.sort())
             const templates = 4 * seed
             const result = {
                 IO: io,
                 seed: prettyNumber(seed),
                 templates: prettyNumber(templates),
                 median: prettyMilliseconds(median),
-                median_per_template: prettyNumber(median / templates) + ' ms',
+                median_per_template: prettyMilliseconds(median / templates),
                 file_size: prettyBytes(size),
                 file_lines: prettyNumber(lines),
             }
             results.push(result)
         }
     }
-
     return results
 }
 
-function prettyBytes(bytes?: number) {
-    if (bytes === undefined) return
-    const kb = bytes / 1000
-    const mb = kb / 1000
-    return kb > 1000 ? `${prettyNumber(mb)} mb` : `${prettyNumber(Math.round(kb))} kb`
-}
-
-function prettyMilliseconds(ms?: number) {
-    if (ms === undefined) return
-    const s = ms / 1000
-    return ms > 1000 ? `${s.toFixed(3)} s` : `${ms.toFixed(3)} ms`
-}
-
-function prettyNumber(number?: number) {
-    if (number === undefined) return
-    if (Number.isInteger(number)) return number.toLocaleString('en')
-    return number.toLocaleString('en', {maximumFractionDigits: 3, minimumFractionDigits: 3})
-}
-
-function constructServiceTemplate(seed: number): ServiceTemplate {
+export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate {
     const serviceTemplate: ServiceTemplate = {
         tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
         topology_template: {
@@ -121,6 +96,7 @@ function constructServiceTemplate(seed: number): ServiceTemplate {
                 expressions: {},
             },
             node_templates: {},
+            relationship_templates: {},
         },
     }
 
@@ -134,16 +110,32 @@ function constructServiceTemplate(seed: number): ServiceTemplate {
             conditions: {get_variability_condition: `condition_${i}_present`},
             requirements: [
                 {
-                    relation: {
+                    relation_present: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_present`,
                         conditions: {get_variability_condition: `condition_${i}_present`},
+                        relationship: `relationship_${i}_present`,
+                    },
+                },
+                {
+                    relation_removed: {
+                        node: `component_${i + 1 == seed ? 0 : i + 1}_removed`,
+                        conditions: {get_variability_condition: `condition_${i}_removed`},
+                        relationship: `relationship_${i}_removed`,
                     },
                 },
             ],
         }
 
+        serviceTemplate.topology_template.relationship_templates[`relationship_${i}_present`] = {
+            type: `relationship_type_${i}_present`,
+        }
+
+        serviceTemplate.topology_template.relationship_templates[`relationship_${i}_removed`] = {
+            type: `relationship_type_${i}_removed`,
+        }
+
         serviceTemplate.topology_template.variability.expressions[`condition_${i}_removed`] = {
-            equal: [{get_variability_input: 'mode'}, `component_${i}_removed`],
+            equal: [{get_variability_input: 'mode'}, `absent`],
         }
 
         serviceTemplate.topology_template.node_templates[`component_${i}_removed`] = {
@@ -155,7 +147,7 @@ function constructServiceTemplate(seed: number): ServiceTemplate {
     return serviceTemplate
 }
 
-function plotMarkdown(results: Results) {
+export function benchmark2markdown(results: BenchmarkResults) {
     const data = []
     data.push('| Test | Seed |  Templates | Median | Median per Template | I/O | File Size | File Lines | ')
     data.push('| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
@@ -177,10 +169,10 @@ function plotMarkdown(results: Results) {
         )
     })
 
-    console.log(data.join(`\n`))
+    return data.join(`\n`)
 }
 
-function plotLatex(results: Results) {
+export function benchmark2latex(results: BenchmarkResults, options: BenchmarkArguments) {
     const data = []
     data.push('Test & Seed & Templates & Median & Median per Template & I/O & File Size & File Lines \\\\')
     data.push('\\toprule')
@@ -199,12 +191,10 @@ function plotLatex(results: Results) {
             ].join(' & ') + '\\\\'
         )
 
-        console.log({index, cond: index === config.seeds.length})
-
-        if (index + 1 == config.seeds.length) data.push('\\midrule')
+        if (options.io && index + 1 == options.seeds.length) data.push('\\midrule')
     })
 
     data.push('\\bottomrule')
 
-    console.log(data.join('\n'))
+    return data.join('\n')
 }

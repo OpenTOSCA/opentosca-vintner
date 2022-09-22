@@ -77,7 +77,7 @@ topology_template:
             is_prod: {equal: [{get_variability_input: mode}, prod]}
 
     node_templates:
-        application:
+        web_component:
             type: node.application
             properties:
                 application_name: application
@@ -103,7 +103,9 @@ topology_template:
             type: gcp.appengine.engine
             conditions: {get_variability_expression: is_prod}
             requirements:
-                - host: gcp
+                - host:
+                      node: gcp
+                      conditions: {get_variability_expression: is_prod}
 
         prod_database:
             type: gcp.sql.db
@@ -112,7 +114,9 @@ topology_template:
                 user: {eval: '.::.requirements::[.name=host]::.target::user'}
                 password: {eval: '.::.requirements::[.name=host]::.target::password'}
             requirements:
-                - host: prod_dbms
+                - host:
+                      node: prod_dbms
+                      conditions: {get_variability_expression: is_prod}
 
         prod_dbms:
             type: gcp.sql.dbms
@@ -121,7 +125,9 @@ topology_template:
                 instance_name: {concat: [{get_input: release}, '-', dbms]}
                 password: {get_input: db_password}
             requirements:
-                - host: gcp
+                - host:
+                      node: gcp
+                      conditions: {get_variability_expression: is_prod}
 
         gcp:
             type: gcp.provider
@@ -133,7 +139,9 @@ topology_template:
             type: node.runtime
             conditions: {get_variability_expression: is_dev}
             requirements:
-                - host: dev_vm
+                - host:
+                      node: dev_vm
+                      conditions: {get_variability_expression: is_dev}
 
         dev_database:
             type: sqlite.db
@@ -141,7 +149,9 @@ topology_template:
             properties:
                 database_name: {concat: [{get_input: release}, '-', db]}
             requirements:
-                - host: dev_vm
+                - host:
+                      node: dev_vm
+                      conditions: {get_variability_expression: is_dev}
 
         dev_vm:
             type: openstack.vm
@@ -155,10 +165,13 @@ topology_template:
                 ssh_user: {get_input: vm_ssh_user}
                 ssh_key_file: {get_input: vm_ssh_key_file}
             requirements:
-                - host: os
+                - host:
+                      node: os
+                      conditions: {get_variability_expression: is_dev}
 
         os:
             type: openstack.provider
+            conditions: {get_variability_expression: is_dev}
             properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}

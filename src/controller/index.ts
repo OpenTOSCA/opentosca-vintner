@@ -22,6 +22,7 @@ import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
 import executeQuery from './query/query';
+import benchmarkSetup from './setup/benchmark'
 
 const Controller = {
     instances: {
@@ -51,6 +52,7 @@ const Controller = {
         clean: cleanSetup,
         init: initSetup,
         open: openHome,
+        benchmark: benchmarkSetup,
     },
     template: {
         resolve: resolveTemplate,

@@ -39,7 +39,9 @@ topology_template:
             properties:
                 content: 'First Textfile has been selected!'
             requirements:
-                - host: localhost
+                - host:
+                      node: localhost
+                      conditions: {get_variability_expression: is_first}
 
         second:
             type: textfile
@@ -47,4 +49,6 @@ topology_template:
             properties:
                 content: 'Second Textfile has been selected!'
             requirements:
-                - host: localhost
+                - host:
+                      node: localhost
+                      conditions: {get_variability_expression: is_second}

@@ -10,6 +10,9 @@ jobs:
         name: Tests
         runs-on: ubuntu-latest
         steps:
+            - name: (PREPARE) Set up QEMU
+              uses: docker/setup-qemu-action@v2
+
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
 
@@ -26,13 +29,43 @@ jobs:
               run: yarn lint:check
 
             - name: (TEST) Check Prettier
-              run: yarn pretty:check
+              run: yarn style:check
 
             - name: (TEST) Check Licenses
               run: yarn licenses:check
 
             - name: (TEST) Run Tests
-              run: yarn test:local
+              run: yarn test
 
             - name: (BUILD) Build Project
               run: yarn build
+
+            - name: (BUILD) Set Version
+              run: sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
+
+            - name: (BUILD) Setup Packaging Cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.pkg-cache
+                  key: pkg
+
+            - name: (BUILD) Package Binaries
+              run: yarn package
+
+            - name: (DOCS) Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.x
+                  cache: pip
+
+            - name: (DOCS) Install Dependencies
+              run: yarn docs:install
+
+            - name: (DOCS) Generate Licenses Page
+              run: yarn licenses:generate
+
+            - name: (DOCS) Generate Interface Page
+              run: yarn interface:generate
+
+            - name: (DOCS) Build Docs
+              run: yarn docs:build

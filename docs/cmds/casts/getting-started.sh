@@ -5,8 +5,8 @@ TYPE_SPEED=100
 cd ../../../
 
 echo '# Installation'
-p 'curl -sL https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64'
-# sleep 0.5
+p 'wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64'
+sleep 1
 
 p 'mv vintner-linux-x64 /usr/bin/vintner'
 # sleep 0.5
@@ -18,7 +18,7 @@ pe 'vintner setup init'
 # sleep 0.5
 
 echo ''
-echo '# Setup'
+echo '# Orchestrator'
 
 pe 'vintner orchestrators init opera'
 # sleep 0.5
