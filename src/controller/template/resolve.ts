@@ -108,13 +108,13 @@ export class VariabilityResolver {
                 const relationName = utils.firstKey(map)
                 const assignment = utils.firstValue(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
-                const condition = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
+                const conditions = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
                 const relation: Relation = {
                     name: relationName,
                     source: nodeName,
                     target,
-                    conditions: condition,
+                    conditions,
                     groups: [],
                 }
                 this.relations.push(relation)
@@ -184,8 +184,6 @@ export class VariabilityResolver {
         let conditions = element.conditions
         element.groups.forEach(group => conditions.push(...group.conditions))
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
-
-        // if (listIsEmpty(conditions)) conditions = [true]
 
         // Prune Relation: Assign default condition to relation that checks if source is present
         if (this.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
