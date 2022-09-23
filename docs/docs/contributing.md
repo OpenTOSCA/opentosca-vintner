@@ -13,10 +13,10 @@ Branches should be names as follows
 - `refactor/short-title` for refactoring
 - `project/short-title` for thesis, EnPro or StuPro
 
-
 ## Squash and Merge
 
 Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
+The commit message should not have a link to the merge request.
 
 ## Signed Commits
 
@@ -24,7 +24,7 @@ Commits are required to be signed.
 Therefore, you need to register a signing key. 
 Your can enable auto-signing for a specific repository with the following command
 
-```
+```linenums="1"
 git config commit.gpgsign true
 ```
 

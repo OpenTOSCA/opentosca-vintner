@@ -60,10 +60,12 @@ plugins:
 nav:
     - Home: index.md
     - getting-started.md
-    - motivation.md
     - installation.md
     - orchestrators.md
-    - Variability4TOSCA: variability4tosca.md
+    - Variability4TOSCA:
+          - variability4tosca/motivation.md
+          - Specification: variability4tosca/specification.md
+    - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md
     - development.md

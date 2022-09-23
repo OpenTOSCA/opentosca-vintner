@@ -5,7 +5,7 @@ There are no other dependencies required.
 You might add the binary to your PATH.
 
 The following example shows the installation on Linux.
-```
+```linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
@@ -24,19 +24,19 @@ The following binaries are available:
 
 To check, that the `vintner` can be executed, run
 
-```
+```linenums="1"
 vintner --version
 ```
 
 To start the server, run
-```
+```linenums="1"
 vintner server start
 ```
 
 To uninstall all files including the binary, run the following commands.
 However, this will not undeploy currently deployed applications.
 
-```
+```linenums="1"
 vintner setup clean
 rm "$(which vintner)"
 ```

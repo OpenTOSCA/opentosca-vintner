@@ -10,16 +10,17 @@
 [![Plugins](https://img.shields.io/badge/Orchestrators-xOpera%20%7C%20Unfurl-blueviolet.svg)](https://vintner.opentosca.org)
 [![OpenTOSCA](https://img.shields.io/badge/OpenTOSCA-%E2%9D%A4%EF%B8%8F-ff69b4)](https://opentosca.org)
 
-A Concept for Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
+OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
+Preprocessing includes, e.g., the resolving of variability.
 
 </div>
 
-  - [Documentation](https://vintner.opentosca.org)
-  - [Getting Started](https://vintner.opentosca.org/getting-started)
-  - [Motivating Scenario](https://vintner.opentosca.org/motivation)
-  - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
-  - [CLI Documentation](https://vintner.opentosca.org/interface)
-  - [REST API Documentation](https://vintner.opentosca.org/interface)
+- [Documentation](https://vintner.opentosca.org)
+- [Getting Started](https://vintner.opentosca.org/getting-started)
+- [Variability4TOSCA Motivating Scenario](https://vintner.opentosca.org/variability4tosca/motivation)
+- [Variability4TOSCA Specification](https://vintner.opentosca.org/variability4tosca/specification)
+- [CLI Documentation](https://vintner.opentosca.org/interface)
+- [REST API Documentation](https://vintner.opentosca.org/interface)
 
 # Haftungsausschluss
 
@@ -37,5 +38,5 @@ and assume any risks associated with Your exercise of permissions under this Lic
 
 # Acknowledgements
 
-This project is developed for the purpose of research by the [Institute of Architecture of Application Systems (IAAS)](https://www.iaas.uni-stuttgart.de) of the [University of Stuttgart, Germany](https://www.uni-stuttgart.de).
+This project is developed for the purpose of research by the [Institute of Architecture of Application Systems (IAAS)](https://www.iaas.uni-stuttgart.de) and the [Institute of Software Engineering (ISTE)](https://www.iste.uni-stuttgart.de) of the [University of Stuttgart, Germany](https://www.uni-stuttgart.de).
 The development is partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de/Navigation/EN/Home/home.html) as part of the [Software-Defined Car (SofDCar)](https://sofdcar.de) project (19S21002).
