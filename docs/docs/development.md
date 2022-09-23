@@ -71,9 +71,14 @@ yarn server:serve
 The documentation is powered by [Material for MkDocs](https://squidfunk.github.io/mkdocs-material){target=_blank}.
 Corresponding files are located in the `docs` directory.
 Custom macros are implemented in `docs/macros.py` using [mkdocs-macros](https://mkdocs-macros-plugin.readthedocs.io){target=_blank}.
-With the following command you can install `mkdocs-material` along with its requirements globally on your system.
-We expect that Python is already installed.
 
+We expect that Python and [pandoc](https://pandoc.org){target=_blank} is already installed.
+To install [pandoc](https://pandoc.org){target=_blank} on Ubuntu you might run
+```linenums="1"
+sudo apt-get install pandoc
+```
+
+With the following command you can install `mkdocs-material` along with its requirements globally on your system.
 ```linenums="1"
 yarn docs:install
 ```

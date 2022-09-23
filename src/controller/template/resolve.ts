@@ -6,6 +6,7 @@ import {VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
+import {listIsEmpty} from '../../utils/utils'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -13,6 +14,9 @@ export type TemplateResolveArguments = {
     preset?: string
     inputs?: string
     output?: string
+    pruneRelations?: boolean
+    forcePruneRelations?: boolean
+    disableConsistencyCheck?: boolean
 }
 
 export default function (options: TemplateResolveArguments) {
@@ -32,6 +36,8 @@ export default function (options: TemplateResolveArguments) {
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
+        .setPruneRelations(options.pruneRelations)
+        .setForcePruneRelations(options.forcePruneRelations)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -40,7 +46,7 @@ export default function (options: TemplateResolveArguments) {
     resolver.resolve()
 
     // Check consistency
-    resolver.checkConsistency()
+    if (!options.disableConsistencyCheck) resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
     resolver.transformInPlace()
@@ -73,6 +79,8 @@ export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
 
     private _variabilityInputs?: InputAssignmentMap
+    private pruneRelations = false
+    private forcePruneRelations = false
 
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
@@ -100,13 +108,13 @@ export class VariabilityResolver {
                 const relationName = utils.firstKey(map)
                 const assignment = utils.firstValue(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
-                const condition = validator.isString(assignment) ? [true] : utils.toList(assignment.conditions)
+                const conditions = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
                 const relation: Relation = {
                     name: relationName,
                     source: nodeName,
                     target,
-                    conditions: condition,
+                    conditions,
                     groups: [],
                 }
                 this.relations.push(relation)
@@ -163,22 +171,35 @@ export class VariabilityResolver {
     }
 
     resolve() {
-        for (const node of this.nodes) {
-            node.present = this.checkPresence(node)
-        }
-
-        for (const relation of this.relations) {
-            relation.present = this.checkPresence(relation)
-        }
-
+        for (const node of this.nodes) this.checkPresence(node)
+        for (const relation of this.relations) this.checkPresence(relation)
         return this
     }
 
-    checkPresence(element: Element) {
+    checkPresence(element: Node | Relation) {
+        // Check if presence already has been evaluated
         if (validator.hasProperty(element, 'present')) return element.present
-        const conditions = element.conditions
+
+        // Collect assigned conditions
+        let conditions = element.conditions
         element.groups.forEach(group => conditions.push(...group.conditions))
-        return utils.filterNotNull(conditions).every(condition => this.evaluateVariabilityCondition(condition))
+        conditions = utils.filterNotNull<VariabilityExpression>(conditions)
+
+        // Prune Relation: Assign default condition to relation that checks if source is present
+        if (this.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
+            conditions = [{get_element_presence: element.source}]
+        }
+
+        // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
+        if (this.forcePruneRelations && validator.hasProperty(element, 'source')) {
+            conditions = [{get_element_presence: element.source}]
+        }
+
+        // Evaluate assigned conditions
+        const present = conditions.every(condition => this.evaluateVariabilityCondition(condition))
+        element.present = present
+
+        return present
     }
 
     checkConsistency() {
@@ -280,6 +301,16 @@ export class VariabilityResolver {
 
     setVariabilityInputs(inputs: InputAssignmentMap) {
         this._variabilityInputs = {...this._variabilityInputs, ...inputs}
+        return this
+    }
+
+    setPruneRelations(value?: boolean) {
+        this.pruneRelations = value
+        return this
+    }
+
+    setForcePruneRelations(value?: boolean) {
+        this.forcePruneRelations = value
         return this
     }
 
