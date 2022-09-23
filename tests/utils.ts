@@ -10,12 +10,14 @@ export function getDefaultTest({
     error,
     example,
     pruneRelations,
+    forcePruneRelations,
     disableConsistencyCheck,
 }: {
     preset?: string
     error?: string
     example?: string
     pruneRelations?: boolean
+    forcePruneRelations?: boolean
     disableConsistencyCheck?: boolean
 }) {
     return async function () {
@@ -30,6 +32,7 @@ export function getDefaultTest({
                 output,
                 preset,
                 pruneRelations,
+                forcePruneRelations,
                 disableConsistencyCheck,
             })
         }

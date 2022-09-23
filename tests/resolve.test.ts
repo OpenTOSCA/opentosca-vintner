@@ -4,6 +4,11 @@ it('node', getDefaultTest({}))
 
 it('requirement-assignment', getDefaultTest({}))
 it('requirement-assignment-prune', getDefaultTest({pruneRelations: true}))
+it(
+    'requirement-assignment-prune-throw',
+    getDefaultTest({pruneRelations: true, error: 'Relation source "one" of relation "two" does not exist'})
+)
+it('requirement-assignment-prune-force', getDefaultTest({forcePruneRelations: true}))
 
 it('groups', getDefaultTest({}))
 
@@ -14,7 +19,6 @@ it('preset', getDefaultTest({preset: 'two'}))
 it('tosca-definitions-version', getDefaultTest({}))
 
 it('relationship', getDefaultTest({}))
-it('relationship-prune', getDefaultTest({pruneRelations: true}))
 
 it(
     'relationship-throw-undefined',

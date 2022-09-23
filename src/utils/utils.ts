@@ -55,7 +55,7 @@ export function joinNotNull(array: string[], separator: string) {
     return filterNotNull(array).join(separator)
 }
 
-export function filterNotNull(array: any[]) {
+export function filterNotNull<T>(array: any[]): T[] {
     return array.filter(x => x !== undefined && x !== null)
 }
 

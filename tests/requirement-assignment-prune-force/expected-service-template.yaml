@@ -5,11 +5,7 @@ topology_template:
         two:
             type: two
             requirements:
-                - three:
-                      node: three
-                      relationship: rthree
+                - three: three
+
         three:
             type: three
-    relationship_templates:
-        rthree:
-            type: tthree

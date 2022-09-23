@@ -6,6 +6,7 @@ import {VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
+import {listIsEmpty} from '../../utils/utils'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -14,6 +15,7 @@ export type TemplateResolveArguments = {
     inputs?: string
     output?: string
     pruneRelations?: boolean
+    forcePruneRelations?: boolean
     disableConsistencyCheck?: boolean
 }
 
@@ -35,6 +37,7 @@ export default function (options: TemplateResolveArguments) {
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
         .setPruneRelations(options.pruneRelations)
+        .setForcePruneRelations(options.forcePruneRelations)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -77,6 +80,7 @@ export class VariabilityResolver {
 
     private _variabilityInputs?: InputAssignmentMap
     private pruneRelations = false
+    private forcePruneRelations = false
 
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
@@ -104,7 +108,8 @@ export class VariabilityResolver {
                 const relationName = utils.firstKey(map)
                 const assignment = utils.firstValue(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
-                const condition = validator.isString(assignment) ? [true] : utils.toList(assignment.conditions)
+                // TODO: this seems not to work
+                const condition = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
                 const relation: Relation = {
                     name: relationName,
@@ -172,29 +177,30 @@ export class VariabilityResolver {
         return this
     }
 
-    // TODO: prune only if element has no conditions assigned?
-    // TODO: add documentation
     checkPresence(element: Node | Relation) {
         // Check if presence already has been evaluated
         if (validator.hasProperty(element, 'present')) return element.present
 
-        // Check if relation is pruned
-        if (this.pruneRelations && validator.hasProperty(element, 'source')) {
-            //if (!this.checkPresence(this.getElement(element.source))) return false
-            this.checkPresence(this.getElement(element.source))
-            if (validator.hasProperty(element, 'present')) return element.present
+        // Collect assigned conditions
+        let conditions = element.conditions
+        element.groups.forEach(group => conditions.push(...group.conditions))
+        conditions = utils.filterNotNull<VariabilityExpression>(conditions)
+
+        // if (listIsEmpty(conditions)) conditions = [true]
+
+        // Prune Relation: Assign default condition to relation that checks if source is present
+        if (this.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
+            conditions = [{get_element_presence: element.source}]
+        }
+
+        // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
+        if (this.forcePruneRelations && validator.hasProperty(element, 'source')) {
+            conditions = [{get_element_presence: element.source}]
         }
 
         // Evaluate assigned conditions
-        const conditions = element.conditions
-        element.groups.forEach(group => conditions.push(...group.conditions))
-        const present = utils.filterNotNull(conditions).every(condition => this.evaluateVariabilityCondition(condition))
+        const present = conditions.every(condition => this.evaluateVariabilityCondition(condition))
         element.present = present
-
-        // Prune relations of node if node is not present and pruneRelations is enabled
-        if (this.pruneRelations && validator.hasProperty(element, 'relations') && !present) {
-            element.relations.forEach(relation => (relation.present = false))
-        }
 
         return present
     }
@@ -303,6 +309,11 @@ export class VariabilityResolver {
 
     setPruneRelations(value?: boolean) {
         this.pruneRelations = value
+        return this
+    }
+
+    setForcePruneRelations(value?: boolean) {
+        this.forcePruneRelations = value
         return this
     }
 

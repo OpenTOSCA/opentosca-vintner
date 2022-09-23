@@ -251,3 +251,40 @@ The following _Constraint Operators_ can be used inside a _Variability Expressio
 | length           | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a given length.                            |
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
+
+
+## Processing
+
+In the following we describe on a high-level the steps to conduct to derive a _Variability-Resolved Service Template_ from a _Variable Service Template_.
+
+### Resolve Variability
+
+To resolve the variability in a _Variable Service Template_ conduct the following steps: 
+
+1. Remove all _Node Templates_ which are _not present_.
+1. Remove all _Relationship Templates_ which are _not present_.
+1. Remove all non-standard key, e.g., `conditions` at _Node Templates_.
+
+### Check Element Presence
+
+To check if an element is present check that all assigned conditions are satisfied: 
+
+1. Collect all conditions which are assigned to the element via `conditions`.
+1. Collect all conditions which are assigned to groups via `conditinos` which the element is member of.
+1. The element is present only if all conditions are satisfied.
+
+To further improve modeling the following improvements can be taken: 
+
+1. Prune Relations: The default condition assigned to a _Relationship Template_ checks if the source node is present.
+1. Force Prune Relations: Ignore any assigned conditions and remove a _Relationship Template_ if the source node is present.
+
+### Check Consistency
+
+To check the consistency conduct the following steps: 
+
+1. Ensure that each relation source exists
+1. Ensure that each relation target exists
+1. Ensure that every node has at maximum one hosting relation
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the _Variable Service Template_.
+
+Since the derived _Service Template_ might be further processed, e.g. by _Topology Completion_[@hirmer2014automatic], some or all of these consistency steps might be omitted.
