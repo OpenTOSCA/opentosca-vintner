@@ -108,7 +108,6 @@ export class VariabilityResolver {
                 const relationName = utils.firstKey(map)
                 const assignment = utils.firstValue(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
-                // TODO: this seems not to work
                 const condition = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
                 const relation: Relation = {

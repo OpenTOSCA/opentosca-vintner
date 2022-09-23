@@ -6,8 +6,9 @@ topology_template:
             type: one
             conditions: false
             requirements:
-                - two: two
-                  conditions: true
+                - two:
+                      node: two
+                      conditions: true
 
         two:
             type: two
