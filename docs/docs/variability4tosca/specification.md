@@ -143,6 +143,7 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 
 A _Group Template_ can additionally contain _Variability Conditions_.
 These conditions must evaluate to true otherwise the respective group members are not present.
+Such a group is also called _Variability Group_.
 
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
 
@@ -255,7 +256,7 @@ The following _Constraint Operators_ can be used inside a _Variability Expressio
 
 ## Processing
 
-In the following we describe on a high-level the steps to conduct to derive a _Variability-Resolved Service Template_ from a _Variable Service Template_.
+In the following we describe on a high-level the steps to derive a _Variability-Resolved Service Template_ from a _Variable Service Template_.
 
 ### Resolve Variability
 
@@ -263,7 +264,7 @@ To resolve the variability in a _Variable Service Template_ conduct the followin
 
 1. Remove all _Node Templates_ which are _not present_.
 1. Remove all _Relationship Templates_ which are _not present_.
-1. Remove all non-standard key, e.g., `conditions` at _Node Templates_.
+1. Remove all non-standard elements, e.g., `conditions` at _Node Templates_ or _Variability Groups_.
 
 ### Check Element Presence
 
@@ -275,8 +276,8 @@ To check if an element is present check that all assigned conditions are satisfi
 
 To further improve modeling the following improvements can be taken: 
 
-1. Prune Relations: The default condition assigned to a _Relationship Template_ checks if the source node is present.
-1. Force Prune Relations: Ignore any assigned conditions and remove a _Relationship Template_ if the source node is present.
+1. Prune Relations: Remove a _Relationship Template_ if the source node is not present.
+1. Force Prune Relations: Ignore any assigned conditions and remove a _Relationship Template_ if the source node is not present.
 
 ### Check Consistency
 
