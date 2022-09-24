@@ -1,7 +1,7 @@
 import ohm from 'ohm-js';
 import * as fs from 'fs';
 import {
-    ConditionExpression, Expression, FromExpression, PredicateExpression, RelationshipExpression,
+    ConditionExpression, Expression, FromExpression, PathExpression, PredicateExpression, RelationshipExpression,
     SelectExpression, StepExpression
 } from '../specification/query-type';
 
@@ -15,8 +15,8 @@ export class Parser {
         Main(a, _) {
             return a.buildAST()
         },
-        Expression(from, _, select, __, selectAdd): Expression {
-            return {type: 'Expression', from: from.buildAST(), select: [select.buildAST()].concat(selectAdd.buildAST())}
+        Expression(from, select): Expression {
+            return {type: 'Expression', from: from.buildAST(), select: select.buildAST()}
         },
         MatchExpression(from, match, select) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
@@ -27,11 +27,11 @@ export class Parser {
         FromTemplate(_, template): FromExpression {
             return {type: 'From', template: template.buildAST()}
         },
-        Select(path): SelectExpression {
-            return {type: 'Select', path: path.buildAST()}
+        Select(_, firstPath, __, addPath): SelectExpression {
+            return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}
         },
-        Path(firstStep, __, nextSteps) {
-            return [firstStep.buildAST()].concat(nextSteps.buildAST())
+        Path(firstStep, __, nextSteps): PathExpression {
+            return {type: 'Path', steps: [firstStep.buildAST()].concat(nextSteps.buildAST())}
         },
         Step(path): StepExpression {
             return {type: 'Step', path: path.buildAST()}

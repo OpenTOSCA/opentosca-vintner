@@ -3,7 +3,7 @@ export type Expression = {
     value?: string
     from: FromExpression
     match?: MatchExpression
-    select: SelectExpression[]
+    select: SelectExpression
 }
 
 export type FromExpression = {
@@ -31,6 +31,11 @@ export type NodeExpression = {
     predicate?: PredicateExpression
 }
 
+export type PathExpression = {
+    type: 'Path'
+    steps: StepExpression[]
+}
+
 export type PredicateExpression = {
     type: 'Predicate'
     a: Object
@@ -47,7 +52,7 @@ export type RelationshipExpression = {
 
 export type SelectExpression = {
     type: 'Select'
-    path: StepExpression[]
+    path: PathExpression[]
 }
 
 export type StepExpression = {

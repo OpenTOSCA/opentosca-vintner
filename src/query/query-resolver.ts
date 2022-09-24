@@ -36,13 +36,12 @@ export class QueryResolver {
         for (const t of templates) {
             let result = []
             if (expression.match != null) {
-                result = this.evaluateMatch(result, expression.match)
+                result = this.evaluateMatch(t.template, expression.match)
             }
             try {
-                for (const s of expression.select)
-                    result.push(this.evaluateSelect(t.template, s))
+                result.push(this.evaluateSelect(t.template,expression.select))
             } catch (e) {
-                console.error(e.message)
+                console.error(e)
                 result = null
             }
             if (result) {
@@ -72,29 +71,35 @@ export class QueryResolver {
     }
 
     evaluateSelect(data: Object, expression: SelectExpression) {
-        let result = data
-        for (const i of expression.path) {
-            if (i.type == 'Group') {
-                result = this.evaluateGroup(result, i.path)
-            } else if (i.type == 'Policy') {
-                result = this.evaluatePolicy(result, i.path)
-            } else if (i.path == "*") {
-                result = this.evaluateWildcard(result, i.condition)
-            } else {
-                result = this.evaluateStep(result, i)
+        const results = []
+        for (const p of expression.path) {
+            let result = data
+            for (const i of p.steps) {
+                if (i.type == 'Group') {
+                    result = this.evaluateGroup(result, i.path)
+                } else if (i.type == 'Policy') {
+                    result = this.evaluatePolicy(result, i.path)
+                } else if (i.path == "*") {
+                    result = this.evaluateWildcard(result, i.condition)
+                } else {
+                    result = this.evaluateStep(result, i)
+                }
             }
+            results.push(result)
         }
-        return result
+        return results
     }
 
     evaluateMatch(data: Object, expression: MatchExpression) {
         const matchingNodes = [{name: expression.start.name, data: this.evaluateNode(data, expression.start)}]
-        for (let i = 0; i < expression.steps.length; i++) {
+        for (const s of expression.steps) {
+            console.log(s)
             matchingNodes.push({
-                name: expression.steps[i].target.name,
-                data: this.evaluateNode(data, expression.steps[i].target)
+                name: s.target.name,
+                data: this.evaluateNode(data, s.target)
             })
         }
+        console.log(matchingNodes)
         return matchingNodes
     }
 
@@ -102,11 +107,11 @@ export class QueryResolver {
         return result
     }
 
-    evaluateNode(node: Object, expression: NodeExpression) {
+    evaluateNode(data: Object, expression: NodeExpression) {
         console.log("Evaluate " + expression.name)
         let result
-        const path = 'topology_template.node_templates'
-        result = this.resolvePath(path, node)
+        const path = 'topology_template.node_templates.' + expression.name
+        result = this.resolvePath(path, data)
         if (expression.predicate) {
             result = this.evaluatePredicate(result, expression.predicate)
         }
