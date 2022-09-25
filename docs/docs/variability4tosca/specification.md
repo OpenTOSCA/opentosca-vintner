@@ -271,13 +271,13 @@ To resolve the variability in a _Variable Service Template_ conduct the followin
 To check if an element is present check that all assigned conditions are satisfied: 
 
 1. Collect all conditions which are assigned to the element via `conditions`.
-1. Collect all conditions which are assigned to groups via `conditinos` which the element is member of.
+1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
 1. The element is present only if all conditions are satisfied.
 
-To further improve modeling the following improvements can be taken: 
+To further support modeling the following improvements can be taken: 
 
-1. Prune Relations: Remove a _Relationship Template_ if the source node is not present.
-1. Force Prune Relations: Ignore any assigned conditions and remove a _Relationship Template_ if the source node is not present.
+1. Prune Relations: The default condition of a relation checks if the source node is present.
+1. Force Prune Relations: Ignore any assigned conditions and remove a relation if the source node is not present.
 
 ### Check Consistency
 
