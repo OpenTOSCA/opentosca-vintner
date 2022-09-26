@@ -54,18 +54,20 @@ export default function (options: TemplateResolveArguments) {
     files.storeFile(output, serviceTemplate)
 }
 
-type Element = {
+type ConditionalElementBase = {
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
     groups: Group[]
 }
 
-type Node = Element & {
+type Input = ConditionalElementBase
+
+type Node = ConditionalElementBase & {
     relations: Relation[]
 }
 
-type Relation = Element & {
+type Relation = ConditionalElementBase & {
     source: string
     target: string
 }
@@ -74,6 +76,8 @@ type Group = {
     name: string
     conditions: VariabilityExpression[]
 }
+
+type ConditionalElement = Input | Node | Relation
 
 export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
@@ -84,11 +88,25 @@ export class VariabilityResolver {
 
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
+
     private relations: Relation[] = []
     private relationships: {[name: string]: Relation[]} = {}
 
+    private inputs: Input[] = []
+    private inputsMap: {[name: string]: Input} = {}
+
     constructor(serviceTemplate: ServiceTemplate) {
         this._serviceTemplate = serviceTemplate
+
+        Object.entries(serviceTemplate?.topology_template?.inputs || {}).forEach(([name, definition]) => {
+            const input: Input = {
+                name,
+                conditions: utils.toList(definition.conditions),
+                groups: [],
+            }
+            this.inputs.push(input)
+            this.inputsMap[name] = input
+        })
 
         Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(
             name => (this.relationships[name] = [])
@@ -173,10 +191,11 @@ export class VariabilityResolver {
     resolve() {
         for (const node of this.nodes) this.checkPresence(node)
         for (const relation of this.relations) this.checkPresence(relation)
+        for (const input of this.inputs) this.checkPresence(input)
         return this
     }
 
-    checkPresence(element: Node | Relation) {
+    checkPresence(element: ConditionalElement) {
         // Check if presence already has been evaluated
         if (validator.hasProperty(element, 'present')) return element.present
 
@@ -278,6 +297,15 @@ export class VariabilityResolver {
                 )
             )
                 delete this._serviceTemplate.topology_template?.groups[name]
+        })
+
+        // Delete all topology template inputs which are not present
+        this.inputs.forEach(input => {
+            if (input.present) {
+                delete this._serviceTemplate.topology_template.inputs[input.name].conditions
+            } else {
+                delete this._serviceTemplate.topology_template.inputs[input.name]
+            }
         })
 
         return this._serviceTemplate

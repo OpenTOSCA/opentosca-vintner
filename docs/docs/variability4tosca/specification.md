@@ -161,6 +161,28 @@ example_group:
     conditions: {get_variability_expression: is_prod}
 ```
 
+## Topology Template Input Definition
+
+A _Topology Template Input_ can additionally contain _Variability Conditions_.
+These conditions must evaluate to true otherwise the respective input is not present.
+
+
+| Keyname   | Mandatory | Type                           | Description                        |
+| --------- | --------- | ------------------------------ |------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+
+
+The following example contains a _Topology Template Input_ that has a _Variability Condition_ assigned.
+
+```linenums="1"
+ssh_key_file:
+    type: string
+    conditions: {get_variability_expression: is_dev}
+```
+
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+
 ## Normative Group Types
 
 There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
@@ -264,6 +286,7 @@ To resolve the variability in a _Variable Service Template_ conduct the followin
 
 1. Remove all _Node Templates_ which are _not present_.
 1. Remove all _Relationship Templates_ which are _not present_.
+1. Remove all _Topology Template Inputs_ which are _not present_.
 1. Remove all non-standard elements, e.g., `conditions` at _Node Templates_ or _Variability Groups_.
 
 ### Check Element Presence
