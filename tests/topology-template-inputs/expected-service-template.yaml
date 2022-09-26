@@ -4,3 +4,5 @@ topology_template:
     inputs:
         one:
             type: string
+        three:
+            type: string

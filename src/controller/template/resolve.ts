@@ -54,20 +54,20 @@ export default function (options: TemplateResolveArguments) {
     files.storeFile(output, serviceTemplate)
 }
 
-type Element = {
+type ConditionalElementBase = {
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
     groups: Group[]
 }
 
-type Input = Element
+type Input = ConditionalElementBase
 
-type Node = Element & {
+type Node = ConditionalElementBase & {
     relations: Relation[]
 }
 
-type Relation = Element & {
+type Relation = ConditionalElementBase & {
     source: string
     target: string
 }
@@ -102,7 +102,7 @@ export class VariabilityResolver {
             const input: Input = {
                 name,
                 conditions: utils.toList(definition.conditions),
-                groups: []
+                groups: [],
             }
             this.inputs.push(input)
             this.inputsMap[name] = input
