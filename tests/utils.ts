@@ -3,7 +3,7 @@ import * as files from '../src/utils/files'
 import {ServiceTemplate} from '../src/specification/service-template'
 import {expect} from 'chai'
 import Controller from '../src/controller'
-import {VariabilityResolver} from '../src/controller/template/resolve'
+import {ResolvingOptions, VariabilityResolver} from '../src/controller/template/resolve'
 
 export function getDefaultTest({
     preset,
@@ -12,14 +12,15 @@ export function getDefaultTest({
     pruneRelations,
     forcePruneRelations,
     disableConsistencyCheck,
+    disableRelationSourceConsistencyCheck,
+    disableRelationTargetConsistencyCheck,
+    disableMaximumHostingConsistencyCheck,
+    disableExpectedHostingConsistencyCheck,
 }: {
     preset?: string
     error?: string
     example?: string
-    pruneRelations?: boolean
-    forcePruneRelations?: boolean
-    disableConsistencyCheck?: boolean
-}) {
+} & ResolvingOptions) {
     return async function () {
         const dir = path.join(__dirname, this.test.title)
         files.assertDirectory(dir)
@@ -34,6 +35,10 @@ export function getDefaultTest({
                 pruneRelations,
                 forcePruneRelations,
                 disableConsistencyCheck,
+                disableRelationSourceConsistencyCheck,
+                disableRelationTargetConsistencyCheck,
+                disableMaximumHostingConsistencyCheck,
+                disableExpectedHostingConsistencyCheck,
             })
         }
 

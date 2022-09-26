@@ -14,9 +14,16 @@ export type TemplateResolveArguments = {
     preset?: string
     inputs?: string
     output?: string
+} & ResolvingOptions
+
+export type ResolvingOptions = {
     pruneRelations?: boolean
     forcePruneRelations?: boolean
     disableConsistencyCheck?: boolean
+    disableRelationSourceConsistencyCheck?: boolean
+    disableRelationTargetConsistencyCheck?: boolean
+    disableMaximumHostingConsistencyCheck?: boolean
+    disableExpectedHostingConsistencyCheck?: boolean
 }
 
 export default function (options: TemplateResolveArguments) {
@@ -36,8 +43,7 @@ export default function (options: TemplateResolveArguments) {
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
-        .setPruneRelations(options.pruneRelations)
-        .setForcePruneRelations(options.forcePruneRelations)
+        .setOptions(options)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -83,8 +89,7 @@ export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
 
     private _variabilityInputs?: InputAssignmentMap
-    private pruneRelations = false
-    private forcePruneRelations = false
+    private options: ResolvingOptions = {}
 
     private nodes: Node[] = []
     private nodesMap: {[name: string]: Node} = {}
@@ -205,12 +210,12 @@ export class VariabilityResolver {
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
         // Prune Relation: Assign default condition to relation that checks if source is present
-        if (this.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
+        if (this.options.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
             conditions = [{get_element_presence: element.source}]
         }
 
         // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
-        if (this.forcePruneRelations && validator.hasProperty(element, 'source')) {
+        if (this.options.forcePruneRelations && validator.hasProperty(element, 'source')) {
             conditions = [{get_element_presence: element.source}]
         }
 
@@ -226,33 +231,45 @@ export class VariabilityResolver {
         const nodes = this.nodes.filter(node => node.present)
 
         // Ensure that each relation source exists
-        for (const relation of relations) {
-            if (!this.nodesMap[relation.source]?.present)
-                throw new Error(`Relation source "${relation.source}" of relation "${relation.name}" does not exist`)
+        if (!this.options.disableRelationSourceConsistencyCheck) {
+            for (const relation of relations) {
+                if (!this.nodesMap[relation.source]?.present)
+                    throw new Error(
+                        `Relation source "${relation.source}" of relation "${relation.name}" does not exist`
+                    )
+            }
         }
 
         // Ensure that each relation target exists
-        for (const relation of relations) {
-            if (!this.nodesMap[relation.target]?.present)
-                throw new Error(`Relation target "${relation.target}" of relation "${relation.name}" does not exist`)
+        if (!this.options.disableRelationTargetConsistencyCheck) {
+            for (const relation of relations) {
+                if (!this.nodesMap[relation.target]?.present)
+                    throw new Error(
+                        `Relation target "${relation.target}" of relation "${relation.name}" does not exist`
+                    )
+            }
         }
 
         // Ensure that every component has at maximum one hosting relation
-        for (const node of nodes) {
-            const relations = node.relations.filter(
-                relation => relation.source === node.name && relation.name === 'host' && relation.present
-            )
-            if (relations.length > 1) throw new Error(`Node "${node.name}" has more than one hosting relations`)
+        if (!this.options.disableMaximumHostingConsistencyCheck) {
+            for (const node of nodes) {
+                const relations = node.relations.filter(
+                    relation => relation.source === node.name && relation.name === 'host' && relation.present
+                )
+                if (relations.length > 1) throw new Error(`Node "${node.name}" has more than one hosting relations`)
+            }
         }
 
         // Ensure that every component that had a hosting relation previously still has one
-        for (const node of nodes) {
-            const relations = node.relations.filter(
-                relation => relation.source === node.name && relation.name === 'host'
-            )
+        if (!this.options.disableExpectedHostingConsistencyCheck) {
+            for (const node of nodes) {
+                const relations = node.relations.filter(
+                    relation => relation.source === node.name && relation.name === 'host'
+                )
 
-            if (relations.length !== 0 && !relations.some(relation => relation.present))
-                throw new Error(`Node "${node.name}" requires a hosting relation`)
+                if (relations.length !== 0 && !relations.some(relation => relation.present))
+                    throw new Error(`Node "${node.name}" requires a hosting relation`)
+            }
         }
         return this
     }
@@ -332,13 +349,8 @@ export class VariabilityResolver {
         return this
     }
 
-    setPruneRelations(value?: boolean) {
-        this.pruneRelations = value
-        return this
-    }
-
-    setForcePruneRelations(value?: boolean) {
-        this.forcePruneRelations = value
+    setOptions(options: ResolvingOptions) {
+        this.options = options
         return this
     }
 
