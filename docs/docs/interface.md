@@ -307,10 +307,14 @@ resolves variability
 | template |  true  | string | path to variable service template |
 | preset |  false  | string | name of the variability preset set |
 | inputs |  false  | string | path to the variability inputs |
+| output |  true  | string | path of the output |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
-| disable-consistency-check |  false  | boolean | disable consistency check |
-| output |  true  | string | path of the output |
+| disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
+| disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
+| disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
+| disable-maximum-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 
 ## templates list
 
@@ -581,6 +585,13 @@ resolves variability
 | instance |  true  | string | instance name |
 | preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs |
+| prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
+| force-prune-relations |  false  | boolean | prune relation if source is not present |
+| disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
+| disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
+| disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
+| disable-maximum-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 
 ## instances inspect
 
