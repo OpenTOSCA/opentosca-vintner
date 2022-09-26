@@ -51,3 +51,5 @@ it('examples-unfurl-motivation-dev', getDefaultTest({preset: 'dev', example: 'un
 it('examples-unfurl-motivation-prod', getDefaultTest({preset: 'prod', example: 'unfurl-motivation'}))
 
 it('one-hosting-relation', getDefaultTest({}))
+
+it('topology-template-inputs', getDefaultTest({}))
