@@ -4,11 +4,16 @@ import {Instance} from '../repository/instances';
 import {
     ConditionExpression,
     Expression,
-    FromExpression, MatchExpression, NodeExpression, PredicateExpression,
+    FromExpression, MatchExpression, NodeExpression, PredicateExpression, RelationshipExpression,
     SelectExpression, StepExpression
 } from '../specification/query-type';
+import {NodeTemplate} from '../specification/node-template';
+import {ServiceTemplate} from '../specification/service-template';
+import * as utils from '../utils/utils';
+import {NodeGraph} from './node-graph';
 
 export class QueryResolver {
+    private nodeGraph: NodeGraph
 
     resolve(query: string) {
         const parser = new Parser
@@ -34,12 +39,12 @@ export class QueryResolver {
         const results = []
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
-            let result = []
+            let result = t.template
             if (expression.match != null) {
-                result = this.evaluateMatch(t.template, expression.match)
+                result = this.evaluateMatch(result, expression.match)
             }
             try {
-                result.push(this.evaluateSelect(t.template,expression.select))
+                result = this.evaluateSelect(result,expression.select)
             } catch (e) {
                 console.error(e)
                 result = null
@@ -90,32 +95,49 @@ export class QueryResolver {
         return results
     }
 
-    evaluateMatch(data: Object, expression: MatchExpression) {
-        const matchingNodes = [{name: expression.start.name, data: this.evaluateNode(data, expression.start)}]
-        for (const s of expression.steps) {
-            console.log(s)
-            matchingNodes.push({
-                name: s.target.name,
-                data: this.evaluateNode(data, s.target)
-            })
+    evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
+        this.nodeGraph = new NodeGraph(data)
+        const matchingNodes: string[][] = [this.evaluateNode(data, expression.nodes[0])]
+        for (let i = 0; i < expression.relationships.length; i++) {
+            matchingNodes[i+1] = this.expandAll(matchingNodes[i], expression.relationships[i])
+            matchingNodes[i+1] = this.evaluateNode(data, expression.nodes[i+1])
         }
-        console.log(matchingNodes)
-        return matchingNodes
-    }
-
-    evaluateMatchStep(result: Object, step: string) {
+        const result = {}
+        for (let i = 0; i < expression.nodes.length; i++) {
+            result[expression.nodes[i].name] = matchingNodes[i]
+        }
         return result
     }
 
-    evaluateNode(data: Object, expression: NodeExpression) {
-        console.log("Evaluate " + expression.name)
-        let result
-        const path = 'topology_template.node_templates.' + expression.name
-        result = this.resolvePath(path, data)
+    /**
+     * Gets a node expression as input and returns a string list of node template names that match
+     * @param data
+     * @param expression
+     */
+
+    evaluateNode(data: ServiceTemplate, expression: NodeExpression) {
+        let result: string[] = []
+        const nodes = data.topology_template.node_templates
         if (expression.predicate) {
-            result = this.evaluatePredicate(result, expression.predicate)
+            for (const [key, value] of Object.entries(nodes)) {
+                if (this.evaluatePredicate(value, expression.predicate)) {
+                    result.push(key)
+                }
+            }
+        } else {
+            result = Object.keys(nodes)
         }
         return result
+    }
+
+    expandAll(start: string[], relationship: RelationshipExpression) {
+        const targets = new Set<string>()
+        for (const n of start) {
+            for (const r of this.nodeGraph.nodesMap[n].relationships) {
+                targets.add(r.to)
+            }
+        }
+        return [...targets]
     }
 
     evaluatePredicate(data: Object, predicate: PredicateExpression) {

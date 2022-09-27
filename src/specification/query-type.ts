@@ -14,20 +14,13 @@ export type FromExpression = {
 
 export type MatchExpression = {
     type: 'Match'
-    start: NodeExpression
-    steps?: MatchStepExpression[]
-}
-
-export type MatchStepExpression = {
-    type: 'MatchStep'
-    relationship: RelationshipExpression
-    target: NodeExpression
+    nodes: NodeExpression[]
+    relationships?: RelationshipExpression[]
 }
 
 export type NodeExpression = {
     type: 'Node'
     name?: string
-    nodeType?: string
     predicate?: PredicateExpression
 }
 
@@ -45,9 +38,8 @@ export type PredicateExpression = {
 
 export type RelationshipExpression = {
     type: 'Relationship'
-    kind: string
-    name: string
-    value: string
+    direction: 'left' | 'right' | 'both'
+    condition?: PredicateExpression
 }
 
 export type SelectExpression = {

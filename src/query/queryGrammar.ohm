@@ -18,21 +18,23 @@ Query {
             | Condition -- single
   Condition = shortcut? Value comparison Value -- comparison
             | shortcut? Value -- existence
-  Match = matchLiteral Node MatchStep*
-  MatchStep = Relationship Node
-  Node = "(" ident? (":" ident)? PredicateExpression? ")"
-  Relationship = "-[" ident? (":" ident)? "]->"
+  Match = matchLiteral Node (Relationship Node)*
+  Node = "(" ident? PredicateExpression? ")"
+  Relationship = arrowLeft RelationshipFilter? arrowRight
+  RelationshipFilter = "[" ident? PredicateExpression? "]"
 
   Value = path | literal
 
   fromLiteral = "FROM"
   groupLiteral = "GROUP"
   matchLiteral = "MATCH"
-  policyLiteral = "POLTARGET"
+  policyLiteral = "POLICY"
   selectLiteral = "SELECT"
 
+  arrowLeft = "<-" | "-"
+  arrowRight = "->" | "-"
   asterisk = "*"
-  comparison = ("=" | "!=" | ">=" | "<=" | ">" | "<")
+  comparison = "=" | "!=" | ">=" | "<=" | ">" | "<"
   ident = letter (alnum | "_" | "-")*
   logic = "AND" | "OR"
   path = letter (alnum | "_" | "-" | ".")*

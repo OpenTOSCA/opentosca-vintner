@@ -1,8 +1,15 @@
 import ohm from 'ohm-js';
 import * as fs from 'fs';
 import {
-    ConditionExpression, Expression, FromExpression, PathExpression, PredicateExpression, RelationshipExpression,
-    SelectExpression, StepExpression
+    ConditionExpression,
+    Expression,
+    FromExpression,
+    MatchExpression,
+    PathExpression,
+    PredicateExpression,
+    RelationshipExpression,
+    SelectExpression,
+    StepExpression
 } from '../specification/query-type';
 
 export class Parser {
@@ -68,18 +75,19 @@ export class Parser {
                 variable: getShortcut(shortcut.sourceString).concat(variable.buildAST())
             }
         },
-        Match(_, start, steps) {
-            return {type: 'Match', start: start.buildAST(), steps: steps.buildAST()}
+        Match(_, firstNode, relationships, addNodes): MatchExpression {
+            return {type: 'Match', nodes: [firstNode.buildAST()].concat(addNodes.buildAST()), relationships: relationships.buildAST()}
         },
-        MatchStep(relationship, target) {
-            return {type: 'MatchStep', relationship: relationship.buildAST(), target: target.buildAST()}
+        Node(_, name, predicate, __) {
+            return (predicate.sourceString != "")? {type: 'Node', name: name.sourceString, predicate: predicate.buildAST()[0]}
+                : {type: 'Node', name: name.sourceString}
         },
-        Node(_, name, __, nodeType, predicate, ___) {
-            return (predicate.sourceString != "")? {type: 'Node', name: name.sourceString, nodeType: nodeType.sourceString, predicate: predicate.buildAST()}
-                : {type: 'Node', name: name.sourceString, nodeType: nodeType.sourceString}
+        Relationship(arrow1, condition, arrow2): RelationshipExpression {
+            const direction = getArrowDirection(arrow1.sourceString + arrow2.sourceString)
+            return {type: 'Relationship', direction: direction, condition: condition.buildAST()[0]}
         },
-        Relationship(_, name, __, value, ___): RelationshipExpression {
-            return {type: 'Relationship', kind: 'To', name: name.sourceString, value: value.sourceString}
+        RelationshipFilter(_, name, predicate, __): PredicateExpression {
+            return predicate.buildAST()[0]
         },
         Value(v) {
             return v.buildAST()
@@ -152,5 +160,16 @@ function getShortcut(shortcut: string) {
             return 'capabilities.'
         default:
             return ''
+    }
+}
+
+function getArrowDirection(arrow: string) {
+    switch (arrow) {
+        case '-->':
+            return 'right'
+        case '<--':
+            return 'left'
+        default:
+            return 'both'
     }
 }
