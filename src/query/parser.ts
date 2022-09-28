@@ -28,11 +28,11 @@ export class Parser {
         MatchExpression(from, match, select) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
         },
-        FromInstance(_, template, __, instance): FromExpression {
-            return {type: 'From', template: template.buildAST(), instance: instance.buildAST()}
+        FromInstance(_, __, instance, ___): FromExpression {
+            return {type: 'Instance', instance: instance.sourceString}
         },
-        FromTemplate(_, template): FromExpression {
-            return {type: 'From', template: template.buildAST()}
+        FromTemplate(_, __, template, ___): FromExpression {
+            return {type: 'Template', template: template.sourceString}
         },
         Select(_, firstPath, __, addPath): SelectExpression {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}

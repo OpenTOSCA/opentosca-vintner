@@ -7,8 +7,8 @@ export type Expression = {
 }
 
 export type FromExpression = {
-    type: 'From'
-    template: string
+    type: 'Instance' | 'Template'
+    template?: string
     instance?: string
 }
 

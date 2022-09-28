@@ -2,12 +2,13 @@ import {QueryResolver} from '../../query/query-resolver';
 
 export type QueryTemplateArguments = {
     query: string
+    source: 'vintner' | 'file' | 'winery'
 }
 
 export default async function executeQuery(options: QueryTemplateArguments) {
     console.log(`Executing query: ${options.query}`)
     const resolver = new QueryResolver()
-    const results = resolver.resolve(options.query)
+    const results = resolver.resolve(options)
     if (results.length > 0) {
         for (const r of results)
             if (r.result) {

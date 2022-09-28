@@ -3,8 +3,8 @@ Query {
   Expression = (FromInstance | FromTemplate) Select
   MatchExpression = (FromInstance | FromTemplate) Match Select
 
-  FromInstance = fromLiteral ident "/" ident
-  FromTemplate = fromLiteral (asterisk | ident)
+  FromInstance = fromLiteral "instance(" (asterisk | filePath) ")"
+  FromTemplate = fromLiteral "template(" (asterisk | filePath) ")"
 
   Select = selectLiteral Path ("," Path)*
   Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))*
@@ -39,6 +39,7 @@ Query {
   ident = letter (alnum | "_" | "-")*
   logic = "AND" | "OR"
   path = letter (alnum | "_" | "-" | ".")*
+  filePath = (letter | alnum | "_" | "-" | "." | "/")*
   literal = string | float | digit | bool
   bool = "true" | "false" | "TRUE" | "FALSE"
   shortcut = "@" | "#" | ":"

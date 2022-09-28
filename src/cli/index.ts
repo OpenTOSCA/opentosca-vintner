@@ -123,6 +123,7 @@ const query = program.command('query').description('executes a query')
 query
     .command('execute')
     .requiredOption('--query <string>', 'path to query')
+    .option('--source <string>', 'specifies where to search for template to query', 'vintner')
     .action(hae(async options => {
         await Controller.query.query(options)
     }))

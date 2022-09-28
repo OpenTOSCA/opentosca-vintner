@@ -2,24 +2,27 @@ import {Parser} from './parser';
 import {Template, Templates} from '../repository/templates';
 import {Instance} from '../repository/instances';
 import {
-    ConditionExpression,
-    Expression,
-    FromExpression, MatchExpression, NodeExpression, PredicateExpression, RelationshipExpression,
-    SelectExpression, StepExpression
+    ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
+    RelationshipExpression, SelectExpression, StepExpression
 } from '../specification/query-type';
-import {NodeTemplate} from '../specification/node-template';
 import {ServiceTemplate} from '../specification/service-template';
-import * as utils from '../utils/utils';
 import {NodeGraph} from './node-graph';
+import {QueryTemplateArguments} from '../controller/query/query';
+import * as files from '../utils/files'
+import path from 'path';
+import * as yaml from 'js-yaml';
+import fs from 'fs';
 
 export class QueryResolver {
     private nodeGraph: NodeGraph
+    private source: string
 
-    resolve(query: string) {
+    resolve(query: QueryTemplateArguments) {
         const parser = new Parser
         let tree
         try {
-            tree = parser.getAST(query)
+            this.source = query.source
+            tree = parser.getAST(query.query)
         } catch (e) {
             console.error(e.message)
             process.exit(0);
@@ -60,17 +63,28 @@ export class QueryResolver {
     evaluateFrom(expression: FromExpression) {
         const serviceTemplates = []
         try {
-            if (expression.instance) {
-                serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance).getServiceTemplate()})
-            } else if (expression.template == '*') {
-                for (const t of Templates.all()) {
-                    serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
+            switch (this.source){
+                case 'vintner':
+                    if (expression.type == 'Instance') {
+                        serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance).getServiceTemplate()})
+                    } else if (expression.type == 'Template' && expression.template == '*') {
+                        for (const t of Templates.all()) {
+                            serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
+                        }
+                    } else {
+                        serviceTemplates.push({name: expression.template, template:new Template(expression.template).getVariableServiceTemplate()})
+                    }
+                    break
+                case 'winery': {
+                    const winery = path.resolve(path.join(files.getWineryRepo(), 'servicetemplates', expression.template, 'ServiceTemplate.tosca'))
+                    serviceTemplates.push({
+                        name: expression.template,
+                        template: yaml.load(fs.readFileSync(winery, 'utf-8')) as ServiceTemplate
+                    })
                 }
-            } else {
-                serviceTemplates.push({name: expression.template, template:new Template(expression.template).getVariableServiceTemplate()})
             }
         } catch (error) {
-            console.error(`Could not locate service template ${expression.template}`)
+            console.error(`Could not locate service template ${expression.template} from source ${this.source}`)
         }
         return serviceTemplates
     }
