@@ -20,8 +20,9 @@ Query {
             | shortcut? Value -- existence
   Match = matchLiteral Node (Relationship Node)*
   Node = "(" ident? PredicateExpression? ")"
-  Relationship = arrowLeft RelationshipFilter? arrowRight
-  RelationshipFilter = "[" ident? PredicateExpression? "]"
+  Relationship = arrowLeft arrowRight --simple
+               | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
+  Cardinality = asterisk integer?
 
   Value = path | literal
 
@@ -44,6 +45,7 @@ Query {
   string
     = "'" (~"'" any)* "'"
     | "\"" (~"\"" any)* "\""
+  integer = digit+
   float   = digit? "." digit+
   singleComment = "//" (~"\n" any)*
   multiComment = "/*" (~"*/" any)* "*/"

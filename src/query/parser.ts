@@ -82,12 +82,22 @@ export class Parser {
             return (predicate.sourceString != "")? {type: 'Node', name: name.sourceString, predicate: predicate.buildAST()[0]}
                 : {type: 'Node', name: name.sourceString}
         },
-        Relationship(arrow1, condition, arrow2): RelationshipExpression {
-            const direction = getArrowDirection(arrow1.sourceString + arrow2.sourceString)
-            return {type: 'Relationship', direction: direction, condition: condition.buildAST()[0]}
+        Relationship_simple(arrowLeft, arrowRight): RelationshipExpression {
+            const direction = getArrowDirection(arrowLeft.sourceString + arrowRight.sourceString)
+            return {type: 'Relationship', direction: direction}
         },
-        RelationshipFilter(_, name, predicate, __): PredicateExpression {
-            return predicate.buildAST()[0]
+        Relationship_cond(arrowLeft, _, variable, predicate, cardinality, __, arrowRight): RelationshipExpression {
+            const direction = getArrowDirection(arrowLeft.sourceString + arrowRight.sourceString)
+            return {
+                type: 'Relationship',
+                direction: direction,
+                variable: variable.sourceString,
+                cardinality: cardinality.buildAST()[0],
+                predicate: predicate.buildAST()[0]
+            }
+        },
+        Cardinality(asterisk, number) {
+            return '1'
         },
         Value(v) {
             return v.buildAST()

@@ -39,7 +39,9 @@ export type PredicateExpression = {
 export type RelationshipExpression = {
     type: 'Relationship'
     direction: 'left' | 'right' | 'both'
-    condition?: PredicateExpression
+    variable?: string
+    cardinality?: string
+    predicate?: PredicateExpression
 }
 
 export type SelectExpression = {
