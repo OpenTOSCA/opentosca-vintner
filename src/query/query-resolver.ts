@@ -17,6 +17,7 @@ import {NodeTemplate} from '../specification/node-template';
 export class QueryResolver {
     private nodeGraph: NodeGraph
     private source: string
+    private currentKeys: string[]
 
     resolve(query: QueryTemplateArguments) {
         const parser = new Parser
@@ -208,12 +209,15 @@ export class QueryResolver {
 
     evaluateWildcard(data: Object, condition?: PredicateExpression) {
         const result = []
-        for (const node of Object.values(data)) {
+        this.currentKeys = []
+        for (const [key, value] of Object.entries(data)) {
             if (condition) {
-                if (this.evaluatePredicate(node, condition))
-                    result.push(node)
+                if (this.evaluatePredicate(value, condition))
+                    result.push(value)
+                    this.currentKeys.push(key)
             } else {
-                result.push(node)
+                result.push(value)
+                this.currentKeys.push(key)
             }
         }
         return result
@@ -221,14 +225,24 @@ export class QueryResolver {
 
     evaluateStep(data: Object, step: StepExpression) {
         if (Array.isArray(data)) {
-            const result = []
-            for (const node of data) {
-                if (Object.getOwnPropertyDescriptor(node, step.path)) {
-                    result.push(node[step.path])
+            let result = []
+            if (step.path == 'name') {
+                result = this.currentKeys
+            } else {
+                for (const node of data) {
+                    this.currentKeys = []
+                    if (Object.getOwnPropertyDescriptor(node, step.path)) {
+                        result.push(node[step.path])
+                        this.currentKeys.push(step.path)
+                    }
                 }
             }
             return result
         } else {
+            if (step.path == 'name') {
+                return this.currentKeys[0]
+            }
+            this.currentKeys = [step.path]
             return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : null
         }
     }
@@ -239,6 +253,7 @@ export class QueryResolver {
             throw new Error(`Could not find group ${name}`)
         }
         const result = {}
+        this.currentKeys = groupNodes
         for (const i of groupNodes) {
             result[i] = data['topology_template']['node_templates'][i]
         }
@@ -251,6 +266,7 @@ export class QueryResolver {
             throw new Error(`Could not find policy ${name}`)
         }
         const result = {}
+        this.currentKeys = policyNodes
         for (const i of policyNodes) {
             result[i] = data['topology_template']['node_templates'][i]
         }
