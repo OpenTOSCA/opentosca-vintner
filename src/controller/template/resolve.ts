@@ -19,6 +19,8 @@ export type TemplateResolveArguments = {
 export type ResolvingOptions = {
     pruneRelations?: boolean
     forcePruneRelations?: boolean
+    pruneNodes?: boolean
+    forcePruneNodes?: boolean
     disableConsistencyCheck?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -61,21 +63,27 @@ export default function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
+    type: 'node' | 'relation' | 'input'
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
     groups: Group[]
 }
 
-type Input = ConditionalElementBase
+type Input = ConditionalElementBase & {
+    type: 'input'
+}
 
 type Node = ConditionalElementBase & {
-    relations: Relation[]
+    type: 'node'
+    ingoing: Relation[] // TODO: should not be an array but a map?
+    outgoing: Relation[] // TODO: should not be an array but a map?
 }
 
 type Relation = ConditionalElementBase & {
-    source: string
-    target: string
+    type: 'relation'
+    source: string // TODO: should not be an string but a node
+    target: string // TODO: should not be a string but a node
 }
 
 type Group = {
@@ -105,6 +113,7 @@ export class VariabilityResolver {
 
         Object.entries(serviceTemplate?.topology_template?.inputs || {}).forEach(([name, definition]) => {
             const input: Input = {
+                type: 'input',
                 name,
                 conditions: utils.toList(definition.conditions),
                 groups: [],
@@ -119,9 +128,11 @@ export class VariabilityResolver {
 
         Object.entries(serviceTemplate.topology_template?.node_templates || {}).forEach(([nodeName, nodeTemplate]) => {
             const node: Node = {
+                type: 'node',
                 name: nodeName,
                 conditions: utils.toList(nodeTemplate.conditions),
-                relations: [],
+                ingoing: [],
+                outgoing: [],
                 groups: [],
             }
             this.nodes.push(node)
@@ -134,6 +145,7 @@ export class VariabilityResolver {
                 const conditions = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
                 const relation: Relation = {
+                    type: 'relation',
                     name: relationName,
                     source: nodeName,
                     target,
@@ -141,7 +153,7 @@ export class VariabilityResolver {
                     groups: [],
                 }
                 this.relations.push(relation)
-                node.relations.push(relation)
+                node.outgoing.push(relation)
 
                 if (!validator.isString(assignment)) {
                     if (validator.isString(assignment.relationship)) {
@@ -155,6 +167,15 @@ export class VariabilityResolver {
                     }
                 }
             })
+        })
+
+        // Assign ingoing relations to nodes
+        this.relations.forEach(relation => {
+            const node = this.nodesMap[relation.source]
+            if (validator.isUndefined(node))
+                throw new Error(`Source ${relation.source} of ${relation.name} does not exist`)
+
+            node.ingoing.push(relation)
         })
 
         // Ensure that each relationship is at least used in one relation
@@ -175,13 +196,13 @@ export class VariabilityResolver {
                     this.nodesMap[member]?.groups.push(group)
                 } else {
                     if (validator.isString(member[1])) {
-                        this.nodesMap[member[0]]?.relations.forEach(relation => {
+                        this.nodesMap[member[0]]?.outgoing.forEach(relation => {
                             if (relation.name === member[1]) relation.groups.push(group)
                         })
                     }
 
                     if (validator.isNumber(member[1])) {
-                        this.nodesMap[member[0]]?.relations[member[1]]?.groups.push(group)
+                        this.nodesMap[member[0]]?.outgoing[member[1]]?.groups.push(group)
                     }
                 }
             })
@@ -190,7 +211,7 @@ export class VariabilityResolver {
 
     getElement(member: GroupMember) {
         if (validator.isString(member)) return this.nodesMap[member]
-        return this.nodesMap[member[0]].relations[member[1]]
+        return this.nodesMap[member[0]].outgoing[member[1]]
     }
 
     resolve() {
@@ -210,13 +231,25 @@ export class VariabilityResolver {
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
         // Prune Relation: Assign default condition to relation that checks if source is present
-        if (this.options.pruneRelations && listIsEmpty(conditions) && validator.hasProperty(element, 'source')) {
+        // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
+        if (
+            element.type === 'relation' &&
+            ((this.options.pruneRelations && listIsEmpty(conditions)) || this.options.forcePruneRelations)
+        ) {
             conditions = [{get_element_presence: element.source}]
         }
 
-        // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
-        if (this.options.forcePruneRelations && validator.hasProperty(element, 'source')) {
-            conditions = [{get_element_presence: element.source}]
+        // Prune Node: Assign default condition to node that checks if any ingoing relation is present
+        // Force Prune Node:
+        if (
+            element.type === 'node' &&
+            ((this.options.pruneNodes && listIsEmpty(conditions)) || this.options.forcePruneNodes)
+        ) {
+            conditions = [
+                {
+                    or: element.ingoing.map(relation => ({get_element_presence: [element.name, relation.name]})),
+                },
+            ]
         }
 
         // Evaluate assigned conditions
@@ -253,7 +286,7 @@ export class VariabilityResolver {
         // Ensure that every component has at maximum one hosting relation
         if (!this.options.disableMaximumHostingConsistencyCheck) {
             for (const node of nodes) {
-                const relations = node.relations.filter(
+                const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host' && relation.present
                 )
                 if (relations.length > 1) throw new Error(`Node "${node.name}" has more than one hosting relations`)
@@ -263,7 +296,7 @@ export class VariabilityResolver {
         // Ensure that every component that had a hosting relation previously still has one
         if (!this.options.disableExpectedHostingConsistencyCheck) {
             for (const node of nodes) {
-                const relations = node.relations.filter(
+                const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host'
                 )
 
@@ -295,7 +328,7 @@ export class VariabilityResolver {
                 nodeTemplate.requirements = nodeTemplate.requirements?.filter((map, index) => {
                     const assignment = utils.firstValue(map)
                     if (!validator.isString(assignment)) delete assignment.conditions
-                    return node.relations[index].present
+                    return node.outgoing[index].present
                 })
             }
         )
