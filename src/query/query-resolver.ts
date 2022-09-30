@@ -114,6 +114,7 @@ export class QueryResolver {
 
     evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
         this.nodeGraph = new NodeGraph(data)
+        this.currentKeys = Object.keys(data.topology_template.node_templates)
         let paths = new Set<string[]>()
         // initialize our starting nodes by checking the condition
         for (const n of this.filterNodes(data, expression.nodes[0])) {
@@ -149,7 +150,7 @@ export class QueryResolver {
             const node = p[p.length-1]
             if (this.nodeGraph.nodesMap[node]?.relationships) {
                 for (const r of this.nodeGraph.nodesMap[node].relationships) {
-                    if (!relationship.predicate || this.evaluatePredicate(r, relationship.predicate)) {
+                    if (!relationship.predicate || this.evaluatePredicate(r.type, r, relationship.predicate)) {
                         newPaths.add(p.concat(r.to))
                     }
                 }
@@ -168,7 +169,7 @@ export class QueryResolver {
         const nodes = data.topology_template.node_templates
         if (expression.predicate) {
             for (const [key, value] of Object.entries(nodes)) {
-                if (this.evaluatePredicate(value, expression.predicate)) {
+                if (this.evaluatePredicate(key, value, expression.predicate)) {
                     result.push(key)
                 }
             }
@@ -178,23 +179,26 @@ export class QueryResolver {
         return result
     }
 
-    evaluatePredicate(data: Object, predicate: PredicateExpression) {
+    evaluatePredicate(key: string, data: Object, predicate: PredicateExpression) {
         const {a, operator, b} = predicate
         if (operator == null) {
-            return this.evaluateCondition(data, a as ConditionExpression)
+            return this.evaluateCondition(key, data, a as ConditionExpression)
         } else if (operator == 'AND') {
-            return this.evaluatePredicate(data, a as PredicateExpression)
-            && this.evaluatePredicate(data, b as PredicateExpression)
+            return this.evaluatePredicate(key, data, a as PredicateExpression)
+            && this.evaluatePredicate(key, data, b as PredicateExpression)
         } else if (operator == 'OR') {
-            return this.evaluatePredicate(data, a as PredicateExpression)
-                || this.evaluatePredicate(data, b as PredicateExpression)
+            return this.evaluatePredicate(key, data, a as PredicateExpression)
+                || this.evaluatePredicate(key, data, b as PredicateExpression)
         }
         return null
     }
 
-    evaluateCondition(data: Object, condition: ConditionExpression) {
+    evaluateCondition(key: string, data: Object, condition: ConditionExpression) {
         if (condition.type == 'Existence') {
             return (Object.getOwnPropertyDescriptor(data, condition.variable)) ? data : null
+        }
+        if (condition.variable == 'name') {
+            return (condition.value == key)? data : null
         }
         const {variable, value, operator} = condition
         const property = this.resolvePath(variable, data)
@@ -220,7 +224,7 @@ export class QueryResolver {
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
             if (condition) {
-                if (this.evaluatePredicate(value, condition))
+                if (this.evaluatePredicate(key, value, condition))
                     result.push(value)
                     this.currentKeys.push(key)
             } else {
