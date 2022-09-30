@@ -12,11 +12,12 @@ import * as files from '../utils/files'
 import path from 'path';
 import * as yaml from 'js-yaml';
 import fs from 'fs';
-import {NodeTemplate} from '../specification/node-template';
 
 export class QueryResolver {
+    // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
     private nodeGraph: NodeGraph
     private source: string
+    // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
     private currentKeys: string[]
 
     resolve(query: QueryTemplateArguments) {
@@ -36,8 +37,8 @@ export class QueryResolver {
     }
 
     /**
-     * Generator function that evaluates a given expression
-     * @param expression A node of the AST
+     * Function that takes an AST as input and returns the matching objects
+     * @param expression The complete AST
      * @return result The data that matches the expression
      */
     evaluate(expression: Expression) {
@@ -120,22 +121,29 @@ export class QueryResolver {
         }
         // for each path, expand all relationships at last node and check if it fits filters
         for (let i = 0; i < expression.relationships.length; i++) {
-            paths = this.expand(data, paths, expression.relationships[i])
+            paths = this.expand(paths, expression.relationships[i])
         }
         console.log('Found the following paths:')
         console.log(paths)
-        const result: {[name: string]: string[]} = {}
+        /*
+        Paths only contain node names as strings, so in this step we create a new array of nodes for each alias variable
+        defined in the query, then put the matching nodes in that array
+         */
+        const result: {[name: string]: Object} = {}
         for (let i = 0; i < expression.nodes.length; i++) {
             const nodes = new Set<string>()
-            for (const p of paths) {
-                nodes.add(p[i])
-            }
-            result[expression.nodes[i].name] = [...nodes]
+            for (const p of paths) nodes.add(p[i])
+            result[expression.nodes[i].name] = this.getNodesByName(data, [...nodes])
         }
         return result
     }
 
-    expand(data: ServiceTemplate, paths: Set<string[]>, relationship: RelationshipExpression) {
+    /**
+     * Traverses all relationships of a given node to find neighbors
+     * @param paths The current set of viable paths, expansion will start from the last node
+     * @param relationship Direction and optional conditions of relationships
+     */
+    expand(paths: Set<string[]>, relationship: RelationshipExpression) {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
             const node = p[p.length-1]
@@ -247,6 +255,12 @@ export class QueryResolver {
         }
     }
 
+    /**
+     * Returns a set of nodes that belong to a group
+     * @param data The service template
+     * @param name The name of the group
+     */
+
     evaluateGroup(data: Object, name: string) {
         const groupNodes = data['topology_template']['groups']?.[name]?.['members']
         if (groupNodes == undefined) {
@@ -260,6 +274,12 @@ export class QueryResolver {
         return result;
     }
 
+    /**
+     * Returns an array of nodes that are targeted by a policy
+     * @param data The service template
+     * @param name The name of the policy
+     */
+
     evaluatePolicy(data: Object, name: string) {
         const policyNodes = data['topology_template']['policies']?.[0]?.[name]?.['targets']
         if (policyNodes == undefined) {
@@ -271,6 +291,14 @@ export class QueryResolver {
             result[i] = data['topology_template']['node_templates'][i]
         }
         return result;
+    }
+
+    getNodesByName(data: ServiceTemplate, names: string[]) {
+        const result = {}
+        for (const node of names){
+            result[node] = data.topology_template.node_templates[node]
+        }
+        return result
     }
 
     resolvePath(path, obj) {
