@@ -27,7 +27,6 @@ export class NodeGraph {
                 relationships.push({type: Object.keys(r)[0], to: Object.values(r)[0].toString()})
             }
         }
-
         return relationships;
     }
 

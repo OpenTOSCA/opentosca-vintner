@@ -12,6 +12,7 @@ import * as files from '../utils/files'
 import path from 'path';
 import * as yaml from 'js-yaml';
 import fs from 'fs';
+import {NodeTemplate} from '../specification/node-template';
 
 export class QueryResolver {
     private nodeGraph: NodeGraph
@@ -111,16 +112,41 @@ export class QueryResolver {
 
     evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
         this.nodeGraph = new NodeGraph(data)
-        const matchingNodes: string[][] = [this.evaluateNode(data, expression.nodes[0])]
-        for (let i = 0; i < expression.relationships.length; i++) {
-            matchingNodes[i+1] = this.expandAll(matchingNodes[i], expression.relationships[i])
-            matchingNodes[i+1] = this.evaluateNode(data, expression.nodes[i+1])
+        let paths = new Set<string[]>()
+        // initialize our starting nodes by checking the condition
+        for (const n of this.filterNodes(data, expression.nodes[0])) {
+            paths.add([n])
         }
-        const result = {}
+        // for each path, expand all relationships at last node and check if it fits filters
+        for (let i = 0; i < expression.relationships.length; i++) {
+            paths = this.expand(data, paths, expression.relationships[i])
+        }
+        console.log('Found the following paths:')
+        console.log(paths)
+        const result: {[name: string]: string[]} = {}
         for (let i = 0; i < expression.nodes.length; i++) {
-            result[expression.nodes[i].name] = matchingNodes[i]
+            const nodes = new Set<string>()
+            for (const p of paths) {
+                nodes.add(p[i])
+            }
+            result[expression.nodes[i].name] = [...nodes]
         }
         return result
+    }
+
+    expand(data: ServiceTemplate, paths: Set<string[]>, relationship: RelationshipExpression) {
+        const newPaths = new Set<string[]>()
+        for (const p of paths) {
+            const node = p[p.length-1]
+            if (this.nodeGraph.nodesMap[node]?.relationships) {
+                for (const r of this.nodeGraph.nodesMap[node].relationships) {
+                    if (!relationship.predicate || this.evaluatePredicate(r, relationship.predicate)) {
+                        newPaths.add(p.concat(r.to))
+                    }
+                }
+            }
+        }
+        return newPaths
     }
 
     /**
@@ -128,8 +154,7 @@ export class QueryResolver {
      * @param data
      * @param expression
      */
-
-    evaluateNode(data: ServiceTemplate, expression: NodeExpression) {
+    filterNodes(data: ServiceTemplate, expression: NodeExpression) {
         let result: string[] = []
         const nodes = data.topology_template.node_templates
         if (expression.predicate) {
@@ -142,16 +167,6 @@ export class QueryResolver {
             result = Object.keys(nodes)
         }
         return result
-    }
-
-    expandAll(start: string[], relationship: RelationshipExpression) {
-        const targets = new Set<string>()
-        for (const n of start) {
-            for (const r of this.nodeGraph.nodesMap[n].relationships) {
-                targets.add(r.to)
-            }
-        }
-        return [...targets]
     }
 
     evaluatePredicate(data: Object, predicate: PredicateExpression) {
