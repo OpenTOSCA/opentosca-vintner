@@ -32,8 +32,7 @@ export class QueryResolver {
         }
         console.log("Generated the following AST: ")
         console.log(JSON.stringify(tree, null, 4))
-
-        return this.evaluate(tree);
+        return this.evaluate(tree)
     }
 
     /**
@@ -56,7 +55,9 @@ export class QueryResolver {
                 result = null
             }
             if (result) {
-                results.push({name: t.name, result: result.flat()})
+                // Flatten the result if it is only one element
+                result = (result.length == 1)? result[0] : result
+                results.push({name: t.name, result: result})
             }
         }
         return results

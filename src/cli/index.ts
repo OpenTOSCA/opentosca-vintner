@@ -124,6 +124,7 @@ query
     .command('execute')
     .requiredOption('--query <string>', 'path to query')
     .option('--source <string>', 'specifies where to search for template to query', 'vintner')
+    .option('--output <string>', 'output file for the result of the query')
     .action(hae(async options => {
         await Controller.query.query(options)
     }))

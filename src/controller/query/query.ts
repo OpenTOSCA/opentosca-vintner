@@ -1,6 +1,8 @@
 import {QueryResolver} from '../../query/query-resolver';
+import * as files from '../../utils/files'
 
 export type QueryTemplateArguments = {
+    output: string
     query: string
     source: 'vintner' | 'file' | 'winery'
 }
@@ -12,11 +14,10 @@ export default async function executeQuery(options: QueryTemplateArguments) {
     if (results.length > 0) {
         for (const r of results)
             if (r.result) {
-                // Flatten the result if it is only one element
-                const result = (r.result.length == 1)? r.result[0] : r.result
-                console.log("\nResults in " + r.name + ": \n" + JSON.stringify(result, null, 4))
-                // storeFile("test.yaml", stringify(result))
+                console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
             }
+        if (options.output)
+            files.storeFile(options.output, files.stringify(results[0].result))
     } else {
         console.log('No results found.')
     }
