@@ -97,7 +97,7 @@ export class Parser {
             }
         },
         Cardinality(asterisk, number) {
-            return '1'
+            return (number.sourceString == '')? 99 : parseInt(number.sourceString)
         },
         Value(v) {
             return v.buildAST()

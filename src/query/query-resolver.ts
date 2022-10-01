@@ -123,7 +123,7 @@ export class QueryResolver {
         }
         // for each path, expand all relationships at last node and check if it fits filters
         for (let i = 0; i < expression.relationships.length; i++) {
-            paths = this.expand(paths, expression.relationships[i])
+            paths = this.expand(paths, expression.relationships[i], expression.nodes[i+1]?.predicate)
         }
         console.log('Found the following paths:')
         console.log(paths)
@@ -144,16 +144,17 @@ export class QueryResolver {
      * Traverses all relationships of a given node to find neighbors
      * @param paths The current set of viable paths, expansion will start from the last node
      * @param relationship Direction and optional conditions of relationships
+     * @param nodePredicate
      */
-    expand(paths: Set<string[]>, relationship: RelationshipExpression) {
+    expand(paths: Set<string[]>, relationship: RelationshipExpression, nodePredicate: PredicateExpression) {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
-            const node = p[p.length-1]
-            if (this.nodeGraph.nodesMap[node]?.relationships) {
-                for (const r of this.nodeGraph.nodesMap[node].relationships) {
-                    if (!relationship.predicate || this.evaluatePredicate(r.type, r, relationship.predicate)) {
-                        newPaths.add(p.concat(r.to))
-                    }
+            // do a breadth first search to find all nodes reachable within n steps
+            const targets = this.nodeGraph.limitedBFS(p[p.length-1],relationship?.cardinality || 1, relationship.predicate)
+            // if a predicate is specified, filter out nodes which do not satisfy it
+            for (const n of targets) {
+                if (!nodePredicate || this.evaluatePredicate(n, this.nodeGraph.nodesMap[n].data, nodePredicate)) {
+                    newPaths.add(p.concat(n))
                 }
             }
         }

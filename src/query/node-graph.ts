@@ -1,5 +1,6 @@
 import {ServiceTemplate} from '../specification/service-template';
 import {NodeTemplate} from '../specification/node-template';
+import {PredicateExpression} from '../specification/query-type';
 
 type Node = {
     data: Object
@@ -46,5 +47,53 @@ export class NodeGraph {
             result[name] = this.nodesMap[name]
         }
         return result
+    }
+
+    getNext(nodeName: string, predicate: PredicateExpression): string[] {
+        const targets = new Set<string>()
+        for (const r of this.nodesMap[nodeName]?.relationships || []) {
+            targets.add(r.to)
+        }
+        return [...targets]
+    }
+
+    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression) {
+        let level = 0
+        const visited: Set<string> = new Set<string>()
+        const nodes: Queue<string> = new Queue<string>()
+        nodes.add(nodeName)
+        nodes.add(null)
+        while (!nodes.isEmpty() && level < limit){
+            const current = nodes.pop()
+            if (current == null) {
+                level++
+                nodes.add(null)
+                if(nodes.peek() == null) break
+            }
+            const next = this.getNext(current, predicate)
+            if (next.length > 0) {
+                for (const n of next) {
+                    visited.add(n)
+                    nodes.add(n)
+                }
+            }
+        }
+        return [...visited]
+    }
+}
+
+class Queue<T> {
+    private items: T[] = [];
+    add(item: T) {
+        this.items.push(item);
+    }
+    pop(): T {
+        return this.items.shift();
+    }
+    peek(): T {
+        return this.items[0];
+    }
+    isEmpty():boolean {
+        return this.items.length == 0;
     }
 }
