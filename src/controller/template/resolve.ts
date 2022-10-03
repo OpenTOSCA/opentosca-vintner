@@ -6,7 +6,7 @@ import {VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
-import {listIsEmpty} from '../../utils/utils'
+import {listIsEmpty, prettyJSON} from '../../utils/utils'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -171,9 +171,9 @@ export class VariabilityResolver {
 
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
-            const node = this.nodesMap[relation.source]
+            const node = this.nodesMap[relation.target]
             if (validator.isUndefined(node))
-                throw new Error(`Source ${relation.source} of ${relation.name} does not exist`)
+                throw new Error(`Target "${relation.target}" of "${relation.name}" does not exist`)
 
             node.ingoing.push(relation)
         })
@@ -210,8 +210,17 @@ export class VariabilityResolver {
     }
 
     getElement(member: GroupMember) {
+        // Element is node name
         if (validator.isString(member)) return this.nodesMap[member]
-        return this.nodesMap[member[0]].outgoing[member[1]]
+
+        // Element is [node name, relation index]
+        if (validator.isNumber(member[1])) return this.nodesMap[member[0]].outgoing[member[1]]
+
+        // Element is [node name, relation name]
+        if (validator.isString(member[1]))
+            return this.nodesMap[member[0]].outgoing.find(relation => relation.name === member[1])
+
+        throw new Error(`Member "${prettyJSON(member)}" has bad format`)
     }
 
     resolve() {
@@ -231,7 +240,7 @@ export class VariabilityResolver {
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
         // Prune Relation: Assign default condition to relation that checks if source is present
-        // Force Prune Relation: Override any assigned conditions if relation should be pruned along with the source
+        // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
         if (
             element.type === 'relation' &&
             ((this.options.pruneRelations && listIsEmpty(conditions)) || this.options.forcePruneRelations)
@@ -240,14 +249,16 @@ export class VariabilityResolver {
         }
 
         // Prune Node: Assign default condition to node that checks if any ingoing relation is present
-        // Force Prune Node:
+        // Force Prune Node: Ignore any assigned conditions and assign condition to node that checks if any ingoing relation is present
         if (
             element.type === 'node' &&
             ((this.options.pruneNodes && listIsEmpty(conditions)) || this.options.forcePruneNodes)
         ) {
             conditions = [
                 {
-                    or: element.ingoing.map(relation => ({get_element_presence: [element.name, relation.name]})),
+                    or: listIsEmpty(element.ingoing)
+                        ? [true]
+                        : element.ingoing.map(relation => ({get_element_presence: [relation.source, relation.name]})),
                 },
             ]
         }
@@ -389,19 +400,19 @@ export class VariabilityResolver {
 
     getVariabilityInput(name: string) {
         const input = this._variabilityInputs?.[name]
-        if (validator.isUndefined(input)) throw new Error(`Did not find variability input ${name}`)
+        if (validator.isUndefined(input)) throw new Error(`Did not find variability input "${name}"`)
         return input
     }
 
     getVariabilityPreset(name: string) {
         const set = this._serviceTemplate.topology_template?.variability?.presets[name]
-        if (validator.isUndefined(set)) throw new Error(`Did not find variability set ${name}`)
+        if (validator.isUndefined(set)) throw new Error(`Did not find variability set "${name}"`)
         return set
     }
 
     getVariabilityExpression(name: string) {
         const condition = this._serviceTemplate.topology_template?.variability?.expressions[name]
-        if (validator.isUndefined(condition)) throw new Error(`Did not find variability expression ${name}`)
+        if (validator.isUndefined(condition)) throw new Error(`Did not find variability expression "${name}"`)
         return condition
     }
 
@@ -649,6 +660,6 @@ export class VariabilityResolver {
             return element.length <= length
         }
 
-        throw new Error(`Unknown variability condition ${condition}`)
+        throw new Error(`Unknown variability condition "${prettyJSON(condition)}"`)
     }
 }

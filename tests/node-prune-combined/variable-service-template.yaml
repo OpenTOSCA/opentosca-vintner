@@ -1,0 +1,20 @@
+# Combine pruning of nodes and relations
+
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        one:
+            type: one
+            requirements:
+                - two:
+                      node: two
+                      conditions: false
+
+        two:
+            type: two
+            requirements:
+                - three: three
+
+        three:
+            type: three
