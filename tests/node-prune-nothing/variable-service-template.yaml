@@ -1,0 +1,22 @@
+# Test for pruning nodes.
+# Nothing is pruned since relation "three.two" prevents the pruning of node "two"
+
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        one:
+            type: one
+            requirements:
+                - two:
+                      node: two
+                      conditions: false
+
+        two:
+            type: two
+
+        three:
+            type: three
+            requirements:
+                - two:
+                      node: two

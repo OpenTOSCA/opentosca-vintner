@@ -76,14 +76,14 @@ type Input = ConditionalElementBase & {
 
 type Node = ConditionalElementBase & {
     type: 'node'
-    ingoing: Relation[] // TODO: should not be an array but a map?
-    outgoing: Relation[] // TODO: should not be an array but a map?
+    ingoing: Relation[]
+    outgoing: Relation[]
 }
 
 type Relation = ConditionalElementBase & {
     type: 'relation'
-    source: string // TODO: should not be an string but a node
-    target: string // TODO: should not be a string but a node
+    source: string
+    target: string
 }
 
 type Group = {

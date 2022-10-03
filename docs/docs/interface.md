@@ -310,6 +310,8 @@ resolves variability
 | output |  true  | string | path of the output |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
+| prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
+| force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
 | disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
@@ -587,6 +589,8 @@ resolves variability
 | inputs |  false  | string | path to the variability inputs |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
+| prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
+| force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
 | disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
