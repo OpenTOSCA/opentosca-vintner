@@ -266,6 +266,9 @@ it('get_element_presence: relation by index absent', () => {
     expect(result).to.equal(false)
 })
 
+// TODO: get_source_presence
+// TODO: get_target_presence
+
 it('concat', () => {
     const resolver = getDefaultVariabilityResolver()
     const result = resolver.evaluateVariabilityExpression({concat: ['hello', ' ', 'world']})

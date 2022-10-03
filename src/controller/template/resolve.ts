@@ -565,6 +565,28 @@ export class VariabilityResolver {
             return this.checkPresence(this.getElement(element))
         }
 
+        if (validator.hasProperty(condition, 'get_source_presence')) {
+            const first = this.evaluateVariabilityExpression(condition.get_source_presence[0])
+            validator.ensureString(first)
+
+            const second = this.evaluateVariabilityExpression(condition.get_source_presence[1])
+            validator.ensureStringOrNumber(second)
+
+            const relation = this.getElement([first, second])
+            const source = this.getElement(relation.source)
+            return this.checkPresence(source)
+        }
+
+        if (validator.hasProperty(condition, 'get_target_presence')) {
+            const first = this.evaluateVariabilityExpression(condition.get_target_presence[0])
+            validator.ensureString(first)
+
+            const second = this.evaluateVariabilityExpression(condition.get_target_presence[1])
+            validator.ensureStringOrNumber(second)
+
+            return this.checkPresence(this.getElement([first, second]))
+        }
+
         if (validator.hasProperty(condition, 'concat')) {
             return condition.concat.map(c => this.evaluateVariabilityExpression(c)).join('')
         }
