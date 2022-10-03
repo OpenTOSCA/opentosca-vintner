@@ -300,7 +300,9 @@ To check if an element is present check that all assigned conditions are satisfi
 To further support modeling the following improvements can be taken: 
 
 1. Prune Relations: The default condition of a relation checks if the source node is present.
-1. Force Prune Relations: Ignore any assigned conditions and remove a relation if the source node is not present.
+1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
+1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
+1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
 
 ### Check Consistency
 

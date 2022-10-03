@@ -129,6 +129,8 @@ template
     .requiredOption('--output <string>', 'path of the output')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
+    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
+    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
     .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -247,6 +249,8 @@ instances
     .option('--inputs [string]', 'path to the variability inputs')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
+    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
+    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
     .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
     .option(
         '--disable-relation-source-consistency-check [boolean]',

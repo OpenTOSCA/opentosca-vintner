@@ -9,13 +9,7 @@ export function getDefaultTest({
     preset,
     error,
     example,
-    pruneRelations,
-    forcePruneRelations,
-    disableConsistencyCheck,
-    disableRelationSourceConsistencyCheck,
-    disableRelationTargetConsistencyCheck,
-    disableMaximumHostingConsistencyCheck,
-    disableExpectedHostingConsistencyCheck,
+    ...remainingOptions
 }: {
     preset?: string
     error?: string
@@ -32,13 +26,7 @@ export function getDefaultTest({
                 inputs: getDefaultInputs(dir),
                 output,
                 preset,
-                pruneRelations,
-                forcePruneRelations,
-                disableConsistencyCheck,
-                disableRelationSourceConsistencyCheck,
-                disableRelationTargetConsistencyCheck,
-                disableMaximumHostingConsistencyCheck,
-                disableExpectedHostingConsistencyCheck,
+                ...remainingOptions,
             })
         }
 

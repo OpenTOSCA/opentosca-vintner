@@ -1,6 +1,11 @@
 import {getDefaultTest} from './utils'
 
 it('node', getDefaultTest({}))
+it('node-prune', getDefaultTest({pruneNodes: true}))
+it('node-prune-nothing', getDefaultTest({pruneNodes: true}))
+it('node-prune-throw', getDefaultTest({pruneNodes: true}))
+it('node-prune-force', getDefaultTest({forcePruneNodes: true}))
+it('node-prune-combined', getDefaultTest({pruneRelations: true, pruneNodes: true}))
 
 it('requirement-assignment', getDefaultTest({}))
 it('requirement-assignment-prune', getDefaultTest({pruneRelations: true}))
