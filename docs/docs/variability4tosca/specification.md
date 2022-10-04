@@ -2,7 +2,7 @@
 
 This document specifies _Variability4TOSCA_ which extends [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank} with conditional elements.
 In the following, we discuss the differences.
-The specification is under active development.
+The specification is under active development and is not backwards compatible with any previous versions.
 
 ## Service Template Definition
 
@@ -36,7 +36,7 @@ A _Variability Definition_ defines _Variability Inputs_, _Variability Presets_, 
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
 
-The following example contains a _Variability Definition_ which declares the _Variability Input_ `mode` and two _Variability Conditions_ `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
+The following non-normative and incomplete example contains a _Variability Definition_ which declares the _Variability Input_ `mode` and two _Variability Conditions_ `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
 Furthermore, two _Variability Presets_ `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
 ```linenums="1"
@@ -107,7 +107,7 @@ These conditions must evaluate to true otherwise the respective _Node Template_ 
 |------------| --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following example contains a _Node Template_ that has a _Variability Condition_ assigned.
+The following non-normative and incomplete example contains a _Node Template_ that has a _Variability Condition_ assigned.
 
 ```linenums="1"
 prod_database:
@@ -128,7 +128,7 @@ These conditions must evaluate to true otherwise the respective relationship is 
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
 
-The following example contains a _Requirement Assignment_ that has a _Variability Condition_ assigned.
+The following non-normative and incomplete example contains a _Requirement Assignment_ that has a _Variability Condition_ assigned.
 
 ```linenums="1"
 requirements:
@@ -143,7 +143,7 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 
 A _Group Template_ can additionally contain _Variability Conditions_.
 These conditions must evaluate to true otherwise the respective group members are not present.
-Such a group is also called _Variability Group_.
+Such a group is also called _Variability Group_ and must be derived from `variability.groups.Conditional`.
 
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
 
@@ -152,7 +152,7 @@ Furthermore, group elements can be _Node Templates_ and _Requirement Assignments
 | members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
 
-The following example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
+The following non-normative and incomplete example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
 
 ```linenums="1"
 example_group:
@@ -160,6 +160,56 @@ example_group:
     members: [prod_database, [application, prod_connects_to]]
     conditions: {get_variability_expression: is_prod}
 ```
+
+
+## Policy Template Definition
+
+A _Policy Template_ can additionally contain _Variability Conditions_.
+These conditions must evaluate to true otherwise the respective policy is not present.
+
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
+|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+
+The following non-normative and incomplete example contains the _Policy Template_ `anticollocation` that has the _Variability Condition_ `is_prod` assigned.
+If the condition evaluates to true, then the policy is present. 
+As a result, the _Node Templates_ `wordpress` and `mysql` _must not_ be hosted on the same server.
+For more information about this example, take a look in the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
+
+```linenums="1"
+node_templates:
+    wordpress:
+        type: tosca.nodes.WebServer
+        requirements:
+            - host:
+                  node_filter:
+                      capabilities:
+                          - os:
+                                properties:
+                                    - architecture: x86_64
+                                    - type: linux
+
+    mysql:
+        type: tosca.nodes.DBMS.MySQL
+        requirements:
+            - host:
+                  node: tosca.nodes.Compute
+                  node_filter:
+                      capabilities:
+                          - os:
+                                properties:
+                                    - architecture: x86_64
+                                    - type: linux
+
+policies:
+    - anticollocation:
+          type: tosca.policies.AntiCollocation
+          targets: [wordpress_server, mysql]
+          conditions: {get_variability_expression: is_prod}
+```
+
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
 
 ## Topology Template Input Definition
 
@@ -172,7 +222,7 @@ These conditions must evaluate to true otherwise the respective input is not pre
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
 
-The following example contains a _Topology Template Input_ that has a _Variability Condition_ assigned.
+The following non-normative and incomplete example contains a _Topology Template Input_ that has a _Variability Condition_ assigned.
 
 ```linenums="1"
 ssh_key_file:
@@ -285,9 +335,13 @@ In the following we describe on a high-level the steps to derive a _Variability-
 To resolve the variability in a _Variable Service Template_ conduct the following steps: 
 
 1. Remove all _Node Templates_ which are _not present_.
-1. Remove all _Relationship Templates_ which are _not present_.
+1. Remove all _Requirement Assignments_ which are _not present_.
+1. Remove all _Relationship Templates_ which are not used by any _Requirement Assignment_.
 1. Remove all _Topology Template Inputs_ which are _not present_.
-1. Remove all non-standard elements, e.g., `conditions` at _Node Templates_ or _Variability Groups_.
+1. Remove all _Policy Templates_ which are _not present_.
+1. Remove all non-standard elements, e.g., _Variability Definition_, _Variability Groups_, or `conditions` at _Node Templates_.
+1. Set the _TOSCA Definitions Version_ to `tosca_simple_yaml_1_3`.
+
 
 ### Check Element Presence
 

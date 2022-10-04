@@ -63,11 +63,10 @@ export default function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input'
+    type: 'node' | 'relation' | 'input' | 'policy'
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
-    groups: Group[]
 }
 
 type Input = ConditionalElementBase & {
@@ -78,12 +77,18 @@ type Node = ConditionalElementBase & {
     type: 'node'
     ingoing: Relation[]
     outgoing: Relation[]
+    groups: Group[]
 }
 
 type Relation = ConditionalElementBase & {
     type: 'relation'
     source: string
     target: string
+    groups: Group[]
+}
+
+type Policy = ConditionalElementBase & {
+    type: 'policy'
 }
 
 type Group = {
@@ -91,7 +96,7 @@ type Group = {
     conditions: VariabilityExpression[]
 }
 
-type ConditionalElement = Input | Node | Relation
+type ConditionalElement = Input | Node | Relation | Policy
 
 export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
@@ -105,27 +110,31 @@ export class VariabilityResolver {
     private relations: Relation[] = []
     private relationships: {[name: string]: Relation[]} = {}
 
+    private policies: Policy[] = []
+
     private inputs: Input[] = []
-    private inputsMap: {[name: string]: Input} = {}
+    private inputsMap: {[name: string]: Input | undefined} = {}
 
     constructor(serviceTemplate: ServiceTemplate) {
         this._serviceTemplate = serviceTemplate
 
+        // Deployment inputs
         Object.entries(serviceTemplate?.topology_template?.inputs || {}).forEach(([name, definition]) => {
             const input: Input = {
                 type: 'input',
                 name,
                 conditions: utils.toList(definition.conditions),
-                groups: [],
             }
             this.inputs.push(input)
             this.inputsMap[name] = input
         })
 
+        // Relationship templates
         Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(
             name => (this.relationships[name] = [])
         )
 
+        // Node templates
         Object.entries(serviceTemplate.topology_template?.node_templates || {}).forEach(([nodeName, nodeTemplate]) => {
             const node: Node = {
                 type: 'node',
@@ -140,7 +149,7 @@ export class VariabilityResolver {
 
             nodeTemplate.requirements?.forEach(map => {
                 const relationName = utils.firstKey(map)
-                const assignment = utils.firstValue(map)
+                const assignment = map[relationName]
                 const target = validator.isString(assignment) ? assignment : assignment.node
                 const conditions = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
@@ -183,6 +192,19 @@ export class VariabilityResolver {
             if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
         }
 
+        // Policies
+        serviceTemplate.topology_template?.policies?.forEach((map, index) => {
+            const name = utils.firstKey(map)
+            const template = map[name]
+            const policy: Policy = {
+                type: 'policy',
+                name,
+                conditions: utils.toList(template.conditions),
+            }
+            this.policies.push(policy)
+        })
+
+        // Groups
         Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([groupName, groupTemplate]) => {
             if (groupTemplate.conditions === undefined) return
 
@@ -227,6 +249,7 @@ export class VariabilityResolver {
         for (const node of this.nodes) this.checkPresence(node)
         for (const relation of this.relations) this.checkPresence(relation)
         for (const input of this.inputs) this.checkPresence(input)
+        for (const policy of this.policies) this.checkPresence(policy)
         return this
     }
 
@@ -236,7 +259,10 @@ export class VariabilityResolver {
 
         // Collect assigned conditions
         let conditions = element.conditions
-        element.groups.forEach(group => conditions.push(...group.conditions))
+
+        if (validator.hasProperty(element, 'groups'))
+            element.groups.forEach(group => conditions.push(...group.conditions))
+
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
         // Prune Relation: Assign default condition to relation that checks if source is present
@@ -368,6 +394,22 @@ export class VariabilityResolver {
                 delete this._serviceTemplate.topology_template.inputs[input.name]
             }
         })
+
+        // Delete all policy templates which are not present
+        if (!validator.isUndefined(this._serviceTemplate?.topology_template?.policies)) {
+            this._serviceTemplate.topology_template.policies = this._serviceTemplate.topology_template.policies.filter(
+                (map, index) => {
+                    const name = utils.firstKey(map)
+                    const policy = this.policies[index]
+                    // Sanity check
+                    if (name !== policy.name)
+                        throw new Error(`Somehow index of policies do not match! ${prettyJSON({name, policy, index})}`)
+
+                    if (policy.present) delete map[name].conditions
+                    return policy.present
+                }
+            )
+        }
 
         return this._serviceTemplate
     }

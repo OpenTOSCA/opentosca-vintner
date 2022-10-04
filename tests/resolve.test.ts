@@ -19,6 +19,8 @@ it('groups', getDefaultTest({}))
 
 it('nothing', getDefaultTest({}))
 
+it('policy', getDefaultTest({}))
+
 it('preset', getDefaultTest({preset: 'two'}))
 
 it('tosca-definitions-version', getDefaultTest({}))

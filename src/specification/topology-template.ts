@@ -2,18 +2,20 @@
  * Topology Template Definition
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969450}
  */
-import {NodeTemplate} from './node-template'
+import {NodeTemplateMap} from './node-template'
 import {VariabilityDefinition, VariabilityExpression} from './variability'
 import {GroupTemplateMap} from './group-template'
-import {RelationshipTemplate} from './relationship-template'
+import {RelationshipTemplateMap} from './relationship-template'
+import {PolicyTemplateList} from './policy-template'
 
 export type TopologyTemplate = {
     description?: string
     inputs?: InputDefinitionMap
-    node_templates?: {[key: string]: NodeTemplate}
-    relationship_templates?: {[key: string]: RelationshipTemplate}
+    node_templates?: NodeTemplateMap
+    relationship_templates?: RelationshipTemplateMap
     variability?: VariabilityDefinition
     groups?: GroupTemplateMap
+    policies?: PolicyTemplateList
 }
 
 export type InputDefinitionMap = {[key: string]: InputDefinition}

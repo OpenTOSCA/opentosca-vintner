@@ -16,7 +16,8 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
-export function toList<T>(data: T | T[]): T[] {
+export function toList<T>(data: T | T[] | undefined): T[] {
+    if (validator.isUndefined(data)) return []
     if (Array.isArray(data)) return data
     return [data]
 }
