@@ -2,6 +2,10 @@ export function isUndefined(element: unknown): element is undefined {
     return typeof element === 'undefined'
 }
 
+export function isDefined<T>(element: T | undefined | null): element is T {
+    return !isUndefined(element)
+}
+
 export function isString(element: unknown): element is string {
     return typeof element === 'string'
 }
@@ -41,11 +45,4 @@ export function isObject(element: unknown): element is object {
 
 export function ensureObject(element: unknown): asserts element is object {
     if (!isObject(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an object`)
-}
-
-export function hasProperty<T extends {}, U extends PropertyKey>(
-    element: T,
-    property: U
-): element is T & Record<U, unknown> {
-    return Object.prototype.hasOwnProperty.call(element, property)
 }

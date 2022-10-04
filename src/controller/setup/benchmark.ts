@@ -13,12 +13,12 @@ type BenchmarkArguments = {
 
 export type BenchmarkResult = {
     IO: boolean
-    seed: string
-    templates: string
-    median: string
-    median_per_template: string
-    file_size: string
-    file_lines: string
+    seed?: string
+    templates?: string
+    median?: string
+    median_per_template?: string
+    file_size?: string
+    file_lines?: string
 }
 export type BenchmarkResults = BenchmarkResult[]
 
@@ -86,22 +86,21 @@ export default async function (options: BenchmarkArguments) {
 export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate {
     const serviceTemplate: ServiceTemplate = {
         tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-        topology_template: {
-            variability: {
-                inputs: {
-                    mode: {
-                        type: 'string',
-                    },
-                },
-                expressions: {},
+    }
+    serviceTemplate.topology_template = {}
+    serviceTemplate.topology_template.variability = {
+        inputs: {
+            mode: {
+                type: 'string',
             },
-            node_templates: {},
-            relationship_templates: {},
         },
     }
+    serviceTemplate.topology_template.variability.expressions = {}
+    serviceTemplate.topology_template.node_templates = {}
+    serviceTemplate.topology_template.relationship_templates = {}
 
     for (let i = 0; i < seed; i++) {
-        serviceTemplate.topology_template.variability.expressions[`condition_${i}_present`] = {
+        serviceTemplate.topology_template.variability!!.expressions!![`condition_${i}_present`] = {
             equal: [{get_variability_input: 'mode'}, 'present'],
         }
 

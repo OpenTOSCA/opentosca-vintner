@@ -2,7 +2,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/se
 import {InputAssignmentMap} from '../../specification/topology-template'
 import {Instance} from '../../repository/instances'
 import * as files from '../../utils/files'
-import {VariabilityExpression} from '../../specification/variability'
+import {InputAssignmentPreset, VariabilityExpression} from '../../specification/variability'
 import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
@@ -196,7 +196,7 @@ export class VariabilityResolver {
 
         // Ensure that each relationship is at least used in one relation
         for (const relationship of Object.entries(this.relationships)) {
-            if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
+            if (relationship[1]?.length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
         }
 
         // Policies
@@ -244,17 +244,20 @@ export class VariabilityResolver {
     }
 
     getElement(member: GroupMember) {
+        let element
+
         // Element is node name
-        if (validator.isString(member)) return this.nodesMap[member]
+        if (validator.isString(member)) element = this.nodesMap[member]
 
         // Element is [node name, relation index]
-        if (validator.isNumber(member[1])) return this.nodesMap[member[0]].outgoing[member[1]]
+        if (validator.isNumber(member[1])) element = this.nodesMap[member[0]].outgoing[member[1]]
 
         // Element is [node name, relation name]
         if (validator.isString(member[1]))
-            return this.nodesMap[member[0]].outgoing.find(relation => relation.name === member[1])
+            element = this.nodesMap[member[0]].outgoing.find(relation => relation.name === member[1])
 
-        throw new Error(`Member "${prettyJSON(member)}" has bad format`)
+        if (validator.isUndefined(element)) throw new Error(`Member "${prettyJSON(member)}" has bad format`)
+        return element
     }
 
     resolve() {
@@ -271,14 +274,12 @@ export class VariabilityResolver {
         if (element.type === 'group' && element.variability) element.present = false
 
         // Check if presence already has been evaluated
-        if (validator.hasProperty(element, 'present')) return element.present
+        if (validator.isDefined(element.present)) return element.present
 
         // Collect assigned conditions
         let conditions = element.conditions
-
-        if (validator.hasProperty(element, 'groups'))
+        if (element.type === 'node' || element.type === 'relation')
             element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
-
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
         // Prune Relation: Assign default condition to relation that checks if source is present
@@ -372,9 +373,9 @@ export class VariabilityResolver {
             ([nodeName, nodeTemplate]) => {
                 const node = this.nodesMap[nodeName]
                 if (node.present) {
-                    delete this._serviceTemplate.topology_template.node_templates[nodeName].conditions
+                    delete this._serviceTemplate.topology_template!!.node_templates!![nodeName].conditions
                 } else {
-                    delete this._serviceTemplate.topology_template.node_templates[nodeName]
+                    delete this._serviceTemplate.topology_template!!.node_templates!![nodeName]
                 }
 
                 // Delete requirement assignment which are not present
@@ -389,38 +390,38 @@ export class VariabilityResolver {
         // Delete all relationship templates which have no present relations
         Object.keys(this._serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
             if (this.relationships[name].every(relation => !relation.present))
-                delete this._serviceTemplate.topology_template.relationship_templates[name]
+                delete this._serviceTemplate.topology_template!!.relationship_templates!![name]
         })
 
         // Delete all groups which are not present
         this.groups.forEach(group => {
             if (group.present) {
-                const template = this._serviceTemplate.topology_template?.groups[group.name]
+                const template = this._serviceTemplate.topology_template!!.groups!![group.name]
                 template.members = template.members.filter(member => {
                     const element = this.getElement(member)
                     if (validator.isUndefined(element))
                         throw new Error(`Group member "${member}" of group "${group.name}" does not exist`)
                     return element.present
                 })
-                delete this._serviceTemplate.topology_template?.groups[group.name].conditions
+                delete this._serviceTemplate.topology_template!!.groups!![group.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template?.groups[group.name]
+                delete this._serviceTemplate.topology_template!!.groups!![group.name]
             }
         })
 
         // Delete all topology template inputs which are not present
         this.inputs.forEach(input => {
             if (input.present) {
-                delete this._serviceTemplate.topology_template.inputs[input.name].conditions
+                delete this._serviceTemplate.topology_template!!.inputs!![input.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template.inputs[input.name]
+                delete this._serviceTemplate.topology_template!!.inputs!![input.name]
             }
         })
 
         // Delete all policy templates which are not present
         if (!validator.isUndefined(this._serviceTemplate?.topology_template?.policies)) {
-            this._serviceTemplate.topology_template.policies = this._serviceTemplate.topology_template.policies.filter(
-                (map, index) => {
+            this._serviceTemplate.topology_template!!.policies =
+                this._serviceTemplate.topology_template!!.policies.filter((map, index) => {
                     const name = utils.firstKey(map)
                     const policy = this.policies[index]
                     const template = map[name]
@@ -443,8 +444,7 @@ export class VariabilityResolver {
                         })
                     }
                     return policy.present
-                }
-            )
+                })
         }
 
         return this._serviceTemplate
@@ -483,13 +483,15 @@ export class VariabilityResolver {
     }
 
     getVariabilityPreset(name: string) {
-        const set = this._serviceTemplate.topology_template?.variability?.presets[name]
+        const set: InputAssignmentPreset | undefined = (this._serviceTemplate.topology_template?.variability?.presets ||
+            {})[name]
         if (validator.isUndefined(set)) throw new Error(`Did not find variability set "${name}"`)
         return set
     }
 
     getVariabilityExpression(name: string) {
-        const condition = this._serviceTemplate.topology_template?.variability?.expressions[name]
+        const condition: VariabilityExpression | undefined = (this._serviceTemplate.topology_template?.variability
+            ?.expressions || {})[name]
         if (validator.isUndefined(condition)) throw new Error(`Did not find variability expression "${name}"`)
         return condition
     }
@@ -505,25 +507,25 @@ export class VariabilityResolver {
         context: VariabilityExpressionContext
     ): boolean | string | number {
         if (validator.isObject(condition)) {
-            if (validator.hasProperty(condition, 'cached_result')) return condition.cached_result
+            if (validator.isDefined(condition.cached_result)) return condition.cached_result
             const result = this.evaluateVariabilityExpressionRunner(condition, context)
             condition.cached_result = result
             return result
         }
 
-        return this.evaluateVariabilityExpressionRunner(condition)
+        return this.evaluateVariabilityExpressionRunner(condition, context)
     }
 
     evaluateVariabilityExpressionRunner(
         condition: VariabilityExpression,
-        context?: VariabilityExpressionContext
+        context: VariabilityExpressionContext
     ): boolean | string | number {
         if (validator.isUndefined(condition)) throw new Error(`Received condition that is undefined or null`)
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
         if (validator.isNumber(condition)) return condition
 
-        if (validator.hasProperty(condition, 'and')) {
+        if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
                 const value = this.evaluateVariabilityExpression(element, context)
                 validator.ensureBoolean(value)
@@ -531,7 +533,7 @@ export class VariabilityResolver {
             })
         }
 
-        if (validator.hasProperty(condition, 'or')) {
+        if (validator.isDefined(condition.or)) {
             return condition.or.some(element => {
                 const value = this.evaluateVariabilityExpression(element, context)
                 validator.ensureBoolean(value)
@@ -539,13 +541,13 @@ export class VariabilityResolver {
             })
         }
 
-        if (validator.hasProperty(condition, 'not')) {
+        if (validator.isDefined(condition.not)) {
             const value = this.evaluateVariabilityExpression(condition.not, context)
             validator.ensureBoolean(value)
             return !value
         }
 
-        if (validator.hasProperty(condition, 'xor')) {
+        if (validator.isDefined(condition.xor)) {
             return (
                 condition.xor.reduce((count: number, element) => {
                     const value = this.evaluateVariabilityExpression(element, context)
@@ -556,7 +558,7 @@ export class VariabilityResolver {
             )
         }
 
-        if (validator.hasProperty(condition, 'implies')) {
+        if (validator.isDefined(condition.implies)) {
             const first = this.evaluateVariabilityExpression(condition.implies[0], context)
             validator.ensureBoolean(first)
 
@@ -566,7 +568,7 @@ export class VariabilityResolver {
             return first ? second : true
         }
 
-        if (validator.hasProperty(condition, 'add')) {
+        if (validator.isDefined(condition.add)) {
             return condition.add.reduce<number>((sum, element) => {
                 const value = this.evaluateVariabilityExpression(element, context)
                 validator.ensureNumber(value)
@@ -574,7 +576,7 @@ export class VariabilityResolver {
             }, 0)
         }
 
-        if (validator.hasProperty(condition, 'sub')) {
+        if (validator.isDefined(condition.sub)) {
             const first = this.evaluateVariabilityExpression(condition.sub[0], context)
             validator.ensureNumber(first)
 
@@ -585,7 +587,7 @@ export class VariabilityResolver {
             }, first)
         }
 
-        if (validator.hasProperty(condition, 'mul')) {
+        if (validator.isDefined(condition.mul)) {
             return condition.mul.reduce<number>((product, element) => {
                 const value = this.evaluateVariabilityExpression(element, context)
                 validator.ensureNumber(value)
@@ -593,7 +595,7 @@ export class VariabilityResolver {
             }, 1)
         }
 
-        if (validator.hasProperty(condition, 'div')) {
+        if (validator.isDefined(condition.div)) {
             const first = this.evaluateVariabilityExpression(condition.div[0], context)
             validator.ensureNumber(first)
 
@@ -604,7 +606,7 @@ export class VariabilityResolver {
             }, first)
         }
 
-        if (validator.hasProperty(condition, 'mod')) {
+        if (validator.isDefined(condition.mod)) {
             const first = this.evaluateVariabilityExpression(condition.mod[0], context)
             validator.ensureNumber(first)
 
@@ -614,7 +616,7 @@ export class VariabilityResolver {
             return first % second
         }
 
-        if (validator.hasProperty(condition, 'get_variability_input')) {
+        if (validator.isDefined(condition.get_variability_input)) {
             validator.ensureString(condition.get_variability_input)
             return this.evaluateVariabilityExpression(
                 this.getVariabilityInput(condition.get_variability_input),
@@ -622,7 +624,7 @@ export class VariabilityResolver {
             )
         }
 
-        if (validator.hasProperty(condition, 'get_variability_expression')) {
+        if (validator.isDefined(condition.get_variability_expression)) {
             validator.ensureString(condition.get_variability_expression)
             return this.evaluateVariabilityExpression(
                 this.getVariabilityExpression(condition.get_variability_expression),
@@ -630,7 +632,7 @@ export class VariabilityResolver {
             )
         }
 
-        if (validator.hasProperty(condition, 'get_variability_condition')) {
+        if (validator.isDefined(condition.get_variability_condition)) {
             validator.ensureString(condition.get_variability_condition)
             return this.evaluateVariabilityCondition(
                 this.getVariabilityExpression(condition.get_variability_condition),
@@ -638,8 +640,8 @@ export class VariabilityResolver {
             )
         }
 
-        if (validator.hasProperty(condition, 'get_element_presence')) {
-            let element
+        if (validator.isDefined(condition.get_element_presence)) {
+            let member: GroupMember
             if (validator.isArray(condition.get_element_presence)) {
                 const first = this.evaluateVariabilityExpression(condition.get_element_presence[0], context)
                 validator.ensureString(first)
@@ -647,16 +649,17 @@ export class VariabilityResolver {
                 const second = this.evaluateVariabilityExpression(condition.get_element_presence[1], context)
                 validator.ensureStringOrNumber(second)
 
-                element = [first, second]
+                member = [first, second]
             } else {
-                element = this.evaluateVariabilityExpression(condition.get_element_presence, context)
-                validator.ensureString(element)
+                const result = this.evaluateVariabilityExpression(condition.get_element_presence, context)
+                validator.ensureString(result)
+                member = result
             }
 
-            return this.checkPresence(this.getElement(element))
+            return this.checkPresence(this.getElement(member))
         }
 
-        if (validator.hasProperty(condition, 'get_source_presence')) {
+        if (validator.isDefined(condition.get_source_presence)) {
             const element = this.evaluateVariabilityExpression(condition.get_source_presence, context)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
@@ -665,7 +668,7 @@ export class VariabilityResolver {
             return this.checkPresence(this.getElement(context.element.source))
         }
 
-        if (validator.hasProperty(condition, 'get_target_presence')) {
+        if (validator.isDefined(condition.get_target_presence)) {
             const element = this.evaluateVariabilityExpression(condition.get_target_presence, context)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
@@ -674,15 +677,15 @@ export class VariabilityResolver {
             return this.checkPresence(this.getElement(context.element.target))
         }
 
-        if (validator.hasProperty(condition, 'concat')) {
+        if (validator.isDefined(condition.concat)) {
             return condition.concat.map(c => this.evaluateVariabilityExpression(c, context)).join('')
         }
 
-        if (validator.hasProperty(condition, 'join')) {
+        if (validator.isDefined(condition.join)) {
             return condition.join[0].map(c => this.evaluateVariabilityExpression(c, context)).join(condition.join[1])
         }
 
-        if (validator.hasProperty(condition, 'token')) {
+        if (validator.isDefined(condition.token)) {
             const element = this.evaluateVariabilityExpression(condition.token[0], context)
             validator.ensureString(element)
             const token = condition.token[1]
@@ -690,7 +693,7 @@ export class VariabilityResolver {
             return element.split(token)[index]
         }
 
-        if (validator.hasProperty(condition, 'equal')) {
+        if (validator.isDefined(condition.equal)) {
             const first = this.evaluateVariabilityExpression(condition.equal[0], context)
             return condition.equal.every(element => {
                 const value = this.evaluateVariabilityExpression(element, context)
@@ -698,48 +701,48 @@ export class VariabilityResolver {
             })
         }
 
-        if (validator.hasProperty(condition, 'greater_than')) {
+        if (validator.isDefined(condition.greater_than)) {
             return (
                 this.evaluateVariabilityExpression(condition.greater_than[0], context) >
                 this.evaluateVariabilityExpression(condition.greater_than[1], context)
             )
         }
 
-        if (validator.hasProperty(condition, 'greater_or_equal')) {
+        if (validator.isDefined(condition.greater_or_equal)) {
             return (
                 this.evaluateVariabilityExpression(condition.greater_or_equal[0], context) >=
                 this.evaluateVariabilityExpression(condition.greater_or_equal[1], context)
             )
         }
 
-        if (validator.hasProperty(condition, 'less_than')) {
+        if (validator.isDefined(condition.less_than)) {
             return (
                 this.evaluateVariabilityExpression(condition.less_than[0], context) <
                 this.evaluateVariabilityExpression(condition.less_than[1], context)
             )
         }
 
-        if (validator.hasProperty(condition, 'less_or_equal')) {
+        if (validator.isDefined(condition.less_or_equal)) {
             return (
                 this.evaluateVariabilityExpression(condition.less_or_equal[0], context) <=
                 this.evaluateVariabilityExpression(condition.less_or_equal[1], context)
             )
         }
 
-        if (validator.hasProperty(condition, 'in_range')) {
+        if (validator.isDefined(condition.in_range)) {
             const element = this.evaluateVariabilityExpression(condition.in_range[0], context)
             const lower = condition.in_range[1][0]
             const upper = condition.in_range[1][1]
             return lower <= element && element <= upper
         }
 
-        if (validator.hasProperty(condition, 'valid_values')) {
+        if (validator.isDefined(condition.valid_values)) {
             const element = this.evaluateVariabilityExpression(condition.valid_values[0], context)
             const valid = condition.valid_values[1].map(c => this.evaluateVariabilityExpression(c, context))
             return valid.includes(element)
         }
 
-        if (validator.hasProperty(condition, 'length')) {
+        if (validator.isDefined(condition.length)) {
             const element = this.evaluateVariabilityExpression(condition.length[0], context)
             validator.ensureString(element)
 
@@ -749,7 +752,7 @@ export class VariabilityResolver {
             return element.length === length
         }
 
-        if (validator.hasProperty(condition, 'min_length')) {
+        if (validator.isDefined(condition.min_length)) {
             const element = this.evaluateVariabilityExpression(condition.min_length[0], context)
             validator.ensureString(element)
 
@@ -759,7 +762,7 @@ export class VariabilityResolver {
             return element.length >= length
         }
 
-        if (validator.hasProperty(condition, 'max_length')) {
+        if (validator.isDefined(condition.max_length)) {
             const element = this.evaluateVariabilityExpression(condition.max_length[0], context)
             validator.ensureString(element)
 
