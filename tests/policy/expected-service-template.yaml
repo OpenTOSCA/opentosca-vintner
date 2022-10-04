@@ -5,14 +5,11 @@ topology_template:
         one:
             type: one
 
-        two:
-            type: two
-
     policies:
         - pone:
               type: pone
-              targets: [one, two]
+              targets: [one]
 
         - pthree:
               type: pthree
-              targets: [one, two]
+              targets: [one]

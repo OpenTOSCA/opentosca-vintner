@@ -3,13 +3,13 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     groups:
         with_conditions:
-            type: variability.groups.Conditional
+            type: variability.groups.ConditionalMembers
             members: [magic, [magic, 0], [application, magic]]
             conditions: false
 
         without_conditions:
             type: tosca.groups.Root
-            members: [container]
+            members: [container, magic]
 
     node_templates:
         application:

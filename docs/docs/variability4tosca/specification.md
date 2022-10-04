@@ -101,7 +101,7 @@ is_prod: {equal: [{get_variability_input: mode}, prod]}
 ## Node Template Definition
 
 A _Node Template_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective _Node Template_ is not present.
+These conditions must be satisfied otherwise the respective _Node Template_ is not present.
 
 | Keyname    | Mandatory | Type                           | Description                        |
 |------------| --------- | ------------------------------ |------------------------------------|
@@ -121,7 +121,7 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 ## Requirement Assignment Definition
 
 A _Requirement Assignment_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective relationship is not present.
+These conditions must be satisfied otherwise the respective relationship is not present.
 
 | Keyname   | Mandatory | Type                           | Description                        |
 | --------- | --------- | ------------------------------ |------------------------------------|
@@ -142,30 +142,47 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 ## Group Template Definition
 
 A _Group Template_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective group members are not present.
-Such a group is also called _Variability Group_ and must be derived from `variability.groups.Conditional`.
+Depending on the _Group Type_ the conditions are either assigned to the group itself or to the group members.
+In general, the conditions are assigned to the group itself.
+These conditions must be satisfied otherwise the respective group is not present.
+Such a group is also called _Conditional Group_.
 
+However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the group members.
+These conditions must be satisfied otherwise the respective group members are not present.
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
+Such a group is also called _Variability Group_.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
-|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
 
-The following non-normative and incomplete example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
+| Keyname           | Mandatory | Type                                                                       | Description                                                                                                               |
+|-------------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| members           | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
+| conditions        | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+
+The following non-normative and incomplete example contains the group `example_group` which is only present if the conditions are satisfied.
 
 ```linenums="1"
-example_group:
-    type: variability.groups.Conditional
+conditional_group:
+    type: tosca.groups.Root
+    members: [prod_database, [application, prod_connects_to]]
+    conditions: {get_variability_expression: is_prod}
+```
+
+The following non-normative and incomplete example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
+In contrast to the previous example this group is not derived from `variability.groups.ConditionalMembers`.
+
+```linenums="1"
+variability_group:
+    type: variability.groups.ConditionalMembers
     members: [prod_database, [application, prod_connects_to]]
     conditions: {get_variability_expression: is_prod}
 ```
 
 
+
 ## Policy Template Definition
 
 A _Policy Template_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective policy is not present.
+These conditions must be satisfied otherwise the respective policy is not present.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
 |------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
@@ -214,7 +231,7 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 ## Topology Template Input Definition
 
 A _Topology Template Input_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective input is not present.
+These conditions must be satisfied otherwise the respective input is not present.
 
 
 | Keyname   | Mandatory | Type                           | Description                        |
@@ -235,8 +252,8 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 
 ## Normative Group Types
 
-There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
-The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.Conditional` should derive from.
+There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.ConditionalMembers`.
+The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.ConditionalMembers` should derive from.
 
 ```linenums="1"
 variability.groups.Root
@@ -246,7 +263,7 @@ variability.groups.Root
 The second _Group Type_ should be used when a group has variability definitions assigned.
 
 ```linenums="1"
-variability.groups.Conditional
+variability.groups.ConditionalMembers
     derived_from: variability.groups.Root
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```
@@ -340,7 +357,10 @@ To resolve the variability in a _Variable Service Template_ conduct the followin
 1. Remove all _Requirement Assignments_ which are _not present_.
 1. Remove all _Relationship Templates_ which are not used by any _Requirement Assignment_.
 1. Remove all _Topology Template Inputs_ which are _not present_.
+1. Remove all _Group Templates_ which are _not present_.
+1. Remove all _Group Members_ which are _not present_ from _Group Template_.
 1. Remove all _Policy Templates_ which are _not present_.
+1. Remove all _Policy Targets_ which are _not present_ from _Policy Template_.
 1. Remove all non-standard elements, e.g., _Variability Definition_, _Variability Groups_, or `conditions` at _Node Templates_.
 1. Set the _TOSCA Definitions Version_ to `tosca_simple_yaml_1_3`.
 

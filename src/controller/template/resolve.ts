@@ -63,7 +63,7 @@ export default function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input' | 'policy'
+    type: 'node' | 'relation' | 'input' | 'policy' | 'group'
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
@@ -91,12 +91,12 @@ type Policy = ConditionalElementBase & {
     type: 'policy'
 }
 
-type Group = {
-    name: string
-    conditions: VariabilityExpression[]
+type Group = ConditionalElementBase & {
+    type: 'group'
+    variability: boolean
 }
 
-type ConditionalElement = Input | Node | Relation | Policy
+type ConditionalElement = Input | Node | Relation | Policy | Group
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
@@ -115,6 +115,9 @@ export class VariabilityResolver {
     private relationships: {[name: string]: Relation[]} = {}
 
     private policies: Policy[] = []
+
+    private groups: Group[] = []
+    private groupsMap: {[name: string]: Group} = {}
 
     private inputs: Input[] = []
     private inputsMap: {[name: string]: Input} = {}
@@ -209,15 +212,20 @@ export class VariabilityResolver {
         })
 
         // Groups
-        Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([groupName, groupTemplate]) => {
-            if (groupTemplate.conditions === undefined) return
-
+        Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
             const group: Group = {
-                name: groupName,
-                conditions: utils.toList(groupTemplate.conditions),
+                type: 'group',
+                name,
+                conditions: utils.toList(template.conditions),
+                variability: [
+                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
+                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
+                ].includes(template.type),
             }
+            this.groups.push(group)
+            this.groupsMap[name] = group
 
-            groupTemplate.members.forEach(member => {
+            template.members.forEach(member => {
                 if (validator.isString(member)) {
                     this.nodesMap[member]?.groups.push(group)
                 } else {
@@ -253,11 +261,15 @@ export class VariabilityResolver {
         for (const node of this.nodes) this.checkPresence(node)
         for (const relation of this.relations) this.checkPresence(relation)
         for (const input of this.inputs) this.checkPresence(input)
+        for (const group of this.groups) this.checkPresence(group)
         for (const policy of this.policies) this.checkPresence(policy)
         return this
     }
 
     checkPresence(element: ConditionalElement) {
+        // Variability group are never present
+        if (element.type === 'group' && element.variability) element.present = false
+
         // Check if presence already has been evaluated
         if (validator.hasProperty(element, 'present')) return element.present
 
@@ -265,7 +277,7 @@ export class VariabilityResolver {
         let conditions = element.conditions
 
         if (validator.hasProperty(element, 'groups'))
-            element.groups.forEach(group => conditions.push(...group.conditions))
+            element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
 
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
@@ -380,14 +392,20 @@ export class VariabilityResolver {
                 delete this._serviceTemplate.topology_template.relationship_templates[name]
         })
 
-        // Delete all variability groups
-        Object.entries(this._serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
-            if (
-                [TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT, TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL].includes(
-                    template.type
-                )
-            )
-                delete this._serviceTemplate.topology_template?.groups[name]
+        // Delete all groups which are not present
+        this.groups.forEach(group => {
+            if (group.present) {
+                const template = this._serviceTemplate.topology_template?.groups[group.name]
+                template.members = template.members.filter(member => {
+                    const element = this.getElement(member)
+                    if (validator.isUndefined(element))
+                        throw new Error(`Group member "${member}" of group "${group.name}" does not exist`)
+                    return element.present
+                })
+                delete this._serviceTemplate.topology_template?.groups[group.name].conditions
+            } else {
+                delete this._serviceTemplate.topology_template?.groups[group.name]
+            }
         })
 
         // Delete all topology template inputs which are not present
@@ -405,11 +423,25 @@ export class VariabilityResolver {
                 (map, index) => {
                     const name = utils.firstKey(map)
                     const policy = this.policies[index]
+                    const template = map[name]
                     // Sanity check
                     if (name !== policy.name)
                         throw new Error(`Somehow index of policies do not match! ${prettyJSON({name, policy, index})}`)
 
-                    if (policy.present) delete map[name].conditions
+                    if (policy.present) {
+                        delete template.conditions
+                        template.targets = template.targets?.filter(target => {
+                            const node = this.nodesMap[target]
+                            if (!validator.isUndefined(node)) return node.present
+
+                            const group = this.groupsMap[target]
+                            if (!validator.isUndefined(group)) return group.present
+
+                            throw new Error(
+                                `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
+                            )
+                        })
+                    }
                     return policy.present
                 }
             )
