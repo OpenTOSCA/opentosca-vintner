@@ -93,6 +93,10 @@ type Group = {
 
 type ConditionalElement = Input | Node | Relation
 
+type VariabilityExpressionContext = {
+    element?: ConditionalElement
+}
+
 export class VariabilityResolver {
     private readonly _serviceTemplate: ServiceTemplate
 
@@ -264,7 +268,7 @@ export class VariabilityResolver {
         }
 
         // Evaluate assigned conditions
-        const present = conditions.every(condition => this.evaluateVariabilityCondition(condition))
+        const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
         element.present = present
 
         return present
@@ -416,16 +420,19 @@ export class VariabilityResolver {
         return condition
     }
 
-    evaluateVariabilityCondition(condition: VariabilityExpression): boolean {
-        const result = this.evaluateVariabilityExpression(condition)
+    evaluateVariabilityCondition(condition: VariabilityExpression, context?: VariabilityExpressionContext): boolean {
+        const result = this.evaluateVariabilityExpression(condition, context)
         validator.ensureBoolean(result)
         return result
     }
 
-    evaluateVariabilityExpression(condition: VariabilityExpression): boolean | string | number {
+    evaluateVariabilityExpression(
+        condition: VariabilityExpression,
+        context?: VariabilityExpressionContext
+    ): boolean | string | number {
         if (validator.isObject(condition)) {
             if (validator.hasProperty(condition, 'cached_result')) return condition.cached_result
-            const result = this.evaluateVariabilityExpressionRunner(condition)
+            const result = this.evaluateVariabilityExpressionRunner(condition, context)
             condition.cached_result = result
             return result
         }
@@ -433,7 +440,10 @@ export class VariabilityResolver {
         return this.evaluateVariabilityExpressionRunner(condition)
     }
 
-    evaluateVariabilityExpressionRunner(condition: VariabilityExpression): boolean | string | number {
+    evaluateVariabilityExpressionRunner(
+        condition: VariabilityExpression,
+        context?: VariabilityExpressionContext
+    ): boolean | string | number {
         if (validator.isUndefined(condition)) throw new Error(`Received condition that is undefined or null`)
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
@@ -566,25 +576,21 @@ export class VariabilityResolver {
         }
 
         if (validator.hasProperty(condition, 'get_source_presence')) {
-            const first = this.evaluateVariabilityExpression(condition.get_source_presence[0])
-            validator.ensureString(first)
-
-            const second = this.evaluateVariabilityExpression(condition.get_source_presence[1])
-            validator.ensureStringOrNumber(second)
-
-            const relation = this.getElement([first, second])
-            const source = this.getElement(relation.source)
-            return this.checkPresence(source)
+            const element = this.evaluateVariabilityExpression(condition.get_source_presence)
+            if (element !== 'SELF')
+                throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
+            if (context?.element?.type !== 'relation')
+                throw new Error(`"get_source_presence" is only valid inside a relation`)
+            return this.checkPresence(this.getElement(context.element.source))
         }
 
         if (validator.hasProperty(condition, 'get_target_presence')) {
-            const first = this.evaluateVariabilityExpression(condition.get_target_presence[0])
-            validator.ensureString(first)
-
-            const second = this.evaluateVariabilityExpression(condition.get_target_presence[1])
-            validator.ensureStringOrNumber(second)
-
-            return this.checkPresence(this.getElement([first, second]))
+            const element = this.evaluateVariabilityExpression(condition.get_target_presence)
+            if (element !== 'SELF')
+                throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
+            if (context?.element?.type !== 'relation')
+                throw new Error(`"get_target_presence" is only valid inside a relation`)
+            return this.checkPresence(this.getElement(context.element.target))
         }
 
         if (validator.hasProperty(condition, 'concat')) {

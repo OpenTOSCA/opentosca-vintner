@@ -266,8 +266,99 @@ it('get_element_presence: relation by index absent', () => {
     expect(result).to.equal(false)
 })
 
-// TODO: get_source_presence
-// TODO: get_target_presence
+it('get_source_presence: present', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    conditions: true,
+                    requirements: [
+                        {
+                            relation: {
+                                node: 'another_node',
+                                conditions: {get_source_presence: 'SELF'},
+                            },
+                        },
+                    ],
+                },
+                another_node: {},
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']})
+    expect(result).to.equal(true)
+})
+
+it('get_source_presence: absent', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    conditions: false,
+                    requirements: [
+                        {
+                            relation: {
+                                node: 'another_node',
+                                conditions: {get_source_presence: 'SELF'},
+                            },
+                        },
+                    ],
+                },
+                another_node: {},
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']})
+    expect(result).to.equal(false)
+})
+
+it('get_target_presence: present', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    requirements: [
+                        {
+                            relation: {
+                                node: 'another_node',
+                                conditions: {get_target_presence: 'SELF'},
+                            },
+                        },
+                    ],
+                },
+                another_node: {
+                    conditions: true,
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']})
+    expect(result).to.equal(true)
+})
+
+it('get_target_presence: absent', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node: {
+                    requirements: [
+                        {
+                            relation: {
+                                node: 'another_node',
+                                conditions: {get_target_presence: 'SELF'},
+                            },
+                        },
+                    ],
+                },
+                another_node: {
+                    conditions: false,
+                },
+            },
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']})
+    expect(result).to.equal(false)
+})
 
 it('concat', () => {
     const resolver = getDefaultVariabilityResolver()
