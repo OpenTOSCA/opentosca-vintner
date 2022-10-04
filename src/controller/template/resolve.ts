@@ -113,7 +113,7 @@ export class VariabilityResolver {
     private policies: Policy[] = []
 
     private inputs: Input[] = []
-    private inputsMap: {[name: string]: Input | undefined} = {}
+    private inputsMap: {[name: string]: Input} = {}
 
     constructor(serviceTemplate: ServiceTemplate) {
         this._serviceTemplate = serviceTemplate
