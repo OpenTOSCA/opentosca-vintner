@@ -8,6 +8,7 @@ import {VariabilityExpression} from './variability'
 export type PolicyTemplate = {
     type: string
     conditions?: VariabilityExpression | VariabilityExpression[]
+    targets?: string[]
 }
 
 export type PolicyTemplateList = PolicyAssignmentMap[]
