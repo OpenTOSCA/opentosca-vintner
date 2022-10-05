@@ -2,7 +2,7 @@
 
 This document specifies _Variability4TOSCA_ which extends [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank} with conditional elements.
 In the following, we discuss the differences.
-The specification is under active development.
+The specification is under active development and is not backwards compatible with any previous versions.
 
 ## Service Template Definition
 
@@ -36,7 +36,7 @@ A _Variability Definition_ defines _Variability Inputs_, _Variability Presets_, 
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
 
-The following example contains a _Variability Definition_ which declares the _Variability Input_ `mode` and two _Variability Conditions_ `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
+The following non-normative and incomplete example contains a _Variability Definition_ which declares the _Variability Input_ `mode` and two _Variability Conditions_ `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
 Furthermore, two _Variability Presets_ `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
 ```linenums="1"
@@ -101,13 +101,13 @@ is_prod: {equal: [{get_variability_input: mode}, prod]}
 ## Node Template Definition
 
 A _Node Template_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective _Node Template_ is not present.
+These conditions must be satisfied otherwise the respective _Node Template_ is not present.
 
 | Keyname    | Mandatory | Type                           | Description                        |
 |------------| --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following example contains a _Node Template_ that has a _Variability Condition_ assigned.
+The following non-normative and incomplete example contains a _Node Template_ that has a _Variability Condition_ assigned.
 
 ```linenums="1"
 prod_database:
@@ -121,14 +121,14 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 ## Requirement Assignment Definition
 
 A _Requirement Assignment_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective relationship is not present.
+These conditions must be satisfied otherwise the respective relationship is not present.
 
 | Keyname   | Mandatory | Type                           | Description                        |
 | --------- | --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
 
-The following example contains a _Requirement Assignment_ that has a _Variability Condition_ assigned.
+The following non-normative and incomplete example contains a _Requirement Assignment_ that has a _Variability Condition_ assigned.
 
 ```linenums="1"
 requirements:
@@ -142,28 +142,118 @@ The `conditions` keyword is expected to be removed when the _Service Template_ i
 ## Group Template Definition
 
 A _Group Template_ can additionally contain _Variability Conditions_.
-These conditions must evaluate to true otherwise the respective group members are not present.
+Depending on the _Group Type_ the conditions are either assigned to the group itself or to the group members.
+In general, the conditions are assigned to the group itself.
+These conditions must be satisfied otherwise the respective group is not present.
+Such a group is also called _Conditional Group_.
 
+However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the group members.
+These conditions must be satisfied otherwise the respective group members are not present.
 Furthermore, group elements can be _Node Templates_ and _Requirement Assignments_.
+Such a group is also called _Variability Group_.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
-|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
 
-The following example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
+| Keyname           | Mandatory | Type                                                                       | Description                                                                                                               |
+|-------------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| members           | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
+| conditions        | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+
+The following non-normative and incomplete example contains the group `example_group` which is only present if the conditions are satisfied.
 
 ```linenums="1"
-example_group:
-    type: variability.groups.Conditional
+conditional_group:
+    type: tosca.groups.Root
     members: [prod_database, [application, prod_connects_to]]
     conditions: {get_variability_expression: is_prod}
 ```
 
+The following non-normative and incomplete example contains the group `example_group` whose elements are the _Node Template_ `prod_database` and the _Requirement Assignment_ `prod_connects_to` of the _Node Template_ `application`.
+In contrast to the previous example this group is not derived from `variability.groups.ConditionalMembers`.
+
+```linenums="1"
+variability_group:
+    type: variability.groups.ConditionalMembers
+    members: [prod_database, [application, prod_connects_to]]
+    conditions: {get_variability_expression: is_prod}
+```
+
+
+
+## Policy Template Definition
+
+A _Policy Template_ can additionally contain _Variability Conditions_.
+These conditions must be satisfied otherwise the respective policy is not present.
+
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
+|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+
+The following non-normative and incomplete example contains the _Policy Template_ `anticollocation` that has the _Variability Condition_ `is_prod` assigned.
+If the condition evaluates to true, then the policy is present. 
+As a result, the _Node Templates_ `wordpress` and `mysql` _must not_ be hosted on the same server.
+For more information about this example, take a look in the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
+
+```linenums="1"
+node_templates:
+    wordpress:
+        type: tosca.nodes.WebServer
+        requirements:
+            - host:
+                  node_filter:
+                      capabilities:
+                          - os:
+                                properties:
+                                    - architecture: x86_64
+                                    - type: linux
+
+    mysql:
+        type: tosca.nodes.DBMS.MySQL
+        requirements:
+            - host:
+                  node: tosca.nodes.Compute
+                  node_filter:
+                      capabilities:
+                          - os:
+                                properties:
+                                    - architecture: x86_64
+                                    - type: linux
+
+policies:
+    - anticollocation:
+          type: tosca.policies.AntiCollocation
+          targets: [wordpress_server, mysql]
+          conditions: {get_variability_expression: is_prod}
+```
+
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+
+## Topology Template Input Definition
+
+A _Topology Template Input_ can additionally contain _Variability Conditions_.
+These conditions must be satisfied otherwise the respective input is not present.
+
+
+| Keyname   | Mandatory | Type                           | Description                        |
+| --------- | --------- | ------------------------------ |------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+
+
+The following non-normative and incomplete example contains a _Topology Template Input_ that has a _Variability Condition_ assigned.
+
+```linenums="1"
+ssh_key_file:
+    type: string
+    conditions: {get_variability_expression: is_dev}
+```
+
+The `conditions` keyword is expected to be removed when the _Service Template_ is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+
 ## Normative Group Types
 
-There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.Conditional`.
-The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.Conditional` should derive from.
+There are two normative _Group Types_ for informational purposes: `variability.groups.Root` and `variability.groups.ConditionalMembers`.
+The first _Group Type_ is the root group every other variability-related group, such as `variability.groups.ConditionalMembers` should derive from.
 
 ```linenums="1"
 variability.groups.Root
@@ -173,7 +263,7 @@ variability.groups.Root
 The second _Group Type_ should be used when a group has variability definitions assigned.
 
 ```linenums="1"
-variability.groups.Conditional
+variability.groups.ConditionalMembers
     derived_from: variability.groups.Root
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```
@@ -226,15 +316,17 @@ The following _Arithmetic Operators_ can be used inside a _Variability Expressio
 
 The following _Intrinsic Functions_ can be used inside a _Variability Expression_.
 
-| Keyname                    | Input                                                             | Output                                                                                                                             | Description                                                                                             |
-|----------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                            | Any                                                                                                                                | Returns the value of a Variability Input.                                                               |
-| get_variability_expression | String                                                            | Any                                                                                                                                | Returns the value of the Variability Expression.                                                        |
-| get_variability_condition  | String                                                            | Boolean                                                                                                                            | Returns the value of the Variability Condition.                                                         |
-| get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                         |
-| concat                     | List(ValueExpression)                                             | String                                                                                                                             | Concatenates the given values.                                                                          |
-| join                       | Tuple(List(ValueExpression), String)                              | String                                                                                                                             | Joins the given values using the provided delimiter.                                                    |
-| token                      | Tuple(ValueExpression, String, Number)                            | String                                                                                                                             | Splits a given value by the provided delimiter and returns the element specified by the provided index. |
+| Keyname                    | Input                                                            | Output                                                                                                                             | Description                                                                                                                                |
+|----------------------------|------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                                           | Any                                                                                                                                | Returns the value of a Variability Input.                                                                                                  |
+| get_variability_expression | String                                                           | Any                                                                                                                                | Returns the value of the Variability Expression.                                                                                           |
+| get_variability_condition  | String                                                           | Boolean                                                                                                                            | Returns the value of the Variability Condition.                                                                                            |
+| get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                                             |
+| get_source_presence        | 'SELF'                                                            | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_target_presence        | 'SELF'               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| concat                     | List(ValueExpression)                                            | String                                                                                                                             | Concatenates the given values.                                                                                                             |
+| join                       | Tuple(List(ValueExpression), String)                             | String                                                                                                                             | Joins the given values using the provided delimiter.                                                                                       |
+| token                      | Tuple(ValueExpression, String, Number)                           | String                                                                                                                             | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                    |
 
 ## Constraint Operators
 
@@ -251,3 +343,50 @@ The following _Constraint Operators_ can be used inside a _Variability Expressio
 | length           | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a given length.                            |
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
+
+
+## Processing
+
+In the following we describe on a high-level the steps to derive a _Variability-Resolved Service Template_ from a _Variable Service Template_.
+
+### Resolve Variability
+
+To resolve the variability in a _Variable Service Template_ conduct the following steps: 
+
+1. Remove all _Node Templates_ which are _not present_.
+1. Remove all _Requirement Assignments_ which are _not present_.
+1. Remove all _Relationship Templates_ which are not used by any _Requirement Assignment_.
+1. Remove all _Topology Template Inputs_ which are _not present_.
+1. Remove all _Group Templates_ which are _not present_.
+1. Remove all _Group Members_ which are _not present_ from _Group Template_.
+1. Remove all _Policy Templates_ which are _not present_.
+1. Remove all _Policy Targets_ which are _not present_ from _Policy Template_.
+1. Remove all non-standard elements, e.g., _Variability Definition_, _Variability Groups_, or `conditions` at _Node Templates_.
+1. Set the _TOSCA Definitions Version_ to `tosca_simple_yaml_1_3`.
+
+
+### Check Element Presence
+
+To check if an element is present check that all assigned conditions are satisfied: 
+
+1. Collect all conditions which are assigned to the element via `conditions`.
+1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
+1. The element is present only if all conditions are satisfied.
+
+To further support modeling the following improvements can be taken: 
+
+1. Prune Relations: The default condition of a relation checks if the source node is present.
+1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
+1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
+1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
+
+### Check Consistency
+
+To check the consistency conduct the following steps: 
+
+1. Ensure that each relation source exists
+1. Ensure that each relation target exists
+1. Ensure that every node has at maximum one hosting relation
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the _Variable Service Template_.
+
+Since the derived _Service Template_ might be further processed, e.g. by _Topology Completion_[@hirmer2014automatic], some or all of these consistency steps might be omitted.

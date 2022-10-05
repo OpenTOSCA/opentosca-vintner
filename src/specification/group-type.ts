@@ -5,7 +5,7 @@
 
 export enum TOSCA_GROUP_TYPES {
     VARIABILITY_GROUPS_ROOT = 'variability.groups.Root',
-    VARIABILITY_GROUPS_CONDITIONAL = 'variability.groups.Conditional',
+    VARIABILITY_GROUPS_CONDITIONAL_MEMBERS = 'variability.groups.ConditionalMembers',
 }
 
 export type GroupType = {}

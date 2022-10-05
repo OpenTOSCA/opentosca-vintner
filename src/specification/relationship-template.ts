@@ -6,3 +6,5 @@
 export type RelationshipTemplate = {
     type: string
 }
+
+export type RelationshipTemplateMap = {[name: string]: RelationshipTemplate}

@@ -16,7 +16,8 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
-export function toList<T>(data: T | T[]): T[] {
+export function toList<T>(data: T | T[] | undefined): T[] {
+    if (validator.isUndefined(data)) return []
     if (Array.isArray(data)) return data
     return [data]
 }
@@ -51,11 +52,11 @@ export function prettyJSON(obj: any) {
     return JSON.stringify(obj, null, 4)
 }
 
-export function joinNotNull(array: string[], separator: string) {
+export function joinNotNull(array: (string | undefined)[], separator: string) {
     return filterNotNull(array).join(separator)
 }
 
-export function filterNotNull(array: any[]) {
+export function filterNotNull<T>(array: any[]): T[] {
     return array.filter(x => x !== undefined && x !== null)
 }
 

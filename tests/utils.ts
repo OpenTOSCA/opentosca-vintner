@@ -3,11 +3,22 @@ import * as files from '../src/utils/files'
 import {ServiceTemplate} from '../src/specification/service-template'
 import {expect} from 'chai'
 import Controller from '../src/controller'
-import {VariabilityResolver} from '../src/controller/template/resolve'
+import {ResolvingOptions, VariabilityResolver} from '../src/controller/template/resolve'
 
-export function getDefaultTest({preset, error, example}: {preset?: string; error?: string; example?: string}) {
+export function getDefaultTest({
+    preset,
+    error,
+    example,
+    ...remainingOptions
+}: {
+    preset?: string
+    error?: string
+    example?: string
+} & ResolvingOptions) {
     return async function () {
-        const dir = path.join(__dirname, this.test.title)
+        //@ts-ignore
+        const title = this.test.title
+        const dir = path.join(__dirname, title)
         files.assertDirectory(dir)
 
         const output = files.temporaryFile()
@@ -17,6 +28,7 @@ export function getDefaultTest({preset, error, example}: {preset?: string; error
                 inputs: getDefaultInputs(dir),
                 output,
                 preset,
+                ...remainingOptions,
             })
         }
 

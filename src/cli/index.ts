@@ -138,6 +138,27 @@ template
     .option('--preset [string]', 'name of the variability preset set')
     .option('--inputs [string]', 'path to the variability inputs')
     .requiredOption('--output <string>', 'path of the output')
+    .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
+    .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
+    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
+    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
+    .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
+    .option(
+        '--disable-relation-source-consistency-check [boolean]',
+        'disable consistency check regarding relation sources'
+    )
+    .option(
+        '--disable-relation-target-consistency-check [boolean]',
+        'disable consistency check regarding relation targets'
+    )
+    .option(
+        '--disable-maximum-hosting-consistency-check [boolean]',
+        'disable consistency check regarding maximum one hosting relation'
+    )
+    .option(
+        '--disable-expected-hosting-consistency-check [boolean]',
+        'disable consistency check regarding expected hosting relation'
+    )
     .action(
         hae(async options => {
             await Controller.template.resolve(options)
@@ -237,6 +258,27 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs')
+    .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
+    .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
+    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
+    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
+    .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
+    .option(
+        '--disable-relation-source-consistency-check [boolean]',
+        'disable consistency check regarding relation sources'
+    )
+    .option(
+        '--disable-relation-target-consistency-check [boolean]',
+        'disable consistency check regarding relation targets'
+    )
+    .option(
+        '--disable-maximum-hosting-consistency-check [boolean]',
+        'disable consistency check regarding maximum one hosting relation'
+    )
+    .option(
+        '--disable-expected-hosting-consistency-check [boolean]',
+        'disable consistency check regarding expected hosting relation'
+    )
     .action(
         hae(async options => {
             await Controller.template.resolve(options)

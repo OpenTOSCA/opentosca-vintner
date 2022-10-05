@@ -49,6 +49,7 @@ markdown_extensions:
     - pymdownx.superfences
     - pymdownx.tabbed:
           alternate_style: true
+    - footnotes
 
 plugins:
     - search
@@ -56,14 +57,15 @@ plugins:
           on_error_fail: true
           module_name: macros
     - glightbox
-
+    - bibtex:
+          bib_file: 'bibtex.bib'
 nav:
     - Home: index.md
     - getting-started.md
     - installation.md
     - orchestrators.md
     - Variability4TOSCA:
-          - variability4tosca/motivation.md
+          - Motivation: variability4tosca/motivation.md
           - Specification: variability4tosca/specification.md
     - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
     - interface.md

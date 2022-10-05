@@ -1,12 +1,25 @@
 import {getDefaultTest} from './utils'
 
 it('node', getDefaultTest({}))
+it('node-prune', getDefaultTest({pruneNodes: true}))
+it('node-prune-nothing', getDefaultTest({pruneNodes: true}))
+it('node-prune-throw', getDefaultTest({pruneNodes: true}))
+it('node-prune-force', getDefaultTest({forcePruneNodes: true}))
+it('node-prune-combined', getDefaultTest({pruneRelations: true, pruneNodes: true}))
 
 it('requirement-assignment', getDefaultTest({}))
+it('requirement-assignment-prune', getDefaultTest({pruneRelations: true}))
+it(
+    'requirement-assignment-prune-throw',
+    getDefaultTest({pruneRelations: true, error: 'Relation source "one" of relation "two" does not exist'})
+)
+it('requirement-assignment-prune-force', getDefaultTest({forcePruneRelations: true}))
 
 it('groups', getDefaultTest({}))
 
 it('nothing', getDefaultTest({}))
+
+it('policy', getDefaultTest({}))
 
 it('preset', getDefaultTest({preset: 'two'}))
 
@@ -45,3 +58,5 @@ it('examples-unfurl-motivation-dev', getDefaultTest({preset: 'dev', example: 'un
 it('examples-unfurl-motivation-prod', getDefaultTest({preset: 'prod', example: 'unfurl-motivation'}))
 
 it('one-hosting-relation', getDefaultTest({}))
+
+it('topology-template-inputs', getDefaultTest({}))
