@@ -18,7 +18,7 @@ export const LICENSES: {[key: string]: string} = {
 /**
  * Read latest list from CSV file
  */
-export function readLatestList(path): Dependencies {
+export function readLatestList(path: string): Dependencies {
     let data: Dependencies = []
     if (fs.existsSync(path)) {
         data = Papa.parse<Dependency>(fs.readFileSync(path, 'utf8'), {skipEmptyLines: true, header: true}).data
