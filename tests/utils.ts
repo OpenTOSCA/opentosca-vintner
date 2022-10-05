@@ -16,7 +16,9 @@ export function getDefaultTest({
     example?: string
 } & ResolvingOptions) {
     return async function () {
-        const dir = path.join(__dirname, this.test.title)
+        //@ts-ignore
+        const title = this.test.title
+        const dir = path.join(__dirname, title)
         files.assertDirectory(dir)
 
         const output = files.temporaryFile()

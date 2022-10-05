@@ -99,9 +99,7 @@ export async function extractArchive(source: string, target: string) {
     await extract(source, {dir: target})
 }
 
-export async function download(source: string, target?: string): Promise<string> {
-    if (validator.isUndefined(target)) target = temporaryFile()
-
+export async function download(source: string, target: string = temporaryFile()): Promise<string> {
     return new Promise((resolve, reject) => {
         axios
             .get(source, {
