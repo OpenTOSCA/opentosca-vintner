@@ -6,19 +6,18 @@ import {
     RelationshipExpression, SelectExpression, StepExpression
 } from '../specification/query-type';
 import {ServiceTemplate} from '../specification/service-template';
-import {NodeGraph} from './node-graph';
+import {Graph} from './graph';
 import {QueryTemplateArguments} from '../controller/query/query';
 import * as files from '../utils/files'
 import path from 'path';
-import * as yaml from 'js-yaml';
-import fs from 'fs';
+import exp from 'constants';
 
-export class QueryResolver {
+export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
-    private nodeGraph: NodeGraph
-    private source: string
+    private nodeGraph: Graph | undefined
+    private source = ''
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
-    private currentKeys: string[]
+    private currentKeys: string[] = [];
 
     resolve(query: QueryTemplateArguments) {
         const parser = new Parser
@@ -26,7 +25,7 @@ export class QueryResolver {
         try {
             this.source = query.source
             tree = parser.getAST(query.query)
-        } catch (e) {
+        } catch (e: any) {
             console.error(e.message)
             process.exit(0);
         }
@@ -40,11 +39,11 @@ export class QueryResolver {
      * @param expression The complete AST
      * @return result The data that matches the expression
      */
-    evaluate(expression: Expression) {
+    private evaluate(expression: Expression) {
         const results = []
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
-            let result = t.template
+            let result: any = t.template
             if (expression.match != null) {
                 result = this.evaluateMatch(result, expression.match)
             }
@@ -64,26 +63,26 @@ export class QueryResolver {
     }
 
     /** Loads the template or instance in the FROM clause */
-    evaluateFrom(expression: FromExpression) {
+    private evaluateFrom(expression: FromExpression) {
         const serviceTemplates = []
         try {
             switch (this.source){
                 case 'vintner':
                     if (expression.type == 'Instance') {
-                        serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance).getServiceTemplate()})
+                        serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance || '').getServiceTemplate()})
                     } else if (expression.type == 'Template' && expression.template == '*') {
                         for (const t of Templates.all()) {
                             serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
                         }
                     } else {
-                        serviceTemplates.push({name: expression.template, template:new Template(expression.template).getVariableServiceTemplate()})
+                        serviceTemplates.push({name: expression.template, template:new Template(expression.template || '').getVariableServiceTemplate()})
                     }
                     break
                 case 'winery': {
-                    const winery = path.resolve(path.join(files.getWineryRepo(), 'servicetemplates', expression.template, 'ServiceTemplate.tosca'))
+                    const winery = path.resolve(path.join(files.getWineryRepo(), 'servicetemplates', (expression.template || ''), 'ServiceTemplate.tosca'))
                     serviceTemplates.push({
                         name: expression.template,
-                        template: yaml.load(fs.readFileSync(winery, 'utf-8')) as ServiceTemplate
+                        template: files.loadFile(winery) as ServiceTemplate
                     })
                 }
             }
@@ -93,7 +92,7 @@ export class QueryResolver {
         return serviceTemplates
     }
 
-    evaluateSelect(data: Object, expression: SelectExpression) {
+    private evaluateSelect(data: Object, expression: SelectExpression) {
         const results = []
         for (const p of expression.path) {
             let result = data
@@ -113,17 +112,19 @@ export class QueryResolver {
         return results
     }
 
-    evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
-        this.nodeGraph = new NodeGraph(data)
-        this.currentKeys = Object.keys(data.topology_template.node_templates)
+    private evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
+        this.nodeGraph = new Graph(data)
+        this.currentKeys = Object.keys(data.topology_template?.node_templates || [])
         let paths = new Set<string[]>()
         // initialize our starting nodes by checking the condition
         for (const n of this.filterNodes(data, expression.nodes[0])) {
             paths.add([n])
         }
         // for each path, expand all relationships at last node and check if it fits filters
-        for (let i = 0; i < expression.relationships.length; i++) {
-            paths = this.expand(paths, expression.relationships[i], expression.nodes[i+1]?.predicate)
+        if (expression.relationships) {
+            for (let i = 0; i < expression.relationships.length; i++) {
+                paths = this.expand(paths, expression.relationships[i], expression.nodes[i + 1]?.predicate)
+            }
         }
         console.log('Found the following paths:')
         console.log(paths)
@@ -135,8 +136,12 @@ export class QueryResolver {
         for (let i = 0; i < expression.nodes.length; i++) {
             const nodes = new Set<string>()
             for (const p of paths) nodes.add(p[i])
-            result[expression.nodes[i].name] = this.getNodesByName(data, [...nodes])
+            const name = expression.nodes[i].name
+            if (name) {
+                result[name] = Resolver.getNodesByName(data, [...nodes])
+            }
         }
+        console.log(result)
         return result
     }
 
@@ -146,14 +151,14 @@ export class QueryResolver {
      * @param relationship Direction and optional conditions of relationships
      * @param nodePredicate
      */
-    expand(paths: Set<string[]>, relationship: RelationshipExpression, nodePredicate: PredicateExpression) {
+    private expand(paths: Set<string[]>, relationship: RelationshipExpression, nodePredicate: PredicateExpression | undefined) {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
             // do a breadth first search to find all nodes reachable within n steps
-            const targets = this.nodeGraph.limitedBFS(p[p.length-1],relationship?.cardinality || 1, relationship.predicate)
+            const targets = this.nodeGraph?.limitedBFS(p[p.length-1],relationship?.cardinality || 1, relationship.predicate)
             // if a predicate is specified, filter out nodes which do not satisfy it
-            for (const n of targets) {
-                if (!nodePredicate || this.evaluatePredicate(n, this.nodeGraph.nodesMap[n].data, nodePredicate)) {
+            for (const n of targets || []) {
+                if (!nodePredicate || (this.nodeGraph?.nodesMap[n].data && this.evaluatePredicate(n, this.nodeGraph.nodesMap[n].data, nodePredicate))) {
                     newPaths.add(p.concat(n))
                 }
             }
@@ -166,9 +171,9 @@ export class QueryResolver {
      * @param data
      * @param expression
      */
-    filterNodes(data: ServiceTemplate, expression: NodeExpression) {
+    private filterNodes(data: ServiceTemplate, expression: NodeExpression) {
         let result: string[] = []
-        const nodes = data.topology_template.node_templates
+        const nodes = data.topology_template?.node_templates || {}
         if (expression.predicate) {
             for (const [key, value] of Object.entries(nodes)) {
                 if (this.evaluatePredicate(key, value, expression.predicate)) {
@@ -181,10 +186,10 @@ export class QueryResolver {
         return result
     }
 
-    evaluatePredicate(key: string, data: Object, predicate: PredicateExpression) {
+    private evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): Object {
         const {a, operator, b} = predicate
         if (operator == null) {
-            return this.evaluateCondition(key, data, a as ConditionExpression)
+            return Resolver.evaluateCondition(key, data, a as ConditionExpression)
         } else if (operator == 'AND') {
             return this.evaluatePredicate(key, data, a as PredicateExpression)
             && this.evaluatePredicate(key, data, b as PredicateExpression)
@@ -192,36 +197,38 @@ export class QueryResolver {
             return this.evaluatePredicate(key, data, a as PredicateExpression)
                 || this.evaluatePredicate(key, data, b as PredicateExpression)
         }
-        return null
+        return {}
     }
 
-    evaluateCondition(key: string, data: Object, condition: ConditionExpression) {
+    private static evaluateCondition(key: string, data: Object, condition: ConditionExpression): Object {
         if (condition.type == 'Existence') {
-            return (Object.getOwnPropertyDescriptor(data, condition.variable)) ? data : null
+            return (Object.getOwnPropertyDescriptor(data, condition.variable)) ? data : {}
         }
         if (condition.variable == 'name') {
-            return (condition.value == key)? data : null
+            return (condition.value == key)? data : {}
         }
         const {variable, value, operator} = condition
-        const property = this.resolvePath(variable, data)
-        switch (operator) {
-            case '=':
-                return ((property == value)? data : null)
-            case '!=':
-                return ((property !== value)? data : null)
-            case '>=':
-                return ((property >= value)? data : null)
-            case '>':
-                return ((property > value)? data : null)
-            case '<=':
-                return ((property <= value)? data : null)
-            case '<':
-                return ((property < value)? data : null)
+        const property = Resolver.resolvePath(variable, data)
+        if (value) {
+            switch (operator) {
+               case '=':
+                   return ((property == value)? data : {})
+               case '!=':
+                   return ((property !== value)? data : {})
+              case '>=':
+                   return ((property >= value)? data : {})
+              case '>':
+                  return ((property > value)? data : {})
+               case '<=':
+                  return ((property <= value)? data : {})
+              case '<':
+                   return ((property < value)? data : {})
+            }
         }
-        return null
+        return {}
     }
 
-    evaluateWildcard(data: Object, condition?: PredicateExpression) {
+    private evaluateWildcard(data: Object, condition?: PredicateExpression) {
         const result = []
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
@@ -237,7 +244,7 @@ export class QueryResolver {
         return result
     }
 
-    evaluateStep(data: Object, step: StepExpression) {
+    private evaluateStep(data: any, step: StepExpression): Object {
         if (Array.isArray(data)) {
             let result = []
             if (step.path == 'name') {
@@ -257,7 +264,7 @@ export class QueryResolver {
                 return this.currentKeys[0]
             }
             this.currentKeys = [step.path]
-            return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : null
+            return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : {}
         }
     }
 
@@ -267,12 +274,12 @@ export class QueryResolver {
      * @param name The name of the group
      */
 
-    evaluateGroup(data: Object, name: string) {
+    private evaluateGroup(data: any, name: string): any {
         const groupNodes = data['topology_template']['groups']?.[name]?.['members']
         if (groupNodes == undefined) {
             throw new Error(`Could not find group ${name}`)
         }
-        const result = {}
+        const result: any = {}
         this.currentKeys = groupNodes
         for (const i of groupNodes) {
             result[i] = data['topology_template']['node_templates'][i]
@@ -286,12 +293,12 @@ export class QueryResolver {
      * @param name The name of the policy
      */
 
-    evaluatePolicy(data: Object, name: string) {
+    private evaluatePolicy(data: any, name: string): any {
         const policyNodes = data['topology_template']['policies']?.[0]?.[name]?.['targets']
         if (policyNodes == undefined) {
             throw new Error(`Could not find policy ${name}`)
         }
-        const result = {}
+        const result: any = {}
         this.currentKeys = policyNodes
         for (const i of policyNodes) {
             result[i] = data['topology_template']['node_templates'][i]
@@ -299,17 +306,17 @@ export class QueryResolver {
         return result;
     }
 
-    getNodesByName(data: ServiceTemplate, names: string[]) {
-        const result = {}
+    private static getNodesByName(data: ServiceTemplate, names: string[]) {
+        const result: any = {}
         for (const node of names){
-            result[node] = data.topology_template.node_templates[node]
+            result[node] = data.topology_template?.node_templates?.[node] || undefined
         }
         return result
     }
 
-    resolvePath(path, obj) {
+    private static resolvePath(path: string, obj: any): any {
         return path.split('.').reduce(function(prev, curr) {
             return prev ? prev[curr] : null
-        }, obj || self)
+        }, obj)
     }
 }

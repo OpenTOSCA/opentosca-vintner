@@ -12,12 +12,12 @@ type Relationship = {
     to: string
 }
 
-export class NodeGraph {
+export class Graph {
     nodesMap: {[name: string]: Node} = {}
 
     constructor(serviceTemplate: ServiceTemplate) {
-        for (const [nodeName, nodeTemplate] of Object.entries(serviceTemplate.topology_template?.node_templates)) {
-            this.nodesMap[nodeName] = {data: nodeTemplate, relationships: NodeGraph.getRelationships(nodeTemplate)}
+        for (const [nodeName, nodeTemplate] of Object.entries(serviceTemplate.topology_template?.node_templates || {})) {
+            this.nodesMap[nodeName] = {data: nodeTemplate, relationships: Graph.getRelationships(nodeTemplate)}
         }
     }
 
@@ -31,7 +31,7 @@ export class NodeGraph {
         return relationships;
     }
 
-    getAllTargets(nodeNames: string[]) {
+    private getAllTargets(nodeNames: string[]) {
         const targets = new Set<string>()
         for (const name of nodeNames) {
             for (const r of this.nodesMap[name].relationships) {
@@ -41,7 +41,7 @@ export class NodeGraph {
         return [...targets]
     }
 
-    getNodesByName(nodeNames: string[]) {
+    private getNodesByName(nodeNames: string[]) {
         const result: {[name: string]: Node} = {}
         for (const name of nodeNames) {
             result[name] = this.nodesMap[name]
@@ -49,7 +49,7 @@ export class NodeGraph {
         return result
     }
 
-    getNext(nodeName: string, predicate: PredicateExpression): string[] {
+    private getNext(nodeName: string, predicate: PredicateExpression | undefined): string[] {
         const targets = new Set<string>()
         for (const r of this.nodesMap[nodeName]?.relationships || []) {
             targets.add(r.to)
@@ -57,10 +57,10 @@ export class NodeGraph {
         return [...targets]
     }
 
-    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression) {
+    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression | undefined) {
         let level = 0
         const visited: Set<string> = new Set<string>()
-        const nodes: Queue<string> = new Queue<string>()
+        const nodes: Queue<any> = new Queue<string>()
         nodes.add(nodeName)
         nodes.add(null)
         while (!nodes.isEmpty() && level < limit){
@@ -87,7 +87,7 @@ class Queue<T> {
     add(item: T) {
         this.items.push(item);
     }
-    pop(): T {
+    pop(): T | undefined {
         return this.items.shift();
     }
     peek(): T {

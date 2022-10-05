@@ -7,7 +7,6 @@ import os from 'os'
 import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
-import config from '../cli/config';
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -126,7 +125,8 @@ export function temporaryFile(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
 }
 
-export function getWineryRepo() {
-    const wineryConfig = path.resolve(path.join(os.homedir(), '.winery', 'winery.yml'))
-    return yaml.load(fs.readFileSync(path.resolve(wineryConfig), 'utf-8'))?.['repository']?.['repositoryRoot']
+export function getWineryRepo(): any {
+    const wineryConfigPath = path.resolve(path.join(os.homedir(), '.winery', 'winery.yml'))
+    const wineryConfig = yaml.load(fs.readFileSync(path.resolve(wineryConfigPath), 'utf-8')) as {repository: {repositoryRoot: string}}
+    return wineryConfig? wineryConfig.repository.repositoryRoot : ''
 }

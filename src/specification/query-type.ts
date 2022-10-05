@@ -20,7 +20,7 @@ export type MatchExpression = {
 
 export type NodeExpression = {
     type: 'Node'
-    name?: string
+    name: string | undefined
     predicate?: PredicateExpression
 }
 

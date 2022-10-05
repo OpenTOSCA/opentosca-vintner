@@ -1,4 +1,4 @@
-import ohm from 'ohm-js';
+import ohm, {ActionDict} from 'ohm-js';
 import * as fs from 'fs';
 import {
     ConditionExpression,
@@ -18,7 +18,7 @@ export class Parser {
     semantics: ohm.Semantics
 
     /** Set of actions to pass to the Ohm library to build the syntax tree of the query */
-    actions = {
+    actions: ActionDict<any> = {
         Main(a, _) {
             return a.buildAST()
         },
@@ -118,7 +118,7 @@ export class Parser {
             return s.sourceString
         },
         float(a, b, c) {
-            return parseFloat(a + b + c)
+            return parseFloat(a.sourceString + b.sourceString + c.sourceString)
         },
         path(a, b) {
             return [a, b].map((v) => v.sourceString).join('')
@@ -136,7 +136,7 @@ export class Parser {
 
     /** Loads the Ohm grammar from a file, initializes the grammar and the semantic actions */
     constructor() {
-        const grammarFile = fs.readFileSync('src/query/queryGrammar.ohm', 'utf-8')
+        const grammarFile = fs.readFileSync('src/query/grammar.ohm', 'utf-8')
         this.grammar = ohm.grammar(grammarFile)
         this.semantics = this.grammar.createSemantics()
         this.semantics.addOperation('buildAST', this.actions)
