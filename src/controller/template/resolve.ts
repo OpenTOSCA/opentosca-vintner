@@ -109,18 +109,18 @@ export class VariabilityResolver {
     private options: ResolvingOptions = {}
 
     private nodes: Node[] = []
-    private nodesMap: {[name: string]: Node} = {}
+    private nodesMap = new Map<string, Node>()
 
     private relations: Relation[] = []
-    private relationships: {[name: string]: Relation[]} = {}
+    private relationshipsMap = new Map<string, Relation[]>()
 
     private policies: Policy[] = []
 
     private groups: Group[] = []
-    private groupsMap: {[name: string]: Group} = {}
+    private groupsMap = new Map<string, Group>()
 
     private inputs: Input[] = []
-    private inputsMap: {[name: string]: Input} = {}
+    private inputsMap = new Map<string, Input>()
 
     constructor(serviceTemplate: ServiceTemplate) {
         this._serviceTemplate = serviceTemplate
@@ -133,12 +133,12 @@ export class VariabilityResolver {
                 conditions: utils.toList(definition.conditions),
             }
             this.inputs.push(input)
-            this.inputsMap[name] = input
+            this.inputsMap.set(name, input)
         })
 
         // Relationship templates
-        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(
-            name => (this.relationships[name] = [])
+        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(name =>
+            this.relationshipsMap.set(name, [])
         )
 
         // Node templates
@@ -152,7 +152,7 @@ export class VariabilityResolver {
                 groups: [],
             }
             this.nodes.push(node)
-            this.nodesMap[nodeName] = node
+            this.nodesMap.set(nodeName, node)
 
             nodeTemplate.requirements?.forEach(map => {
                 const relationName = utils.firstKey(map)
@@ -173,7 +173,7 @@ export class VariabilityResolver {
 
                 if (!validator.isString(assignment)) {
                     if (validator.isString(assignment.relationship)) {
-                        const relationship = this.relationships[assignment.relationship]
+                        const relationship = this.relationshipsMap.get(assignment.relationship)
                         validator.ensureDefined(
                             relationship,
                             `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
@@ -186,14 +186,14 @@ export class VariabilityResolver {
 
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
-            const node = this.nodesMap[relation.target]
+            const node = this.nodesMap.get(relation.target)
             validator.ensureDefined(node, `Target "${relation.target}" of "${relation.name}" does not exist`)
             node.ingoing.push(relation)
         })
 
         // Ensure that each relationship is at least used in one relation
-        for (const relationship of Object.entries(this.relationships)) {
-            if (relationship[1]?.length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
+        for (const relationship of this.relationshipsMap) {
+            if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
         }
 
         // Policies
@@ -220,22 +220,11 @@ export class VariabilityResolver {
                 ].includes(template.type),
             }
             this.groups.push(group)
-            this.groupsMap[name] = group
+            this.groupsMap.set(name, group)
 
             template.members.forEach(member => {
-                if (validator.isString(member)) {
-                    this.nodesMap[member]?.groups.push(group)
-                } else {
-                    if (validator.isString(member[1])) {
-                        this.nodesMap[member[0]]?.outgoing.forEach(relation => {
-                            if (relation.name === member[1]) relation.groups.push(group)
-                        })
-                    }
-
-                    if (validator.isNumber(member[1])) {
-                        this.nodesMap[member[0]]?.outgoing[member[1]]?.groups.push(group)
-                    }
-                }
+                const element = this.getElement(member)
+                element.groups.push(group)
             })
         })
     }
@@ -247,7 +236,7 @@ export class VariabilityResolver {
     }
 
     getNode(member: string) {
-        const node = this.nodesMap[member]
+        const node = this.nodesMap.get(member)
         validator.ensureDefined(node, `Node "${prettyJSON(member)}" not found`)
         return node
     }
@@ -326,7 +315,7 @@ export class VariabilityResolver {
         // Ensure that each relation source exists
         if (!this.options.disableRelationSourceConsistencyCheck) {
             for (const relation of relations) {
-                if (!this.nodesMap[relation.source]?.present)
+                if (!this.nodesMap.get(relation.source)?.present)
                     throw new Error(
                         `Relation source "${relation.source}" of relation "${relation.name}" does not exist`
                     )
@@ -336,7 +325,7 @@ export class VariabilityResolver {
         // Ensure that each relation target exists
         if (!this.options.disableRelationTargetConsistencyCheck) {
             for (const relation of relations) {
-                if (!this.nodesMap[relation.target]?.present)
+                if (!this.nodesMap.get(relation.target)?.present)
                     throw new Error(
                         `Relation target "${relation.target}" of relation "${relation.name}" does not exist`
                     )
@@ -377,7 +366,7 @@ export class VariabilityResolver {
         // Delete node templates which are not present
         Object.entries(this._serviceTemplate.topology_template?.node_templates || {}).forEach(
             ([nodeName, nodeTemplate]) => {
-                const node = this.nodesMap[nodeName]
+                const node = this.getNode(nodeName)
                 if (node.present) {
                     delete this._serviceTemplate.topology_template!.node_templates![nodeName].conditions
                 } else {
@@ -395,7 +384,10 @@ export class VariabilityResolver {
 
         // Delete all relationship templates which have no present relations
         Object.keys(this._serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
-            if (this.relationships[name].every(relation => !relation.present))
+            const relationship = this.relationshipsMap.get(name)
+            validator.ensureDefined(relationship, `Relationship "${name}" not found`)
+
+            if (relationship.every(relation => !relation.present))
                 delete this._serviceTemplate.topology_template!.relationship_templates![name]
         })
 
@@ -437,10 +429,10 @@ export class VariabilityResolver {
                     if (policy.present) {
                         delete template.conditions
                         template.targets = template.targets?.filter(target => {
-                            const node = this.nodesMap[target]
+                            const node = this.nodesMap.get(target)
                             if (validator.isDefined(node)) return node.present
 
-                            const group = this.groupsMap[target]
+                            const group = this.groupsMap.get(target)
                             if (validator.isDefined(group)) return group.present
 
                             throw new Error(
