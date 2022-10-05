@@ -86,25 +86,26 @@ export default async function (options: BenchmarkArguments) {
 export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate {
     const serviceTemplate: ServiceTemplate = {
         tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-    }
-    serviceTemplate.topology_template = {}
-    serviceTemplate.topology_template.variability = {
-        inputs: {
-            mode: {
-                type: 'string',
+        topology_template: {
+            variability: {
+                inputs: {
+                    mode: {
+                        type: 'string',
+                    },
+                },
+                expressions: {},
             },
+            node_templates: {},
+            relationship_templates: {},
         },
     }
-    serviceTemplate.topology_template.variability.expressions = {}
-    serviceTemplate.topology_template.node_templates = {}
-    serviceTemplate.topology_template.relationship_templates = {}
 
     for (let i = 0; i < seed; i++) {
-        serviceTemplate.topology_template.variability!!.expressions!![`condition_${i}_present`] = {
+        serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_present`] = {
             equal: [{get_variability_input: 'mode'}, 'present'],
         }
 
-        serviceTemplate.topology_template.node_templates[`component_${i}_present`] = {
+        serviceTemplate.topology_template!.node_templates![`component_${i}_present`] = {
             type: `component_type_${i}_present`,
             conditions: {get_variability_condition: `condition_${i}_present`},
             requirements: [
@@ -125,19 +126,19 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
             ],
         }
 
-        serviceTemplate.topology_template.relationship_templates[`relationship_${i}_present`] = {
+        serviceTemplate.topology_template!.relationship_templates![`relationship_${i}_present`] = {
             type: `relationship_type_${i}_present`,
         }
 
-        serviceTemplate.topology_template.relationship_templates[`relationship_${i}_removed`] = {
+        serviceTemplate.topology_template!.relationship_templates![`relationship_${i}_removed`] = {
             type: `relationship_type_${i}_removed`,
         }
 
-        serviceTemplate.topology_template.variability.expressions[`condition_${i}_removed`] = {
+        serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_removed`] = {
             equal: [{get_variability_input: 'mode'}, `absent`],
         }
 
-        serviceTemplate.topology_template.node_templates[`component_${i}_removed`] = {
+        serviceTemplate.topology_template!.node_templates![`component_${i}_removed`] = {
             type: `component_type_${i}_removed`,
             conditions: {get_variability_condition: `condition_${i}_removed`},
         }

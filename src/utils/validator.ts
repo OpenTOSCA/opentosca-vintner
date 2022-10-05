@@ -10,6 +10,10 @@ export function isString(element: unknown): element is string {
     return typeof element === 'string'
 }
 
+export function ensureDefined<T>(element: T | undefined | null, msg: string): asserts element is T {
+    if (isUndefined(element)) throw new Error(msg)
+}
+
 export function ensureString(element: unknown): asserts element is string {
     if (!isString(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a string`)
 }

@@ -38,21 +38,19 @@ export class Orchestrators {
 
         switch (config.enabled) {
             case 'opera':
-                if (validator.isUndefined(config.opera)) throw new Error('Opera is enabled but no config was found')
+                validator.ensureDefined(config.opera, 'Opera is enabled but no config was found')
                 return new Opera({...config.opera, wsl: false})
 
             case 'opera-wsl':
-                if (validator.isUndefined(config.operaWSL))
-                    throw new Error('OperaWSL is enabled but no config was found')
+                validator.ensureDefined(config.operaWSL, 'OperaWSL is enabled but no config was found')
                 return new Opera({...config.operaWSL, wsl: true})
 
             case 'unfurl':
-                if (validator.isUndefined(config.unfurl)) throw new Error('Unfurl is enabled but no config was found')
+                validator.ensureDefined(config.unfurl, 'Unfurl is enabled but no config was found')
                 return new Unfurl({...config.unfurl, wsl: false})
 
             case 'unfurl-wsl':
-                if (validator.isUndefined(config.unfurlWSL))
-                    throw new Error('UnfurlWSL is enabled but no config was found')
+                validator.ensureDefined(config.unfurlWSL, 'UnfurlWSL is enabled but no config was found')
                 return new Unfurl({...config.unfurlWSL, wsl: true})
 
             case undefined:

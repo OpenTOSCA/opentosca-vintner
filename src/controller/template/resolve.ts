@@ -174,11 +174,10 @@ export class VariabilityResolver {
                 if (!validator.isString(assignment)) {
                     if (validator.isString(assignment.relationship)) {
                         const relationship = this.relationships[assignment.relationship]
-                        if (validator.isUndefined(relationship))
-                            throw new Error(
-                                `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
-                            )
-
+                        validator.ensureDefined(
+                            relationship,
+                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
+                        )
                         relationship.push(relation)
                     }
                 }
@@ -188,9 +187,7 @@ export class VariabilityResolver {
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
             const node = this.nodesMap[relation.target]
-            if (validator.isUndefined(node))
-                throw new Error(`Target "${relation.target}" of "${relation.name}" does not exist`)
-
+            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.name}" does not exist`)
             node.ingoing.push(relation)
         })
 
@@ -200,7 +197,7 @@ export class VariabilityResolver {
         }
 
         // Policies
-        serviceTemplate.topology_template?.policies?.forEach((map, index) => {
+        serviceTemplate.topology_template?.policies?.forEach(map => {
             const name = utils.firstKey(map)
             const template = map[name]
             const policy: Policy = {
@@ -243,21 +240,30 @@ export class VariabilityResolver {
         })
     }
 
-    getElement(member: GroupMember) {
-        let element
+    getElement(member: GroupMember): Node | Relation {
+        if (validator.isString(member)) return this.getNode(member)
+        if (validator.isArray(member)) return this.getRelation(member)
+        throw new Error(`Member "${prettyJSON(member)}" has bad format`)
+    }
 
-        // Element is node name
-        if (validator.isString(member)) element = this.nodesMap[member]
+    getNode(member: string) {
+        const node = this.nodesMap[member]
+        validator.ensureDefined(node, `Node "${prettyJSON(member)}" not found`)
+        return node
+    }
 
-        // Element is [node name, relation index]
-        if (validator.isNumber(member[1])) element = this.nodesMap[member[0]].outgoing[member[1]]
+    getRelation(member: [string, string] | [string, number]) {
+        let relation
+        const node = this.getNode(member[0])
 
         // Element is [node name, relation name]
-        if (validator.isString(member[1]))
-            element = this.nodesMap[member[0]].outgoing.find(relation => relation.name === member[1])
+        if (validator.isString(member[1])) relation = node.outgoing.find(relation => relation.name === member[1])
 
-        if (validator.isUndefined(element)) throw new Error(`Member "${prettyJSON(member)}" has bad format`)
-        return element
+        // Element is [node name, relation index]
+        if (validator.isNumber(member[1])) relation = node.outgoing[member[1]]
+
+        validator.ensureDefined(relation, `Relation "${prettyJSON(member)}" not found`)
+        return relation
     }
 
     resolve() {
@@ -373,9 +379,9 @@ export class VariabilityResolver {
             ([nodeName, nodeTemplate]) => {
                 const node = this.nodesMap[nodeName]
                 if (node.present) {
-                    delete this._serviceTemplate.topology_template!!.node_templates!![nodeName].conditions
+                    delete this._serviceTemplate.topology_template!.node_templates![nodeName].conditions
                 } else {
-                    delete this._serviceTemplate.topology_template!!.node_templates!![nodeName]
+                    delete this._serviceTemplate.topology_template!.node_templates![nodeName]
                 }
 
                 // Delete requirement assignment which are not present
@@ -390,38 +396,37 @@ export class VariabilityResolver {
         // Delete all relationship templates which have no present relations
         Object.keys(this._serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
             if (this.relationships[name].every(relation => !relation.present))
-                delete this._serviceTemplate.topology_template!!.relationship_templates!![name]
+                delete this._serviceTemplate.topology_template!.relationship_templates![name]
         })
 
         // Delete all groups which are not present
         this.groups.forEach(group => {
             if (group.present) {
-                const template = this._serviceTemplate.topology_template!!.groups!![group.name]
+                const template = this._serviceTemplate.topology_template!.groups![group.name]
                 template.members = template.members.filter(member => {
                     const element = this.getElement(member)
-                    if (validator.isUndefined(element))
-                        throw new Error(`Group member "${member}" of group "${group.name}" does not exist`)
+                    validator.ensureDefined(element, `Group member "${member}" of group "${group.name}" does not exist`)
                     return element.present
                 })
-                delete this._serviceTemplate.topology_template!!.groups!![group.name].conditions
+                delete this._serviceTemplate.topology_template!.groups![group.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template!!.groups!![group.name]
+                delete this._serviceTemplate.topology_template!.groups![group.name]
             }
         })
 
         // Delete all topology template inputs which are not present
         this.inputs.forEach(input => {
             if (input.present) {
-                delete this._serviceTemplate.topology_template!!.inputs!![input.name].conditions
+                delete this._serviceTemplate.topology_template!.inputs![input.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template!!.inputs!![input.name]
+                delete this._serviceTemplate.topology_template!.inputs![input.name]
             }
         })
 
         // Delete all policy templates which are not present
-        if (!validator.isUndefined(this._serviceTemplate?.topology_template?.policies)) {
-            this._serviceTemplate.topology_template!!.policies =
-                this._serviceTemplate.topology_template!!.policies.filter((map, index) => {
+        if (validator.isDefined(this._serviceTemplate?.topology_template?.policies)) {
+            this._serviceTemplate.topology_template!.policies =
+                this._serviceTemplate.topology_template!.policies.filter((map, index) => {
                     const name = utils.firstKey(map)
                     const policy = this.policies[index]
                     const template = map[name]
@@ -433,10 +438,10 @@ export class VariabilityResolver {
                         delete template.conditions
                         template.targets = template.targets?.filter(target => {
                             const node = this.nodesMap[target]
-                            if (!validator.isUndefined(node)) return node.present
+                            if (validator.isDefined(node)) return node.present
 
                             const group = this.groupsMap[target]
-                            if (!validator.isUndefined(group)) return group.present
+                            if (validator.isDefined(group)) return group.present
 
                             throw new Error(
                                 `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
@@ -478,21 +483,21 @@ export class VariabilityResolver {
 
     getVariabilityInput(name: string) {
         const input = this._variabilityInputs?.[name]
-        if (validator.isUndefined(input)) throw new Error(`Did not find variability input "${name}"`)
+        validator.ensureDefined(input, `Did not find variability input "${name}"`)
         return input
     }
 
     getVariabilityPreset(name: string) {
         const set: InputAssignmentPreset | undefined = (this._serviceTemplate.topology_template?.variability?.presets ||
             {})[name]
-        if (validator.isUndefined(set)) throw new Error(`Did not find variability set "${name}"`)
+        validator.ensureDefined(set, `Did not find variability set "${name}"`)
         return set
     }
 
     getVariabilityExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this._serviceTemplate.topology_template?.variability
             ?.expressions || {})[name]
-        if (validator.isUndefined(condition)) throw new Error(`Did not find variability expression "${name}"`)
+        validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
         return condition
     }
 
@@ -520,7 +525,8 @@ export class VariabilityResolver {
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
     ): boolean | string | number {
-        if (validator.isUndefined(condition)) throw new Error(`Received condition that is undefined or null`)
+        validator.ensureDefined(condition, `Received condition that is undefined or null`)
+
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
         if (validator.isNumber(condition)) return condition
