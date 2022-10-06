@@ -36,7 +36,7 @@ export function getDefaultTest({
             expect(fn).to.throw(error)
         } else {
             await fn()
-            const result = files.loadFile<ServiceTemplate>(output)
+            const result = files.loadYAML<ServiceTemplate>(output)
             const expected = readDefaultExpect(dir)
             expect(result).to.deep.equal(expected)
         }
@@ -56,7 +56,7 @@ export function getDefaultInputs(dir: string) {
 }
 
 export function readDefaultExpect(dir: string) {
-    return files.loadFile<ServiceTemplate>(path.join(dir, 'expected-service-template.yaml'))
+    return files.loadYAML<ServiceTemplate>(path.join(dir, 'expected-service-template.yaml'))
 }
 
 export function getDefaultVariabilityResolver() {

@@ -1,5 +1,5 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
-import {countLines, getSize, loadFile, storeFile, temporaryFile} from '../../utils/files'
+import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '../../utils/files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
 import {VariabilityResolver} from '../template/resolve'
 
@@ -43,15 +43,15 @@ export default async function (options: BenchmarkArguments) {
 
                 const start = process.hrtime()
 
-                if (io) storeFile(input, serviceTemplate)
+                if (io) storeYAML(input, serviceTemplate)
 
-                const result = new VariabilityResolver(io ? loadFile<ServiceTemplate>(input) : serviceTemplate)
+                const result = new VariabilityResolver(io ? loadYAML<ServiceTemplate>(input) : serviceTemplate)
                     .setVariabilityInputs({mode: 'present'})
                     .resolve()
                     .checkConsistency()
                     .transformInPlace()
 
-                if (io) storeFile(output, result)
+                if (io) storeYAML(output, result)
 
                 const end = process.hrtime(start)
                 const duration = hrtime2ms(end)

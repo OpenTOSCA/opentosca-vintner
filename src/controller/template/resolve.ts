@@ -41,10 +41,10 @@ export default function (options: TemplateResolveArguments) {
     if (!output) throw new Error('Either instance or output must be set')
 
     // Load service template
-    const serviceTemplate = files.loadFile<ServiceTemplate>(template)
+    const serviceTemplate = files.loadYAML<ServiceTemplate>(template)
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
+        .setVariabilityInputs(options.inputs ? files.loadYAML<InputAssignmentMap>(options.inputs) : {})
         .setOptions(options)
 
     // Ensure correct TOSCA definitions version
@@ -59,7 +59,7 @@ export default function (options: TemplateResolveArguments) {
     // Transform to TOSCA compliant format
     resolver.transformInPlace()
 
-    files.storeFile(output, serviceTemplate)
+    files.storeYAML(output, serviceTemplate)
 }
 
 type ConditionalElementBase = {

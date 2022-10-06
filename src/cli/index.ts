@@ -194,7 +194,7 @@ templates
     .action(
         hae(async options => {
             const template = await Controller.templates.inspect(options)
-            console.log(files.stringify(template))
+            console.log(files.toYAML(template))
         })
     )
 
@@ -281,7 +281,7 @@ instances
     .action(
         hae(async options => {
             const template = await Controller.instances.inspect(options)
-            console.log(files.stringify(template))
+            console.log(files.toYAML(template))
         })
     )
 

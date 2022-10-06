@@ -12,7 +12,7 @@ it('benchmark: run', () => {
 it('generateBenchmarkServiceTemplate', () => {
     const result = generateBenchmarkServiceTemplate(2)
     expect(result).to.deep.equal(
-        files.loadFile<ServiceTemplate>(path.join(__dirname, 'benchmark', 'variable-service-template.yaml'))
+        files.loadYAML<ServiceTemplate>(path.join(__dirname, 'benchmark', 'variable-service-template.yaml'))
     )
 })
 

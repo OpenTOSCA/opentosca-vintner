@@ -67,6 +67,7 @@ nav:
     - Variability4TOSCA:
           - Motivation: variability4tosca/motivation.md
           - Specification: variability4tosca/specification.md
+          - variability4tosca/feature-modeling.md
     - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md
