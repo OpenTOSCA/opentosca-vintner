@@ -10,7 +10,6 @@ import {Graph} from './graph';
 import {QueryTemplateArguments} from '../controller/query/query';
 import * as files from '../utils/files'
 import path from 'path';
-import exp from 'constants';
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -66,10 +65,13 @@ export class Resolver {
     private evaluateFrom(expression: FromExpression) {
         const serviceTemplates = []
         try {
-            switch (this.source){
+            switch(this.source) {
                 case 'vintner':
                     if (expression.type == 'Instance') {
-                        serviceTemplates.push({name: expression.instance, template: new Instance(expression.instance || '').getServiceTemplate()})
+                        serviceTemplates.push({
+                            name: expression.instance,
+                            template: new Instance(expression.instance || '').getTemplateWithAttributes()
+                        })
                     } else if (expression.type == 'Template' && expression.template == '*') {
                         for (const t of Templates.all()) {
                             serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
@@ -86,8 +88,11 @@ export class Resolver {
                     })
                 }
             }
-        } catch (error) {
+        } catch (e: unknown) {
             console.error(`Could not locate service template ${expression.template} from source ${this.source}`)
+            if (e instanceof Error) {
+                console.error(e.message)
+            }
         }
         return serviceTemplates
     }
@@ -210,7 +215,7 @@ export class Resolver {
         const {variable, value, operator} = condition
         const property = Resolver.resolvePath(variable, data)
         if (value) {
-            switch (operator) {
+            switch(operator) {
                case '=':
                    return ((property == value)? data : {})
                case '!=':
@@ -229,15 +234,15 @@ export class Resolver {
     }
 
     private evaluateWildcard(data: Object, condition?: PredicateExpression) {
-        const result = []
+        const result: any = {}
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
             if (condition) {
                 if (this.evaluatePredicate(key, value, condition))
-                    result.push(value)
+                    result[key] = value
                     this.currentKeys.push(key)
             } else {
-                result.push(value)
+                result[key] = value
                 this.currentKeys.push(key)
             }
         }

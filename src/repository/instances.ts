@@ -3,6 +3,8 @@ import config from '../cli/config'
 import * as files from '../utils/files'
 import {ServiceTemplate} from '../specification/service-template'
 import {Template} from './templates'
+import {Opera} from '../orchestrators/opera';
+import {Orchestrators} from './orchestrators';
 
 export class Instances {
     static all() {
@@ -60,6 +62,28 @@ export class Instance {
 
     getDataDirectory() {
         return path.join(this.getInstanceDirectory(), 'data')
+    }
+
+    /**
+     * Merges the attributes of this instance into its service template and returns the result
+     */
+    getTemplateWithAttributes(): ServiceTemplate {
+        let instanceData: Object = {}
+        const template = this.getServiceTemplate()
+        switch(Orchestrators.getConfig().enabled) {
+            case 'opera':
+            case 'opera-wsl':
+                instanceData = Opera.getAttributes(this)
+                break
+            default:
+                throw new Error('Error: Querying instance data is only supported when using Opera at the moment. ')
+        }
+        for (const [key, value] of Object.entries(instanceData)) {
+            if (template.topology_template?.node_templates?.[key]) {
+                template.topology_template.node_templates[key].attributes = value
+            }
+        }
+        return template
     }
 
     hasServiceInput() {

@@ -2,6 +2,7 @@ import {Instance} from '../repository/instances'
 import {Orchestrator} from '../repository/orchestrators'
 import {joinNotNull} from '../utils/utils'
 import {Shell} from '../utils/shell'
+import * as files from '../utils/files'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -65,5 +66,25 @@ export class Opera implements Orchestrator {
             '--resume',
             '--force',
         ])
+    }
+
+    /**
+     * Returns attribute names and data for each node template
+     * @param instance
+     */
+    static getAttributes(instance: Instance) {
+        const attributes: {[node: string]: {[name: string]: string}} = {}
+        for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
+            const attributesPath = instance.getDataDirectory().concat('/instances/' + node + '_0')
+            if (files.isFile(attributesPath)) {
+                const entries: { [s: string]: { is_set: string, data: string } } =
+                    files.loadFile(attributesPath)
+                attributes[node] = {}
+                for (const [key, value] of Object.entries(entries)) {
+                    attributes[node][key] = value.data
+                }
+            }
+        }
+        return attributes
     }
 }
