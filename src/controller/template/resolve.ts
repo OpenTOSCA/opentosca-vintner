@@ -28,7 +28,7 @@ export type ResolvingOptions = {
     disableExpectedHostingConsistencyCheck?: boolean
 }
 
-export default function (options: TemplateResolveArguments) {
+export default async function (options: TemplateResolveArguments) {
     let instance: Instance | undefined
     if (options.instance) instance = new Instance(options.instance)
 
@@ -44,7 +44,13 @@ export default function (options: TemplateResolveArguments) {
     const serviceTemplate = files.loadYAML<ServiceTemplate>(template)
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(options.inputs ? files.loadYAML<InputAssignmentMap>(options.inputs) : {})
+        .setVariabilityInputs(
+            options.inputs
+                ? options.inputs.endsWith('.xml')
+                    ? await files.loadFeatureIDEConfiguration(options.inputs)
+                    : files.loadYAML<InputAssignmentMap>(options.inputs)
+                : {}
+        )
         .setOptions(options)
 
     // Ensure correct TOSCA definitions version

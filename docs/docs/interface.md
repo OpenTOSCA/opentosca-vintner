@@ -306,7 +306,7 @@ resolves variability
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
 | preset |  false  | string | name of the variability preset set |
-| inputs |  false  | string | path to the variability inputs |
+| inputs |  false  | string | path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
@@ -586,7 +586,7 @@ resolves variability
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | preset |  false  | string | name of the variability preset |
-| inputs |  false  | string | path to the variability inputs |
+| inputs |  false  | string | path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML]) |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
 | prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |

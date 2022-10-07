@@ -1,26 +1,20 @@
 import * as files from '../../src/utils/files'
 import path from 'path'
-import * as util from 'util'
+import {expect} from 'chai'
 
 it('feature-ide', async () => {
-    type FeatureIDESelection = {
-        automatic?: 'undefined' | 'selected'
-        manual?: 'undefined' | 'selected'
-        name: string
-    }
-
-    type FeatureIDEConfiguration = {
-        extendedConfiguration: {
-            feature: {
-                $: FeatureIDESelection
-            }[]
-        }
-    }
-
-    const data = await files.loadXML<FeatureIDEConfiguration>(path.join(__dirname, './configuration.xml'))
-    console.log(util.inspect(data, false, null))
-
-    const inputs: {[key: string]: boolean} = {}
-    data.extendedConfiguration.feature.forEach(f => (inputs[f.$.name] = true))
-    console.log(inputs)
+    const result = await files.loadFeatureIDEConfiguration(path.join(__dirname, './inputs.xml'))
+    expect(result).to.deep.equal({
+        model: true,
+        feature_a: true,
+        feature_a_attr_overridden: 1,
+        feature_a_attr_string: 'hello world',
+        feature_a_attr_double: 2.5,
+        feature_a_attr_bool_true: true,
+        feature_a_attr_bool_false: false,
+        feature_b: true,
+        feature_b_attr_long: 3,
+        feature_c: true,
+        feature_overridden: true,
+    })
 })

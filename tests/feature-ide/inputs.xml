@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extendedConfiguration>
+    <feature automatic="selected" manual="undefined" name="model"/>
+    <feature automatic="selected" manual="selected" name="Feature A">
+        <attribute name="attr Long" value="1"/>
+        <attribute name="__input_name_attr_long" value="attr_overridden"/>
+        <attribute name="attr_string" value="hello world"/>
+        <attribute name="attr_double" value="2.5"/>
+        <attribute name="attr_bool_true" value="true"/>
+        <attribute name="attr_bool_false" value="false"/>
+    </feature>
+    <feature automatic="undefined" manual="selected" name="Feature B">
+        <attribute name="attr_long" value="3"/>
+    </feature>
+    <feature automatic="undefined" manual="selected" name="Feature C"/>
+    <feature automatic="undefined" manual="selected" name="Feature D">
+        <attribute name="__input_name" value="feature_overridden"/>
+    </feature>
+</extendedConfiguration>
