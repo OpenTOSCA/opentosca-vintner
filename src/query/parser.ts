@@ -11,6 +11,8 @@ import {
     SelectExpression,
     StepExpression, VariableExpression
 } from '../specification/query-type';
+import {first, template} from 'lodash';
+import {NodeTemplate} from '../specification/node-template';
 
 export class Parser {
 
@@ -38,7 +40,11 @@ export class Parser {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}
         },
         Path(firstStep, __, nextSteps, returnClause): PathExpression {
-            return {type: 'Path', steps: [firstStep.buildAST()].concat(nextSteps.buildAST()), returnVal: returnClause.buildAST()[0]}
+            let steps = [firstStep.buildAST()].concat(nextSteps.buildAST())
+            if (isPathShortcut(firstStep.sourceString)) {
+                steps = [{type: 'Step', path: 'topology_template'}].concat(steps)
+            }
+            return {type: 'Path', steps: steps, returnVal: returnClause.buildAST()[0]}
         },
         Step(path): StepExpression {
             return {type: 'Step', path: path.buildAST()}
@@ -191,4 +197,8 @@ function getArrowDirection(arrow: string) {
         default:
             return 'both'
     }
+}
+
+function isPathShortcut(path: string) {
+    return ['groups', 'inputs', 'node_templates', 'outputs', 'policies', 'relationship_templates'].includes(path)
 }
