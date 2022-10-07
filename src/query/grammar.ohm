@@ -7,9 +7,11 @@ Query {
   FromTemplate = fromLiteral "template(" (asterisk | filePath) ")"
 
   Select = selectLiteral Path ("," Path)*
-  Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))*
+  Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))* ReturnClause?
   Step = asterisk | ident
   StepCond = (asterisk | ident) PredicateExpression
+  ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
+  KeyValuePair = Variable (":" Variable)?
   Group = groupLiteral "(" ident ")"
   Policy = policyLiteral "(" ident ")"
 
@@ -23,7 +25,7 @@ Query {
   Relationship = arrowLeft arrowRight --simple
                | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
   Cardinality = asterisk integer?
-
+  Variable = literal | ident
   Value = path | literal
 
   fromLiteral = "FROM"

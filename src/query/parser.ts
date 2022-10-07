@@ -7,9 +7,9 @@ import {
     MatchExpression,
     PathExpression,
     PredicateExpression,
-    RelationshipExpression,
+    RelationshipExpression, ReturnExpression,
     SelectExpression,
-    StepExpression
+    StepExpression, VariableExpression
 } from '../specification/query-type';
 
 export class Parser {
@@ -37,14 +37,20 @@ export class Parser {
         Select(_, firstPath, __, addPath): SelectExpression {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}
         },
-        Path(firstStep, __, nextSteps): PathExpression {
-            return {type: 'Path', steps: [firstStep.buildAST()].concat(nextSteps.buildAST())}
+        Path(firstStep, __, nextSteps, returnClause): PathExpression {
+            return {type: 'Path', steps: [firstStep.buildAST()].concat(nextSteps.buildAST()), returnVal: returnClause.buildAST()[0]}
         },
         Step(path): StepExpression {
             return {type: 'Step', path: path.buildAST()}
         },
         StepCond(path, condition): StepExpression {
             return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
+        },
+        ReturnClause(_, pair1, __, pair2, ___): ReturnExpression {
+            return {type: 'Return', keyValuePairs: [pair1.buildAST()].concat(pair2.buildAST())}
+        },
+        KeyValuePair(key, _, value): {key: VariableExpression, value: VariableExpression} {
+            return {key: key.buildAST(), value: value.buildAST()[0]}
         },
         Group(_, __, groupName, ___): StepExpression {
             return {type: 'Group', path: groupName.sourceString}
@@ -98,6 +104,9 @@ export class Parser {
         },
         Cardinality(asterisk, number) {
             return (number.sourceString == '')? 99 : parseInt(number.sourceString)
+        },
+        Variable(v): VariableExpression {
+            return {text: v.buildAST(), isString: (v.sourceString.startsWith('\'') || v.sourceString.startsWith('"'))}
         },
         Value(v) {
             return v.buildAST()

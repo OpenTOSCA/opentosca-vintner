@@ -1,3 +1,10 @@
+export type ConditionExpression = {
+    type: 'Comparison' | 'Existence'
+    variable: string
+    operator?: string
+    value?: string
+}
+
 export type Expression = {
     type: string
     value?: string
@@ -10,6 +17,11 @@ export type FromExpression = {
     type: 'Instance' | 'Template'
     template?: string
     instance?: string
+}
+
+export type KeyValuePair = {
+    key: VariableExpression
+    value: VariableExpression
 }
 
 export type MatchExpression = {
@@ -27,6 +39,7 @@ export type NodeExpression = {
 export type PathExpression = {
     type: 'Path'
     steps: StepExpression[]
+    returnVal?: ReturnExpression
 }
 
 export type PredicateExpression = {
@@ -44,6 +57,11 @@ export type RelationshipExpression = {
     predicate?: PredicateExpression
 }
 
+export type ReturnExpression = {
+    type: 'Return'
+    keyValuePairs: KeyValuePair[]
+}
+
 export type SelectExpression = {
     type: 'Select'
     path: PathExpression[]
@@ -55,9 +73,7 @@ export type StepExpression = {
     condition?: PredicateExpression
 }
 
-export type ConditionExpression = {
-    type: 'Comparison' | 'Existence'
-    variable: string
-    operator?: string
-    value?: string
+export type VariableExpression = {
+    isString: boolean
+    text: string
 }

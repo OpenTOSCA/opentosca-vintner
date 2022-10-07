@@ -3,7 +3,7 @@ import {Template, Templates} from '../repository/templates';
 import {Instance} from '../repository/instances';
 import {
     ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
-    RelationshipExpression, SelectExpression, StepExpression
+    RelationshipExpression, ReturnExpression, SelectExpression, StepExpression, VariableExpression
 } from '../specification/query-type';
 import {ServiceTemplate} from '../specification/service-template';
 import {Graph} from './graph';
@@ -109,12 +109,42 @@ export class Resolver {
                 } else if (i.path == "*") {
                     result = this.evaluateWildcard(result, i.condition)
                 } else {
-                    result = this.evaluateStep(result, i)
+                    result = this.evaluateStep(result, i.path)
                 }
+            }
+            if (p.returnVal) {
+                result = this.evaluateReturn(result, p.returnVal)
             }
             results.push(result)
         }
         return results
+    }
+
+    private evaluateReturn(result: Object, returnVal: ReturnExpression): any {
+        if (Array.isArray(result)) {
+            const resultArray: any[] = []
+            for (const obj of result) {
+                const entry: any = {}
+                for (const pair of returnVal.keyValuePairs) {
+                    entry[this.evaluateVariable(pair.key, obj)] = this.evaluateVariable(pair.value, obj)
+                }
+                resultArray.push(entry)
+            }
+            return resultArray
+        } else {
+            const result: any = {}
+            for (const [key, value] of Object.entries(result)) {
+                result[key] = {}
+                for (const pair of returnVal.keyValuePairs) {
+                    result[key][this.evaluateVariable(pair.key, value)] = this.evaluateVariable(pair.value, value)
+                }
+            }
+            return result
+        }
+    }
+
+    private evaluateVariable(variable: VariableExpression, result: any): any {
+        return variable.isString? variable.text : this.evaluateStep(result, variable.text)
     }
 
     private evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
@@ -249,27 +279,27 @@ export class Resolver {
         return result
     }
 
-    private evaluateStep(data: any, step: StepExpression): Object {
+    private evaluateStep(data: any, path: string): Object {
         if (Array.isArray(data)) {
             let result = []
-            if (step.path == 'name') {
+            if (path == 'name') {
                 result = this.currentKeys
             } else {
                 for (const node of data) {
                     this.currentKeys = []
-                    if (Object.getOwnPropertyDescriptor(node, step.path)) {
-                        result.push(node[step.path])
-                        this.currentKeys.push(step.path)
+                    if (Object.getOwnPropertyDescriptor(node, path)) {
+                        result.push(node[path])
+                        this.currentKeys.push(path)
                     }
                 }
             }
             return result
         } else {
-            if (step.path == 'name') {
+            if (path == 'name') {
                 return this.currentKeys[0]
             }
-            this.currentKeys = [step.path]
-            return (Object.getOwnPropertyDescriptor(data, step.path)) ? data[step.path] : {}
+            this.currentKeys = [path]
+            return (Object.getOwnPropertyDescriptor(data, path)) ? data[path] : {}
         }
     }
 
@@ -324,4 +354,5 @@ export class Resolver {
             return prev ? prev[curr] : null
         }, obj)
     }
+
 }
