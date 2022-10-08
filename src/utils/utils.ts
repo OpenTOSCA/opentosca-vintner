@@ -91,3 +91,7 @@ export function toBoolean(data: string | boolean) {
 export function hrtime2ms(data: [number, number]) {
     return (data[0] * 1000000000 + data[1]) / 1000000
 }
+
+export function normalizeString(value: string) {
+    return value.toLowerCase().replaceAll(' ', '_')
+}

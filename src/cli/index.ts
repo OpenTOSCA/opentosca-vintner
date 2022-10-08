@@ -125,7 +125,7 @@ template
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
     .option('--preset [string]', 'name of the variability preset set')
-    .option('--inputs [string]', 'path to the variability inputs')
+    .option('--inputs [string]', 'path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
@@ -194,7 +194,7 @@ templates
     .action(
         hae(async options => {
             const template = await Controller.templates.inspect(options)
-            console.log(files.stringify(template))
+            console.log(files.toYAML(template))
         })
     )
 
@@ -246,7 +246,7 @@ instances
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
     .option('--preset [string]', 'name of the variability preset')
-    .option('--inputs [string]', 'path to the variability inputs')
+    .option('--inputs [string]', 'path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML])')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
     .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
@@ -281,7 +281,7 @@ instances
     .action(
         hae(async options => {
             const template = await Controller.instances.inspect(options)
-            console.log(files.stringify(template))
+            console.log(files.toYAML(template))
         })
     )
 

@@ -19,7 +19,8 @@
         "lodash": "^4.17.21",
         "open": "^8.4.0",
         "papaparse": "^5.3.2",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "xml2js": "^0.4.23"
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.3",
@@ -37,6 +38,7 @@
         "@types/papaparse": "^5.3.2",
         "@types/semver": "^7.3.12",
         "@types/uuid": "^8.3.4",
+        "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
         "dotenv": "^16.0.1",
@@ -75,6 +77,7 @@
         "docs:serve": "cd docs && MKDOCS_IS_DEV=true mkdocs serve --watch-theme",
         "docs:open": "open-cli http://localhost:8000",
         "docs:build": "cd docs && mkdocs build",
+        "docs:clean": "cd docs && rm -rf site",
         "docs:deploy": "cd docs && mkdocs gh-deploy --force",
         "interface:generate": "yarn build && yarn ts-node docs/cmds/interface/generate.ts",
         "record:home": "cd docs/cmds/casts && ./record.sh home",

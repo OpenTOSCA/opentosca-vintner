@@ -7,6 +7,7 @@ import os from 'os'
 import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
+import xml2js from 'xml2js'
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -29,12 +30,12 @@ export function isDirectory(path: string) {
 }
 
 export function getSize(file: string) {
-    if (!isFile(file)) throw new Error(`Can not read size of non file ${file}`)
+    assertFile(file)
     return fs.lstatSync(file).size
 }
 
 export function countLines(file: string) {
-    if (!isFile(file)) throw new Error(`Can not read lines of non file ${file}`)
+    assertFile(file)
     return fs.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
 }
 
@@ -42,21 +43,29 @@ export function isLink(path: string) {
     return path.startsWith('http://') || path.startsWith('https://')
 }
 
-export function loadFile<T>(file: string) {
+export function loadFile(file: string) {
     assertFile(file)
-    return yaml.load(fs.readFileSync(path.resolve(file), 'utf-8')) as T
+    return fs.readFileSync(path.resolve(file), 'utf-8')
 }
 
-export function storeFile(file: string, data: any | string) {
+export function loadYAML<T>(file: string) {
+    return yaml.load(loadFile(file)) as T
+}
+
+export function storeYAML(file: string, data: any | string) {
     if (validator.isString(data)) {
         fs.writeFileSync(path.resolve(file), data)
     } else {
-        fs.writeFileSync(path.resolve(file), stringify(data))
+        fs.writeFileSync(path.resolve(file), toYAML(data))
     }
     return file
 }
 
-export function stringify(obj: any) {
+export async function loadXML<T>(file: string) {
+    return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
+}
+
+export function toYAML(obj: any) {
     return yaml.dump(obj, {
         indent: 4,
         styles: {

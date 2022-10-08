@@ -20,6 +20,7 @@ theme:
         - navigation.tracking
         - navigation.expand
         - navigation.indexes
+        - content.code.annotate
 
 extra_css:
     - assets/stylesheets/extra.css
@@ -67,6 +68,7 @@ nav:
     - Variability4TOSCA:
           - Motivation: variability4tosca/motivation.md
           - Specification: variability4tosca/specification.md
+          - variability4tosca/feature-modeling.md
     - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md

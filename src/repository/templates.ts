@@ -62,7 +62,7 @@ export class Template {
     }
 
     getVariableServiceTemplate() {
-        return files.loadFile<ServiceTemplate>(this.getVariableServiceTemplatePath())
+        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
     }
 
     delete() {
