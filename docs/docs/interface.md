@@ -11,6 +11,7 @@ initialises the filesystem
     ```shell linenums="1"
     vintner setup init 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -39,6 +40,7 @@ cleans up the filesystem
     ```shell linenums="1"
     vintner setup clean 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -69,6 +71,7 @@ opens the home directory
     ```
 
 
+
 ## setup benchmark
 
 benchmarks the variability resolver
@@ -77,6 +80,7 @@ benchmarks the variability resolver
     ```shell linenums="1"
     vintner setup benchmark 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -112,6 +116,7 @@ enables an orchestrator plugin
     ```shell linenums="1"
     vintner orchestrators enable --orchestrator ${ORCHESTRATOR}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -148,6 +153,7 @@ initializes opera plugin
     ```shell linenums="1"
     vintner orchestrators init opera 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -180,6 +186,7 @@ initializes opera-wsl plugin
     ```shell linenums="1"
     vintner orchestrators init opera-wsl 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -212,6 +219,7 @@ initializes unfurl plugin
     ```shell linenums="1"
     vintner orchestrators init unfurl 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -244,6 +252,7 @@ initializes unfurl-wsl plugin
     ```shell linenums="1"
     vintner orchestrators init unfurl-wsl 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -276,6 +285,7 @@ resolves variability
     ```shell linenums="1"
     vintner template resolve --template ${TEMPLATE} --output ${OUTPUT}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -326,6 +336,7 @@ lists all templates
     ```shell linenums="1"
     vintner templates list 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -354,6 +365,7 @@ imports a new template
     ```shell linenums="1"
     vintner templates import --template ${TEMPLATE} --path ${PATH}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -394,6 +406,7 @@ opens template directory in a file browser
     vintner templates open --template ${TEMPLATE}
     ```
 
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
@@ -406,6 +419,7 @@ inspects the variable service template
     ```shell linenums="1"
     vintner templates inspect --template ${TEMPLATE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -442,6 +456,7 @@ deletes a template
     ```shell linenums="1"
     vintner templates delete --template ${TEMPLATE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -478,6 +493,7 @@ lists all instances
     ```shell linenums="1"
     vintner instances list 
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -506,6 +522,7 @@ creates a new instance
     ```shell linenums="1"
     vintner instances create --instance ${INSTANCE} --template ${TEMPLATE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -546,6 +563,7 @@ opens template directory in a file browser
     vintner instances open --instance ${INSTANCE}
     ```
 
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -558,6 +576,7 @@ resolves variability
     ```shell linenums="1"
     vintner instances resolve --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -605,6 +624,7 @@ inspects variability-resolved service template
     ```shell linenums="1"
     vintner instances inspect --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -641,6 +661,7 @@ deploys instance
     ```shell linenums="1"
     vintner instances deploy --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -678,6 +699,7 @@ updates instance
     ```shell linenums="1"
     vintner instances update --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -715,6 +737,7 @@ undeploys instance
     ```shell linenums="1"
     vintner instances undeploy --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -751,6 +774,7 @@ deletes instance
     ```shell linenums="1"
     vintner instances delete --instance ${INSTANCE}
     ```
+
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
@@ -787,6 +811,7 @@ starts the server
     ```shell linenums="1"
     vintner server start 
     ```
+
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
