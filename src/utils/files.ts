@@ -124,9 +124,3 @@ export async function download(source: string, target: string = temporaryFile())
 export function temporaryFile(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
 }
-
-export function getWineryRepo(): any {
-    const wineryConfigPath = path.resolve(path.join(os.homedir(), '.winery', 'winery.yml'))
-    const wineryConfig = yaml.load(fs.readFileSync(path.resolve(wineryConfigPath), 'utf-8')) as {repository: {repositoryRoot: string}}
-    return wineryConfig? wineryConfig.repository.repositoryRoot : ''
-}

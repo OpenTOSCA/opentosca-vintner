@@ -1,4 +1,4 @@
-import {Resolver} from '../../query/resolver';
+import {Resolver} from '../../query/resolver'
 import * as files from '../../utils/files'
 
 export type QueryTemplateArguments = {
@@ -16,8 +16,9 @@ export default function executeQuery(options: QueryTemplateArguments) {
             if (r.result) {
                 console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
             }
-        if (options.output)
-            files.storeFile(options.output, results[0].result)
+        if (options.output) {
+            files.storeFile(options.output, results)
+        }
     } else {
         console.log('No results found.')
     }

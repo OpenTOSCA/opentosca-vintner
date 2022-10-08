@@ -1,15 +1,16 @@
-import {Parser} from './parser';
-import {Template, Templates} from '../repository/templates';
-import {Instance} from '../repository/instances';
+import {Parser} from './parser'
+import {Template, Templates} from '../repository/templates'
+import {Instance} from '../repository/instances'
 import {
     ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
     RelationshipExpression, ReturnExpression, SelectExpression, VariableExpression
-} from '../specification/query-type';
-import {ServiceTemplate} from '../specification/service-template';
-import {Graph} from './graph';
-import {QueryTemplateArguments} from '../controller/query/query';
+} from '../specification/query-type'
+import {ServiceTemplate} from '../specification/service-template'
+import {Graph} from './graph'
+import {QueryTemplateArguments} from '../controller/query/query'
 import * as files from '../utils/files'
-import path from 'path';
+import path from 'path'
+import {Winery} from '../orchestrators/winery'
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -63,11 +64,11 @@ export class Resolver {
 
     /** Loads the template or instance in the FROM clause */
     private evaluateFrom(expression: FromExpression) {
-        const serviceTemplates = []
+        let serviceTemplates: {name: string, template: ServiceTemplate}[] = []
         try {
             switch(this.source) {
                 case 'vintner':
-                    if (expression.type == 'Instance') {
+                    if (expression.type == 'Instance' && expression.instance) {
                         serviceTemplates.push({
                             name: expression.instance,
                             template: new Instance(expression.instance || '').getTemplateWithAttributes()
@@ -76,16 +77,19 @@ export class Resolver {
                         for (const t of Templates.all()) {
                             serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
                         }
-                    } else {
+                    } else if (expression.template) {
                         serviceTemplates.push({name: expression.template, template:new Template(expression.template || '').getVariableServiceTemplate()})
                     }
                     break
                 case 'winery': {
-                    const winery = path.resolve(path.join(files.getWineryRepo(), 'servicetemplates', (expression.template || ''), 'ServiceTemplate.tosca'))
-                    serviceTemplates.push({
-                        name: expression.template,
-                        template: files.loadFile(winery) as ServiceTemplate
-                    })
+                    const winery = new Winery()
+                    if (expression.type == 'Instance') {
+                        console.error('Cannot query instance data on Winery repository. Use "FROM template" instead.')
+                    } else if (expression.template == '*') {
+                        serviceTemplates = winery.getAllTemplates()
+                    } else if (expression.template) {
+                        serviceTemplates.push(winery.getTemplate(expression.template))
+                    }
                 }
             }
         } catch (e: unknown) {
