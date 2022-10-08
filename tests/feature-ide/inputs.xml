@@ -21,5 +21,7 @@
         <attribute name="attr_double" value="1337"/>
         <attribute name="attr_string" value="something"/>
         <attribute name="__name_attr_string" value="attr_also_overridden"/>
+        <attribute name="attr_another_string" value="something else"/>
+        <attribute name="__full_name_attr_another_string" value="fully_overridden"/>
     </feature>
 </extendedConfiguration>

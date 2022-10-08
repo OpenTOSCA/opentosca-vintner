@@ -17,3 +17,4 @@ feature_d_attr_overridden: 1
 feature_another_overridden: true
 feature_another_overridden_attr_double: 1337
 feature_another_overridden_attr_also_overridden: something
+fully_overridden: something else

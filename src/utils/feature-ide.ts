@@ -32,23 +32,29 @@ export async function loadConfiguration(file: string): Promise<InputAssignmentMa
     data.extendedConfiguration.feature?.forEach(feature => {
         const originalFeatureName = utils.normalizeString(feature.$.name)
         const overrideFeatureName = feature.attribute?.find(attribute => attribute.$.name === '__name')?.$.value
+
         const effectiveFeatureName = validator.isDefined(overrideFeatureName)
             ? utils.normalizeString(overrideFeatureName)
             : originalFeatureName
         result[effectiveFeatureName] = feature.$.automatic === 'selected' || feature.$.manual === 'selected'
 
         feature.attribute
-            ?.filter(attribute => !attribute.$.name.startsWith('__name'))
+            ?.filter(attribute => !attribute.$.name.startsWith('__'))
             .forEach(attribute => {
                 const originalAttributeName = utils.normalizeString(attribute.$.name)
+
                 const overrideAttributeName = feature.attribute?.find(
                     attribute => attribute.$.name === `__name_${originalAttributeName}`
                 )?.$.value
-                const effectiveAttributeName = `${effectiveFeatureName}_${
-                    validator.isDefined(overrideAttributeName)
-                        ? utils.normalizeString(overrideAttributeName)
-                        : originalAttributeName
-                }`
+
+                const fullOverrideAttributeName = feature.attribute?.find(
+                    attribute => attribute.$.name === `__full_name_${originalAttributeName}`
+                )?.$.value
+
+                const effectiveAttributeName = utils.normalizeString(
+                    fullOverrideAttributeName ||
+                        `${effectiveFeatureName}_${overrideAttributeName || originalAttributeName}`
+                )
 
                 let value = attribute.$.value
                 try {
