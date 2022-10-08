@@ -7,7 +7,7 @@ Query {
   FromTemplate = fromLiteral "template(" (asterisk | filePath) ")"
 
   Select = selectLiteral Path ("," Path)*
-  Path = (Group | Policy | StepCond | Step) ("." (StepCond | Step))* ReturnClause?
+  Path = (Group | Policy | StepCond | Step | ".") ("." (StepCond | Step))* ReturnClause?
   Step = asterisk | ident
   StepCond = (asterisk | ident) PredicateExpression
   ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"

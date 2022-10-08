@@ -3,7 +3,7 @@ import {Template, Templates} from '../repository/templates';
 import {Instance} from '../repository/instances';
 import {
     ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
-    RelationshipExpression, ReturnExpression, SelectExpression, StepExpression, VariableExpression
+    RelationshipExpression, ReturnExpression, SelectExpression, VariableExpression
 } from '../specification/query-type';
 import {ServiceTemplate} from '../specification/service-template';
 import {Graph} from './graph';
@@ -117,17 +117,19 @@ export class Resolver {
             }
             results.push(result)
         }
-        return results
+        return (results.length > 1)? results : results[0]
     }
 
     private evaluateReturn(result: Object, returnVal: ReturnExpression): any {
         if (Array.isArray(result)) {
             const resultArray: any[] = []
+            let i = 0
             for (const obj of result) {
                 const entry: any = {}
                 for (const pair of returnVal.keyValuePairs) {
-                    entry[this.evaluateVariable(pair.key, obj)] = this.evaluateVariable(pair.value, obj)
+                    entry[this.evaluateVariable(pair.key, obj, i)] = this.evaluateVariable(pair.value, obj, i)
                 }
+                i++
                 resultArray.push(entry)
             }
             return resultArray
@@ -143,8 +145,8 @@ export class Resolver {
         }
     }
 
-    private evaluateVariable(variable: VariableExpression, result: any): any {
-        return variable.isString? variable.text : this.evaluateStep(result, variable.text)
+    private evaluateVariable(variable: VariableExpression, result: any, index?: number): any {
+        return variable.isString? variable.text : this.resolvePath(variable.text, result, index || 0)
     }
 
     private evaluateMatch(data: ServiceTemplate, expression: MatchExpression) {
@@ -221,10 +223,10 @@ export class Resolver {
         return result
     }
 
-    private evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): Object {
+    private evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): boolean {
         const {a, operator, b} = predicate
         if (operator == null) {
-            return Resolver.evaluateCondition(key, data, a as ConditionExpression)
+            return this.evaluateCondition(key, data, a as ConditionExpression)
         } else if (operator == 'AND') {
             return this.evaluatePredicate(key, data, a as PredicateExpression)
             && this.evaluatePredicate(key, data, b as PredicateExpression)
@@ -232,47 +234,47 @@ export class Resolver {
             return this.evaluatePredicate(key, data, a as PredicateExpression)
                 || this.evaluatePredicate(key, data, b as PredicateExpression)
         }
-        return {}
+        return false
     }
 
-    private static evaluateCondition(key: string, data: Object, condition: ConditionExpression): Object {
+    private evaluateCondition(key: string, data: Object, condition: ConditionExpression): boolean {
         if (condition.type == 'Existence') {
-            return (Object.getOwnPropertyDescriptor(data, condition.variable)) ? data : {}
+            return Object.getOwnPropertyDescriptor(data, condition.variable) != undefined
         }
         if (condition.variable == 'name') {
-            return (condition.value == key)? data : {}
+            return condition.value == key
         }
         const {variable, value, operator} = condition
-        const property = Resolver.resolvePath(variable, data)
+        const property = this.resolvePath(variable, data)
         if (value) {
             switch(operator) {
-               case '=':
-                   return ((property == value)? data : {})
-               case '!=':
-                   return ((property !== value)? data : {})
-              case '>=':
-                   return ((property >= value)? data : {})
-              case '>':
-                  return ((property > value)? data : {})
-               case '<=':
-                  return ((property <= value)? data : {})
-              case '<':
-                   return ((property < value)? data : {})
+                case '=':
+                    return property == value
+                case '!=':
+                    return property !== value
+                case '>=':
+                    return property >= value
+                case '>':
+                    return property > value
+                case '<=':
+                    return property <= value
+                case '<':
+                    return property < value
             }
         }
-        return {}
+        return false
     }
 
     private evaluateWildcard(data: Object, condition?: PredicateExpression) {
-        const result: any = {}
+        const result: Object[] = []
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
             if (condition) {
                 if (this.evaluatePredicate(key, value, condition))
-                    result[key] = value
+                    result.push(value)
                     this.currentKeys.push(key)
             } else {
-                result[key] = value
+                result.push(value)
                 this.currentKeys.push(key)
             }
         }
@@ -349,7 +351,8 @@ export class Resolver {
         return result
     }
 
-    private static resolvePath(path: string, obj: any): any {
+    private resolvePath(path: string, obj: any, index?: number): any {
+        if (path == 'name' && (index != undefined)) return this.currentKeys[index]
         return path.split('.').reduce(function(prev, curr) {
             return prev ? prev[curr] : null
         }, obj)
