@@ -8,7 +8,6 @@ import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
 import xml2js from 'xml2js'
-import {InputAssignmentMap} from '../specification/topology-template'
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -31,12 +30,12 @@ export function isDirectory(path: string) {
 }
 
 export function getSize(file: string) {
-    if (!isFile(file)) throw new Error(`Can not read size of non file ${file}`)
+    assertFile(file)
     return fs.lstatSync(file).size
 }
 
 export function countLines(file: string) {
-    if (!isFile(file)) throw new Error(`Can not read lines of non file ${file}`)
+    assertFile(file)
     return fs.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
 }
 
@@ -64,60 +63,6 @@ export function storeYAML(file: string, data: any | string) {
 
 export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
-}
-
-// TODO: refactor this and move it to resolve.ts
-export async function loadFeatureIDEConfiguration<T>(file: string): Promise<InputAssignmentMap> {
-    const data = await loadXML<{
-        extendedConfiguration: {
-            feature?: {
-                $: {
-                    automatic?: 'undefined' | 'selected'
-                    manual?: 'undefined' | 'selected'
-                    name: string
-                }
-                attribute?: {
-                    $: {
-                        name: string
-                        value: string
-                    }
-                }[]
-            }[]
-        }
-    }>(file)
-
-    const normalizeString = (value: string) => value.toLowerCase().replaceAll(' ', '_')
-
-    const result: InputAssignmentMap = {}
-    data.extendedConfiguration.feature?.forEach(feature => {
-        let featureName = feature.attribute?.find(attribute => attribute.$.name === '__input_name')?.$.value
-        if (validator.isUndefined(featureName)) featureName = feature.$.name
-        featureName = normalizeString(featureName)
-
-        result[featureName] = feature.$.automatic === 'selected' || feature.$.manual === 'selected'
-
-        feature.attribute
-            ?.filter(attribute => !attribute.$.name.startsWith('__input_name'))
-            .forEach(attribute => {
-                const normalizedAttributeName = normalizeString(attribute.$.name)
-                let attributeName = feature.attribute?.find(
-                    attribute => attribute.$.name === `__input_name_${normalizedAttributeName}`
-                )?.$.value
-                if (validator.isUndefined(attributeName)) attributeName = attribute.$.name
-                const fullAttributeName = `${featureName}_${normalizeString(attributeName)}`
-
-                let value = attribute.$.value
-                try {
-                    value = JSON.parse(value)
-                } catch (e) {
-                    // Ignore
-                }
-
-                result[fullAttributeName] = value
-            })
-    })
-
-    return result
 }
 
 export function toYAML(obj: any) {

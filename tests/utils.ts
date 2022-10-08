@@ -51,8 +51,11 @@ export function getDefaultVariableServiceTemplate({dir, example}: {dir: string; 
 }
 
 export function getDefaultInputs(dir: string) {
-    const file = path.join(dir, 'inputs.yaml')
-    if (files.isFile(file)) return file
+    const yml = path.join(dir, 'inputs.yaml')
+    if (files.isFile(yml)) return yml
+
+    const xml = path.join(dir, 'inputs.xml')
+    if (files.isFile(xml)) return xml
 }
 
 export function readDefaultExpect(dir: string) {

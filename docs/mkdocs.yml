@@ -20,6 +20,7 @@ theme:
         - navigation.tracking
         - navigation.expand
         - navigation.indexes
+        - content.code.annotate
 
 extra_css:
     - assets/stylesheets/extra.css

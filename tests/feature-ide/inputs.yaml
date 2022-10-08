@@ -1,0 +1,19 @@
+application: true
+
+feature_a: true
+feature_a_attr_bool_true: true
+feature_a_attr_bool_false: false
+feature_a_attr_long: 3
+feature_a_attr_double: 2.5
+feature_a_attr_string: 'hello world'
+
+feature_b: false
+
+feature_overridden: true
+
+feature_d: true
+feature_d_attr_overridden: 1
+
+feature_another_overridden: true
+feature_another_overridden_attr_double: 1337
+feature_another_overridden_attr_also_overridden: something

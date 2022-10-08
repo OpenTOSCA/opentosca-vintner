@@ -7,6 +7,7 @@ import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
 import {listIsEmpty, prettyJSON} from '../../utils/utils'
+import * as featureIDE from '../../utils/feature-ide'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -47,7 +48,7 @@ export default async function (options: TemplateResolveArguments) {
         .setVariabilityInputs(
             options.inputs
                 ? options.inputs.endsWith('.xml')
-                    ? await files.loadFeatureIDEConfiguration(options.inputs)
+                    ? await featureIDE.loadConfiguration(options.inputs)
                     : files.loadYAML<InputAssignmentMap>(options.inputs)
                 : {}
         )
