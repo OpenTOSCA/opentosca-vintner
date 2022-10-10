@@ -4,7 +4,7 @@ import * as files from '../../utils/files'
 export type QueryTemplateArguments = {
     output: string
     query: string
-    source: 'vintner' | 'file' | 'winery'
+    source: 'file' | 'vintner' | 'winery'
 }
 
 export default function executeQuery(options: QueryTemplateArguments) {
@@ -13,11 +13,9 @@ export default function executeQuery(options: QueryTemplateArguments) {
     const results = resolver.resolve(options)
     if (results.length > 0) {
         for (const r of results)
-            if (r.result) {
-                console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
-            }
+            console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
         if (options.output) {
-            files.storeFile(options.output, results)
+            files.storeFile(options.output, (results.length == 1)? results[0] : results)
         }
     } else {
         console.log('No results found.')
