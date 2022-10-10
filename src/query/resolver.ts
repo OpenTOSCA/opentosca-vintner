@@ -8,9 +8,9 @@ import {
 import {ServiceTemplate} from '../specification/service-template'
 import {Graph} from './graph'
 import {QueryTemplateArguments} from '../controller/query/query'
-import * as files from '../utils/files'
-import path from 'path'
 import {Winery} from '../orchestrators/winery'
+import * as files from '../utils/files'
+import * as path from 'path';
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -94,6 +94,13 @@ export class Resolver {
                     } else {
                         serviceTemplates.push(winery.getTemplate(expression.path))
                     }
+                    break
+                }
+                case 'file': {
+                    serviceTemplates.push({
+                        name: expression.path,
+                        template: files.loadFile(path.resolve(expression.path))
+                    })
                 }
             }
         } catch (e: unknown) {

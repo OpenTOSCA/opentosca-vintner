@@ -3,7 +3,7 @@ Query {
   Expression = FromExpression Select
   MatchExpression = FromExpression Match Select
 
-  FromExpression = fromLiteral ("instance" | "template") "." (asterisk | filePath)
+  FromExpression = fromLiteral ("instance" | "template") ("/" | ".") (asterisk | filePath)
 
   Select = selectLiteral Path ("," Path)*
   Path = (Group | Policy | StepCond | Step | ".") ("." (StepCond | Step))* ReturnClause?
