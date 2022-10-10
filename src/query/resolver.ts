@@ -135,11 +135,11 @@ export class Resolver {
         return (results.length > 1)? results : results[0]
     }
 
-    private evaluateReturn(result: Object, returnVal: ReturnExpression): any {
-        if (Array.isArray(result)) {
+    private evaluateReturn(data: Object, returnVal: ReturnExpression): any {
+        if (Array.isArray(data)) {
             const resultArray: any[] = []
             let i = 0
-            for (const obj of result) {
+            for (const obj of data) {
                 const entry: any = {}
                 for (const pair of returnVal.keyValuePairs) {
                     entry[this.evaluateVariable(pair.key, obj, i)] = this.evaluateVariable(pair.value, obj, i)
@@ -150,11 +150,8 @@ export class Resolver {
             return resultArray
         } else {
             const result: any = {}
-            for (const [key, value] of Object.entries(result)) {
-                result[key] = {}
-                for (const pair of returnVal.keyValuePairs) {
-                    result[key][this.evaluateVariable(pair.key, value)] = this.evaluateVariable(pair.value, value)
-                }
+            for (const pair of returnVal.keyValuePairs) {
+                result[this.evaluateVariable(pair.key, data)] = this.evaluateVariable(pair.value, data)
             }
             return result
         }

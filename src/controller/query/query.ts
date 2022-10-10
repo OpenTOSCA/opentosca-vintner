@@ -15,7 +15,7 @@ export default function executeQuery(options: QueryTemplateArguments) {
         for (const r of results)
             console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
         if (options.output) {
-            files.storeFile(options.output, (results.length == 1)? results[0] : results)
+            files.storeFile(options.output, (results.length == 1)? results[0].result : results)
         }
     } else {
         console.log('No results found.')
