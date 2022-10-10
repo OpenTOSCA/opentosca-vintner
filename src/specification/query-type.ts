@@ -15,8 +15,7 @@ export type Expression = {
 
 export type FromExpression = {
     type: 'Instance' | 'Template'
-    template?: string
-    instance?: string
+    path: string
 }
 
 export type KeyValuePair = {

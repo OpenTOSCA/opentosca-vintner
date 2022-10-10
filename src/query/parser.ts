@@ -30,11 +30,10 @@ export class Parser {
         MatchExpression(from, match, select) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
         },
-        FromInstance(_, __, instance, ___): FromExpression {
-            return {type: 'Instance', instance: instance.sourceString}
-        },
-        FromTemplate(_, __, template, ___): FromExpression {
-            return {type: 'Template', template: template.sourceString}
+        FromExpression(_, type, __,  path): FromExpression {
+            let nodeType: 'Instance' | 'Template' = 'Template'
+            if (type.sourceString.toLowerCase() == 'instance') nodeType = 'Instance'
+            return {type: nodeType, path: path.sourceString}
         },
         Select(_, firstPath, __, addPath): SelectExpression {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}

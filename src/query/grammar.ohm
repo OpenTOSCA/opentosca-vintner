@@ -1,10 +1,9 @@
 Query {
   Main = (Expression | MatchExpression) end
-  Expression = (FromInstance | FromTemplate) Select
-  MatchExpression = (FromInstance | FromTemplate) Match Select
+  Expression = FromExpression Select
+  MatchExpression = FromExpression Match Select
 
-  FromInstance = fromLiteral "instance(" (asterisk | filePath) ")"
-  FromTemplate = fromLiteral "template(" (asterisk | filePath) ")"
+  FromExpression = fromLiteral ("instance" | "template") "." (asterisk | filePath)
 
   Select = selectLiteral Path ("," Path)*
   Path = (Group | Policy | StepCond | Step | ".") ("." (StepCond | Step))* ReturnClause?

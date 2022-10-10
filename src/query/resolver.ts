@@ -69,32 +69,35 @@ export class Resolver {
         try {
             switch(this.source) {
                 case 'vintner':
-                    if (expression.type == 'Instance' && expression.instance) {
+                    if (expression.type == 'Instance') {
                         serviceTemplates.push({
-                            name: expression.instance,
-                            template: new Instance(expression.instance || '').getTemplateWithAttributes()
+                            name: expression.path,
+                            template: new Instance(expression.path).getTemplateWithAttributes()
                         })
-                    } else if (expression.type == 'Template' && expression.template == '*') {
+                    } else if (expression.type == 'Template' && expression.path == '*') {
                         for (const t of Templates.all()) {
                             serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
                         }
-                    } else if (expression.template) {
-                        serviceTemplates.push({name: expression.template, template:new Template(expression.template || '').getVariableServiceTemplate()})
+                    } else {
+                        serviceTemplates.push({
+                            name: expression.path,
+                            template: new Template(expression.path).getVariableServiceTemplate()
+                        })
                     }
                     break
                 case 'winery': {
                     const winery = new Winery()
                     if (expression.type == 'Instance') {
                         console.error('Cannot query instance data on Winery repository. Use "FROM template" instead.')
-                    } else if (expression.template == '*') {
+                    } else if (expression.path == '*') {
                         serviceTemplates = winery.getAllTemplates()
-                    } else if (expression.template) {
-                        serviceTemplates.push(winery.getTemplate(expression.template))
+                    } else {
+                        serviceTemplates.push(winery.getTemplate(expression.path))
                     }
                 }
             }
         } catch (e: unknown) {
-            console.error(`Could not locate service template ${expression.template} from source ${this.source}`)
+            console.error(`Could not locate service template ${expression.path} from source ${this.source}`)
             if (e instanceof Error) {
                 console.error(e.message)
             }
