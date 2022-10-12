@@ -1,6 +1,7 @@
 import {ServiceTemplate} from '../specification/service-template';
-import {NodeTemplate} from '../specification/node-template';
+import {NodeTemplate, RequirementAssignmentMap} from '../specification/node-template';
 import {PredicateExpression} from '../specification/query-type';
+import {isString} from '../utils/validator';
 
 type Node = {
     data: Object
@@ -25,28 +26,19 @@ export class Graph {
         const relationships: Relationship[] = []
         if (nodeTemplate.requirements !== undefined) {
             for (const r of nodeTemplate.requirements) {
-                relationships.push({type: Object.keys(r)[0], to: Object.values(r)[0].toString()})
+                relationships.push(this.resolveRelationship(r))
             }
         }
         return relationships;
     }
 
-    private getAllTargets(nodeNames: string[]) {
-        const targets = new Set<string>()
-        for (const name of nodeNames) {
-            for (const r of this.nodesMap[name].relationships) {
-                targets.add(r.to)
-            }
+    private static resolveRelationship(r: RequirementAssignmentMap): {type: string, to: string} {
+        if (isString(Object.values(r)[0])) {
+            return {type: Object.keys(r)[0], to: Object.values(r)[0].toString()}
+        } else {
+            const target = (Object.values(r)[0])? '' : ''
+            return {type: Object.keys(r)[0], to: Object.values(r)[0].toString()}
         }
-        return [...targets]
-    }
-
-    private getNodesByName(nodeNames: string[]) {
-        const result: {[name: string]: Node} = {}
-        for (const name of nodeNames) {
-            result[name] = this.nodesMap[name]
-        }
-        return result
     }
 
     private getNext(nodeName: string, predicate: PredicateExpression | undefined): string[] {

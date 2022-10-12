@@ -314,7 +314,7 @@ export class Resolver {
                 return this.currentKeys[0]
             }
             this.currentKeys = [path]
-            return (Object.getOwnPropertyDescriptor(data, path)) ? data[path] : {}
+            return this.resolvePath(path, data)
         }
     }
 

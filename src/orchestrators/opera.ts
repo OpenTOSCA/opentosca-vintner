@@ -3,6 +3,7 @@ import {Orchestrator} from '../repository/orchestrators'
 import {joinNotNull} from '../utils/utils'
 import {Shell} from '../utils/shell'
 import * as files from '../utils/files'
+import _ from 'lodash';
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -73,15 +74,14 @@ export class Opera implements Orchestrator {
      * @param instance
      */
     static getAttributes(instance: Instance) {
-        const attributes: {[node: string]: {[name: string]: string}} = {}
+        const attributes: {[node: string]: {[name: string]: any}} = {}
         for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
-            const attributesPath = instance.getDataDirectory().concat('/instances/' + node + '_0')
+            const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {
                 const entries: { [s: string]: { is_set: string, data: string } } =
                     files.loadFile(attributesPath)
-                attributes[node] = {}
-                for (const [key, value] of Object.entries(entries)) {
-                    attributes[node][key] = value.data
+                for (const [attrKey, attrValue] of Object.entries(entries)) {
+                    _.set(attributes, [node, 'attributes', attrKey], attrValue.data)
                 }
             }
         }

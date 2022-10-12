@@ -5,6 +5,7 @@ import {ServiceTemplate} from '../specification/service-template'
 import {Template} from './templates'
 import {Opera} from '../orchestrators/opera';
 import {Orchestrators} from './orchestrators';
+import _ from 'lodash';
 
 export class Instances {
     static all() {
@@ -78,10 +79,8 @@ export class Instance {
             default:
                 throw new Error('Error: Querying instance data is only supported when using Opera at the moment. ')
         }
-        for (const [key, value] of Object.entries(instanceData)) {
-            if (template.topology_template?.node_templates?.[key]) {
-                template.topology_template.node_templates[key].attributes = value
-            }
+        if (template.topology_template?.node_templates) {
+            template.topology_template.node_templates = _.merge(template.topology_template.node_templates, instanceData)
         }
         return template
     }

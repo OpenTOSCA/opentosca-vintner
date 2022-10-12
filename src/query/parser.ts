@@ -37,7 +37,7 @@ export class Parser {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}
         },
         Path(firstStep, __, nextSteps, returnClause): PathExpression {
-            let steps = [firstStep.buildAST()].concat(nextSteps.buildAST())
+            let steps = [firstStep.buildAST()].concat(nextSteps.buildAST()).flat()
             if (isPathShortcut(firstStep.sourceString)) {
                 steps = [{type: 'Step', path: 'topology_template'}].concat(steps.flat())
             } else if (firstStep.sourceString == '.') {
