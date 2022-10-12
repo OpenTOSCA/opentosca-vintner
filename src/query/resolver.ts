@@ -250,13 +250,14 @@ export class Resolver {
     }
 
     private evaluateCondition(key: string, data: Object, condition: ConditionExpression): boolean {
+        const {variable, value, operator} = condition
         if (condition.type == 'Existence') {
-            return Object.getOwnPropertyDescriptor(data, condition.variable) != undefined
+            const property = this.resolvePath(variable, data)
+            return property != null
         }
         if (condition.variable == 'name') {
             return condition.value == key
         }
-        const {variable, value, operator} = condition
         const property = this.resolvePath(variable, data)
         if (value) {
             switch(operator) {

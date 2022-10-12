@@ -7,8 +7,8 @@ Query {
 
   Select = selectLiteral Path ("," Path)*
   Path = (Group | Policy | StepCond | Step | ".") ("." (StepCond | Step))* ReturnClause?
-  Step = asterisk | ident
-  StepCond = (asterisk | ident) PredicateExpression
+  Step = shortcut? (asterisk | ident)
+  StepCond = shortcut? (asterisk | ident) PredicateExpression
   ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
   KeyValuePair = Variable (":" Variable)?
   Group = groupLiteral "(" ident ")"
@@ -17,15 +17,15 @@ Query {
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
-  Condition = shortcut? Value comparison Value -- comparison
-            | shortcut? Value -- existence
+  Condition = Value comparison Value -- comparison
+            | Value -- existence
   Match = matchLiteral Node (Relationship Node)*
   Node = "(" ident? PredicateExpression? ")"
   Relationship = arrowLeft arrowRight --simple
                | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
   Cardinality = asterisk integer?
   Variable = literal | ident
-  Value = path | literal
+  Value = shortcut? (path | literal)
 
   fromLiteral = "FROM"
   groupLiteral = "GROUP"

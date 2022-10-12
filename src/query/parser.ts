@@ -11,8 +11,6 @@ import {
     SelectExpression,
     StepExpression, VariableExpression
 } from '../specification/query-type';
-import {first, template} from 'lodash';
-import {NodeTemplate} from '../specification/node-template';
 
 export class Parser {
 
@@ -41,16 +39,18 @@ export class Parser {
         Path(firstStep, __, nextSteps, returnClause): PathExpression {
             let steps = [firstStep.buildAST()].concat(nextSteps.buildAST())
             if (isPathShortcut(firstStep.sourceString)) {
-                steps = [{type: 'Step', path: 'topology_template'}].concat(steps)
+                steps = [{type: 'Step', path: 'topology_template'}].concat(steps.flat())
             } else if (firstStep.sourceString == '.') {
                 steps = []
             }
             return {type: 'Path', steps: steps, returnVal: returnClause.buildAST()[0]}
         },
-        Step(path): StepExpression {
-            return {type: 'Step', path: path.buildAST()}
+        Step(shortcut, path): StepExpression[] {
+            const result: StepExpression[] = (shortcut.sourceString != '')?
+                [{type: 'Step', path: getShortcut(shortcut.sourceString)}] : []
+            return result.concat({type: 'Step', path: path.buildAST()})
         },
-        StepCond(path, condition): StepExpression {
+        StepCond(shortcut, path, condition): StepExpression {
             return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
         },
         ReturnClause(_, pair1, __, pair2, ___): ReturnExpression {
@@ -74,18 +74,18 @@ export class Parser {
         Predicate_single(a): PredicateExpression {
             return {type: 'Predicate', a: a.buildAST()}
         },
-        Condition_comparison(shortcut, variable, operator, value): ConditionExpression {
+        Condition_comparison(variable, operator, value): ConditionExpression {
             return {
                 type: 'Comparison',
-                variable: getShortcut(shortcut.sourceString).concat(variable.buildAST()),
+                variable: variable.buildAST(),
                 operator: operator.buildAST(),
                 value: value.buildAST()
             }
         },
-        Condition_existence(shortcut, variable): ConditionExpression {
+        Condition_existence(variable): ConditionExpression {
             return {
                 type: 'Existence',
-                variable: getShortcut(shortcut.sourceString).concat(variable.buildAST())
+                variable: variable.buildAST()
             }
         },
         Match(_, firstNode, relationships, addNodes): MatchExpression {
@@ -115,8 +115,9 @@ export class Parser {
         Variable(v): VariableExpression {
             return {text: v.buildAST(), isString: (v.sourceString.startsWith('\'') || v.sourceString.startsWith('"'))}
         },
-        Value(v) {
-            return v.buildAST()
+        Value(shortcut, v) {
+            const shortcutString = getShortcut(shortcut.sourceString)
+            return ((shortcutString != '')? (shortcutString + '.') : '') + v.sourceString
         },
         comparison(v) {
             return v.sourceString
@@ -137,7 +138,7 @@ export class Parser {
             return parseFloat(a.sourceString + b.sourceString + c.sourceString)
         },
         path(a, b) {
-            return [a, b].map((v) => v.sourceString).join('')
+            return a.sourceString + b.sourceString
         },
         asterisk(v) {
             return '*'
@@ -174,16 +175,16 @@ export class Parser {
     }
 }
 
-function getShortcut(shortcut: string) {
+function getShortcut(shortcut: string): string {
     switch (shortcut) {
         case '#':
-            return 'properties.'
+            return 'properties'
         case '@':
-            return 'attributes.'
+            return 'attributes'
         case '$':
-            return 'requirements.'
+            return 'requirements'
         case '%':
-            return 'capabilities.'
+            return 'capabilities'
         default:
             return ''
     }
