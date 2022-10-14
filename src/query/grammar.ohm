@@ -36,7 +36,7 @@ Query {
   arrowLeft = "<-" | "-"
   arrowRight = "->" | "-"
   asterisk = "*"
-  comparison = "=" | "!=" | ">=" | "<=" | ">" | "<"
+  comparison = "=~" | "=" | "!=" | ">=" | "<=" | ">" | "<"
   ident = letter (alnum | "_" | "-")*
   logic = "AND" | "OR"
   path = letter (alnum | "_" | "-" | ".")*

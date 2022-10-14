@@ -273,6 +273,8 @@ export class Resolver {
                     return property <= value
                 case '<':
                     return property < value
+                case '=~':
+                    return new RegExp(value).test(property)
             }
         }
         return false
@@ -283,9 +285,10 @@ export class Resolver {
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
             if (condition) {
-                if (this.evaluatePredicate(key, value, condition))
+                if (this.evaluatePredicate(key, value, condition)) {
                     result.push(value)
                     this.currentKeys.push(key)
+                }
             } else {
                 result.push(value)
                 this.currentKeys.push(key)

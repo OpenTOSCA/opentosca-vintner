@@ -117,7 +117,7 @@ export class Parser {
         },
         Value(shortcut, v) {
             const shortcutString = getShortcut(shortcut.sourceString)
-            return ((shortcutString != '')? (shortcutString + '.') : '') + v.sourceString
+            return ((shortcutString != '')? (shortcutString + '.') : '') + v.buildAST()
         },
         comparison(v) {
             return v.sourceString
