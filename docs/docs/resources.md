@@ -1,6 +1,6 @@
 # Resources
 
-This page contains a collection of interesting resources such as the TOSCA specifications, popular orchestrators and TOSCA repositories.
+This page contains a collection of interesting resources such as the TOSCA specifications, introductions, popular orchestrators and TOSCA repositories.
 
 ## Specifications
 
