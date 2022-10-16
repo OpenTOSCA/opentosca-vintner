@@ -11,9 +11,13 @@ This page contains a collection of interesting resources such as the TOSCA speci
 
 ## Introductions
 
-- [TOSCA Primer Version 1.0](http://docs.oasis-open.org/tosca/tosca-primer/v1.0/tosca-primer-v1.0.html){target=_blank} (TOSCA 1.0)
-- [TOSCA Introduction](https://www.opentosca.org/documents/presentation-tosca.pdf){target=_blank} (TOSCA 1.0)
-
+- [Understanding OASIS TOSCA](https://www.youtube.com/watch?v=C75LBxsQNsc){target=_blank}
+- [Portable Cloud Services Using TOSCA](https://www.iaas.uni-stuttgart.de/publications/ART-2012-09-PortableCloudServicesUsingTOSCA.pdf){target=_blank}[@ART-2012-09]
+- [TOSCA: Portable Automated Deployment and Management of Cloud Applications](https://www.iaas.uni-stuttgart.de/publications/INBOOK-2014-01-TOSCA-Portable-Automated-Deployment-and-Management-of-Cloud-Applications.pdf){target=_blank} [@INBOOK-2014-01]
+- [Unified Invocation of Scripts and Services for Provisioning, Deployment, and Management of Cloud Applications Based on TOSCA](https://www.iaas.uni-stuttgart.de/publications/INPROC-2014-22-Unified-Invocation-of-Scripts-and-Services-for-Provisioning-Deployment-and-Management-of-Cloud-Applications-Based-on-TOSCA.pdf){target=_blank}[@Wettinger2014]
+- [Declarative vs. Imperative: Two Modeling Patterns for the Automated Deployment of Applications](https://www.iaas.uni-stuttgart.de/publications/INPROC-2017-12-Declarative-vs-Imperative-Modeling-Patterns.pdf){target=_blank}[@Endres2017]
+- [TOSCA Primer Version 1.0](http://docs.oasis-open.org/tosca/tosca-primer/v1.0/tosca-primer-v1.0.html){target=_blank}
+- [TOSCA Introduction](https://www.opentosca.org/documents/presentation-tosca.pdf){target=_blank}
 
 ## Orchestrators
 
