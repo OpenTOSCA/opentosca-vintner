@@ -1,6 +1,8 @@
 import {ServiceTemplate} from '../specification/service-template';
-import {NodeTemplate, RequirementAssignmentMap} from '../specification/node-template';
+import {RequirementAssignmentMap} from '../specification/node-template';
 import {PredicateExpression} from '../specification/query-type';
+import {TopologyTemplate} from '../specification/topology-template';
+import {firstKey, firstValue} from '../utils/utils';
 import {isString} from '../utils/validator';
 
 type Node = {
@@ -10,46 +12,60 @@ type Node = {
 
 type Relationship = {
     type: string
-    to: string
+    source: string
+    target: string
 }
 
 export class Graph {
-    nodesMap: {[name: string]: Node} = {}
+    nodesMap: Map<string, Node> = new Map<string, Node>()
 
     constructor(serviceTemplate: ServiceTemplate) {
         for (const [nodeName, nodeTemplate] of Object.entries(serviceTemplate.topology_template?.node_templates || {})) {
-            this.nodesMap[nodeName] = {data: nodeTemplate, relationships: Graph.getRelationships(nodeTemplate)}
+            this.nodesMap.set(nodeName, {
+                data: nodeTemplate,
+                relationships: []
+            })
         }
+        this.getAllRelationships(serviceTemplate?.topology_template || {})
     }
 
-    private static getRelationships(nodeTemplate: NodeTemplate) {
-        const relationships: Relationship[] = []
-        if (nodeTemplate.requirements !== undefined) {
-            for (const r of nodeTemplate.requirements) {
-                relationships.push(this.resolveRelationship(r))
+    private getAllRelationships(topologyTemplate: TopologyTemplate) {
+        for (const [nodeName, nodeTemplate] of Object.entries(topologyTemplate?.node_templates || {})) {
+            if (nodeTemplate.requirements !== undefined) {
+                for (const r of nodeTemplate.requirements) {
+                    const relationship = Graph.resolveRelationship(nodeName, r)
+                    this.nodesMap.get(nodeName)?.relationships.push(relationship)
+                    this.nodesMap.get(relationship.target)?.relationships.push(relationship)
+                }
             }
         }
-        return relationships;
     }
 
-    private static resolveRelationship(r: RequirementAssignmentMap): {type: string, to: string} {
-        if (isString(Object.values(r)[0])) {
-            return {type: Object.keys(r)[0], to: Object.values(r)[0].toString()}
-        } else {
-            const target = (Object.values(r)[0])? '' : ''
-            return {type: Object.keys(r)[0], to: Object.values(r)[0].toString()}
+    private static resolveRelationship(nodeName: string, r: RequirementAssignmentMap): {type: string, source: string, target: string} {
+        // value is not a string -> try extended notation, otherwise just set value as target node (short notation)
+        if (!isString(firstValue(r))) {
+            for (const entry of Object.values(r)) {
+                if (!isString(entry) && firstKey(entry) == 'node') {
+                    return {type: Object.keys(r)[0], source: nodeName, target: firstValue(entry).toString()}
+                }
+            }
         }
+        return {type: Object.keys(r)[0], source: nodeName, target: Object.values(r)[0].toString()}
     }
 
-    private getNext(nodeName: string, predicate: PredicateExpression | undefined): string[] {
+    private getNext(nodeName: string, predicate: PredicateExpression | undefined, direction: string): string[] {
         const targets = new Set<string>()
-        for (const r of this.nodesMap[nodeName]?.relationships || []) {
-            targets.add(r.to)
+        for (const r of this.nodesMap.get(nodeName)?.relationships || []) {
+            if ((direction == 'both' || direction == 'right') && r.source == nodeName) {
+                targets.add(r.target)
+            } else if ((direction == 'both' || direction == 'left') && r.target == nodeName) {
+                targets.add(r.source)
+            }
         }
         return [...targets]
     }
 
-    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression | undefined) {
+    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression | undefined, direction: string) {
         let level = 0
         const visited: Set<string> = new Set<string>()
         const nodes: Queue<any> = new Queue<string>()
@@ -62,7 +78,7 @@ export class Graph {
                 nodes.add(null)
                 if(nodes.peek() == null) break
             }
-            const next = this.getNext(current, predicate)
+            const next = this.getNext(current, predicate, direction)
             if (next.length > 0) {
                 for (const n of next) {
                     visited.add(n)
@@ -71,6 +87,10 @@ export class Graph {
             }
         }
         return [...visited]
+    }
+
+    public getNode(nodeName: string): Node | undefined {
+        return this.nodesMap.get(nodeName)
     }
 }
 
