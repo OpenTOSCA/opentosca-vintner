@@ -10,7 +10,8 @@ Query {
   Step = shortcut? (asterisk | ident)
   StepCond = shortcut? (asterisk | ident) PredicateExpression
   ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
-  KeyValuePair = Variable (":" Variable)?
+  KeyValuePair = Variable ":" Variable --complex
+               | Variable              --simple
   Group = groupLiteral "(" ident ")"
   Policy = policyLiteral "(" ident ")"
 

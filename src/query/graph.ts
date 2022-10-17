@@ -89,7 +89,7 @@ export class Graph {
         return [...visited]
     }
 
-    public getNode(nodeName: string): Node | undefined {
+    getNode(nodeName: string): Node | undefined {
         return this.nodesMap.get(nodeName)
     }
 }

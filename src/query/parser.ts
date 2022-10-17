@@ -56,8 +56,11 @@ export class Parser {
         ReturnClause(_, pair1, __, pair2, ___): ReturnExpression {
             return {type: 'Return', keyValuePairs: [pair1.buildAST()].concat(pair2.buildAST())}
         },
-        KeyValuePair(key, _, value): {key: VariableExpression, value: VariableExpression} {
-            return {key: key.buildAST(), value: value.buildAST()[0]}
+        KeyValuePair_complex(key, _, value): {key: VariableExpression, value: VariableExpression} {
+            return {key: key.buildAST(), value: value.buildAST()}
+        },
+        KeyValuePair_simple(value): {key: VariableExpression, value: VariableExpression} {
+            return {key: {text: value.sourceString, isString: true}, value: value.buildAST()}
         },
         Group(_, __, groupName, ___): StepExpression {
             return {type: 'Group', path: groupName.sourceString}
