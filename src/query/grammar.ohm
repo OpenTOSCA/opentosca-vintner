@@ -29,7 +29,7 @@ Query {
               | asterisk integer ".." --min
               | asterisk integer --exact
               | asterisk --unlimited
-  Variable = literal | ident
+  Variable = literal | path | ident
   Value = shortcut? (path | literal)
 
   fromLiteral = "FROM"
