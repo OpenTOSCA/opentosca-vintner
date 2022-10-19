@@ -78,17 +78,19 @@ export class Parser {
         Predicate_single(a): PredicateExpression {
             return {type: 'Predicate', a: a.buildAST()}
         },
-        Condition_comparison(variable, operator, value): ConditionExpression {
+        Condition_comparison(negation, variable, operator, value): ConditionExpression {
             return {
                 type: 'Comparison',
+                negation: negation.buildAST(),
                 variable: variable.buildAST(),
                 operator: operator.buildAST(),
                 value: value.buildAST()
             }
         },
-        Condition_existence(variable): ConditionExpression {
+        Condition_existence(negation, variable): ConditionExpression {
             return {
                 type: 'Existence',
+                negation: negation.buildAST(),
                 variable: variable.buildAST()
             }
         },
@@ -134,6 +136,9 @@ export class Parser {
         Value(shortcut, v) {
             const shortcutString = getShortcut(shortcut.sourceString)
             return ((shortcutString != '')? (shortcutString + '.') : '') + v.buildAST()
+        },
+        negation(v) {
+            return v.sourceString == '!'
         },
         comparison(v) {
             return v.sourceString

@@ -11,6 +11,7 @@ import {QueryTemplateArguments} from '../controller/query/query'
 import {Winery} from '../orchestrators/winery'
 import * as files from '../utils/files'
 import * as path from 'path';
+import {cond} from 'lodash';
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -253,32 +254,40 @@ export class Resolver {
     private evaluateCondition(key: string, data: Object, condition: ConditionExpression): boolean {
         const {variable, value, operator} = condition
         if (condition.type == 'Existence') {
-            const property = this.resolvePath(variable, data)
-            return property != null
+            const exists = this.resolvePath(variable, data) != null
+            return condition.negation? !exists : exists
         }
         if (condition.variable == 'name') {
-            return condition.value == key
+            return condition.negation? condition.value != key : condition.value == key
         }
         const property = this.resolvePath(variable, data)
+        let result = false
         if (value) {
             switch(operator) {
                 case '=':
-                    return property == value
+                    result = property == value
+                    break
                 case '!=':
-                    return property !== value
+                    result = property !== value
+                    break
                 case '>=':
-                    return property >= value
+                    result = property >= value
+                    break
                 case '>':
-                    return property > value
+                    result = property > value
+                    break
                 case '<=':
-                    return property <= value
+                    result = property <= value
+                    break
                 case '<':
-                    return property < value
+                    result = property < value
+                    break
                 case '=~':
-                    return new RegExp(value).test(property)
+                    result = new RegExp(value).test(property)
+                    break
             }
         }
-        return false
+        return condition.negation? !result : result
     }
 
     private evaluateWildcard(data: Object, condition?: PredicateExpression) {

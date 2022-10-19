@@ -5,6 +5,7 @@ export type CardinalityExpression = {
 
 export type ConditionExpression = {
     type: 'Comparison' | 'Existence'
+    negation: boolean
     variable: string
     operator?: string
     value?: string

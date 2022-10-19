@@ -18,8 +18,8 @@ Query {
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
-  Condition = Value comparison Value -- comparison
-            | Value -- existence
+  Condition = negation Value comparison Value -- comparison
+            | negation Value -- existence
   Match = matchLiteral Node (Relationship Node)*
   Node = "(" ident? PredicateExpression? ")"
   Relationship = arrowLeft arrowRight --simple
@@ -38,6 +38,7 @@ Query {
   policyLiteral = "POLICY"
   selectLiteral = "SELECT"
 
+  negation = "!" | ""
   arrowLeft = "<-" | "-"
   arrowRight = "->" | "-"
   asterisk = "*"
