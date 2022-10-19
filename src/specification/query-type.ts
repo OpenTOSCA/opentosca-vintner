@@ -1,3 +1,8 @@
+export type CardinalityExpression = {
+    min: number
+    max: number
+}
+
 export type ConditionExpression = {
     type: 'Comparison' | 'Existence'
     variable: string
@@ -52,7 +57,7 @@ export type RelationshipExpression = {
     type: 'Relationship'
     direction: 'left' | 'right' | 'both'
     variable?: string
-    cardinality?: number
+    cardinality?: CardinalityExpression
     predicate?: PredicateExpression
 }
 

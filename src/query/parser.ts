@@ -11,6 +11,7 @@ import {
     SelectExpression,
     StepExpression, VariableExpression
 } from '../specification/query-type';
+import {parseInt} from 'lodash';
 
 export class Parser {
 
@@ -112,8 +113,20 @@ export class Parser {
                 predicate: predicate.buildAST()[0]
             }
         },
-        Cardinality(asterisk, number) {
-            return (number.sourceString == '')? 99 : parseInt(number.sourceString)
+        Cardinality_range(asterisk, min, _, max) {
+            return {min: min.buildAST(), max: max.buildAST()}
+        },
+        Cardinality_max(asterisk, _, max) {
+            return {min: 0, max: max.buildAST()}
+        },
+        Cardinality_min(asterisk, min, _) {
+            return {min: min.buildAST(), max: 99}
+        },
+        Cardinality_exact(asterisk, number) {
+            return {min: number.buildAST(), max: number.buildAST()}
+        },
+        Cardinality_unlimited(asterisk) {
+            return {min: 0, max: 99}
         },
         Variable(v): VariableExpression {
             return {text: v.buildAST(), isString: (v.sourceString.startsWith('\'') || v.sourceString.startsWith('"'))}
@@ -139,6 +152,9 @@ export class Parser {
         },
         float(a, b, c) {
             return parseFloat(a.sourceString + b.sourceString + c.sourceString)
+        },
+        integer(i) {
+            return parseInt(i.sourceString)
         },
         path(a, b) {
             return a.sourceString + b.sourceString

@@ -204,7 +204,8 @@ export class Resolver {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
             // do a breadth first search to find all nodes reachable within n steps
-            const targets = this.nodeGraph?.limitedBFS(p[p.length-1],relationship?.cardinality || 1, relationship.predicate, relationship.direction)
+            const targets = this.nodeGraph?.limitedBFS(p[p.length-1],relationship?.cardinality?.min || 1,
+                relationship?.cardinality?.max || 1, relationship.direction, relationship.predicate)
             // if a predicate is specified, filter out nodes which do not satisfy it
             for (const n of targets || []) {
                 if (!nodePredicate || (this.nodeGraph?.getNode(n)?.data && this.evaluatePredicate(n, this.nodeGraph?.getNode(n)?.data || {}, nodePredicate))) {

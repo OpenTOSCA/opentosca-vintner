@@ -24,7 +24,11 @@ Query {
   Node = "(" ident? PredicateExpression? ")"
   Relationship = arrowLeft arrowRight --simple
                | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
-  Cardinality = asterisk integer?
+  Cardinality = asterisk integer ".." integer --range
+              | asterisk ".." integer --max
+              | asterisk integer ".." --min
+              | asterisk integer --exact
+              | asterisk --unlimited
   Variable = literal | ident
   Value = shortcut? (path | literal)
 

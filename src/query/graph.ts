@@ -65,13 +65,13 @@ export class Graph {
         return [...targets]
     }
 
-    limitedBFS(nodeName: string, limit: number, predicate: PredicateExpression | undefined, direction: string) {
+    limitedBFS(nodeName: string, minimum: number, maximum: number, direction: string, predicate?: PredicateExpression) {
         let level = 0
         const visited: Set<string> = new Set<string>()
         const nodes: Queue<any> = new Queue<string>()
         nodes.add(nodeName)
         nodes.add(null)
-        while (!nodes.isEmpty() && level < limit){
+        while (!nodes.isEmpty() && level <= maximum - 1){
             const current = nodes.pop()
             if (current == null) {
                 level++
@@ -81,7 +81,7 @@ export class Graph {
             const next = this.getNext(current, predicate, direction)
             if (next.length > 0) {
                 for (const n of next) {
-                    visited.add(n)
+                    if (level >= minimum - 1) visited.add(n)
                     nodes.add(n)
                 }
             }
