@@ -1,3 +1,7 @@
+--- 
+title: Dynamic Deployment Artifacts
+---
+
 # Dynamic Deployment Artifacts 1.0 Release Candidate
 
 This document specifies _Dynamic Deployment Artifacts_ which are supposed to be build on-demand based on information in the topology.

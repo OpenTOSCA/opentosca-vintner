@@ -60,21 +60,22 @@ plugins:
     - glightbox
     - bibtex:
           bib_file: 'bibtex.bib'
+
 nav:
-    - Home: index.md
+    - index.md
     - getting-started.md
     - installation.md
     - orchestrators.md
     - Variability4TOSCA:
-          - Motivation: variability4tosca/motivation.md
-          - Specification: variability4tosca/specification.md
+          - variability4tosca/motivation.md
+          - variability4tosca/specification.md
           - variability4tosca/feature-modeling.md
-    - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
+    - dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md
     - development.md
     - contributing.md
     - code-of-conduct.md
-    - Resources: resources.md
+    - resources.md
     - about-us.md
     - faq.md

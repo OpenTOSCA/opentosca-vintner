@@ -1,3 +1,7 @@
+---
+title: Specification
+---
+
 # Variability4TOSCA Specification 1.0 Release Candidate
 
 This document specifies _Variability4TOSCA_ which extends [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank} with conditional elements.
