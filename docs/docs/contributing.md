@@ -1,7 +1,7 @@
 # Contributing
 
 Contributions are very much welcome. 
-But please follow our guidelines and read the [development guidelines]({{ fix_url('development')}}){target=_blank}.
+But please follow our guidelines and read [Development]({{ fix_url('development')}}){target=_blank} and our [Code of Conduct]({{ fix_url('code-of-conduct')}}){target=_blank}.
 
 ## Branch Naming Convention
 
