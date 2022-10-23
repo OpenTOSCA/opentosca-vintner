@@ -4,7 +4,7 @@ We currently support [xOpera](https://github.com/xlab-si/xopera-opera){target=_b
 Since both can only be installed on Linux, we implemented a [WSL](https://docs.microsoft.com/en-us/windows/wsl){target=_blank} integration for both.
 Configure and enable your orchestrator as follows.
 We expect, that the orchestrator is already installed.
-For more information see [Interface]({{ fix_url('interface')}}){target=_blank}.
+For more information see [Interface](interface.md){target=_blank}.
 
 ## Opera
 === "Opera"

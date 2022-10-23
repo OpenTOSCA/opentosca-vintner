@@ -6,12 +6,13 @@ copyright: 'Copyright &copy; 2022 University of Stuttgart'
 edit_uri: ''
 theme:
     name: material
+    language: en
     custom_dir: overrides
     icon:
         repo: fontawesome/brands/github
     font:
-        text: Segoe UI
-        code: Monospaced
+        text: Noto Sans
+        code: Noto Sans Mono
     palette:
         primary: black
     features:
@@ -21,6 +22,7 @@ theme:
         - navigation.expand
         - navigation.indexes
         - content.code.annotate
+        - toc.follow
 
 extra_css:
     - assets/stylesheets/extra.css
@@ -28,7 +30,7 @@ extra_css:
     - assets/stylesheets/asciinema-player.css
 
 extra_javascript:
-    - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+    - assets/javascripts/tablesort.min.js
     - assets/javascripts/tablesort.js
 
 extra:
@@ -51,6 +53,8 @@ markdown_extensions:
     - pymdownx.tabbed:
           alternate_style: true
     - footnotes
+    - toc:
+          permalink: true
 
 plugins:
     - search
@@ -60,21 +64,22 @@ plugins:
     - glightbox
     - bibtex:
           bib_file: 'bibtex.bib'
+
 nav:
-    - Home: index.md
+    - index.md
     - getting-started.md
     - installation.md
     - orchestrators.md
     - Variability4TOSCA:
-          - Motivation: variability4tosca/motivation.md
-          - Specification: variability4tosca/specification.md
+          - variability4tosca/motivation.md
+          - variability4tosca/specification.md
           - variability4tosca/feature-modeling.md
-    - Dynamic Deployment Artifacts: dynamic-deployment-artifacts.md
+    - dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md
     - development.md
     - contributing.md
     - code-of-conduct.md
-    - Resources: resources.md
+    - resources.md
     - about-us.md
     - faq.md
