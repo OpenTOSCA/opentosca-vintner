@@ -61,6 +61,7 @@ jobs:
 
             - name: (SIGN) Sign Binaries
               run: |
+                  cd dist
                   gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
                   gpg --detach-sign -a --local-user vintner-release vintner-linux-arm64
                   gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
