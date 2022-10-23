@@ -45,5 +45,5 @@ The following environment variables can be used for configuration.
 
 | Environment Variable       | Default            | Description |
 |----------------------------|--------------------| ----------- |
-| OPENTOSCA_VINTNER_HOME_DIR | `${HOME_DIR}/.opentosca_vintner` |             |
+| OPENTOSCA_VINTNER_HOME_DIR | ${HOME_DIR}/.opentosca_vintner |             |
 

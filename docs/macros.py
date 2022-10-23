@@ -36,7 +36,7 @@ def define_env(env):
         cols: 200,
         rows: 10,
         fit: false,
-        terminalFontSize: "10pt"
+        terminalFontSize: "13px"
     });
 </script>
 """ % {"id": 'asciinema-player-' + cast, "url": fix_url('assets/casts/' + cast + '.cast')}
