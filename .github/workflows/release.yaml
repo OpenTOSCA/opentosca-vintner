@@ -57,15 +57,15 @@ jobs:
             - name: (SIGN) Import Signing Key
               uses: crazy-max/ghaction-import-gpg@v5
               with:
-                  gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+                  gpg_private_key: ${{ secrets.VINTNER_RELEASE_PRIVATE_KEY }}
 
             - name: (SIGN) Sign Binaries
               run: |
                   cd dist
-                  gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
-                  gpg --detach-sign -a --local-user vintner-release vintner-linux-arm64
-                  gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
-                  gpg --detach-sign -a --local-user vintner-release vintner-win-x64.exe
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-alpine-x64 vintner-win-x64.exe
+                  do 
+                    gpg --no-tty --detach-sign -a --local-user ${BINARY}             
+                  done
 
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
