@@ -64,7 +64,7 @@ jobs:
                   cd dist
                   for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-alpine-x64 vintner-win-x64.exe
                   do 
-                    gpg --no-tty --detach-sign -a --local-user ${BINARY}             
+                    gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
                   done
 
             - name: (RELEASE) Delete Latest Release
