@@ -5,6 +5,7 @@ on:
         branches:
             - main
             - fix/workflow
+            - feature/singed-binaries # TODO: remove this
 
 jobs:
     release:
@@ -52,6 +53,17 @@ jobs:
 
             - name: (BUILD) Package Binaries
               run: yarn package
+
+            - name: (SIGN) Import Signing Key
+              uses: crazy-max/ghaction-import-vintner.gpg@v5
+              with:
+                  gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+
+            - name: (SIGN) Sign Binaries
+              run: gpg --detach-sign -a --local-user vintner-release ${{ matrix.binary }}
+              strategy:
+                  matrix:
+                      binary: [vintner-alpine-x64, vintner-linux-arm64, vintner-alpine-x64, vintner-win-x64.exe]
 
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
