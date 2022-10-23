@@ -60,10 +60,11 @@ jobs:
                   gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
 
             - name: (SIGN) Sign Binaries
-              run: gpg --detach-sign -a --local-user vintner-release ${{ matrix.binary }}
-              strategy:
-                  matrix:
-                      binary: [vintner-alpine-x64, vintner-linux-arm64, vintner-alpine-x64, vintner-win-x64.exe]
+              run: |
+                  gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
+                  gpg --detach-sign -a --local-user vintner-release vintner-linux-arm64
+                  gpg --detach-sign -a --local-user vintner-release vintner-alpine-x64
+                  gpg --detach-sign -a --local-user vintner-release vintner-win-x64.exe
 
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
