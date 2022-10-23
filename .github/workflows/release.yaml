@@ -5,7 +5,9 @@ on:
         branches:
             - main
             - fix/workflow
-            - feature/singed-binaries # TODO: remove this
+
+            # TODO: remove this
+            - feature/singed-binaries
 
 jobs:
     release:
