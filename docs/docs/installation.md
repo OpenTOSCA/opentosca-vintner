@@ -57,10 +57,10 @@ The following environment variables can be used for configuration.
 Binaries are signed using the following key ([download]({{ fix_url('assets/documents/vintner.gpg') }}){target=_blank} or see below).
 
 ```shell linenums="1"
-sec   rsa4096/964183A1485881AD 2022-10-23 [SC]
+pub   rsa4096/964183A1485881AD 2022-10-23 [SC]
       4BB862B810B792CC072D59DB964183A1485881AD
-uid                 [ultimate] vintner-release
-ssb   rsa4096/B230BD6651AA1BB8 2022-10-23 [E]
+uid                 [unknown] vintner-release
+sub   rsa4096/B230BD6651AA1BB8 2022-10-23 [E]
 ```
 
 To verify the signature, import our public key, download the respective signature and then verify the signature.
@@ -76,9 +76,12 @@ The output should be something like
 
 ```shell linenums="1"
 gpg: assuming signed data in 'vintner-linux-x64'
-gpg: Signature made Sun Oct 23 20:25:40 2022    
+gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
 gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
-gpg: Good signature from "vintner-release" [ultimate]
+gpg: Good signature from "vintner-release" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
 ```
 
 This is the public key that should be used for verification.
