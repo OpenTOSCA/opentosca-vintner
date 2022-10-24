@@ -267,3 +267,15 @@ There is only one release at total.
 During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
 As a consequence, `vintner --version` returns the commit hash.
 
+## Package-Manager
+
+Create `.lib` directory and download dependencies specified in `dependencies.json`. Dependencies that already exist will be skipped.
+Optional parameter `-r` to first delete and then download **all** dependencies.
+```linenums="1"
+yarn package:install [-r]
+```
+
+Delete all dependencies in the `.lib` directory.
+```linenums="1"
+yarn package:cleanup
+```
