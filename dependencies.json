@@ -1,0 +1,9 @@
+{
+    "dependencies": {
+        "alien4cloud": {
+            "url": "https://github.com/alien4cloud/csar-public-library",
+            "directory": "org.alien4cloud.agentpuppet",
+            "branch": "3.0.x"
+        }
+    }
+}

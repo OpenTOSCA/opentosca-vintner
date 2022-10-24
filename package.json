@@ -85,6 +85,7 @@
         "opera-motivation": "./examples/opera-motivation/demo.sh",
         "unfurl-motivation:run": "./examples/unfurl-motivation/demo.sh",
         "licenses:check": "license-checker --production --summary --onlyAllow 'MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0'",
-        "licenses:generate": "yarn ts-node docs/cmds/licenses/generate.ts"
+        "licenses:generate": "yarn ts-node docs/cmds/licenses/generate.ts",
+        "package:install": "yarn ts-node src/package-manager/install.ts"
     }
 }
