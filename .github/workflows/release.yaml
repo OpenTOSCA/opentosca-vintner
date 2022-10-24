@@ -6,9 +6,6 @@ on:
             - main
             - fix/workflow
 
-            # TODO: remove this
-            - feature/singed-binaries
-
 jobs:
     release:
         name: Release

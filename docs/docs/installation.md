@@ -2,12 +2,12 @@
 
 ## Binaries
 
-To install `vintner`, download the binary for your operating system.
+To install `vintner`, download the binary for your system.
 There are no other dependencies required. 
 You might add the binary to your PATH.
 
 The following example shows the installation on Linux.
-See below for verifying the signature of the binary.
+See [below](#signature) for verifying the signature of the binary.
 
 ```linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
@@ -37,7 +37,7 @@ vintner server start
 ```
 
 To uninstall all files including the binary, run the following commands.
-However, this will not undeploy currently deployed applications.
+_This will not undeploy currently deployed applications_.
 
 ```linenums="1"
 vintner setup clean
@@ -54,25 +54,23 @@ The following environment variables can be used for configuration.
 
 ## Signature
 
-Binaries are signed using the following key ([download]({{ fix_url('assets/documents/vintner.gpg') }}){target=_blank} or see below).
+To verify a signature of a binary, first import our public key and then download the respective signature.
+The following is a walkthrough for `vintner-linux-x64` using `gpg`.
 
-```shell linenums="1"
-pub   rsa4096/964183A1485881AD 2022-10-23 [SC]
-      4BB862B810B792CC072D59DB964183A1485881AD
-uid                 [unknown] vintner-release
-sub   rsa4096/B230BD6651AA1BB8 2022-10-23 [E]
-```
-
-To verify the signature, import our public key, download the respective signature and then verify the signature.
-The following is an example for `vintner-linux-x64`.
+First, import our public key.
 
 ```shell linenums="1"
 curl https://vintner.opentosca.org/assets/documents/vintner.gpg | gpg --import
+```
+
+Then download and verify the respective signature.
+
+```shell linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
 gpg --verify vintner-linux-x64.asc
 ```
 
-The output should be something like
+The output should be something as follows.
 
 ```shell linenums="1"
 gpg: assuming signed data in 'vintner-linux-x64'
@@ -84,7 +82,14 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
 ```
 
-This is the public key that should be used for verification.
+This is the public key that should be used for verification ([download]({{ fix_url('assets/documents/vintner.gpg') }}){target=_blank}).
+
+```shell linenums="1"
+pub   rsa4096/964183A1485881AD 2022-10-23 [SC]
+      4BB862B810B792CC072D59DB964183A1485881AD
+uid                 [unknown] vintner-release
+sub   rsa4096/B230BD6651AA1BB8 2022-10-23 [E]
+```
 
 ```linenums="1"
 -----BEGIN PGP PUBLIC KEY BLOCK-----
