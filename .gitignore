@@ -36,3 +36,6 @@ dist
 # tests
 !tests/tmp/.gitkeep
 tests/tmp
+
+# libs
+.lib
