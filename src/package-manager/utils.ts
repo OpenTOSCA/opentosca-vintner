@@ -1,13 +1,12 @@
-
-import { DEPENDENCY_FILE, LIB_DIRECTORY } from "./consts";
-import { escapeRegExp } from "lodash"
-const fs = require('fs')
+import {DEPENDENCY_FILE, LIB_DIRECTORY} from './consts'
+import {escapeRegExp} from 'lodash'
+import * as fs from 'fs'
 
 /**
  * Returns full directory name: LIB_DIR/dependency_dir
  */
 export function getFullDependencyDirectory(dependency: string): string {
-    return LIB_DIRECTORY + "/" + dependency
+    return LIB_DIRECTORY + '/' + dependency
 }
 
 /**
@@ -15,7 +14,7 @@ export function getFullDependencyDirectory(dependency: string): string {
  * org.abc.module => org/abc/module
  */
 export function domainToUrl(dir: string): string {
-    return dir.replace(new RegExp(escapeRegExp("."), 'g'), "/")
+    return dir.replace(new RegExp(escapeRegExp('.'), 'g'), '/')
 }
 
 /**
@@ -29,8 +28,8 @@ export function checkDirectoryExists(dir: string): boolean {
  * Create lib directory if it does not exist
  */
 export function createLibDirectory(): void {
-    if(!checkDirectoryExists(LIB_DIRECTORY)) {
-        console.log("Creating lib directory");        
+    if (!checkDirectoryExists(LIB_DIRECTORY)) {
+        console.log('Creating lib directory')
         fs.mkdirSync(LIB_DIRECTORY)
     }
 }
@@ -39,5 +38,5 @@ export function createLibDirectory(): void {
  * Read the dependency file
  */
 export function readDependencyFile() {
-    return fs.readFileSync(DEPENDENCY_FILE)
+    return fs.readFileSync(DEPENDENCY_FILE).toString()
 }

@@ -1,6 +1,6 @@
-import { exec } from 'child_process'
+import {exec} from 'child_process'
 import clean from '../controller/setup/clean'
-import { LIB_DIRECTORY, DEPENDENCY_FILE } from './consts'
+import {LIB_DIRECTORY, DEPENDENCY_FILE} from './consts'
 
 function main() {
     cleanup()
