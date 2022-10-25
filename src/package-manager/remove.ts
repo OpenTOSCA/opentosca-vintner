@@ -2,25 +2,25 @@ import {exec} from 'child_process'
 import {DependencyInfo, DependencyFile} from './types'
 import * as utils from './utils'
 import * as fs from 'fs'
-import { DEPENDENCY_FILE } from './consts';
+import {DEPENDENCY_FILE} from './consts'
 
 function main() {
-    if(process.argv.length != 3) {
-        console.log('Missing arguments\n\n\tpackage:remove package-name\n');
+    if (process.argv.length != 3) {
+        console.log('Missing arguments\n\n\tpackage:remove package-name\n')
         return
     }
-    let packageName = process.argv[2]
+    const packageName = process.argv[2]
 
     // Check if dependencies.json exists
-    if(utils.checkDirectoryOrFileExists(DEPENDENCY_FILE) == false) {
-        console.log("No dependencies.json found");
+    if (utils.checkDirectoryOrFileExists(DEPENDENCY_FILE) == false) {
+        console.log('No dependencies.json found')
         return
     }
     const dependencies = utils.readDependencyFile().dependencies
 
     // Check if package is already installed
-    if(dependencies[packageName] == null) {
-        console.log(`No package with name  ${packageName}  found`);        
+    if (dependencies[packageName] == null) {
+        console.log(`No package with name  ${packageName}  found`)
         return
     }
 
@@ -31,8 +31,7 @@ function main() {
     // Save new dependency file
     utils.writeDependencyFile(dependencies)
 
-    console.log(`package  ${packageName}  removed.`);
-    
+    console.log(`package  ${packageName}  removed.`)
 }
 
 main()

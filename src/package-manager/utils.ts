@@ -2,7 +2,7 @@ import {DEPENDENCY_FILE, LIB_DIRECTORY} from './consts'
 import {escapeRegExp} from 'lodash'
 import * as fs from 'fs'
 import {exec} from 'child_process'
-import { DependencyFile, DependencyInfo } from './types'
+import {DependencyFile, DependencyInfo} from './types'
 
 /**
  * Returns full directory name: LIB_DIR/dependency_dir
@@ -44,8 +44,8 @@ export function readDependencyFile(): DependencyFile {
 }
 
 export function writeDependencyFile(dependencies: object) {
-    let file: DependencyFile = {
-        dependencies: dependencies
+    const file: DependencyFile = {
+        dependencies: dependencies,
     }
     fs.writeFileSync(DEPENDENCY_FILE, JSON.stringify(file))
 }

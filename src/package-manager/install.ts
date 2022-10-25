@@ -1,41 +1,40 @@
 import {exec} from 'child_process'
-import { DEPENDENCY_FILE } from './consts'
+import {DEPENDENCY_FILE} from './consts'
 import {DependencyInfo, DependencyFile} from './types'
 import * as utils from './utils'
 
 function main() {
     utils.createLibDirectory()
 
-    if(utils.checkDirectoryOrFileExists(DEPENDENCY_FILE) == false) {
-        console.log("No dependencies.json found");
+    if (utils.checkDirectoryOrFileExists(DEPENDENCY_FILE) == false) {
+        console.log('No dependencies.json found')
         return
     }
-    
+
     const dependencies = utils.readDependencyFile().dependencies
 
-    if(process.argv.length == 2) {
+    if (process.argv.length == 2) {
         installFromDependencyFile()
         return
-    }
-    else if(process.argv.length < 5) {
-        console.log('Missing arguments\n\n\tpackage:install package-name git-url branch\n');
+    } else if (process.argv.length < 5) {
+        console.log('Missing arguments\n\n\tpackage:install package-name git-url branch\n')
         return
     }
-    
-    let packageName = process.argv[2]
-    let packageUrl = process.argv[3]
-    let packageBranch = process.argv[4]    
+
+    const packageName = process.argv[2]
+    const packageUrl = process.argv[3]
+    const packageBranch = process.argv[4]
 
     // Check if package is already installed
-    if(dependencies[packageName] != null) {
-        console.log(`Package  ${packageName}  is already installed`);        
+    if (dependencies[packageName] != null) {
+        console.log(`Package  ${packageName}  is already installed`)
         return
     }
 
     // Create new object
-    let newDependency: DependencyInfo = {
+    const newDependency: DependencyInfo = {
         url: packageUrl,
-        branch: packageBranch
+        branch: packageBranch,
     }
     dependencies[packageName] = newDependency
 
@@ -50,9 +49,9 @@ function main() {
  * Install a single dependency
  */
 function installDependency(name: string, info: DependencyInfo): void {
-    let fullDir = utils.getFullDependencyDirectory(name)
-    let dirExists = utils.checkDirectoryOrFileExists(fullDir)
-        
+    const fullDir = utils.getFullDependencyDirectory(name)
+    const dirExists = utils.checkDirectoryOrFileExists(fullDir)
+
     if (!dirExists) {
         downloadDependency(name, info)
     }
@@ -62,12 +61,12 @@ function installDependency(name: string, info: DependencyInfo): void {
  * Install all dependencies from dependency file
  */
 function installFromDependencyFile(): void {
-    console.log("Installing all packages from dependency file");    
+    console.log('Installing all packages from dependency file')
 
     const dependencies = utils.readDependencyFile().dependencies
-    
+
     Object.keys(dependencies).forEach(packageName => {
-        const packageInfo = dependencies[packageName]  
+        const packageInfo = dependencies[packageName]
 
         installDependency(packageName, packageInfo)
     })
