@@ -268,13 +268,43 @@ During the workflow the string `__VERSION__` inside a Javascript file is replace
 As a consequence, `vintner --version` returns the commit hash.
 
 ## Package-Manager
+Packages will be installed in the `.lib` directory which will be created on first install.
 
-Create `.lib` directory and download dependencies specified in `dependencies.json`. Dependencies that already exist will be skipped.
-Optional parameter `-r` to first delete and then download **all** dependencies.
+### Dependency File
+All installed packages are listed in the `dependencies.json` file with the following format:
 ```linenums="1"
-yarn package:install [-r]
+{
+    "dependencies": {
+        "org.alien4cloud.agentpuppet": {
+            "url": "https://github.com/alien4cloud/csar-public-library",
+            "branch": "3.0.x"
+        },
+        ...
+    }
+}
+```
+The package name is the path in the repository.
+
+### Install
+Install all packages listed in the `dependencies.json` file:
+
+```linenums="1"
+yarn package:install
 ```
 
+Install a single and new package (will be added to the `dependencies.json` file):
+
+```linenums="1"
+yarn package:install package-name git-url branch
+```
+
+### Remove
+Remove single package (uninstall and remove from `dependencies.json` file):
+```linenums="1"
+yarn package:remove package-name
+```
+
+### Clean Up
 Delete all dependencies in the `.lib` directory.
 ```linenums="1"
 yarn package:cleanup

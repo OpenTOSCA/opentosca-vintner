@@ -1,13 +1,7 @@
-import {exec} from 'child_process'
-import clean from '../controller/setup/clean'
-import {LIB_DIRECTORY, DEPENDENCY_FILE} from './consts'
+import * as utils from "./utils"
 
 function main() {
-    cleanup()
-}
-
-export function cleanup() {
-    exec(`rm -rf ${LIB_DIRECTORY}/*`)
+    utils.cleanup()
 }
 
 main()

@@ -1,5 +1,8 @@
 export type DependencyInfo = {
     url: string
-    directory: string
     branch: string
+}
+
+export type DependencyFile = {
+    dependencies: any // TODO
 }
