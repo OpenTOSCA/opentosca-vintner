@@ -54,13 +54,13 @@ The following environment variables can be used for configuration.
 
 ## Signature
 
-To verify a signature of a binary, first import our public key and then download the respective signature.
+To verify a signature of a binary, first import our public key and download the respective signature.
 The following is a walkthrough for `vintner-linux-x64` using `gpg`.
 
 First, import our public key.
 
 ```shell linenums="1"
-curl https://vintner.opentosca.org/assets/documents/vintner.gpg | gpg --import
+curl https://vintner.opentosca.org/assets/documents/vintner-release.gpg | gpg --import
 ```
 
 Then download and verify the respective signature.
@@ -82,7 +82,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
 ```
 
-This is the public key that should be used for verification ([download]({{ fix_url('assets/documents/vintner.gpg') }}){target=_blank}).
+This is the public key that should be used for verification ([download]({{ fix_url('assets/documents/vintner-release.gpg') }}){target=_blank}).
 
 ```shell linenums="1"
 pub   rsa4096/964183A1485881AD 2022-10-23 [SC]
