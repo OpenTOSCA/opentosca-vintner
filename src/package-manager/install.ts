@@ -1,91 +1,66 @@
-import {exec} from 'child_process'
-import {DEPENDENCY_FILE} from './consts'
-import {DependencyInfo, DependencyFile} from './types'
+import {exec, execSync} from 'child_process'
+import {DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './consts'
+import {Dependency, Dependencies} from './types'
+import * as files from '../utils/files'
 import * as utils from './utils'
+import path from 'path'
 
 function main() {
-    utils.createLibDirectory()
+    files.createDirectory(LIB_DIRECTORY)
+    files.createDirectory(TMP_DIRECTORY)
 
-    if (utils.checkDirectoryOrFileExists(DEPENDENCY_FILE) == false) {
-        console.log('No dependencies.json found')
+    if (files.exists(DEPENDENCY_FILE) == false) {
+        console.log('No dependencies file found')
         return
     }
 
-    const dependencies = utils.readDependencyFile().dependencies
+    const dependencies = utils.readDependencyFile()      
 
-    if (process.argv.length == 2) {
-        installFromDependencyFile()
-        return
-    } else if (process.argv.length < 5) {
-        console.log('Missing arguments\n\n\tpackage:install package-name git-url branch\n')
-        return
-    }
+    installDependencies(dependencies)
 
-    const packageName = process.argv[2]
-    const packageUrl = process.argv[3]
-    const packageBranch = process.argv[4]
-
-    // Check if package is already installed
-    if (dependencies[packageName] != null) {
-        console.log(`Package  ${packageName}  is already installed`)
-        return
-    }
-
-    // Create new object
-    const newDependency: DependencyInfo = {
-        url: packageUrl,
-        branch: packageBranch,
-    }
-    dependencies[packageName] = newDependency
-
-    // Save new dependency file
-    utils.writeDependencyFile(dependencies)
-
-    // Install new dependency
-    installDependency(packageName, dependencies[packageName])
-}
-
-/**
- * Install a single dependency
- */
-function installDependency(name: string, info: DependencyInfo): void {
-    const fullDir = utils.getFullDependencyDirectory(name)
-    const dirExists = utils.checkDirectoryOrFileExists(fullDir)
-
-    if (!dirExists) {
-        downloadDependency(name, info)
-    }
 }
 
 /**
  * Install all dependencies from dependency file
  */
-function installFromDependencyFile(): void {
+function installDependencies(dependencies: Dependencies): void {
     console.log('Installing all packages from dependency file')
 
-    const dependencies = utils.readDependencyFile().dependencies
-
-    Object.keys(dependencies).forEach(packageName => {
-        const packageInfo = dependencies[packageName]
-
-        installDependency(packageName, packageInfo)
+    dependencies.forEach(dependency => {
+        installDependency(dependency)
     })
 }
 
-function downloadDependency(name: string, info: DependencyInfo): void {
-    console.log(`Installing ${name}`)
+/**
+ * Install a single dependency
+ */
+function installDependency(dependency: Dependency): void {       
+    const tmpDir = utils.getTemporaryCloneDirectory(dependency)
+    const libDir = utils.getLibDirectory(dependency)
+    
+    if(files.exists(tmpDir)) {
+        // Repo has already been cloned
+        console.log(`Updating ${dependency.dir}`);
+        execSync(`git -C ${tmpDir} pull`) // pull latest
+    } else {
+        // TODO tag/commit
+        console.log(`Installing ${dependency.dir}`);
+        execSync(`git clone --branch ${dependency.checkout} ${dependency.repo} ${tmpDir}`) // pull latest
+    }
+    syncDependencyFiles(dependency, tmpDir, libDir)
+}
 
-    const dir = utils.domainToUrl(name)
-    const url = info.url + '/branches/' + info.branch + '/' + dir
-
-    const libDir = utils.getFullDependencyDirectory(name)
-
-    const command = `svn export ${url} ${libDir}`
-    exec(command)
-
-    /**
-     * alternative? https://www.npmjs.com/package/github-download-directory
-     */
+/**
+ * Sync the repo and the lib directory of a dependency
+ */
+function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: string) {
+    let desiredTmpPath = tmpDir
+    dependency.dir.split('.').forEach(dir => {
+        desiredTmpPath = path.join(desiredTmpPath, dir)
+    })    
+    desiredTmpPath += '/'   
+    
+    exec(`rsync -a ${desiredTmpPath} ${libDir} --delete`)
 }
 
 main()

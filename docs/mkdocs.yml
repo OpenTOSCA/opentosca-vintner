@@ -78,6 +78,7 @@ nav:
     - interface.md
     - dependencies.md
     - development.md
+    - package-manager.md
     - contributing.md
     - code-of-conduct.md
     - resources.md

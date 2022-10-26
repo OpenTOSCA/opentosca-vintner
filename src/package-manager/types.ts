@@ -1,8 +1,7 @@
-export type DependencyInfo = {
-    url: string
-    branch: string
+export type Dependency = {
+    dir: string
+    repo: string
+    checkout: string
 }
 
-export type DependencyFile = {
-    dependencies: any // TODO
-}
+export type Dependencies = Dependency[]

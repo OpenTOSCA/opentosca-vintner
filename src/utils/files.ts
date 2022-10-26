@@ -133,3 +133,7 @@ export async function download(source: string, target: string = temporaryFile())
 export function temporaryFile(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
 }
+
+export function mkdir(dir: string) {
+    fs.mkdirSync(dir)
+}

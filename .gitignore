@@ -38,4 +38,5 @@ dist
 tests/tmp
 
 # libs
-.lib
+lib
+tmp
