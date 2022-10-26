@@ -1,4 +1,4 @@
-import path from "path"
+import path from 'path'
 
 export const LIB_DIRECTORY = 'lib'
 export const TMP_DIRECTORY = path.join('tmp', 'lib')

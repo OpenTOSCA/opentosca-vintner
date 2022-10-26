@@ -1,6 +1,5 @@
 function main() {
-    console.log('This command is not yet implemented');
-    
+    console.log('This command is not yet implemented')
 }
 
 main()

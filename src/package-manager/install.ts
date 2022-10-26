@@ -14,10 +14,9 @@ function main() {
         return
     }
 
-    const dependencies = utils.readDependencyFile()      
+    const dependencies = utils.readDependencyFile()
 
     installDependencies(dependencies)
-
 }
 
 /**
@@ -34,17 +33,17 @@ function installDependencies(dependencies: Dependencies): void {
 /**
  * Install a single dependency
  */
-function installDependency(dependency: Dependency): void {       
+function installDependency(dependency: Dependency): void {
     const tmpDir = utils.getTemporaryCloneDirectory(dependency)
     const libDir = utils.getLibDirectory(dependency)
-    
-    if(files.exists(tmpDir)) {
+
+    if (files.exists(tmpDir)) {
         // Repo has already been cloned
-        console.log(`Updating ${dependency.dir}`);
+        console.log(`Updating ${dependency.dir}`)
         execSync(`git -C ${tmpDir} pull`) // pull latest
     } else {
         // TODO tag/commit
-        console.log(`Installing ${dependency.dir}`);
+        console.log(`Installing ${dependency.dir}`)
         execSync(`git clone --branch ${dependency.checkout} ${dependency.repo} ${tmpDir}`) // pull latest
     }
     syncDependencyFiles(dependency, tmpDir, libDir)
@@ -57,9 +56,9 @@ function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: str
     let desiredTmpPath = tmpDir
     dependency.dir.split('.').forEach(dir => {
         desiredTmpPath = path.join(desiredTmpPath, dir)
-    })    
-    desiredTmpPath += '/'   
-    
+    })
+    desiredTmpPath += '/'
+
     exec(`rsync -a ${desiredTmpPath} ${libDir} --delete`)
 }
 

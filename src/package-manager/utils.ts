@@ -6,12 +6,11 @@ import * as files from '../utils/files'
 import Papa from 'papaparse'
 import path from 'path'
 
-
 /**
  * Get the temporary directory for a dependency
  */
 export function getTemporaryCloneDirectory(dependency: Dependency): string {
-    let dir = getDirectoryNameForDependency(dependency)
+    const dir = getDirectoryNameForDependency(dependency)
     return path.join(TMP_DIRECTORY, dir)
 }
 
@@ -19,17 +18,17 @@ export function getTemporaryCloneDirectory(dependency: Dependency): string {
  * Get the lib directory for a dependency
  */
 export function getLibDirectory(dependency: Dependency): string {
-    let dir = getDirectoryNameForDependency(dependency)
+    const dir = getDirectoryNameForDependency(dependency)
     return path.join(LIB_DIRECTORY, dir)
 }
 
 /**
  * Get directory name for a dependency:
- * 
+ *
  * directory:checkout
  */
 function getDirectoryNameForDependency(dependency: Dependency): string {
-    return dependency.dir + ":" + dependency.checkout
+    return dependency.dir + ':' + dependency.checkout
 }
 
 /**
@@ -45,12 +44,12 @@ export function domainToUrl(dir: string): string {
  */
 export function readDependencyFile(): Dependencies {
     let dependencies: Dependencies = []
-    dependencies = Papa.parse<Dependency>(files.loadFile(DEPENDENCY_FILE), {skipEmptyLines: true, header: true, delimiter: ' '}).data
+    dependencies = Papa.parse<Dependency>(files.loadFile(DEPENDENCY_FILE), {
+        skipEmptyLines: true,
+        header: true,
+        delimiter: ' ',
+    }).data
     return dependencies
-}
-
-export function writeDependencyFile(dependencies: object) {
-    
 }
 
 export function cleanup(): void {
