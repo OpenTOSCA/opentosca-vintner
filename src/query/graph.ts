@@ -56,11 +56,8 @@ export class Graph {
     private getNext(nodeName: string, predicate: PredicateExpression | undefined, direction: string): string[] {
         const targets = new Set<string>()
         for (const r of this.nodesMap.get(nodeName)?.relationships || []) {
-            if ((direction == 'both' || direction == 'right') && r.source == nodeName) {
-                targets.add(r.target)
-            } else if ((direction == 'both' || direction == 'left') && r.target == nodeName) {
-                targets.add(r.source)
-            }
+            if ((direction == 'both' || direction == 'right') && r.source == nodeName) targets.add(r.target)
+            if ((direction == 'both' || direction == 'left') && r.target == nodeName) targets.add(r.source)
         }
         return [...targets]
     }

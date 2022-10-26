@@ -11,7 +11,6 @@ import {QueryTemplateArguments} from '../controller/query/query'
 import {Winery} from '../orchestrators/winery'
 import * as files from '../utils/files'
 import * as path from 'path';
-import {cond} from 'lodash';
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -20,18 +19,19 @@ export class Resolver {
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
     private currentKeys: string[] = [];
 
-    resolve(query: QueryTemplateArguments) {
+    resolve(queryArgs: QueryTemplateArguments) {
+        // If input is a file load it, otherwise use input string directly
+        const queryString: string = files.isFile(queryArgs.query)? files.loadFile(queryArgs.query) : queryArgs.query
         const parser = new Parser
         let tree
         try {
-            this.source = query.source
-            tree = parser.getAST(query.query)
+            this.source = queryArgs.source
+            tree = parser.getAST(queryString)
         } catch (e: any) {
             console.error(e.message)
             process.exit(0);
         }
-        console.log("Generated the following AST: ")
-        console.log(JSON.stringify(tree, null, 4))
+        console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
         return this.evaluate(tree)
     }
 

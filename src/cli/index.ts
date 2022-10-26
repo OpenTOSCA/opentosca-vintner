@@ -122,7 +122,7 @@ const query = program.command('query').description('executes a query')
 
 query
     .command('execute')
-    .requiredOption('--query <string>', 'path to query')
+    .requiredOption('--query <string>', 'path to query or query string')
     .option('--source <string>', 'specifies where to search for template to query', 'vintner')
     .option('--output <string>', 'output file for the result of the query')
     .action(hae(async options => {

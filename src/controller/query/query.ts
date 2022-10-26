@@ -8,7 +8,6 @@ export type QueryTemplateArguments = {
 }
 
 export default function executeQuery(options: QueryTemplateArguments) {
-    console.log(`Executing query: ${options.query}`)
     const resolver = new Resolver()
     const results = resolver.resolve(options)
     if (results.length > 0) {
