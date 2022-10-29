@@ -1,13 +1,13 @@
 import {Parser} from './parser'
 import {Template, Templates} from '../repository/templates'
-import {Instance} from '../repository/instances'
+import {Instance, Instances} from '../repository/instances'
 import {
     ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
     RelationshipExpression, ReturnExpression, SelectExpression, VariableExpression
 } from '../specification/query-type'
 import {ServiceTemplate} from '../specification/service-template'
 import {Graph} from './graph'
-import {QueryTemplateArguments} from '../controller/query/query'
+import {QueryTemplateArguments} from '../controller/query/resolve'
 import {Winery} from '../orchestrators/winery'
 import * as files from '../utils/files'
 import * as path from 'path';
@@ -71,10 +71,16 @@ export class Resolver {
             switch(this.source) {
                 case 'vintner':
                     if (expression.type == 'Instance') {
-                        serviceTemplates.push({
-                            name: expression.path,
-                            template: new Instance(expression.path).getTemplateWithAttributes()
-                        })
+                        if (expression.path == '*') {
+                            for (const t of Instances.all()) {
+                                serviceTemplates.push({name: t.getName(), template: t.getTemplateWithAttributes()})
+                            }
+                        } else {
+                            serviceTemplates.push({
+                                name: expression.path,
+                                template: new Instance(expression.path).getTemplateWithAttributes()
+                            })
+                        }
                     } else if (expression.type == 'Template' && expression.path == '*') {
                         for (const t of Templates.all()) {
                             serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})

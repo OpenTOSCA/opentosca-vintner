@@ -154,4 +154,12 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/query',
+    hae(async (req, res, next) => {
+        const result = Controller.query.resolve(req.body)
+        res.json({result})
+    })
+)
+
 export default resolvers
