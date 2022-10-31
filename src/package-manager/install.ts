@@ -4,6 +4,8 @@ import {Dependency, Dependencies} from './types'
 import * as files from '../utils/files'
 import * as utils from './utils'
 import path from 'path'
+const syncDirectory = require('sync-directory'); 
+
 
 function main() {
     files.createDirectory(LIB_DIRECTORY)
@@ -57,9 +59,10 @@ function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: str
     dependency.dir.split('.').forEach(dir => {
         desiredTmpPath = path.join(desiredTmpPath, dir)
     })
-    desiredTmpPath += '/'
 
-    exec(`rsync -a ${desiredTmpPath} ${libDir} --delete`)
+    syncDirectory.sync(desiredTmpPath, libDir, {
+        deleteOrphaned: true
+    })
 }
 
 main()
