@@ -62,3 +62,37 @@ export function readCustomDependencyFile(path: string): Dependencies {
 export function cleanup(): void {
     exec(`rm -rf ${LIB_DIRECTORY}/*`)
 }
+
+export function gatherAllDependencies(): Set<string> {
+    const dependencyList = new Set<string>()
+    // Add all deps from root dependency file
+    const dependencies = readDependencyFile()
+    addDependenciesToList(dependencies, dependencyList)
+
+    // Add all deps from sub dependency files
+    const directories = files.readDir(LIB_DIRECTORY)
+    let listSize
+    do {
+        listSize = dependencyList.size
+        for (const dir of directories) {
+            // Only consider directories of required dependencies
+            if (dependencyList.has(dir)) {
+                const subDependencyFilePath = path.join(TMP_DIRECTORY, dir, DEPENDENCY_FILE)
+
+                // If dependency has a dependency file
+                if (files.exists(subDependencyFilePath)) {
+                    const subDependencies = readCustomDependencyFile(subDependencyFilePath)
+                    addDependenciesToList(subDependencies, dependencyList)
+                }
+            }
+        }
+    } while (listSize != dependencyList.size) // Repeat until no more changes
+
+    return dependencyList
+}
+
+function addDependenciesToList(dependencies: Dependencies, list: Set<string>) {
+    for (const dep of dependencies) {
+        list.add(getDirectoryNameForDependency(dep))
+    }
+}
