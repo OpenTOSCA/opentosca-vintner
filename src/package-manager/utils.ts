@@ -27,7 +27,7 @@ export function getLibDirectory(dependency: Dependency): string {
  *
  * directory:checkout
  */
-function getDirectoryNameForDependency(dependency: Dependency): string {
+export function getDirectoryNameForDependency(dependency: Dependency): string {
     return dependency.dir + ':' + dependency.checkout
 }
 
