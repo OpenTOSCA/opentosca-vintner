@@ -13,7 +13,7 @@ export const LICENSES: {[key: string]: string} = {
     '0BSD': 'https://opensource.org/licenses/0BSD',
     'CC0-1.0': 'https://creativecommons.org/publicdomain/zero/1.0',
     'CC-BY-3.0': 'https://creativecommons.org/licenses/by/3.0/',
-    'BSD*': ''
+    'BSD*': '',
 }
 
 /**
