@@ -1,3 +1,2 @@
 dir repo checkout
 org.alien4cloud.agentpuppet https://github.com/alien4cloud/csar-public-library develop
-org.ystia https://github.com/alien4cloud/csar-public-library 3.0.x
