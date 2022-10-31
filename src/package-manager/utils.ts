@@ -77,7 +77,7 @@ export function gatherAllDependencies(): Set<string> {
         for (const dir of directories) {
             // Only consider directories of required dependencies
             if (dependencyList.has(dir)) {
-                const subDependencyFilePath = path.join(TMP_DIRECTORY, dir, DEPENDENCY_FILE)
+                const subDependencyFilePath = path.join(LIB_DIRECTORY, dir, DEPENDENCY_FILE)
 
                 // If dependency has a dependency file
                 if (files.exists(subDependencyFilePath)) {
