@@ -4,8 +4,7 @@ import {Dependency, Dependencies} from './types'
 import * as files from '../utils/files'
 import * as utils from './utils'
 import path from 'path'
-const syncDirectory = require('sync-directory'); 
-
+import syncDirectory from 'sync-directory'
 
 function main() {
     files.createDirectory(LIB_DIRECTORY)
@@ -60,8 +59,8 @@ function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: str
         desiredTmpPath = path.join(desiredTmpPath, dir)
     })
 
-    syncDirectory.sync(desiredTmpPath, libDir, {
-        deleteOrphaned: true
+    syncDirectory(desiredTmpPath, libDir, {
+        deleteOrphaned: true,
     })
 }
 
