@@ -137,3 +137,7 @@ export function temporaryFile(name?: string) {
 export function mkdir(dir: string) {
     fs.mkdirSync(dir)
 }
+
+export function readDir(dir: string): string[] {
+    return fs.readdirSync(dir)
+}
