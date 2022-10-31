@@ -18,7 +18,7 @@ Installs all packages listed in the `dependencies` file:
 yarn package:install
 ```
 The repositories will be downloaded in `tmp/lib/name-of-dependency`.
-Then the specified directory is copied to `lib/name-of-dependency`.
+Then the specified directory is synced to `lib/name-of-dependency`.
 
 Already installed dependencies will be updated instead.
 
