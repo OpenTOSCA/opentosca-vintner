@@ -43,8 +43,15 @@ export function domainToUrl(dir: string): string {
  * Read the dependency file
  */
 export function readDependencyFile(): Dependencies {
+    return readCustomDependencyFile(DEPENDENCY_FILE)
+}
+
+/**
+ * Read the dependency file
+ */
+export function readCustomDependencyFile(path: string): Dependencies {
     let dependencies: Dependencies = []
-    dependencies = Papa.parse<Dependency>(files.loadFile(DEPENDENCY_FILE), {
+    dependencies = Papa.parse<Dependency>(files.loadFile(path), {
         skipEmptyLines: true,
         header: true,
         delimiter: ' ',

@@ -24,8 +24,6 @@ function main() {
  * Install all dependencies from dependency file
  */
 function installDependencies(dependencies: Dependencies): void {
-    console.log('Installing all packages from dependency file')
-
     dependencies.forEach(dependency => {
         installDependency(dependency)
     })
@@ -38,16 +36,23 @@ function installDependency(dependency: Dependency): void {
     const tmpDir = utils.getTemporaryCloneDirectory(dependency)
     const libDir = utils.getLibDirectory(dependency)
 
+    const dependencyName = utils.getDirectoryNameForDependency(dependency)
     if (files.exists(tmpDir)) {
         // Repo has already been cloned
-        console.log(`Updating ${dependency.dir}`)
+        console.log(`Updating ${dependencyName}`)
         execSync(`git -C ${tmpDir} pull`) // pull latest
     } else {
         // TODO tag/commit
-        console.log(`Installing ${dependency.dir}`)
+        console.log(`Installing ${dependencyName}`)
         execSync(`git clone --branch ${dependency.checkout} ${dependency.repo} ${tmpDir}`) // pull latest
     }
     syncDependencyFiles(dependency, tmpDir, libDir)
+
+    const subDependencyFile = path.join(tmpDir, DEPENDENCY_FILE)
+    if (files.exists(subDependencyFile)) {
+        const subDependencies = utils.readCustomDependencyFile(subDependencyFile)
+        installDependencies(subDependencies)
+    }
 }
 
 /**
