@@ -45,10 +45,11 @@ function installDependency(dependency: Dependency): void {
         // TODO tag/commit
         console.log(`Installing ${dependencyName}`)
         execSync(`git clone --branch ${dependency.checkout} ${dependency.repo} ${tmpDir}`) // pull latest
+        //execSync(`git checkout ${dependency.checkout}`) ???
     }
     syncDependencyFiles(dependency, tmpDir, libDir)
 
-    const subDependencyFile = path.join(tmpDir, DEPENDENCY_FILE)
+    const subDependencyFile = path.join(libDir, DEPENDENCY_FILE)
     if (files.exists(subDependencyFile)) {
         const subDependencies = utils.readCustomDependencyFile(subDependencyFile)
         installDependencies(subDependencies)
