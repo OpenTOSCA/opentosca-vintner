@@ -1,19 +1,15 @@
-import {exec, execSync} from 'child_process'
-import {DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './consts'
-import {Dependency, Dependencies} from './types'
+import {execSync} from 'child_process'
+import {Dependency, Dependencies, DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './types'
 import * as files from '../utils/files'
 import * as utils from './utils'
 import path from 'path'
 import syncDirectory from 'sync-directory'
 
-function main() {
+export default async function () {
+    if (!files.exists(DEPENDENCY_FILE)) return console.log('No dependencies file found')
+
     files.createDirectory(LIB_DIRECTORY)
     files.createDirectory(TMP_DIRECTORY)
-
-    if (files.exists(DEPENDENCY_FILE) == false) {
-        console.log('No dependencies file found')
-        return
-    }
 
     const dependencies = utils.readDependencyFile()
 
@@ -69,5 +65,3 @@ function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: str
         deleteOrphaned: true,
     })
 }
-
-main()

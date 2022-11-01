@@ -1,7 +1,5 @@
-import {DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './consts'
 import {escapeRegExp} from 'lodash'
-import {exec} from 'child_process'
-import {Dependencies, Dependency} from './types'
+import {Dependencies, Dependency, DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './types'
 import * as files from '../utils/files'
 import Papa from 'papaparse'
 import path from 'path'
@@ -59,10 +57,6 @@ export function readCustomDependencyFile(path: string): Dependencies {
     return dependencies
 }
 
-export function cleanup(): void {
-    exec(`rm -rf ${LIB_DIRECTORY}/*`)
-}
-
 export function gatherAllDependencies(): Set<string> {
     const dependencyList = new Set<string>()
     // Add all deps from root dependency file
@@ -70,7 +64,7 @@ export function gatherAllDependencies(): Set<string> {
     addDependenciesToList(dependencies, dependencyList)
 
     // Add all deps from sub dependency files
-    const directories = files.readDir(LIB_DIRECTORY)
+    const directories = files.readDirectory(LIB_DIRECTORY)
     let listSize
     do {
         listSize = dependencyList.size

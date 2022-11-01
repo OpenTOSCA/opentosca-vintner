@@ -70,6 +70,7 @@ nav:
     - getting-started.md
     - installation.md
     - orchestrators.md
+    - package-manager.md
     - Variability4TOSCA:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
@@ -78,7 +79,6 @@ nav:
     - interface.md
     - dependencies.md
     - development.md
-    - package-manager.md
     - contributing.md
     - code-of-conduct.md
     - resources.md
