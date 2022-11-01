@@ -24,7 +24,11 @@
  * See https://github.com/squidfunk/mkdocs-material/issues/4072
  */
 @media (max-width: 720px) {
-    .md-typeset .tabbed-block code {
+    div.tabbed-block > div.highlight > table.highlighttable > tbody {
+        margin: 0 -0.8rem;
+    }
+
+    div.tabbed-block > div.highlight > pre > code {
         margin: 0 -0.8rem;
     }
 }

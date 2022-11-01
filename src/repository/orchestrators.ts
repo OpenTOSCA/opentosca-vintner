@@ -26,11 +26,11 @@ export class Orchestrators {
     }
 
     static getConfig() {
-        return files.loadFile<OrchestratorsConfig>(this.getConfigPath())
+        return files.loadYAML<OrchestratorsConfig>(this.getConfigPath())
     }
 
     static setConfig(config: OrchestratorsConfig) {
-        files.storeFile(Orchestrators.getConfigPath(), config)
+        files.storeYAML(Orchestrators.getConfigPath(), config)
     }
 
     static getOrchestrator() {

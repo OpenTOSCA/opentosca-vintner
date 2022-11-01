@@ -25,7 +25,7 @@ export class Unfurl implements Orchestrator {
 
     async deploy(instance: Instance) {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
-        files.storeFile(this.getEnsemblePath(instance), this.getEnsemble(instance))
+        files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))
         files.copy(instance.getTemplateDirectory(), this.getEnsembleDirectory(instance))
         files.copy(instance.getServiceInputPath(), this.getEnsembleInputsPath(instance))
         await this.shell.execute([this.getBinary(instance), 'deploy', '--approve'])

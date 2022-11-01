@@ -118,7 +118,7 @@ export class Instance {
     }
 
     getServiceTemplate() {
-        return files.loadFile<ServiceTemplate>(this.getServiceTemplatePath())
+        return files.loadYAML<ServiceTemplate>(this.getServiceTemplatePath())
     }
 
     getVariableServiceTemplatePath() {
@@ -126,6 +126,6 @@ export class Instance {
     }
 
     getVariableServiceTemplate() {
-        return files.loadFile<ServiceTemplate>(this.getVariableServiceTemplatePath())
+        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
     }
 }

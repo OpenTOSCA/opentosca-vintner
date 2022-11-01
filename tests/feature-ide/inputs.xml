@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extendedConfiguration>
+    <feature automatic="selected" manual="undefined" name="Application"/>
+    <feature automatic="selected" manual="selected" name="Feature A">
+        <attribute name="attr_bool_true" value="true"/>
+        <attribute name="attr_bool_false" value="false"/>
+        <attribute name="attr LoNg" value="3"/>
+        <attribute name="attr_double" value="2.5"/>
+        <attribute name="attr_string" value="hello world"/>
+    </feature>
+    <feature automatic="undefined" manual="undefined" name="Feature B"/>
+    <feature automatic="undefined" manual="selected" name="Feature C">
+        <attribute name="__name" value="feature_overridden"/>
+    </feature>
+    <feature automatic="undefined" manual="selected" name="Feature D">
+        <attribute name="attr Long" value="1"/>
+        <attribute name="__name_attr_long" value="attr_overridden"/>
+    </feature>
+    <feature automatic="undefined" manual="selected" name="Feature E">
+        <attribute name="__name" value="feature_another_overridden"/>
+        <attribute name="attr_double" value="1337"/>
+        <attribute name="attr_string" value="something"/>
+        <attribute name="__name_attr_string" value="attr_also_overridden"/>
+        <attribute name="attr_another_string" value="something else"/>
+        <attribute name="__full_name_attr_another_string" value="fully_overridden"/>
+    </feature>
+</extendedConfiguration>

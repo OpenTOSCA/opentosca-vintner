@@ -7,6 +7,7 @@ import * as utils from '../../utils/utils'
 import * as validator from '../../utils/validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
 import {listIsEmpty, prettyJSON} from '../../utils/utils'
+import * as featureIDE from '../../utils/feature-ide'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -28,7 +29,7 @@ export type ResolvingOptions = {
     disableExpectedHostingConsistencyCheck?: boolean
 }
 
-export default function (options: TemplateResolveArguments) {
+export default async function (options: TemplateResolveArguments) {
     let instance: Instance | undefined
     if (options.instance) instance = new Instance(options.instance)
 
@@ -41,10 +42,16 @@ export default function (options: TemplateResolveArguments) {
     if (!output) throw new Error('Either instance or output must be set')
 
     // Load service template
-    const serviceTemplate = files.loadFile<ServiceTemplate>(template)
+    const serviceTemplate = files.loadYAML<ServiceTemplate>(template)
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(options.inputs ? files.loadFile<InputAssignmentMap>(options.inputs) : {})
+        .setVariabilityInputs(
+            options.inputs
+                ? options.inputs.endsWith('.xml')
+                    ? await featureIDE.loadConfiguration(options.inputs)
+                    : files.loadYAML<InputAssignmentMap>(options.inputs)
+                : {}
+        )
         .setOptions(options)
 
     // Ensure correct TOSCA definitions version
@@ -59,7 +66,7 @@ export default function (options: TemplateResolveArguments) {
     // Transform to TOSCA compliant format
     resolver.transformInPlace()
 
-    files.storeFile(output, serviceTemplate)
+    files.storeYAML(output, serviceTemplate)
 }
 
 type ConditionalElementBase = {
