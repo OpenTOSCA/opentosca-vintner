@@ -4,6 +4,12 @@ from mkdocs_macros import fix_url
 def define_env(env):
 
     @env.macro
+    def experimental_notice():
+        return """!!! Warning
+    Experimental Feature.
+"""
+
+    @env.macro
     def linux_only_notice():
         return """!!! Warning
     This only works on Linux.

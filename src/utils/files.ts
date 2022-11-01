@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import {copySync} from 'fs-extra'
+import fsExtra from 'fs-extra'
 import * as yaml from 'js-yaml'
 import extract from 'extract-zip'
 import os from 'os'
@@ -75,7 +75,7 @@ export function toYAML(obj: any) {
 }
 
 export function copy(source: string, target: string) {
-    copySync(path.resolve(source), path.resolve(target))
+    fsExtra.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {
@@ -134,10 +134,7 @@ export function temporaryFile(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
 }
 
-export function mkdir(dir: string) {
-    fs.mkdirSync(dir)
-}
-
-export function readDir(dir: string): string[] {
+export function readDirectory(dir: string): string[] {
+    assertDirectory(dir)
     return fs.readdirSync(dir)
 }
