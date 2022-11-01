@@ -79,7 +79,7 @@ export class Opera implements Orchestrator {
             const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {
                 const entries: { [s: string]: { is_set: string, data: string } } =
-                    files.loadFile(attributesPath)
+                    files.loadYAML(attributesPath)
                 for (const [attrKey, attrValue] of Object.entries(entries)) {
                     _.set(attributes, [node, 'attributes', attrKey], attrValue.data)
                 }

@@ -106,7 +106,7 @@ export class Resolver {
                 case 'file': {
                     serviceTemplates.push({
                         name: expression.path,
-                        template: files.loadFile(path.resolve(expression.path))
+                        template: files.loadYAML(path.resolve(expression.path))
                     })
                 }
             }
