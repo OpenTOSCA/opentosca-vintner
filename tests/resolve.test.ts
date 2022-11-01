@@ -1,5 +1,8 @@
 import {getDefaultTest} from './utils'
 
+it('circle', getDefaultTest({}))
+it('circle-prune', getDefaultTest({pruneNodes: true}))
+
 it('node', getDefaultTest({}))
 it('node-prune', getDefaultTest({pruneNodes: true}))
 it('node-prune-nothing', getDefaultTest({pruneNodes: true}))

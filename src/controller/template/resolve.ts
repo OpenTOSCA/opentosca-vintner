@@ -74,6 +74,7 @@ type ConditionalElementBase = {
     name: string
     present?: boolean
     conditions: VariabilityExpression[]
+    presence_history: ConditionalElement[]
 }
 
 type Input = ConditionalElementBase & {
@@ -107,6 +108,7 @@ type ConditionalElement = Input | Node | Relation | Policy | Group
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
+    get_element_presence_history?: ConditionalElement[]
 }
 
 export class VariabilityResolver {
@@ -138,6 +140,7 @@ export class VariabilityResolver {
                 type: 'input',
                 name,
                 conditions: utils.toList(definition.conditions),
+                presence_history: [],
             }
             this.inputs.push(input)
             this.inputsMap.set(name, input)
@@ -157,6 +160,7 @@ export class VariabilityResolver {
                 ingoing: [],
                 outgoing: [],
                 groups: [],
+                presence_history: [],
             }
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
@@ -174,6 +178,7 @@ export class VariabilityResolver {
                     target,
                     conditions,
                     groups: [],
+                    presence_history: [],
                 }
                 this.relations.push(relation)
                 node.outgoing.push(relation)
@@ -211,6 +216,7 @@ export class VariabilityResolver {
                 type: 'policy',
                 name,
                 conditions: utils.toList(template.conditions),
+                presence_history: [],
             }
             this.policies.push(policy)
         })
@@ -225,6 +231,7 @@ export class VariabilityResolver {
                     TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
                     TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
                 ].includes(template.type),
+                presence_history: [],
             }
             this.groups.push(group)
             this.groupsMap.set(name, group)
@@ -236,6 +243,7 @@ export class VariabilityResolver {
         })
     }
 
+    // TODO: get element should support all kind of conditional elements ...
     getElement(member: GroupMember): Node | Relation {
         if (validator.isString(member)) return this.getNode(member)
         if (validator.isArray(member)) return this.getRelation(member)
@@ -272,6 +280,29 @@ export class VariabilityResolver {
     }
 
     checkPresence(element: ConditionalElement) {
+        // Detect circle
+        // TODO: what is about pruneRelations? circle detection must respect that; or is this implicit?
+        const exists =
+            element.presence_history.findIndex(entry => {
+                // TODO: support all conditional element types?!
+                if (entry.type === 'node' && element.type === 'node') return entry.name === element.name
+
+                if (entry.type === 'relation' && element.type === 'relation')
+                    return entry.name === element.name && entry.source === element.source
+
+                return false
+            }) !== -1
+
+        // circle resolved to true
+        // TODO: circle resolves to false if pruning
+        // TODO: does this even make sense? or just to make it more error-resistant
+        if (exists) {
+            element.present = !this.options.pruneNodes
+            return element.present
+        }
+
+        element.presence_history.push(element)
+
         // Variability group are never present
         if (element.type === 'group' && element.variability) element.present = false
 
