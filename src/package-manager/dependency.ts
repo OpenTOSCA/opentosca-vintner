@@ -1,6 +1,7 @@
 import path from 'path'
 import {LIB_DIRECTORY, TMP_DIRECTORY} from './utils'
 import syncDirectory from 'sync-directory'
+import * as files from '../utils/files'
 
 export class Dependency {
     id: string
@@ -27,6 +28,9 @@ export class Dependency {
      * Sync the repo and the lib directory of a dependency
      */
     async sync() {
+        files.assertDirectory(this.source)
+        files.assertDirectory(this.target)
+
         return new Promise(resolve => {
             syncDirectory(this.source, this.target, {
                 deleteOrphaned: true,
