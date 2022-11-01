@@ -264,7 +264,13 @@ export class Resolver {
             return condition.negation? !exists : exists
         }
         if (condition.variable == 'name') {
-            return condition.negation? condition.value != key : condition.value == key
+            if (condition.operator == '=') {
+                return condition.negation? condition.value != key : condition.value == key
+            } else {
+                if (value)
+                return condition.negation? !(new RegExp(value).test(key)) : new RegExp(value).test(key)
+            }
+
         }
         const property = this.resolvePath(variable, data)
         let result = false
