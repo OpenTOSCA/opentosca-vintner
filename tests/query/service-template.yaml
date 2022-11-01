@@ -1,38 +1,32 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
+
 topology_template:
     node_templates:
         webapp:
             type: WebApplication
             requirements:
-                -
-                    database_endpoint: mysql_database
-                -
-                    host: tomcat
+                - database_endpoint: mysql_database
+                - host: tomcat
         tomcat:
             type: Tomcat
             requirements:
-                -
-                    host: vm
+                - host: vm_1
         mysql_database:
             type: Database
             requirements:
-                -
-                    host: dbms
+                - host: dbms
         dbms:
             type: DBMS
             requirements:
-                -
-                    host: dbms
+                - host: vm_2
         vm_1:
             type: SoftwareComponent
             requirements:
-                -
-                    host: openstack
+                - host: openstack
         vm_2:
             type: SoftwareComponent
             requirements:
-                -
-                    host: openstack
+                - host: openstack
         openstack:
             type: Compute
             capabilities:
@@ -44,3 +38,12 @@ topology_template:
                 properties:
                     type: linux
                     distribution: ubuntu
+                    
+    groups:
+        database_group:
+            type: tosca.groups.Root
+            members: [ mysql_database, dbms ]
+    policies:
+        - placement_policy:
+            type: tosca.policies.placement
+            targets: [ vm_1, vm_2 ]

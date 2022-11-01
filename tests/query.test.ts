@@ -1,27 +1,31 @@
 import {expect} from 'chai'
 import * as files from '../src/utils/files';
-import {ServiceTemplate} from '../src/specification/service-template';
 import path from 'path';
 import {Resolver} from '../src/query/resolver'
-import {QueryTemplateArguments} from '../src/controller/query/query';
+import {QueryTemplateArguments} from '../src/controller/query/resolve';
 
-it('select-all', () => {
-    const resolver = new Resolver()
-    const query = 'FROM template/tests/query-select-all/service-template.yaml SELECT .'
-    const args: QueryTemplateArguments = {output: '', query: query, source: 'file'}
-    const result = resolver.resolve(args)
-    console.log(files.stringify(result[0].result))
-    expect(result[0].result).to.deep.equal(
-        files.loadFile<ServiceTemplate>(path.join(__dirname, 'query-select-all', 'expected-output.yaml'))
-    )
+it('all', () => {
+    const result = getResult('FROM template/tests/query/service-template.yaml SELECT .')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/all/expected-output.yaml')))
 })
 
-it('select-node-template', () => {
-    const resolver = new Resolver()
-    const query = 'FROM template/tests/query-select-node-template/service-template.yaml SELECT node_templates.webapp'
-    const args: QueryTemplateArguments = {output: '', query: query, source: 'file'}
-    const result = resolver.resolve(args)
-    expect(result[0].result).to.deep.equal(
-        files.loadFile<ServiceTemplate>(path.join(__dirname, 'query-select-node-template', 'expected-output.yaml'))
-    )
+it('group', () => {
+    const result = getResult('FROM template/tests/query/service-template.yaml SELECT GROUP(database_group)')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/group/expected-output.yaml')))
 })
+
+it('node-template', () => {
+    const result = getResult('FROM template/tests/query/service-template.yaml SELECT node_templates.webapp')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/node-template/expected-output.yaml')))
+})
+
+it('policy', () => {
+    const result = getResult('FROM template/tests/query/service-template.yaml SELECT POLICY(placement_policy)')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/policy/expected-output.yaml')))
+})
+
+function getResult(query: string): Object {
+    const resolver = new Resolver()
+    const args: QueryTemplateArguments = {output: '', query: query, source: 'file'}
+    return resolver.resolve(args)[0].result
+}

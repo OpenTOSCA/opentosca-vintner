@@ -23,7 +23,7 @@ export class Winery implements RepoPlugin {
             (
                 {
                     name: v.split("/")[v.split("/").length - 2],
-                    template: files.loadFile(v) as ServiceTemplate
+                    template: files.loadYAML(v)
                 }
             ))
     }
@@ -37,7 +37,7 @@ export class Winery implements RepoPlugin {
             path.resolve(path.join(this.templatePath,
                 name,
                 'ServiceTemplate.tosca'))
-        return {name: name, template: files.loadFile(templatePath) as ServiceTemplate};
+        return {name: name, template: files.loadYAML(templatePath)}
     }
 
     /**
@@ -46,7 +46,7 @@ export class Winery implements RepoPlugin {
     getRepo(): string {
         const wineryConfigPath = path.resolve(path.join(os.homedir(), '.winery', 'winery.yml'))
         try {
-            const wineryConfig = files.loadFile(path.resolve(wineryConfigPath)) as {repository: {repositoryRoot: string}}
+            const wineryConfig = files.loadYAML(path.resolve(wineryConfigPath)) as {repository: {repositoryRoot: string}}
             return wineryConfig.repository.repositoryRoot
         } catch (e: unknown) {
             console.error('Unable to find Winery configuration file. Cannot execute query on winery repository.')

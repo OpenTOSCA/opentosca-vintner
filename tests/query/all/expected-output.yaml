@@ -10,7 +10,7 @@ topology_template:
         tomcat:
             type: Tomcat
             requirements:
-                - host: vm
+                - host: vm_1
         mysql_database:
             type: Database
             requirements:
@@ -18,7 +18,7 @@ topology_template:
         dbms:
             type: DBMS
             requirements:
-                - host: dbms
+                - host: vm_2
         vm_1:
             type: SoftwareComponent
             requirements:
@@ -38,3 +38,12 @@ topology_template:
                 properties:
                     type: linux
                     distribution: ubuntu
+                    
+    groups:
+        database_group:
+            type: tosca.groups.Root
+            members: [ mysql_database, dbms ]
+    policies:
+        - placement_policy:
+            type: tosca.policies.placement
+            targets: [ vm_1, vm_2 ]

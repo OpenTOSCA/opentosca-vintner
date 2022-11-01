@@ -1,0 +1,10 @@
+vm_1:
+    type: SoftwareComponent
+    requirements:
+        -
+            host: openstack
+vm_2:
+    type: SoftwareComponent
+    requirements:
+        -
+            host: openstack
