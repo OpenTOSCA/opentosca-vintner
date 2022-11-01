@@ -22,7 +22,7 @@ export class Shell {
         return resolved
     }
 
-    async execute(parts: string[]) {
+    async execute(parts: string[]): Promise<number> {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
             console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)

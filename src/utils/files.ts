@@ -108,7 +108,7 @@ export async function extractArchive(source: string, target: string) {
     await extract(source, {dir: target})
 }
 
-export async function download(source: string, target: string = temporaryFile()): Promise<string> {
+export async function download(source: string, target: string = temporaryPath()): Promise<string> {
     return new Promise((resolve, reject) => {
         axios
             .get(source, {
@@ -130,7 +130,7 @@ export async function download(source: string, target: string = temporaryFile())
     })
 }
 
-export function temporaryFile(name?: string) {
+export function temporaryPath(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
 }
 

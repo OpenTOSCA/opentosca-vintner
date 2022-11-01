@@ -3,9 +3,7 @@ import hae from './hae'
 import config from './config'
 import Controller from '../controller'
 import * as files from '../utils/files'
-import {toBoolean} from '../utils/utils'
 import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
-import install from '../package-manager/install'
 import PackageManager from '../package-manager'
 
 const program = new Command()
@@ -117,6 +115,76 @@ initOrchestrators
     .action(
         hae(async options => {
             await Controller.orchestrators.initUnfurlWSL(options)
+        })
+    )
+
+const packages = program.command('packages').description('handle packages')
+
+packages
+    .command('check')
+    .description('checks syntax of dependencies file')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages check' command
+            throw new Error('Not Implemented')
+        })
+    )
+
+packages
+    .command('list')
+    .description('lists all dependencies')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages list' command
+            throw new Error('Not Implemented')
+        })
+    )
+
+packages
+    .command('install')
+    .description('installs all dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.install()
+        })
+    )
+
+packages
+    .command('add')
+    .description('adds a dependency')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages add' command
+            throw new Error('Not Implemented')
+        })
+    )
+
+packages
+    .command('upgrade')
+    .description('upgrades a dependency')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages upgrade' command
+            throw new Error('Not Implemented')
+        })
+    )
+
+packages
+    .command('remove')
+    .description('removes a dependency')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages remove' command
+            throw new Error('Not Implemented')
+        })
+    )
+
+packages
+    .command('purge')
+    .description('purges unused dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.purge()
         })
     )
 
@@ -339,76 +407,6 @@ server
     .action(
         hae(async options => {
             await Controller.server.start(options)
-        })
-    )
-
-const packageManager = program.command('package-manager').description('handle dependencies')
-
-packageManager
-    .command('check')
-    .description('checks syntax of dependency file')
-    .action(
-        hae(async options => {
-            // TODO: implement 'vintner package-manager check' command
-            throw new Error('Not Implemented')
-        })
-    )
-
-packageManager
-    .command('list')
-    .description('lists all dependencies')
-    .action(
-        hae(async options => {
-            // TODO: implement 'vintner package-manager list' command
-            throw new Error('Not Implemented')
-        })
-    )
-
-packageManager
-    .command('install')
-    .description('installs all dependencies')
-    .action(
-        hae(async options => {
-            await PackageManager.install()
-        })
-    )
-
-packageManager
-    .command('add')
-    .description('adds a dependency')
-    .action(
-        hae(async options => {
-            // TODO: implement 'vintner package-manager add' command
-            throw new Error('Not Implemented')
-        })
-    )
-
-packageManager
-    .command('upgrade')
-    .description('upgrades a dependency')
-    .action(
-        hae(async options => {
-            // TODO: implement 'vintner package-manager upgrade' command
-            throw new Error('Not Implemented')
-        })
-    )
-
-packageManager
-    .command('remove')
-    .description('removes a dependency')
-    .action(
-        hae(async options => {
-            // TODO: implement 'vintner package-manager remove' command
-            throw new Error('Not Implemented')
-        })
-    )
-
-packageManager
-    .command('purge')
-    .description('purges unused dependencies')
-    .action(
-        hae(async options => {
-            await PackageManager.purge()
         })
     )
 

@@ -21,7 +21,7 @@ export function getDefaultTest({
         const dir = path.join(__dirname, title)
         files.assertDirectory(dir)
 
-        const output = files.temporaryFile()
+        const output = files.temporaryPath()
         function fn() {
             Controller.template.resolve({
                 template: getDefaultVariableServiceTemplate({dir, example}),

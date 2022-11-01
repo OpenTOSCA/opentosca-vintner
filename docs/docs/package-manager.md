@@ -2,38 +2,52 @@
 
 {{ experimental_notice() }}
 
-With this package manager dependencies can be installed from git repositories.
+With this package manager dependencies can be installed.
 
 ## Dependency File
-All packages to be installed must be listed in the `dependencies` file in the following format:
+
+The `dependencies` file contains dependencies in the following format:
+
 ```linenums="1"
-dir repo checkout
+[name] [repository] [checkout: commit | branch | tag = main]
 org.alien4cloud.agentpuppet https://github.com/alien4cloud/csar-public-library 3.0.x
 ```
 
 ## Install
-Installs all packages listed in the `dependencies` file:
+
+Installs all dependencies listed in the `dependencies` file:
 
 ```linenums="1"
-vintner package-manager install
+vintner packages install
 ```
-The repositories will be downloaded in `tmp/lib/name-of-dependency`.
-Then the specified directory is synced to `lib/name-of-dependency`.
 
+The repositories will be downloaded in `${OS_TMP}/lib/${DEPENDENCY_NAME}`.
+Then the specified directory is synced to `${PROJECT_ROOT}lib/${DEPENDENCY_NAME}`.
 Already installed dependencies will be updated instead.
 
 ## Purge
+
 Delete all dependencies that are not listed in the `dependencies` file.
+
 ```linenums="1"
-vintner package-manager purge
+vintner packages purge
 ```
 
 ## Check
+
 Verify the syntax of the `dependencies` file
+
 ```linenums="1"
-vintner package-manager check
+vintner packages check
 ```
 
-## Authentication
+## Authenticate at Git Provider
 
 A correctly configured authentication for Git is assumed at this point and is not part of this component.
+
+## Import Dependency inside Service Template
+
+```
+imports:
+- lib/org.alien4cloud.agentpuppet@3.0.x
+```

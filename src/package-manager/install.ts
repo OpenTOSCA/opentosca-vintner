@@ -1,67 +1,51 @@
-import {execSync} from 'child_process'
-import {Dependency, Dependencies, DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './types'
 import * as files from '../utils/files'
 import * as utils from './utils'
 import path from 'path'
-import syncDirectory from 'sync-directory'
+import {Shell} from '../utils/shell'
+import {Dependencies, Dependency} from './dependency'
 
 export default async function () {
-    if (!files.exists(DEPENDENCY_FILE)) return console.log('No dependencies file found')
+    console.log('Installing dependencies')
 
-    files.createDirectory(LIB_DIRECTORY)
-    files.createDirectory(TMP_DIRECTORY)
+    if (!files.exists(utils.DEPENDENCY_FILE)) return console.log('Dependencies file not found')
 
-    const dependencies = utils.readDependencyFile()
+    files.createDirectory(utils.LIB_DIRECTORY)
+    files.createDirectory(utils.TMP_DIRECTORY)
 
-    installDependencies(dependencies)
-}
-
-/**
- * Install all dependencies from dependency file
- */
-function installDependencies(dependencies: Dependencies): void {
-    dependencies.forEach(dependency => {
-        installDependency(dependency)
-    })
+    await installDependencies(utils.readDependencies())
 }
 
 /**
  * Install a single dependency
  */
-function installDependency(dependency: Dependency): void {
-    const tmpDir = utils.getTemporaryCloneDirectory(dependency)
-    const libDir = utils.getLibDirectory(dependency)
+async function installDependency(dependency: Dependency) {
+    const shell = new Shell()
 
-    const dependencyName = utils.getDirectoryNameForDependency(dependency)
-    if (files.exists(tmpDir)) {
+    if (files.exists(dependency.clone)) {
         // Repo has already been cloned
-        console.log(`Updating ${dependencyName}`)
-        execSync(`git -C ${tmpDir} pull`) // pull latest
+        console.log(`Updating ${dependency.id}`)
+        await shell.execute(['git', '-C', dependency.clone, 'pull'])
     } else {
         // TODO tag/commit
-        console.log(`Installing ${dependencyName}`)
-        execSync(`git clone --branch ${dependency.checkout} ${dependency.repo} ${tmpDir}`) // pull latest
+        console.log(`Installing ${dependency.id}`)
+        await shell.execute(['git', 'clone', '--branch', dependency.checkout, dependency.repo, dependency.clone])
         //execSync(`git checkout ${dependency.checkout}`) ???
     }
-    syncDependencyFiles(dependency, tmpDir, libDir)
+    await dependency.sync()
 
-    const subDependencyFile = path.join(libDir, DEPENDENCY_FILE)
-    if (files.exists(subDependencyFile)) {
-        const subDependencies = utils.readCustomDependencyFile(subDependencyFile)
-        installDependencies(subDependencies)
+    const recursiveDependencyFile = path.join(dependency.target, utils.DEPENDENCY_FILE)
+    if (files.exists(recursiveDependencyFile)) {
+        await installDependencies(utils.readDependencies(recursiveDependencyFile))
     }
 }
 
 /**
- * Sync the repo and the lib directory of a dependency
+ * Install multiple dependencies
  */
-function syncDependencyFiles(dependency: Dependency, tmpDir: string, libDir: string) {
-    let desiredTmpPath = tmpDir
-    dependency.dir.split('.').forEach(dir => {
-        desiredTmpPath = path.join(desiredTmpPath, dir)
-    })
-
-    syncDirectory(desiredTmpPath, libDir, {
-        deleteOrphaned: true,
-    })
+async function installDependencies(dependencies: Dependencies) {
+    return Promise.all(
+        dependencies.map(dependency => {
+            return installDependency(dependency)
+        })
+    )
 }
