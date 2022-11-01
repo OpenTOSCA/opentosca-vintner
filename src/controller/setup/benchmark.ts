@@ -1,5 +1,5 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
-import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '../../utils/files'
+import {countLines, getSize, loadYAML, storeYAML, temporaryPath} from '../../utils/files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '../../utils/utils'
 import {VariabilityResolver} from '../template/resolve'
 
@@ -38,8 +38,8 @@ export default async function (options: BenchmarkArguments) {
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
-                const input = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input.yaml`)
-                const output = temporaryFile(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output.yaml`)
+                const input = temporaryPath(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input.yaml`)
+                const output = temporaryPath(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output.yaml`)
 
                 const start = process.hrtime()
 

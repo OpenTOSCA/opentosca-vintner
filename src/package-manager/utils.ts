@@ -1,66 +1,23 @@
-import {escapeRegExp} from 'lodash'
-import {Dependencies, Dependency, DEPENDENCY_FILE, LIB_DIRECTORY, TMP_DIRECTORY} from './types'
 import * as files from '../utils/files'
 import Papa from 'papaparse'
 import path from 'path'
+import {Dependencies, Dependency} from './dependency'
 
-/**
- * Get the temporary directory for a dependency
- */
-export function getTemporaryCloneDirectory(dependency: Dependency): string {
-    const dir = getDirectoryNameForDependency(dependency)
-    return path.join(TMP_DIRECTORY, dir)
-}
+export const LIB_DIRECTORY = 'lib'
+export const TMP_DIRECTORY = path.join(files.temporaryPath('vintner-package-manager'))
+export const DEPENDENCY_FILE = 'dependencies'
 
-/**
- * Get the lib directory for a dependency
- */
-export function getLibDirectory(dependency: Dependency): string {
-    const dir = getDirectoryNameForDependency(dependency)
-    return path.join(LIB_DIRECTORY, dir)
-}
-
-/**
- * Get directory name for a dependency:
- *
- * directory:checkout
- */
-export function getDirectoryNameForDependency(dependency: Dependency): string {
-    return dependency.dir + ':' + dependency.checkout
-}
-
-/**
- * Replaces dots with slashes:
- * org.abc.module => org/abc/module
- */
-export function domainToUrl(dir: string): string {
-    return dir.replace(new RegExp(escapeRegExp('.'), 'g'), '/')
-}
-
-/**
- * Read the dependency file
- */
-export function readDependencyFile(): Dependencies {
-    return readCustomDependencyFile(DEPENDENCY_FILE)
-}
-
-/**
- * Read the dependency file
- */
-export function readCustomDependencyFile(path: string): Dependencies {
-    let dependencies: Dependencies = []
-    dependencies = Papa.parse<Dependency>(files.loadFile(path), {
+export function readDependencies(path: string = DEPENDENCY_FILE): Dependencies {
+    return Papa.parse<string[]>(files.loadFile(path), {
         skipEmptyLines: true,
-        header: true,
         delimiter: ' ',
-    }).data
-    return dependencies
+    }).data.map(data => new Dependency(data[0], data[1], data.length >= 2 ? data[2] : 'main'))
 }
 
-export function gatherAllDependencies(): Set<string> {
+export function readAllDependencies(): Set<string> {
     const dependencyList = new Set<string>()
     // Add all deps from root dependency file
-    const dependencies = readDependencyFile()
+    const dependencies = readDependencies()
     addDependenciesToList(dependencies, dependencyList)
 
     // Add all deps from sub dependency files
@@ -75,7 +32,7 @@ export function gatherAllDependencies(): Set<string> {
 
                 // If dependency has a dependency file
                 if (files.exists(subDependencyFilePath)) {
-                    const subDependencies = readCustomDependencyFile(subDependencyFilePath)
+                    const subDependencies = readDependencies(subDependencyFilePath)
                     addDependenciesToList(subDependencies, dependencyList)
                 }
             }
@@ -87,6 +44,6 @@ export function gatherAllDependencies(): Set<string> {
 
 function addDependenciesToList(dependencies: Dependencies, list: Set<string>) {
     for (const dep of dependencies) {
-        list.add(getDirectoryNameForDependency(dep))
+        list.add(dep.id)
     }
 }
