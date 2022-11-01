@@ -20,11 +20,11 @@ topology_template:
             requirements:
                 - host: vm_2
         vm_1:
-            type: SoftwareComponent
+            type: VirtualMachine
             requirements:
                 - host: openstack
         vm_2:
-            type: SoftwareComponent
+            type: VirtualMachine
             requirements:
                 - host: openstack
         openstack:

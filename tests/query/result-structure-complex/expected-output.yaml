@@ -1,0 +1,21 @@
+-
+    Node Name: webapp
+    Node Type: WebApplication
+-
+    Node Name: tomcat
+    Node Type: Tomcat
+-
+    Node Name: mysql_database
+    Node Type: Database
+-
+    Node Name: dbms
+    Node Type: DBMS
+-
+    Node Name: vm_1
+    Node Type: VirtualMachine
+-
+    Node Name: vm_2
+    Node Type: VirtualMachine
+-
+    Node Name: openstack
+    Node Type: Compute
