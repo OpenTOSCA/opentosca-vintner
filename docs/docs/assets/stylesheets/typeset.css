@@ -18,12 +18,12 @@
 
 /* Source Repository */
 .md-source__repository {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /* Search Input */
 .md-search__input {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /* Navbar Title */
@@ -40,16 +40,16 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
 
 /* Code */
 .md-typeset code {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /* Code Linenumbers */
 .highlighttable .linenos {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .linenos {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 
@@ -63,7 +63,7 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
 
 /* Footer Navigation Direction */
 .md-footer__direction {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /* Footer Navigation Title */
@@ -73,7 +73,7 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
 
 /* Copyright Text */
 .md-copyright {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /* Admonition Text */

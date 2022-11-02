@@ -53,6 +53,19 @@ jobs:
             - name: (BUILD) Package Binaries
               run: yarn package
 
+            - name: (SIGN) Import Signing Key
+              uses: crazy-max/ghaction-import-gpg@v5
+              with:
+                  gpg_private_key: ${{ secrets.VINTNER_RELEASE_PRIVATE_KEY }}
+
+            - name: (SIGN) Sign Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
+                  done
+
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
               env:

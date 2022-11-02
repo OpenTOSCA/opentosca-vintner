@@ -10,9 +10,7 @@ theme:
     custom_dir: overrides
     icon:
         repo: fontawesome/brands/github
-    font:
-        text: Noto Sans
-        code: Noto Sans Mono
+    font: false
     palette:
         primary: black
     features:
