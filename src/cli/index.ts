@@ -135,8 +135,7 @@ packages
     .description('lists all dependencies')
     .action(
         hae(async options => {
-            // TODO: implement 'vintner packages list' command
-            throw new Error('Not Implemented')
+            await PackageManager.list()
         })
     )
 

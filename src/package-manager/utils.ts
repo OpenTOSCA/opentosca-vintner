@@ -1,5 +1,5 @@
-import * as files from '../utils/files'
 import Papa from 'papaparse'
+import * as files from '../utils/files'
 import path from 'path'
 import {Dependencies, Dependency} from './dependency'
 
