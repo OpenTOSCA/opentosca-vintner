@@ -308,7 +308,7 @@ checks syntax of dependencies file
 
 ## packages list
 
-lists all packages
+lists all dependencies
 
 === "CLI"
     ```shell linenums="1"
@@ -334,10 +334,15 @@ lists all packages
     requests.post(SERVER_ADDRESS + "/packages/list")
     ```
 
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| installed |  false  | boolean | include installed dependencies |
+| declared |  false  | boolean | include declared dependencies |
+| all |  false  | boolean | include installed and declared dependencies |
 
 ## packages install
 
-installs all packages
+installs all dependencies
 
 === "CLI"
     ```shell linenums="1"
@@ -366,11 +371,11 @@ installs all packages
 
 ## packages add
 
-adds a package
+adds a dependency
 
 === "CLI"
     ```shell linenums="1"
-    vintner packages add 
+    vintner packages add [options] <name> <repo>  
     ```
 
 === "cURL"
@@ -395,11 +400,11 @@ adds a package
 
 ## packages upgrade
 
-upgrades a package
+upgrades a dependency
 
 === "CLI"
     ```shell linenums="1"
-    vintner packages upgrade 
+    vintner packages upgrade [options] <name>  
     ```
 
 === "cURL"
@@ -424,11 +429,11 @@ upgrades a package
 
 ## packages remove
 
-removes a package
+removes a dependency
 
 === "CLI"
     ```shell linenums="1"
-    vintner packages remove 
+    vintner packages remove [options] <name>  
     ```
 
 === "cURL"
@@ -453,7 +458,7 @@ removes a package
 
 ## packages purge
 
-purges unused packages
+purges unused dependencies
 
 === "CLI"
     ```shell linenums="1"
@@ -477,6 +482,35 @@ purges unused packages
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/packages/purge")
+    ```
+
+
+## packages clean
+
+cleans up dependencies
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages clean 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/clean
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/clean")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/clean")
     ```
 
 
