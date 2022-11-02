@@ -133,8 +133,12 @@ packages
 packages
     .command('list')
     .description('lists all dependencies')
+    .option('--installed [boolean]', 'include installed dependencies')
+    .option('--declared [boolean]', 'include declared dependencies')
+    .option('--all [boolean]', 'include installed and declared dependencies')
     .action(
         hae(async options => {
+            // TODO: implement 'vintner packages list' command
             await PackageManager.list()
         })
     )
@@ -151,6 +155,9 @@ packages
 packages
     .command('add')
     .description('adds a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<repo>', 'http repository link of the dependency')
+    .argument('[checkout]', 'commit, branch or tag to checkout', 'main')
     .action(
         hae(async options => {
             // TODO: implement 'vintner packages add' command
@@ -161,6 +168,8 @@ packages
 packages
     .command('upgrade')
     .description('upgrades a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
     .action(
         hae(async options => {
             // TODO: implement 'vintner packages upgrade' command
@@ -171,6 +180,8 @@ packages
 packages
     .command('remove')
     .description('removes a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
     .action(
         hae(async options => {
             // TODO: implement 'vintner packages remove' command
@@ -184,6 +195,16 @@ packages
     .action(
         hae(async options => {
             await PackageManager.purge()
+        })
+    )
+
+packages
+    .command('clean')
+    .description('cleans up dependencies')
+    .action(
+        hae(async options => {
+            // TODO: implement 'vintner packages clean' command
+            throw new Error('Not Implemented')
         })
     )
 
