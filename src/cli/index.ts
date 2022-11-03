@@ -121,12 +121,11 @@ initOrchestrators
 const packages = program.command('packages').description('handle packages')
 
 packages
-    .command('check')
-    .description('checks syntax of dependencies file')
+    .command('validate')
+    .description('validate syntax of dependencies file')
     .action(
         hae(async options => {
-            // TODO: implement 'vintner packages check' command
-            throw new Error('Not Implemented')
+            await PackageManager.validate()
         })
     )
 
@@ -138,8 +137,7 @@ packages
     .option('--all [boolean]', 'include installed and declared dependencies')
     .action(
         hae(async options => {
-            // TODO: implement 'vintner packages list' command
-            await PackageManager.list()
+            await PackageManager.list(options)
         })
     )
 
@@ -156,12 +154,11 @@ packages
     .command('add')
     .description('adds a dependency')
     .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
     .argument('<repo>', 'http repository link of the dependency')
-    .argument('[checkout]', 'commit, branch or tag to checkout', 'main')
     .action(
-        hae(async options => {
-            // TODO: implement 'vintner packages add' command
-            throw new Error('Not Implemented')
+        hae(async (name, repo, checkout) => {
+            await PackageManager.add(name, repo, checkout)
         })
     )
 
@@ -171,9 +168,8 @@ packages
     .argument('<name>', 'name of the dependency')
     .argument('<checkout>', 'commit, branch or tag to checkout')
     .action(
-        hae(async options => {
-            // TODO: implement 'vintner packages upgrade' command
-            throw new Error('Not Implemented')
+        hae(async (name, checkout) => {
+            await PackageManager.upgrade(name, checkout)
         })
     )
 
@@ -183,9 +179,8 @@ packages
     .argument('<name>', 'name of the dependency')
     .argument('<checkout>', 'commit, branch or tag to checkout')
     .action(
-        hae(async options => {
-            // TODO: implement 'vintner packages remove' command
-            throw new Error('Not Implemented')
+        hae(async (name, checkout) => {
+            await PackageManager.remove(name, checkout)
         })
     )
 
@@ -203,8 +198,7 @@ packages
     .description('cleans up dependencies')
     .action(
         hae(async options => {
-            // TODO: implement 'vintner packages clean' command
-            throw new Error('Not Implemented')
+            await PackageManager.clean()
         })
     )
 

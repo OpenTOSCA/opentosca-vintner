@@ -3,7 +3,10 @@ import {Shell} from '../utils/shell'
 import * as files from '../utils/files'
 import path from 'path'
 // TODO: fix recursive import?
-import {DEPENDENCY_FILE, LIB_DIRECTORY, readDependencies, TMP_DIRECTORY} from './utils'
+import {DEPENDENCY_FILE, DependencyFile} from './dependency-file'
+
+export const LIB_DIRECTORY = 'lib'
+export const TMP_DIRECTORY = path.join(files.temporaryPath('vintner-package-manager'))
 
 export class Dependency {
     id: string
@@ -16,7 +19,7 @@ export class Dependency {
     sourceDir: string
     dependenciesFile: string
 
-    constructor(name: string, repo: string, checkout: string) {
+    constructor(name: string, checkout: string, repo: string) {
         this.id = [name, checkout].join('@')
         this.name = name
         this.path = name.split('.')
@@ -38,8 +41,6 @@ export class Dependency {
         await this.clone()
         await this.update()
         await this.sync()
-
-        return Promise.all((await this.getDependencies()).map(d => d.install))
     }
 
     isInstalled() {
@@ -47,8 +48,7 @@ export class Dependency {
     }
 
     async remove() {
-        // TODO: remove
-        throw new Error('Not Implemented')
+        files.removeDirectory(this.libDir)
     }
 
     /**
@@ -76,6 +76,7 @@ export class Dependency {
     async update() {
         // TODO: handle changed checkout?
         console.log('Updating', this)
+        // TODO: crashes on tag and commit
         await new Shell().execute(['git', '-C', this.cloneDir, 'pull'])
     }
 
@@ -89,11 +90,12 @@ export class Dependency {
         if (!this.isInstalled()) throw new Error(`Dependency ${this} is not installed`)
 
         if (files.exists(this.dependenciesFile)) {
-            return readDependencies(this.dependenciesFile)
+            return new DependencyFile(this.dependenciesFile).read()
         }
         return []
     }
 
+    // TODO: this is not working
     toString() {
         return this.id
     }

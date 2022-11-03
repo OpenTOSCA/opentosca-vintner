@@ -9,6 +9,11 @@ import axios from 'axios'
 import * as validator from './validator'
 import xml2js from 'xml2js'
 
+export function createFile(file: string) {
+    if (exists(file)) return
+    fsExtra.createFileSync(file)
+}
+
 export function exists(file: string) {
     return fs.existsSync(file)
 }
@@ -52,7 +57,7 @@ export function loadYAML<T>(file: string) {
     return yaml.load(loadFile(file)) as T
 }
 
-export function storeYAML(file: string, data: any | string) {
+export function storeYAML<T>(file: string, data: T) {
     if (validator.isString(data)) {
         fs.writeFileSync(path.resolve(file), data)
     } else {
