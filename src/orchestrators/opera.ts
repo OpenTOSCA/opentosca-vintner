@@ -3,7 +3,8 @@ import {Orchestrator} from '../repository/orchestrators'
 import {joinNotNull} from '../utils/utils'
 import {Shell} from '../utils/shell'
 import * as files from '../utils/files'
-import _ from 'lodash';
+import _ from 'lodash'
+import {NodeTemplateAttributes, NodeTemplateAttributesMap, OrchestratorPlugin} from '../query/plugins'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -14,7 +15,7 @@ export type OperaNativeConfig = {
 
 export type OperaWLSConfig = OperaNativeConfig
 
-export class Opera implements Orchestrator {
+export class Opera implements Orchestrator, OrchestratorPlugin {
     private readonly config: OperaConfig
     private readonly binary: string
     private readonly shell: Shell
@@ -73,8 +74,8 @@ export class Opera implements Orchestrator {
      * Returns attribute names and data for each node template
      * @param instance
      */
-    static getAttributes(instance: Instance) {
-        const attributes: {[node: string]: {[name: string]: any}} = {}
+    getAttributes(instance: Instance): NodeTemplateAttributesMap {
+        const attributes: {[key: string]: NodeTemplateAttributes} = {}
         for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
             const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {

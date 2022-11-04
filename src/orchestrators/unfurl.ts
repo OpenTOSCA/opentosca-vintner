@@ -4,6 +4,7 @@ import * as files from '../utils/files'
 import path from 'path'
 import {joinNotNull} from '../utils/utils'
 import {Shell} from '../utils/shell'
+import {NodeTemplateAttributesMap, OrchestratorPlugin} from '../query/plugins'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -14,7 +15,7 @@ export type UnfurlNativeConfig = {
 
 export type UnfurlWSLConfig = UnfurlNativeConfig
 
-export class Unfurl implements Orchestrator {
+export class Unfurl implements Orchestrator, OrchestratorPlugin {
     private readonly config: UnfurlConfig
     private readonly shell: Shell
 
@@ -71,5 +72,9 @@ spec:
     +?include: service-inputs.yaml
   service_template:
     +include: ${instance.getServiceTemplateFile()}`
+    }
+
+    getAttributes(instance: Instance): NodeTemplateAttributesMap {
+        throw new Error('Unsupported operation')
     }
 }
