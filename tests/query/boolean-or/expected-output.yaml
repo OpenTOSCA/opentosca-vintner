@@ -1,0 +1,10 @@
+-
+    type: Database
+    requirements:
+        -
+            host: dbms
+-
+    type: DBMS
+    requirements:
+        -
+            host: vm_2

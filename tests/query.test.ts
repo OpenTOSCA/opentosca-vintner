@@ -8,10 +8,28 @@ it('all', () => {
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/all/expected-output.yaml')))
 })
 
+it('boolean-and', () => {
+    const result = getResult
+    ('FROM template/tests/query/service-template.yaml SELECT node_templates.*[name="dbms" AND type="DBMS"]')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/boolean-and/expected-output.yaml')))
+})
+
+it('boolean-or', () => {
+    const result = getResult
+    ('FROM template/tests/query/service-template.yaml SELECT node_templates.*[type="Database" OR type="DBMS"]')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/boolean-or/expected-output.yaml')))
+})
+
 it('filter-equals', () => {
     const result = getResult
     ('FROM template/tests/query/service-template.yaml SELECT node_templates.*[type="VirtualMachine"].name')
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-equals/expected-output.yaml')))
+})
+
+it('filter-existence', () => {
+    const result = getResult
+    ('FROM template/tests/query/service-template.yaml SELECT node_templates.*[capabilities].name')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-existence/expected-output.yaml')))
 })
 
 it('filter-regex', () => {
@@ -43,10 +61,16 @@ it('match-single', () => {
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-single/expected-output.yaml')))
 })
 
-it('match-variable-length', () => {
+it('match-length-any', () => {
     const result = getResult
     ('FROM template/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type=Compute]) SELECT node')
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-variable-length/expected-output.yaml')))
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-any/expected-output.yaml')))
+})
+
+it('match-length-range', () => {
+    const result = getResult
+    ('FROM template/tests/query/service-template.yaml MATCH ([type="Tomcat"])-{*1..2}->(node) SELECT node.*.name')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-range/expected-output.yaml')))
 })
 
 it('node-template', () => {
