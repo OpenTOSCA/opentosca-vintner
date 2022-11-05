@@ -1,9 +1,9 @@
-import {Dependencies, Dependency, LIB_DIRECTORY, TMP_DIRECTORY} from './dependency'
+import {Dependencies, Dependency, LIB_DIRECTORY, CACHE_DIRECTORY} from './dependency'
 import {DEPENDENCY_FILE, DependencyFile} from './dependency-file'
 import * as files from '../utils/files'
 import path from 'path'
 
-export default {add, upgrade, remove, install, list, purge, clean, validate}
+export default {add, upgrade, remove, install, list, clean: clean, purge: purge, validate}
 
 async function install() {
     console.log('Installing dependencies')
@@ -37,8 +37,7 @@ async function remove(name: string, checkout: string) {
     file.remove(dependency)
 }
 
-async function list(options: any) {
-    // TODO: implement options
+async function list() {
     console.log('Listing dependencies')
     new DependencyFile().read().forEach(dependency =>
         console.log({
@@ -50,8 +49,8 @@ async function list(options: any) {
     )
 }
 
-async function purge() {
-    console.log('Purging dependencies')
+async function clean() {
+    console.log('Cleaning up unused dependencies')
 
     const dependencies = readAllDependencies()
     console.log(dependencies)
@@ -60,15 +59,16 @@ async function purge() {
     for (const dir of directories) {
         if (!dependencies.has(dir)) {
             files.removeDirectory(path.join(LIB_DIRECTORY, dir))
-            files.removeDirectory(path.join(TMP_DIRECTORY, dir))
+            files.removeDirectory(path.join(CACHE_DIRECTORY, dir))
             console.log(`Purged ${dir}`)
         }
     }
 }
 
-async function clean() {
+async function purge() {
+    console.log('Purging all dependencies')
     files.removeDirectory(LIB_DIRECTORY)
-    files.removeDirectory(TMP_DIRECTORY)
+    files.removeDirectory(CACHE_DIRECTORY)
 }
 
 async function validate() {

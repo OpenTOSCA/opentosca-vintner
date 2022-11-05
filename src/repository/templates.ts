@@ -1,6 +1,6 @@
 import * as files from '../utils/files'
 import path from 'path'
-import config from '../cli/config'
+import config from '../utils/config'
 import {ServiceTemplate} from '../specification/service-template'
 
 export class Templates {

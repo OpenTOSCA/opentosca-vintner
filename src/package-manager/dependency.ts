@@ -4,9 +4,10 @@ import * as files from '../utils/files'
 import path from 'path'
 // TODO: fix recursive import?
 import {DEPENDENCY_FILE, DependencyFile} from './dependency-file'
+import config from "../utils/config";
 
 export const LIB_DIRECTORY = 'lib'
-export const TMP_DIRECTORY = path.join(files.temporaryPath('vintner-package-manager'))
+export const CACHE_DIRECTORY = path.join(config.home, 'package-cache')
 
 export class Dependency {
     id: string
@@ -26,7 +27,7 @@ export class Dependency {
         this.libDir = path.join(LIB_DIRECTORY, this.id)
         this.checkout = checkout
         this.repo = repo
-        this.cloneDir = path.join(TMP_DIRECTORY, this.id)
+        this.cloneDir = path.join(CACHE_DIRECTORY, this.id)
         this.sourceDir = path.join(this.cloneDir, ...this.path)
         this.dependenciesFile = path.join(this.libDir, DEPENDENCY_FILE)
         // TODO: path.resolve?!
@@ -36,7 +37,7 @@ export class Dependency {
         console.log('Installing', this)
 
         files.createDirectory(LIB_DIRECTORY)
-        files.createDirectory(TMP_DIRECTORY)
+        files.createDirectory(CACHE_DIRECTORY)
 
         await this.clone()
         await this.update()

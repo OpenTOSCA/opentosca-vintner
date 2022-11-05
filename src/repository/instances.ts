@@ -1,5 +1,5 @@
 import * as path from 'path'
-import config from '../cli/config'
+import config from '../utils/config'
 import * as files from '../utils/files'
 import {ServiceTemplate} from '../specification/service-template'
 import {Template} from './templates'

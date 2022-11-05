@@ -1,6 +1,6 @@
 import {Command, Option} from 'commander'
 import hae from './hae'
-import config from './config'
+import config from '../utils/config'
 import Controller from '../controller'
 import * as files from '../utils/files'
 import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
@@ -131,13 +131,10 @@ packages
 
 packages
     .command('list')
-    .description('lists all dependencies')
-    .option('--installed [boolean]', 'include installed dependencies')
-    .option('--declared [boolean]', 'include declared dependencies')
-    .option('--all [boolean]', 'include installed and declared dependencies')
+    .description('lists dependencies')
     .action(
         hae(async options => {
-            await PackageManager.list(options)
+            await PackageManager.list()
         })
     )
 
@@ -185,20 +182,20 @@ packages
     )
 
 packages
+    .command('clean')
+    .description('cleans up unused dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.clean()
+        })
+    )
+
+packages
     .command('purge')
     .description('purges unused dependencies')
     .action(
         hae(async options => {
             await PackageManager.purge()
-        })
-    )
-
-packages
-    .command('clean')
-    .description('cleans up dependencies')
-    .action(
-        hae(async options => {
-            await PackageManager.clean()
         })
     )
 
