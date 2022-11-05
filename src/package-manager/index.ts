@@ -5,6 +5,8 @@ import path from 'path'
 
 export default {add, upgrade, remove, install, list, clean: clean, purge: purge, validate}
 
+// TODO: when to create cache dir?
+
 async function install() {
     console.log('Installing dependencies')
 
