@@ -1,7 +1,6 @@
 import * as files from '../utils/files'
 import {Dependencies, Dependency} from './dependency'
-
-export const DEPENDENCY_FILE = 'dependencies.yaml'
+import config from "../utils/config";
 
 export type DependencyFileData = {[id: string]: DependencyShortNotation}
 export type DependencyShortNotation = string
@@ -10,7 +9,7 @@ export type DependencyShortNotation = string
 export class DependencyFile {
     path: string
 
-    constructor(path: string = DEPENDENCY_FILE) {
+    constructor(path: string = config.dependencyFile) {
         this.path = path
     }
 

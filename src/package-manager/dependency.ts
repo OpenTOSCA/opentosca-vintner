@@ -3,11 +3,8 @@ import {Shell} from '../utils/shell'
 import * as files from '../utils/files'
 import path from 'path'
 // TODO: fix recursive import?
-import {DEPENDENCY_FILE, DependencyFile} from './dependency-file'
+import {DependencyFile} from './dependency-file'
 import config from "../utils/config";
-
-export const LIB_DIRECTORY = 'lib'
-export const CACHE_DIRECTORY = path.join(config.home, 'package-cache')
 
 export class Dependency {
     id: string
@@ -24,20 +21,20 @@ export class Dependency {
         this.id = [name, checkout].join('@')
         this.name = name
         this.path = name.split('.')
-        this.libDir = path.join(LIB_DIRECTORY, this.id)
+        this.libDir = path.join(config.libDir, this.id)
         this.checkout = checkout
         this.repo = repo
-        this.cloneDir = path.join(CACHE_DIRECTORY, this.id)
+        this.cloneDir = path.join(config.packageCacheDir, this.id)
         this.sourceDir = path.join(this.cloneDir, ...this.path)
-        this.dependenciesFile = path.join(this.libDir, DEPENDENCY_FILE)
+        this.dependenciesFile = path.join(this.libDir, config.dependencyFile)
         // TODO: path.resolve?!
     }
 
     async install() {
         console.log('Installing', this)
 
-        files.createDirectory(LIB_DIRECTORY)
-        files.createDirectory(CACHE_DIRECTORY)
+        files.createDirectory(config.libDir)
+        files.createDirectory(config.packageCacheDir)
 
         await this.clone()
         await this.update()
@@ -71,7 +68,7 @@ export class Dependency {
     async clone() {
         console.log('Cloning', this)
         if (files.exists(this.cloneDir)) console.log(this, 'is already cloned')
-        await new Shell().execute(['git', 'clone', '--branch', this.checkout, this.repo, this.cloneDir])
+        await new Shell().execute(['git', 'clone', '--depth', '1', '--branch', this.checkout, this.repo, this.cloneDir])
     }
 
     async update() {
