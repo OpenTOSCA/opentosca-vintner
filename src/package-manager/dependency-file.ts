@@ -1,6 +1,7 @@
 import * as files from '../utils/files'
 import {Dependencies, Dependency} from './dependency'
 import config from '../utils/config'
+import * as validator from '../utils/validator'
 
 export type DependencyFileData = {[id: string]: string}
 
@@ -12,7 +13,12 @@ export class DependencyFile {
     }
 
     read() {
-        return Object.entries(files.loadYAML<DependencyFileData>(this.path)).map(([id, repo]) => {
+        const data = files.loadYAML<DependencyFileData>(this.path)
+
+        return Object.entries(data).map(([id, repo]) => {
+            validator.ensureString(id)
+            validator.ensureString(repo)
+
             const data = id.split('@')
             return new Dependency(data[0], data[1], repo)
         })
@@ -25,7 +31,6 @@ export class DependencyFile {
     add(dependency: Dependency) {
         this.ensureExists()
         const dependencies = this.read()
-        console.log(dependencies, dependency)
         if (dependencies.find(it => it.id === dependency.id)) {
             console.log(`${dependency} is already added`)
             return this

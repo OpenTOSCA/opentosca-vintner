@@ -1,11 +1,7 @@
 import {Shell} from '../utils/shell'
 import * as files from '../utils/files'
 import path from 'path'
-// TODO: fix recursive import?
-import {DependencyFile} from './dependency-file'
 import config from '../utils/config'
-
-// TODO: fix paths for wsl integration?
 
 export class Dependency {
     // Dependency name
@@ -50,26 +46,23 @@ export class Dependency {
         this.dependencyFile = path.join(this.targetDir, config.dependencyFile)
     }
 
-    isInstalled() {
-        return files.exists(this.targetDir)
-    }
-
     async install() {
-        console.log('Installing', this)
+        console.log('Installing', this.id)
+
         await this.clone()
         await this.update()
         await this.sync()
     }
 
     async clone() {
-        console.log('Cloning', this)
+        console.log('Cloning', this.id)
         files.createDirectory(config.packageCacheDir)
 
         if (!files.exists(this.cloneDir)) {
             console.log('Cloning repo', this.repo, 'into', this.cloneDir)
             await this.shell.execute(['git', 'clone', this.repo, this.cloneDir])
         } else {
-            console.log('Repo is already cloned')
+            console.log(this.repo, 'already cloned')
         }
 
         if (!files.exists(this.worktreeDir)) {
@@ -80,38 +73,40 @@ export class Dependency {
                     cwd: this.cloneDir,
                 }
             )
-        } else {
-            console.log(this, 'already added')
+            return true
         }
+
+        console.log(this.id, 'already added')
+        return false
     }
 
     async update() {
-        console.log('Updating', this)
+        console.log('Updating', this.id)
         files.assertDirectory(this.cloneDir)
         files.assertDirectory(this.worktreeDir)
 
-        console.log('Checking status of', this)
+        console.log('Checking status of', this.id)
         const status = await this.shell.execute(['git', 'status'], {cwd: this.worktreeDir})
         if (status.output.startsWith('On branch')) {
-            console.log('Pulling', this)
+            console.log('Pulling', this.id)
             const pull = await this.shell.execute(['git', '-C', this.worktreeDir, 'pull'])
             if (pull.output.startsWith('Already up to date.')) {
-                console.log('Already up to date')
+                console.log(this.id, 'already up to date')
             } else {
-                console.log('Updated', this)
+                console.log('Updated', this.id)
             }
         } else {
-            console.log('Not updating since', this, 'is not a branch')
+            console.log('Not updating since', this.id, 'is not a branch')
         }
     }
 
     async sync() {
-        console.log('Syncing', this)
+        console.log('Syncing', this.id)
         files.syncDirectory(this.sourceDir, this.targetDir)
     }
 
     async upgrade() {
-        console.log('Upgrading', this)
+        console.log('Upgrading', this.id)
         await this.update()
         await this.sync()
     }
@@ -120,16 +115,6 @@ export class Dependency {
         files.removeDirectory(this.targetDir)
     }
 
-    async getDependencies(): Promise<Dependencies> {
-        if (!this.isInstalled()) throw new Error(`Dependency ${this} is not installed`)
-
-        if (files.exists(this.dependencyFile)) {
-            return new DependencyFile(this.dependencyFile).read()
-        }
-        return []
-    }
-
-    // TODO: this is not working
     toString() {
         return this.id
     }
