@@ -8,11 +8,7 @@ export default {add, upgrade, remove, install, list, clean, purge, validate}
 
 async function install() {
     console.log('Installing dependencies')
-
-    const file = new DependencyFile()
-    if (!file.exists()) return console.log('Dependencies file not found')
-
-    return Promise.all(file.read().map(_install))
+    await _installAll(new DependencyFile())
 }
 
 async function add(name: string, checkout: string, repo: string) {
@@ -52,10 +48,7 @@ async function list() {
 
 async function clean() {
     console.log('Cleaning up unused dependencies')
-
-    const dependencies = readAllDependencies()
-    console.log(dependencies)
-
+    const dependencies = _readAllDependencies()
     const directories = files.readDirectory(config.libDir)
     for (const dir of directories) {
         if (!dependencies.has(dir)) {
@@ -73,16 +66,30 @@ async function purge() {
 }
 
 async function validate() {
-    // TODO: validate
-    throw new Error('Not Implemented')
+    new DependencyFile().read()
+}
+
+async function _install(dependency: Dependency) {
+    await dependency.install()
+    await _installAll(new DependencyFile(dependency.dependencyFile))
+}
+
+async function _installAll(file: DependencyFile) {
+    if (!file.exists()) return console.log(`Dependencies file not found at "${file.path}"`)
+
+    for (const dependency of file.read()) {
+        console.log('-------------------------------------------------')
+        await dependency.install()
+        console.log('-------------------------------------------------')
+    }
 }
 
 // TODO: rework this
-function readAllDependencies(): Set<string> {
+function _readAllDependencies(): Set<string> {
     const dependencyList = new Set<string>()
     // Add all deps from root dependency file
     const dependencies = new DependencyFile().read()
-    addDependenciesToList(dependencies, dependencyList)
+    _addDependenciesToList(dependencies, dependencyList)
 
     // Add all deps from sub dependency files
     const directories = files.readDirectory(config.libDir)
@@ -97,7 +104,7 @@ function readAllDependencies(): Set<string> {
                 // If dependency has a dependency file
                 if (files.exists(subDependencyFilePath)) {
                     const subDependencies = new DependencyFile(subDependencyFilePath).read()
-                    addDependenciesToList(subDependencies, dependencyList)
+                    _addDependenciesToList(subDependencies, dependencyList)
                 }
             }
         }
@@ -106,14 +113,8 @@ function readAllDependencies(): Set<string> {
     return dependencyList
 }
 
-function addDependenciesToList(dependencies: Dependencies, list: Set<string>) {
+function _addDependenciesToList(dependencies: Dependencies, list: Set<string>) {
     for (const dep of dependencies) {
         list.add(dep.id)
     }
-}
-
-async function _install(dependency: Dependency) {
-    await dependency.install()
-    const dependencies = await dependency.getDependencies()
-    return Promise.all(dependencies.map(it => it.install()))
 }

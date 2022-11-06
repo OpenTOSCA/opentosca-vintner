@@ -1,5 +1,6 @@
 import {spawn, SpawnOptionsWithoutStdio} from 'child_process'
 import path from 'path'
+import {joinNotNull} from './utils'
 
 export class Shell {
     private readonly wsl: boolean
@@ -29,7 +30,15 @@ export class Shell {
     ): Promise<{success: true; output: string; code: number} | {success: false; output: string; code: number}> {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
-            console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)
+            console.log(
+                joinNotNull([
+                    'Executing',
+                    this.wsl ? 'on WSL' : 'locally',
+                    'the command',
+                    `"${command}"`,
+                    options?.cwd ? `in "${options.cwd}"` : undefined,
+                ])
+            )
 
             let child
             if (this.wsl) {
