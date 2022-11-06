@@ -10,7 +10,9 @@ class Config {
     dependencyFile = 'dependencies.yaml'
 
     constructor() {
-        this.home = path.resolve(process.env.OPENTOSCA_VINTNER_HOME_DIR || path.join(os.homedir(), '.opentosca_vintner'))
+        this.home = path.resolve(
+            process.env.OPENTOSCA_VINTNER_HOME_DIR || path.join(os.homedir(), '.opentosca_vintner')
+        )
         this.packageCacheDir = path.join(this.home, 'package-cache')
     }
 }

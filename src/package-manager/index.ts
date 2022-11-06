@@ -2,7 +2,7 @@ import {Dependencies, Dependency} from './dependency'
 import {DependencyFile} from './dependency-file'
 import * as files from '../utils/files'
 import path from 'path'
-import config from "../utils/config";
+import config from '../utils/config'
 
 export default {add, upgrade, remove, install, list, clean, purge, validate}
 
