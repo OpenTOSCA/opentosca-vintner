@@ -1,5 +1,11 @@
+# commit
 org.alien4cloud.agentpuppet@1ee103e9c2910667448ff8af57157b11eab3530d: https://github.com/alien4cloud/csar-public-library
-org.alien4cloud.agentpuppet@3.0.x: https://github.com/alien4cloud/csar-public-library
+
+# default branch
 org.alien4cloud.agentpuppet@develop: https://github.com/alien4cloud/csar-public-library
+
+# non default branch
+org.alien4cloud.agentpuppet@3.0.x: https://github.com/alien4cloud/csar-public-library
+
+# tag
 org.alien4cloud.agentpuppet@v2.0.0: https://github.com/alien4cloud/csar-public-library
-org.alien4cloud.agentpuppet@v2.2.0: https://github.com/alien4cloud/csar-public-library

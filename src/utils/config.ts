@@ -3,13 +3,17 @@ import os from 'os'
 
 class Config {
     version = '__VERSION__'
-    home: string
+    home!: string
 
     libDir = 'lib'
-    packageCacheDir: string
+    packageCacheDir!: string
     dependencyFile = 'dependencies.yaml'
 
     constructor() {
+        this.load()
+    }
+
+    load() {
         this.home = path.resolve(
             process.env.OPENTOSCA_VINTNER_HOME_DIR || path.join(os.homedir(), '.opentosca_vintner')
         )
