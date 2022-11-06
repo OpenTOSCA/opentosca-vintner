@@ -23,7 +23,10 @@ export class Shell {
     }
 
     // TODO: cwd will not work if wsl is enabled
-    async execute(parts: string[], options?: {cwd?: string, resolve?: boolean}): Promise<{success: true, output: string, code: number} | {success: false, output: string, code: number}> {
+    async execute(
+        parts: string[],
+        options?: {cwd?: string; resolve?: boolean}
+    ): Promise<{success: true; output: string; code: number} | {success: false; output: string; code: number}> {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
             console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)

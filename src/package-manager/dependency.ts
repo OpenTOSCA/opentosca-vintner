@@ -56,11 +56,20 @@ export class Dependency {
 
     async install() {
         console.log('Installing', this)
+        await this.clone()
+        await this.update()
+        await this.sync()
+    }
+
+    async clone() {
+        console.log('Cloning', this)
         files.createDirectory(config.packageCacheDir)
 
         if (!files.exists(this.cloneDir)) {
             console.log('Cloning repo', this.repo, 'into', this.cloneDir)
             await this.shell.execute(['git', 'clone', this.repo, this.cloneDir])
+        } else {
+            console.log('Repo is already cloned')
         }
 
         if (!files.exists(this.worktreeDir)) {
@@ -71,28 +80,40 @@ export class Dependency {
                     cwd: this.cloneDir,
                 }
             )
+        } else {
+            console.log(this, 'already added')
         }
+    }
 
-        await this.upgrade()
+    async update() {
+        console.log('Updating', this)
+        files.assertDirectory(this.cloneDir)
+        files.assertDirectory(this.worktreeDir)
+
+        console.log('Checking status of', this)
+        const status = await this.shell.execute(['git', 'status'], {cwd: this.worktreeDir})
+        if (status.output.startsWith('On branch')) {
+            console.log('Pulling', this)
+            const pull = await this.shell.execute(['git', '-C', this.worktreeDir, 'pull'])
+            if (pull.output.startsWith('Already up to date.')) {
+                console.log('Already up to date')
+            } else {
+                console.log('Updated', this)
+            }
+        } else {
+            console.log('Not updating since', this, 'is not a branch')
+        }
+    }
+
+    async sync() {
+        console.log('Syncing', this)
+        files.syncDirectory(this.sourceDir, this.targetDir)
     }
 
     async upgrade() {
         console.log('Upgrading', this)
-        files.assertDirectory(this.cloneDir)
-        files.assertDirectory(this.worktreeDir)
-
-        console.log('Checking status of', this.worktreeDir)
-        const status = await this.shell.execute(['git', 'status'], {cwd: this.worktreeDir})
-        if (status.output.startsWith('On branch')) {
-            console.log('Pulling', this.worktreeDir)
-            const pull = await this.shell.execute(['git', '-C', this.worktreeDir, 'pull'])
-            if (pull.output.startsWith('Already up to date.')) return console.log('Already up to date')
-        } else {
-            console.log('Not updating since', this.checkout, 'is not a branch')
-        }
-
-        console.log('Syncing', this.sourceDir, 'to', this.targetDir)
-        files.syncDirectory(this.sourceDir, this.targetDir)
+        await this.update()
+        await this.sync()
     }
 
     async remove() {

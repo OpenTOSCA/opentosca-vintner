@@ -1,6 +1,6 @@
 import * as files from '../utils/files'
 import {Dependencies, Dependency} from './dependency'
-import config from "../utils/config";
+import config from '../utils/config'
 
 export type DependencyFileData = {[id: string]: string}
 
