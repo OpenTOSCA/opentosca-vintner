@@ -1,5 +1,11 @@
 # Takes 7.755s
 
+# Good
+# - versions are treated the same
+
+# Bad
+# - versions not available
+
 rm -rf cache-test
 mkdir cache-test
 cd cache-test

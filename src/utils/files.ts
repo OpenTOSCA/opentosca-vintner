@@ -8,6 +8,20 @@ import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
 import xml2js from 'xml2js'
+import filenamify from "filenamify";
+import _syncDirectory from 'sync-directory'
+
+export function syncDirectory(source: string, target: string) {
+        assertDirectory(source)
+        createDirectory(target)
+        _syncDirectory(source, target, {
+            deleteOrphaned: true,
+        })
+}
+
+export function sanitize(file: string) {
+    return filenamify(file, {replacement: '__', maxLength: 255})
+}
 
 export function createFile(file: string) {
     if (exists(file)) return
