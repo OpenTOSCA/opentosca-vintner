@@ -1,5 +1,18 @@
 # Takes 6.439s
 
+# Bad:
+# - detect commit
+
+# Good:
+# - pull works everywhere
+# - versions available
+
+# Neutral:
+# - duplication not bad since only one commit
+
+# Notes:
+# - detect branch by "git status -> On branch"
+
 rm -rf cache-test
 mkdir cache-test
 cd cache-test

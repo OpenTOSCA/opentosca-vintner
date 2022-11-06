@@ -1,4 +1,4 @@
-import {spawn} from 'child_process'
+import {spawn, SpawnOptionsWithoutStdio} from 'child_process'
 import path from 'path'
 
 export class Shell {
@@ -22,26 +22,33 @@ export class Shell {
         return resolved
     }
 
-    async execute(parts: string[]): Promise<number> {
+    // TODO: cwd will not work if wsl is enabled
+    async execute(parts: string[], options?: {cwd?: string, resolve?: boolean}): Promise<{success: true, output: string, code: number} | {success: false, output: string, code: number}> {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
             console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)
 
             let child
             if (this.wsl) {
-                child = spawn('wsl')
+                child = spawn('wsl', {cwd: options?.cwd})
                 child.stdin.write(command)
                 child.stdin.end()
             } else {
-                child = spawn(command, {shell: true})
+                child = spawn(command, {shell: true, cwd: options?.cwd})
             }
 
+            let output = ''
+
             child.stdout.on('data', data => {
-                console.log(data.toString())
+                const decoded = data.toString()
+                output += decoded
+                console.log(decoded)
             })
 
             child.stderr.on('data', data => {
-                console.log(data.toString())
+                const decoded = data.toString()
+                output += decoded
+                console.log(decoded)
             })
 
             child.on('error', error => {
@@ -52,11 +59,9 @@ export class Shell {
             child.on('close', code => {
                 console.log(`Command exited with code ${code}`)
 
-                if (code === 0) {
-                    resolve(code)
-                } else {
-                    reject(code)
-                }
+                if (code === 0) return resolve({success: true, code, output})
+                if (options?.resolve) return resolve({success: false, code: code ?? -1, output})
+                return reject({success: false, code, output})
             })
         })
     }

@@ -1,11 +1,10 @@
-import {Dependencies, Dependency, LIB_DIRECTORY, CACHE_DIRECTORY} from './dependency'
-import {DEPENDENCY_FILE, DependencyFile} from './dependency-file'
+import {Dependencies, Dependency} from './dependency'
+import {DependencyFile} from './dependency-file'
 import * as files from '../utils/files'
 import path from 'path'
+import config from "../utils/config";
 
-export default {add, upgrade, remove, install, list, clean: clean, purge: purge, validate}
-
-// TODO: when to create cache dir?
+export default {add, upgrade, remove, install, list, clean, purge, validate}
 
 async function install() {
     console.log('Installing dependencies')
@@ -57,11 +56,11 @@ async function clean() {
     const dependencies = readAllDependencies()
     console.log(dependencies)
 
-    const directories = files.readDirectory(LIB_DIRECTORY)
+    const directories = files.readDirectory(config.libDir)
     for (const dir of directories) {
         if (!dependencies.has(dir)) {
-            files.removeDirectory(path.join(LIB_DIRECTORY, dir))
-            files.removeDirectory(path.join(CACHE_DIRECTORY, dir))
+            files.removeDirectory(path.join(config.libDir, dir))
+            files.removeDirectory(path.join(config.packageCacheDir, dir))
             console.log(`Purged ${dir}`)
         }
     }
@@ -69,8 +68,8 @@ async function clean() {
 
 async function purge() {
     console.log('Purging all dependencies')
-    files.removeDirectory(LIB_DIRECTORY)
-    files.removeDirectory(CACHE_DIRECTORY)
+    files.removeDirectory(config.libDir)
+    files.removeDirectory(config.packageCacheDir)
 }
 
 async function validate() {
@@ -86,14 +85,14 @@ function readAllDependencies(): Set<string> {
     addDependenciesToList(dependencies, dependencyList)
 
     // Add all deps from sub dependency files
-    const directories = files.readDirectory(LIB_DIRECTORY)
+    const directories = files.readDirectory(config.libDir)
     let listSize
     do {
         listSize = dependencyList.size
         for (const dir of directories) {
             // Only consider directories of required dependencies
             if (dependencyList.has(dir)) {
-                const subDependencyFilePath = path.join(LIB_DIRECTORY, dir, DEPENDENCY_FILE)
+                const subDependencyFilePath = path.join(config.libDir, dir, config.dependencyFile)
 
                 // If dependency has a dependency file
                 if (files.exists(subDependencyFilePath)) {

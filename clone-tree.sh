@@ -19,7 +19,7 @@ clone_package() {
   fi
 
   cd $1__$2
-  git worktree add --checkout ../$1__$2__$4 $4
+  git worktree add --force --checkout ../$1__$2__$4 $4
   cd ..
 }
 

@@ -2,9 +2,7 @@ import * as files from '../utils/files'
 import {Dependencies, Dependency} from './dependency'
 import config from "../utils/config";
 
-export type DependencyFileData = {[id: string]: DependencyShortNotation}
-export type DependencyShortNotation = string
-// TODO: DependencyExtendedNotation
+export type DependencyFileData = {[id: string]: string}
 
 export class DependencyFile {
     path: string
