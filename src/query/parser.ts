@@ -186,10 +186,15 @@ export class Parser {
     /**
      * Returns an abstract syntax tree that represents the given query
      * @param query The query string input by the user
+     * @param startRule The query string input by the user
      */
-    getAST(query: string) {
-        let tree
-        const match = this.grammar.match(query)
+    getAST(query: string, startRule?: string) {
+        let tree, match
+        if (startRule) {
+            match = this.grammar.match(query, startRule)
+        } else {
+            match = this.grammar.match(query)
+        }
         if (match.succeeded()) {
             tree = this.semantics(match).buildAST()
         } else {

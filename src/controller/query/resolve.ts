@@ -1,25 +1,61 @@
-import {Resolver} from '../../query/resolver'
 import * as files from '../../utils/files'
+import {Resolver} from '../../query/resolver'
+import {ServiceTemplate} from '../../specification/service-template'
+import {Instance} from '../../repository/instances'
 
-export type QueryTemplateArguments = {
+export type QueryResolveTemplateArguments = {
+    template: string
     output: string
-    query: string
     source: 'file' | 'vintner' | 'winery'
 }
 
-export default function executeQuery(options: QueryTemplateArguments): Object {
-    const resolver = new Resolver()
-    // add missing default for REST calls
-    if (!options.source) options.source = 'vintner'
-    const results = resolver.resolve(options)
-    if (results.length > 0) {
-        for (const r of results)
-            console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
-        if (options.output) {
-            files.storeYAML(options.output, (results.length == 1)? results[0].result : results)
-        }
-    } else {
-        console.log('No results found.')
+export default function resolveQueries(options: QueryResolveTemplateArguments): void {
+    const {template, output} = options
+    const serviceTemplate = files.loadYAML<ServiceTemplate>(new Instance(template).getServiceTemplatePath())
+    const queryResolver = new TemplateQueryResolver(serviceTemplate)
+    const result = queryResolver.findAndRunQueries()
+    files.storeYAML(output, result)
+}
+
+export class TemplateQueryResolver {
+    private readonly serviceTemplate: ServiceTemplate
+    private resolver = new Resolver()
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
     }
-    return (results.length == 1)? results[0].result : results
+
+    findAndRunQueries() {
+        // Regex to find query commands
+        const regExp = /executeQuery\(([^)]+)\)/
+
+        // Recursively go through template to find any queries and resolve them
+        const recursiveRun = (object: any, path: string) => {
+            if (typeof object === 'string') {
+                if (regExp.test(object)) {
+                    const match = object.match(regExp)?.pop() || ''
+                    return this.runQuery(path, match)
+                } else {
+                    return object
+                }
+            }
+            if (typeof object === 'object') {
+                if (object === null) return null
+                Object.keys(object).forEach((key) => {
+                    object[key] = recursiveRun(object[key], path + '.' + key)
+                })
+                return object;
+            }
+        }
+        return recursiveRun(this.serviceTemplate, '');
+    }
+
+    private runQuery(context: string, query: string): any {
+        console.log(context)
+        const queryResult = this.resolver.resolveFromTemplate(query, this.serviceTemplate)
+        if (!queryResult) throw new Error (
+            `Resolving queries failed. The following query in your template evaluated to null: ${query}`
+        )
+        return queryResult
+    }
 }

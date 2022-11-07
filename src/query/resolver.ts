@@ -7,7 +7,7 @@ import {
 } from '../specification/query-type'
 import {ServiceTemplate} from '../specification/service-template'
 import {Graph} from './graph'
-import {QueryTemplateArguments} from '../controller/query/resolve'
+import {QueryTemplateArguments} from '../controller/query/execute'
 import {Winery} from '../orchestrators/winery'
 import * as files from '../utils/files'
 import * as path from 'path'
@@ -34,6 +34,19 @@ export class Resolver {
         }
         console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
         return this.evaluate(tree)
+    }
+
+    resolveFromTemplate(query: string, template: ServiceTemplate) {
+        const parser = new Parser
+        let tree
+        try {
+            tree = parser.getAST(query, 'Select')
+        } catch (e) {
+            if (e instanceof  Error) console.error(e.message)
+            process.exit(1);
+        }
+        console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
+        return this.evaluateSelect(template, tree)
     }
 
     /**

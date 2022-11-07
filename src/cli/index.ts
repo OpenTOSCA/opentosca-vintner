@@ -118,16 +118,31 @@ initOrchestrators
         })
     )
 
-const query = program.command('query').description('executes a query')
+const query = program.command('query').description('handles commands related to queries')
 
 query
-    .command('execute')
+    .command('run')
+    .description('runs the given query and returns the result in console and optional output file')
     .requiredOption('--query <string>', 'path to query or query string')
     .option('--source <string>', 'specifies where to search for template to query', 'vintner')
     .option('--output <string>', 'output file for the result of the query')
-    .action(hae(async options => {
-        await Controller.query.resolve(options)
-    }))
+    .action(
+        hae(async options => {
+        await Controller.query.execute(options)
+        })
+    )
+
+query
+    .command('resolve')
+    .description('resolves all queries in a given service template')
+    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--output <string>', 'output file for the result of the query')
+    .option('--source <string>', 'specifies where to search for service template', 'vintner')
+    .action(
+        hae(async options => {
+            await Controller.query.resolve(options)
+        })
+    )
 
 const template = program.command('template').description('handles stand-alone variable service templates')
 
