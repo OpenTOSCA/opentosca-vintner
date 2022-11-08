@@ -36,7 +36,7 @@ export class Resolver {
         return this.evaluate(tree)
     }
 
-    resolveFromTemplate(query: string, template: ServiceTemplate) {
+    resolveFromTemplate(query: string, template: ServiceTemplate): Object {
         const parser = new Parser
         let tree
         try {
@@ -45,7 +45,6 @@ export class Resolver {
             if (e instanceof  Error) console.error(e.message)
             process.exit(1);
         }
-        console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
         return this.evaluateSelect(template, tree)
     }
 
