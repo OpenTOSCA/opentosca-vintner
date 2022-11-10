@@ -1,9 +1,9 @@
-import {ServiceTemplate} from '../specification/service-template';
-import {RequirementAssignmentMap} from '../specification/node-template';
-import {PredicateExpression} from '../specification/query-type';
-import {TopologyTemplate} from '../specification/topology-template';
-import {firstKey, firstValue} from '../utils/utils';
-import {isString} from '../utils/validator';
+import {ServiceTemplate} from '../specification/service-template'
+import {RequirementAssignmentMap} from '../specification/node-template'
+import {PredicateExpression} from '../specification/query-type'
+import {TopologyTemplate} from '../specification/topology-template'
+import {firstKey, firstValue} from '../utils/utils'
+import {isString} from '../utils/validator'
 
 type Node = {
     data: Object
@@ -20,10 +20,12 @@ export class Graph {
     nodesMap: Map<string, Node> = new Map<string, Node>()
 
     constructor(serviceTemplate: ServiceTemplate) {
-        for (const [nodeName, nodeTemplate] of Object.entries(serviceTemplate.topology_template?.node_templates || {})) {
+        for (const [nodeName, nodeTemplate] of Object.entries(
+            serviceTemplate.topology_template?.node_templates || {}
+        )) {
             this.nodesMap.set(nodeName, {
                 data: nodeTemplate,
-                relationships: []
+                relationships: [],
             })
         }
         this.getAllRelationships(serviceTemplate?.topology_template || {})
@@ -41,7 +43,10 @@ export class Graph {
         }
     }
 
-    private static resolveRelationship(nodeName: string, r: RequirementAssignmentMap): {type: string, source: string, target: string} {
+    private static resolveRelationship(
+        nodeName: string,
+        r: RequirementAssignmentMap
+    ): {type: string; source: string; target: string} {
         // value is not a string -> try extended notation, otherwise just set value as target node (short notation)
         if (!isString(firstValue(r))) {
             for (const entry of Object.values(r)) {
@@ -68,12 +73,12 @@ export class Graph {
         const nodes: Queue<any> = new Queue<string>()
         nodes.add(nodeName)
         nodes.add(null)
-        while (!nodes.isEmpty() && level <= maximum - 1){
+        while (!nodes.isEmpty() && level <= maximum - 1) {
             const current = nodes.pop()
             if (current == null) {
                 level++
                 nodes.add(null)
-                if(nodes.peek() == null) break
+                if (nodes.peek() == null) break
             }
             const next = this.getNext(current, predicate, direction)
             if (next.length > 0) {
@@ -92,17 +97,17 @@ export class Graph {
 }
 
 class Queue<T> {
-    private items: T[] = [];
+    private items: T[] = []
     add(item: T) {
-        this.items.push(item);
+        this.items.push(item)
     }
     pop(): T | undefined {
-        return this.items.shift();
+        return this.items.shift()
     }
     peek(): T {
-        return this.items[0];
+        return this.items[0]
     }
-    isEmpty():boolean {
-        return this.items.length == 0;
+    isEmpty(): boolean {
+        return this.items.length == 0
     }
 }

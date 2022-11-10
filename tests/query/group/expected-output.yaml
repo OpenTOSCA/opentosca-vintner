@@ -1,10 +1,8 @@
 mysql_database:
     type: Database
     requirements:
-        -
-            host: dbms
+        - host: dbms
 dbms:
     type: DBMS
     requirements:
-        -
-            host: vm_2
+        - host: vm_2

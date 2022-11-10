@@ -128,7 +128,7 @@ query
     .option('--output <string>', 'output file for the result of the query')
     .action(
         hae(async options => {
-        await Controller.query.execute(options)
+            await Controller.query.execute(options)
         })
     )
 

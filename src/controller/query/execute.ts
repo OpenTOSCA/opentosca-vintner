@@ -13,13 +13,12 @@ export default function executeQuery(options: QueryTemplateArguments): Object {
     if (!options.source) options.source = 'vintner'
     const results = resolver.resolve(options)
     if (results.length > 0) {
-        for (const r of results)
-            console.log("\nResults in " + r.name + ": \n" + JSON.stringify(r.result, null, 4))
+        for (const r of results) console.log('\nResults in ' + r.name + ': \n' + JSON.stringify(r.result, null, 4))
         if (options.output) {
-            files.storeYAML(options.output, (results.length == 1)? results[0].result : results)
+            files.storeYAML(options.output, results.length == 1 ? results[0].result : results)
         }
     } else {
         console.log('No results found.')
     }
-    return (results.length == 1)? results[0].result : results
+    return results.length == 1 ? results[0].result : results
 }

@@ -1,5 +1,5 @@
-import ohm, {ActionDict} from 'ohm-js';
-import * as fs from 'fs';
+import ohm, {ActionDict} from 'ohm-js'
+import * as fs from 'fs'
 import {
     ConditionExpression,
     Expression,
@@ -7,14 +7,15 @@ import {
     MatchExpression,
     PathExpression,
     PredicateExpression,
-    RelationshipExpression, ReturnExpression,
+    RelationshipExpression,
+    ReturnExpression,
     SelectExpression,
-    StepExpression, VariableExpression
-} from '../specification/query-type';
-import {parseInt} from 'lodash';
+    StepExpression,
+    VariableExpression,
+} from '../specification/query-type'
+import {parseInt} from 'lodash'
 
 export class Parser {
-
     grammar: ohm.Grammar
     semantics: ohm.Semantics
 
@@ -29,7 +30,7 @@ export class Parser {
         MatchExpression(from, match, select) {
             return {type: 'Expression', from: from.buildAST(), match: match.buildAST(), select: select.buildAST()}
         },
-        FromExpression(_, type, __,  path): FromExpression {
+        FromExpression(_, type, __, path): FromExpression {
             let nodeType: 'Instance' | 'Template' = 'Template'
             if (type.sourceString.toLowerCase() == 'instance') nodeType = 'Instance'
             return {type: nodeType, path: path.sourceString}
@@ -47,8 +48,8 @@ export class Parser {
             return {type: 'Path', steps: steps, returnVal: returnClause.buildAST()[0]}
         },
         Step(shortcut, path): StepExpression[] {
-            const result: StepExpression[] = (shortcut.sourceString != '')?
-                [{type: 'Step', path: getShortcut(shortcut.sourceString)}] : []
+            const result: StepExpression[] =
+                shortcut.sourceString != '' ? [{type: 'Step', path: getShortcut(shortcut.sourceString)}] : []
             return result.concat({type: 'Step', path: path.buildAST()})
         },
         StepCond(shortcut, path, condition): StepExpression {
@@ -57,10 +58,10 @@ export class Parser {
         ReturnClause(_, pair1, __, pair2, ___): ReturnExpression {
             return {type: 'Return', keyValuePairs: [pair1.buildAST()].concat(pair2.buildAST())}
         },
-        KeyValuePair_complex(key, _, value): {key: VariableExpression, value: VariableExpression} {
+        KeyValuePair_complex(key, _, value): {key: VariableExpression; value: VariableExpression} {
             return {key: key.buildAST(), value: value.buildAST()}
         },
-        KeyValuePair_simple(value): {key: VariableExpression, value: VariableExpression} {
+        KeyValuePair_simple(value): {key: VariableExpression; value: VariableExpression} {
             return {key: {text: value.sourceString, isString: true}, value: value.buildAST()}
         },
         Group(_, __, groupName, ___): StepExpression {
@@ -84,21 +85,26 @@ export class Parser {
                 negation: negation.buildAST(),
                 variable: variable.buildAST(),
                 operator: operator.buildAST(),
-                value: value.buildAST()
+                value: value.buildAST(),
             }
         },
         Condition_existence(negation, variable): ConditionExpression {
             return {
                 type: 'Existence',
                 negation: negation.buildAST(),
-                variable: variable.buildAST()
+                variable: variable.buildAST(),
             }
         },
         Match(_, firstNode, relationships, addNodes): MatchExpression {
-            return {type: 'Match', nodes: [firstNode.buildAST()].concat(addNodes.buildAST()), relationships: relationships.buildAST()}
+            return {
+                type: 'Match',
+                nodes: [firstNode.buildAST()].concat(addNodes.buildAST()),
+                relationships: relationships.buildAST(),
+            }
         },
         Node(_, name, predicate, __) {
-            return (predicate.sourceString != "")? {type: 'Node', name: name.sourceString, predicate: predicate.buildAST()[0]}
+            return predicate.sourceString != ''
+                ? {type: 'Node', name: name.sourceString, predicate: predicate.buildAST()[0]}
                 : {type: 'Node', name: name.sourceString}
         },
         Relationship_simple(arrowLeft, arrowRight): RelationshipExpression {
@@ -112,7 +118,7 @@ export class Parser {
                 direction: direction,
                 variable: variable.sourceString,
                 cardinality: cardinality.buildAST()[0],
-                predicate: predicate.buildAST()[0]
+                predicate: predicate.buildAST()[0],
             }
         },
         Cardinality_range(asterisk, min, _, max) {
@@ -131,11 +137,11 @@ export class Parser {
             return {min: 0, max: 99}
         },
         Variable(v): VariableExpression {
-            return {text: v.buildAST(), isString: (v.sourceString.startsWith('\'') || v.sourceString.startsWith('"'))}
+            return {text: v.buildAST(), isString: v.sourceString.startsWith("'") || v.sourceString.startsWith('"')}
         },
         Value(shortcut, v) {
             const shortcutString = getShortcut(shortcut.sourceString)
-            return ((shortcutString != '')? (shortcutString + '.') : '') + v.buildAST()
+            return (shortcutString != '' ? shortcutString + '.' : '') + v.buildAST()
         },
         negation(v) {
             return v.sourceString == '!'
@@ -144,13 +150,13 @@ export class Parser {
             return v.sourceString
         },
         ident(a, b) {
-            return [a, b].map((v) => v.sourceString).join('')
+            return [a, b].map(v => v.sourceString).join('')
         },
         literal(v) {
             return v.buildAST()
         },
         bool(b) {
-            return { type: 'bool', value: b.sourceString.toLowerCase() === 'true' };
+            return {type: 'bool', value: b.sourceString.toLowerCase() === 'true'}
         },
         string(start, s, end) {
             return s.sourceString
@@ -168,11 +174,11 @@ export class Parser {
             return '*'
         },
         _iter(...children) {
-            return children.map(c => c.buildAST());
+            return children.map(c => c.buildAST())
         },
         _terminal() {
             return ''
-        }
+        },
     }
 
     /** Loads the Ohm grammar from a file, initializes the grammar and the semantic actions */

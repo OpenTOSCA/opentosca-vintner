@@ -79,8 +79,7 @@ export class Opera implements Orchestrator, OrchestratorPlugin {
         for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
             const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {
-                const entries: { [s: string]: { is_set: string, data: string } } =
-                    files.loadYAML(attributesPath)
+                const entries: {[s: string]: {is_set: string; data: string}} = files.loadYAML(attributesPath)
                 for (const [attrKey, attrValue] of Object.entries(entries)) {
                     _.set(attributes, [node, 'attributes', attrKey], attrValue.data)
                 }

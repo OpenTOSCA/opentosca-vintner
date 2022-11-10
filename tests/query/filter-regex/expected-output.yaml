@@ -1,10 +1,6 @@
--
-    type: VirtualMachine
-    requirements:
-        -
-            host: openstack
--
-    type: VirtualMachine
-    requirements:
-        -
-            host: openstack
+- type: VirtualMachine
+  requirements:
+      - host: openstack
+- type: VirtualMachine
+  requirements:
+      - host: openstack

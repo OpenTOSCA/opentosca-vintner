@@ -40,17 +40,17 @@ export class TemplateQueryResolver {
                     const match = object.match(this.queryRegex)?.pop() || ''
                     const queryResult = this.runQuery(path, match)
                     // if query result is itself a query, leave it in and let it resolve in a later loop
-                    return (isString(queryResult) && this.queryRegex.test(queryResult))? object : queryResult
+                    return isString(queryResult) && this.queryRegex.test(queryResult) ? object : queryResult
                 } else {
                     return object
                 }
             }
             if (typeof object === 'object') {
                 if (object === null) return null
-                Object.keys(object).forEach((key) => {
+                Object.keys(object).forEach(key => {
                     object[key] = recursiveRun(object[key], path + '.' + key)
                 })
-                return object;
+                return object
             }
         }
         /*
@@ -70,9 +70,10 @@ export class TemplateQueryResolver {
 
     private runQuery(context: string, query: string): Object {
         const queryResult = this.resolver.resolveFromTemplate(query, this.serviceTemplate)
-        if (!queryResult) throw new Error (
-            `Resolving queries failed. The following query in your template evaluated to null: ${query}`
-        )
+        if (!queryResult)
+            throw new Error(
+                `Resolving queries failed. The following query in your template evaluated to null: ${query}`
+            )
         return queryResult
     }
 }

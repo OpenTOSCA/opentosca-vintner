@@ -8,8 +8,8 @@ export type NodeTemplateAttributes = {
 export type NodeTemplateAttributesMap = {[key: string]: NodeTemplateAttributes}
 
 export interface RepoPlugin {
-    getTemplate: (path: string) => {name: string, template: ServiceTemplate}
-    getAllTemplates: () => {name: string, template: ServiceTemplate}[]
+    getTemplate: (path: string) => {name: string; template: ServiceTemplate}
+    getAllTemplates: () => {name: string; template: ServiceTemplate}[]
 }
 
 export interface OrchestratorPlugin {

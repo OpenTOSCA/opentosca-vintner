@@ -1,7 +1,5 @@
 webapp:
     type: WebApplication
     requirements:
-        -
-            database_endpoint: mysql_database
-        -
-            host: tomcat
+        - database_endpoint: mysql_database
+        - host: tomcat

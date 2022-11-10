@@ -2,8 +2,16 @@ import {Parser} from './parser'
 import {Template, Templates} from '../repository/templates'
 import {Instance, Instances} from '../repository/instances'
 import {
-    ConditionExpression, Expression, FromExpression, MatchExpression, NodeExpression, PredicateExpression,
-    RelationshipExpression, ReturnExpression, SelectExpression, VariableExpression
+    ConditionExpression,
+    Expression,
+    FromExpression,
+    MatchExpression,
+    NodeExpression,
+    PredicateExpression,
+    RelationshipExpression,
+    ReturnExpression,
+    SelectExpression,
+    VariableExpression,
 } from '../specification/query-type'
 import {ServiceTemplate} from '../specification/service-template'
 import {Graph} from './graph'
@@ -18,32 +26,32 @@ export class Resolver {
     private nodeGraph: Graph | undefined
     private source = ''
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
-    private currentKeys: string[] = [];
+    private currentKeys: string[] = []
 
-    resolve(queryArgs: QueryTemplateArguments): {name: string, result: Object}[] {
+    resolve(queryArgs: QueryTemplateArguments): {name: string; result: Object}[] {
         // If input is a file load it, otherwise use input string directly
-        const queryString: string = files.isFile(queryArgs.query)? files.loadFile(queryArgs.query) : queryArgs.query
-        const parser = new Parser
+        const queryString: string = files.isFile(queryArgs.query) ? files.loadFile(queryArgs.query) : queryArgs.query
+        const parser = new Parser()
         let tree
         try {
             this.source = queryArgs.source
             tree = parser.getAST(queryString)
         } catch (e) {
-            if (e instanceof  Error) console.error(e.message)
-            process.exit(1);
+            if (e instanceof Error) console.error(e.message)
+            process.exit(1)
         }
         console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
         return this.evaluate(tree)
     }
 
     resolveFromTemplate(query: string, template: ServiceTemplate): Object {
-        const parser = new Parser
+        const parser = new Parser()
         let tree
         try {
             tree = parser.getAST(query, 'Select')
         } catch (e) {
-            if (e instanceof  Error) console.error(e.message)
-            process.exit(1);
+            if (e instanceof Error) console.error(e.message)
+            process.exit(1)
         }
         return this.evaluateSelect(template, tree)
     }
@@ -53,7 +61,7 @@ export class Resolver {
      * @param expression The complete AST
      * @return result The data that matches the expression
      */
-    private evaluate(expression: Expression): {name: string, result: Object}[] {
+    private evaluate(expression: Expression): {name: string; result: Object}[] {
         const results = []
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
@@ -62,15 +70,15 @@ export class Resolver {
                 result = this.evaluateMatch(result, expression.match)
             }
             try {
-                result = this.evaluateSelect(result,expression.select)
+                result = this.evaluateSelect(result, expression.select)
             } catch (e) {
                 if (e instanceof Error) console.error(e.message)
                 result = null
             }
             // Discard empty results
-            if (result && ((Array.isArray(result) && result.length > 0) || (Object.keys(result).length > 0))) {
+            if (result && ((Array.isArray(result) && result.length > 0) || Object.keys(result).length > 0)) {
                 // Flatten the result if it is only one element
-                result = (result.length == 1)? result[0] : result
+                result = result.length == 1 ? result[0] : result
                 results.push({name: t.name, result: result})
             }
         }
@@ -78,10 +86,10 @@ export class Resolver {
     }
 
     /** Loads the template or instance in the FROM clause */
-    private evaluateFrom(expression: FromExpression): {name: string, template: ServiceTemplate}[] {
-        let serviceTemplates: {name: string, template: ServiceTemplate}[] = []
+    private evaluateFrom(expression: FromExpression): {name: string; template: ServiceTemplate}[] {
+        let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
         try {
-            switch(this.source) {
+            switch (this.source) {
                 case 'vintner':
                     if (expression.type == 'Instance') {
                         if (expression.path == '*') {
@@ -91,7 +99,7 @@ export class Resolver {
                         } else {
                             serviceTemplates.push({
                                 name: expression.path,
-                                template: new Instance(expression.path).getTemplateWithAttributes()
+                                template: new Instance(expression.path).getTemplateWithAttributes(),
                             })
                         }
                     } else if (expression.type == 'Template' && expression.path == '*') {
@@ -101,7 +109,7 @@ export class Resolver {
                     } else {
                         serviceTemplates.push({
                             name: expression.path,
-                            template: new Template(expression.path).getVariableServiceTemplate()
+                            template: new Template(expression.path).getVariableServiceTemplate(),
                         })
                     }
                     break
@@ -119,7 +127,7 @@ export class Resolver {
                 case 'file': {
                     serviceTemplates.push({
                         name: expression.path,
-                        template: files.loadYAML(path.resolve(expression.path))
+                        template: files.loadYAML(path.resolve(expression.path)),
                     })
                 }
             }
@@ -141,7 +149,7 @@ export class Resolver {
                     result = this.evaluateGroup(result, i.path)
                 } else if (i.type == 'Policy') {
                     result = this.evaluatePolicy(result, i.path)
-                } else if (i.path == "*") {
+                } else if (i.path == '*') {
                     result = this.evaluateWildcard(result, i.condition)
                 } else {
                     result = this.evaluateStep(result, i.path)
@@ -152,7 +160,7 @@ export class Resolver {
             }
             results.push(result)
         }
-        return (results.length > 1)? results : results[0]
+        return results.length > 1 ? results : results[0]
     }
 
     private evaluateReturn(data: Object, returnVal: ReturnExpression): Object {
@@ -178,7 +186,7 @@ export class Resolver {
     }
 
     private evaluateVariable(variable: VariableExpression, result: any, index?: number): any {
-        return variable.isString? variable.text : this.resolvePath(variable.text, result, index || 0)
+        return variable.isString ? variable.text : this.resolvePath(variable.text, result, index || 0)
     }
 
     private evaluateMatch(data: ServiceTemplate, expression: MatchExpression): {[name: string]: NodeTemplateMap} {
@@ -217,18 +225,28 @@ export class Resolver {
      * @param relationship Direction and optional conditions of relationships
      * @param nodePredicate Predicate, if any
      */
-    private expand(paths: Set<string[]>,
-                   relationship: RelationshipExpression,
-                   nodePredicate: PredicateExpression | undefined): Set<string[]> {
+    private expand(
+        paths: Set<string[]>,
+        relationship: RelationshipExpression,
+        nodePredicate: PredicateExpression | undefined
+    ): Set<string[]> {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
             // do a breadth first search to find all nodes reachable within n steps
-            const targets = this.nodeGraph?.limitedBFS(p[p.length-1],relationship?.cardinality?.min || 1,
-                relationship?.cardinality?.max || 1, relationship.direction, relationship.predicate)
+            const targets = this.nodeGraph?.limitedBFS(
+                p[p.length - 1],
+                relationship?.cardinality?.min || 1,
+                relationship?.cardinality?.max || 1,
+                relationship.direction,
+                relationship.predicate
+            )
             // if a predicate is specified, filter out nodes which do not satisfy it
             for (const n of targets || []) {
-                if (!nodePredicate || (this.nodeGraph?.getNode(n)?.data &&
-                    this.evaluatePredicate(n, this.nodeGraph?.getNode(n)?.data || {}, nodePredicate))) {
+                if (
+                    !nodePredicate ||
+                    (this.nodeGraph?.getNode(n)?.data &&
+                        this.evaluatePredicate(n, this.nodeGraph?.getNode(n)?.data || {}, nodePredicate))
+                ) {
                     newPaths.add(p.concat(n))
                 }
             }
@@ -259,11 +277,15 @@ export class Resolver {
         if (operator == null) {
             return this.evaluateCondition(key, data, a as ConditionExpression)
         } else if (operator == 'AND') {
-            return this.evaluatePredicate(key, data, a as PredicateExpression)
-            && this.evaluatePredicate(key, data, b as PredicateExpression)
+            return (
+                this.evaluatePredicate(key, data, a as PredicateExpression) &&
+                this.evaluatePredicate(key, data, b as PredicateExpression)
+            )
         } else if (operator == 'OR') {
-            return this.evaluatePredicate(key, data, a as PredicateExpression)
-                || this.evaluatePredicate(key, data, b as PredicateExpression)
+            return (
+                this.evaluatePredicate(key, data, a as PredicateExpression) ||
+                this.evaluatePredicate(key, data, b as PredicateExpression)
+            )
         }
         return false
     }
@@ -272,20 +294,19 @@ export class Resolver {
         const {variable, value, operator} = condition
         if (condition.type == 'Existence') {
             const exists = this.resolvePath(variable, data) != null
-            return condition.negation? !exists : exists
+            return condition.negation ? !exists : exists
         }
         if (condition.variable == 'name') {
             if (condition.operator == '=') {
-                return condition.negation? condition.value != key : condition.value == key
+                return condition.negation ? condition.value != key : condition.value == key
             } else {
-                if (value)
-                return condition.negation? !(new RegExp(value).test(key)) : new RegExp(value).test(key)
+                if (value) return condition.negation ? !new RegExp(value).test(key) : new RegExp(value).test(key)
             }
         }
         const property = this.resolvePath(variable, data)
         let result = false
         if (value) {
-            switch(operator) {
+            switch (operator) {
                 case '=':
                     result = property == value
                     break
@@ -309,7 +330,7 @@ export class Resolver {
                     break
             }
         }
-        return condition.negation? !result : result
+        return condition.negation ? !result : result
     }
 
     private evaluateWildcard(data: Object, condition?: PredicateExpression): Object[] {
@@ -364,7 +385,7 @@ export class Resolver {
         for (const i of groupNodesNames) {
             result[i] = data['topology_template']['node_templates'][i]
         }
-        return result;
+        return result
     }
 
     /**
@@ -383,21 +404,21 @@ export class Resolver {
         for (const i of policyNodeNames) {
             result[i] = data['topology_template']['node_templates'][i]
         }
-        return result;
+        return result
     }
 
     private static getNodesByName(data: ServiceTemplate, names: string[]): {[name: string]: NodeTemplate} {
         const result: {[name: string]: NodeTemplate} = {}
-        for (const node of names){
+        for (const node of names) {
             if (data.topology_template?.node_templates?.[node])
-            result[node] = data.topology_template?.node_templates?.[node]
+                result[node] = data.topology_template?.node_templates?.[node]
         }
         return result
     }
 
     private resolvePath(path: string, obj: any, index?: number): any {
-        if (path == 'name' && (index != undefined)) return this.currentKeys[index]
-        return path.split('.').reduce(function(prev, curr) {
+        if (path == 'name' && index != undefined) return this.currentKeys[index]
+        return path.split('.').reduce(function (prev, curr) {
             return prev ? prev[curr] : null
         }, obj)
     }

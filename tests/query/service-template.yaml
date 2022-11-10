@@ -38,12 +38,12 @@ topology_template:
                 properties:
                     type: linux
                     distribution: ubuntu
-                    
+
     groups:
         database_group:
             type: tosca.groups.Root
-            members: [ mysql_database, dbms ]
+            members: [mysql_database, dbms]
     policies:
         - placement_policy:
-            type: tosca.policies.placement
-            targets: [ vm_1, vm_2 ]
+              type: tosca.policies.placement
+              targets: [vm_1, vm_2]

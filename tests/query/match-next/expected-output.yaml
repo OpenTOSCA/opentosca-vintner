@@ -1,5 +1,4 @@
 vm_1:
     type: VirtualMachine
     requirements:
-        -
-            host: openstack
+        - host: openstack
