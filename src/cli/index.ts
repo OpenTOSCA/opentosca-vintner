@@ -121,26 +121,26 @@ initOrchestrators
 const query = program.command('query').description('handles commands related to queries')
 
 query
-    .command('run')
-    .description('runs the given query and returns the result in console and optional output file')
-    .requiredOption('--query <string>', 'path to query or query string')
-    .option('--source <string>', 'specifies where to search for template to query', 'vintner')
-    .option('--output <string>', 'output file for the result of the query')
-    .action(
-        hae(async options => {
-            await Controller.query.execute(options)
-        })
-    )
-
-query
     .command('resolve')
     .description('resolves all queries in a given service template')
     .requiredOption('--template <string>', 'path to service template')
     .requiredOption('--output <string>', 'output file for the result of the query')
-    .option('--source <string>', 'specifies where to search for service template', 'vintner')
+    .option('--source [string]', 'specifies where to search for service template', 'vintner')
     .action(
         hae(async options => {
-            await Controller.query.resolve(options)
+            Controller.query.resolve(options)
+        })
+    )
+
+query
+    .command('run')
+    .description('runs a query and returns the result')
+    .requiredOption('--query <string>', 'path to query or query string')
+    .option('--source [string]', 'specifies where to search for template to query', 'vintner')
+    .option('--output [string]', 'output file for the result of the query')
+    .action(
+        hae(async options => {
+            Controller.query.execute(options)
         })
     )
 
