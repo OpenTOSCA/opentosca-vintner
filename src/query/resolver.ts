@@ -24,6 +24,7 @@ import {NodeTemplate, NodeTemplateMap} from '../specification/node-template'
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
     private nodeGraph: Graph | undefined
+    private currentTemplate: ServiceTemplate | undefined
     private source = ''
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
     private currentKeys: string[] = []
@@ -66,6 +67,7 @@ export class Resolver {
         const templates = this.evaluateFrom(expression.from)
         for (const t of templates) {
             let result: any = t.template
+            this.currentTemplate = t.template
             if (expression.match != null) {
                 result = this.evaluateMatch(result, expression.match)
             }
@@ -333,7 +335,7 @@ export class Resolver {
         return condition.negation ? !result : result
     }
 
-    private evaluateWildcard(data: Object, condition?: PredicateExpression): Object[] {
+    private evaluateWildcard(data: Object, condition?: PredicateExpression): Object {
         const result: Object[] = []
         this.currentKeys = []
         for (const [key, value] of Object.entries(data)) {
@@ -342,7 +344,7 @@ export class Resolver {
                 this.currentKeys.push(key)
             }
         }
-        return result
+        return result.length > 1 ? result : result[0]
     }
 
     private evaluateStep(data: Object, path: string): Object {
@@ -359,10 +361,14 @@ export class Resolver {
                     }
                 }
             }
-            return result
+            return result.length > 1 ? result : result[0]
         } else {
             if (path == 'name') {
                 return this.currentKeys[0]
+            } else if (path == 'relationship') {
+                const name = this.resolvePath(path, data)
+                this.currentKeys = [name]
+                return this.currentTemplate?.topology_template?.relationship_templates?.[name] || {}
             }
             this.currentKeys = [path]
             return this.resolvePath(path, data)
