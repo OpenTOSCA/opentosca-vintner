@@ -22,8 +22,8 @@ export function getDefaultTest({
         files.assertDirectory(dir)
 
         const output = files.temporaryFile()
-        function fn() {
-            Controller.template.resolve({
+        async function fn() {
+            await Controller.template.resolve({
                 template: getDefaultVariableServiceTemplate({dir, example}),
                 inputs: getDefaultInputs(dir),
                 output,
@@ -33,13 +33,23 @@ export function getDefaultTest({
         }
 
         if (error) {
-            expect(fn).to.throw(error)
+            await expectAsyncThrow(fn, error)
         } else {
             await fn()
             const result = files.loadYAML<ServiceTemplate>(output)
             const expected = readDefaultExpect(dir)
             expect(result).to.deep.equal(expected)
         }
+    }
+}
+
+export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
+    try {
+        await fn()
+    } catch (e) {
+        expect(() => {
+            throw e
+        }).to.be.throw(error)
     }
 }
 
