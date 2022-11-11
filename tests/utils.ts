@@ -9,16 +9,18 @@ export function getDefaultTest({
     preset,
     error,
     example,
+    dir: _dir,
     ...remainingOptions
 }: {
     preset?: string
     error?: string
     example?: string
+    dir?: string
 } & ResolvingOptions) {
     return async function () {
         //@ts-ignore
         const title = this.test.title
-        const dir = path.join(__dirname, title)
+        const dir = path.join(__dirname, _dir || title)
         files.assertDirectory(dir)
 
         const output = files.temporaryFile()
