@@ -80,6 +80,7 @@ js-yaml,4.1.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.
 json-parse-even-better-errors,2.3.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/npm/json-parse-even-better-errors
 jsonfile,6.1.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/jprichardson/node-jsonfile
 license-checker,25.0.1,BSD-3-Clause,Standalone,https://opensource.org/licenses/BSD-3-Clause,http://github.com/davglass/license-checker
+lodash,4.17.21,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/lodash/lodash
 loupe,2.3.4,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/chaijs/loupe
 media-typer,0.3.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/jshttp/media-typer
 merge-descriptors,1.0.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/component/merge-descriptors
@@ -122,6 +123,7 @@ readdir-scoped-modules,1.1.0,ISC,Standalone,https://opensource.org/licenses/ISC,
 resolve,1.22.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/browserify/resolve
 safe-buffer,5.2.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/feross/safe-buffer
 safer-buffer,2.1.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/ChALkeR/safer-buffer
+sax,1.2.4,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/isaacs/sax-js
 semver,5.7.1,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/npm/node-semver
 send,0.18.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/pillarjs/send
 serve-static,1.15.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/expressjs/serve-static
@@ -150,4 +152,6 @@ uuid,8.3.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com
 validate-npm-package-license,3.0.4,Apache-2.0,Standalone,https://www.apache.org/licenses/LICENSE-2.0,https://github.com/kemitchell/validate-npm-package-license.js
 vary,1.1.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/jshttp/vary
 wrappy,1.0.2,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/npm/wrappy
+xml2js,0.4.23,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/Leonidas-from-XIV/node-xml2js
+xmlbuilder,11.0.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/oozcitak/xmlbuilder-js
 yauzl,2.10.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/thejoshwolfe/yauzl

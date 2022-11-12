@@ -1,10 +1,9 @@
 import {Command, Option} from 'commander'
 import hae from './hae'
-import config from './config'
-import Controller from '../controller'
-import * as files from '../utils/files'
-import {toBoolean} from '../utils/utils'
-import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
+import config from '#config'
+import Controller from '#controller'
+import * as files from '#files'
+import benchmark, {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 
 const program = new Command()
 

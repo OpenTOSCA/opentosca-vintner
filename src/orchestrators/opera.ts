@@ -1,7 +1,7 @@
-import {Instance} from '../repository/instances'
-import {Orchestrator} from '../repository/orchestrators'
-import {joinNotNull} from '../utils/utils'
-import {Shell} from '../utils/shell'
+import {Instance} from '#repository/instances'
+import {Orchestrator} from '#repository/orchestrators'
+import {joinNotNull} from '#utils'
+import {Shell} from '#shell'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 

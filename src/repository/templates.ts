@@ -1,7 +1,7 @@
-import * as files from '../utils/files'
+import * as files from '#files'
 import path from 'path'
-import config from '../cli/config'
-import {ServiceTemplate} from '../specification/service-template'
+import config from '#config'
+import {ServiceTemplate} from '#spec/service-template'
 
 export class Templates {
     static all() {
