@@ -116,10 +116,10 @@ jobs:
               run: yarn docs:install
 
             - name: (DOCS) Generate Licenses Page
-              run: yarn licenses:generate
+              run: yarn docs:generate:licenses
 
             - name: (DOCS) Generate Interface Page
-              run: yarn interface:generate
+              run: yarn docs:generate:interface
 
             - name: (DOCS) Deploy Docs
               run: yarn docs:deploy
