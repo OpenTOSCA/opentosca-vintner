@@ -71,7 +71,7 @@
         "vintner": "node build/cli/index",
         "cli": "yarn ts-node src/cli/index",
         "test": "yarn test:local",
-        "test:local": "mocha --require ts-node/register tests/**/*.ts",
+        "test:local": "mocha --require ts-node/register \"tests/**/*.ts\"",
         "test:docker": "docker build .",
         "benchmark": "yarn cli setup benchmark --latex",
         "server:start": "node -r dotenv/config -r ts-node/register src/cli/index.ts server start",
