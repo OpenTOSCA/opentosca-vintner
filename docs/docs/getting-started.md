@@ -34,7 +34,6 @@ vintner templates import --template getting-started --path examples/opera-gettin
 vintner instances create --instance getting-started --template getting-started
 ```
 
-
 The imported template contains the following conditional node templates.
 
 ```linenums="1"

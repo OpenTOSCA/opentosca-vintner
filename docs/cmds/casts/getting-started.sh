@@ -1,4 +1,6 @@
-# Setup demo-magic
+#!/usr/bin/env sh
+set -e
+
 . magic.sh -n
 TYPE_SPEED=100
 

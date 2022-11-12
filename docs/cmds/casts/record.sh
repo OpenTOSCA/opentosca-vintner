@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 set -e
 
 CAST_NAME=$1

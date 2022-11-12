@@ -19,7 +19,6 @@ Such a Service Template is also called Variable Service Template.
 
 The version is expected to be set to `tosca_simple_1_3` when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
-
 ## Topology Template Definition
 
 A Topology Template additionally contains a Variability Definition.
@@ -28,7 +27,6 @@ Such a Topology Template is also called Variable Topology Template.
 | Keyname     | Mandatory | Type                  | Description                                                                                 |
 | ----------- | --------- | --------------------- |---------------------------------------------------------------------------------------------|
 | variability | yes       | VariabilityDefinition | A required object for Variability Inputs, Variability Presets, and Variability Expressions. |
-
 
 ## Variability Definition
 
@@ -68,7 +66,6 @@ variability:
 
 This definition is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
-
 ## Variability Preset Definition
 
 A Variability Preset predefines values for Variability Inputs that might be used when resolving variability.
@@ -78,7 +75,6 @@ A Variability Preset predefines values for Variability Inputs that might be used
 | name        | no        | String                                | An optional name of the Variability Preset.         |
 | description | no        | String                                | An optional description for the Variability Preset. |
 | inputs      | yes       | Map(String, InputParameterAssignment) | A required map of Input Parameter Assignments.      |
-
 
 ## Variability Expression Definition
 
@@ -90,7 +86,6 @@ This result might be used inside a Variability Condition to ensure that the depl
 expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_input: costs_offering_b}]}
 ```
 
-
 ## Variability Condition Definition
 
 A Variability Condition is a Variability Expression that returns a boolean. 
@@ -100,7 +95,6 @@ For example, the following condition evaluates to true if the Variability Input 
 ```linenums="1"
 is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
-
 
 ## Node Template Definition
 
@@ -121,7 +115,6 @@ prod_database:
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
-
 ## Requirement Assignment Definition
 
 A Requirement Assignment can additionally contain Variability Conditions.
@@ -130,7 +123,6 @@ These conditions must be satisfied otherwise the respective relationship is not 
 | Keyname   | Mandatory | Type                           | Description                        |
 | --------- | --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-
 
 The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition assigned.
 
@@ -156,7 +148,6 @@ These conditions must be satisfied otherwise the respective group members are no
 Furthermore, group elements can be Node Templates and Requirement Assignments.
 Such a group is also called Variability Group.
 
-
 | Keyname           | Mandatory | Type                                                                       | Description                                                                                                               |
 |-------------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | members           | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
@@ -180,8 +171,6 @@ variability_group:
     members: [prod_database, [application, prod_connects_to]]
     conditions: {get_variability_expression: is_prod}
 ```
-
-
 
 ## Policy Template Definition
 
@@ -231,17 +220,14 @@ policies:
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
-
 ## Topology Template Input Definition
 
 A Topology Template Input can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective input is not present.
 
-
 | Keyname   | Mandatory | Type                           | Description                        |
 | --------- | --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-
 
 The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition assigned.
 
@@ -252,7 +238,6 @@ ssh_key_file:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
-
 
 ## Normative Group Types
 
@@ -348,7 +333,6 @@ The following constraint operators can be used inside a Variability Expression.
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
 
-
 ## Processing
 
 In the following we describe on a high-level the steps to derive a Variability-Resolved Service Template from a Variable Service Template.
@@ -367,7 +351,6 @@ To resolve the variability in a Variable Service Template conduct the following 
 1. Remove all Policy Targets which are _not present_ from Policy Template.
 1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
-
 
 ### Check Element Presence
 

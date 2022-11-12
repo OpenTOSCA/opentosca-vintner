@@ -6,12 +6,12 @@
     color: var(--md-typeset-color);
 }
 
-.md-typeset h1, .md-typeset h2 {
+.md-typeset h1,
+.md-typeset h2 {
     font-weight: 400;
 }
 
-
-/*  */
+/* Text Font Size */
 .md-typeset {
     font-size: 15px;
 }
@@ -43,15 +43,14 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
     font-size: 14px;
 }
 
-/* Code Linenumbers */
-.highlighttable .linenos {
-    font-size: 14px;
-}
-
 .linenos {
     font-size: 14px;
 }
 
+/* Code Linenumbers */
+.highlighttable .linenos {
+    font-size: 14px;
+}
 
 .md-tabs__link {
     font-size: 15px;

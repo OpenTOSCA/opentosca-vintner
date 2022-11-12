@@ -44,7 +44,6 @@ This page contains a collection of interesting resources such as the TOSCA speci
 - [Unfurl Tests Examples](https://github.com/onecommons/unfurl/tree/master/tests/examples){target=_blank} (TOSCA 1.3) (Unfurl)
 - [xOpera Examples](https://github.com/xlab-si/xopera-examples){target=_blank} (TOSCA 1.3) (xOpera)
 
-
 ## Other Resources
 
 - [IAAS TOSCA-Related Research](https://www.opentosca.org/resources){target=_blank}
