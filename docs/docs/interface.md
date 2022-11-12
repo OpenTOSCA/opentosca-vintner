@@ -272,6 +272,243 @@ initializes unfurl-wsl plugin
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
+## packages check
+
+checks syntax of dependencies file
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages check 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/check
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/check")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/check")
+    ```
+
+
+## packages list
+
+lists all dependencies
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages list 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/list
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/list")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/list")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| installed |  false  | boolean | include installed dependencies |
+| declared |  false  | boolean | include declared dependencies |
+| all |  false  | boolean | include installed and declared dependencies |
+
+## packages install
+
+installs all dependencies
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages install 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/install
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/install")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/install")
+    ```
+
+
+## packages add
+
+adds a dependency
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages add [options] <name> <repo>  
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/add
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/add")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/add")
+    ```
+
+
+## packages upgrade
+
+upgrades a dependency
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages upgrade [options] <name>  
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/upgrade
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/upgrade")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/upgrade")
+    ```
+
+
+## packages remove
+
+removes a dependency
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages remove [options] <name>  
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/remove
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/remove")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/remove")
+    ```
+
+
+## packages purge
+
+purges unused dependencies
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages purge 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/purge
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/purge")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/purge")
+    ```
+
+
+## packages clean
+
+cleans up dependencies
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner packages clean 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/packages/clean
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/packages/clean")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/packages/clean")
+    ```
+
+
 ## template resolve
 
 resolves variability

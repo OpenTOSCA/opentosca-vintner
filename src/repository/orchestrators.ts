@@ -1,6 +1,6 @@
 import * as files from '../utils/files'
 import path from 'path'
-import config from '../cli/config'
+import config from '../utils/config'
 import {Opera, OperaNativeConfig, OperaWLSConfig} from '../orchestrators/opera'
 import {Unfurl, UnfurlNativeConfig, UnfurlWSLConfig} from '../orchestrators/unfurl'
 import {Instance} from './instances'

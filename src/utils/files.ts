@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import {copySync} from 'fs-extra'
+import fsExtra from 'fs-extra'
 import * as yaml from 'js-yaml'
 import extract from 'extract-zip'
 import os from 'os'
@@ -8,6 +8,25 @@ import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
 import xml2js from 'xml2js'
+import filenamify from 'filenamify'
+import _syncDirectory from 'sync-directory'
+
+export function syncDirectory(source: string, target: string) {
+    assertDirectory(source)
+    createDirectory(target)
+    _syncDirectory(source, target, {
+        deleteOrphaned: true,
+    })
+}
+
+export function sanitize(file: string) {
+    return filenamify(file, {replacement: '__', maxLength: 255})
+}
+
+export function createFile(file: string) {
+    if (exists(file)) return
+    fsExtra.createFileSync(file)
+}
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -52,7 +71,7 @@ export function loadYAML<T>(file: string) {
     return yaml.load(loadFile(file)) as T
 }
 
-export function storeYAML(file: string, data: any | string) {
+export function storeYAML<T>(file: string, data: T) {
     if (validator.isString(data)) {
         fs.writeFileSync(path.resolve(file), data)
     } else {
@@ -75,7 +94,7 @@ export function toYAML(obj: any) {
 }
 
 export function copy(source: string, target: string) {
-    copySync(path.resolve(source), path.resolve(target))
+    fsExtra.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {
@@ -108,7 +127,7 @@ export async function extractArchive(source: string, target: string) {
     await extract(source, {dir: target})
 }
 
-export async function download(source: string, target: string = temporaryFile()): Promise<string> {
+export async function download(source: string, target: string = temporaryPath()): Promise<string> {
     return new Promise((resolve, reject) => {
         axios
             .get(source, {
@@ -130,6 +149,11 @@ export async function download(source: string, target: string = temporaryFile())
     })
 }
 
-export function temporaryFile(name?: string) {
+export function temporaryPath(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
+}
+
+export function readDirectory(dir: string): string[] {
+    assertDirectory(dir)
+    return fs.readdirSync(dir)
 }

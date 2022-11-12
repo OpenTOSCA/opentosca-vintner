@@ -238,7 +238,7 @@ This command is also executed during the `release` workflow and, therefore, over
 ## Build 
 
 To locally build the project, run the following command. 
-This will generate Javascript inside the `/build` directory.
+This will generate JavaScript inside the `/build` directory.
 
 ```linenums="1"
 yarn build
@@ -249,7 +249,7 @@ yarn build
 {{ linux_only_notice() }}
 
 To locally package the project, run the following command. 
-This will package the previously build Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and generate binaries inside the `/dist` directory.
+This will package the previously build JavaScript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and generate binaries inside the `/dist` directory.
 
 ```linenums="1"
 yarn package
@@ -261,5 +261,5 @@ On pushes to the `main` branch, the `release` workflow is triggered.
 This workflow runs several tests, builds and packages the project and creates a new release.
 Thereby, an existing release and `latest` tag is deleted. 
 There is only one release at total.
-During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
+During the workflow the string `__VERSION__` inside a JavaScript file is replace with the current commit hash.
 As a consequence, `vintner --version` returns the commit hash.

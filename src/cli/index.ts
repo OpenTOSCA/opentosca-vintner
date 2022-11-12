@@ -1,10 +1,10 @@
 import {Command, Option} from 'commander'
 import hae from './hae'
-import config from './config'
+import config from '../utils/config'
 import Controller from '../controller'
 import * as files from '../utils/files'
-import {toBoolean} from '../utils/utils'
 import benchmark, {benchmark2latex, benchmark2markdown} from '../controller/setup/benchmark'
+import PackageManager from '../package-manager'
 
 const program = new Command()
 
@@ -115,6 +115,87 @@ initOrchestrators
     .action(
         hae(async options => {
             await Controller.orchestrators.initUnfurlWSL(options)
+        })
+    )
+
+const packages = program.command('packages').description('handle packages')
+
+packages
+    .command('validate')
+    .description('validate syntax of dependencies file')
+    .action(
+        hae(async options => {
+            await PackageManager.validate()
+        })
+    )
+
+packages
+    .command('list')
+    .description('lists dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.list()
+        })
+    )
+
+packages
+    .command('install')
+    .description('installs all dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.install()
+        })
+    )
+
+packages
+    .command('add')
+    .description('adds a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
+    .argument('<repo>', 'http repository link of the dependency')
+    .action(
+        hae(async (name, repo, checkout) => {
+            await PackageManager.add(name, repo, checkout)
+        })
+    )
+
+packages
+    .command('upgrade')
+    .description('upgrades a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
+    .action(
+        hae(async (name, checkout) => {
+            await PackageManager.upgrade(name, checkout)
+        })
+    )
+
+packages
+    .command('remove')
+    .description('removes a dependency')
+    .argument('<name>', 'name of the dependency')
+    .argument('<checkout>', 'commit, branch or tag to checkout')
+    .action(
+        hae(async (name, checkout) => {
+            await PackageManager.remove(name, checkout)
+        })
+    )
+
+packages
+    .command('clean')
+    .description('cleans up unused dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.clean()
+        })
+    )
+
+packages
+    .command('purge')
+    .description('purges unused dependencies')
+    .action(
+        hae(async options => {
+            await PackageManager.purge()
         })
     )
 
