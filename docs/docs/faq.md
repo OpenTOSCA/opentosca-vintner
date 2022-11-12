@@ -3,7 +3,7 @@
 ## Is Vintner an Orchestrator? 
 
 No, Vintner is not an orchestrator.
-But it is possible to deploy application using orchestrator plugins.
+But it is possible to deploy applications using orchestrator plugins.
 
 ## How can I contribute? 
 

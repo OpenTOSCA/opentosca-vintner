@@ -34,8 +34,6 @@ Feature names can be overridden by the value of the attribute `__name`.
     feature_overridden: true
     ```
 
-
-
 ## Attributes
 
 Each attribute is mapped to a Variability Input.
