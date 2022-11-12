@@ -1,4 +1,4 @@
-import {Instance} from '../../repository/instances'
+import {Instance} from '#repository/instances'
 
 export type InspectArguments = {instance: string}
 

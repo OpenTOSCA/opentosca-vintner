@@ -1,13 +1,13 @@
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../specification/service-template'
-import {InputAssignmentMap} from '../../specification/topology-template'
-import {Instance} from '../../repository/instances'
-import * as files from '../../utils/files'
-import {InputAssignmentPreset, VariabilityExpression} from '../../specification/variability'
-import * as utils from '../../utils/utils'
-import * as validator from '../../utils/validator'
-import {GroupMember, TOSCA_GROUP_TYPES} from '../../specification/group-type'
-import {listIsEmpty, prettyJSON} from '../../utils/utils'
-import * as featureIDE from '../../utils/feature-ide'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {InputAssignmentMap} from '#spec/topology-template'
+import {Instance} from '#repository/instances'
+import * as files from '#files'
+import {InputAssignmentPreset, VariabilityExpression} from '#spec/variability'
+import * as utils from '#utils'
+import * as validator from '#validator'
+import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
+import {listIsEmpty, prettyJSON} from '#utils'
+import * as featureIDE from '#utils/feature-ide'
 
 export type TemplateResolveArguments = {
     instance?: string

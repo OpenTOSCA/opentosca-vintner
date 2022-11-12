@@ -1,4 +1,4 @@
-import {Template} from '../../repository/templates'
+import {Template} from '#repository/templates'
 import open from 'open'
 
 export type TemplatesOpenArguments = {template: string}

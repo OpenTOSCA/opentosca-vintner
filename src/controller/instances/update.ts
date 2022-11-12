@@ -1,5 +1,5 @@
-import {Instance} from '../../repository/instances'
-import {Orchestrators} from '../../repository/orchestrators'
+import {Instance} from '#repository/instances'
+import {Orchestrators} from '#repository/orchestrators'
 
 export type InstancesUpdateArguments = {instance: string; inputs?: string}
 
