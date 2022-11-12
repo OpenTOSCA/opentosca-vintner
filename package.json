@@ -48,6 +48,7 @@
         "license-checker": "^25.0.1",
         "mocha": "^10.0.0",
         "nodemon": "^2.0.16",
+        "nyc": "^15.1.0",
         "open-cli": "^7.0.1",
         "pkg": "^5.8.0",
         "prettier": "^2.7.1",
@@ -69,7 +70,7 @@
         "vintner": "node build/cli/index",
         "cli": "yarn ts-node src/cli/index",
         "test": "yarn test:local",
-        "test:local": "mocha --require ts-node/register \"tests/**/*.ts\"",
+        "test:local": "nyc mocha --require ts-node/register \"tests/**/*.ts\"",
         "test:docker": "docker build .",
         "benchmark": "yarn cli setup benchmark --latex",
         "server:start": "node -r dotenv/config -r ts-node/register src/cli/index.ts server start",
@@ -86,6 +87,6 @@
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:opera": "./examples/opera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
-        "licenses:check": "license-checker --production --summary --onlyAllow 'MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0'"
+        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0\""
     }
 }
