@@ -54,7 +54,6 @@ The attribute name is namespaced by their feature, transformed to lowercase and 
     feature_a_attr_bool_true: true
     ```
 
-
 Attribute names can be overridden by the value of the attribute `__name_${attribute name}`.
 
 === "FeatureIDE Extended XML"
@@ -70,7 +69,6 @@ Attribute names can be overridden by the value of the attribute `__name_${attrib
     feature_d_attr_overridden: true
     ```
 
-
 The full attribute name (including the feature namespacing) can be overridden by the value of the attribute `__full_name_${attribute name}`.
 
 === "FeatureIDE Extended XML"
@@ -85,7 +83,6 @@ The full attribute name (including the feature namespacing) can be overridden by
     ```yaml linenums="1"
     fully_overridden: something else
     ```
-
 
 ## Complete Example
 

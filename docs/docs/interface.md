@@ -807,4 +807,3 @@ starts the server
 | --- | --- | --- | --- |
 | host |  false  | string | host on which to listen (default: "127.0.0.1") |
 | port |  false  | number | port on which to listen (default: "3000") |
-

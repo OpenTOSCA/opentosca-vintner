@@ -124,7 +124,6 @@ These conditions must be satisfied otherwise the respective relationship is not 
 | --------- | --------- | ------------------------------ |------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-
 The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition assigned.
 
 ```linenums="1"
