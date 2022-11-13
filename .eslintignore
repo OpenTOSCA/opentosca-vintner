@@ -1,5 +1,8 @@
 dist
 build
-docs/docs/assets
 node_modules
-docs/docs/javascripts
+
+**/*.min.js
+**/*.min.css
+
+docs/docs/assets/javascripts/tablesort-controller.js

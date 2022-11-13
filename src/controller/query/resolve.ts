@@ -1,8 +1,8 @@
 import * as files from '../../utils/files'
-import {Resolver} from '../../query/resolver'
-import {ServiceTemplate} from '../../specification/service-template'
-import {Instance} from '../../repository/instances'
-import {isString} from '../../utils/validator'
+import {Resolver} from '#/query/resolver'
+import {ServiceTemplate} from '#spec/service-template'
+import {Instance} from '#repository/instances'
+import {isString} from '#validator'
 
 export type QueryResolveTemplateArguments = {
     template: string

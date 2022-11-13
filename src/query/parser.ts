@@ -12,7 +12,7 @@ import {
     SelectExpression,
     StepExpression,
     VariableExpression,
-} from '../specification/query-type'
+} from '#spec/query-type'
 import {parseInt} from 'lodash'
 
 export class Parser {

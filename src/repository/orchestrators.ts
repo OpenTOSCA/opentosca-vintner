@@ -1,10 +1,10 @@
-import * as files from '../utils/files'
+import * as files from '#files'
 import path from 'path'
-import config from '../cli/config'
-import {Opera, OperaNativeConfig, OperaWLSConfig} from '../orchestrators/opera'
-import {Unfurl, UnfurlNativeConfig, UnfurlWSLConfig} from '../orchestrators/unfurl'
+import config from '#config'
+import {Opera, OperaNativeConfig, OperaWLSConfig} from '#orchestrators/opera'
+import {Unfurl, UnfurlNativeConfig, UnfurlWSLConfig} from '#orchestrators/unfurl'
 import {Instance} from './instances'
-import * as validator from '../utils/validator'
+import * as validator from '#validator'
 
 export interface Orchestrator {
     deploy: (instance: Instance) => Promise<void>

@@ -1,4 +1,4 @@
-import {Instance} from '../../repository/instances'
+import {Instance} from '#repository/instances'
 
 export type InstancesCreateArguments = {instance: string; template: string}
 

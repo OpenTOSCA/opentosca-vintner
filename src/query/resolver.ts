@@ -1,6 +1,6 @@
 import {Parser} from './parser'
-import {Template, Templates} from '../repository/templates'
-import {Instance, Instances} from '../repository/instances'
+import {Template, Templates} from '#repository/templates'
+import {Instance, Instances} from '#repository/instances'
 import {
     ConditionExpression,
     Expression,
@@ -12,14 +12,14 @@ import {
     ReturnExpression,
     SelectExpression,
     VariableExpression,
-} from '../specification/query-type'
-import {ServiceTemplate} from '../specification/service-template'
+} from '#spec/query-type'
+import {ServiceTemplate} from '#spec/service-template'
 import {Graph} from './graph'
-import {QueryTemplateArguments} from '../controller/query/execute'
-import {Winery} from '../orchestrators/winery'
+import {QueryTemplateArguments} from '#controller/query/execute'
+import {Winery} from '#orchestrators/winery'
 import * as files from '../utils/files'
 import * as path from 'path'
-import {NodeTemplate, NodeTemplateMap} from '../specification/node-template'
+import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses

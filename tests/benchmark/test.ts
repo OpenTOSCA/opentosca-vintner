@@ -1,7 +1,7 @@
 import {expect} from 'chai'
-import benchmark, {generateBenchmarkServiceTemplate} from '../../src/controller/setup/benchmark'
-import * as files from '../../src/utils/files'
-import {ServiceTemplate} from '../../src/specification/service-template'
+import benchmark, {generateBenchmarkServiceTemplate} from '#controller/setup/benchmark'
+import * as files from '#files'
+import {ServiceTemplate} from '#spec/service-template'
 import * as path from 'path'
 import {getDefaultTest} from '../utils'
 

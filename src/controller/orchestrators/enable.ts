@@ -1,4 +1,4 @@
-import {Orchestrators} from '../../repository/orchestrators'
+import {Orchestrators} from '#repository/orchestrators'
 
 export type OrchestratorsEnableArguments = {orchestrator: string}
 

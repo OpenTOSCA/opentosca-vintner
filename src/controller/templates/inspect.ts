@@ -1,4 +1,4 @@
-import {Template} from '../../repository/templates'
+import {Template} from '#repository/templates'
 
 export type TemplatesInspectArguments = {template: string}
 

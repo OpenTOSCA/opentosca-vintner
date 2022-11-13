@@ -1,5 +1,5 @@
-import {RepoPlugin} from '../query/plugins'
-import {ServiceTemplate} from '../specification/service-template'
+import {RepoPlugin} from '#/query/plugins'
+import {ServiceTemplate} from '#spec/service-template'
 import path from 'path'
 import os from 'os'
 import * as files from '../utils/files'
@@ -22,7 +22,7 @@ export class Winery implements RepoPlugin {
             .split(path.sep)
             .join(path.posix.sep)
         // use glob to recursively search all files named 'ServiceTemplate.tosca' within the repo
-        return glob.sync(searchPattern).map((v, i) => ({
+        return glob.sync(searchPattern).map(v => ({
             name: v.split('/')[v.split('/').length - 2],
             template: files.loadYAML(v),
         }))

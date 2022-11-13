@@ -1,6 +1,21 @@
 {
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "#/*": ["src/*"],
+            "#utils/*": ["src/utils/*"],
+            "#config": ["src/cli/config"],
+            "#controller/*": ["src/controller/*"],
+            "#controller": ["src/controller"],
+            "#repository/*": ["src/repository/*"],
+            "#orchestrators/*": ["src/orchestrators/*"],
+            "#spec/*": ["src/specification/*"],
+            "#files": ["src/utils/files"],
+            "#shell": ["src/utils/shell"],
+            "#utils": ["src/utils/utils"],
+            "#validator": ["src/utils/validator"]
+        },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": false

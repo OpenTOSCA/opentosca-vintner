@@ -1,5 +1,5 @@
 import open from 'open'
-import {Instance} from '../../repository/instances'
+import {Instance} from '#repository/instances'
 
 export type InstancesOpenArguments = {instance: string}
 

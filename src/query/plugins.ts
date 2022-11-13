@@ -1,5 +1,5 @@
-import {ServiceTemplate} from '../specification/service-template'
-import {Instance} from '../repository/instances'
+import {ServiceTemplate} from '#spec/service-template'
+import {Instance} from '#repository/instances'
 
 export type NodeTemplateAttributes = {
     attributes: {[key: string]: string}

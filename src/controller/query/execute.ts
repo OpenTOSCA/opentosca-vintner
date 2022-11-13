@@ -1,4 +1,4 @@
-import {Resolver} from '../../query/resolver'
+import {Resolver} from '#/query/resolver'
 import * as files from '../../utils/files'
 
 export type QueryTemplateArguments = {

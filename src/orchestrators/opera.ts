@@ -1,10 +1,10 @@
-import {Instance} from '../repository/instances'
-import {Orchestrator} from '../repository/orchestrators'
-import {joinNotNull} from '../utils/utils'
-import {Shell} from '../utils/shell'
+import {Instance} from '#repository/instances'
+import {Orchestrator} from '#repository/orchestrators'
+import {joinNotNull} from '#utils'
+import {Shell} from '#shell'
 import * as files from '../utils/files'
 import _ from 'lodash'
-import {NodeTemplateAttributes, NodeTemplateAttributesMap, OrchestratorPlugin} from '../query/plugins'
+import {NodeTemplateAttributes, NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 

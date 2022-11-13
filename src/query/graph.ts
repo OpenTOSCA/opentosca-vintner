@@ -1,9 +1,9 @@
-import {ServiceTemplate} from '../specification/service-template'
-import {RequirementAssignmentMap} from '../specification/node-template'
-import {PredicateExpression} from '../specification/query-type'
-import {TopologyTemplate} from '../specification/topology-template'
-import {firstKey, firstValue} from '../utils/utils'
-import {isString} from '../utils/validator'
+import {ServiceTemplate} from '#spec/service-template'
+import {RequirementAssignmentMap} from '#spec/node-template'
+import {PredicateExpression} from '#spec/query-type'
+import {TopologyTemplate} from '#spec/topology-template'
+import {firstKey, firstValue} from '#utils'
+import {isString} from '#validator'
 
 type Node = {
     data: Object

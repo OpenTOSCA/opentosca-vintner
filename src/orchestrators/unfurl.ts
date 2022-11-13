@@ -1,10 +1,10 @@
-import {Instance} from '../repository/instances'
-import {Orchestrator} from '../repository/orchestrators'
-import * as files from '../utils/files'
+import {Instance} from '#repository/instances'
+import {Orchestrator} from '#repository/orchestrators'
+import * as files from '#files'
 import path from 'path'
-import {joinNotNull} from '../utils/utils'
-import {Shell} from '../utils/shell'
-import {NodeTemplateAttributesMap, OrchestratorPlugin} from '../query/plugins'
+import {joinNotNull} from '#utils'
+import {Shell} from '#shell'
+import {NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
