@@ -1,8 +1,8 @@
 import * as files from '../../utils/files'
 import {Resolver} from '#/query/resolver'
 import {ServiceTemplate} from '#spec/service-template'
-import {Instance} from '#repository/instances'
 import {isString} from '#validator'
+import {getTemplates} from '#/query/utils'
 
 export type QueryResolveTemplateArguments = {
     template: string
@@ -12,10 +12,20 @@ export type QueryResolveTemplateArguments = {
 
 export default function resolveQueries(options: QueryResolveTemplateArguments): void {
     const {template, output} = options
-    const serviceTemplate = files.loadYAML<ServiceTemplate>(new Instance(template).getServiceTemplatePath())
-    const queryResolver = new TemplateQueryResolver(serviceTemplate)
-    const result = queryResolver.findAndRunQueries()
-    files.storeYAML(output, result)
+    let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
+    try {
+        serviceTemplates = getTemplates(options.source, 'template', template)
+    } catch (e: unknown) {
+        console.error(`Resolving failed. Could not load service template ${template} from source ${options.source}`)
+        if (e instanceof Error) {
+            console.error(e.message)
+        }
+    }
+    for (const t of serviceTemplates) {
+        const queryResolver = new TemplateQueryResolver(t.template)
+        const result = queryResolver.findAndRunQueries()
+        files.storeYAML(output, result)
+    }
 }
 
 export class TemplateQueryResolver {
@@ -45,13 +55,13 @@ export class TemplateQueryResolver {
                     return object
                 }
             }
-            if (typeof object === 'object') {
+            if (typeof object == 'object') {
                 if (object === null) return null
                 Object.keys(object).forEach(key => {
                     object[key] = recursiveRun(object[key], path + '.' + key)
                 })
-                return object
             }
+            return object
         }
         /*
         This loop keeps track of the number of queries still in the template and repeats if there are more than 0

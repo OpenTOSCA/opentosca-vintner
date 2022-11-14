@@ -2,6 +2,7 @@ import {expect} from 'chai'
 import * as files from '../src/utils/files'
 import path from 'path'
 import executeQuery from '../src/controller/query/execute'
+import resolveQueries from '../src/controller/query/resolve'
 
 it('all', () => {
     const result = getResult('FROM template/tests/query/service-template.yaml SELECT .')
@@ -106,6 +107,34 @@ it('result-structure-complex', () => {
         files.loadYAML(path.join(__dirname, 'query/result-structure-complex/expected-output.yaml'))
     )
 })
+
+it('resolve-chain', () => {
+    expect(files.loadYAML(resolvedTemplate('query/resolve-chain/service-template.yaml'))).to.deep.equal(
+        files.loadYAML(path.join(__dirname, 'query/resolve-chain/expected-service-template.yaml'))
+    )
+})
+
+it('resolve-loop', () => {
+    expect(() => resolvedTemplate('query/resolve-loop/service-template.yaml')).to.throw(
+        'Circular dependencies detected. Unable to resolve queries in your template.'
+    )
+})
+
+it('resolve-simple', () => {
+    expect(files.loadYAML(resolvedTemplate('query/resolve-simple/service-template.yaml'))).to.deep.equal(
+        files.loadYAML(path.join(__dirname, 'query/resolve-simple/expected-service-template.yaml'))
+    )
+})
+
+function resolvedTemplate(templatePath: string): string {
+    const output = files.temporaryFile()
+    resolveQueries({
+        output: output,
+        template: path.join(__dirname, templatePath),
+        source: 'file',
+    })
+    return output
+}
 
 function getResult(query: string): Object {
     return executeQuery({output: '', query: query, source: 'file'})

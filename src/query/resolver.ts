@@ -1,6 +1,4 @@
 import {Parser} from './parser'
-import {Template, Templates} from '#repository/templates'
-import {Instance, Instances} from '#repository/instances'
 import {
     ConditionExpression,
     Expression,
@@ -16,10 +14,9 @@ import {
 import {ServiceTemplate} from '#spec/service-template'
 import {Graph} from './graph'
 import {QueryTemplateArguments} from '#controller/query/execute'
-import {Winery} from '#orchestrators/winery'
 import * as files from '../utils/files'
-import * as path from 'path'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {getTemplates} from '#/query/utils'
 
 export class Resolver {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
@@ -41,7 +38,6 @@ export class Resolver {
             if (e instanceof Error) console.error(e.message)
             process.exit(1)
         }
-        console.log(`Generated the following AST: ${JSON.stringify(tree, null, 4)}`)
         return this.evaluate(tree)
     }
 
@@ -91,48 +87,7 @@ export class Resolver {
     private evaluateFrom(expression: FromExpression): {name: string; template: ServiceTemplate}[] {
         let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
         try {
-            switch (this.source) {
-                case 'vintner':
-                    if (expression.type == 'Instance') {
-                        if (expression.path == '*') {
-                            for (const t of Instances.all()) {
-                                serviceTemplates.push({name: t.getName(), template: t.getTemplateWithAttributes()})
-                            }
-                        } else {
-                            serviceTemplates.push({
-                                name: expression.path,
-                                template: new Instance(expression.path).getTemplateWithAttributes(),
-                            })
-                        }
-                    } else if (expression.type == 'Template' && expression.path == '*') {
-                        for (const t of Templates.all()) {
-                            serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
-                        }
-                    } else {
-                        serviceTemplates.push({
-                            name: expression.path,
-                            template: new Template(expression.path).getVariableServiceTemplate(),
-                        })
-                    }
-                    break
-                case 'winery': {
-                    const winery = new Winery()
-                    if (expression.type == 'Instance') {
-                        console.error('Cannot query instance data on Winery repository. Use "FROM template" instead.')
-                    } else if (expression.path == '*') {
-                        serviceTemplates = winery.getAllTemplates()
-                    } else {
-                        serviceTemplates.push(winery.getTemplate(expression.path))
-                    }
-                    break
-                }
-                case 'file': {
-                    serviceTemplates.push({
-                        name: expression.path,
-                        template: files.loadYAML(path.resolve(expression.path)),
-                    })
-                }
-            }
+            serviceTemplates = getTemplates(this.source, expression.type, expression.path)
         } catch (e: unknown) {
             console.error(`Could not locate service template ${expression.path} from source ${this.source}`)
             if (e instanceof Error) {
