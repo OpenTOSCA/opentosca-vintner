@@ -13,14 +13,7 @@ export type QueryResolveTemplateArguments = {
 export default function resolveQueries(options: QueryResolveTemplateArguments): void {
     const {template, output} = options
     let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
-    try {
-        serviceTemplates = getTemplates(options.source, 'template', template)
-    } catch (e: unknown) {
-        console.error(`Resolving failed. Could not load service template ${template} from source ${options.source}`)
-        if (e instanceof Error) {
-            console.error(e.message)
-        }
-    }
+    serviceTemplates = getTemplates(options.source, 'template', template)
     for (const t of serviceTemplates) {
         const queryResolver = new TemplateQueryResolver(t.template)
         const result = queryResolver.findAndRunQueries()
@@ -72,8 +65,11 @@ export class TemplateQueryResolver {
             const previousNumberOfQueries = numberOfQueries
             numberOfQueries = 0
             resolvedTemplate = recursiveRun(resolvedTemplate, '')
-            if (previousNumberOfQueries == numberOfQueries)
+            if (numberOfQueries > 0 && previousNumberOfQueries == numberOfQueries) {
                 throw new Error('Circular dependencies detected. Unable to resolve queries in your template.')
+            } else if (numberOfQueries == 0 && previousNumberOfQueries == 0) {
+                throw new Error('No queries found to resolve.')
+            }
         } while (numberOfQueries > 0)
         return resolvedTemplate
     }
