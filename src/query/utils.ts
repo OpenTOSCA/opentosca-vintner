@@ -1,5 +1,5 @@
 import {Instance, Instances} from '#repository/instances'
-import {Template, Templates} from '#repository/templates'
+import {Template} from '#repository/templates'
 import {Winery} from '#orchestrators/winery'
 import * as files from '#files'
 import path from 'path'
@@ -15,8 +15,8 @@ export function getTemplates(
         case 'vintner':
             if (type == 'Instance') {
                 if (templatePath == '*') {
-                    for (const t of Instances.all()) {
-                        serviceTemplates.push({name: t.getName(), template: t.getTemplateWithAttributes()})
+                    for (const i of Instances.all()) {
+                        serviceTemplates.push({name: i.getName(), template: i.getTemplateWithAttributes()})
                     }
                 } else {
                     serviceTemplates.push({
@@ -25,13 +25,13 @@ export function getTemplates(
                     })
                 }
             } else if (type == 'Template' && templatePath == '*') {
-                for (const t of Templates.all()) {
-                    serviceTemplates.push({name: t.getName(), template: t.getVariableServiceTemplate()})
+                for (const i of Instances.all()) {
+                    serviceTemplates.push({name: i.getName(), template: i.getServiceTemplate()})
                 }
             } else {
                 serviceTemplates.push({
                     name: templatePath,
-                    template: new Template(templatePath).getVariableServiceTemplate(),
+                    template: new Instance(templatePath).getServiceTemplate(),
                 })
             }
             break

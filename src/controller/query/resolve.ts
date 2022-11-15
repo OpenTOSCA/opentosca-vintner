@@ -13,7 +13,7 @@ export type QueryResolveTemplateArguments = {
 export default function resolveQueries(options: QueryResolveTemplateArguments): void {
     const {template, output} = options
     let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
-    serviceTemplates = getTemplates(options.source, 'template', template)
+    serviceTemplates = getTemplates(options.source, 'Template', template)
     for (const t of serviceTemplates) {
         const queryResolver = new TemplateQueryResolver(t.template)
         const result = queryResolver.findAndRunQueries()
