@@ -3,24 +3,24 @@ Query {
   Expression = FromExpression Select
   MatchExpression = FromExpression Match Select
 
-  FromExpression = fromLiteral ("instance" | "template") ("/" | ".") (asterisk | filePath)
+  FromExpression = "FROM" ("instance" | "template") ("/" | ".") (asterisk | filePath)
 
-  Select = selectLiteral Path ("," Path)*
+  Select = "SELECT" Path ("," Path)*
   Path = (Group | Policy | StepCond | Step | ".") ("." (StepCond | Step))* ReturnClause?
   Step = shortcut? (asterisk | ident)
   StepCond = shortcut? (asterisk | ident) PredicateExpression
   ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
   KeyValuePair = Variable ":" Variable --complex
                | Variable              --simple
-  Group = groupLiteral "(" ident ")"
-  Policy = policyLiteral "(" ident ")"
+  Group = "GROUP" "(" ident ")"
+  Policy = "POLICY" "(" ident ")"
 
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
   Condition = negation Value comparison Value -- comparison
             | negation Value -- existence
-  Match = matchLiteral Node (Relationship Node)*
+  Match = "MATCH" Node (Relationship Node)*
   Node = "(" ident? PredicateExpression? ")"
   Relationship = arrowLeft arrowRight --simple
                | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
@@ -32,12 +32,6 @@ Query {
   Variable = literal | path | ident
   Value = shortcut? (path | literal)
 
-  fromLiteral = "FROM"
-  groupLiteral = "GROUP"
-  matchLiteral = "MATCH"
-  policyLiteral = "POLICY"
-  selectLiteral = "SELECT"
-
   negation = "!" | ""
   arrowLeft = "<-" | "-"
   arrowRight = "->" | "-"
@@ -46,10 +40,10 @@ Query {
   ident = letter (alnum | "_" | "-")*
   logic = "AND" | "OR"
   path = letter (alnum | "_" | "-" | ".")*
-  filePath = (letter | alnum | "_" | "-" | "." | "/")*
+  filePath = (~space any)*
   literal = string | float | digit | bool
   bool = "true" | "false" | "TRUE" | "FALSE"
-  shortcut = "@" | "#" | ":"
+  shortcut = "@" | "#" | "$" | "%"
   string
     = "'" (~"'" any)* "'"
     | "\"" (~"\"" any)* "\""
