@@ -56,7 +56,7 @@ export type PredicateExpression = {
 
 export type RelationshipExpression = {
     type: 'Relationship'
-    direction: 'left' | 'right' | 'both'
+    direction: 'in' | 'out' | 'both'
     variable?: string
     cardinality?: CardinalityExpression
     predicate?: PredicateExpression

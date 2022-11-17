@@ -4,6 +4,8 @@ import {PredicateExpression} from '#spec/query-type'
 import {TopologyTemplate} from '#spec/topology-template'
 import {firstKey, firstValue} from '#utils'
 import {isString} from '#validator'
+import {Resolver} from '#/query/resolver'
+import {RelationshipTemplate} from '#spec/relationship-template'
 
 type Node = {
     data: Object
@@ -11,15 +13,24 @@ type Node = {
 }
 
 type Relationship = {
-    type: string
+    name: string
     source: string
     target: string
+    template?: RelationshipTemplate
 }
 
+/**
+ * Class that builds and searches a graph out of node templates and their relations
+ * Used in resolving MATCH statements
+ */
+
 export class Graph {
+    serviceTemplate: ServiceTemplate
     nodesMap: Map<string, Node> = new Map<string, Node>()
+    resolver = new Resolver()
 
     constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
         for (const [nodeName, nodeTemplate] of Object.entries(
             serviceTemplate.topology_template?.node_templates || {}
         )) {
@@ -35,7 +46,7 @@ export class Graph {
         for (const [nodeName, nodeTemplate] of Object.entries(topologyTemplate?.node_templates || {})) {
             if (nodeTemplate.requirements !== undefined) {
                 for (const r of nodeTemplate.requirements) {
-                    const relationship = Graph.resolveRelationship(nodeName, r)
+                    const relationship = this.resolveRelationship(nodeName, r)
                     this.nodesMap.get(nodeName)?.relationships.push(relationship)
                     this.nodesMap.get(relationship.target)?.relationships.push(relationship)
                 }
@@ -43,26 +54,43 @@ export class Graph {
         }
     }
 
-    private static resolveRelationship(
-        nodeName: string,
-        r: RequirementAssignmentMap
-    ): {type: string; source: string; target: string} {
+    private resolveRelationship(nodeName: string, r: RequirementAssignmentMap): Relationship {
+        let target = Object.values(r)[0].toString()
+        const name = Object.keys(r)[0]
         // value is not a string -> try extended notation, otherwise just set value as target node (short notation)
         if (!isString(firstValue(r))) {
             for (const entry of Object.values(r)) {
                 if (!isString(entry) && firstKey(entry) == 'node') {
-                    return {type: Object.keys(r)[0], source: nodeName, target: firstValue(entry).toString()}
+                    target = firstValue(entry).toString()
                 }
             }
         }
-        return {type: Object.keys(r)[0], source: nodeName, target: Object.values(r)[0].toString()}
+        // Attach relationship template data if available
+        return this.serviceTemplate.topology_template?.relationship_templates?.[name]
+            ? {
+                  name: Object.keys(r)[0],
+                  source: nodeName,
+                  target: target,
+                  template: this.serviceTemplate.topology_template?.relationship_templates[name],
+              }
+            : {name: Object.keys(r)[0], source: nodeName, target: target}
     }
 
+    /**
+     * Returns a set of neighboring nodes for the given node, given that their relationship fulfills the predicate
+     * and has the proper direction
+     * @param nodeName Name of node from which to start the search
+     * @param predicate Optional predicate that relationships need to fulfill
+     * @param direction Whether to traverse inbound or outbound relationships, or both
+     * @private
+     */
     private getNext(nodeName: string, predicate: PredicateExpression | undefined, direction: string): string[] {
         const targets = new Set<string>()
         for (const r of this.nodesMap.get(nodeName)?.relationships || []) {
-            if ((direction == 'both' || direction == 'right') && r.source == nodeName) targets.add(r.target)
-            if ((direction == 'both' || direction == 'left') && r.target == nodeName) targets.add(r.source)
+            if (!predicate || this.resolver.evaluatePredicate(r.name, r.template || {}, predicate)) {
+                if ((direction == 'both' || direction == 'out') && r.source == nodeName) targets.add(r.target)
+                if ((direction == 'both' || direction == 'in') && r.target == nodeName) targets.add(r.source)
+            }
         }
         return [...targets]
     }

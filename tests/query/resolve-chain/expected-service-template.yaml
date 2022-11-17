@@ -21,7 +21,7 @@ topology_template:
                 username: user
                 password: password
             requirements:
-                - host: dbms
+                - my_db_connection: dbms
         dbms:
             type: DBMS
             requirements:

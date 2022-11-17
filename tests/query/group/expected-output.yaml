@@ -5,7 +5,7 @@ mysql_database:
         password: dbpwd
     requirements:
         -
-            host: dbms
+            my_db_connection: dbms
 dbms:
     type: DBMS
     requirements:

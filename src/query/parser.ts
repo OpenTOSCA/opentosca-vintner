@@ -228,9 +228,9 @@ function getShortcut(shortcut: string): string {
 function getArrowDirection(arrow: string) {
     switch (arrow) {
         case '-->':
-            return 'right'
+            return 'out'
         case '<--':
-            return 'left'
+            return 'in'
         default:
             return 'both'
     }

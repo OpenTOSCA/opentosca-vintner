@@ -1,0 +1,5 @@
+dbms:
+    type: DBMS
+    requirements:
+        -
+            host: vm_2

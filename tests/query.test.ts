@@ -68,6 +68,13 @@ it('match-previous', () => {
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-previous/expected-output.yaml')))
 })
 
+it('match-rel-filter', () => {
+    const result = getResult(
+        'FROM template/tests/query/service-template.yaml MATCH ()-{[type="ConnectsTo"]}->(node2) SELECT node2'
+    )
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-rel-filter/expected-output.yaml')))
+})
+
 it('match-single', () => {
     const result = getResult(
         'FROM template/tests/query/service-template.yaml MATCH (node[type="WebApplication"]) SELECT node'

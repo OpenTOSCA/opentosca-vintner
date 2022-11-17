@@ -21,7 +21,7 @@ topology_template:
                 username: dbuser
                 password: dbpwd
             requirements:
-                - host: dbms
+                - my_db_connection: dbms
         dbms:
             type: DBMS
             requirements:
@@ -54,3 +54,9 @@ topology_template:
         - placement_policy:
               type: tosca.policies.placement
               targets: [vm_1, vm_2]
+    relationship_templates:
+        my_db_connection:
+            type: ConnectsTo
+            interfaces:
+                Configure:
+                    pre_configure_source: scripts/wp_db_configure.sh

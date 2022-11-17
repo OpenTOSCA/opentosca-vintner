@@ -229,7 +229,7 @@ export class Resolver {
         return result
     }
 
-    private evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): boolean {
+    evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): boolean {
         const {a, operator, b} = predicate
         if (operator == null) {
             return this.evaluateCondition(key, data, a as ConditionExpression)
