@@ -1,11 +1,4 @@
 openstack:
-    type: Compute
-    capabilities:
-        host:
-            properties:
-                num_cpus: 1
-                mem_size: 2 GB
-    os:
-        properties:
-            type: linux
-            distribution: ubuntu
+    type: OpenStack
+    properties:
+        ip_address: 

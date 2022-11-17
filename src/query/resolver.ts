@@ -74,7 +74,7 @@ export class Resolver {
                 result = null
             }
             // Discard empty results
-            if (result && ((Array.isArray(result) && result.length > 0) || Object.keys(result).length > 0)) {
+            if (result && !(Array.isArray(result) && result.length == 0)) {
                 // Flatten the result if it is only one element
                 result = result.length == 1 ? result[0] : result
                 results.push({name: t.name, result: result})

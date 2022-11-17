@@ -1,6 +1,9 @@
 - type: Database
+  properties:
+    username: dbuser
+    password: dbpwd
   requirements:
-      - host: dbms
+    - host: dbms
 - type: DBMS
   requirements:
       - host: vm_2

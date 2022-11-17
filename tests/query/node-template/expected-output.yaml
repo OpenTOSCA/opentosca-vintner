@@ -1,4 +1,16 @@
 type: WebApplication
+properties:
+    db_username:
+        get_property:
+            - mysql_database
+            - username
+    db_password:
+        get_property:
+            - mysql_database
+            - password
+    port: 3306
 requirements:
-    - database_endpoint: mysql_database
-    - host: tomcat
+    -
+        database_endpoint: mysql_database
+    -
+        host: tomcat

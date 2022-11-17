@@ -32,9 +32,16 @@ it('filter-equals', () => {
 
 it('filter-existence', () => {
     const result = getResult(
-        'FROM template/tests/query/service-template.yaml SELECT node_templates.*[capabilities].name'
+        'FROM template/tests/query/service-template.yaml SELECT node_templates.*[properties.num_cpus].name'
     )
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-existence/expected-output.yaml')))
+})
+
+it('filter-negation', () => {
+    const result = getResult(
+        'FROM template/tests/query/service-template.yaml SELECT node_templates.*[!type="VirtualMachine"].name'
+    )
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-negation/expected-output.yaml')))
 })
 
 it('filter-regex', () => {
@@ -70,7 +77,7 @@ it('match-single', () => {
 
 it('match-length-any', () => {
     const result = getResult(
-        'FROM template/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type=Compute]) SELECT node'
+        'FROM template/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type=OpenStack]) SELECT node'
     )
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-any/expected-output.yaml')))
 })
@@ -108,25 +115,30 @@ it('result-structure-complex', () => {
     )
 })
 
+it('shortcut-property', () => {
+    const result = getResult('FROM template/tests/query/service-template.yaml SELECT node_templates.webapp.#port')
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/shortcut-property/expected-output.yaml')))
+})
+
 it('resolve-chain', () => {
-    expect(files.loadYAML(resolvedTemplate('query/resolve-chain/service-template.yaml'))).to.deep.equal(
+    expect(files.loadYAML(resolveTemplate('query/resolve-chain/service-template.yaml'))).to.deep.equal(
         files.loadYAML(path.join(__dirname, 'query/resolve-chain/expected-service-template.yaml'))
     )
 })
 
 it('resolve-loop', () => {
-    expect(() => resolvedTemplate('query/resolve-loop/service-template.yaml')).to.throw(
+    expect(() => resolveTemplate('query/resolve-loop/service-template.yaml')).to.throw(
         'Circular dependencies detected. Unable to resolve queries in your template.'
     )
 })
 
 it('resolve-simple', () => {
-    expect(files.loadYAML(resolvedTemplate('query/resolve-simple/service-template.yaml'))).to.deep.equal(
+    expect(files.loadYAML(resolveTemplate('query/resolve-simple/service-template.yaml'))).to.deep.equal(
         files.loadYAML(path.join(__dirname, 'query/resolve-simple/expected-service-template.yaml'))
     )
 })
 
-function resolvedTemplate(templatePath: string): string {
+function resolveTemplate(templatePath: string): string {
     const output = files.temporaryFile()
     resolveQueries({
         output: output,
