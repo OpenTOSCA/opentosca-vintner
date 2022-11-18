@@ -70,9 +70,11 @@ export class Instance {
     getTemplateWithAttributes(): ServiceTemplate {
         const template = this.getServiceTemplate()
         const attributes = Orchestrators.getOrchestrator().getAttributes(this)
+        const inputs = Orchestrators.getOrchestrator().getInputs(this)
         if (template.topology_template?.node_templates) {
             template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)
         }
+        _.set(template, 'topology_template.inputs', inputs)
         return template
     }
 

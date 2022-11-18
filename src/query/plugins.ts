@@ -1,5 +1,6 @@
 import {ServiceTemplate} from '#spec/service-template'
 import {Instance} from '#repository/instances'
+import {InputAssignmentMap} from '#spec/topology-template'
 
 export type NodeTemplateAttributes = {
     attributes: {[key: string]: string}
@@ -14,4 +15,5 @@ export interface RepoPlugin {
 
 export interface OrchestratorPlugin {
     getAttributes: (instance: Instance) => NodeTemplateAttributesMap
+    getInputs: (instance: Instance) => InputAssignmentMap
 }

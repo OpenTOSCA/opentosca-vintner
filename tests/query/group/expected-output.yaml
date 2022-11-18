@@ -4,10 +4,8 @@ mysql_database:
         username: dbuser
         password: dbpwd
     requirements:
-        -
-            my_db_connection: dbms
+        - my_db_connection: dbms
 dbms:
     type: DBMS
     requirements:
-        -
-            host: vm_2
+        - host: vm_2

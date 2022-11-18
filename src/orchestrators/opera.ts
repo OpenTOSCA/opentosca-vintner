@@ -5,6 +5,8 @@ import {Shell} from '#shell'
 import * as files from '../utils/files'
 import _ from 'lodash'
 import {NodeTemplateAttributes, NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
+import {InputAssignmentMap} from '#spec/topology-template'
+import * as fs from 'fs'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -68,6 +70,11 @@ export class Opera implements Orchestrator, OrchestratorPlugin {
             '--resume',
             '--force',
         ])
+    }
+
+    getInputs(instance: Instance): InputAssignmentMap {
+        const inputsPath = `${instance.getDataDirectory()}/inputs`
+        return files.isFile(inputsPath) ? JSON.parse(fs.readFileSync(inputsPath, 'utf-8')) : {}
     }
 
     /**

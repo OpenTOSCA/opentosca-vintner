@@ -5,6 +5,7 @@ import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
 import {NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
+import {InputAssignmentMap} from '#spec/topology-template'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -75,6 +76,10 @@ spec:
     }
 
     getAttributes(instance: Instance): NodeTemplateAttributesMap {
+        throw new Error('Unsupported operation')
+    }
+
+    getInputs(instance: Instance): InputAssignmentMap {
         throw new Error('Unsupported operation')
     }
 }
