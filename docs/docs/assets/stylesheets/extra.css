@@ -52,3 +52,30 @@
 .md-typeset .admonition {
     box-shadow: none;
 }
+
+.md-footer {
+    margin-top: 2rem;
+    border-top: .05rem solid var(--md-typeset-table-color);
+    background-color: inherit;
+    color: inherit;
+}
+
+.md-footer-meta {
+    border-top: .05rem solid var(--md-typeset-table-color);
+    background-color: whitesmoke;
+}
+
+.md-copyright {
+    color: inherit;
+}
+
+html .md-footer-meta.md-typeset a {
+    color: var(--md-default-fg-color)!important;
+}
+
+
+html .md-footer-meta.md-typeset a:hover {
+    color: var(--md-default-fg-color);
+    text-decoration: underline;
+}
+
