@@ -31,11 +31,24 @@
     }
 }
 
-.shadow {
-    filter: drop-shadow(0 0.2rem 0.25rem rgba(0, 0, 0, 0.2));
+.figure {
+    border: var(--md-typeset-table-color) solid .05rem;
+    max-width: 90%!important;
+    margin: auto;
 }
 
 /* Disable Navbar Shadow */
 .md-header {
+    box-shadow: none;
+    border-bottom: .05rem solid var(--md-typeset-table-color);
+}
+
+
+.highlight tbody {
+    border: var(--md-typeset-table-color) solid .05rem;
+    border-radius: 2px;
+}
+
+.md-typeset .admonition {
     box-shadow: none;
 }
