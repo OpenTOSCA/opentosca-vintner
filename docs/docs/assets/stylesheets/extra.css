@@ -86,3 +86,13 @@
 .md-footer-meta a:hover {
     color: var(--md-typeset-a-color) !important;
 }
+
+.md-source:hover {
+    color: var(--md-typeset-a-color) !important;
+    opacity: 100%;
+}
+
+.md-logo:hover {
+    color: var(--md-typeset-a-color) !important;
+    opacity: 100%;
+}
