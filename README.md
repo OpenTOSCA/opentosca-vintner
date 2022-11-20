@@ -1,6 +1,5 @@
-[![OpenTOSCA Vintner](assets/logo.svg)](https://vintner.opentosca.org)
+# OpenTOSCA Vintner
 
-<div align="center">
 
 [![release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://www.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OpenTOSCA/opentosca-vintner&amp;utm_campaign=Badge_Grade)
@@ -13,8 +12,6 @@
 
 OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
 Preprocessing includes, e.g., the resolving of variability.
-
-</div>
 
 - [Documentation](https://vintner.opentosca.org)
 - [Getting Started](https://vintner.opentosca.org/getting-started)
