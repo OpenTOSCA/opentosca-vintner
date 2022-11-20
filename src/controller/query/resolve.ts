@@ -2,7 +2,7 @@ import * as files from '../../utils/files'
 import {Resolver} from '#/query/resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
-import {getTemplates} from '#/query/utils'
+import {getParentNode, getTemplates} from '#/query/utils'
 
 export type QueryResolveTemplateArguments = {
     template: string
@@ -12,8 +12,11 @@ export type QueryResolveTemplateArguments = {
 
 export default function resolveQueries(options: QueryResolveTemplateArguments): void {
     const {template, output} = options
-    let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
-    serviceTemplates = getTemplates(options.source, 'Template', template)
+    const serviceTemplates: {name: string; template: ServiceTemplate}[] = getTemplates(
+        options.source,
+        'Template',
+        template
+    )
     for (const t of serviceTemplates) {
         const queryResolver = new TemplateQueryResolver(t.template)
         const result = queryResolver.findAndRunQueries()
@@ -32,7 +35,11 @@ export class TemplateQueryResolver {
         this.serviceTemplate = serviceTemplate
     }
 
-    findAndRunQueries() {
+    /**
+     * Identifies all queries within a template and runs them
+     * @returns The service template with all queries resolved
+     */
+    findAndRunQueries(): ServiceTemplate {
         let resolvedTemplate = this.serviceTemplate
         let numberOfQueries = 0
         // Recursively go through template to find any queries and resolve them
@@ -42,7 +49,7 @@ export class TemplateQueryResolver {
                     numberOfQueries++
                     const match = object.match(this.queryRegex)?.pop() || ''
                     const queryResult = this.runQuery(path, match)
-                    // if query result is itself a query, leave it in and let it resolve in a later loop
+                    // if result is also a query, leave this entry as it is and let it resolve in a later loop
                     return isString(queryResult) && this.queryRegex.test(queryResult) ? object : queryResult
                 } else {
                     return object
@@ -75,7 +82,7 @@ export class TemplateQueryResolver {
     }
 
     private runQuery(context: string, query: string): Object {
-        const queryResult = this.resolver.resolveFromTemplate(query, this.serviceTemplate)
+        const queryResult = this.resolver.resolveFromTemplate(query, getParentNode(context), this.serviceTemplate)
         if (!queryResult)
             throw new Error(
                 `Resolving queries failed. The following query in your template evaluated to null: ${query}`

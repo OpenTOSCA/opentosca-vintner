@@ -7,6 +7,10 @@ import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
 
+/**
+ * Tries to resolve get_Attribute and get_Property commands in template to get the actual value
+ * @param template The template to resolve the commands in
+ */
 function resolveAllGets(template: ServiceTemplate) {
     let resolvedTemplate = template
     let numberOfGets = 0
@@ -50,10 +54,7 @@ function getPropertyOrAttribute(
 ): Object {
     let result =
         toscaPath[0] == 'SELF'
-            ? resolvePath(
-                  template.topology_template?.node_templates,
-                  context.split('.')[context.split('.').indexOf('node_templates') + 1]
-              )
+            ? resolvePath(template.topology_template?.node_templates, getParentNode(context))
             : resolvePath(template.topology_template?.node_templates, toscaPath[0])
     const optionalRel = getRelationship(template, result, toscaPath[1])
     if (optionalRel) result = getRelationship(template, result, toscaPath[1])
@@ -62,9 +63,16 @@ function getPropertyOrAttribute(
     return resolvePath(result, `${type}.${propertyAccess}`)
 }
 
-function getRelationship(template: ServiceTemplate, data: Object, relName: string): Object | null {
-    const reqs: [] = resolvePath(data, 'requirements') || []
-    const caps: [] = resolvePath(data, 'capabilities') || []
+/**
+ * Tries to find a capability or requirement of a node by name, then returns the data of the target of that relationship
+ * Used to resolve TOSCA path expressions
+ * @param template The template that contains the node
+ * @param node The current node
+ * @param relName The name of the capability or requirement
+ */
+function getRelationship(template: ServiceTemplate, node: Object, relName: string): Object | null {
+    const reqs: [] = resolvePath(node, 'requirements') || []
+    const caps: [] = resolvePath(node, 'capabilities') || []
     for (const req of reqs) {
         if (firstKey(req) == relName) {
             if (isString(firstValue(req))) {
@@ -82,15 +90,25 @@ function getRelationship(template: ServiceTemplate, data: Object, relName: strin
     return null
 }
 
+export function getParentNode(context: string): string {
+    return context.split('.')[context.split('.').indexOf('node_templates') + 1]
+}
+
 function resolvePath(obj: any, path: string): any {
     return path.split('.').reduce(function (prev, curr) {
         return prev ? prev[curr] : null
     }, obj)
 }
 
+/**
+ * Tries to load all service template from a given source and path
+ * @param source Root folder to search
+ * @param type When searching for instances, enhance templates with instance data
+ * @param templatePath The name or path of the template/instance to search
+ */
 export function getTemplates(
     source: string,
-    type: string,
+    type: 'Instance' | 'Template',
     templatePath: string
 ): {name: string; template: ServiceTemplate}[] {
     let serviceTemplates: {name: string; template: ServiceTemplate}[] = []

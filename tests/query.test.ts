@@ -139,6 +139,12 @@ it('resolve-loop', () => {
     )
 })
 
+it('resolve-self', () => {
+    expect(files.loadYAML(resolveTemplate('query/resolve-self/service-template.yaml'))).to.deep.equal(
+        files.loadYAML(path.join(__dirname, 'query/resolve-self/expected-service-template.yaml'))
+    )
+})
+
 it('resolve-simple', () => {
     expect(files.loadYAML(resolveTemplate('query/resolve-simple/service-template.yaml'))).to.deep.equal(
         files.loadYAML(path.join(__dirname, 'query/resolve-simple/expected-service-template.yaml'))

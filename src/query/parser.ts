@@ -15,6 +15,9 @@ import {
 } from '#spec/query-type'
 import {parseInt} from 'lodash'
 
+/**
+ * Parses Query4TOSCA expressions and returns an abstract syntax tree for further processing
+ */
 export class Parser {
     grammar: ohm.Grammar
     semantics: ohm.Semantics
@@ -192,7 +195,7 @@ export class Parser {
     /**
      * Returns an abstract syntax tree that represents the given query
      * @param query The query string input by the user
-     * @param startRule The query string input by the user
+     * @param startRule The rule from which to start matching
      */
     getAST(query: string, startRule?: string) {
         let tree, match
@@ -236,6 +239,10 @@ function getArrowDirection(arrow: string) {
     }
 }
 
+/**
+ * Determines if a given path is a child of 'topology_template', so that 'topology_template' can be automatically added
+ * to the beginning of the path without the user needing to specify it
+ */
 function isPathShortcut(path: string) {
     return ['groups', 'inputs', 'node_templates', 'outputs', 'policies', 'relationship_templates'].includes(path)
 }
