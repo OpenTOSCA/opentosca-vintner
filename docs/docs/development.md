@@ -25,7 +25,7 @@ ESLint should be configured as given in the figure below with the following patt
 ```
 
 <figure markdown>
-  ![IntelliJ ESLint Settings](assets/images/intellij-eslint.png){class=shadow}
+  ![IntelliJ ESLint Settings](assets/images/intellij-eslint.png){class=figure}
   <figcaption>Figure 1: IntelliJ ESLint Settings</figcaption>
 </figure>
 
@@ -36,7 +36,7 @@ Prettier should be configured as given in the figure below with the following pa
 ```
 
 <figure markdown>
-  ![IntelliJ Prettier Settings](assets/images/intellij-prettier.png){class=shadow}
+  ![IntelliJ Prettier Settings](assets/images/intellij-prettier.png){class=figure}
   <figcaption>Figure 2: IntelliJ Prettier Settings</figcaption>
 </figure>
 
@@ -262,4 +262,4 @@ This workflow runs several tests, builds and packages the project and creates a 
 Thereby, an existing release and `latest` tag is deleted. 
 There is only one release at total.
 During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
-As a consequence, `vintner --version` returns the commit hash.
+The current version can be checked using `vintner --version`.

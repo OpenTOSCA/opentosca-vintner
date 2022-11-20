@@ -9,10 +9,15 @@ theme:
     language: en
     custom_dir: overrides
     icon:
-        repo: fontawesome/brands/github
-    font: false
+        repo: octicons/mark-github-16
+        logo: octicons/terminal-24
+    favicon: assets/images/octicons-terminal-24.svg
+    font:
+        text: Inter
+        code: ui-monospace
     palette:
-        primary: black
+        primary: white
+        accent: deep orange
     features:
         - navigation.tabs.sticky
         - navigation.instant
