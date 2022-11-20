@@ -17,6 +17,7 @@ theme:
         code: ui-monospace
     palette:
         primary: white
+        accent: deep orange
     features:
         - navigation.tabs.sticky
         - navigation.instant

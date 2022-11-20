@@ -84,6 +84,7 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
 body > div.md-container > main > div > div.md-content > article > div.tabbed-set.tabbed-alternate > div.tabbed-labels > label {
     font-size: 15px;
     font-weight: 400;
+    color: inherit;
 }
 
 /* TOC Title */

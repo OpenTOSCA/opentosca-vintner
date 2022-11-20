@@ -376,4 +376,4 @@ To check the consistency conduct the following steps:
 1. Ensure that every node has at maximum one hosting relation
 1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable Service Template.
 
-Since the derived Service Template might be further processed, e.g. by _[Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}_[@hirmer2014automatic], some or all of these consistency steps might be omitted.
+Since the derived Service Template might be further processed, e.g. by [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic], some or all of these consistency steps might be omitted.

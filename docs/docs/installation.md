@@ -72,7 +72,7 @@ gpg --verify vintner-linux-x64.asc
 
 The output should be something as follows.
 
-```shell linenums="1"
+```linenums="1"
 gpg: assuming signed data in 'vintner-linux-x64'
 gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
 gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD

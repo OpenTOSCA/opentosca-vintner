@@ -262,4 +262,4 @@ This workflow runs several tests, builds and packages the project and creates a 
 Thereby, an existing release and `latest` tag is deleted. 
 There is only one release at total.
 During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
-As a consequence, `vintner --version` returns the commit hash.
+The current version can be checked using `vintner --version`.

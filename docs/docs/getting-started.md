@@ -2,12 +2,10 @@
 
 {{ asciinema_player('getting-started') }}
 
-You can add additional scheduled backups for your branches, billed at $0.023 per GB per month.
-
 In this example, we will deploy a textfile on our local machine which has a different content depending on our input.
 This is just a simple example without any dependencies such as a Docker Engine or a cloud.
-For a more complex scenario including OpenStack and GCP see [Motivating Scenario](variability4tosca/motivation.md)
-{target=_blank}.
+For a more complex scenario including OpenStack and GCP see
+[Motivating Scenario](variability4tosca/motivation.md){target=_blank}.
 First, install OpenTOSCA Vintner.
 
 In our case, we run on a Linux machine.
@@ -20,10 +18,14 @@ chmod +x /usr/bin/vintner
 vintner setup init
 ```
 
-We currently support [xOpera](https://github.com/xlab-si/xopera-opera){target=_blank}
-and [Unfurl](https://github.com/onecommons/unfurl){target=_blank}.
-Since both can only be installed on Linux, we implemented a [WSL](https://docs.microsoft.com/en-us/windows/wsl){target=_
-blank} integration for both.
+We currently support
+[xOpera](https://github.com/xlab-si/xopera-opera){target=_blank}
+and
+[Unfurl](https://github.com/onecommons/unfurl){target=_blank}
+.
+Since both can only be installed on Linux, we implemented a
+[WSL](https://docs.microsoft.com/en-us/windows/wsl){target=_blank}
+integration for both.
 Configure and enable your orchestrator.
 For more information see [Installation](installation.md){target=_blank}.
 
