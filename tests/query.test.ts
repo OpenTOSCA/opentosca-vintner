@@ -9,6 +9,13 @@ it('all', () => {
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/all/expected-output.yaml')))
 })
 
+it('array-access', () => {
+    const result = getResult(
+        'FROM template/tests/query/service-template.yaml SELECT node_templates.webapp.requirements[1]'
+    )
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/array-access/expected-output.yaml')))
+})
+
 it('boolean-and', () => {
     const result = getResult(
         'FROM template/tests/query/service-template.yaml SELECT node_templates.*[name="dbms" AND type="DBMS"]'

@@ -73,9 +73,10 @@ export type SelectExpression = {
 }
 
 export type StepExpression = {
-    type: 'Step' | 'Group' | 'Policy'
-    path: string
+    type: 'Array' | 'Condition' | 'Group' | 'Policy' | 'Step'
+    path?: string
     condition?: PredicateExpression
+    index?: number
 }
 
 export type VariableExpression = {

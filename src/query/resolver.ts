@@ -122,15 +122,20 @@ export class Resolver {
             let result = data
             for (const i of p.steps) {
                 if (i.type == 'Group') {
-                    result = this.evaluateGroup(result, i.path)
+                    result = this.evaluateGroup(result, i.path || '')
                 } else if (i.type == 'Policy') {
-                    result = this.evaluatePolicy(result, i.path)
+                    result = this.evaluatePolicy(result, i.path || '')
+                } else if (i.type == 'Condition' && i.condition) {
+                    result = this.evaluateFilter(result, i.condition)
+                } else if (i.type == 'Array') {
+                    result = this.evaluateArrayAccess(result, i.index || 0)
                 } else if (i.path == '*') {
-                    result = this.evaluateWildcard(result, i.condition)
+                    this.currentKeys = Object.keys(result)
+                    result = Object.values(result)
                 } else if (i.path == 'SELF') {
                     result = this.currentTemplate?.topology_template?.node_templates?.[this.startingContext] || {}
                 } else {
-                    result = this.evaluateStep(result, i.path)
+                    result = this.evaluateStep(result, i.path || '')
                 }
             }
             if (p.returnVal) {
@@ -333,16 +338,21 @@ export class Resolver {
      * @param data Data for which all children should be returned
      * @param condition Optional condition that all elements in the result set need to fulfill
      */
-    private evaluateWildcard(data: Object, condition?: PredicateExpression): Object {
-        const result: Object[] = []
-        this.currentKeys = []
-        for (const [key, value] of Object.entries(data)) {
-            if (!condition || this.evaluatePredicate(key, value, condition)) {
-                result.push(value)
-                this.currentKeys.push(key)
+    private evaluateFilter(data: Object, condition: PredicateExpression): Object {
+        if (Array.isArray(data)) {
+            const result: Object[] = []
+            const keys = this.currentKeys
+            this.currentKeys = []
+            for (let i = 0; i < data.length; i++) {
+                if (this.evaluatePredicate(keys[i], data[i], condition)) {
+                    result.push(data[i])
+                    this.currentKeys.push(keys[i])
+                }
             }
+            return result.length > 1 ? result : result[0]
+        } else {
+            return this.evaluatePredicate(this.currentKeys[0], data, condition)
         }
-        return result.length > 1 ? result : result[0]
     }
 
     private evaluateStep(data: Object, path: string): Object {
@@ -370,6 +380,15 @@ export class Resolver {
             }
             this.currentKeys = [path]
             return this.resolvePath(path, data)
+        }
+    }
+
+    private evaluateArrayAccess(data: Object, index: number): Object {
+        if (Array.isArray(data)) {
+            this.currentKeys = [this.currentKeys[index]] || ''
+            return data[index] || {}
+        } else {
+            return index == 0 ? data : {}
         }
     }
 

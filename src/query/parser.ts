@@ -41,7 +41,7 @@ export class Parser {
         Select(_, firstPath, __, addPath): SelectExpression {
             return {type: 'Select', path: [firstPath.buildAST()].concat(addPath.buildAST())}
         },
-        Path(firstStep, __, nextSteps, returnClause): PathExpression {
+        Path(firstStep, nextSteps, returnClause): PathExpression {
             let steps = [firstStep.buildAST()].concat(nextSteps.buildAST()).flat()
             if (isPathShortcut(firstStep.sourceString)) {
                 steps = [{type: 'Step', path: 'topology_template'}].concat(steps.flat())
@@ -50,13 +50,19 @@ export class Parser {
             }
             return {type: 'Path', steps: steps, returnVal: returnClause.buildAST()[0]}
         },
+        Map(_, path): StepExpression[] {
+            return path.buildAST()
+        },
+        Filter(predicate): StepExpression {
+            return {type: 'Condition', condition: predicate.buildAST()}
+        },
         Step(shortcut, path): StepExpression[] {
             const result: StepExpression[] =
                 shortcut.sourceString != '' ? [{type: 'Step', path: getShortcut(shortcut.sourceString)}] : []
             return result.concat({type: 'Step', path: path.buildAST()})
         },
-        StepCond(shortcut, path, condition): StepExpression {
-            return {type: 'Step', path: path.buildAST(), condition: condition.buildAST()}
+        ArrayAccess(_, index, __): StepExpression {
+            return {type: 'Array', index: index.buildAST()}
         },
         ReturnClause(_, pair1, __, pair2, ___): ReturnExpression {
             return {type: 'Return', keyValuePairs: [pair1.buildAST()].concat(pair2.buildAST())}
