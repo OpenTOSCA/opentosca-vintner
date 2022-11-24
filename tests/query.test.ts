@@ -51,6 +51,13 @@ it('filter-negation', () => {
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-negation/expected-output.yaml')))
 })
 
+it('filter-nested', () => {
+    const result = getResult(
+        'FROM template/tests/query/service-template.yaml SELECT node_templates.*[properties.port=3306]'
+    )
+    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-nested/expected-output.yaml')))
+})
+
 it('filter-regex', () => {
     const result = getResult('FROM template/tests/query/service-template.yaml SELECT node_templates.*[name=~"vm_"]')
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-regex/expected-output.yaml')))
@@ -91,7 +98,7 @@ it('match-single', () => {
 
 it('match-length-any', () => {
     const result = getResult(
-        'FROM template/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type=OpenStack]) SELECT node'
+        'FROM template/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type="OpenStack"]) SELECT node'
     )
     expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-any/expected-output.yaml')))
 })

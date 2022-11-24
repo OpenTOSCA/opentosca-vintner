@@ -20,7 +20,7 @@ Query {
   PredicateExpression = "[" Predicate "]"
   Predicate = Predicate logic Predicate -- multi
             | Condition -- single
-  Condition = negation Value comparison Value -- comparison
+  Condition = negation Value comparison literal -- comparison
             | negation Value -- existence
 
   Match = "MATCH" Node (Relationship Node)*
@@ -44,7 +44,7 @@ Query {
   logic = "AND" | "OR"
   path = letter (alnum | "_" | "-" | ".")*
   filePath = (~space any)*
-  literal = string | float | digit | bool
+  literal = string | float | integer | bool
   bool = "true" | "false" | "TRUE" | "FALSE"
   shortcut = "@" | "#" | "$" | "%"
   string
