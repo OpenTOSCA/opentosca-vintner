@@ -155,7 +155,7 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/query/execute',
+    '/query/run',
     hae(async (req, res, next) => {
         const result = Controller.query.execute(req.body)
         res.json({result})
