@@ -123,7 +123,7 @@ query
     .command('resolve')
     .description('resolves all queries in a given service template')
     .requiredOption('--template <string>', 'path to service template')
-    .requiredOption('--output <string>', 'output file for the result of the query')
+    .requiredOption('--output <string>', 'path of the output')
     .option('--source [string]', 'specifies where to search for service template', 'vintner')
     .action(
         hae(async options => {
@@ -136,7 +136,7 @@ query
     .description('runs a query and returns the result')
     .requiredOption('--query <string>', 'path to query or query string')
     .option('--source [string]', 'specifies where to search for template to query', 'vintner')
-    .option('--output [string]', 'output file for the result of the query')
+    .option('--output [string]', 'path of the output')
     .action(
         hae(async options => {
             Controller.query.execute(options)

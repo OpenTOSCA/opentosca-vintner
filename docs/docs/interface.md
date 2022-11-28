@@ -272,6 +272,86 @@ initializes unfurl-wsl plugin
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
+## query resolve
+
+resolves all queries in a given service template
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner query resolve --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/query/resolve
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/query/resolve", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/query/resolve", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to service template |
+| output |  true  | string | path of the output |
+| source |  false  | string | specifies where to search for service template (default: "vintner") |
+
+## query run
+
+runs a query and returns the result
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner query run --query ${QUERY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"query": "${QUERY}"}' \
+            ${SERVER_ADDRESS}/query/run
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/query/run", {
+		query: QUERY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/query/run", json={
+		"query": QUERY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| query |  true  | string | path to query or query string |
+| source |  false  | string | specifies where to search for template to query (default: "vintner") |
+| output |  false  | string | path of the output |
+
 ## template resolve
 
 resolves variability
