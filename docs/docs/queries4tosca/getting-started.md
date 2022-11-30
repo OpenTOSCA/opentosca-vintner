@@ -8,7 +8,7 @@ This section will give a quick introduction to Queries4TOSCA. To run the example
 "getting started" template. If you don't have one, follow the steps in [Getting Started](../getting-started.md){target=_blank}.
 
 
-Queries start with a `FROM` statement, followed by either `templates` or `instances` and the template or instance name(s).
+Queries start with a `FROM` statement, followed by either `templates` or `instances` and the template or instance name, or an asterisk to query all.
 Inside a `SELECT` statement, you can enter a path to the data that you want to return.
 
 To get the entire contents of the template, run the following command.

@@ -41,13 +41,11 @@ Match = "MATCH" Node (Relationship Node)*
 ```
 
 ### Comments
-It is possible to insert comments into queries. All comments are discarded at the parsing stage,
-they are only intended to be read by other developers and have no influence on the execution of the
-query.
 Single-line comments begin with two forward slashes and extend to the end of the current line.
 Multi-line comments begin with a forward slash and an asterisk and end with another asterisk and
-slash and can be inserted anywhere. Listing 4.19 shows an example for each type of comment.
+slash and can be inserted anywhere.
 
+Examples:
 ```linenums="1"
 // single-line comment
 /* multi-line
@@ -56,7 +54,9 @@ comment */
 
 ## Path Syntax (Paths4TOSCA)
 
-Paths4TOSCA is a path expression syntax that can navigate the various parts of a service template.
+Paths4TOSCA is a path expression syntax that can navigate the various parts of a service template. 
+Paths are separated by dots. All parts of a topology template (node_templates, inputs, etc...) can be accessed directly.
+The following expressions can be used:
 
 | Symbol | Meaning | Description |
 | --- | --- | --- |
@@ -64,10 +64,16 @@ Paths4TOSCA is a path expression syntax that can navigate the various parts of a
 | . |  Path separator  | Mapping step |
 | * |  Wildcard  | Matches any child element |
 | SELF |  Current element  | Matches the element that contains the query (inside templates only) |
-| [] |  Filter  | Evaluates the predicate inside the brackets for every current element |
+| \[Condition] |  Filter  | Evaluates the predicate inside the brackets for every current element |
+| \[Integer] |  Array Access  | Returns the element at the specified position |
 | GROUP(name) |  Group members  | Returns the set of nodes that belong to the group with the specified name |
 | POLICY(name) |  Policy targets  | Returns the set of nodes that are targeted by the policy with the specified name |
+| @ |  Attributes  | Shortcut for attributes |
+| # |  Properties  | Shortcut for properties |
+| $ |  Requirements  | Shortcut for requirements |
+| % |  Capabilities  | Shortcut for capabilities |
 
+Examples:
 ```linenums="1"
 node_templates.webapp       // Selecting a node directly by name
 node_templates.webapp.@     // Selecting attributes of webapp
@@ -78,18 +84,15 @@ POLICY(my-policy)           // Selecting all nodes targeted by policy 'my-policy
 
 ### Predicates
 
-Predicates are used to filter results based on user defined conditions. Only elements for which the
-expression inside the brackets evaluates to true are included in the result set.
-Predicates can use comparison operators. Strings need to be surrounded by single or double quotes,
-and may optionally use regular expressions to find multiple possible matches. Table 4.2 shows all
-available comparison operators along with their semantics.
-Additionally, if a filter only consists of a single string with no comparison operator, it will return
-true if the current element has a child element that matches the string. Listing 4.21 shows various
-examples of filtering nodes using different conditions, with the corresponding semantics explained
-in a line comment.
+Elements can be filtered by putting a condition in square brackets. Strings need to be surrounded by single or double quotes,
+and may use regular expressions to find multiple possible matches.
+If a filter only consists of a single variable with no comparison operator, it will return
+true if the current element has a matching child element. Putting an exclamation mark before a condition negates it.
+The following operators can be used:
 
 | Symbol | Description |
 | --- | --- |
+| ! |  Negation |
 | = |  Equality |
 | != |  Inequality |
 | > |  Greater than |
@@ -98,10 +101,11 @@ in a line comment.
 | <= |  Less than or equal |
 | =~ |  Matches regular expression |
 
+Examples:
 ```linenums="1"
-node_templates.*[type='VirtualMachine'] // equality
-node_templates.*[name!='vm_1']          // inequality
-node_templates.*[name=~'^vm_']          // regular expression
+node_templates.*[type='textfile']       // equality
+node_templates.*[name!='localhost']     // inequality
+node_templates.*[name=~'^local']        // regular expression
 node_templates.*[properties]            // existence of field properties
 ```
 
@@ -165,16 +169,15 @@ described above. Selecting a node template can be seen as the equivalent of a SE
 clause that implicitly starts at the path node_templates.*.
 
 ```linenums="1"
-([type='VirtualMachine'])   // anonymous node template with filter
-(n [type='VirtualMachine']) // node template with variable n and filter
+([type='textfile'])   // anonymous node template with filter
+(n [type='textfile']) // node template with variable n and filter
 ```
 
 Between nodes, relationships can be specified. They are connected to nodes via dashes or arrows
 to denote undirected or directed relationships, respectively. An incoming relationship means that
 the requirement of another node is fulfilled by a capability of the current node, while an outgoing
 relationship means that a requirement of the current node is fulfilled by the capability of the other
-node. An undirected relationship applies to both of these scenarios. Listing 4.27 shows all possible
-relationship directions.
+node. An undirected relationship applies to both of these scenarios.
 
 ```linenums="1"
 (a)-->(b)   // a has requirement fulfilled by capability of b
