@@ -75,11 +75,11 @@ The following expressions can be used:
 
 Examples:
 ```linenums="1"
-node_templates.webapp       // Selecting a node directly by name
-node_templates.webapp.@     // Selecting attributes of webapp
-node_templates.*            // Selecting all nodes
-GROUP(my-group)             // Selecting all nodes in group 'my-group'
-POLICY(my-policy)           // Selecting all nodes targeted by policy 'my-policy'
+node_templates.localhost       // Selecting a node directly by name
+node_templates.localhost.#     // Selecting attributes of webapp
+node_templates.*               // Selecting all nodes
+GROUP(my-group)                // Selecting all nodes in group 'my-group'
+POLICY(my-policy)              // Selecting all nodes targeted by policy 'my-policy'
 ```
 
 ### Predicates
@@ -116,8 +116,8 @@ access, otherwise, it is interpreted as a filter. Attempting to access non-exist
 return an empty result.
 
 ```linenums="1"
-node_templates.*[0]                     // Selecting the first node template
-node_templates.webapp.requirements[1]   // Selecting the second requirement of webapp
+node_templates.*[0]                         // Selecting the first node template
+node_templates.localhost.requirements[1]    // Selecting the second requirement of webapp
 ```
 
 ### Boolean Operators
@@ -127,8 +127,8 @@ true if both predicates evaluate to true, Boolean OR returns true if at least on
 evaluates to true.
 
 ```linenums="1"
-node_templates.*[type='VirtualMachine' AND name='vm_1']
-node_templates.*[name='vm_1' OR name='vm_2']
+node_templates.*[type='textfile' AND name='first']
+node_templates.*[name='frist' OR name='second']
 ```
 
 ### Return Structures

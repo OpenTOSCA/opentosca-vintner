@@ -28,12 +28,6 @@ You can use an asterisk as a wildcard operator to get all child elements. The fo
 vintner query run --query "FROM templates.getting-started SELECT node_templates.*" --output output.yaml
 ```
 
-You can also specify a predicate in square brackets after any part of the path expression to filter elements. 
-The following command will return only nodes of type `textfile`.
-```linenums="1"
-vintner query run --query "FROM templates.getting-started SELECT node_templates.*[type='textfile']" --output output.yaml
-```
-
 You can also specify a predicate in square brackets after any part of the path expression to filter elements.
 The following command will return only nodes of type `textfile`, which may be `first` or `second`, depending on how you resolved the template.
 ```linenums="1"
