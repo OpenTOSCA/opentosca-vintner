@@ -18,7 +18,7 @@
 
 /* Source Repository */
 .md-source__repository {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 /* Search Input */
@@ -83,7 +83,8 @@ body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div 
 /* Tabbed Content Title  */
 body > div.md-container > main > div > div.md-content > article > div.tabbed-set.tabbed-alternate > div.tabbed-labels > label {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 400;
+    color: inherit;
 }
 
 /* TOC Title */
@@ -100,4 +101,14 @@ tr > th {
 /* Table Rows */
 tr > td {
     font-size: 15px;
+}
+
+/* Code Blocks Titles */
+.highlight span.filename {
+    font-weight: 400;
+}
+
+/* Disable line below Tabbed Content */
+.md-typeset .tabbed-labels {
+    box-shadow: none;
 }

@@ -18,9 +18,9 @@ During development the application should be deployed on a single virtual machin
 
 We expect that the following is installed on a Linux machine.
 
-- [x] [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=_blank}
-- [x] [Google Cloud CLI](https://cloud.google.com/sdk/gcloud){target=_blank}
-- [x] [Ansible Galaxy Collection `openstack.cloud`](https://galaxy.ansible.com/openstack/cloud){target=_blank}
+- [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=_blank}
+- [Google Cloud CLI](https://cloud.google.com/sdk/gcloud){target=_blank}
+- [Ansible Galaxy Collection `openstack.cloud`](https://galaxy.ansible.com/openstack/cloud){target=_blank}
 
 ## Preparation
 
