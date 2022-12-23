@@ -1,24 +1,28 @@
 import {Resolver} from '#/query/resolver'
 import * as files from '../../utils/files'
+import * as console from "console";
 
 export type QueryTemplateArguments = {
-    output: string
     query: string
-    source: 'file' | 'vintner' | 'winery'
+    output?: string
+    source?: 'file' | 'vintner' | 'winery'
+    format?: 'json' | 'yaml'
 }
 
-export default function executeQuery(options: QueryTemplateArguments): Object {
-    const resolver = new Resolver()
-    // add missing default for REST calls
+export default function (options: QueryTemplateArguments): Object {
     if (!options.source) options.source = 'vintner'
-    const results = resolver.resolve(options)
-    if (results.length > 0) {
-        for (const r of results) console.log('\nResults in ' + r.name + ': \n' + JSON.stringify(r.result, null, 4))
-        if (options.output) {
-            files.storeYAML(options.output, results.length == 1 ? results[0].result : results)
-        }
+    if (!options.format) options.format = 'yaml'
+
+    const _results = new Resolver().resolve({query: options.query, source: options.source})
+    const results = _results.length === 0 ? {} : _results.length === 1 ? _results[0].result : _results
+
+    if (options.output) {
+        if (options.format === 'yaml') files.storeYAML(options.output, results)
+        if (options.format === 'json') files.storeJSON(options.output, results)
     } else {
-        console.log('No results found.')
+        if (options.format === 'yaml') console.log(files.toYAML(results))
+        if (options.format === 'json') console.log(files.toJSON(results))
     }
-    return results.length == 1 ? results[0].result : results
+
+    return results
 }

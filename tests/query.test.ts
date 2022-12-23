@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import * as files from '../src/utils/files'
 import path from 'path'
-import executeQuery from '../src/controller/query/execute'
+import runQuery from '../src/controller/query/execute'
 import resolveQueries from '../src/controller/query/resolve'
 
 it('all', () => {
@@ -178,5 +178,5 @@ function resolveTemplate(templatePath: string): string {
 }
 
 function getResult(query: string): Object {
-    return executeQuery({output: '', query: query, source: 'file'})
+    return runQuery({output: '', query: query, source: 'file'})
 }

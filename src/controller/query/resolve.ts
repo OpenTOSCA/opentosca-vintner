@@ -10,7 +10,7 @@ export type QueryResolveTemplateArguments = {
     source: 'file' | 'vintner' | 'winery'
 }
 
-export default function resolveQueries(options: QueryResolveTemplateArguments): void {
+export default function(options: QueryResolveTemplateArguments) {
     const {template, output} = options
     const serviceTemplates: {name: string; template: ServiceTemplate}[] = getTemplates(
         options.source,

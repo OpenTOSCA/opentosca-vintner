@@ -21,7 +21,7 @@ import openInstance from './instances/open'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
-import executeQuery from './query/execute'
+import runQuery from './query/execute'
 import benchmarkSetup from './setup/benchmark'
 import resolveQueries from './query/resolve'
 
@@ -37,7 +37,7 @@ const Controller = {
         update: updateInstance,
     },
     query: {
-        execute: executeQuery,
+        run: runQuery,
         resolve: resolveQueries,
     },
     orchestrators: {

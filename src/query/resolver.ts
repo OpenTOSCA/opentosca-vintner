@@ -31,13 +31,13 @@ export class Resolver {
     // The name of the node that contains the query (when resolving a query from within a template)
     private startingContext = ''
 
-    resolve(queryArgs: QueryTemplateArguments): {name: string; result: Object}[] {
+    resolve(options: {query: string, source: string}): {name: string; result: Object}[] {
         // If input is a file load it, otherwise use input string as query
-        const queryString: string = files.isFile(queryArgs.query) ? files.loadFile(queryArgs.query) : queryArgs.query
+        const queryString: string = files.isFile(options.query) ? files.loadFile(options.query) : options.query
         const parser = new Parser()
         let tree
         try {
-            this.source = queryArgs.source
+            this.source = options.source
             tree = parser.getAST(queryString)
         } catch (e) {
             if (e instanceof Error) console.error(e.message)

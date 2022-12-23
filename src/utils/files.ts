@@ -61,17 +61,30 @@ export function storeYAML(file: string, data: any | string) {
     return file
 }
 
+export function storeJSON(file: string, data: any | string) {
+    if (validator.isString(data)) {
+        fs.writeFileSync(path.resolve(file), data)
+    } else {
+        fs.writeFileSync(path.resolve(file), toJSON(data))
+    }
+    return file
+}
+
+
 export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
 export function toYAML(obj: any) {
     return yaml.dump(obj, {
-        indent: 4,
         styles: {
             '!!null': 'empty',
         },
     })
+}
+
+export function toJSON(obj: any) {
+    return JSON.stringify(obj, null, 4)
 }
 
 export function copy(source: string, target: string) {
