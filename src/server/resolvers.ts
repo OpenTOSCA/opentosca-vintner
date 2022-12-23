@@ -68,6 +68,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/query',
+    hae(async (req, res, next) => {
+        Controller.template.query(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/templates/list',
     hae(async (req, res, next) => {
         const list = await Controller.templates.list()
@@ -159,14 +167,6 @@ resolvers.post(
     hae(async (req, res, next) => {
         const result = Controller.query.run(req.body)
         res.json({result})
-    })
-)
-
-resolvers.post(
-    '/query/resolve',
-    hae(async (req, res, next) => {
-        Controller.query.resolve(req.body)
-        res.json({})
     })
 )
 
