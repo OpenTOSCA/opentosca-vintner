@@ -77,11 +77,11 @@ nav:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
           - variability4tosca/feature-modeling.md
-    - dynamic-deployment-artifacts.md
-    - interface.md
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
+    - dynamic-deployment-artifacts.md
+    - interface.md
     - dependencies.md
     - development.md
     - contributing.md

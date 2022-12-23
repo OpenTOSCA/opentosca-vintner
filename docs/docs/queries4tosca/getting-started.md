@@ -1,8 +1,4 @@
----
-title: Getting Started
----
-
-# Introductory Example
+# Getting Started
 
 This section will give a quick introduction to Queries4TOSCA. To run the example queries, you need to have a resolved instance of the
 "getting started" template. If you don't have one, follow the steps in [Getting Started](../getting-started.md){target=_blank}.

@@ -2,7 +2,11 @@
 title: Specification
 ---
 
-# Queries4TOSCA Specification
+# Queries4TOSCA Specification 1.0 Release Candidate
+
+This document specifies a Query Language for TOSCA (Queries4TOSCA) inspired by [XPath](https://www.w3schools.com/xml/xpath_intro.asp){target=_blank} and [Cypher](https://opencypher.org){target=_blank}.
+The specification is under active development and is not backwards compatible with any previous versions.
+
 
 ## Statements
 
@@ -52,7 +56,7 @@ Examples:
 comment */
 ```
 
-## Path Syntax (Paths4TOSCA)
+## Paths4TOSCA
 
 Paths4TOSCA is a path expression syntax that can navigate the various parts of a service template. 
 Paths are separated by dots. All parts of a topology template (node_templates, inputs, etc...) can be accessed directly.
@@ -204,4 +208,68 @@ optionally by a number or a range. If both are omitted, relationships of any len
 (a)-{*2..}->(b)     // at least two hops
 (a)-{*..5}->(b)     // at most five hops
 (a)-{*}->(b)        // any amount of hops
+```
+
+## Grammar 
+
+```
+Query {
+  Main = (Expression | MatchExpression) end
+  Expression = FromExpression Select
+  MatchExpression = FromExpression Match Select
+
+  FromExpression = "FROM" ("instances" | "templates") ("/" | ".") (asterisk | filePath)
+
+  Select = "SELECT" Path ("," Path)*
+  Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
+  Map = "." Step
+  Filter = PredicateExpression
+  Step = shortcut? (asterisk | ident)
+  ArrayAccess = "[" integer "]"
+  ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
+  KeyValuePair = Variable ":" Variable --complex
+               | Variable              --simple
+  Group = "GROUP" "(" ident ")"
+  Policy = "POLICY" "(" ident ")"
+
+  PredicateExpression = "[" Predicate "]"
+  Predicate = Predicate logic Predicate -- multi
+            | Condition -- single
+  Condition = negation Value comparison literal -- comparison
+            | negation Value -- existence
+
+  Match = "MATCH" Node (Relationship Node)*
+  Node = "(" ident? PredicateExpression? ")"
+  Relationship = arrowLeft arrowRight --simple
+               | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
+  Cardinality = asterisk integer ".." integer --range
+              | asterisk ".." integer --max
+              | asterisk integer ".." --min
+              | asterisk integer --exact
+              | asterisk --unlimited
+  Variable = literal | path | ident
+  Value = shortcut? (path | literal)
+
+  negation = "!" | ""
+  arrowLeft = "<-" | "-"
+  arrowRight = "->" | "-"
+  asterisk = "*"
+  comparison = "=~" | "=" | "!=" | ">=" | "<=" | ">" | "<"
+  ident = letter (alnum | "_" | "-")*
+  logic = "AND" | "OR"
+  path = letter (alnum | "_" | "-" | ".")*
+  filePath = (~space any)*
+  literal = string | float | integer | bool
+  bool = "true" | "false" | "TRUE" | "FALSE"
+  shortcut = "@" | "#" | "$" | "%"
+  string
+    = "'" (~"'" any)* "'"
+    | "\"" (~"\"" any)* "\""
+  integer = digit+
+  float   = digit? "." digit+
+  singleComment = "//" (~"\n" any)*
+  multiComment = "/*" (~"*/" any)* "*/"
+  space := singleComment | multiComment | ...
+}
+
 ```
