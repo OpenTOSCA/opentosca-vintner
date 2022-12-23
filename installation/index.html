@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://vintner.opentosca.org/installation/" rel="canonical"/>
+<link href="../assets/images/octicons-terminal-24.svg" rel="icon"/>
+<meta content="mkdocs-1.4.2, mkdocs-material-8.5.7" name="generator"/>
+<title>Installation - OpenTOSCA Vintner</title>
+<link href="../assets/stylesheets/main.20d9efc8.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<meta content="#ffffff" name="theme-color"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7Cui-monospace:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Inter";--md-code-font:"ui-monospace"}</style>
+<link href="../assets/stylesheets/extra.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/typeset.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/asciinema-player.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../assets/javascripts/asciinema-player.min.js"></script>
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>html.glightbox-open { overflow: initial; height: 100%; }</style><script src="../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="deep-orange" data-md-color-primary="white" data-md-color-scheme="" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#installation">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="OpenTOSCA Vintner" class="md-header__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 12a.75.75 0 0 1-.22.53l-2.75 2.75a.75.75 0 0 1-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 1 1 1.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5h-5z"></path><path d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0 1 22.25 21H1.75A1.75 1.75 0 0 1 0 19.25V4.75zm1.75-.25a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25H1.75z" fill-rule="evenodd"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            OpenTOSCA Vintner
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="OpenTOSCA Vintner" class="md-nav__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 12a.75.75 0 0 1-.22.53l-2.75 2.75a.75.75 0 0 1-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 1 1 1.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5h-5z"></path><path d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0 1 22.25 21H1.75A1.75 1.75 0 0 1 0 19.25V4.75zm1.75-.25a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25H1.75z" fill-rule="evenodd"></path></svg>
+</a>
+    OpenTOSCA Vintner
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Installation
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Installation
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#binaries">
+    Binaries
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#signature">
+    Signature
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../orchestrators/">
+        Orchestrators
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Variability4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Variability4TOSCA" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Variability4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/feature-modeling/">
+        Feature Modeling
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../dynamic-deployment-artifacts/">
+        Dynamic Deployment Artifacts
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../interface/">
+        Interface
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../dependencies/">
+        Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../development/">
+        Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../code-of-conduct/">
+        Code of Conduct
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../resources/">
+        Resources
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../about-us/">
+        About Us
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../faq/">
+        FAQ
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#binaries">
+    Binaries
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#signature">
+    Signature
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">¶</a></h1>
+<h2 id="binaries">Binaries<a class="headerlink" href="#binaries" title="Permanent link">¶</a></h2>
+<p>To install <code>vintner</code>, download the binary for your system.
+There are no other dependencies required. 
+You might add the binary to your PATH.</p>
+<p>The following example shows the installation on Linux.
+See <a href="#signature">below</a> for verifying the signature of the binary.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>mv vintner-linux-x64 /usr/bin/vintner
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>chmod +x /usr/bin/vintner
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>vintner setup init
+</code></pre></div></td></tr></table></div>
+<p>The following binaries are available:</p>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Architecture</th>
+<th>Binary</th>
+<th>Signature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alpine</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64" target="_blank">vintner-alpine-x64</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc" target="_blank">vintner-alpine-x64.asc</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>arm64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64" target="_blank">vintner-linux-arm64</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc" target="_blank">vintner-linux-arm64.asc</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64" target="_blank">vintner-linux-x64</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc" target="_blank">vintner-linux-x64.asc</a></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe" target="_blank">vintner-win-x64.exe</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc" target="_blank">vintner-win-x64.exe.asc</a></td>
+</tr>
+</tbody>
+</table>
+<p>To check, that the <code>vintner</code> can be executed, run</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner --version
+</code></pre></div></td></tr></table></div>
+<p>To start the server, run
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner server start
+</code></pre></div></td></tr></table></div></p>
+<p>To uninstall all files including the binary, run the following commands.
+<em>This will not undeploy currently deployed applications</em>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner setup clean
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>rm "$(which vintner)"
+</code></pre></div></td></tr></table></div>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
+<p>The following environment variables can be used for configuration.</p>
+<table>
+<thead>
+<tr>
+<th>Environment Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPENTOSCA_VINTNER_HOME_DIR</td>
+<td>${HOME_DIR}/.opentosca_vintner</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="signature">Signature<a class="headerlink" href="#signature" title="Permanent link">¶</a></h2>
+<p>To verify a signature of a binary, first import our public key and download the respective signature.
+The following is a walkthrough for <code>vintner-linux-x64</code> using <code>gpg</code>.</p>
+<p>First, import our public key.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl https://vintner.opentosca.org/assets/documents/vintner-release.gpg <span class="p">|</span> gpg --import
+</code></pre></div></td></tr></table></div>
+<p>Then download and verify the respective signature.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>gpg --verify vintner-linux-x64.asc
+</code></pre></div></td></tr></table></div>
+<p>The output should be something as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span>
+<span class="normal"><a href="#__codelineno-6-6">6</a></span>
+<span class="normal"><a href="#__codelineno-6-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>gpg: assuming signed data in 'vintner-linux-x64'
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a>gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a>gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a>gpg: Good signature from "vintner-release" [unknown]
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a>gpg: WARNING: This key is not certified with a trusted signature!
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a>gpg:          There is no indication that the signature belongs to the owner.
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a>Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
+</code></pre></div></td></tr></table></div>
+<p>This is the public key that should be used for verification (<a href="../assets/documents/vintner-release.gpg" target="_blank">download</a>).</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>pub   rsa4096/964183A1485881AD <span class="m">2022</span>-10-23 <span class="o">[</span>SC<span class="o">]</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>      4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a>uid                 <span class="o">[</span>unknown<span class="o">]</span> vintner-release
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>sub   rsa4096/B230BD6651AA1BB8 <span class="m">2022</span>-10-23 <span class="o">[</span>E<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span>
+<span class="normal"><a href="#__codelineno-8-29">29</a></span>
+<span class="normal"><a href="#__codelineno-8-30">30</a></span>
+<span class="normal"><a href="#__codelineno-8-31">31</a></span>
+<span class="normal"><a href="#__codelineno-8-32">32</a></span>
+<span class="normal"><a href="#__codelineno-8-33">33</a></span>
+<span class="normal"><a href="#__codelineno-8-34">34</a></span>
+<span class="normal"><a href="#__codelineno-8-35">35</a></span>
+<span class="normal"><a href="#__codelineno-8-36">36</a></span>
+<span class="normal"><a href="#__codelineno-8-37">37</a></span>
+<span class="normal"><a href="#__codelineno-8-38">38</a></span>
+<span class="normal"><a href="#__codelineno-8-39">39</a></span>
+<span class="normal"><a href="#__codelineno-8-40">40</a></span>
+<span class="normal"><a href="#__codelineno-8-41">41</a></span>
+<span class="normal"><a href="#__codelineno-8-42">42</a></span>
+<span class="normal"><a href="#__codelineno-8-43">43</a></span>
+<span class="normal"><a href="#__codelineno-8-44">44</a></span>
+<span class="normal"><a href="#__codelineno-8-45">45</a></span>
+<span class="normal"><a href="#__codelineno-8-46">46</a></span>
+<span class="normal"><a href="#__codelineno-8-47">47</a></span>
+<span class="normal"><a href="#__codelineno-8-48">48</a></span>
+<span class="normal"><a href="#__codelineno-8-49">49</a></span>
+<span class="normal"><a href="#__codelineno-8-50">50</a></span>
+<span class="normal"><a href="#__codelineno-8-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>-----BEGIN PGP PUBLIC KEY BLOCK-----
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>mQINBGNVcowBEAC0jzKuuLE6AqCaRvjp1mwCC76Px6wG4jgvrXfraCaOf3Y3uywW
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>lD3NNfqb/rc/FYQXH9lIU9n6zIB47mK0zoeHWWqPjRp6BTTbbMjePinHCb2K1XM5
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>wLglw0OeC2T/NvfbU7FbN/QVFgQPWL16UhuoQhfraax6TFGO9iF/+yhG7AYZ+vAE
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>7GkaPQAlzGrbbyffaBYzoqgalHslmxG9RvAxDBaQXrcsqJiv6Zfv8rDNdPlGk7mX
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a>UIbMHUuFzcep15ZQy+9PY/JLyYBUUDNhAXKLomjNPuCQHvZ/DS/XveIW+l6EYSLq
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a>r6B/XCFkVWUO2RugvmpEacUSLrIL39ceUh0dYnpEDU4Z8dRlAyVaswR5j90bPrgz
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a>NSaLF5NQrWlE8gksvK2KYog9Q4lrAdD0wQNV0bnU6YG3TM71wXZim8PokTzxPrA0
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a>JAigEHzN9nbHSzjB71m8cVt6Zl4lGCCYqr8jSjKAUAN01koQVZd/lFljXfI27NcG
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a>y7yYBc97IWaOM039kyPKKVGAB3I3l9d90+RL3tSET2MwPN3Vjlq3ArJ6QBKeB80S
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a>HgRroYVXx+dCJpZhMeeTC8kVjWNL1kctwOMtxWU7N4fO+pi2BW1F5QHlYWJj2fRY
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a>Mp9LE9NYXD1UO/8N1bT2RLGPwrmXXCJF20UDc63wuKzO0IBgXBvPArkUtwARAQAB
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a>tA92aW50bmVyLXJlbGVhc2WJAk4EEwEIADgWIQRLuGK4ELeSzActWduWQYOhSFiB
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a>rQUCY1VyjAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCWQYOhSFiBraf5
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a>D/4mHhD7nwLQ87bE4d6jPB9prwN86eT3bpz1wXoVwFJfArJ7I3wH/0uQe0GXGbJx
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a>G9TUdQHAGgN6/e99x54Dg4n4Qzap4W5baYlE3Klu6BUZOx9RKhSdtGfCk0+kUpxV
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a>lMNLWeXFeHepCp3CwKdH3gkwcWxaBBSsYE2ayk34+CXs3ftttRRUPmCCyxk+XiM9
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a>HSDO/1yIdiwO1XPFVuFZA150wdW2KYL4AuG4aB7lh1nd6jNgoz7LjwdpWN4Sa+38
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a>5AkQVez1n8Ru1ul4GRPbS2T+OZu6aoITe6i3JxDEAL/ljPN07ufiqFnTYKh8yUsl
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a>pPOpoM6ytMgcPlSxDfyhWSKw4aFYEJYT6Teeniup4ElywOJsBHfQ6Tl9Ix9nVti1
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a>9h+xbO7mik802AVYdyXtBrZHNdaUClsJjYpL17mivuZ1JoFNAmLPo1nTr/4IVuiI
+<a id="__codelineno-8-23" name="__codelineno-8-23"></a>A/LoKotLsL9OI+4rhXzsvIyvJBXHhcDp7TOjfEp8S9tLygDLnlC4lsJLzVdDamq2
+<a id="__codelineno-8-24" name="__codelineno-8-24"></a>/iDnucQu3TMRoVLrZwVAtsr5GyazmAZcpBjkh88Rgf4iKWbAesG7yGgJdOJ5Bi81
+<a id="__codelineno-8-25" name="__codelineno-8-25"></a>vmm25Sks+UxaXQzXcTe6ga80o5dqm1KYIkoj+assnA0LwOh1GZt7FZaSoQqXERKm
+<a id="__codelineno-8-26" name="__codelineno-8-26"></a>yEjOAXNt8ZhewyJZGizYhGUslFOQA/8/kKBKcW9hxqTqLbkCDQRjVXKMARAA2MNq
+<a id="__codelineno-8-27" name="__codelineno-8-27"></a>ipSOqaLOzDz4EULTYknshTe34bKw4EDYVbTeHhIJKr1VWkPo8XK9o74+NgiwpI2H
+<a id="__codelineno-8-28" name="__codelineno-8-28"></a>fPlO61BMm0FWRq9RUPQHNWU6qtV2KimQuvTdlwUiiX9uLeJvU6DO25350d7b9RdZ
+<a id="__codelineno-8-29" name="__codelineno-8-29"></a>aXUT1In9Ziya67ThsnXQqPusUyV7OEFI9xLX8EsmrZjw/7S3ACJ0ekehq0tRcPJo
+<a id="__codelineno-8-30" name="__codelineno-8-30"></a>hS5bmN75V9YZVmQViW5nuUfg3iifhsn6xMSBV2oQ+vg0qFwKlTRO1a12ltJuJjCB
+<a id="__codelineno-8-31" name="__codelineno-8-31"></a>FAtB3C8aI/tl//KRnkyuARmrtGtaht0oCbi+J3/1ChnTvbEXlMG65mNw/OXz+KsI
+<a id="__codelineno-8-32" name="__codelineno-8-32"></a>GPn4dOvigMQMTfTcvSX6pT4H3xmadFl4pF+8gmysxZuSMhTrPhLXitu24r9DxRrY
+<a id="__codelineno-8-33" name="__codelineno-8-33"></a>dAibrXOJu7J20+8ZttvRAiEUYAvUyQVtgsc0aAkbUGGBwt4NmdMb0mbN34X0bKPV
+<a id="__codelineno-8-34" name="__codelineno-8-34"></a>XGc/JImn1pZd1h7zzO4nHlJPDtjb5/s4C3g9isnvFHFXmAIfV9q94e0lXmI5xsQY
+<a id="__codelineno-8-35" name="__codelineno-8-35"></a>rGqcQzT8JT8S2SpvX/2ABPWyLBAxveDAKZpKNu6uasG2AeA8GpNqOGJq4S7IkaUx
+<a id="__codelineno-8-36" name="__codelineno-8-36"></a>1xNaQzkJvemKWefslExVAhV1uv2cOxCIq8wTxsozRxs+5WzWxIfT/ob60edKgMkn
+<a id="__codelineno-8-37" name="__codelineno-8-37"></a>z8NfPbCZw5PkHf/e0pbkbGJI8F2VerjubSSNDEMAEQEAAYkCNgQYAQgAIBYhBEu4
+<a id="__codelineno-8-38" name="__codelineno-8-38"></a>YrgQt5LMBy1Z25ZBg6FIWIGtBQJjVXKMAhsMAAoJEJZBg6FIWIGtx80QAIOGvqB5
+<a id="__codelineno-8-39" name="__codelineno-8-39"></a>X+E6VvblU5HHbj8mSZOqWKWgDpnKlehEjEx5UxFgJckmywhYy6UpxjLVGUvIaDLj
+<a id="__codelineno-8-40" name="__codelineno-8-40"></a>XTmekqV32PUzaLEA5Z/n7nnNBXhVkAPReXqOrpMru+G6q5EgEBtAqVBx34J1Wq/f
+<a id="__codelineno-8-41" name="__codelineno-8-41"></a>FBWVq4qoPVQrIuvJRtpQJTl7EDWfFZNDrbWCyNjWCQFOU0RzbpGN8Psr2yQZGBpa
+<a id="__codelineno-8-42" name="__codelineno-8-42"></a>/BkobV3ffJnNvWd2qqP0eOsmOZUrERO3wlbb4Gfi7IvbBaqrwcXw9PwgQ0mWGXoH
+<a id="__codelineno-8-43" name="__codelineno-8-43"></a>IGvcc3XgEoN4j/RCrkz8LufgkmDjjcomfwXMC/g7NWChCxlGAmZPqZnU5hCLLHpL
+<a id="__codelineno-8-44" name="__codelineno-8-44"></a>nIyEZJEhpWXk2VGwgiSl+LhfSk1jWGStVL92bgW/YGu7+rjWA6+2hu9PZ0bneAWb
+<a id="__codelineno-8-45" name="__codelineno-8-45"></a>B/ho86sE5y9eeSUM87aN0E5rWCmzx8ijTKOcukdpk+yJS1L1d/CxAv5twSrA23ne
+<a id="__codelineno-8-46" name="__codelineno-8-46"></a>aTBoNMm9JmUxJU8ILWY9DRBWV1FLsoBy3v3+ztQWz6i3bPZKNVgPdQD2XyXMZQfu
+<a id="__codelineno-8-47" name="__codelineno-8-47"></a>ZWvvd6zqXqPPX38sveW+jMyw4jUORWYkjF1MOP/YtmmuVbdcvJNTrwLlN+KWzSzd
+<a id="__codelineno-8-48" name="__codelineno-8-48"></a>e83fmHrZs0iN43SQBPNtz3hYWnwpQLZCSgLa0UKzaVWLkhHA/QBFOPMQUNwdfaHq
+<a id="__codelineno-8-49" name="__codelineno-8-49"></a>q2BZ9kJ+ruFawgv9hjTz2vYO/EGXwZuqcvHB
+<a id="__codelineno-8-50" name="__codelineno-8-50"></a>=MPBe
+<a id="__codelineno-8-51" name="__codelineno-8-51"></a>-----END PGP PUBLIC KEY BLOCK-----
+</code></pre></div></td></tr></table></div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Getting Started" class="md-footer__link md-footer__link--prev" href="../getting-started/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Previous
+              </span>
+              Getting Started
+            </div>
+</div>
+</a>
+<a aria-label="Next: Orchestrators" class="md-footer__link md-footer__link--next" href="../orchestrators/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Next
+              </span>
+              Orchestrators
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<a href="https://www.uni-stuttgart.de/impressum/" rel="noopener" target="_blank">
+        Copyright © 2022 University of Stuttgart
+    </a>
+<br/>
+
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank"> Material for MkDocs </a>
+<br/>
+
+    Partially funded by the
+    <a href="https://www.bmwk.de/Navigation/EN/Home/home.html" rel="noopener" target="_blank">
+        German Federal Ministry for Economic Affairs and Climate Action (BMWK)
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs.sticky", "navigation.instant", "navigation.tracking", "navigation.expand", "navigation.indexes", "content.code.annotate", "toc.follow"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../assets/javascripts/bundle.8492ddcf.min.js"></script>
+<script src="../assets/javascripts/tablesort.min.js"></script>
+<script src="../assets/javascripts/tablesort-controller.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "width": "100%", "height": "auto", "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom"});})</script></body>
+</html>

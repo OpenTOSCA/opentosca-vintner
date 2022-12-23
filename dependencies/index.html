@@ -1,0 +1,1250 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://vintner.opentosca.org/dependencies/" rel="canonical"/>
+<link href="../assets/images/octicons-terminal-24.svg" rel="icon"/>
+<meta content="mkdocs-1.4.2, mkdocs-material-8.5.7" name="generator"/>
+<title>Dependencies - OpenTOSCA Vintner</title>
+<link href="../assets/stylesheets/main.20d9efc8.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<meta content="#ffffff" name="theme-color"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7Cui-monospace:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Inter";--md-code-font:"ui-monospace"}</style>
+<link href="../assets/stylesheets/extra.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/typeset.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/asciinema-player.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script src="../assets/javascripts/asciinema-player.min.js"></script>
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>html.glightbox-open { overflow: initial; height: 100%; }</style><script src="../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="deep-orange" data-md-color-primary="white" data-md-color-scheme="" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#dependencies">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="OpenTOSCA Vintner" class="md-header__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 12a.75.75 0 0 1-.22.53l-2.75 2.75a.75.75 0 0 1-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 1 1 1.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5h-5z"></path><path d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0 1 22.25 21H1.75A1.75 1.75 0 0 1 0 19.25V4.75zm1.75-.25a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25H1.75z" fill-rule="evenodd"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            OpenTOSCA Vintner
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Dependencies
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="OpenTOSCA Vintner" class="md-nav__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 12a.75.75 0 0 1-.22.53l-2.75 2.75a.75.75 0 0 1-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 1 1 1.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5h-5z"></path><path d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0 1 22.25 21H1.75A1.75 1.75 0 0 1 0 19.25V4.75zm1.75-.25a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25H1.75z" fill-rule="evenodd"></path></svg>
+</a>
+    OpenTOSCA Vintner
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../installation/">
+        Installation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../orchestrators/">
+        Orchestrators
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          Variability4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Variability4TOSCA" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Variability4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/feature-modeling/">
+        Feature Modeling
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../dynamic-deployment-artifacts/">
+        Dynamic Deployment Artifacts
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../interface/">
+        Interface
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../development/">
+        Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/">
+        Contributing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../code-of-conduct/">
+        Code of Conduct
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../resources/">
+        Resources
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../about-us/">
+        About Us
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../faq/">
+        FAQ
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">¶</a></h1>
+<p>We use the following dependencies in production.
+You can download the dataset as <a href="../assets/documents/licenses.csv">CSV</a>.
+We ensure, that only the licenses <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a>, <a href="https://opensource.org/licenses/BSD-2-Clause" target="_blank">BSD-2-Clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause" target="_blank">BSD-3-Clause</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC-BY-3.0</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0" target="_blank">CC0-1.0</a>, <a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a>, <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>, <a href="https://opensource.org/licenses/Python-2.0" target="_blank">Python-2.0</a> are used.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Dependency</th>
+<th>Version</th>
+<th>License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="https://github.com/DefinitelyTyped/DefinitelyTyped" target="_blank">@types/node</a></td>
+<td>18.0.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://github.com/DefinitelyTyped/DefinitelyTyped" target="_blank">@types/yauzl</a></td>
+<td>2.10.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="http://github.com/isaacs/abbrev-js" target="_blank">abbrev</a></td>
+<td>1.1.1</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://github.com/jshttp/accepts" target="_blank">accepts</a></td>
+<td>1.3.8</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://github.com/chalk/ansi-styles" target="_blank">ansi-styles</a></td>
+<td>4.3.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://github.com/nodeca/argparse" target="_blank">argparse</a></td>
+<td>2.0.1</td>
+<td><a href="https://opensource.org/licenses/Python-2.0" target="_blank">Python-2.0</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="https://github.com/sindresorhus/array-find-index" target="_blank">array-find-index</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="https://github.com/blakeembrey/array-flatten" target="_blank">array-flatten</a></td>
+<td>1.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="https://github.com/kriskowal/asap" target="_blank">asap</a></td>
+<td>2.0.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://github.com/chaijs/assertion-error" target="_blank">assertion-error</a></td>
+<td>1.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://github.com/caolan/async" target="_blank">async</a></td>
+<td>3.2.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://github.com/alexindigo/asynckit" target="_blank">asynckit</a></td>
+<td>0.4.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>13</td>
+<td><a href="https://github.com/axios/axios" target="_blank">axios</a></td>
+<td>0.27.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://github.com/juliangruber/balanced-match" target="_blank">balanced-match</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://github.com/expressjs/body-parser" target="_blank">body-parser</a></td>
+<td>1.20.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://github.com/juliangruber/brace-expansion" target="_blank">brace-expansion</a></td>
+<td>2.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://github.com/brianloveswords/buffer-crc32" target="_blank">buffer-crc32</a></td>
+<td>0.2.13</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://github.com/visionmedia/bytes.js" target="_blank">bytes</a></td>
+<td>3.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://github.com/ljharb/call-bind" target="_blank">call-bind</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>20</td>
+<td><a href="https://github.com/chaijs/chai" target="_blank">chai</a></td>
+<td>4.3.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>21</td>
+<td><a href="https://github.com/chalk/chalk" target="_blank">chalk</a></td>
+<td>4.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>22</td>
+<td><a href="https://github.com/chaijs/check-error" target="_blank">check-error</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>23</td>
+<td><a href="https://github.com/Qix-/color-convert" target="_blank">color-convert</a></td>
+<td>2.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>24</td>
+<td><a href="https://github.com/colorjs/color-name" target="_blank">color-name</a></td>
+<td>1.1.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>25</td>
+<td><a href="https://github.com/felixge/node-combined-stream" target="_blank">combined-stream</a></td>
+<td>1.0.8</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>26</td>
+<td><a href="https://github.com/tj/commander.js" target="_blank">commander</a></td>
+<td>9.4.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>27</td>
+<td><a href="https://github.com/substack/node-concat-map" target="_blank">concat-map</a></td>
+<td>0.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>28</td>
+<td><a href="https://github.com/jshttp/content-disposition" target="_blank">content-disposition</a></td>
+<td>0.5.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>29</td>
+<td><a href="https://github.com/jshttp/content-type" target="_blank">content-type</a></td>
+<td>1.0.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>30</td>
+<td><a href="https://github.com/jshttp/cookie" target="_blank">cookie</a></td>
+<td>0.5.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>31</td>
+<td><a href="https://github.com/visionmedia/node-cookie-signature" target="_blank">cookie-signature</a></td>
+<td>1.0.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>32</td>
+<td><a href="https://github.com/expressjs/cors" target="_blank">cors</a></td>
+<td>2.8.5</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>33</td>
+<td><a href="https://github.com/debug-js/debug" target="_blank">debug</a></td>
+<td>4.3.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>34</td>
+<td><a href="https://github.com/sam-github/node-debuglog" target="_blank">debuglog</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>35</td>
+<td><a href="https://github.com/chaijs/deep-eql" target="_blank">deep-eql</a></td>
+<td>3.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>36</td>
+<td><a href="https://github.com/sindresorhus/define-lazy-prop" target="_blank">define-lazy-prop</a></td>
+<td>2.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>37</td>
+<td><a href="https://github.com/felixge/node-delayed-stream" target="_blank">delayed-stream</a></td>
+<td>1.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>38</td>
+<td><a href="https://github.com/dougwilson/nodejs-depd" target="_blank">depd</a></td>
+<td>2.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>39</td>
+<td><a href="https://github.com/stream-utils/destroy" target="_blank">destroy</a></td>
+<td>1.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>40</td>
+<td><a href="https://github.com/npm/dezalgo" target="_blank">dezalgo</a></td>
+<td>1.0.4</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>41</td>
+<td><a href="https://github.com/jonathanong/ee-first" target="_blank">ee-first</a></td>
+<td>1.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>42</td>
+<td><a href="https://github.com/mde/ejs" target="_blank">ejs</a></td>
+<td>3.1.8</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>43</td>
+<td><a href="https://github.com/pillarjs/encodeurl" target="_blank">encodeurl</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>44</td>
+<td><a href="https://github.com/mafintosh/end-of-stream" target="_blank">end-of-stream</a></td>
+<td>1.4.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>45</td>
+<td><a href="https://github.com/component/escape-html" target="_blank">escape-html</a></td>
+<td>1.0.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>46</td>
+<td><a href="https://github.com/sindresorhus/escape-string-regexp" target="_blank">escape-string-regexp</a></td>
+<td>1.0.5</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>47</td>
+<td><a href="https://github.com/jshttp/etag" target="_blank">etag</a></td>
+<td>1.8.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>48</td>
+<td><a href="https://github.com/expressjs/express" target="_blank">express</a></td>
+<td>4.18.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>49</td>
+<td><a href="https://github.com/maxogden/extract-zip" target="_blank">extract-zip</a></td>
+<td>2.0.1</td>
+<td><a href="https://opensource.org/licenses/BSD-2-Clause" target="_blank">BSD-2-Clause</a></td>
+</tr>
+<tr>
+<td>50</td>
+<td><a href="https://github.com/andrewrk/node-fd-slicer" target="_blank">fd-slicer</a></td>
+<td>1.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>51</td>
+<td><a href="https://github.com/mde/filelist" target="_blank">filelist</a></td>
+<td>1.0.4</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>52</td>
+<td><a href="https://github.com/pillarjs/finalhandler" target="_blank">finalhandler</a></td>
+<td>1.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>53</td>
+<td><a href="https://github.com/follow-redirects/follow-redirects" target="_blank">follow-redirects</a></td>
+<td>1.15.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>54</td>
+<td><a href="https://github.com/form-data/form-data" target="_blank">form-data</a></td>
+<td>4.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>55</td>
+<td><a href="https://github.com/jshttp/forwarded" target="_blank">forwarded</a></td>
+<td>0.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>56</td>
+<td><a href="https://github.com/jshttp/fresh" target="_blank">fresh</a></td>
+<td>0.5.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>57</td>
+<td><a href="https://github.com/jprichardson/node-fs-extra" target="_blank">fs-extra</a></td>
+<td>10.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>58</td>
+<td><a href="https://github.com/isaacs/fs.realpath" target="_blank">fs.realpath</a></td>
+<td>1.0.0</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>59</td>
+<td><a href="https://github.com/Raynos/function-bind" target="_blank">function-bind</a></td>
+<td>1.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>60</td>
+<td><a href="https://github.com/chaijs/get-func-name" target="_blank">get-func-name</a></td>
+<td>2.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>61</td>
+<td><a href="https://github.com/ljharb/get-intrinsic" target="_blank">get-intrinsic</a></td>
+<td>1.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>62</td>
+<td><a href="https://github.com/sindresorhus/get-stream" target="_blank">get-stream</a></td>
+<td>5.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>63</td>
+<td><a href="https://github.com/isaacs/node-glob" target="_blank">glob</a></td>
+<td>7.2.3</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>64</td>
+<td><a href="https://github.com/isaacs/node-graceful-fs" target="_blank">graceful-fs</a></td>
+<td>4.2.10</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>65</td>
+<td><a href="https://github.com/tarruda/has" target="_blank">has</a></td>
+<td>1.0.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>66</td>
+<td><a href="https://github.com/sindresorhus/has-flag" target="_blank">has-flag</a></td>
+<td>4.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>67</td>
+<td><a href="https://github.com/inspect-js/has-symbols" target="_blank">has-symbols</a></td>
+<td>1.0.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>68</td>
+<td><a href="https://github.com/npm/hosted-git-info" target="_blank">hosted-git-info</a></td>
+<td>2.8.9</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>69</td>
+<td><a href="https://github.com/jshttp/http-errors" target="_blank">http-errors</a></td>
+<td>2.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>70</td>
+<td><a href="https://github.com/ashtuchkin/iconv-lite" target="_blank">iconv-lite</a></td>
+<td>0.4.24</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>71</td>
+<td><a href="https://github.com/npm/inflight" target="_blank">inflight</a></td>
+<td>1.0.6</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>72</td>
+<td><a href="https://github.com/isaacs/inherits" target="_blank">inherits</a></td>
+<td>2.0.4</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>73</td>
+<td><a href="https://github.com/whitequark/ipaddr.js" target="_blank">ipaddr.js</a></td>
+<td>1.9.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>74</td>
+<td><a href="https://github.com/inspect-js/is-core-module" target="_blank">is-core-module</a></td>
+<td>2.9.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>75</td>
+<td><a href="https://github.com/sindresorhus/is-docker" target="_blank">is-docker</a></td>
+<td>2.2.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>76</td>
+<td><a href="https://github.com/sindresorhus/is-wsl" target="_blank">is-wsl</a></td>
+<td>2.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>77</td>
+<td><a href="https://github.com/jakejs/jake" target="_blank">jake</a></td>
+<td>10.8.5</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>78</td>
+<td><a href="https://github.com/nodeca/js-yaml" target="_blank">js-yaml</a></td>
+<td>4.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>79</td>
+<td><a href="https://github.com/npm/json-parse-even-better-errors" target="_blank">json-parse-even-better-errors</a></td>
+<td>2.3.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>80</td>
+<td><a href="https://github.com/jprichardson/node-jsonfile" target="_blank">jsonfile</a></td>
+<td>6.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>81</td>
+<td><a href="http://github.com/davglass/license-checker" target="_blank">license-checker</a></td>
+<td>25.0.1</td>
+<td><a href="https://opensource.org/licenses/BSD-3-Clause" target="_blank">BSD-3-Clause</a></td>
+</tr>
+<tr>
+<td>82</td>
+<td><a href="https://github.com/lodash/lodash" target="_blank">lodash</a></td>
+<td>4.17.21</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>83</td>
+<td><a href="https://github.com/chaijs/loupe" target="_blank">loupe</a></td>
+<td>2.3.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>84</td>
+<td><a href="https://github.com/jshttp/media-typer" target="_blank">media-typer</a></td>
+<td>0.3.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>85</td>
+<td><a href="https://github.com/component/merge-descriptors" target="_blank">merge-descriptors</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>86</td>
+<td><a href="https://github.com/jshttp/methods" target="_blank">methods</a></td>
+<td>1.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>87</td>
+<td><a href="https://github.com/broofa/node-mime" target="_blank">mime</a></td>
+<td>1.6.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>88</td>
+<td><a href="https://github.com/jshttp/mime-db" target="_blank">mime-db</a></td>
+<td>1.52.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>89</td>
+<td><a href="https://github.com/jshttp/mime-types" target="_blank">mime-types</a></td>
+<td>2.1.35</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>90</td>
+<td><a href="https://github.com/isaacs/minimatch" target="_blank">minimatch</a></td>
+<td>5.1.0</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>91</td>
+<td><a href="https://github.com/substack/minimist" target="_blank">minimist</a></td>
+<td>1.2.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>92</td>
+<td><a href="https://github.com/substack/node-mkdirp" target="_blank">mkdirp</a></td>
+<td>0.5.6</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>93</td>
+<td><a href="https://github.com/vercel/ms" target="_blank">ms</a></td>
+<td>2.1.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>94</td>
+<td><a href="https://github.com/jshttp/negotiator" target="_blank">negotiator</a></td>
+<td>0.6.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>95</td>
+<td><a href="https://github.com/npm/nopt" target="_blank">nopt</a></td>
+<td>4.0.3</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>96</td>
+<td><a href="https://github.com/npm/normalize-package-data" target="_blank">normalize-package-data</a></td>
+<td>2.5.0</td>
+<td><a href="https://opensource.org/licenses/BSD-2-Clause" target="_blank">BSD-2-Clause</a></td>
+</tr>
+<tr>
+<td>97</td>
+<td><a href="https://github.com/npm/npm-normalize-package-bin" target="_blank">npm-normalize-package-bin</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>98</td>
+<td><a href="https://github.com/sindresorhus/object-assign" target="_blank">object-assign</a></td>
+<td>4.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>99</td>
+<td><a href="https://github.com/inspect-js/object-inspect" target="_blank">object-inspect</a></td>
+<td>1.12.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>100</td>
+<td><a href="https://github.com/jshttp/on-finished" target="_blank">on-finished</a></td>
+<td>2.4.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>101</td>
+<td><a href="https://github.com/isaacs/once" target="_blank">once</a></td>
+<td>1.4.0</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>102</td>
+<td><a href="https://github.com/sindresorhus/open" target="_blank">open</a></td>
+<td>8.4.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>103</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner" target="_blank">opentosca-vintner</a></td>
+<td>1.0.0</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>104</td>
+<td><a href="https://github.com/sindresorhus/os-homedir" target="_blank">os-homedir</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>105</td>
+<td><a href="https://github.com/sindresorhus/os-tmpdir" target="_blank">os-tmpdir</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>106</td>
+<td><a href="https://github.com/npm/osenv" target="_blank">osenv</a></td>
+<td>0.1.5</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>107</td>
+<td><a href="https://github.com/mholt/PapaParse" target="_blank">papaparse</a></td>
+<td>5.3.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>108</td>
+<td><a href="https://github.com/pillarjs/parseurl" target="_blank">parseurl</a></td>
+<td>1.3.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>109</td>
+<td><a href="https://github.com/sindresorhus/path-is-absolute" target="_blank">path-is-absolute</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>110</td>
+<td><a href="https://github.com/jbgutierrez/path-parse" target="_blank">path-parse</a></td>
+<td>1.0.7</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>111</td>
+<td><a href="https://github.com/component/path-to-regexp" target="_blank">path-to-regexp</a></td>
+<td>0.1.7</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>112</td>
+<td><a href="https://github.com/chaijs/pathval" target="_blank">pathval</a></td>
+<td>1.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>113</td>
+<td><a href="https://github.com/andrewrk/node-pend" target="_blank">pend</a></td>
+<td>1.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>114</td>
+<td><a href="https://github.com/jshttp/proxy-addr" target="_blank">proxy-addr</a></td>
+<td>2.0.7</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>115</td>
+<td><a href="https://github.com/mafintosh/pump" target="_blank">pump</a></td>
+<td>3.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>116</td>
+<td><a href="https://github.com/ljharb/qs" target="_blank">qs</a></td>
+<td>6.10.3</td>
+<td><a href="https://opensource.org/licenses/BSD-3-Clause" target="_blank">BSD-3-Clause</a></td>
+</tr>
+<tr>
+<td>117</td>
+<td><a href="https://github.com/jshttp/range-parser" target="_blank">range-parser</a></td>
+<td>1.2.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>118</td>
+<td><a href="https://github.com/stream-utils/raw-body" target="_blank">raw-body</a></td>
+<td>2.5.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>119</td>
+<td><a href="https://github.com/isaacs/read-installed" target="_blank">read-installed</a></td>
+<td>4.0.3</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>120</td>
+<td><a href="https://github.com/npm/read-package-json" target="_blank">read-package-json</a></td>
+<td>2.1.2</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>121</td>
+<td><a href="https://github.com/npm/readdir-scoped-modules" target="_blank">readdir-scoped-modules</a></td>
+<td>1.1.0</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>122</td>
+<td><a href="https://github.com/browserify/resolve" target="_blank">resolve</a></td>
+<td>1.22.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>123</td>
+<td><a href="https://github.com/feross/safe-buffer" target="_blank">safe-buffer</a></td>
+<td>5.2.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>124</td>
+<td><a href="https://github.com/ChALkeR/safer-buffer" target="_blank">safer-buffer</a></td>
+<td>2.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>125</td>
+<td><a href="https://github.com/isaacs/sax-js" target="_blank">sax</a></td>
+<td>1.2.4</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>126</td>
+<td><a href="https://github.com/npm/node-semver" target="_blank">semver</a></td>
+<td>5.7.1</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>127</td>
+<td><a href="https://github.com/pillarjs/send" target="_blank">send</a></td>
+<td>0.18.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>128</td>
+<td><a href="https://github.com/expressjs/serve-static" target="_blank">serve-static</a></td>
+<td>1.15.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>129</td>
+<td><a href="https://github.com/wesleytodd/setprototypeof" target="_blank">setprototypeof</a></td>
+<td>1.2.0</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>130</td>
+<td><a href="https://github.com/ljharb/side-channel" target="_blank">side-channel</a></td>
+<td>1.0.4</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>131</td>
+<td><a href="https://github.com/isaacs/slide-flow-control" target="_blank">slide</a></td>
+<td>1.1.6</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>132</td>
+<td><a href="https://github.com/kemitchell/spdx-compare.js" target="_blank">spdx-compare</a></td>
+<td>1.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>133</td>
+<td><a href="https://github.com/jslicense/spdx-correct.js" target="_blank">spdx-correct</a></td>
+<td>3.1.1</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>134</td>
+<td><a href="https://github.com/kemitchell/spdx-exceptions.json" target="_blank">spdx-exceptions</a></td>
+<td>2.3.0</td>
+<td><a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC-BY-3.0</a></td>
+</tr>
+<tr>
+<td>135</td>
+<td><a href="https://github.com/jslicense/spdx-expression-parse.js" target="_blank">spdx-expression-parse</a></td>
+<td>3.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>136</td>
+<td><a href="https://github.com/jslicense/spdx-license-ids" target="_blank">spdx-license-ids</a></td>
+<td>3.0.11</td>
+<td><a href="https://creativecommons.org/publicdomain/zero/1.0" target="_blank">CC0-1.0</a></td>
+</tr>
+<tr>
+<td>137</td>
+<td><a href="https://github.com/kemitchell/spdx-ranges.js" target="_blank">spdx-ranges</a></td>
+<td>2.1.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>                         AND                        <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC-BY-3.0</a></td>
+</tr>
+<tr>
+<td>138</td>
+<td><a href="https://github.com/kemitchell/spdx-satisfies.js" target="_blank">spdx-satisfies</a></td>
+<td>4.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>139</td>
+<td><a href="https://github.com/jshttp/statuses" target="_blank">statuses</a></td>
+<td>2.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>140</td>
+<td><a href="https://github.com/chalk/supports-color" target="_blank">supports-color</a></td>
+<td>7.2.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>141</td>
+<td><a href="https://github.com/inspect-js/node-supports-preserve-symlinks-flag" target="_blank">supports-preserve-symlinks-flag</a></td>
+<td>1.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>142</td>
+<td><a href="https://github.com/component/toidentifier" target="_blank">toidentifier</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>143</td>
+<td><a href="https://github.com/notatestuser/treeify" target="_blank">treeify</a></td>
+<td>1.1.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>144</td>
+<td><a href="https://github.com/chaijs/type-detect" target="_blank">type-detect</a></td>
+<td>4.0.8</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>145</td>
+<td><a href="https://github.com/jshttp/type-is" target="_blank">type-is</a></td>
+<td>1.6.18</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>146</td>
+<td><a href="https://github.com/RyanZim/universalify" target="_blank">universalify</a></td>
+<td>2.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>147</td>
+<td><a href="https://github.com/stream-utils/unpipe" target="_blank">unpipe</a></td>
+<td>1.0.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>148</td>
+<td><a href="https://github.com/isaacs/util-extend" target="_blank">util-extend</a></td>
+<td>1.0.3</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>149</td>
+<td><a href="https://github.com/jaredhanson/utils-merge" target="_blank">utils-merge</a></td>
+<td>1.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>150</td>
+<td><a href="https://github.com/uuidjs/uuid" target="_blank">uuid</a></td>
+<td>8.3.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>151</td>
+<td><a href="https://github.com/kemitchell/validate-npm-package-license.js" target="_blank">validate-npm-package-license</a></td>
+<td>3.0.4</td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache-2.0</a></td>
+</tr>
+<tr>
+<td>152</td>
+<td><a href="https://github.com/jshttp/vary" target="_blank">vary</a></td>
+<td>1.1.2</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>153</td>
+<td><a href="https://github.com/npm/wrappy" target="_blank">wrappy</a></td>
+<td>1.0.2</td>
+<td><a href="https://opensource.org/licenses/ISC" target="_blank">ISC</a></td>
+</tr>
+<tr>
+<td>154</td>
+<td><a href="https://github.com/Leonidas-from-XIV/node-xml2js" target="_blank">xml2js</a></td>
+<td>0.4.23</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>155</td>
+<td><a href="https://github.com/oozcitak/xmlbuilder-js" target="_blank">xmlbuilder</a></td>
+<td>11.0.1</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+<tr>
+<td>156</td>
+<td><a href="https://github.com/thejoshwolfe/yauzl" target="_blank">yauzl</a></td>
+<td>2.10.0</td>
+<td><a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a></td>
+</tr>
+</tbody>
+</table>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Interface" class="md-footer__link md-footer__link--prev" href="../interface/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Previous
+              </span>
+              Interface
+            </div>
+</div>
+</a>
+<a aria-label="Next: Development" class="md-footer__link md-footer__link--next" href="../development/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Next
+              </span>
+              Development
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<a href="https://www.uni-stuttgart.de/impressum/" rel="noopener" target="_blank">
+        Copyright © 2022 University of Stuttgart
+    </a>
+<br/>
+
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank"> Material for MkDocs </a>
+<br/>
+
+    Partially funded by the
+    <a href="https://www.bmwk.de/Navigation/EN/Home/home.html" rel="noopener" target="_blank">
+        German Federal Ministry for Economic Affairs and Climate Action (BMWK)
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs.sticky", "navigation.instant", "navigation.tracking", "navigation.expand", "navigation.indexes", "content.code.annotate", "toc.follow"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../assets/javascripts/bundle.8492ddcf.min.js"></script>
+<script src="../assets/javascripts/tablesort.min.js"></script>
+<script src="../assets/javascripts/tablesort-controller.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "width": "100%", "height": "auto", "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom"});})</script></body>
+</html>
