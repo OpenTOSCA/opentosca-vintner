@@ -13,7 +13,6 @@ import {
 } from '#spec/query-type'
 import {ServiceTemplate} from '#spec/service-template'
 import {Graph} from './graph'
-import {QueryTemplateArguments} from '#controller/query/execute'
 import * as files from '../utils/files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {getTemplates} from '#/query/utils'
@@ -21,7 +20,7 @@ import {getTemplates} from '#/query/utils'
 /**
  * This class resolves Queries4TOSCA expressions
  */
-export class Resolver {
+export class Query {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
     private nodeGraph: Graph | undefined
     private currentTemplate: ServiceTemplate | undefined
@@ -31,14 +30,13 @@ export class Resolver {
     // The name of the node that contains the query (when resolving a query from within a template)
     private startingContext = ''
 
-    resolve(options: {query: string, source: string}): {name: string; result: Object}[] {
-        // If input is a file load it, otherwise use input string as query
-        const queryString: string = files.isFile(options.query) ? files.loadFile(options.query) : options.query
+    resolve(options: {query: string; source: string}): {name: string; result: Object}[] {
+        const query = files.isFile(options.query) ? files.loadFile(options.query) : options.query
         const parser = new Parser()
         let tree
         try {
             this.source = options.source
-            tree = parser.getAST(queryString)
+            tree = parser.getAST(query)
         } catch (e) {
             if (e instanceof Error) console.error(e.message)
             process.exit(1)
@@ -207,7 +205,7 @@ export class Resolver {
             for (const p of paths) nodes.add(p[i])
             const name = expression.nodes[i].name
             if (name) {
-                result[name] = Resolver.getNodesByName(data, [...nodes])
+                result[name] = Query.getNodesByName(data, [...nodes])
             }
         }
         return result

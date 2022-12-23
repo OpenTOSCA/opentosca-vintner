@@ -1,6 +1,6 @@
-import {Resolver} from '#/query/resolver'
+import {Query} from '#/query/query'
 import * as files from '../../utils/files'
-import * as console from "console";
+import * as console from 'console'
 
 export type QueryTemplateArguments = {
     query: string
@@ -13,7 +13,7 @@ export default function (options: QueryTemplateArguments): Object {
     if (!options.source) options.source = 'vintner'
     if (!options.format) options.format = 'yaml'
 
-    const _results = new Resolver().resolve({query: options.query, source: options.source})
+    const _results = new Query().resolve({query: options.query, source: options.source})
     const results = _results.length === 0 ? {} : _results.length === 1 ? _results[0].result : _results
 
     if (options.output) {

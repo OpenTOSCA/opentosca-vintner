@@ -1,5 +1,5 @@
-import * as files from '../../utils/files'
-import {Resolver} from '#/query/resolver'
+import * as files from '#files'
+import {Query} from '#/query/query'
 import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
 import {getParentNode, getTemplates} from '#/query/utils'
@@ -10,7 +10,7 @@ export type QueryResolveTemplateArguments = {
     source: 'file' | 'vintner' | 'winery'
 }
 
-export default function(options: QueryResolveTemplateArguments) {
+export default function (options: QueryResolveTemplateArguments) {
     const {template, output} = options
     const serviceTemplates: {name: string; template: ServiceTemplate}[] = getTemplates(
         options.source,
@@ -26,7 +26,7 @@ export default function(options: QueryResolveTemplateArguments) {
 
 export class TemplateQueryResolver {
     private readonly serviceTemplate: ServiceTemplate
-    private resolver = new Resolver()
+    private resolver = new Query()
 
     // This regex checks if a given string is a query command ( executeQuery(...) )
     private readonly queryRegex = /executeQuery\(([^)]+)\)/

@@ -117,7 +117,8 @@ initOrchestrators
         })
     )
 
-program.command('query')
+program
+    .command('query')
     .description('runs a query and returns the result')
     .requiredOption('--query <string>', 'path to query or query string')
     .option('--source [string]', 'specifies where to search for template to query', 'vintner')
@@ -173,7 +174,7 @@ template
     .option('--source [string]', 'specifies where to search for service template', 'vintner')
     .action(
         hae(async options => {
-            Controller.query.resolve(options)
+            Controller.template.query(options)
         })
     )
 

@@ -4,7 +4,7 @@ import {PredicateExpression} from '#spec/query-type'
 import {TopologyTemplate} from '#spec/topology-template'
 import {firstKey, firstValue} from '#utils'
 import {isString} from '#validator'
-import {Resolver} from '#/query/resolver'
+import {Query} from '#/query/query'
 import {RelationshipTemplate} from '#spec/relationship-template'
 
 type Node = {
@@ -27,7 +27,7 @@ type Relationship = {
 export class Graph {
     serviceTemplate: ServiceTemplate
     nodesMap: Map<string, Node> = new Map<string, Node>()
-    resolver = new Resolver()
+    resolver = new Query()
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate

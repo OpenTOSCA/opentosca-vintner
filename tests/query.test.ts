@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import * as files from '../src/utils/files'
 import path from 'path'
-import runQuery from '../src/controller/query/execute'
-import resolveQueries from '../src/controller/query/resolve'
+import runQuery from '../src/controller/query/run'
+import resolveQueries from '../src/controller/template/query'
 
 it('all', () => {
     const result = getResult('FROM templates/tests/query/service-template.yaml SELECT .')
