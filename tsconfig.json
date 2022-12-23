@@ -18,7 +18,8 @@
         },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": false
+        "forceConsistentCasingInFileNames": false,
+        "useUnknownInCatchVariables": false
     },
     "include": ["src"],
     "exclude": ["node_modules"]

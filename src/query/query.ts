@@ -1,4 +1,4 @@
-import {Parser} from './parser'
+import {parse} from './parser'
 import {
     ConditionExpression,
     Expression,
@@ -17,6 +17,8 @@ import * as files from '../utils/files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {getTemplates} from '#/query/utils'
 
+export type QueryResults = {name: string; result: Object}[]
+
 /**
  * This class resolves Queries4TOSCA expressions
  */
@@ -30,18 +32,14 @@ export class Query {
     // The name of the node that contains the query (when resolving a query from within a template)
     private startingContext = ''
 
+    /**
+     * Resolves a query
+     * @param options
+     */
     resolve(options: {query: string; source: string}): {name: string; result: Object}[] {
+        this.source = options.source
         const query = files.isFile(options.query) ? files.loadFile(options.query) : options.query
-        const parser = new Parser()
-        let tree
-        try {
-            this.source = options.source
-            tree = parser.getAST(query)
-        } catch (e) {
-            if (e instanceof Error) console.error(e.message)
-            process.exit(1)
-        }
-        return this.evaluate(tree)
+        return this.evaluate(parse(query))
     }
 
     /**
@@ -52,16 +50,8 @@ export class Query {
      */
     resolveFromTemplate(query: string, context: string, template: ServiceTemplate): Object {
         this.currentTemplate = template
-        const parser = new Parser()
         this.startingContext = context
-        let tree
-        try {
-            tree = parser.getAST(query, 'Select')
-        } catch (e) {
-            if (e instanceof Error) console.error(e.message)
-            process.exit(1)
-        }
-        return this.evaluateSelect(template, tree)
+        return this.evaluateSelect(template, parse(query, 'Select'))
     }
 
     /**
@@ -69,12 +59,14 @@ export class Query {
      * @param expression The complete AST
      * @return result The data that matches the expression
      */
-    private evaluate(expression: Expression): {name: string; result: Object}[] {
-        const results = []
+    private evaluate(expression: Expression): QueryResults {
+        const results: QueryResults = []
         const templates = this.evaluateFrom(expression.from)
-        for (const t of templates) {
-            let result: any = t.template
-            this.currentTemplate = t.template
+
+        for (const it of templates) {
+            let result: any = it.template
+            this.currentTemplate = it.template
+
             if (expression.match != null) {
                 result = this.evaluateMatch(result, expression.match)
             }
@@ -88,22 +80,22 @@ export class Query {
             if (result && !(Array.isArray(result) && result.length == 0)) {
                 // Flatten the result if it is only one element
                 result = result.length == 1 ? result[0] : result
-                results.push({name: t.name, result: result})
+                results.push({name: it.name, result: result})
             }
         }
         return results
     }
 
-    /** Loads the template or instance in the FROM clause */
+    /**
+     * Loads the template or instance in the FROM clause
+     */
     private evaluateFrom(expression: FromExpression): {name: string; template: ServiceTemplate}[] {
         let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
         try {
             serviceTemplates = getTemplates(this.source, expression.type, expression.path)
-        } catch (e: unknown) {
+        } catch (error) {
             console.error(`Could not locate service template ${expression.path} from source ${this.source}`)
-            if (e instanceof Error) {
-                console.error(e.message)
-            }
+            console.error(error)
         }
         return serviceTemplates
     }
