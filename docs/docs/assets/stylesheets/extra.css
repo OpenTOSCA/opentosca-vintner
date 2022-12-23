@@ -43,6 +43,7 @@
 /* Disable Navbar Shadow */
 .md-header {
     box-shadow: none;
+    border-top: 2pt solid #ff6e42;
     border-bottom: 0.05rem solid var(--md-typeset-table-color);
 }
 
