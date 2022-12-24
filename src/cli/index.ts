@@ -171,7 +171,6 @@ template
     .description('resolves all queries in a given service template')
     .requiredOption('--template <string>', 'path to service template')
     .requiredOption('--output <string>', 'path of the output')
-    .option('--source [string]', 'specifies where to search for service template', 'vintner')
     .action(
         hae(async options => {
             Controller.template.query(options)

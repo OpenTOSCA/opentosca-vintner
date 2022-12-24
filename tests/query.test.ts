@@ -172,7 +172,6 @@ function resolveTemplate(templatePath: string): string {
     resolveQueries({
         output: output,
         template: path.join(__dirname, templatePath),
-        source: 'file',
     })
     return output
 }

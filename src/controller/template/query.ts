@@ -2,26 +2,19 @@ import * as files from '#files'
 import {Query} from '#/query/query'
 import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
-import {getParentNode, getTemplates} from '#/query/utils'
+import {getParentNode} from '#/query/utils'
 
-export type QueryResolveTemplateArguments = {
+export type TemplateQueryArguments = {
     template: string
     output: string
-    source: 'file' | 'vintner' | 'winery'
 }
 
-export default function (options: QueryResolveTemplateArguments) {
-    const {template, output} = options
-    const serviceTemplates: {name: string; template: ServiceTemplate}[] = getTemplates(
-        options.source,
-        'Template',
-        template
-    )
-    for (const t of serviceTemplates) {
-        const queryResolver = new TemplateQueryResolver(t.template)
-        const result = queryResolver.findAndRunQueries()
-        files.storeYAML(output, result)
-    }
+export default function(options: TemplateQueryArguments) {
+    // TODO: ensure correct tosca definitions version?
+    const template = files.loadYAML<ServiceTemplate>(options.template)
+    const queryResolver = new TemplateQueryResolver(template)
+    const result = queryResolver.findAndRunQueries()
+    files.storeYAML(options.output, result)
 }
 
 export class TemplateQueryResolver {
@@ -85,7 +78,7 @@ export class TemplateQueryResolver {
         const queryResult = this.resolver.resolveFromTemplate(query, getParentNode(context), this.serviceTemplate)
         if (!queryResult)
             throw new Error(
-                `Resolving queries failed. The following query in your template evaluated to null: ${query}`
+                `Resolving queries failed. The following query in your template evaluated to null: ${query}`,
             )
         return queryResult
     }

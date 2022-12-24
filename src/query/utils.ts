@@ -127,7 +127,7 @@ export function getTemplates(
 function _getTemplates(
     source: string,
     type: 'Instance' | 'Template',
-    templatePath: string,
+    name: string,
 ): {name: string; template: ServiceTemplate}[] {
     // TODO: this should use some kind of plugin registry
 
@@ -137,21 +137,21 @@ function _getTemplates(
                 case 'file':
                     return [
                         {
-                            name: templatePath,
-                            template: files.loadYAML(path.resolve(templatePath)),
+                            name,
+                            template: files.loadYAML(path.resolve(name)),
                         },
                     ]
 
                 case 'winery': {
                     const winery = new Winery()
-                    if (templatePath == '*') return winery.getTemplates()
-                    return [winery.getTemplate(templatePath)]
+                    if (name == '*') return winery.getTemplates()
+                    return [winery.getTemplate(name)]
                 }
 
                 case 'vintner':
                     // TODO: this should use Templates and not Instances and should filter for correct definitions version
 
-                    if (templatePath === '*')
+                    if (name === '*')
                         return Instances.all().map(it => ({
                             name: it.getName(),
                             template: it.getServiceTemplate(),
@@ -159,8 +159,8 @@ function _getTemplates(
 
                     return [
                         {
-                            name: templatePath,
-                            template: new Instance(templatePath).getServiceTemplate(),
+                            name,
+                            template: new Instance(name).getServiceTemplate(),
                         },
                     ]
 
@@ -171,7 +171,7 @@ function _getTemplates(
         case 'Instance':
             switch (source) {
                 case 'vintner':
-                    if (templatePath === '*')
+                    if (name === '*')
                         return Instances.all().map(it => ({
                             name: it.getName(),
                             template: it.getInstanceTemplate(),
@@ -179,8 +179,8 @@ function _getTemplates(
 
                     return [
                         {
-                            name: templatePath,
-                            template: new Instance(templatePath).getInstanceTemplate(),
+                            name,
+                            template: new Instance(name).getInstanceTemplate(),
                         },
                     ]
 
