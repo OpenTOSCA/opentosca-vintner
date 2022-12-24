@@ -17,7 +17,8 @@ import * as files from '../utils/files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {getTemplates} from '#/query/utils'
 
-export type QueryResults = {name: string; result: Object}[]
+export type QueryResults = {[name: string]: QueryResult}
+export type QueryResult = Object
 
 /**
  * This class resolves Queries4TOSCA expressions
@@ -36,7 +37,7 @@ export class Query {
      * Resolves a query
      * @param options
      */
-    resolve(options: {query: string; source: string}): {name: string; result: Object}[] {
+    resolve(options: {query: string; source: string}): QueryResults {
         this.source = options.source
         const query = files.isFile(options.query) ? files.loadFile(options.query) : options.query
         return this.evaluate(parse(query))
@@ -60,27 +61,22 @@ export class Query {
      * @return result The data that matches the expression
      */
     private evaluate(expression: Expression): QueryResults {
-        const results: QueryResults = []
+        const results: QueryResults = {}
         const templates = this.evaluateFrom(expression.from)
 
         for (const it of templates) {
             let result: any = it.template
             this.currentTemplate = it.template
 
-            if (expression.match != null) {
-                result = this.evaluateMatch(result, expression.match)
-            }
+            if (expression.match != null) result = this.evaluateMatch(result, expression.match)
+
             try {
                 result = this.evaluateSelect(result, expression.select)
+                if (result && !(Array.isArray(result) && result.length == 0)) {
+                    results[it.name] = result
+                }
             } catch (e) {
-                if (e instanceof Error) console.error(e.message)
-                result = null
-            }
-            // Discard empty results
-            if (result && !(Array.isArray(result) && result.length == 0)) {
-                // Flatten the result if it is only one element
-                result = result.length == 1 ? result[0] : result
-                results.push({name: it.name, result: result})
+                console.error(e.message)
             }
         }
         return results

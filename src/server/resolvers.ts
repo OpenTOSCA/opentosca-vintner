@@ -166,7 +166,7 @@ resolvers.post(
     '/query/run',
     hae(async (req, res, next) => {
         const result = Controller.query.run(req.body)
-        res.json({result})
+        res.json(result)
     })
 )
 
