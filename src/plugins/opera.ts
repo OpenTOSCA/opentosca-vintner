@@ -1,11 +1,9 @@
 import {Instance} from '#repository/instances'
-import {OrchestratorPlugin} from '#repository/orchestrators'
+import {NodeTemplateAttributesMap, OrchestratorPlugin} from '#repository/orchestrators'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
-import * as files from '../utils/files'
+import * as files from '#files'
 import _ from 'lodash'
-import {NodeTemplateAttributes, NodeTemplateAttributesMap, QueryInstancesPlugin} from '#/query/plugins'
-import {InputAssignmentMap} from '#spec/topology-template'
 import * as fs from 'fs'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
@@ -17,7 +15,7 @@ export type OperaNativeConfig = {
 
 export type OperaWLSConfig = OperaNativeConfig
 
-export class Opera implements OrchestratorPlugin, QueryInstancesPlugin {
+export class Opera implements OrchestratorPlugin {
     private readonly config: OperaConfig
     private readonly binary: string
     private readonly shell: Shell
@@ -30,7 +28,7 @@ export class Opera implements OrchestratorPlugin, QueryInstancesPlugin {
                 this.config.venv ? '. .venv/bin/activate' : undefined,
                 'opera',
             ],
-            ' && '
+            ' && ',
         )
         this.shell = new Shell(config.wsl)
     }
@@ -72,17 +70,16 @@ export class Opera implements OrchestratorPlugin, QueryInstancesPlugin {
         ])
     }
 
-    getInputs(instance: Instance): InputAssignmentMap {
+    async getInputs(instance: Instance) {
         const inputsPath = `${instance.getDataDirectory()}/inputs`
         return files.isFile(inputsPath) ? JSON.parse(fs.readFileSync(inputsPath, 'utf-8')) : {}
     }
 
     /**
      * Returns attribute names and data for each node template
-     * @param instance
      */
-    getAttributes(instance: Instance): NodeTemplateAttributesMap {
-        const attributes: {[key: string]: NodeTemplateAttributes} = {}
+    async getAttributes(instance: Instance) {
+        const attributes: NodeTemplateAttributesMap = {}
         for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
             const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {

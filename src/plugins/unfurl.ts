@@ -4,8 +4,6 @@ import * as files from '#files'
 import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
-import {NodeTemplateAttributesMap, QueryInstancesPlugin} from '#/query/plugins'
-import {InputAssignmentMap} from '#spec/topology-template'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -16,8 +14,7 @@ export type UnfurlNativeConfig = {
 
 export type UnfurlWSLConfig = UnfurlNativeConfig
 
-// TODO: remove QueryInstancesPlugin
-export class Unfurl implements OrchestratorPlugin, QueryInstancesPlugin {
+export class Unfurl implements OrchestratorPlugin {
     private readonly config: UnfurlConfig
     private readonly shell: Shell
 
@@ -76,11 +73,12 @@ spec:
     +include: ${instance.getServiceTemplateFile()}`
     }
 
-    getAttributes(instance: Instance): NodeTemplateAttributesMap {
-        throw new Error('Unsupported operation')
+    getInputs(instance: Instance) {
+        return Promise.reject('Not Implemented')
     }
 
-    getInputs(instance: Instance): InputAssignmentMap {
-        throw new Error('Unsupported operation')
+    getAttributes(instance: Instance) {
+        return Promise.reject('Not Implemented')
     }
+
 }

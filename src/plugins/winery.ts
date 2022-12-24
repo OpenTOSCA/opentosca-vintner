@@ -1,11 +1,11 @@
-import {QueryTemplatesPlugin} from '#/query/plugins'
+import {TemplatesPlugin} from '#/query/plugins'
 import {ServiceTemplate} from '#spec/service-template'
 import path from 'path'
 import os from 'os'
 import * as files from '../utils/files'
 import glob from 'glob'
 
-export class Winery implements QueryTemplatesPlugin {
+export class Winery implements TemplatesPlugin {
     private readonly templatesPath: string
 
     constructor() {
