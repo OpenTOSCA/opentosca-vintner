@@ -1,10 +1,10 @@
 import {Instance} from '#repository/instances'
-import {Orchestrator} from '#repository/orchestrators'
+import {OrchestratorPlugin} from '#repository/orchestrators'
 import * as files from '#files'
 import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
-import {NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
+import {NodeTemplateAttributesMap, QueryInstancesPlugin} from '#/query/plugins'
 import {InputAssignmentMap} from '#spec/topology-template'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
@@ -16,7 +16,8 @@ export type UnfurlNativeConfig = {
 
 export type UnfurlWSLConfig = UnfurlNativeConfig
 
-export class Unfurl implements Orchestrator, OrchestratorPlugin {
+// TODO: remove QueryInstancesPlugin
+export class Unfurl implements OrchestratorPlugin, QueryInstancesPlugin {
     private readonly config: UnfurlConfig
     private readonly shell: Shell
 

@@ -9,7 +9,7 @@ import {InterfaceDefinition} from './interface-definition'
 export type NodeTemplate = {
     type: string
     properties?: PropertyAssignmentMap
-    attributes?: {[key: string]: string}
+    attributes?: AttributeAssignmentMap
     requirements?: RequirementAssignmentList
     capabilities?: CapabilityAssignmentMap
     conditions?: VariabilityExpression | VariabilityExpression[]
@@ -19,6 +19,9 @@ export type NodeTemplateMap = {[key: string]: NodeTemplate}
 
 export type PropertyAssignmentMap = {[key: string]: PropertyAssignment}
 export type PropertyAssignment = string
+
+export type AttributeAssignmentMap = {[key: string]: AttributeAssignment}
+export type AttributeAssignment = string
 
 export type RequirementAssignmentList = RequirementAssignmentMap[]
 export type RequirementAssignmentMap = {[key: string]: RequirementAssignment}

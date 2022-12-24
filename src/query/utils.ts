@@ -1,6 +1,6 @@
 import {Instance, Instances} from '#repository/instances'
 import {Template} from '#repository/templates'
-import {Winery} from '#orchestrators/winery'
+import {Winery} from '#plugins/winery'
 import * as files from '#files'
 import path from 'path'
 import {ServiceTemplate} from '#spec/service-template'
@@ -50,7 +50,7 @@ function getPropertyOrAttribute(
     type: 'properties' | 'attributes',
     template: ServiceTemplate,
     toscaPath: string[],
-    context: string
+    context: string,
 ): Object {
     let result =
         toscaPath[0] == 'SELF'
@@ -95,7 +95,7 @@ export function getParentNode(context: string): string {
 }
 
 function resolvePath(obj: any, path: string): any {
-    return path.split('.').reduce(function (prev, curr) {
+    return path.split('.').reduce(function(prev, curr) {
         return prev ? prev[curr] : null
     }, obj)
 }
@@ -109,55 +109,86 @@ function resolvePath(obj: any, path: string): any {
 export function getTemplates(
     source: string,
     type: 'Instance' | 'Template',
-    templatePath: string
+    templatePath: string,
 ): {name: string; template: ServiceTemplate}[] {
-    let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
-    switch (source) {
-        case 'vintner':
-            if (type == 'Instance') {
-                if (templatePath == '*') {
-                    for (const i of Instances.all()) {
-                        serviceTemplates.push({name: i.getName(), template: i.getTemplateWithAttributes()})
-                    }
-                } else {
-                    serviceTemplates.push({
-                        name: templatePath,
-                        template: new Instance(templatePath).getTemplateWithAttributes(),
-                    })
-                }
-            } else if (type == 'Template' && templatePath == '*') {
-                for (const i of Instances.all()) {
-                    serviceTemplates.push({name: i.getName(), template: i.getServiceTemplate()})
-                }
-            } else {
-                serviceTemplates.push({
-                    name: templatePath,
-                    template: new Instance(templatePath).getServiceTemplate(),
-                })
-            }
-            break
-        case 'winery': {
-            const winery = new Winery()
-            if (type == 'Instance') {
-                console.error('Cannot query instance data on Winery repository. Use "FROM template" instead.')
-            } else if (templatePath == '*') {
-                serviceTemplates = winery.getAllTemplates()
-            } else {
-                serviceTemplates.push(winery.getTemplate(templatePath))
-            }
-            break
-        }
-        case 'file': {
-            serviceTemplates.push({
-                name: templatePath,
-                template: files.loadYAML(path.resolve(templatePath)),
-            })
-        }
-    }
-    if (type == 'Instance') {
-        for (const t of serviceTemplates) {
+    const templates = _getTemplates(source, type, templatePath)
+
+    // TODO: why only on instance ...
+    if (type === 'Instance') {
+        for (const t of templates) {
+            // TODO: this logic should be moved in the graph
             t.template = resolveAllGets(t.template)
         }
     }
-    return serviceTemplates
+
+    return templates
+}
+
+function _getTemplates(
+    source: string,
+    type: 'Instance' | 'Template',
+    templatePath: string,
+): {name: string; template: ServiceTemplate}[] {
+    // TODO: this should use some kind of plugin registry
+
+    switch (type) {
+        case 'Template':
+            switch (source) {
+                case 'file':
+                    return [
+                        {
+                            name: templatePath,
+                            template: files.loadYAML(path.resolve(templatePath)),
+                        },
+                    ]
+
+                case 'winery': {
+                    const winery = new Winery()
+                    if (templatePath == '*') return winery.getTemplates()
+                    return [winery.getTemplate(templatePath)]
+                }
+
+                case 'vintner':
+                    // TODO: this should use Templates and not Instances and should filter for correct definitions version
+
+                    if (templatePath === '*')
+                        return Instances.all().map(it => ({
+                            name: it.getName(),
+                            template: it.getServiceTemplate(),
+                        }))
+
+                    return [
+                        {
+                            name: templatePath,
+                            template: new Instance(templatePath).getServiceTemplate(),
+                        },
+                    ]
+
+                default:
+                    throw new Error(`Unknown templates plugin "${source}"`)
+            }
+
+        case 'Instance':
+            switch (source) {
+                case 'vintner':
+                    if (templatePath === '*')
+                        return Instances.all().map(it => ({
+                            name: it.getName(),
+                            template: it.getInstanceTemplate(),
+                        }))
+
+                    return [
+                        {
+                            name: templatePath,
+                            template: new Instance(templatePath).getInstanceTemplate(),
+                        },
+                    ]
+
+                default:
+                    throw new Error(`Unknown instances plugin "${source}"`)
+            }
+
+        default:
+            throw new Error(`Unknown type "${type}"`)
+    }
 }

@@ -1,10 +1,10 @@
 import {Instance} from '#repository/instances'
-import {Orchestrator} from '#repository/orchestrators'
+import {OrchestratorPlugin} from '#repository/orchestrators'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
 import * as files from '../utils/files'
 import _ from 'lodash'
-import {NodeTemplateAttributes, NodeTemplateAttributesMap, OrchestratorPlugin} from '#/query/plugins'
+import {NodeTemplateAttributes, NodeTemplateAttributesMap, QueryInstancesPlugin} from '#/query/plugins'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as fs from 'fs'
 
@@ -17,7 +17,7 @@ export type OperaNativeConfig = {
 
 export type OperaWLSConfig = OperaNativeConfig
 
-export class Opera implements Orchestrator, OrchestratorPlugin {
+export class Opera implements OrchestratorPlugin, QueryInstancesPlugin {
     private readonly config: OperaConfig
     private readonly binary: string
     private readonly shell: Shell

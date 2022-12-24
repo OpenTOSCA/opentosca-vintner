@@ -86,14 +86,7 @@ export class Query {
      * Loads the template or instance in the FROM clause
      */
     private evaluateFrom(expression: FromExpression): {name: string; template: ServiceTemplate}[] {
-        let serviceTemplates: {name: string; template: ServiceTemplate}[] = []
-        try {
-            serviceTemplates = getTemplates(this.source, expression.type, expression.path)
-        } catch (error) {
-            console.error(`Could not locate service template ${expression.path} from source ${this.source}`)
-            console.error(error)
-        }
-        return serviceTemplates
+        return getTemplates(this.source, expression.type, expression.path)
     }
 
     /**

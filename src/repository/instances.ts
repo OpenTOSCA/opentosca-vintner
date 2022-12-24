@@ -67,7 +67,7 @@ export class Instance {
     /**
      * Retrieves the attributes of this instance from the active orchestrator, then merges them into the template
      */
-    getTemplateWithAttributes(): ServiceTemplate {
+    getInstanceTemplate(): ServiceTemplate {
         const template = this.getServiceTemplate()
         const attributes = Orchestrators.getOrchestrator().getAttributes(this)
         const inputs = Orchestrators.getOrchestrator().getInputs(this)
