@@ -1,4 +1,4 @@
-import {Query, QueryResults} from '#/query/query'
+import {Query, QueryResult, QueryResults} from '#/query/query'
 import * as files from '../../utils/files'
 import * as console from 'console'
 
@@ -9,7 +9,7 @@ export type QueryTemplateArguments = {
     format?: 'json' | 'yaml'
 }
 
-export default function (options: QueryTemplateArguments): QueryResults {
+export default function (options: QueryTemplateArguments): QueryResults | QueryResult {
     if (!options.source) options.source = 'vintner'
     if (!options.format) options.format = 'yaml'
 
@@ -24,6 +24,7 @@ export default function (options: QueryTemplateArguments): QueryResults {
     }
 
     // TODO: STRIP command to get only result without name wrapper
-
+    const keys = Object.keys(results)
+    if (keys.length === 1) return results[keys[0]]
     return results
 }
