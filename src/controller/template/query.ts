@@ -1,6 +1,7 @@
 import * as files from '#files'
 import {Query} from '#/query/query'
-import {ServiceTemplate} from '#spec/service-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import * as validator from '#validator'
 import {isString} from '#validator'
 import {getParentNode} from '#/query/utils'
 
@@ -10,8 +11,10 @@ export type TemplateQueryArguments = {
 }
 
 export default function(options: TemplateQueryArguments) {
-    // TODO: ensure correct tosca definitions version?
     const template = files.loadYAML<ServiceTemplate>(options.template)
+    if (template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
+        throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
+
     const queryResolver = new TemplateQueryResolver(template)
     const result = queryResolver.findAndRunQueries()
     files.storeYAML(options.output, result)
