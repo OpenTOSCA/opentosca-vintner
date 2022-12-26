@@ -6,6 +6,8 @@ import path from 'path'
 import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
+import {Vintner} from '#plugins/vintner'
+import {Orchestrators} from '#repository/orchestrators'
 
 /**
  * Tries to resolve get_Attribute and get_Property commands in template to get the actual value
@@ -106,12 +108,12 @@ function resolvePath(obj: any, path: string): any {
  * @param type When searching for instances, enhance templates with instance data
  * @param templatePath The name or path of the template/instance to search
  */
-export function getTemplates(
+export async function getTemplates(
     source: string,
     type: 'Instance' | 'Template',
     templatePath: string,
-): {name: string; template: ServiceTemplate}[] {
-    const templates = _getTemplates(source, type, templatePath)
+): Promise<{name: string; template: ServiceTemplate}[]> {
+    const templates = await _getTemplates(source, type, templatePath)
 
     // TODO: why only on instance ...
     if (type === 'Instance') {
@@ -124,71 +126,34 @@ export function getTemplates(
     return templates
 }
 
-function _getTemplates(
+async function _getTemplates(
     source: string,
-    type: 'Instance' | 'Template',
+    type: 'Template' | 'Instance',
     name: string,
-): {name: string; template: ServiceTemplate}[] {
-    // TODO: this should use some kind of plugin registry
+): Promise<{name: string; template: ServiceTemplate}[]> {
+    if (type === 'Template') {
+        const plugin // TODO: load plugin
 
-    switch (type) {
-        case 'Template':
-            switch (source) {
-                case 'file':
-                    return [
-                        {
-                            name,
-                            template: files.loadYAML(path.resolve(name)),
-                        },
-                    ]
+        if (name == '*') return plugin.getTemplates()
+        return [plugin.getTemplate(name)]
 
-                case 'winery': {
-                    const winery = new Winery()
-                    if (name == '*') return winery.getTemplates()
-                    return [winery.getTemplate(name)]
-                }
-
-                case 'vintner':
-                    // TODO: this should use Templates and not Instances and should filter for correct definitions version
-
-                    if (name === '*')
-                        return Instances.all().map(it => ({
-                            name: it.getName(),
-                            template: it.getServiceTemplate(),
-                        }))
-
-                    return [
-                        {
-                            name,
-                            template: new Instance(name).getServiceTemplate(),
-                        },
-                    ]
-
-                default:
-                    throw new Error(`Unknown templates plugin "${source}"`)
-            }
-
-        case 'Instance':
-            switch (source) {
-                case 'vintner':
-                    if (name === '*')
-                        return Instances.all().map(it => ({
-                            name: it.getName(),
-                            template: it.getInstanceTemplate(),
-                        }))
-
-                    return [
-                        {
-                            name,
-                            template: new Instance(name).getInstanceTemplate(),
-                        },
-                    ]
-
-                default:
-                    throw new Error(`Unknown instances plugin "${source}"`)
-            }
-
-        default:
-            throw new Error(`Unknown type "${type}"`)
+        throw new Error(`Unknown templates plugin "${source}"`)
     }
+
+
+    if (type === 'Instance') {
+        if (name === '*') return Instances.all().map(it => ({
+            name: it.getName(),
+            template: it.getInstanceTemplate(),
+        }))
+
+        return [
+            {
+                name,
+                template: new Instance(name).getInstanceTemplate(),
+            },
+        ]
+    }
+
+    throw new Error(`Unknown type "${type}"`)
 }

@@ -5,7 +5,6 @@ import {Opera, OperaNativeConfig, OperaWLSConfig} from '#plugins/opera'
 import {Unfurl, UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
 import {Instance} from './instances'
 import * as validator from '#validator'
-import {InputAssignmentMap} from '#spec/topology-template'
 import {AttributeAssignmentMap} from '#spec/node-template'
 
 export type NodeTemplateAttributes = {
@@ -18,9 +17,7 @@ export interface OrchestratorPlugin {
     deploy: (instance: Instance) => Promise<void>
     update: (instance: Instance) => Promise<void>
     undeploy: (instance: Instance) => Promise<void>
-    // TODO: why not use Instance.getInputs()
-    getInputs: (instance: Instance) => Promise<InputAssignmentMap>
-    // TODO: (i) there should be something like getInstanceTemplate, (ii) isnt this also is also for relationships?!
+    // TODO: (i) there should be something like getInstanceTemplate, (ii) isn't this also is also for relationships?!
     getAttributes: (instance: Instance) => Promise<NodeTemplateAttributesMap>
 }
 

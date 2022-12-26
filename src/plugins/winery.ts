@@ -1,4 +1,4 @@
-import {TemplatesPlugin} from '#/query/plugins'
+import {TemplatesPlugin} from '#plugins/types'
 import {ServiceTemplate} from '#spec/service-template'
 import path from 'path'
 import os from 'os'
@@ -15,7 +15,7 @@ export class Winery implements TemplatesPlugin {
     /**
      * Returns all service templates in the winery repository. The directory name is set as the name of the template
      */
-    getTemplates(): {name: string; template: ServiceTemplate}[] {
+    async getTemplates() {
         // ensure that our path is in POSIX format for glob
         const searchPattern = path
             .join(this.templatesPath, '/**/ServiceTemplate.tosca')
@@ -24,7 +24,7 @@ export class Winery implements TemplatesPlugin {
         // use glob to recursively search all files named 'ServiceTemplate.tosca' within the repo
         return glob.sync(searchPattern).map(v => ({
             name: v.split('/')[v.split('/').length - 2],
-            template: files.loadYAML(v),
+            template: files.loadYAML<ServiceTemplate>(v),
         }))
     }
 
@@ -32,8 +32,8 @@ export class Winery implements TemplatesPlugin {
      * Returns a single template from a specified path in the winery repository
      * @param name The name of the template
      */
-    getTemplate(name: string): {name: string; template: ServiceTemplate} {
-        return {name, template: files.loadYAML(this.getTemplatePath(name))}
+    async getTemplate(name: string) {
+        return {name, template: files.loadYAML<ServiceTemplate>(this.getTemplatePath(name))}
     }
 
     getTemplatePath(name: string) {

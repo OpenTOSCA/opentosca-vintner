@@ -42,7 +42,7 @@ export class Opera implements OrchestratorPlugin {
             this.shell.resolve(instance.getDataDirectory()),
         ]
 
-        if (instance.hasServiceInput()) command.push('--inputs', this.shell.resolve(instance.getServiceInputPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
         await this.shell.execute(command)
     }
 
@@ -54,7 +54,7 @@ export class Opera implements OrchestratorPlugin {
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-        if (instance.hasServiceInput()) command.push('--inputs', this.shell.resolve(instance.getServiceInputPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
 
         await this.shell.execute(command)
     }
@@ -68,11 +68,6 @@ export class Opera implements OrchestratorPlugin {
             '--resume',
             '--force',
         ])
-    }
-
-    async getInputs(instance: Instance) {
-        const inputsPath = `${instance.getDataDirectory()}/inputs`
-        return files.isFile(inputsPath) ? JSON.parse(fs.readFileSync(inputsPath, 'utf-8')) : {}
     }
 
     /**

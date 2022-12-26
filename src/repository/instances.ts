@@ -5,6 +5,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {Template} from './templates'
 import {Orchestrators} from './orchestrators'
 import _ from 'lodash'
+import {InputAssignmentMap} from '#spec/topology-template'
 
 export class Instances {
     static all() {
@@ -48,7 +49,7 @@ export class Instance {
     }
 
     setServiceInputs(path: string) {
-        files.copy(path, this.getServiceInputPath())
+        files.copy(path, this.getServiceInputsPath())
         return this
     }
 
@@ -70,7 +71,7 @@ export class Instance {
     getInstanceTemplate(): ServiceTemplate {
         const template = this.getServiceTemplate()
         const attributes = Orchestrators.getOrchestrator().getAttributes(this)
-        const inputs = Orchestrators.getOrchestrator().getInputs(this)
+        const inputs = this.hasServiceInputs() ? this.getServiceInputs() : {}
         if (template.topology_template?.node_templates) {
             template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)
         }
@@ -78,12 +79,16 @@ export class Instance {
         return template
     }
 
-    hasServiceInput() {
-        return files.exists(this.getServiceInputPath())
+    hasServiceInputs() {
+        return files.exists(this.getServiceInputsPath())
     }
 
-    getServiceInputPath() {
+    getServiceInputsPath() {
         return path.join(this.getInstanceDirectory(), 'service-inputs.yaml')
+    }
+
+    getServiceInputs() {
+        return files.loadYAML<InputAssignmentMap>(this.getServiceInputsPath())
     }
 
     generateServiceTemplatePath() {
@@ -96,7 +101,7 @@ export class Instance {
                 .listFiles(this.getTemplateDirectory())
                 .map(file => file.match(/^service-template\.(?<id>\d+)\.yaml$/)?.groups?.id)
                 .filter(Boolean)
-                .map(Number)
+                .map(Number),
         )
         if (id === -Infinity) throw new Error('Did not find a service template')
         return id.toString()

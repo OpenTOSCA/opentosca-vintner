@@ -37,7 +37,7 @@ export class Query {
      * Resolves a query
      * @param options
      */
-    resolve(options: {query: string; source: string}): QueryResults {
+    async resolve(options: {query: string; source: string}) {
         this.source = options.source
         const query = files.isFile(options.query) ? files.loadFile(options.query) : options.query
         return this.evaluate(parse(query))
@@ -60,9 +60,9 @@ export class Query {
      * @param expression The complete AST
      * @return result The data that matches the expression
      */
-    private evaluate(expression: Expression): QueryResults {
+    private async evaluate(expression: Expression) {
         const results: QueryResults = {}
-        const templates = this.evaluateFrom(expression.from)
+        const templates = await this.evaluateFrom(expression.from)
 
         for (const it of templates) {
             let result: any = it.template
@@ -85,8 +85,14 @@ export class Query {
     /**
      * Loads the template or instance in the FROM clause
      */
-    private evaluateFrom(expression: FromExpression): {name: string; template: ServiceTemplate}[] {
-        return getTemplates(this.source, expression.type, expression.path).filter(it => it.template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
+    private async evaluateFrom(expression: FromExpression) {
+        /**
+         * TODO: Should support
+         * - FROM path
+         * - FROM instances(.glob)
+         * - FROM templates(.glob)
+         */
+        return (await getTemplates(this.source, expression.type, expression.path)).filter(it => it.template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
     }
 
     /**
