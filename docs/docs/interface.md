@@ -402,7 +402,6 @@ resolves all queries in a given service template
 | --- | --- | --- | --- |
 | template |  true  | string | path to service template |
 | output |  true  | string | path of the output |
-| source |  false  | string | specifies where to search for service template (default: "vintner") |
 
 ## templates list
 

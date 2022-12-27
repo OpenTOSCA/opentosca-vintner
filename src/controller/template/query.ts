@@ -10,9 +10,9 @@ export type TemplateQueryArguments = {
     output: string
 }
 
-export default function(options: TemplateQueryArguments) {
+export default function (options: TemplateQueryArguments) {
     const template = files.loadYAML<ServiceTemplate>(options.template)
-    if (template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
+    if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
         throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
 
     const queryResolver = new TemplateQueryResolver(template)
@@ -81,7 +81,7 @@ export class TemplateQueryResolver {
         const queryResult = this.resolver.resolveFromTemplate(query, getParentNode(context), this.serviceTemplate)
         if (!queryResult)
             throw new Error(
-                `Resolving queries failed. The following query in your template evaluated to null: ${query}`,
+                `Resolving queries failed. The following query in your template evaluated to null: ${query}`
             )
         return queryResult
     }

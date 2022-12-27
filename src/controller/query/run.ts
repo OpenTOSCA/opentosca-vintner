@@ -9,11 +9,12 @@ export type QueryTemplateArguments = {
     format?: 'json' | 'yaml'
 }
 
-export default function (options: QueryTemplateArguments): QueryResults | QueryResult {
+export default async function (options: QueryTemplateArguments): Promise<QueryResults | QueryResult> {
     if (!options.source) options.source = 'vintner'
     if (!options.format) options.format = 'yaml'
 
-    const results = new Query().resolve({query: options.query, source: options.source})
+    const query = new Query()
+    const results = await query.resolve({query: options.query, source: options.source})
 
     if (options.output) {
         if (options.format === 'yaml') files.storeYAML(options.output, results)
@@ -23,7 +24,7 @@ export default function (options: QueryTemplateArguments): QueryResults | QueryR
         if (options.format === 'json') console.log(files.toJSON(results))
     }
 
-    // TODO: STRIP command to get only result without name wrapper
+    // TODO: return unwrapped results if only one result can be returned, e.g., when FROM is a single file
     const keys = Object.keys(results)
     if (keys.length === 1) return results[keys[0]]
     return results

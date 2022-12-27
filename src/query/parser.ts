@@ -28,7 +28,7 @@ export function parse(query: string, startRule?: string) {
 }
 
 // TODO: grammar.ohm must be packaged
-const grammar = ohm.grammar(files.loadFile(path.join(__dirname, 'grammar.ohm')))
+const grammar = ohm.grammar(files.loadFile(path.join('src', 'query', 'grammar.ohm')))
 const semantics = grammar.createSemantics()
 semantics.addOperation('buildAST', {
     Main(a, _) {

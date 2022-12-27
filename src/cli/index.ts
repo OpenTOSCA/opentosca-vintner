@@ -126,7 +126,7 @@ program
     .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
     .action(
         hae(async options => {
-            Controller.query.run(options)
+            await Controller.query.run(options)
         })
     )
 

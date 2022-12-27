@@ -64,13 +64,14 @@ resolvers.post(
     '/template/resolve',
     hae(async (req, res, next) => {
         await Controller.template.resolve(req.body)
+        res.json({})
     })
 )
 
 resolvers.post(
     '/template/query',
     hae(async (req, res, next) => {
-        Controller.template.query(req.body)
+        await Controller.template.query(req.body)
         res.json({})
     })
 )
@@ -87,6 +88,7 @@ resolvers.post(
     '/templates/import',
     hae(async (req, res, next) => {
         await Controller.templates.import(req.body)
+        res.json({})
     })
 )
 
@@ -165,7 +167,7 @@ resolvers.post(
 resolvers.post(
     '/query/run',
     hae(async (req, res, next) => {
-        const result = Controller.query.run(req.body)
+        const result = await Controller.query.run(req.body)
         res.json(result)
     })
 )

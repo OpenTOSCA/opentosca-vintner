@@ -8,6 +8,66 @@ import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
 import {Vintner} from '#plugins/vintner'
 import {Orchestrators} from '#repository/orchestrators'
+import {File} from '#plugins/file'
+
+/**
+ * Tries to load all service template from a given source and path
+ * @param source Root folder to search
+ * @param type When searching for instances, enhance templates with instance data
+ * @param templatePath The name or path of the template/instance to search
+ */
+export async function getTemplates(
+    source: string,
+    type: 'Instance' | 'Template',
+    templatePath: string
+): Promise<{name: string; template: ServiceTemplate}[]> {
+    const templates = await _getTemplates(source, type, templatePath)
+
+    // TODO: why only on instance ...
+    if (type === 'Instance') {
+        for (const t of templates) {
+            // TODO: this logic should be moved in the graph
+            t.template = resolveAllGets(t.template)
+        }
+    }
+
+    return templates
+}
+
+async function _getTemplates(
+    source: string,
+    type: 'Template' | 'Instance',
+    name: string
+): Promise<{name: string; template: ServiceTemplate}[]> {
+    if (type === 'Template') {
+        // TODO: extract this so some kind of global plugin registry
+        let plugin
+        if (source === 'file') plugin = new File()
+        if (source === 'vintner') plugin = new Vintner()
+        if (source === 'winery') plugin = new Winery()
+        if (plugin === undefined) throw new Error(`Unknown templates plugin "${source}"`)
+
+        if (name == '*') return plugin.getTemplates()
+        return [await plugin.getTemplate(name)]
+    }
+
+    if (type === 'Instance') {
+        if (name === '*')
+            return Instances.all().map(it => ({
+                name: it.getName(),
+                template: it.getInstanceTemplate(),
+            }))
+
+        return [
+            {
+                name,
+                template: new Instance(name).getInstanceTemplate(),
+            },
+        ]
+    }
+
+    throw new Error(`Unknown type "${type}"`)
+}
 
 /**
  * Tries to resolve get_Attribute and get_Property commands in template to get the actual value
@@ -52,7 +112,7 @@ function getPropertyOrAttribute(
     type: 'properties' | 'attributes',
     template: ServiceTemplate,
     toscaPath: string[],
-    context: string,
+    context: string
 ): Object {
     let result =
         toscaPath[0] == 'SELF'
@@ -97,63 +157,7 @@ export function getParentNode(context: string): string {
 }
 
 function resolvePath(obj: any, path: string): any {
-    return path.split('.').reduce(function(prev, curr) {
+    return path.split('.').reduce(function (prev, curr) {
         return prev ? prev[curr] : null
     }, obj)
-}
-
-/**
- * Tries to load all service template from a given source and path
- * @param source Root folder to search
- * @param type When searching for instances, enhance templates with instance data
- * @param templatePath The name or path of the template/instance to search
- */
-export async function getTemplates(
-    source: string,
-    type: 'Instance' | 'Template',
-    templatePath: string,
-): Promise<{name: string; template: ServiceTemplate}[]> {
-    const templates = await _getTemplates(source, type, templatePath)
-
-    // TODO: why only on instance ...
-    if (type === 'Instance') {
-        for (const t of templates) {
-            // TODO: this logic should be moved in the graph
-            t.template = resolveAllGets(t.template)
-        }
-    }
-
-    return templates
-}
-
-async function _getTemplates(
-    source: string,
-    type: 'Template' | 'Instance',
-    name: string,
-): Promise<{name: string; template: ServiceTemplate}[]> {
-    if (type === 'Template') {
-        const plugin // TODO: load plugin
-
-        if (name == '*') return plugin.getTemplates()
-        return [plugin.getTemplate(name)]
-
-        throw new Error(`Unknown templates plugin "${source}"`)
-    }
-
-
-    if (type === 'Instance') {
-        if (name === '*') return Instances.all().map(it => ({
-            name: it.getName(),
-            template: it.getInstanceTemplate(),
-        }))
-
-        return [
-            {
-                name,
-                template: new Instance(name).getInstanceTemplate(),
-            },
-        ]
-    }
-
-    throw new Error(`Unknown type "${type}"`)
 }
