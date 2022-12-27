@@ -70,7 +70,7 @@ async function _getTemplates(
 }
 
 /**
- * Tries to resolve get_Attribute and get_Property commands in template to get the actual value
+ * Tries to resolve get_attribute and get_property commands in template to get the actual value
  * @param template The template to resolve the commands in
  */
 function resolveAllGets(template: ServiceTemplate) {
@@ -80,6 +80,7 @@ function resolveAllGets(template: ServiceTemplate) {
     const recursiveRun = (object: any, path: string) => {
         if (typeof object == 'object') {
             if (object === null) return null
+
             if (firstKey(object) == 'get_property' || firstKey(object) == 'get_attribute') {
                 if (path.includes('node_templates')) {
                     numberOfGets++
@@ -89,9 +90,12 @@ function resolveAllGets(template: ServiceTemplate) {
                 } else {
                     return object
                 }
-            } else if (firstKey(object).includes('get_input')) {
+            }
+
+            if (firstKey(object) === 'get_input') {
                 return resolvePath(template.topology_template?.inputs, firstValue(object)) || object
             }
+
             Object.keys(object).forEach(key => {
                 object[key] = recursiveRun(object[key], path + '.' + key)
             })
