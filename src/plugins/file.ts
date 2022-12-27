@@ -14,5 +14,4 @@ export class File implements TemplatesPlugin {
         // TODO: implement search in directory
         return Promise.reject('Not Implemented')
     }
-
 }

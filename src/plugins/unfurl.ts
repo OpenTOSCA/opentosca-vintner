@@ -80,5 +80,4 @@ spec:
     getAttributes(instance: Instance) {
         return Promise.reject('Not Implemented')
     }
-
 }

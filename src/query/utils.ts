@@ -26,7 +26,7 @@ export async function getTemplates(
     // TODO: why only on instance ...
     if (type === 'Instance') {
         for (const t of templates) {
-            // TODO: this logic should be moved in the graph
+            // TODO: this logic should be moved in graph.ts?
             t.template = resolveAllGets(t.template)
         }
     }
@@ -40,7 +40,7 @@ async function _getTemplates(
     name: string
 ): Promise<{name: string; template: ServiceTemplate}[]> {
     if (type === 'Template') {
-        // TODO: extract this so some kind of global plugin registry
+        // TODO: extract this to some kind of global plugin registry
         let plugin
         if (source === 'file') plugin = new File()
         if (source === 'vintner') plugin = new Vintner()

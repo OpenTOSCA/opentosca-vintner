@@ -69,6 +69,7 @@ export class Instance {
      * Retrieves the attributes of this instance from the active orchestrator, then merges them into the template
      */
     getInstanceTemplate(): ServiceTemplate {
+        // TODO: does not handle relationships
         const template = this.getServiceTemplate()
         const attributes = Orchestrators.getOrchestrator().getAttributes(this)
         const inputs = this.hasServiceInputs() ? this.getServiceInputs() : {}
@@ -101,7 +102,7 @@ export class Instance {
                 .listFiles(this.getTemplateDirectory())
                 .map(file => file.match(/^service-template\.(?<id>\d+)\.yaml$/)?.groups?.id)
                 .filter(Boolean)
-                .map(Number),
+                .map(Number)
         )
         if (id === -Infinity) throw new Error('Did not find a service template')
         return id.toString()

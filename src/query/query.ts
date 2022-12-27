@@ -92,7 +92,9 @@ export class Query {
          * - FROM instances(.glob)
          * - FROM templates(.glob)
          */
-        return (await getTemplates(this.source, expression.type, expression.path)).filter(it => it.template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
+        return (await getTemplates(this.source, expression.type, expression.path)).filter(
+            it => it.template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
+        )
     }
 
     /**
@@ -207,7 +209,7 @@ export class Query {
     private expand(
         paths: Set<string[]>,
         relationship: RelationshipExpression,
-        nodePredicate?: PredicateExpression,
+        nodePredicate?: PredicateExpression
     ): Set<string[]> {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
@@ -217,7 +219,7 @@ export class Query {
                 relationship?.cardinality?.min || 1,
                 relationship?.cardinality?.max || 1,
                 relationship.direction,
-                relationship.predicate,
+                relationship.predicate
             )
             // if a predicate is specified, filter out nodes which do not satisfy it
             for (const n of targets || []) {
@@ -435,7 +437,7 @@ export class Query {
      */
     private resolvePath(path: string, obj: any, index?: number): any {
         if (path == 'name' && index != undefined) return this.currentKeys[index]
-        return path.split('.').reduce(function(prev, curr) {
+        return path.split('.').reduce(function (prev, curr) {
             return prev ? prev[curr] : null
         }, obj)
     }
