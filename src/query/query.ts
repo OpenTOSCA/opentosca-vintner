@@ -64,19 +64,14 @@ export class Query {
         const results: QueryResults = {}
         const templates = await this.evaluateFrom(expression.from)
 
-        for (const it of templates) {
-            let result: any = it.template
-            this.currentTemplate = it.template
+        for (const {template} of templates) {
+            let result: any = template
+            this.currentTemplate = template
 
             if (expression.match != null) result = this.evaluateMatch(result, expression.match)
-
-            try {
-                result = this.evaluateSelect(result, expression.select)
-                if (result && !(Array.isArray(result) && result.length == 0)) {
-                    results[it.name] = result
-                }
-            } catch (e) {
-                console.error(e.message)
+            result = this.evaluateSelect(result, expression.select)
+            if (result && !(Array.isArray(result) && result.length == 0)) {
+                results[it.name] = result
             }
         }
         return results
@@ -86,12 +81,7 @@ export class Query {
      * Loads the template or instance in the FROM clause
      */
     private async evaluateFrom(expression: FromExpression) {
-        /**
-         * TODO: Should support
-         * - FROM path
-         * - FROM instances(.glob)
-         * - FROM templates(.glob)
-         */
+        // TODO: Should support "FROM filePath" instead of "FROM template.filePath"
         return (await getTemplates(this.source, expression.type, expression.path)).filter(
             it => it.template.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
         )

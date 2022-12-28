@@ -11,7 +11,7 @@ export interface TemplatesRepositoryPlugin {
     getTemplates: () => Promise<NamedServiceTemplate[]>
 }
 
-// TODO: why is this never used
+// TODO: this never used
 export interface InstancesRepositoryPlugin {
     getInstance: (path: string) => Promise<NamedServiceTemplate>
     getInstances: () => Promise<NamedServiceTemplate[]>

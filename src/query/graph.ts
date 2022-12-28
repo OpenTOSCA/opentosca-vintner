@@ -19,11 +19,12 @@ type Relationship = {
     template?: RelationshipTemplate
 }
 
+// TODO: merge this class and VariabilityResolver
+
 /**
  * Class that builds and searches a graph out of node templates and their relations
  * Used in resolving MATCH statements
  */
-
 export class Graph {
     serviceTemplate: ServiceTemplate
     nodesMap: Map<string, Node> = new Map<string, Node>()

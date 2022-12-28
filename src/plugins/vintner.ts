@@ -1,7 +1,7 @@
 import {TemplatesRepositoryPlugin} from '#plugins/types'
 import {Instance, Instances} from '#repository/instances'
 
-// TODO: this should use Templates and not Instances and should filter for correct definitions version?
+// TODO: should this operate on Templates, on Instances or on both?
 export class VintnerPlugin implements TemplatesRepositoryPlugin {
     async getTemplate(name: string) {
         return {

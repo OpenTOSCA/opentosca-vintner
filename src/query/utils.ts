@@ -17,7 +17,7 @@ export async function getTemplates(
 ): Promise<{name: string; template: ServiceTemplate}[]> {
     const templates = await _getTemplates(source, type, templatePath)
 
-    // TODO: why only on instance ...
+    // TODO: why only on instance? coz get_attributes?
     if (type === 'Instance') {
         for (const t of templates) {
             // TODO: this logic should be moved in graph.ts?
