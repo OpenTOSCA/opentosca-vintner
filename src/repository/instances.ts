@@ -3,6 +3,9 @@ import config from '#config'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {Template} from './templates'
+import _ from 'lodash'
+import {InputAssignmentMap} from '#spec/topology-template'
+import Plugins from '#plugins'
 
 export class Instances {
     static all() {
@@ -46,7 +49,7 @@ export class Instance {
     }
 
     setServiceInputs(path: string) {
-        files.copy(path, this.getServiceInputPath())
+        files.copy(path, this.getServiceInputsPath())
         return this
     }
 
@@ -62,12 +65,31 @@ export class Instance {
         return path.join(this.getInstanceDirectory(), 'data')
     }
 
-    hasServiceInput() {
-        return files.exists(this.getServiceInputPath())
+    /**
+     * Retrieves the attributes of this instance from the active orchestrator, then merges them into the template
+     */
+    getInstanceTemplate(): ServiceTemplate {
+        // TODO: does not handle relationships
+        const template = this.getServiceTemplate()
+        const attributes = Plugins.getOrchestrator().getAttributes(this)
+        const inputs = this.hasServiceInputs() ? this.getServiceInputs() : {}
+        if (template.topology_template?.node_templates) {
+            template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)
+        }
+        _.set(template, 'topology_template.inputs', inputs)
+        return template
     }
 
-    getServiceInputPath() {
+    hasServiceInputs() {
+        return files.exists(this.getServiceInputsPath())
+    }
+
+    getServiceInputsPath() {
         return path.join(this.getInstanceDirectory(), 'service-inputs.yaml')
+    }
+
+    getServiceInputs() {
+        return files.loadYAML<InputAssignmentMap>(this.getServiceInputsPath())
     }
 
     generateServiceTemplatePath() {

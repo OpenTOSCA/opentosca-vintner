@@ -7,10 +7,10 @@ TYPE_SPEED=100
 p 'vintner setup init'
 sleep 0.5
 
-p 'vintner orchestrators init opera'
+p 'vintner plugins init opera'
 sleep 0.5
 
-p 'vintner orchestrators enable --orchestrator opera'
+p 'vintner plugins enable --orchestrator opera'
 sleep 0.5
 
 p 'vintner templates import --template ${TEMPLATE_NAME} --path ${TEMPLATE_PATH}'

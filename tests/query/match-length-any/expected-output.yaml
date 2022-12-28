@@ -1,0 +1,4 @@
+openstack:
+    type: OpenStack
+    properties:
+        ip_address:

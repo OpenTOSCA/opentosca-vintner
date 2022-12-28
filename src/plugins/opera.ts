@@ -1,7 +1,9 @@
 import {Instance} from '#repository/instances'
-import {Orchestrator} from '#repository/orchestrators'
+import {NodeTemplateAttributesMap, OrchestratorPlugin} from './types'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
+import * as files from '#files'
+import _ from 'lodash'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -12,7 +14,7 @@ export type OperaNativeConfig = {
 
 export type OperaWLSConfig = OperaNativeConfig
 
-export class Opera implements Orchestrator {
+export class OperaPlugin implements OrchestratorPlugin {
     private readonly config: OperaConfig
     private readonly binary: string
     private readonly shell: Shell
@@ -39,7 +41,7 @@ export class Opera implements Orchestrator {
             this.shell.resolve(instance.getDataDirectory()),
         ]
 
-        if (instance.hasServiceInput()) command.push('--inputs', this.shell.resolve(instance.getServiceInputPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
         await this.shell.execute(command)
     }
 
@@ -51,7 +53,7 @@ export class Opera implements Orchestrator {
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-        if (instance.hasServiceInput()) command.push('--inputs', this.shell.resolve(instance.getServiceInputPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
 
         await this.shell.execute(command)
     }
@@ -65,5 +67,22 @@ export class Opera implements Orchestrator {
             '--resume',
             '--force',
         ])
+    }
+
+    /**
+     * Returns attribute names and data for each node template
+     */
+    async getAttributes(instance: Instance) {
+        const attributes: NodeTemplateAttributesMap = {}
+        for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
+            const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
+            if (files.isFile(attributesPath)) {
+                const entries = files.loadYAML<{[s: string]: {is_set: string; data: string}}>(attributesPath)
+                for (const [key, value] of Object.entries(entries)) {
+                    _.set(attributes, [node, 'attributes', key], value.data)
+                }
+            }
+        }
+        return attributes
     }
 }

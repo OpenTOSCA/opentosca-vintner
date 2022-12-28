@@ -31,6 +31,10 @@ export function ensureBoolean(element: unknown): asserts element is boolean {
     if (!isBoolean(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a boolean`)
 }
 
+export function ensureStatement(boolean: boolean, msg: string) {
+    if (!boolean) throw new Error(msg)
+}
+
 export function isNumber(element: unknown): element is number {
     return typeof element === 'number'
 }

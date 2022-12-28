@@ -1,8 +1,8 @@
-import {Orchestrators} from '#repository/orchestrators'
-import {OperaNativeConfig} from '#orchestrators/opera'
+import {OperaNativeConfig} from '#plugins/opera'
+import Plugins from '#plugins'
 
 export default async function (option: OperaNativeConfig) {
-    const data = Orchestrators.getConfig()
+    const data = Plugins.getConfig()
     data.opera = option
-    Orchestrators.setConfig(data)
+    Plugins.setConfig(data)
 }

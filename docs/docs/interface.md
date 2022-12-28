@@ -272,6 +272,46 @@ initializes unfurl-wsl plugin
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
+## query
+
+runs a query and returns the result
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner query --query ${QUERY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"query": "${QUERY}"}' \
+            ${SERVER_ADDRESS}/query
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/query", {
+		query: QUERY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/query", json={
+		"query": QUERY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| query |  true  | string | path to query or query string |
+| source |  false  | string | specifies where to search for template to query (default: "vintner") |
+| output |  false  | string | path of the output |
+| format |  false  | string | output format (choices: "yaml", "json", default: "yaml") |
+
 ## template resolve
 
 resolves variability
@@ -311,7 +351,7 @@ resolves variability
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
 | preset |  false  | string | name of the variability preset set |
-| inputs |  false  | string | path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML]) |
+| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
@@ -322,6 +362,46 @@ resolves variability
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
 | disable-maximum-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
 | disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
+
+## template query
+
+resolves all queries in a given service template
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template query --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/query
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/query", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/query", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to service template |
+| output |  true  | string | path of the output |
 
 ## templates list
 
@@ -596,7 +676,7 @@ resolves variability
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | preset |  false  | string | name of the variability preset |
-| inputs |  false  | string | path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML]) |
+| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
 | prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |

@@ -1,8 +1,4 @@
----
-title: Motivation
----
-
-# Motivating Scenario
+# Motivation
 
 In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivating scenario.
 The motivating scenario is a simple composite application that consists a web component and database.

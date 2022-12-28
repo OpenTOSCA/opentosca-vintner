@@ -1,8 +1,8 @@
-import {Orchestrators} from '#repository/orchestrators'
-import {UnfurlNativeConfig} from '#orchestrators/unfurl'
+import {UnfurlNativeConfig} from '#plugins/unfurl'
+import Plugins from '#plugins'
 
 export default async function (option: UnfurlNativeConfig) {
-    const data = Orchestrators.getConfig()
+    const data = Plugins.getConfig()
     data.unfurl = option
-    Orchestrators.setConfig(data)
+    Plugins.setConfig(data)
 }
