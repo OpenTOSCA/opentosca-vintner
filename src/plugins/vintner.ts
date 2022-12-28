@@ -1,8 +1,8 @@
-import {TemplatesPlugin} from '#plugins/types'
+import {TemplatesRepositoryPlugin} from '#plugins/types'
 import {Instance, Instances} from '#repository/instances'
 
 // TODO: this should use Templates and not Instances and should filter for correct definitions version?
-export class Vintner implements TemplatesPlugin {
+export class VintnerPlugin implements TemplatesRepositoryPlugin {
     async getTemplate(name: string) {
         return {
             name,

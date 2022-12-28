@@ -1,9 +1,9 @@
 import {Instance} from '#repository/instances'
-import {OrchestratorPlugin} from '#repository/orchestrators'
 import * as files from '#files'
 import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
+import {OrchestratorPlugin} from '#plugins/types'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -14,7 +14,7 @@ export type UnfurlNativeConfig = {
 
 export type UnfurlWSLConfig = UnfurlNativeConfig
 
-export class Unfurl implements OrchestratorPlugin {
+export class UnfurlPlugin implements OrchestratorPlugin {
     private readonly config: UnfurlConfig
     private readonly shell: Shell
 

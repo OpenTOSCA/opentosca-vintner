@@ -1,14 +1,8 @@
 import {Instance, Instances} from '#repository/instances'
-import {Template} from '#repository/templates'
-import {Winery} from '#plugins/winery'
-import * as files from '#files'
-import path from 'path'
 import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
-import {Vintner} from '#plugins/vintner'
-import {Orchestrators} from '#repository/orchestrators'
-import {File} from '#plugins/file'
+import Plugins from '#plugins'
 
 /**
  * Tries to load all service template from a given source and path
@@ -40,13 +34,7 @@ async function _getTemplates(
     name: string
 ): Promise<{name: string; template: ServiceTemplate}[]> {
     if (type === 'Template') {
-        // TODO: extract this to some kind of global plugin registry
-        let plugin
-        if (source === 'file') plugin = new File()
-        if (source === 'vintner') plugin = new Vintner()
-        if (source === 'winery') plugin = new Winery()
-        if (plugin === undefined) throw new Error(`Unknown templates plugin "${source}"`)
-
+        const plugin = Plugins.getTemplateRepository(name)
         if (name == '*') return plugin.getTemplates()
         return [await plugin.getTemplate(name)]
     }

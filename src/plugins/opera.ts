@@ -1,10 +1,9 @@
 import {Instance} from '#repository/instances'
-import {NodeTemplateAttributesMap, OrchestratorPlugin} from '#repository/orchestrators'
+import {NodeTemplateAttributesMap, OrchestratorPlugin} from './types'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
 import * as files from '#files'
 import _ from 'lodash'
-import * as fs from 'fs'
 
 export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
 
@@ -15,7 +14,7 @@ export type OperaNativeConfig = {
 
 export type OperaWLSConfig = OperaNativeConfig
 
-export class Opera implements OrchestratorPlugin {
+export class OperaPlugin implements OrchestratorPlugin {
     private readonly config: OperaConfig
     private readonly binary: string
     private readonly shell: Shell
