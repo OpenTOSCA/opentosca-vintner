@@ -3,9 +3,9 @@ import config from '#config'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {Template} from './templates'
-import {Orchestrators} from './orchestrators'
 import _ from 'lodash'
 import {InputAssignmentMap} from '#spec/topology-template'
+import Plugins from '#plugins'
 
 export class Instances {
     static all() {
@@ -71,7 +71,7 @@ export class Instance {
     getInstanceTemplate(): ServiceTemplate {
         // TODO: does not handle relationships
         const template = this.getServiceTemplate()
-        const attributes = Orchestrators.getOrchestrator().getAttributes(this)
+        const attributes = Plugins.getOrchestrator().getAttributes(this)
         const inputs = this.hasServiceInputs() ? this.getServiceInputs() : {}
         if (template.topology_template?.node_templates) {
             template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)

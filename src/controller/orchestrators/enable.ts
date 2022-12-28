@@ -1,9 +1,9 @@
-import {Orchestrators} from '#repository/orchestrators'
+import Plugins from '#plugins'
 
 export type OrchestratorsEnableArguments = {orchestrator: string}
 
 export default async function (option: OrchestratorsEnableArguments) {
-    const data = Orchestrators.getConfig()
+    const data = Plugins.getConfig()
     data.enabled = option.orchestrator
-    Orchestrators.setConfig(data)
+    Plugins.setConfig(data)
 }

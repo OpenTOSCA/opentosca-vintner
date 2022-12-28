@@ -1,8 +1,8 @@
-import {Orchestrators} from '#repository/orchestrators'
 import {OperaWLSConfig} from '#plugins/opera'
+import Plugins from '#plugins'
 
 export default async function (option: OperaWLSConfig) {
-    const data = Orchestrators.getConfig()
+    const data = Plugins.getConfig()
     data.operaWSL = option
-    Orchestrators.setConfig(data)
+    Plugins.setConfig(data)
 }

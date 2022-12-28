@@ -34,7 +34,7 @@ async function _getTemplates(
     name: string
 ): Promise<{name: string; template: ServiceTemplate}[]> {
     if (type === 'Template') {
-        const plugin = Plugins.getTemplateRepository(name)
+        const plugin = Plugins.getTemplateRepository(source)
         if (name == '*') return plugin.getTemplates()
         return [await plugin.getTemplate(name)]
     }
