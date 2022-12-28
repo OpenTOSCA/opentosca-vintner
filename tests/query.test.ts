@@ -5,154 +5,178 @@ import runQuery from '../src/controller/query/run'
 import resolveQueries from '../src/controller/template/query'
 import {expectAsyncThrow} from './utils'
 
-it('all', async () => {
-    const result = await getResult('FROM templates/tests/query/service-template.yaml SELECT .')
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/all/expected-output.yaml')))
-})
+it(
+    'all',
+    getDefaultQueryTest('FROM templates/tests/query/service-template.yaml SELECT .', 'query/all/expected-output.yaml')
+)
 
-it('array-access', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp.requirements[1]'
+it(
+    'array-access',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp.requirements[1]',
+        'query/array-access/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/array-access/expected-output.yaml')))
-})
+)
 
-it('boolean-and', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[name="dbms" AND type="DBMS"]'
+it(
+    'boolean-and',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[name="dbms" AND type="DBMS"]',
+        'query/boolean-and/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/boolean-and/expected-output.yaml')))
-})
+)
 
-it('boolean-or', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[type="Database" OR type="DBMS"]'
+it(
+    'boolean-or',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[type="Database" OR type="DBMS"]',
+        'query/boolean-or/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/boolean-or/expected-output.yaml')))
-})
+)
 
-it('filter-equals', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[type="VirtualMachine"].name'
+it(
+    'filter-equals',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[type="VirtualMachine"].name',
+        'query/filter-equals/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-equals/expected-output.yaml')))
-})
+)
 
-it('filter-existence', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[properties.num_cpus].name'
+it(
+    'filter-existence',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[properties.num_cpus].name',
+        'query/filter-existence/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-existence/expected-output.yaml')))
-})
+)
 
-it('filter-negation', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[!type="VirtualMachine"].name'
+it(
+    'filter-negation',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[!type="VirtualMachine"].name',
+        'query/filter-negation/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-negation/expected-output.yaml')))
-})
+)
 
-it('filter-nested', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[properties.port=3306]'
+it(
+    'filter-nested',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[properties.port=3306]',
+        'query/filter-nested/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-nested/expected-output.yaml')))
-})
+)
 
-it('filter-regex', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[name=~"vm_"]'
+it(
+    'filter-regex',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*[name=~"vm_"]',
+        'query/filter-regex/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/filter-regex/expected-output.yaml')))
-})
+)
 
-it('group', async () => {
-    const result = await getResult('FROM templates/tests/query/service-template.yaml SELECT GROUP(database_group)')
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/group/expected-output.yaml')))
-})
-
-it('match-next', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH ([type="Tomcat"])-->(node) SELECT node'
+it(
+    'group',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT GROUP(database_group)',
+        'query/group/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-next/expected-output.yaml')))
-})
+)
 
-it('match-previous', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH (node)<--([type="Tomcat"]) SELECT node'
+it(
+    'match-next',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH ([type="Tomcat"])-->(node) SELECT node',
+        'query/match-next/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-previous/expected-output.yaml')))
-})
+)
 
-it('match-rel-filter', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH ()-{[type="ConnectsTo"]}->(node2) SELECT node2'
+it(
+    'match-previous',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH (node)<--([type="Tomcat"]) SELECT node',
+        'query/match-previous/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-rel-filter/expected-output.yaml')))
-})
+)
 
-it('match-single', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH (node[type="WebApplication"]) SELECT node'
+it(
+    'match-rel-filter',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH ()-{[type="ConnectsTo"]}->(node2) SELECT node2',
+        'query/match-rel-filter/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-single/expected-output.yaml')))
-})
+)
 
-it('match-length-any', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type="OpenStack"]) SELECT node'
+it(
+    'match-single',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH (node[type="WebApplication"]) SELECT node',
+        'query/match-single/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-any/expected-output.yaml')))
-})
+)
 
-it('match-length-range', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml MATCH ([type="Tomcat"])-{*1..2}->(node) SELECT node.*.name'
+it(
+    'match-length-any',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH ([type="WebApplication"])-{*}->(node[type="OpenStack"]) SELECT node',
+        'query/match-length-any/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/match-length-range/expected-output.yaml')))
-})
+)
 
-it('node-template', async () => {
-    const result = await getResult('FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp')
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/node-template/expected-output.yaml')))
-})
+it(
+    'match-length-range',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml MATCH ([type="Tomcat"])-{*1..2}->(node) SELECT node.*.name',
+        'query/match-length-range/expected-output.yaml'
+    )
+)
 
-it('policy', async () => {
-    const result = await getResult('FROM templates/tests/query/service-template.yaml SELECT POLICY(placement_policy)')
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/policy/expected-output.yaml')))
-})
+it(
+    'node-template',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp',
+        'query/node-template/expected-output.yaml'
+    )
+)
 
-it('result-structure-simple', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp{name, type}'
+it(
+    'policy',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT POLICY(placement_policy)',
+        'query/policy/expected-output.yaml'
     )
-    expect(result).to.deep.equal(
-        files.loadYAML(path.join(__dirname, 'query/result-structure-simple/expected-output.yaml'))
-    )
-})
+)
 
-it('result-structure-complex', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*{"Node Name": name, "Node Type": type}'
+it(
+    'result-structure-simple',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp{name, type}',
+        'query/result-structure-simple/expected-output.yaml'
     )
-    expect(result).to.deep.equal(
-        files.loadYAML(path.join(__dirname, 'query/result-structure-complex/expected-output.yaml'))
-    )
-})
+)
 
-it('shortcut-property', async () => {
-    const result = await getResult(
-        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp.#port'
+it(
+    'result-structure-complex',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.*{"Node Name": name, "Node Type": type}',
+        'query/result-structure-complex/expected-output.yaml'
     )
-    expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'query/shortcut-property/expected-output.yaml')))
-})
+)
 
-it('resolve-chain', async () => {
-    expect(files.loadYAML(await resolveTemplate('query/resolve-chain/service-template.yaml'))).to.deep.equal(
-        files.loadYAML(path.join(__dirname, 'query/resolve-chain/expected-service-template.yaml'))
+it(
+    'shortcut-property',
+    getDefaultQueryTest(
+        'FROM templates/tests/query/service-template.yaml SELECT node_templates.webapp.#port',
+        'query/shortcut-property/expected-output.yaml'
     )
-})
+)
+
+it(
+    'resolve-chain',
+    getDefaultTemplateTest(
+        'query/resolve-chain/service-template.yaml',
+        'query/resolve-chain/expected-service-template.yaml'
+    )
+)
 
 it('resolve-loop', async () => {
     await expectAsyncThrow(
@@ -161,27 +185,42 @@ it('resolve-loop', async () => {
     )
 })
 
-it('resolve-self', async () => {
-    expect(files.loadYAML(await resolveTemplate('query/resolve-self/service-template.yaml'))).to.deep.equal(
-        files.loadYAML(path.join(__dirname, 'query/resolve-self/expected-service-template.yaml'))
+it(
+    'resolve-self',
+    getDefaultTemplateTest(
+        'query/resolve-self/service-template.yaml',
+        'query/resolve-self/expected-service-template.yaml'
     )
-})
+)
 
-it('resolve-simple', async () => {
-    expect(files.loadYAML(await resolveTemplate('query/resolve-simple/service-template.yaml'))).to.deep.equal(
-        files.loadYAML(path.join(__dirname, 'query/resolve-simple/expected-service-template.yaml'))
+it(
+    'resolve-simple',
+    getDefaultTemplateTest(
+        'query/resolve-simple/service-template.yaml',
+        'query/resolve-simple/expected-service-template.yaml'
     )
-})
+)
+
+function getDefaultQueryTest(query: string, expected: string) {
+    return async function () {
+        const result = await runQuery({query, source: 'file'})
+        expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, expected)))
+    }
+}
+
+function getDefaultTemplateTest(template: string, expected: string) {
+    return async function () {
+        expect(files.loadYAML(await resolveTemplate(template))).to.deep.equal(
+            files.loadYAML(path.join(__dirname, expected))
+        )
+    }
+}
 
 async function resolveTemplate(templatePath: string) {
     const output = files.temporaryFile()
     await resolveQueries({
-        output: output,
+        output,
         template: path.join(__dirname, templatePath),
     })
     return output
-}
-
-async function getResult(query: string) {
-    return runQuery({output: '', query: query, source: 'file'})
 }
