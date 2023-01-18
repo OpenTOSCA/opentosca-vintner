@@ -117,6 +117,19 @@ initOrchestrators
         })
     )
 
+program
+    .command('query')
+    .description('runs a query and returns the result')
+    .requiredOption('--query <string>', 'path to query or query string')
+    .option('--source [string]', 'specifies where to search for template to query', 'vintner')
+    .option('--output [string]', 'path of the output')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
+    .action(
+        hae(async options => {
+            await Controller.query.run(options)
+        })
+    )
+
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
@@ -124,7 +137,7 @@ template
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
     .option('--preset [string]', 'name of the variability preset set')
-    .option('--inputs [string]', 'path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML])')
+    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
@@ -150,6 +163,17 @@ template
     .action(
         hae(async options => {
             await Controller.template.resolve(options)
+        })
+    )
+
+template
+    .command('query')
+    .description('resolves all queries in a given service template')
+    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae(async options => {
+            Controller.template.query(options)
         })
     )
 
@@ -245,7 +269,7 @@ instances
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
     .option('--preset [string]', 'name of the variability preset')
-    .option('--inputs [string]', 'path to the variability inputs (allowed: [YAML, FeatureIDE ExtendedXML])')
+    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
     .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')

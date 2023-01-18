@@ -21,7 +21,9 @@ import openInstance from './instances/open'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
+import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
+import queryTemplate from './template/query'
 
 const Controller = {
     instances: {
@@ -33,6 +35,9 @@ const Controller = {
         open: openInstance,
         undeploy: undeployInstance,
         update: updateInstance,
+    },
+    query: {
+        run: runQuery,
     },
     orchestrators: {
         enable: enableOrchestrator,
@@ -52,6 +57,7 @@ const Controller = {
     },
     template: {
         resolve: resolveTemplate,
+        query: queryTemplate,
     },
     templates: {
         delete: deleteTemplate,

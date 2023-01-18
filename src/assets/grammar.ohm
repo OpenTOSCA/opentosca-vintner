@@ -1,0 +1,58 @@
+Query {
+  Main = (Expression | MatchExpression) end
+  Expression = FromExpression Select
+  MatchExpression = FromExpression Match Select
+
+  FromExpression = "FROM" ("instances" | "templates") ("/" | ".") (asterisk | filePath)
+
+  Select = "SELECT" Path ("," Path)*
+  Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
+  Map = "." Step
+  Filter = PredicateExpression
+  Step = shortcut? (asterisk | ident)
+  ArrayAccess = "[" integer "]"
+  ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
+  KeyValuePair = Variable ":" Variable --complex
+               | Variable              --simple
+  Group = "GROUP" "(" ident ")"
+  Policy = "POLICY" "(" ident ")"
+
+  PredicateExpression = "[" Predicate "]"
+  Predicate = Predicate logic Predicate -- multi
+            | Condition -- single
+  Condition = negation Value comparison literal -- comparison
+            | negation Value -- existence
+
+  Match = "MATCH" Node (Relationship Node)*
+  Node = "(" ident? PredicateExpression? ")"
+  Relationship = arrowLeft arrowRight --simple
+               | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
+  Cardinality = asterisk integer ".." integer --range
+              | asterisk ".." integer --max
+              | asterisk integer ".." --min
+              | asterisk integer --exact
+              | asterisk --unlimited
+  Variable = literal | path | ident
+  Value = shortcut? (path | literal)
+
+  negation = "!" | ""
+  arrowLeft = "<-" | "-"
+  arrowRight = "->" | "-"
+  asterisk = "*"
+  comparison = "=~" | "=" | "!=" | ">=" | "<=" | ">" | "<"
+  ident = letter (alnum | "_" | "-")*
+  logic = "AND" | "OR"
+  path = letter (alnum | "_" | "-" | ".")*
+  filePath = (~space any)*
+  literal = string | float | integer | bool
+  bool = "true" | "false" | "TRUE" | "FALSE"
+  shortcut = "@" | "#" | "$" | "%"
+  string
+    = "'" (~"'" any)* "'"
+    | "\"" (~"\"" any)* "\""
+  integer = digit+
+  float   = digit? "." digit+
+  singleComment = "//" (~"\n" any)*
+  multiComment = "/*" (~"*/" any)* "*/"
+  space := singleComment | multiComment | ...
+}

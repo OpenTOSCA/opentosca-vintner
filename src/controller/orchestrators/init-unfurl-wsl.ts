@@ -1,8 +1,8 @@
-import {Orchestrators} from '#repository/orchestrators'
-import {UnfurlWSLConfig} from '#orchestrators/unfurl'
+import {UnfurlWSLConfig} from '#plugins/unfurl'
+import Plugins from '#plugins'
 
 export default async function (option: UnfurlWSLConfig) {
-    const data = Orchestrators.getConfig()
+    const data = Plugins.getConfig()
     data.unfurlWSL = option
-    Orchestrators.setConfig(data)
+    Plugins.setConfig(data)
 }

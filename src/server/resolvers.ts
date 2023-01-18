@@ -64,6 +64,15 @@ resolvers.post(
     '/template/resolve',
     hae(async (req, res, next) => {
         await Controller.template.resolve(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/template/query',
+    hae(async (req, res, next) => {
+        await Controller.template.query(req.body)
+        res.json({})
     })
 )
 
@@ -79,6 +88,7 @@ resolvers.post(
     '/templates/import',
     hae(async (req, res, next) => {
         await Controller.templates.import(req.body)
+        res.json({})
     })
 )
 
@@ -151,6 +161,14 @@ resolvers.post(
     hae(async (req, res, next) => {
         await Controller.instances.delete(req.body)
         res.json({})
+    })
+)
+
+resolvers.post(
+    '/query/run',
+    hae(async (req, res, next) => {
+        const result = await Controller.query.run(req.body)
+        res.json(result)
     })
 )
 

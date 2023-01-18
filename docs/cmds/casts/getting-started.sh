@@ -22,10 +22,10 @@ pe 'vintner setup init'
 echo ''
 echo '# Orchestrator'
 
-pe 'vintner orchestrators init opera'
+pe 'vintner plugins init opera'
 # sleep 0.5
 
-pe 'vintner orchestrators enable --orchestrator opera'
+pe 'vintner plugins enable --orchestrator opera'
 # sleep 0.5
 
 echo ''

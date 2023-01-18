@@ -1,4 +1,6 @@
 name,version,licenseName,environment,licenseURL,sourceCodeURL
+@types/glob,8.0.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
+@types/minimatch,5.1.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
 @types/node,18.0.6,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
 @types/yauzl,2.10.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
 abbrev,1.1.1,ISC,Standalone,https://opensource.org/licenses/ISC,http://github.com/isaacs/abbrev-js
@@ -61,7 +63,7 @@ function-bind,1.1.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://g
 get-func-name,2.0.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/chaijs/get-func-name
 get-intrinsic,1.1.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/ljharb/get-intrinsic
 get-stream,5.2.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/sindresorhus/get-stream
-glob,7.2.3,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/isaacs/node-glob
+glob,8.0.3,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/isaacs/node-glob
 graceful-fs,4.2.10,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/isaacs/node-graceful-fs
 has,1.0.3,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/tarruda/has
 has-flag,4.0.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/sindresorhus/has-flag
@@ -98,6 +100,7 @@ normalize-package-data,2.5.0,BSD-2-Clause,Standalone,https://opensource.org/lice
 npm-normalize-package-bin,1.0.1,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/npm/npm-normalize-package-bin
 object-assign,4.1.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/sindresorhus/object-assign
 object-inspect,1.12.2,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/inspect-js/object-inspect
+ohm-js,16.4.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/harc/ohm
 on-finished,2.4.1,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/jshttp/on-finished
 once,1.4.0,ISC,Standalone,https://opensource.org/licenses/ISC,https://github.com/isaacs/once
 open,8.4.0,MIT,Standalone,https://opensource.org/licenses/MIT,https://github.com/sindresorhus/open

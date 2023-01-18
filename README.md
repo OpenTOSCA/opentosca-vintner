@@ -15,8 +15,8 @@ Preprocessing includes, e.g., the resolving of variability.
 
 - [Documentation](https://vintner.opentosca.org)
 - [Getting Started](https://vintner.opentosca.org/getting-started)
-- [Variability4TOSCA Motivation](https://vintner.opentosca.org/variability4tosca/motivation)
-- [Variability4TOSCA Specification](https://vintner.opentosca.org/variability4tosca/specification)
+- [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca)
+- [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca)
 - [CLI Documentation](https://vintner.opentosca.org/interface)
 - [REST API Documentation](https://vintner.opentosca.org/interface)
 

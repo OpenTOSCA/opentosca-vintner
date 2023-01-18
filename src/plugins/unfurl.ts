@@ -1,9 +1,9 @@
 import {Instance} from '#repository/instances'
-import {Orchestrator} from '#repository/orchestrators'
 import * as files from '#files'
 import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
+import {OrchestratorPlugin} from '#plugins/types'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -14,7 +14,7 @@ export type UnfurlNativeConfig = {
 
 export type UnfurlWSLConfig = UnfurlNativeConfig
 
-export class Unfurl implements Orchestrator {
+export class UnfurlPlugin implements OrchestratorPlugin {
     private readonly config: UnfurlConfig
     private readonly shell: Shell
 
@@ -27,7 +27,7 @@ export class Unfurl implements Orchestrator {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
         files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))
         files.copy(instance.getTemplateDirectory(), this.getEnsembleDirectory(instance))
-        files.copy(instance.getServiceInputPath(), this.getEnsembleInputsPath(instance))
+        files.copy(instance.getServiceInputsPath(), this.getEnsembleInputsPath(instance))
         await this.shell.execute([this.getBinary(instance), 'deploy', '--approve'])
     }
 
@@ -71,5 +71,13 @@ spec:
     +?include: service-inputs.yaml
   service_template:
     +include: ${instance.getServiceTemplateFile()}`
+    }
+
+    getInputs(instance: Instance) {
+        return Promise.reject('Not Implemented')
+    }
+
+    getAttributes(instance: Instance) {
+        return Promise.reject('Not Implemented')
     }
 }
