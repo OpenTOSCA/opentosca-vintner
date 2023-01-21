@@ -1,0 +1,3 @@
+resolver:
+    pruneNodes: true
+    pruneRelations: true

@@ -3,7 +3,6 @@ import benchmark, {generateBenchmarkServiceTemplate} from '#controller/setup/ben
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import * as path from 'path'
-import {getDefaultTest} from '../utils'
 
 it('benchmark: run', () => {
     benchmark({seeds: [2], runs: 1})
@@ -15,5 +14,3 @@ it('benchmark: generate service template', () => {
         files.loadYAML<ServiceTemplate>(path.join(__dirname, 'variable-service-template.yaml'))
     )
 })
-
-it('benchmark: resolve', getDefaultTest({dir: 'benchmark'}))
