@@ -403,6 +403,43 @@ resolves all queries in a given service template
 | template |  true  | string | path to service template |
 | output |  true  | string | path of the output |
 
+## template test
+
+runs tests defined in the CSAR
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template test --path ${PATH}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"path": "${PATH}"}' \
+            ${SERVER_ADDRESS}/template/test
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/test", {
+		path: PATH
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/test", json={
+		"path": PATH
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| path |  true  | string | path or link to the extracted CSAR |
+
 ## templates list
 
 lists all templates

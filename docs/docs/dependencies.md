@@ -4,7 +4,7 @@
 
 We use the following dependencies in production.
 You can download the dataset as [CSV](assets/documents/licenses.csv).
-We ensure, that only the licenses [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0){target=_blank}, [BSD-2-Clause](https://opensource.org/licenses/BSD-2-Clause){target=_blank}, [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause){target=_blank}, [CC-BY-3.0](https://creativecommons.org/licenses/by/3.0/){target=_blank}, [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0){target=_blank}, [ISC](https://opensource.org/licenses/ISC){target=_blank}, [MIT](https://opensource.org/licenses/MIT){target=_blank}, [Python-2.0](https://opensource.org/licenses/Python-2.0){target=_blank} are used.
+We ensure, that only the licenses [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0){target=_blank}, [BSD-2-Clause](https://opensource.org/licenses/BSD-2-Clause){target=_blank}, [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause){target=_blank}, [CC-BY-3.0](https://creativecommons.org/licenses/by/3.0/){target=_blank}, [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0){target=_blank}, [ISC](https://opensource.org/licenses/ISC){target=_blank}, [MIT](https://opensource.org/licenses/MIT){target=_blank}, [PSF](http://docs.python.org/license.html){target=_blank}, [Python-2.0](https://opensource.org/licenses/Python-2.0){target=_blank} are used.
 
 | ID | Dependency | Version | License |
 | --- | --- | --- | --- |
@@ -186,3 +186,7 @@ We ensure, that only the licenses [Apache-2.0](https://www.apache.org/licenses/L
 | 176  | [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js){target=_blank} | 0.4.23 |             [MIT](https://opensource.org/licenses/MIT){target=_blank}              |
 | 177  | [xmlbuilder](https://github.com/oozcitak/xmlbuilder-js){target=_blank} | 11.0.1 |             [MIT](https://opensource.org/licenses/MIT){target=_blank}              |
 | 178  | [yauzl](https://github.com/thejoshwolfe/yauzl){target=_blank} | 2.10.0 |             [MIT](https://opensource.org/licenses/MIT){target=_blank}              |
+
+
+Note, the release of [dreamopt@0.8.0](https://github.com/ewoudenberg/difflib.js){target=_blank} has no license.
+However, the project is according to the author licensed under MIT.
