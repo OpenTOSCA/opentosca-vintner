@@ -350,7 +350,7 @@ resolves variability
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
-| preset |  false  | string | name of the variability preset set |
+| preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
 | prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |

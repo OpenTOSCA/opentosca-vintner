@@ -1,7 +1,10 @@
 import {expect} from 'chai'
 import {VariabilityResolver} from '#controller/template/resolve'
 import {VariabilityExpression} from '#spec/variability'
-import {getDefaultVariabilityResolver} from './utils'
+
+function getDefaultVariabilityResolver() {
+    return new VariabilityResolver({} as any)
+}
 
 it('and: empty -> true', () => {
     const resolver = getDefaultVariabilityResolver()

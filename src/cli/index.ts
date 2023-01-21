@@ -136,7 +136,7 @@ template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
-    .option('--preset [string]', 'name of the variability preset set')
+    .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
     .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
@@ -174,6 +174,16 @@ template
     .action(
         hae(async options => {
             Controller.template.query(options)
+        })
+    )
+
+template
+    .command('test')
+    .description('runs tests defined in the CSAR')
+    .requiredOption('--path <string>', 'path or link to the extracted CSAR')
+    .action(
+        hae(async options => {
+            await Controller.template.test(options)
         })
     )
 

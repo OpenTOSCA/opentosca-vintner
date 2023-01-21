@@ -1,0 +1,3 @@
+error: Relation source "one" of relation "two" does not exist
+resolver:
+    pruneRelations: true
