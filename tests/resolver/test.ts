@@ -5,16 +5,27 @@ import Controller from '../../src/controller'
 import {ServiceTemplate} from '../../src/specification/service-template'
 import {expect} from 'chai'
 import {expectAsyncThrow} from '../utils'
+import {prettyJSON} from '../../src/utils/utils'
+
+type Group = {
+    name: string
+    tests: Test[]
+}
+
+type Test = {
+    name: string
+    dir: string
+    vstdir?: string
+}
 
 describe('resolver', async () => {
-    const groups = files.listDirectories(path.join(__dirname))
-    for (const group of groups) {
+    const groups: Group[] = []
+
+    for (const group of files.listDirectories(path.join(__dirname))) {
         const groupDir = path.join(__dirname, group)
-        describe(group, async () => {
-            const tests = files.listDirectories(groupDir)
-            tests.forEach(test => {
-                it(test, getDefaultTest(path.join(groupDir, test)))
-            })
+        groups.push({
+            name: group,
+            tests: files.listDirectories(groupDir).map(test => ({name: test, dir: path.join(groupDir, test)})),
         })
     }
 
@@ -24,10 +35,26 @@ describe('resolver', async () => {
         const exampleDir = path.join(examplesDir, example)
         const testsPath = path.join(exampleDir, 'tests')
 
-        describe(example, async () => {
-            const tests = files.listDirectories(testsPath)
-            tests.forEach(test => {
-                it(test, getDefaultTest(path.join(testsPath, test), exampleDir))
+        groups.push({
+            name: `example-${example}`,
+            tests: files
+                .listDirectories(testsPath)
+                .map(test => ({name: test, dir: path.join(testsPath, test), vstdir: exampleDir})),
+        })
+    }
+
+    const onlyGroups = groups.filter(group => group.name.endsWith('---only'))
+    const nonDisabledGroups = groups.filter(group => !group.name.endsWith('---disabled'))
+    const effectiveGroups = onlyGroups.length ? onlyGroups : nonDisabledGroups
+
+    for (const group of effectiveGroups) {
+        describe(group.name, async () => {
+            const onlyTests = group.tests.filter(test => test.name.endsWith('---only'))
+            const nonDisabledTests = group.tests.filter(test => !test.name.endsWith('---disabled'))
+            const effectiveTests = onlyTests.length ? onlyTests : nonDisabledTests
+
+            effectiveTests.forEach(test => {
+                it(test.name, getDefaultTest(test.dir, test.vstdir))
             })
         })
     }
