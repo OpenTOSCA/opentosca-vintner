@@ -5,9 +5,13 @@ import {ServiceTemplate} from '#spec/service-template'
 import {ResolvingOptions} from '#controller/template/resolve'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
-import {keysIn} from 'lodash'
 
 export type TemplateTestArguments = {path: string}
+
+export type VariabilityTestGroup = {
+    name: string
+    tests: VariabilityTest[]
+}
 
 export type VariabilityTest = {
     name: string

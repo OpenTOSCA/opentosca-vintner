@@ -9,16 +9,11 @@ import {
     getDefaultVariableServiceTemplate,
     readConfig,
     readDefaultExpect,
-    VariabilityTest,
 } from '#controller/template/test'
-
-type Group = {
-    name: string
-    tests: VariabilityTest[]
-}
+import {VariabilityTestGroup} from '../../src/controller/template/test'
 
 describe('resolver', async () => {
-    const groups: Group[] = []
+    const groups: VariabilityTestGroup[] = []
 
     for (const group of files.listDirectories(path.join(__dirname))) {
         const groupDir = path.join(__dirname, group)
