@@ -18,6 +18,7 @@
         "glob": "^8.0.3",
         "http-errors": "^2.0.0",
         "js-yaml": "^4.1.0",
+        "json-diff": "^1.0.0",
         "lodash": "^4.17.21",
         "ohm-js": "^16.4.0",
         "open": "^8.4.0",
@@ -34,6 +35,7 @@
         "@types/fs-extra": "^9.0.13",
         "@types/http-errors": "^1.8.2",
         "@types/js-yaml": "^4.0.5",
+        "@types/json-diff": "^0.9.1",
         "@types/license-checker": "^25.0.3",
         "@types/lodash": "^4.14.183",
         "@types/mocha": "^9.1.1",
@@ -92,6 +94,6 @@
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:opera": "./examples/opera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
-        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0\""
+        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF\" --excludePackages dreamopt@0.8.0"
     }
 }

@@ -77,6 +77,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/test',
+    hae(async (req, res, next) => {
+        await Controller.template.test(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/templates/list',
     hae(async (req, res, next) => {
         const list = await Controller.templates.list()

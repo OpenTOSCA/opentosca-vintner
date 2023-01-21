@@ -177,6 +177,16 @@ template
         })
     )
 
+template
+    .command('test')
+    .description('runs tests defined in the CSAR')
+    .requiredOption('--path <string>', 'path or link to the csar')
+    .action(
+        hae(async options => {
+            await Controller.template.test(options)
+        })
+    )
+
 const templates = program.command('templates').description('handles templates repository')
 
 templates

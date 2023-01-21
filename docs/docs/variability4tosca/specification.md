@@ -410,12 +410,13 @@ some or all of these consistency steps might be omitted.
 When variability is resolved, the following errors might be thrown:
 
 
-| Error                         | Message                                                                             |
-|-------------------------------|-------------------------------------------------------------------------------------|
-| Relation Source Missing Error | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
-| Relation Target Missing Error | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
-| Ambiguous Hosting Error       | Node "${node.name}" has more than one hosting relations                                                                                    |
-| Hosting Missing Error         | Node "${node.name}" requires a hosting relation | 
+| Error                           | Message                                                                             |
+|---------------------------------|-------------------------------------------------------------------------------------|
+| Unsupported TOSCA Version Error | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
+| Relation Source Missing Error   | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
+| Relation Target Missing Error   | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
+| Ambiguous Hosting Error         | Node "${node.name}" has more than one hosting relations                                                                                    |
+| Hosting Missing Error           | Node "${node.name}" requires a hosting relation | 
 
 ## Testing
 

@@ -24,6 +24,7 @@ import deleteInstance from './instances/delete'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
+import testTemplate from './template/test'
 
 const Controller = {
     instances: {
@@ -58,6 +59,7 @@ const Controller = {
     template: {
         resolve: resolveTemplate,
         query: queryTemplate,
+        test: testTemplate,
     },
     templates: {
         delete: deleteTemplate,
