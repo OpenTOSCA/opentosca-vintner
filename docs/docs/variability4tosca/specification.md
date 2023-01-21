@@ -4,7 +4,9 @@ title: Specification
 
 # Variability4TOSCA Specification 1.0 Release Candidate
 
-This document specifies Variability4TOSCA which extends [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank} with conditional elements.
+This document specifies Variability4TOSCA which extends
+[TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
+with conditional elements.
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
 
@@ -14,10 +16,11 @@ A Service Template must have the TOSCA Definitions Version `tosca_variability_1_
 Such a Service Template is also called Variable Service Template.
 
 | Keyname                   | Mandatory | Type   | Description                                                              |
-| ------------------------- | --------- | ------ |--------------------------------------------------------------------------|
+|---------------------------|-----------|--------|--------------------------------------------------------------------------|
 | tosca_definitions_version | yes       | String | The required TOSCA Definitions Version. Must be `tosca_variability_1_0`. |
 
-The version is expected to be set to `tosca_simple_1_3` when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The version is expected to be set to `tosca_simple_1_3` when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Topology Template Definition
 
@@ -25,7 +28,7 @@ A Topology Template additionally contains a Variability Definition.
 Such a Topology Template is also called Variable Topology Template.
 
 | Keyname     | Mandatory | Type                  | Description                                                                                 |
-| ----------- | --------- | --------------------- |---------------------------------------------------------------------------------------------|
+|-------------|-----------|-----------------------|---------------------------------------------------------------------------------------------|
 | variability | yes       | VariabilityDefinition | A required object for Variability Inputs, Variability Presets, and Variability Expressions. |
 
 ## Variability Definition
@@ -33,12 +36,13 @@ Such a Topology Template is also called Variable Topology Template.
 A Variability Definition defines Variability Inputs, Variability Presets, and Variability Conditions.
 
 | Keyname     | Mandatory | Type                                         | Description                                                                       |
-|-------------| --------- |----------------------------------------------|-----------------------------------------------------------------------------------|
+|-------------|-----------|----------------------------------------------|-----------------------------------------------------------------------------------|
 | inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
 
-The following non-normative and incomplete example contains a Variability Definition which declares the Variability Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
+The following non-normative and incomplete example contains a Variability Definition which declares the Variability
+Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
 Furthermore, two Variability Presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
 ```linenums="1"
@@ -64,14 +68,15 @@ variability:
         is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
 
-This definition is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+This definition is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Variability Preset Definition
 
 A Variability Preset predefines values for Variability Inputs that might be used when resolving variability.
 
 | Keyname     | Mandatory | Type                                  | Description                                         |
-| ----------- | --------- | ------------------------------------- |-----------------------------------------------------|
+|-------------|-----------|---------------------------------------|-----------------------------------------------------|
 | name        | no        | String                                | An optional name of the Variability Preset.         |
 | description | no        | String                                | An optional description for the Variability Preset. |
 | inputs      | yes       | Map(String, InputParameterAssignment) | A required map of Input Parameter Assignments.      |
@@ -79,8 +84,9 @@ A Variability Preset predefines values for Variability Inputs that might be used
 ## Variability Expression Definition
 
 A Variability Expression is an expression which consists of operators and functions which are listed below.
-For example, the following expression returns the total amount of costs. 
-This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific budget.
+For example, the following expression returns the total amount of costs.
+This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific
+budget.
 
 ```linenums="1"
 expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_input: costs_offering_b}]}
@@ -88,7 +94,7 @@ expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_i
 
 ## Variability Condition Definition
 
-A Variability Condition is a Variability Expression that returns a boolean. 
+A Variability Condition is a Variability Expression that returns a boolean.
 Allowed operators and functions are listed below.
 For example, the following condition evaluates to true if the Variability Input `mode` equals `prod`.
 
@@ -101,8 +107,8 @@ is_prod: {equal: [{get_variability_input: mode}, prod]}
 A Node Template can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective Node Template is not present.
 
-| Keyname    | Mandatory | Type                           | Description                        |
-|------------| --------- | ------------------------------ |------------------------------------|
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
@@ -113,18 +119,20 @@ prod_database:
     conditions: {get_variability_expression: is_prod}
 ```
 
-The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The `conditions` keyword is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Requirement Assignment Definition
 
 A Requirement Assignment can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective relationship is not present.
 
-| Keyname   | Mandatory | Type                           | Description                        |
-| --------- | --------- | ------------------------------ |------------------------------------|
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition assigned.
+The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition
+assigned.
 
 ```linenums="1"
 requirements:
@@ -133,7 +141,8 @@ requirements:
           conditions: {get_variability_expression: is_dev}
 ```
 
-The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The `conditions` keyword is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Group Template Definition
 
@@ -143,17 +152,19 @@ In general, the conditions are assigned to the group itself.
 These conditions must be satisfied otherwise the respective group is not present.
 Such a group is also called Conditional Group.
 
-However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the group members.
+However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the
+group members.
 These conditions must be satisfied otherwise the respective group members are not present.
 Furthermore, group elements can be Node Templates and Requirement Assignments.
 Such a group is also called Variability Group.
 
-| Keyname           | Mandatory | Type                                                                       | Description                                                                                                               |
-|-------------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| members           | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template. |
-| conditions        | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following non-normative and incomplete example contains the group `example_group` which is only present if the conditions are satisfied.
+The following non-normative and incomplete example contains the group `example_group` which is only present if the
+conditions are satisfied.
 
 ```linenums="1"
 conditional_group:
@@ -162,7 +173,8 @@ conditional_group:
     conditions: {get_variability_expression: is_prod}
 ```
 
-The following non-normative and incomplete example contains the group `example_group` whose elements are the Node Template `prod_database` and the Requirement Assignment `prod_connects_to` of the Node Template `application`.
+The following non-normative and incomplete example contains the group `example_group` whose elements are the Node
+Template `prod_database` and the Requirement Assignment `prod_connects_to` of the Node Template `application`.
 In contrast to the previous example this group is not derived from `variability.groups.ConditionalMembers`.
 
 ```linenums="1"
@@ -177,14 +189,16 @@ variability_group:
 A Policy Template can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective policy is not present.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                               |
-|------------| --------- |----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation.        |
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the Variability Condition `is_prod` assigned.
-If the condition evaluates to true, then the policy is present. 
+The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the
+Variability Condition `is_prod` assigned.
+If the condition evaluates to true, then the policy is present.
 As a result, the Node Templates `wordpress` and `mysql` _must not_ be hosted on the same server.
-For more information about this example, take a look in the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
+For more information about this example, take a look in
+the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
 
 ```linenums="1"
 node_templates:
@@ -218,18 +232,20 @@ policies:
           conditions: {get_variability_expression: is_prod}
 ```
 
-The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The `conditions` keyword is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Topology Template Input Definition
 
 A Topology Template Input can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective input is not present.
 
-| Keyname   | Mandatory | Type                           | Description                        |
-| --------- | --------- | ------------------------------ |------------------------------------|
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition assigned.
+The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition
+assigned.
 
 ```linenums="1"
 ssh_key_file:
@@ -237,12 +253,15 @@ ssh_key_file:
     conditions: {get_variability_expression: is_dev}
 ```
 
-The `conditions` keyword is expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The `conditions` keyword is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Normative Group Types
 
-There are two normative Group Types for informational purposes: `variability.groups.Root` and `variability.groups.ConditionalMembers`.
-The first Group Type is the root group every other variability-related group, such as `variability.groups.ConditionalMembers` should derive from.
+There are two normative Group Types for informational purposes: `variability.groups.Root`
+and `variability.groups.ConditionalMembers`.
+The first Group Type is the root group every other variability-related group, such
+as `variability.groups.ConditionalMembers` should derive from.
 
 ```linenums="1"
 variability.groups.Root
@@ -257,21 +276,24 @@ variability.groups.ConditionalMembers
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```
 
-These groups are expected to be removed when the Service Template is transformed to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+These groups are expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Normative Interface Types
 
 The following normative interfaces define a management interface for nodes and relationships.
-Currently, no management operations are defined. 
+Currently, no management operations are defined.
 The definition is intended to be extended in other specifications.
 
 ### Variability Management Interface for Nodes
+
 ```linenums="1"
 tosca.interfaces.node.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
 ### Variability Management Interface for Relationships
+
 ```linenums="1"
 tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
@@ -281,12 +303,12 @@ tosca.interfaces.relationship.management.Variability:
 
 The following Boolean operators can be used inside a Variability Expression.
 
-| Keyname | Input                   | Output  | Description                                        |
-| ------- | ----------------------- | ------- |----------------------------------------------------|
-| and     | List(BooleanExpression) | Boolean | Evaluates if all values are `true`.                |
-| or      | List(BooleanExpression) | Boolean | Evaluates if at least one value is `true`.         |
-| not     | BooleanExpression       | Boolean | Negates the given value.                           |
-| xor     | List(BooleanExpression) | Boolean | Evaluates if exactly one value is `true`.          |
+| Keyname | Input                                      | Output  | Description                                        |
+|---------|--------------------------------------------|---------|----------------------------------------------------|
+| and     | List(BooleanExpression)                    | Boolean | Evaluates if all values are `true`.                |
+| or      | List(BooleanExpression)                    | Boolean | Evaluates if at least one value is `true`.         |
+| not     | BooleanExpression                          | Boolean | Negates the given value.                           |
+| xor     | List(BooleanExpression)                    | Boolean | Evaluates if exactly one value is `true`.          |
 | implies | Tuple(BooleanExpression, BoolenExpression) | Boolean | Evaluates if first value implies the second value. |
 
 ## Arithmetic Operators
@@ -294,7 +316,7 @@ The following Boolean operators can be used inside a Variability Expression.
 The following arithmetic operators can be used inside a Variability Expression.
 
 | Keyname | Input                                       | Output  | Description                               |
-| ------- | ------------------------------------------- | ------- |-------------------------------------------|
+|---------|---------------------------------------------|---------|-------------------------------------------|
 | add     | List(NumericExpression)                     | Numeric | Sums up given values.                     |
 | sub     | List(NumericExpression)                     | Numeric | Subtracts values from the first one.      |
 | mul     | List(NumericExpression)                     | Numeric | Multiplies given values.                  |
@@ -305,24 +327,24 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 The following intrinsic functions can be used inside a Variability Expression.
 
-| Keyname                    | Input                                                            | Output                                                                                                                             | Description                                                                                                                                |
-|----------------------------|------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                           | Any                                                                                                                                | Returns the value of a Variability Input.                                                                                                  |
-| get_variability_expression | String                                                           | Any                                                                                                                                | Returns the value of the Variability Expression.                                                                                           |
-| get_variability_condition  | String                                                           | Boolean                                                                                                                            | Returns the value of the Variability Condition.                                                                                            |
-| get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                                             |
-| get_source_presence        | 'SELF'                                                            | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| get_target_presence        | 'SELF'               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| concat                     | List(ValueExpression)                                            | String                                                                                                                             | Concatenates the given values.                                                                                                             |
-| join                       | Tuple(List(ValueExpression), String)                             | String                                                                                                                             | Joins the given values using the provided delimiter.                                                                                       |
-| token                      | Tuple(ValueExpression, String, Number)                           | String                                                                                                                             | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                    |
+| Keyname                    | Input                                                            | Output  | Description                                                                                                              |
+|----------------------------|------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                                           | Any     | Returns the value of a Variability Input.                                                                                |
+| get_variability_expression | String                                                           | Any     | Returns the value of the Variability Expression.                                                                         |
+| get_variability_condition  | String                                                           | Boolean | Returns the value of the Variability Condition.                                                                          |
+| get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                           |
+| get_source_presence        | 'SELF'                                                           | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_target_presence        | 'SELF'                                                           | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| concat                     | List(ValueExpression)                                            | String  | Concatenates the given values.                                                                                           |
+| join                       | Tuple(List(ValueExpression), String)                             | String  | Joins the given values using the provided delimiter.                                                                     |
+| token                      | Tuple(ValueExpression, String, Number)                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
 
 ## Constraint Operators
 
 The following constraint operators can be used inside a Variability Expression.
 
 | Keyname          | Input                                                                 | Output  | Description                                                           |
-| ---------------- | --------------------------------------------------------------------- | ------- |-----------------------------------------------------------------------|
+|------------------|-----------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
 | equal            | List(ValueExpression)                                                 | Boolean | Evaluates if the given values are equal.                              |
 | greater_than     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
 | greater_or_equal | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greater or equal to the second value. |
@@ -335,11 +357,12 @@ The following constraint operators can be used inside a Variability Expression.
 
 ## Processing
 
-In the following we describe on a high-level the steps to derive a Variability-Resolved Service Template from a Variable Service Template.
+In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a Variable
+Service Template.
 
 ### Resolve Variability
 
-To resolve the variability in a Variable Service Template conduct the following steps: 
+To resolve the variability in a Variable Service Template conduct the following steps:
 
 1. Remove all Node Templates which are _not present_.
 1. Remove all Requirement Assignments which are _not present_.
@@ -349,18 +372,19 @@ To resolve the variability in a Variable Service Template conduct the following 
 1. Remove all Group Members which are _not present_ from Group Template.
 1. Remove all Policy Templates which are _not present_.
 1. Remove all Policy Targets which are _not present_ from Policy Template.
-1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
+1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node
+   Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
 
 ### Check Element Presence
 
-To check if an element is present check that all assigned conditions are satisfied: 
+To check if an element is present check that all assigned conditions are satisfied:
 
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
 1. The element is present only if all conditions are satisfied.
 
-To further support modeling the following improvements can be taken: 
+To further support modeling the following improvements can be taken:
 
 1. Prune Relations: The default condition of a relation checks if the source node is present.
 1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
@@ -369,11 +393,61 @@ To further support modeling the following improvements can be taken:
 
 ### Check Consistency
 
-To check the consistency conduct the following steps: 
+To check the consistency conduct the following steps:
 
-1. Ensure that each relation source exists
-1. Ensure that each relation target exists
-1. Ensure that every node has at maximum one hosting relation
-1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable Service Template.
+1. Ensure that each relation source exists. If not throw Relation Source Missing Error.
+1. Ensure that each relation target exists. If not throw Relation Target Missing Error.
+1. Ensure that every node has at maximum one hosting relation. If not throw Ambiguous Hosting Error.
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable
+   Service Template. If not throw Hosting Missing Error.
 
-Since the derived Service Template might be further processed, e.g. by [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic], some or all of these consistency steps might be omitted.
+Since the derived Service Template might be further processed, e.g. by
+[Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
+some or all of these consistency steps might be omitted.
+
+### Processing Errors 
+
+When variability is resolved, the following errors might be thrown:
+
+
+| Error                         | Message                                                                             |
+|-------------------------------|-------------------------------------------------------------------------------------|
+| Relation Source Missing Error | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
+| Relation Target Missing Error | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
+| Ambiguous Hosting Error       | Node "${node.name}" has more than one hosting relations                                                                                    |
+| Hosting Missing Error         | Node "${node.name}" requires a hosting relation | 
+
+## Testing
+
+A CSAR might contain Variability Tests to continuously test that the variability is resolved as expected, e.g., during
+continuous integration pipelines.
+Therefore, add the directory `/tests` in the root of the CSAR.
+Each test is defined inside its own directory of `/tests` and might contain the following files.
+
+| File          | Description                                                |
+|---------------|------------------------------------------------------------|
+| `est.yaml`    | The expected service template after resolving variability. |
+| `inputs.yaml` | The Variability Inputs used for resolving variability.     |
+| `test.yaml`   | A description of the test including configuration.         |
+
+Here is exemplary structure of a CSAR that has one Variability Test.
+
+```
+my-csar/
+├─ tests/
+│  ├─ my-test-case/
+│  │  ├─ est.yaml
+│  │  ├─ inputs.yaml
+│  │  ├─ test.yaml
+├─ service-template.yaml
+```
+
+The `test.yaml` file describes and configures the test and has the following structure.
+
+| Keyname     | Mandatory | Type   | Description                                            |
+|-------------|-----------|--------|--------------------------------------------------------|
+| name        | false     | String | Display name of the test case.                         | 
+| description | false     | String | Description of the test case.                          | 
+| preset      | false     | String | Variability Preset to used when resolving variability. | 
+| error       | false     | String | The expected error that is thrown.                     | 
+

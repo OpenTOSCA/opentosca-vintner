@@ -5,7 +5,6 @@ import Controller from '../../src/controller'
 import {ServiceTemplate} from '../../src/specification/service-template'
 import {expect} from 'chai'
 import {expectAsyncThrow} from '../utils'
-import {prettyJSON} from '../../src/utils/utils'
 
 type Group = {
     name: string
@@ -63,7 +62,6 @@ describe('resolver', async () => {
 type Config = {
     preset?: string
     error?: string
-    dir?: string
     resolver?: ResolvingOptions
 }
 
