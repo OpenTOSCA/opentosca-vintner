@@ -180,7 +180,7 @@ template
 template
     .command('test')
     .description('runs tests defined in the CSAR')
-    .requiredOption('--path <string>', 'path or link to the csar')
+    .requiredOption('--path <string>', 'path or link to the extracted CSAR')
     .action(
         hae(async options => {
             await Controller.template.test(options)
