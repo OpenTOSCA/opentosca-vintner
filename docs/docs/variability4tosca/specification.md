@@ -335,6 +335,7 @@ The following intrinsic functions can be used inside a Variability Expression.
 | get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                           |
 | get_source_presence        | 'SELF'                                                           | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
 | get_target_presence        | 'SELF'                                                           | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| has_present_targets        | String | Boolean | Returns if any target of the given policy is present. 
 | concat                     | List(ValueExpression)                                            | String  | Concatenates the given values.                                                                                           |
 | join                       | Tuple(List(ValueExpression), String)                             | String  | Joins the given values using the provided delimiter.                                                                     |
 | token                      | Tuple(ValueExpression, String, Number)                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
@@ -364,6 +365,7 @@ Service Template.
 
 To resolve the variability in a Variable Service Template conduct the following steps:
 
+1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
 1. Remove all Node Templates which are _not present_.
 1. Remove all Requirement Assignments which are _not present_.
 1. Remove all Relationship Templates which are not used by any Requirement Assignment.
@@ -395,11 +397,10 @@ To further support modeling the following improvements can be taken:
 
 To check the consistency conduct the following steps:
 
-1. Ensure that each relation source exists. If not throw Relation Source Missing Error.
-1. Ensure that each relation target exists. If not throw Relation Target Missing Error.
-1. Ensure that every node has at maximum one hosting relation. If not throw Ambiguous Hosting Error.
-1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable
-   Service Template. If not throw Hosting Missing Error.
+1. Ensure that each relation source exists. Otherwise, throw Missing Relation Source Error.
+1. Ensure that each relation target exists. Otherwise, throw Missing Relation Target Error.
+1. Ensure that every node has at maximum one hosting relation. Otherwise, throw Ambiguous Hosting Error.
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable Service Template. Otherwise, throw Missing Hosting  Error.
 
 Since the derived Service Template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
@@ -410,26 +411,26 @@ some or all of these consistency steps might be omitted.
 When variability is resolved, the following errors might be thrown:
 
 
-| Error                           | Message                                                                             |
-|---------------------------------|-------------------------------------------------------------------------------------|
-| Unsupported TOSCA Version Error | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
-| Relation Source Missing Error   | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
-| Relation Target Missing Error   | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
-| Ambiguous Hosting Error         | Node "${node.name}" has more than one hosting relations                                                                                    |
-| Hosting Missing Error           | Node "${node.name}" requires a hosting relation | 
+| Error                          | Message                                                                             |
+|--------------------------------|-------------------------------------------------------------------------------------|
+| Unsupported TOSCA Version      | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
+| Missing Relation Source | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
+| Missing Relation Target        | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
+| Ambiguous Hosting              | Node "${node.name}" has more than one hosting relations                                                                                    |
+| Hosting Missing                | Node "${node.name}" requires a hosting relation | 
 
-## Testing
+## Variability Tests
 
 A CSAR might contain Variability Tests to continuously test that the variability is resolved as expected, e.g., during
 continuous integration pipelines.
 Therefore, add the directory `/tests` in the root of the CSAR.
 Each test is defined inside its own directory of `/tests` and might contain the following files.
 
-| File          | Description                                                |
-|---------------|------------------------------------------------------------|
-| `est.yaml`    | The expected service template after resolving variability. |
-| `inputs.yaml` | The Variability Inputs used for resolving variability.     |
-| `test.yaml`   | A description of the test including configuration.         |
+| File            | Description                                                |
+|-----------------|------------------------------------------------------------|
+| `expected.yaml` | The expected service template after resolving variability. |
+| `inputs.yaml`   | The Variability Inputs used for resolving variability.     |
+| `test.yaml`     | A description of the test including configuration.         |
 
 Here is exemplary structure of a CSAR that has one Variability Test.
 
@@ -452,3 +453,7 @@ The `test.yaml` file describes and configures the test and has the following str
 | preset      | false     | String | Variability Preset to used when resolving variability. | 
 | error       | false     | String | The expected error that is thrown.                     | 
 
+## Conformance Tests
+
+There are a variety of conformance tests for Variability4TOSCA implementations.
+The tests can be found in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.

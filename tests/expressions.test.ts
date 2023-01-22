@@ -363,6 +363,145 @@ it('get_target_presence: absent', () => {
     expect(result).to.equal(false)
 })
 
+it('has_present_targets: no targets -> false', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            policies: [
+                {
+                    policy: {
+                        type: 'policy',
+                        targets: [],
+                    },
+                },
+            ],
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({has_present_targets: 'policy'}, {})
+    expect(result).to.equal(false)
+})
+
+it('has_present_targets: false false false true -> true', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node_one: {
+                    conditions: false,
+                },
+                node_two: {
+                    conditions: false,
+                },
+                node_three: {
+                    conditions: false,
+                },
+                node_four: {
+                    conditions: true,
+                },
+            },
+            groups: {
+                group_one: {
+                    members: ['node_three', 'node_four'],
+                },
+            },
+            policies: [
+                {
+                    policy: {
+                        type: 'policy',
+                        targets: ['node_one', 'node_two', 'group_one'],
+                    },
+                },
+            ],
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({has_present_targets: 'policy'}, {})
+    expect(result).to.equal(true)
+})
+
+it('has_present_targets: group false false -> false', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node_one: {
+                    conditions: false,
+                },
+                node_two: {
+                    conditions: false,
+                },
+                node_three: {
+                    conditions: false,
+                },
+                node_four: {
+                    conditions: false,
+                },
+            },
+            groups: {
+                group_one: {
+                    members: ['node_three', 'node_four'],
+                },
+            },
+            policies: [
+                {
+                    policy: {
+                        type: 'policy',
+                        targets: ['node_one', 'node_two', 'group_one'],
+                    },
+                },
+            ],
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({has_present_targets: 'policy'}, {})
+    expect(result).to.equal(false)
+})
+
+it('has_present_targets: true false -> true', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node_one: {
+                    conditions: true,
+                },
+                node_two: {
+                    conditions: false,
+                },
+            },
+            policies: [
+                {
+                    policy: {
+                        type: 'policy',
+                        targets: ['node_one', 'node_two'],
+                    },
+                },
+            ],
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({has_present_targets: 'policy'}, {})
+    expect(result).to.equal(true)
+})
+
+it('has_present_targets: false false -> false', () => {
+    const resolver = new VariabilityResolver({
+        topology_template: {
+            node_templates: {
+                node_one: {
+                    conditions: false,
+                },
+                node_two: {
+                    conditions: false,
+                },
+            },
+            policies: [
+                {
+                    policy: {
+                        type: 'policy',
+                        targets: ['node_one', 'node_two'],
+                    },
+                },
+            ],
+        },
+    } as any)
+    const result = resolver.evaluateVariabilityCondition({has_present_targets: 'policy'}, {})
+    expect(result).to.equal(false)
+})
+
 it('concat', () => {
     const resolver = getDefaultVariabilityResolver()
     const result = resolver.evaluateVariabilityExpression({concat: ['hello', ' ', 'world']}, {})

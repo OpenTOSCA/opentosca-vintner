@@ -81,11 +81,10 @@ async function runTest(dir: string, vstdir: string) {
 }
 
 export function getDefaultVariableServiceTemplate(dir: string) {
-    for (const name of ['vst.yaml', 'variable-service-template.yaml', 'service-template.yaml']) {
+    for (const name of ['vst.yaml', 'variable-service-template.yaml', 'service-template.yaml', 'template.yaml']) {
         const file = path.join(dir, name)
         if (files.isFile(file)) return file
     }
-
     throw new Error(`Did not find variable service template in directory "${dir}"`)
 }
 
@@ -97,7 +96,11 @@ export function getDefaultInputs(dir: string) {
 }
 
 export function readDefaultExpect(dir: string) {
-    return files.loadYAML<ServiceTemplate>(path.join(dir, 'est.yaml'))
+    for (const name of ['est.yaml', 'expected.yaml']) {
+        const file = path.join(dir, name)
+        if (files.isFile(file)) return files.loadYAML<ServiceTemplate>(file)
+    }
+    throw new Error(`Did not find expected service template in directory "${dir}"`)
 }
 
 export function readConfig(dir: string) {
