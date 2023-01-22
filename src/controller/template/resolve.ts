@@ -8,6 +8,7 @@ import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {listIsEmpty, prettyJSON} from '#utils'
 import * as featureIDE from '#utils/feature-ide'
+import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -31,6 +32,8 @@ export type ResolvingOptions = {
     disableRelationTargetConsistencyCheck?: boolean
     disableAmbiguousHostingConsistencyCheck?: boolean
     disableExpectedHostingConsistencyCheck?: boolean
+    disableMissingArtifactParentConsistencyCheck?: boolean
+    disableAmbiguousArtifactConsistencyCheck?: boolean
 }
 
 export default async function (options: TemplateResolveArguments) {
@@ -74,7 +77,7 @@ export default async function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input' | 'policy' | 'group'
+    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact'
     name: string
     display: string
     present?: boolean
@@ -90,6 +93,7 @@ type Node = ConditionalElementBase & {
     ingoing: Relation[]
     outgoing: Relation[]
     groups: Group[]
+    artifacts: Artifact[]
 }
 
 type Relation = ConditionalElementBase & {
@@ -110,7 +114,14 @@ type Group = ConditionalElementBase & {
     members: (Node | Relation)[]
 }
 
-type ConditionalElement = Input | Node | Relation | Policy | Group
+type Artifact = ConditionalElementBase & {
+    type: 'artifact'
+    index?: number
+    node: Node
+    _raw: ArtifactDefinition
+}
+
+type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
@@ -119,7 +130,7 @@ type VariabilityExpressionContext = {
 export class VariabilityResolver {
     private readonly serviceTemplate: ServiceTemplate
 
-    private variabilityInputs?: InputAssignmentMap
+    private variabilityInputs: InputAssignmentMap = {}
     private options: ResolvingOptions = {}
 
     private nodes: Node[] = []
@@ -135,6 +146,8 @@ export class VariabilityResolver {
 
     private inputs: Input[] = []
     private inputsMap = new Map<string, Input>()
+
+    private artifacts: Artifact[] = []
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -166,10 +179,12 @@ export class VariabilityResolver {
                 ingoing: [],
                 outgoing: [],
                 groups: [],
+                artifacts: [],
             }
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
+            // Relations
             nodeTemplate.requirements?.forEach(map => {
                 const relationName = utils.firstKey(map)
                 const assignment = map[relationName]
@@ -199,6 +214,43 @@ export class VariabilityResolver {
                     }
                 }
             })
+
+            // Artifacts
+            if (validator.isDefined(nodeTemplate.artifacts)) {
+                if (validator.isArray(nodeTemplate.artifacts)) {
+                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
+                        const artifactName = utils.firstKey(artifactMap)
+                        const artifactDefinition = artifactMap[artifactName]
+
+                        const artifact: Artifact = {
+                            type: 'artifact',
+                            name: artifactName,
+                            index: artifactIndex,
+                            display: `${artifactName}@${artifactIndex}`,
+                            conditions: utils.toList(artifactDefinition.conditions),
+                            node,
+                            _raw: artifactDefinition,
+                        }
+
+                        node.artifacts.push(artifact)
+                        this.artifacts.push(artifact)
+                    }
+                } else {
+                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
+                        const artifact: Artifact = {
+                            type: 'artifact',
+                            name: artifactName,
+                            display: artifactName,
+                            conditions: utils.toList(artifactDefinition.conditions),
+                            node,
+                            _raw: artifactDefinition,
+                        }
+
+                        node.artifacts.push(artifact)
+                        this.artifacts.push(artifact)
+                    }
+                }
+            }
         })
 
         // Assign ingoing relations to nodes
@@ -324,6 +376,7 @@ export class VariabilityResolver {
         for (const input of this.inputs) this.checkPresence(input)
         for (const group of this.groups) this.checkPresence(group)
         for (const policy of this.policies) this.checkPresence(policy)
+        for (const artifact of this.artifacts) this.checkPresence(artifact)
         return this
     }
 
@@ -382,6 +435,9 @@ export class VariabilityResolver {
             conditions = [{has_present_members: element.name}]
         }
 
+        // TODO: Prune Artifact
+        // TODO: Force Prune Artifact
+
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
         element.present = present
@@ -435,6 +491,27 @@ export class VariabilityResolver {
             }
         }
 
+        // Ensure that node of each artifact exists
+        if (!this.options.disableMissingArtifactParentConsistencyCheck) {
+            const artifacts = this.artifacts.filter(artifact => artifact.present)
+            for (const artifact of artifacts) {
+                if (!artifact.node.present)
+                    throw new Error(`Node "${artifact.node.display}" of artifact "${artifact.display}" does not exist`)
+            }
+        }
+
+        // Ensure that artifacts are unique within their node (Also considering non-present nodes)
+        if (!this.options.disableAmbiguousArtifactConsistencyCheck) {
+            for (const node of this.nodes) {
+                const names = new Set()
+                for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
+                    if (names.has(artifact.name))
+                        throw new Error(`Artifact "${artifact.display}" of node "${node.display}" is ambiguous`)
+                    names.add(artifact.name)
+                }
+            }
+        }
+
         return this
     }
 
@@ -461,6 +538,18 @@ export class VariabilityResolver {
                     if (!validator.isString(assignment)) delete assignment.conditions
                     return node.outgoing[index].present
                 })
+
+                // Delete all artifacts which are not present
+                const artifacts = node.artifacts.filter(artifact => artifact.present)
+                if (!artifacts.length) {
+                    delete nodeTemplate.artifacts
+                } else {
+                    nodeTemplate.artifacts = artifacts.reduce<ArtifactDefinitionMap>((acc, artifact) => {
+                        delete artifact._raw.conditions
+                        acc[artifact.name] = artifact._raw
+                        return acc
+                    }, {})
+                }
             }
         )
 

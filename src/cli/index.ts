@@ -164,6 +164,14 @@ template
         '--disable-expected-hosting-consistency-check [boolean]',
         'disable consistency check regarding expected hosting relation'
     )
+    .option(
+        '--disable-missing-artifact-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of artifact'
+    )
+    .option(
+        '--disable-ambiguous-artifact-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous artifacts'
+    )
     .action(
         hae(async options => {
             await Controller.template.resolve(options)
@@ -308,6 +316,14 @@ instances
     .option(
         '--disable-expected-hosting-consistency-check [boolean]',
         'disable consistency check regarding expected hosting relation'
+    )
+    .option(
+        '--disable-missing-artifact-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of artifact'
+    )
+    .option(
+        '--disable-ambiguous-artifact-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous artifacts'
     )
     .action(
         hae(async options => {
