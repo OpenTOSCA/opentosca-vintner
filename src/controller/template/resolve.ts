@@ -731,9 +731,7 @@ export class VariabilityResolver {
         if (validator.isDefined(condition.has_present_targets)) {
             const element = this.evaluateVariabilityExpression(condition.has_present_targets, context)
             validator.ensureString(element)
-            const policy = this.getPolicy(element)
-
-            return policy.targets.some(target => {
+            return this.getPolicy(element).targets.some(target => {
                 if (target.type === 'node') {
                     return this.checkPresence(target)
                 }
@@ -742,6 +740,12 @@ export class VariabilityResolver {
                     return target.members.some(member => this.checkPresence(member))
                 }
             })
+        }
+
+        if (validator.isDefined(condition.has_present_members)) {
+            const element = this.evaluateVariabilityExpression(condition.has_present_members, context)
+            validator.ensureString(element)
+            return this.getGroup(element).members.some(member => this.checkPresence(member))
         }
 
         if (validator.isDefined(condition.concat)) {

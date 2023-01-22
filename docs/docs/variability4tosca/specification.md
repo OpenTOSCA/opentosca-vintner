@@ -327,18 +327,19 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 The following intrinsic functions can be used inside a Variability Expression.
 
-| Keyname                    | Input                                                            | Output  | Description                                                                                                              |
-|----------------------------|------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                           | Any     | Returns the value of a Variability Input.                                                                                |
-| get_variability_expression | String                                                           | Any     | Returns the value of the Variability Expression.                                                                         |
-| get_variability_condition  | String                                                           | Boolean | Returns the value of the Variability Condition.                                                                          |
+| Keyname                    | Input                                                          | Output  | Description                                                                                                              |
+|----------------------------|----------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                                         | Any     | Returns the value of a Variability Input.                                                                                |
+| get_variability_expression | String                                                         | Any     | Returns the value of the Variability Expression.                                                                         |
+| get_variability_condition  | String                                                         | Boolean | Returns the value of the Variability Condition.                                                                          |
 | get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                           |
-| get_source_presence        | 'SELF'                                                           | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| get_target_presence        | 'SELF'                                                           | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_source_presence        | SELF                                                          | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_target_presence        | SELF                                                          | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
 | has_present_targets        | String | Boolean | Returns if any target of the given policy is present. 
-| concat                     | List(ValueExpression)                                            | String  | Concatenates the given values.                                                                                           |
-| join                       | Tuple(List(ValueExpression), String)                             | String  | Joins the given values using the provided delimiter.                                                                     |
-| token                      | Tuple(ValueExpression, String, Number)                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+| has_present_members        | String | Boolean | Returns if any member of the given group is present. 
+| concat                     | List(ValueExpression)                                          | String  | Concatenates the given values.                                                                                           |
+| join                       | Tuple(List(ValueExpression), String)                           | String  | Joins the given values using the provided delimiter.                                                                     |
+| token                      | Tuple(ValueExpression, String, Number)                         | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
 
 ## Constraint Operators
 
@@ -411,13 +412,13 @@ some or all of these consistency steps might be omitted.
 When variability is resolved, the following errors might be thrown:
 
 
-| Error                          | Message                                                                             |
-|--------------------------------|-------------------------------------------------------------------------------------|
-| Unsupported TOSCA Version      | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
-| Missing Relation Source | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
-| Missing Relation Target        | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
-| Ambiguous Hosting              | Node "${node.name}" has more than one hosting relations                                                                                    |
-| Hosting Missing                | Node "${node.name}" requires a hosting relation | 
+| Error                     | Message                                                                             |
+|---------------------------|-------------------------------------------------------------------------------------|
+| Unsupported TOSCA Version | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
+| Missing Relation Source   | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
+| Missing Relation Target   | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
+| Ambiguous Hosting         | Node "${node.name}" has more than one hosting relations                                                                                    |
+| Missing Hosting           | Node "${node.name}" requires a hosting relation | 
 
 ## Variability Tests
 
