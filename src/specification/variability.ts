@@ -45,6 +45,7 @@ export type VariabilityExpression =
           get_source_presence?: 'SELF'
           get_target_presence?: 'SELF'
           has_present_targets?: VariabilityExpression
+          has_present_members?: VariabilityExpression
           concat?: VariabilityExpression[]
           join?: [VariabilityExpression[], string]
           token?: [VariabilityExpression, string, number]
