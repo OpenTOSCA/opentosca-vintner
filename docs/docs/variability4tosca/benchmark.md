@@ -2,8 +2,8 @@
 
 To benchmark our implementation of a Variability4TOSCA processor, we run several tests.
 Thereby, a service template is generated and then resolved based on a seed.
-A seed of value n results in 2n node templates and 2n relationship templates, thus 4n templates.
-For example, a seed of 10,000 generated 20,0000 node templates and 20,0000 relationship templates.
+A seed of value n results in 2n node templates and 2n relationship templates, thus, 4n templates.
+For example, a seed of 10,000 generates 20,0000 node templates and 20,0000 relationship templates.
 When variability is resolved, n node templates and n relationship templates are removed.
 
 ## Tests In-Memory
