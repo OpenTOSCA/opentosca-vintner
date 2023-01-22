@@ -96,11 +96,13 @@ type Relation = ConditionalElementBase & {
 
 type Policy = ConditionalElementBase & {
     type: 'policy'
+    targets: (Node | Group)[]
 }
 
 type Group = ConditionalElementBase & {
     type: 'group'
     variability: boolean
+    members: (Node | Relation)[]
 }
 
 type ConditionalElement = Input | Node | Relation | Policy | Group
@@ -203,18 +205,6 @@ export class VariabilityResolver {
             if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
         }
 
-        // Policies
-        serviceTemplate.topology_template?.policies?.forEach(map => {
-            const name = utils.firstKey(map)
-            const template = map[name]
-            const policy: Policy = {
-                type: 'policy',
-                name,
-                conditions: utils.toList(template.conditions),
-            }
-            this.policies.push(policy)
-        })
-
         // Groups
         Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
             const group: Group = {
@@ -225,6 +215,7 @@ export class VariabilityResolver {
                     TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
                     TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
                 ].includes(template.type),
+                members: [],
             }
             this.groups.push(group)
             this.groupsMap.set(name, group)
@@ -232,6 +223,34 @@ export class VariabilityResolver {
             template.members.forEach(member => {
                 const element = this.getElement(member)
                 element.groups.push(group)
+                group.members.push(element)
+            })
+        })
+
+        // Policies
+        serviceTemplate.topology_template?.policies?.forEach(map => {
+            const name = utils.firstKey(map)
+            const template = map[name]
+            const policy: Policy = {
+                type: 'policy',
+                name,
+                conditions: utils.toList(template.conditions),
+                targets: [],
+            }
+            this.policies.push(policy)
+
+            template.targets?.forEach(target => {
+                const node = this.nodesMap.get(target)
+                if (validator.isDefined(node)) {
+                    return policy.targets.push(node)
+                }
+
+                const group = this.groupsMap.get(target)
+                if (validator.isDefined(group)) {
+                    return policy.targets.push(group)
+                }
+
+                throw new Error(`Policy target "${target}" not found`)
             })
         })
     }
@@ -253,13 +272,40 @@ export class VariabilityResolver {
         const node = this.getNode(member[0])
 
         // Element is [node name, relation name]
-        if (validator.isString(member[1])) relation = node.outgoing.find(relation => relation.name === member[1])
+        if (validator.isString(member[1])) {
+            const relations = node.outgoing.filter(relation => relation.name === member[1])
+            if (relations.length > 1) throw new Error(`Relation "${prettyJSON(member)}" is ambiguous`)
+            relation = relations[0]
+        }
 
         // Element is [node name, relation index]
         if (validator.isNumber(member[1])) relation = node.outgoing[member[1]]
 
         validator.ensureDefined(relation, `Relation "${prettyJSON(member)}" not found`)
         return relation
+    }
+
+    getGroup(name: string) {
+        const group = this.groupsMap.get(name)
+        validator.ensureDefined(group, `Group "${name}" not found`)
+        return group
+    }
+
+    getPolicy(element: string | number) {
+        let policy
+
+        if (validator.isString(element)) {
+            const policies = this.policies.filter(policy => policy.name === element)
+            if (policies.length > 1) throw new Error(`Policy name "${element}" is ambiguous`)
+            policy = policies[0]
+        }
+
+        if (validator.isNumber(element)) {
+            policy = this.policies[element]
+        }
+
+        if (validator.isUndefined(policy)) throw new Error(`Policy "${element}" not found`)
+        return policy
     }
 
     resolve() {
@@ -398,7 +444,7 @@ export class VariabilityResolver {
                 delete this._serviceTemplate.topology_template!.relationship_templates![name]
         })
 
-        // Delete all groups which are not present
+        // Delete all groups which are not present and remove all members which are not present
         this.groups.forEach(group => {
             if (group.present) {
                 const template = this._serviceTemplate.topology_template!.groups![group.name]
@@ -422,7 +468,7 @@ export class VariabilityResolver {
             }
         })
 
-        // Delete all policy templates which are not present
+        // Delete all policy templates which are not present and remove all targets which are not present
         if (validator.isDefined(this._serviceTemplate?.topology_template?.policies)) {
             this._serviceTemplate.topology_template!.policies =
                 this._serviceTemplate.topology_template!.policies.filter((map, index) => {
@@ -680,6 +726,22 @@ export class VariabilityResolver {
             if (context?.element?.type !== 'relation')
                 throw new Error(`"get_target_presence" is only valid inside a relation`)
             return this.checkPresence(this.getElement(context.element.target))
+        }
+
+        if (validator.isDefined(condition.has_present_targets)) {
+            const element = this.evaluateVariabilityExpression(condition.has_present_targets, context)
+            validator.ensureString(element)
+            const policy = this.getPolicy(element)
+
+            return policy.targets.some(target => {
+                if (target.type === 'node') {
+                    return this.checkPresence(target)
+                }
+
+                if (target.type === 'group') {
+                    return target.members.some(member => this.checkPresence(member))
+                }
+            })
         }
 
         if (validator.isDefined(condition.concat)) {

@@ -1,16 +1,27 @@
-tosca_definitions_version: tosca_simple_yaml_1_3
+tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
     groups:
-        without_conditions:
+        group_one:
+            type: variability.groups.ConditionalMembers
+            members: [magic, [magic, 0], [application, magic]]
+            conditions: false
+
+        group_two:
             type: tosca.groups.Root
-            members: [container]
+            members: [container, magic]
+
+        group_three:
+            type: tosca.groups.Root
+            members: [vm]
+            conditions: false
 
     node_templates:
         application:
             type: docker.container.application
             requirements:
                 - host: container
+                - magic: magic
                 - more: another_application
 
         container:
@@ -35,3 +46,8 @@ topology_template:
 
         vm:
             type: openstack.vm
+
+        magic:
+            type: magic
+            requirements:
+                - magic: application
