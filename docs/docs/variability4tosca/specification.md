@@ -439,7 +439,7 @@ Here is exemplary structure of a CSAR that has one Variability Test.
 my-csar/
 ├─ tests/
 │  ├─ my-test-case/
-│  │  ├─ est.yaml
+│  │  ├─ expected.yaml
 │  │  ├─ inputs.yaml
 │  │  ├─ test.yaml
 ├─ service-template.yaml
