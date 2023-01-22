@@ -10,7 +10,5 @@ it('benchmark: run', () => {
 
 it('benchmark: generate service template', () => {
     const result = generateBenchmarkServiceTemplate(2)
-    expect(result).to.deep.equal(
-        files.loadYAML<ServiceTemplate>(path.join(__dirname, 'variable-service-template.yaml'))
-    )
+    expect(result).to.deep.equal(files.loadYAML<ServiceTemplate>(path.join(__dirname, 'expected.yaml')))
 })
