@@ -22,10 +22,10 @@ export type ResolvingOptions = {
     forcePruneRelations?: boolean
     pruneNodes?: boolean
     forcePruneNodes?: boolean
-    prunePolicies?: boolean // TODO: add to cli
-    forcePrunePolicies?: boolean // TODO: add to cli
-    pruneGroups?: boolean // TODO: add to cli
-    forcePruneGroups?: boolean // TODO: add to cli
+    prunePolicies?: boolean
+    forcePrunePolicies?: boolean
+    pruneGroups?: boolean
+    forcePruneGroups?: boolean
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean

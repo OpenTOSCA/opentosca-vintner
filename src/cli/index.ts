@@ -143,6 +143,10 @@ template
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
     .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
     .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
+    .option('--prune-policies [boolean]', 'prune policy if no target is present and no conditions are assigned')
+    .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
+    .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
+    .option('--force-prune-groups [boolean]', 'prune node if no member is present')
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -284,7 +288,11 @@ instances
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
     .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
     .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
-    .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
+    .option('--prune-policies [boolean]', 'prune policy if no target is present and no conditions are assigned')
+    .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
+    .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
+    .option('--force-prune-groups [boolean]', 'prune node if no member is present')
+    .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
         'disable consistency check regarding relation sources'

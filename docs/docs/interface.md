@@ -357,10 +357,14 @@ resolves variability
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
 | prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
 | force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
-| disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
+| prune-policies |  false  | boolean | prune policy if no target is present and no conditions are assigned |
+| force-prune-policies |  false  | boolean | prune policy if no target is present |
+| prune-groups |  false  | boolean | prune group if no member is present and no conditions are assigned |
+| force-prune-groups |  false  | boolean | prune node if no member is present |
+| disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
-| disable-maximum-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable-ambiguous-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
 | disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 
 ## template query
@@ -718,10 +722,14 @@ resolves variability
 | force-prune-relations |  false  | boolean | prune relation if source is not present |
 | prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
 | force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
-| disable-consistency-check |  false  | boolean | disable (all) consistency check(s) |
+| prune-policies |  false  | boolean | prune policy if no target is present and no conditions are assigned |
+| force-prune-policies |  false  | boolean | prune policy if no target is present |
+| prune-groups |  false  | boolean | prune group if no member is present and no conditions are assigned |
+| force-prune-groups |  false  | boolean | prune node if no member is present |
+| disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
-| disable-maximum-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable-ambiguous-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
 | disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 
 ## instances inspect
