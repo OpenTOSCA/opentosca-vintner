@@ -393,6 +393,10 @@ To further support modeling the following improvements can be taken:
 1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
 1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
 1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
+1. Prune Policies: The default condition of a policy checks if any targets are present.
+1. Prune Force Policies: Ignore any assigned conditions and check instead if any targets are present.
+1. Prune Groups: The default condition of a group checks if any members are present.
+1. Prune Force Groups: Ignore any assigned conditions and check instead if any members are present.
 
 ### Check Consistency
 
@@ -412,13 +416,15 @@ some or all of these consistency steps might be omitted.
 When variability is resolved, the following errors might be thrown:
 
 
-| Error                     | Message                                                                             |
-|---------------------------|-------------------------------------------------------------------------------------|
-| Unsupported TOSCA Version | TOSCA definitions version "${template.tosca_definitions_version}" not supported |
-| Missing Relation Source   | Relation source "${relation.source}" of relation "${relation.name}" does not exist  |
-| Missing Relation Target   | Relation target "${relation.target}" of relation "${relation.name}" does not exist  |
-| Ambiguous Hosting         | Node "${node.name}" has more than one hosting relations                                                                                    |
-| Missing Hosting           | Node "${node.name}" requires a hosting relation | 
+| Error                     | Message                                                                            |
+|---------------------------|------------------------------------------------------------------------------------|
+| Unsupported TOSCA Version | TOSCA definitions version "${template.tosca_definitions_version}" not supported    |
+| Missing Relation Source   | Relation source "${relation.source}" of relation "${relation.name}" does not exist |
+| Missing Relation Target   | Relation target "${relation.target}" of relation "${relation.name}" does not exist |
+| Ambiguous Hosting         | Node "${node.name}" has more than one hosting relations                            |
+| Missing Hosting           | Node "${node.name}" requires a hosting relation                                    |
+| Missing Policy Target     | Policy target "${target.name}" of policy "${policy.name}" does not exist              |
+| Missing Group Member      | Group member "${member.name}" of group "${group.name}" does not exist                                                                                   | 
 
 ## Variability Tests
 

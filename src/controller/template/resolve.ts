@@ -22,10 +22,14 @@ export type ResolvingOptions = {
     forcePruneRelations?: boolean
     pruneNodes?: boolean
     forcePruneNodes?: boolean
-    disableConsistencyCheck?: boolean
+    prunePolicies?: boolean // TODO: add to cli
+    forcePrunePolicies?: boolean // TODO: add to cli
+    pruneGroups?: boolean // TODO: add to cli
+    forcePruneGroups?: boolean // TODO: add to cli
+    disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
-    disableMaximumHostingConsistencyCheck?: boolean
+    disableAmbiguousHostingConsistencyCheck?: boolean
     disableExpectedHostingConsistencyCheck?: boolean
 }
 
@@ -61,7 +65,7 @@ export default async function (options: TemplateResolveArguments) {
     resolver.resolve()
 
     // Check consistency
-    if (!options.disableConsistencyCheck) resolver.checkConsistency()
+    if (!options.disableConsistencyChecks) resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
     resolver.transformInPlace()
@@ -72,6 +76,7 @@ export default async function (options: TemplateResolveArguments) {
 type ConditionalElementBase = {
     type: 'node' | 'relation' | 'input' | 'policy' | 'group'
     name: string
+    display: string
     present?: boolean
     conditions: VariabilityExpression[]
 }
@@ -112,9 +117,9 @@ type VariabilityExpressionContext = {
 }
 
 export class VariabilityResolver {
-    private readonly _serviceTemplate: ServiceTemplate
+    private readonly serviceTemplate: ServiceTemplate
 
-    private _variabilityInputs?: InputAssignmentMap
+    private variabilityInputs?: InputAssignmentMap
     private options: ResolvingOptions = {}
 
     private nodes: Node[] = []
@@ -132,13 +137,14 @@ export class VariabilityResolver {
     private inputsMap = new Map<string, Input>()
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this._serviceTemplate = serviceTemplate
+        this.serviceTemplate = serviceTemplate
 
         // Deployment inputs
         Object.entries(serviceTemplate?.topology_template?.inputs || {}).forEach(([name, definition]) => {
             const input: Input = {
                 type: 'input',
                 name,
+                display: name,
                 conditions: utils.toList(definition.conditions),
             }
             this.inputs.push(input)
@@ -155,6 +161,7 @@ export class VariabilityResolver {
             const node: Node = {
                 type: 'node',
                 name: nodeName,
+                display: nodeName,
                 conditions: utils.toList(nodeTemplate.conditions),
                 ingoing: [],
                 outgoing: [],
@@ -172,6 +179,7 @@ export class VariabilityResolver {
                 const relation: Relation = {
                     type: 'relation',
                     name: relationName,
+                    display: `${nodeName}.${relationName}`,
                     source: nodeName,
                     target,
                     conditions,
@@ -196,7 +204,7 @@ export class VariabilityResolver {
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
             const node = this.nodesMap.get(relation.target)
-            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.name}" does not exist`)
+            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
             node.ingoing.push(relation)
         })
 
@@ -210,6 +218,7 @@ export class VariabilityResolver {
             const group: Group = {
                 type: 'group',
                 name,
+                display: name,
                 conditions: utils.toList(template.conditions),
                 variability: [
                     TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
@@ -234,6 +243,7 @@ export class VariabilityResolver {
             const policy: Policy = {
                 type: 'policy',
                 name,
+                display: name,
                 conditions: utils.toList(template.conditions),
                 targets: [],
             }
@@ -250,7 +260,7 @@ export class VariabilityResolver {
                     return policy.targets.push(group)
                 }
 
-                throw new Error(`Policy target "${target}" not found`)
+                throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
             })
         })
     }
@@ -354,6 +364,24 @@ export class VariabilityResolver {
             ]
         }
 
+        // Prune Policies: Assign default condition to node that checks if any target is present
+        // Force Prune Policies: Ignore any assigned conditions and assign default condition to node that checks if any target is present
+        if (
+            element.type === 'policy' &&
+            ((this.options.prunePolicies && listIsEmpty(conditions)) || this.options.forcePrunePolicies)
+        ) {
+            conditions = [{has_present_targets: element.name}]
+        }
+
+        // Prune Groups: Assign default condition to node that checks if any member is present
+        // Force Prune Groups: Ignore any assigned conditions and assign default condition to node that checks if any member is present
+        if (
+            element.type === 'group' &&
+            ((this.options.pruneGroups && listIsEmpty(conditions)) || this.options.forcePruneGroups)
+        ) {
+            conditions = [{has_present_members: element.name}]
+        }
+
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
         element.present = present
@@ -370,7 +398,7 @@ export class VariabilityResolver {
             for (const relation of relations) {
                 if (!this.nodesMap.get(relation.source)?.present)
                     throw new Error(
-                        `Relation source "${relation.source}" of relation "${relation.name}" does not exist`
+                        `Relation source "${relation.source}" of relation "${relation.display}" does not exist`
                     )
             }
         }
@@ -380,18 +408,18 @@ export class VariabilityResolver {
             for (const relation of relations) {
                 if (!this.nodesMap.get(relation.target)?.present)
                     throw new Error(
-                        `Relation target "${relation.target}" of relation "${relation.name}" does not exist`
+                        `Relation target "${relation.target}" of relation "${relation.display}" does not exist`
                     )
             }
         }
 
         // Ensure that every component has at maximum one hosting relation
-        if (!this.options.disableMaximumHostingConsistencyCheck) {
+        if (!this.options.disableAmbiguousHostingConsistencyCheck) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host' && relation.present
                 )
-                if (relations.length > 1) throw new Error(`Node "${node.name}" has more than one hosting relations`)
+                if (relations.length > 1) throw new Error(`Node "${node.display}" has more than one hosting relations`)
             }
         }
 
@@ -403,27 +431,28 @@ export class VariabilityResolver {
                 )
 
                 if (relations.length !== 0 && !relations.some(relation => relation.present))
-                    throw new Error(`Node "${node.name}" requires a hosting relation`)
+                    throw new Error(`Node "${node.display}" requires a hosting relation`)
             }
         }
+
         return this
     }
 
     transformInPlace() {
         // Set TOSCA definitions version
-        this._serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
+        this.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
         // Delete variability definition
-        delete this._serviceTemplate.topology_template?.variability
+        delete this.serviceTemplate.topology_template?.variability
 
         // Delete node templates which are not present
-        Object.entries(this._serviceTemplate.topology_template?.node_templates || {}).forEach(
+        Object.entries(this.serviceTemplate.topology_template?.node_templates || {}).forEach(
             ([nodeName, nodeTemplate]) => {
                 const node = this.getNode(nodeName)
                 if (node.present) {
-                    delete this._serviceTemplate.topology_template!.node_templates![nodeName].conditions
+                    delete this.serviceTemplate.topology_template!.node_templates![nodeName].conditions
                 } else {
-                    delete this._serviceTemplate.topology_template!.node_templates![nodeName]
+                    delete this.serviceTemplate.topology_template!.node_templates![nodeName]
                 }
 
                 // Delete requirement assignment which are not present
@@ -436,42 +465,45 @@ export class VariabilityResolver {
         )
 
         // Delete all relationship templates which have no present relations
-        Object.keys(this._serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
+        Object.keys(this.serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
             const relationship = this.relationshipsMap.get(name)
             validator.ensureDefined(relationship, `Relationship "${name}" not found`)
 
             if (relationship.every(relation => !relation.present))
-                delete this._serviceTemplate.topology_template!.relationship_templates![name]
+                delete this.serviceTemplate.topology_template!.relationship_templates![name]
         })
 
         // Delete all groups which are not present and remove all members which are not present
         this.groups.forEach(group => {
             if (group.present) {
-                const template = this._serviceTemplate.topology_template!.groups![group.name]
+                const template = this.serviceTemplate.topology_template!.groups![group.name]
                 template.members = template.members.filter(member => {
                     const element = this.getElement(member)
-                    validator.ensureDefined(element, `Group member "${member}" of group "${group.name}" does not exist`)
+                    validator.ensureDefined(
+                        element,
+                        `Group member "${prettyJSON(member)}" of group "${group.display}" does not exist`
+                    )
                     return element.present
                 })
-                delete this._serviceTemplate.topology_template!.groups![group.name].conditions
+                delete this.serviceTemplate.topology_template!.groups![group.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template!.groups![group.name]
+                delete this.serviceTemplate.topology_template!.groups![group.name]
             }
         })
 
         // Delete all topology template inputs which are not present
         this.inputs.forEach(input => {
             if (input.present) {
-                delete this._serviceTemplate.topology_template!.inputs![input.name].conditions
+                delete this.serviceTemplate.topology_template!.inputs![input.name].conditions
             } else {
-                delete this._serviceTemplate.topology_template!.inputs![input.name]
+                delete this.serviceTemplate.topology_template!.inputs![input.name]
             }
         })
 
         // Delete all policy templates which are not present and remove all targets which are not present
-        if (validator.isDefined(this._serviceTemplate?.topology_template?.policies)) {
-            this._serviceTemplate.topology_template!.policies =
-                this._serviceTemplate.topology_template!.policies.filter((map, index) => {
+        if (validator.isDefined(this.serviceTemplate?.topology_template?.policies)) {
+            this.serviceTemplate.topology_template!.policies = this.serviceTemplate.topology_template!.policies.filter(
+                (map, index) => {
                     const name = utils.firstKey(map)
                     const policy = this.policies[index]
                     const template = map[name]
@@ -494,10 +526,11 @@ export class VariabilityResolver {
                         })
                     }
                     return policy.present
-                })
+                }
+            )
         }
 
-        return this._serviceTemplate
+        return this.serviceTemplate
     }
 
     ensureCompatibility() {
@@ -505,19 +538,19 @@ export class VariabilityResolver {
             ![
                 TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
                 TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            ].includes(this._serviceTemplate.tosca_definitions_version)
+            ].includes(this.serviceTemplate.tosca_definitions_version)
         )
             throw new Error('Unsupported TOSCA definitions version')
     }
 
     setVariabilityPreset(name?: string) {
         if (validator.isUndefined(name)) return this
-        this._variabilityInputs = this.getVariabilityPreset(name).inputs
+        this.variabilityInputs = this.getVariabilityPreset(name).inputs
         return this
     }
 
     setVariabilityInputs(inputs: InputAssignmentMap) {
-        this._variabilityInputs = {...this._variabilityInputs, ...inputs}
+        this.variabilityInputs = {...this.variabilityInputs, ...inputs}
         return this
     }
 
@@ -527,20 +560,20 @@ export class VariabilityResolver {
     }
 
     getVariabilityInput(name: string) {
-        const input = this._variabilityInputs?.[name]
+        const input = this.variabilityInputs?.[name]
         validator.ensureDefined(input, `Did not find variability input "${name}"`)
         return input
     }
 
     getVariabilityPreset(name: string) {
-        const set: InputAssignmentPreset | undefined = (this._serviceTemplate.topology_template?.variability?.presets ||
+        const set: InputAssignmentPreset | undefined = (this.serviceTemplate.topology_template?.variability?.presets ||
             {})[name]
         validator.ensureDefined(set, `Did not find variability set "${name}"`)
         return set
     }
 
     getVariabilityExpression(name: string) {
-        const condition: VariabilityExpression | undefined = (this._serviceTemplate.topology_template?.variability
+        const condition: VariabilityExpression | undefined = (this.serviceTemplate.topology_template?.variability
             ?.expressions || {})[name]
         validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
         return condition

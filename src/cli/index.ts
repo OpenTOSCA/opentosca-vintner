@@ -143,7 +143,7 @@ template
     .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
     .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
     .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
-    .option('--disable-consistency-check [boolean]', 'disable (all) consistency check(s)')
+    .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
         'disable consistency check regarding relation sources'
@@ -153,7 +153,7 @@ template
         'disable consistency check regarding relation targets'
     )
     .option(
-        '--disable-maximum-hosting-consistency-check [boolean]',
+        '--disable-ambiguous-hosting-consistency-check [boolean]',
         'disable consistency check regarding maximum one hosting relation'
     )
     .option(
@@ -294,7 +294,7 @@ instances
         'disable consistency check regarding relation targets'
     )
     .option(
-        '--disable-maximum-hosting-consistency-check [boolean]',
+        '--disable-ambiguous-hosting-consistency-check [boolean]',
         'disable consistency check regarding maximum one hosting relation'
     )
     .option(
