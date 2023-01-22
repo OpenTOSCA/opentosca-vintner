@@ -385,7 +385,7 @@ Service Template.
 
 ### Resolve Variability
 
-To resolve the variability in a Variable Service Template conduct the following steps:
+To resolve the variability in a Variable Service Template, conduct the following steps:
 
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
 1. Remove all Node Templates which are not present.
@@ -403,26 +403,30 @@ To resolve the variability in a Variable Service Template conduct the following 
 
 ### Check Element Presence
 
-To check if an element is present check that all assigned conditions are satisfied:
+To check if an element is present, check that all assigned conditions are satisfied:
 
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
 1. The element is present only if all conditions are satisfied.
 
-To further support modeling the following improvements can be taken:
+### Prune Elements
+
+To further support modeling, the following improvements can be taken:
 
 1. Prune Relations: The default condition of a relation checks if the source node is present.
 1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
 1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
 1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
 1. Prune Policies: The default condition of a policy checks if any targets are present.
-1. Prune Force Policies: Ignore any assigned conditions and check instead if any targets are present.
+1. Force Prune Policies: Ignore any assigned conditions and check instead if any targets are present.
 1. Prune Groups: The default condition of a group checks if any members are present.
-1. Prune Force Groups: Ignore any assigned conditions and check instead if any members are present.
+1. Force Prune Groups: Ignore any assigned conditions and check instead if any members are present.
+1. Prune Artifacts: The default condition of an artifact checks if the corresponding node is present.
+1. Force Prune Artifacts: Ignore any assigned conditions and check instead if corresponding node is present.
 
 ### Check Consistency
 
-To check the consistency conduct the following steps:
+To check the consistency, conduct the following steps:
 
 1. Ensure that each relation source exists. Otherwise, throw Missing Relation Source Error.
 1. Ensure that each relation target exists. Otherwise, throw Missing Relation Target Error.

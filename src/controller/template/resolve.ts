@@ -27,6 +27,8 @@ export type ResolvingOptions = {
     forcePrunePolicies?: boolean
     pruneGroups?: boolean
     forcePruneGroups?: boolean
+    pruneArtifacts?: boolean
+    forcePruneArtifacts?: boolean
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -435,8 +437,15 @@ export class VariabilityResolver {
             conditions = [{has_present_members: element.name}]
         }
 
-        // TODO: Prune Artifact
-        // TODO: Force Prune Artifact
+        // Prune Artifact: Assign default condition to artifact that checks if corresponding node is present
+        // Force Prune Artifact: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
+        if (
+            element.type === 'artifact' &&
+            ((this.options.pruneArtifacts && listIsEmpty(conditions)) || this.options.forcePruneArtifacts)
+        ) {
+            // TODO: write tests
+            conditions = [{get_element_presence: element.node.name}]
+        }
 
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))

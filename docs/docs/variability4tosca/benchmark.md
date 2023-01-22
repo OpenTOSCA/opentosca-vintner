@@ -54,13 +54,14 @@ The written variable service templates have the following measurements.
 
 The following computing resources have been used for the benchmark.
 
-| Resource         | Value                                       |
-|------------------|---------------------------------------------|
-| Operating System | Windows 11                                  |
-| Processor        | Intel Core i7-12700KF                       |
-| Memory           | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |
-| Graphic Card     | GeForce RTX TM 2060 WINDFORCE OC 6G         | 
-| Disk             | Samsung 970 EVO Plus 1 TB PCIe 3.0 NVMe M.2 |
+| Resource          | Value                                       |
+|-------------------|---------------------------------------------|
+| OpenTOSCA Vintner | d7c51fa0ecc4b4bb2cf9515c85f8512dc749a05c    |
+| Operating System  | Windows 11                                  |
+| Processor         | Intel Core i7-12700KF                       |
+| Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |
+| Graphic Card      | GeForce RTX TM 2060 WINDFORCE OC 6G         | 
+| Disk              | Samsung 970 EVO Plus 1 TB PCIe 3.0 NVMe M.2 |
 
 ## Running the Benchmark
 
