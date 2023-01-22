@@ -1,0 +1,5 @@
+description: >
+    Ignore assigned conditions at policy "policy_one" and remove it since no targets are present.
+
+resolver:
+    forcePrunePolicies: true

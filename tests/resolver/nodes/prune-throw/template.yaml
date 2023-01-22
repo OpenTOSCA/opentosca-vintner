@@ -1,4 +1,4 @@
-# Test for force pruning nodes.
+# Test for pruning nodes.
 # Node "two" exists since pruning is not forced and node "two" is present due to its assigned conditions
 # (does not throw an error since this is a valid service template)
 

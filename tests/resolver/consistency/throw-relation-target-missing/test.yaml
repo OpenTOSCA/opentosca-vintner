@@ -1,1 +1,1 @@
-error: Relation source "one" of relation "two" does not exist
+error: Relation source "one" of relation "one.two" does not exist
