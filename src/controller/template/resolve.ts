@@ -9,6 +9,7 @@ import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {listIsEmpty, prettyJSON} from '#utils'
 import * as featureIDE from '#utils/feature-ide'
 import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {PropertyAssignmentValue} from '#spec/node-template'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -79,7 +80,7 @@ export default async function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact'
+    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
     name: string
     display: string
     present?: boolean
@@ -96,6 +97,14 @@ type Node = ConditionalElementBase & {
     outgoing: Relation[]
     groups: Group[]
     artifacts: Artifact[]
+    properties: Property[]
+}
+
+type Property = ConditionalElementBase & {
+    type: 'property'
+    node: Node
+    index?: number
+    _value: PropertyAssignmentValue
 }
 
 type Relation = ConditionalElementBase & {
@@ -141,6 +150,8 @@ export class VariabilityResolver {
     private relations: Relation[] = []
     private relationshipsMap = new Map<string, Relation[]>()
 
+    private properties: Property[] = []
+
     private policies: Policy[] = []
 
     private groups: Group[] = []
@@ -182,9 +193,58 @@ export class VariabilityResolver {
                 outgoing: [],
                 groups: [],
                 artifacts: [],
+                properties: [],
             }
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
+
+            // Properties
+            // TODO: properties
+            for (const [propertyName, propertyAssignment] of Object.entries(nodeTemplate.properties || {})) {
+                if (validator.isString(propertyAssignment)) {
+                    const property: Property = {
+                        type: 'property',
+                        name: propertyName,
+                        display: propertyName,
+                        conditions: [],
+                        node,
+                        _value: propertyAssignment,
+                    }
+
+                    node.properties.push(property)
+                    this.properties.push(property)
+                }
+
+                if (validator.isObject(propertyAssignment)) {
+                    if (validator.isArray(propertyAssignment)) {
+                        for (const [propertyIndex, propertyAssignmentEntry] of propertyAssignment.entries()) {
+                            const property: Property = {
+                                type: 'property',
+                                name: propertyName,
+                                display: `${propertyName}@${propertyIndex}`,
+                                conditions: utils.toList(propertyAssignmentEntry.conditions),
+                                node,
+                                _value: propertyAssignmentEntry.value,
+                            }
+
+                            node.properties.push(property)
+                            this.properties.push(property)
+                        }
+                    } else {
+                        const property: Property = {
+                            type: 'property',
+                            name: propertyName,
+                            display: propertyName,
+                            conditions: utils.toList(propertyAssignment.conditions),
+                            node,
+                            _value: propertyAssignment.value,
+                        }
+
+                        node.properties.push(property)
+                        this.properties.push(property)
+                    }
+                }
+            }
 
             // Relations
             nodeTemplate.requirements?.forEach(map => {
@@ -379,6 +439,7 @@ export class VariabilityResolver {
         for (const group of this.groups) this.checkPresence(group)
         for (const policy of this.policies) this.checkPresence(policy)
         for (const artifact of this.artifacts) this.checkPresence(artifact)
+        // TODO: resolved properties
         return this
     }
 
@@ -445,6 +506,9 @@ export class VariabilityResolver {
         ) {
             conditions = [{get_element_presence: element.node.name}]
         }
+
+        // TODO: prune properties
+        // TODO: force prune properties
 
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
@@ -520,6 +584,8 @@ export class VariabilityResolver {
             }
         }
 
+        // TODO: handle properties
+
         return this
     }
 
@@ -560,6 +626,8 @@ export class VariabilityResolver {
                 }
             }
         )
+
+        // TODO: handle properties
 
         // Delete all relationship templates which have no present relations
         Object.keys(this.serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {

@@ -18,8 +18,14 @@ export type NodeTemplate = {
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}
 
-export type PropertyAssignmentMap = {[key: string]: PropertyAssignment}
-export type PropertyAssignment = string
+export type PropertyAssignmentMap = {
+    [key: string]: PropertyAssignmentValue | PropertyAssignmentConditional | PropertyAssignmentConditional[]
+}
+export type PropertyAssignmentValue = string
+export type PropertyAssignmentConditional = {
+    value: PropertyAssignmentValue
+    conditions?: VariabilityExpression | VariabilityExpression[]
+}
 
 export type AttributeAssignmentMap = {[key: string]: AttributeAssignment}
 export type AttributeAssignment = string
@@ -35,5 +41,3 @@ export type RequirementAssignment =
       }
 
 export type CapabilityAssignmentMap = {[key: string]: string}
-
-export type NodeFilter = {}
