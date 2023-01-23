@@ -21,8 +21,7 @@ Such a Service Template is also called Variable Service Template.
 | tosca_definitions_version | yes       | String | The required TOSCA Definitions Version. Must be `tosca_variability_1_0`. |
 
 The version is expected to be set to `tosca_simple_1_3` when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Topology Template Definition
 
@@ -71,8 +70,7 @@ variability:
 ```
 
 This definition is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Variability Preset Definition
 
@@ -128,8 +126,7 @@ prod_database:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 Furthermore, artifacts must be transformed to an Artifact Definitions Map.
 
@@ -153,8 +150,7 @@ requirements:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Group Template Definition
 
@@ -210,8 +206,7 @@ Variability Condition `is_prod` assigned.
 If the condition evaluates to true, then the policy is present.
 As a result, the Node Templates `wordpress` and `mysql` _must not_ be hosted on the same server.
 For more information about this example, take a look in
-the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587)
-{target=_blank}.
+the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
 
 ```linenums="1"
 node_templates:
@@ -246,8 +241,7 @@ policies:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Artifact Definition
 
@@ -259,8 +253,7 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Topology Template Input Definition
 
@@ -281,8 +274,7 @@ ssh_key_file:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Normative Group Types
 
@@ -305,8 +297,7 @@ variability.groups.ConditionalMembers
 ```
 
 These groups are expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
-{target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
 ## Normative Interface Types
 
@@ -508,5 +499,4 @@ The `test.yaml` file describes and configures the test and has the following str
 
 There are a variety of conformance tests for Variability4TOSCA implementations.
 The tests can be found
-in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver)
-{target=_blank}.
+in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.
