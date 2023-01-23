@@ -54,7 +54,7 @@ describe('resolver', async () => {
     }
 })
 
-export function getDefaultTest(dir: string, vstdir?: string) {
+function getDefaultTest(dir: string, vstdir?: string) {
     return async function () {
         files.assertDirectory(dir)
         const config = readConfig(dir)

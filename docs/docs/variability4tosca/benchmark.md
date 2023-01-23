@@ -2,8 +2,8 @@
 
 To benchmark our implementation of a Variability4TOSCA processor, we run several tests.
 Thereby, a service template is generated and then resolved based on a seed.
-A seed of value n results in 2n node templates and 2n relationship templates, thus 4n templates.
-For example, a seed of 10,000 generated 20,0000 node templates and 20,0000 relationship templates.
+A seed of value n results in 2n node templates and 2n relationship templates, thus, 4n templates.
+For example, a seed of 10,000 generates 20,0000 node templates and 20,0000 relationship templates.
 When variability is resolved, n node templates and n relationship templates are removed.
 
 ## Tests In-Memory
@@ -54,13 +54,14 @@ The written variable service templates have the following measurements.
 
 The following computing resources have been used for the benchmark.
 
-| Resource         | Value                                       |
-|------------------|---------------------------------------------|
-| Operating System | Windows 11                                  |
-| Processor        | Intel Core i7-12700KF                       |
-| Memory           | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |
-| Graphic Card     | GeForce RTX TM 2060 WINDFORCE OC 6G         | 
-| Disk             | Samsung 970 EVO Plus 1 TB PCIe 3.0 NVMe M.2 |
+| Resource          | Value                                       |
+|-------------------|---------------------------------------------|
+| OpenTOSCA Vintner | d7c51fa0ecc4b4bb2cf9515c85f8512dc749a05c    |
+| Operating System  | Windows 11                                  |
+| Processor         | Intel Core i7-12700KF                       |
+| Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |
+| Graphic Card      | GeForce RTX TM 2060 WINDFORCE OC 6G         | 
+| Disk              | Samsung 970 EVO Plus 1 TB PCIe 3.0 NVMe M.2 |
 
 ## Running the Benchmark
 

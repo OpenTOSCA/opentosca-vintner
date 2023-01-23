@@ -107,9 +107,13 @@ is_prod: {equal: [{get_variability_input: mode}, prod]}
 A Node Template can additionally contain Variability Conditions.
 These conditions must be satisfied otherwise the respective Node Template is not present.
 
+Furthermore, assigned Artifact Definitions can be a list of Artifact Definitions Maps which contains only one Artifact
+Definition in order to allow Artifact Definition names to be used multiple times.
+
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| artifacts  | no        | ArtifactDefinitionsMap &#124; List(ArtifactDefinitionsMap)                 | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
 
@@ -121,6 +125,8 @@ prod_database:
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
 to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+Furthermore, artifacts  must be transformed to an Artifact Definitions Map.
 
 ## Requirement Assignment Definition
 
@@ -235,6 +241,20 @@ policies:
 The `conditions` keyword is expected to be removed when the Service Template is transformed
 to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 
+## Artifact Definition
+
+An Artifact Definition can additionally contain Variability Conditions.
+These conditions must be satisfied otherwise the respective artifact is not present.
+
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
+|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+
+
+The `conditions` keyword is expected to be removed when the Service Template is transformed
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+
+
 ## Topology Template Input Definition
 
 A Topology Template Input can additionally contain Variability Conditions.
@@ -327,19 +347,19 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 The following intrinsic functions can be used inside a Variability Expression.
 
-| Keyname                    | Input                                                          | Output  | Description                                                                                                              |
-|----------------------------|----------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                         | Any     | Returns the value of a Variability Input.                                                                                |
-| get_variability_expression | String                                                         | Any     | Returns the value of the Variability Expression.                                                                         |
-| get_variability_condition  | String                                                         | Boolean | Returns the value of the Variability Condition.                                                                          |
+| Keyname                    | Input                                                            | Output  | Description                                                                                                              |
+|----------------------------|------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                                           | Any     | Returns the value of a Variability Input.                                                                                |
+| get_variability_expression | String                                                           | Any     | Returns the value of the Variability Expression.                                                                         |
+| get_variability_condition  | String                                                           | Boolean | Returns the value of the Variability Condition.                                                                          |
 | get_element_presence       | String &#124; Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if element is present.                                                                                           |
-| get_source_presence        | SELF                                                          | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| get_target_presence        | SELF                                                          | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| has_present_targets        | String | Boolean | Returns if any target of the given policy is present. 
-| has_present_members        | String | Boolean | Returns if any member of the given group is present. 
-| concat                     | List(ValueExpression)                                          | String  | Concatenates the given values.                                                                                           |
-| join                       | Tuple(List(ValueExpression), String)                           | String  | Joins the given values using the provided delimiter.                                                                     |
-| token                      | Tuple(ValueExpression, String, Number)                         | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+| get_source_presence        | SELF                                                             | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_target_presence        | SELF                                                             | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| has_present_targets        | String                                                           | Boolean | Returns if any target of the given policy is present.                                                                    
+| has_present_members        | String                                                           | Boolean | Returns if any member of the given group is present.                                                                     
+| concat                     | List(ValueExpression)                                            | String  | Concatenates the given values.                                                                                           |
+| join                       | Tuple(List(ValueExpression), String)                             | String  | Joins the given values using the provided delimiter.                                                                     |
+| token                      | Tuple(ValueExpression, String, Number)                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
 
 ## Constraint Operators
 
@@ -359,62 +379,70 @@ The following constraint operators can be used inside a Variability Expression.
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a Variable
+In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a
+Variable
 Service Template.
 
 ### Resolve Variability
 
-To resolve the variability in a Variable Service Template conduct the following steps:
+To resolve the variability in a Variable Service Template, conduct the following steps:
 
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
-1. Remove all Node Templates which are _not present_.
-1. Remove all Requirement Assignments which are _not present_.
+1. Remove all Node Templates which are not present.
+1. Remove all Artifacts which are not present.
+1. Remove all Requirement Assignments which are not present.
 1. Remove all Relationship Templates which are not used by any Requirement Assignment.
-1. Remove all Topology Template Inputs which are _not present_.
-1. Remove all Group Templates which are _not present_.
-1. Remove all Group Members which are _not present_ from Group Template.
-1. Remove all Policy Templates which are _not present_.
-1. Remove all Policy Targets which are _not present_ from Policy Template.
+1. Remove all Topology Template Inputs which are not present.
+1. Remove all Group Templates which are not present.
+1. Remove all Group Members which are not present from Group Template.
+1. Remove all Policy Templates which are not present.
+1. Remove all Policy Targets which are not present from Policy Template.
 1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node
    Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
 
 ### Check Element Presence
 
-To check if an element is present check that all assigned conditions are satisfied:
+To check if an element is present, check that all assigned conditions are satisfied:
 
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
 1. The element is present only if all conditions are satisfied.
 
-To further support modeling the following improvements can be taken:
+### Prune Elements
+
+To further support modeling, the following improvements can be taken:
 
 1. Prune Relations: The default condition of a relation checks if the source node is present.
 1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
 1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
 1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
 1. Prune Policies: The default condition of a policy checks if any targets are present.
-1. Prune Force Policies: Ignore any assigned conditions and check instead if any targets are present.
+1. Force Prune Policies: Ignore any assigned conditions and check instead if any targets are present.
 1. Prune Groups: The default condition of a group checks if any members are present.
-1. Prune Force Groups: Ignore any assigned conditions and check instead if any members are present.
+1. Force Prune Groups: Ignore any assigned conditions and check instead if any members are present.
+1. Prune Artifacts: The default condition of an artifact checks if the corresponding node is present.
+1. Force Prune Artifacts: Ignore any assigned conditions and check instead if corresponding node is present.
 
 ### Check Consistency
 
-To check the consistency conduct the following steps:
+To check the consistency, conduct the following steps:
 
 1. Ensure that each relation source exists. Otherwise, throw Missing Relation Source Error.
 1. Ensure that each relation target exists. Otherwise, throw Missing Relation Target Error.
 1. Ensure that every node has at maximum one hosting relation. Otherwise, throw Ambiguous Hosting Error.
-1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable Service Template. Otherwise, throw Missing Hosting  Error.
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable
+   Service Template. Otherwise, throw Missing Hosting Error.
+1. Ensure that the node of each artifact exist. Otherwise, throw Missing Artifact Parent Error.
+1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
 
 Since the derived Service Template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
 some or all of these consistency steps might be omitted.
 
-### Processing Errors 
+### Processing Errors
 
 When variability is resolved, the following errors might be thrown:
-
 
 | Error                     | Message                                                                            |
 |---------------------------|------------------------------------------------------------------------------------|
@@ -423,8 +451,10 @@ When variability is resolved, the following errors might be thrown:
 | Missing Relation Target   | Relation target "${relation.target}" of relation "${relation.name}" does not exist |
 | Ambiguous Hosting         | Node "${node.name}" has more than one hosting relations                            |
 | Missing Hosting           | Node "${node.name}" requires a hosting relation                                    |
-| Missing Policy Target     | Policy target "${target.name}" of policy "${policy.name}" does not exist              |
-| Missing Group Member      | Group member "${member.name}" of group "${group.name}" does not exist                                                                                   | 
+| Missing Policy Target     | Policy target "${target.name}" of policy "${policy.name}" does not exist           |
+| Missing Group Member      | Group member "${member.name}" of group "${group.name}" does not exist              | 
+| Missing Artifact Parent   | Node "${node.name}" of artifact "${artifact.name}" does not exist                  | 
+| Ambiguous Artifact        | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous  | 
 
 ## Variability Tests
 
@@ -463,4 +493,5 @@ The `test.yaml` file describes and configures the test and has the following str
 ## Conformance Tests
 
 There are a variety of conformance tests for Variability4TOSCA implementations.
-The tests can be found in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.
+The tests can be found
+in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.

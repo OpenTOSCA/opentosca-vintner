@@ -147,6 +147,11 @@ template
     .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
     .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
     .option('--force-prune-groups [boolean]', 'prune node if no member is present')
+    .option(
+        '--prune-artifacts [boolean]',
+        'prune artifact if corresponding node is not present and no conditions are assigned'
+    )
+    .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -163,6 +168,14 @@ template
     .option(
         '--disable-expected-hosting-consistency-check [boolean]',
         'disable consistency check regarding expected hosting relation'
+    )
+    .option(
+        '--disable-missing-artifact-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of artifact'
+    )
+    .option(
+        '--disable-ambiguous-artifact-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous artifacts'
     )
     .action(
         hae(async options => {
@@ -292,6 +305,11 @@ instances
     .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
     .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
     .option('--force-prune-groups [boolean]', 'prune node if no member is present')
+    .option(
+        '--prune-artifacts [boolean]',
+        'prune artifact if corresponding node is not present and no conditions are assigned'
+    )
+    .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -308,6 +326,14 @@ instances
     .option(
         '--disable-expected-hosting-consistency-check [boolean]',
         'disable consistency check regarding expected hosting relation'
+    )
+    .option(
+        '--disable-missing-artifact-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of artifact'
+    )
+    .option(
+        '--disable-ambiguous-artifact-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous artifacts'
     )
     .action(
         hae(async options => {

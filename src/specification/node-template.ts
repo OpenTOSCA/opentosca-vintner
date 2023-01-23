@@ -4,7 +4,7 @@
  */
 import {VariabilityExpression} from './variability'
 import {RelationshipTemplate} from './relationship-template'
-import {InterfaceDefinition} from './interface-definition'
+import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 
 export type NodeTemplate = {
     type: string
@@ -13,6 +13,7 @@ export type NodeTemplate = {
     requirements?: RequirementAssignmentList
     capabilities?: CapabilityAssignmentMap
     conditions?: VariabilityExpression | VariabilityExpression[]
+    artifacts?: ArtifactDefinitionMap | ArtifactDefinitionList
 }
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}
