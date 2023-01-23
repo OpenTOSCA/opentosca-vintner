@@ -177,6 +177,14 @@ template
         '--disable-ambiguous-artifact-consistency-check [boolean]',
         'disable consistency check regarding ambiguous artifacts'
     )
+    .option(
+        '--disable-missing-property-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of a property'
+    )
+    .option(
+        '--disable-ambiguous-property-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous properties'
+    )
     .action(
         hae(async options => {
             await Controller.template.resolve(options)
@@ -334,6 +342,14 @@ instances
     .option(
         '--disable-ambiguous-artifact-consistency-check [boolean]',
         'disable consistency check regarding ambiguous artifacts'
+    )
+    .option(
+        '--disable-missing-property-parent-consistency-check [boolean]',
+        'disable consistency check regarding node of a property'
+    )
+    .option(
+        '--disable-ambiguous-property-consistency-check [boolean]',
+        'disable consistency check regarding ambiguous properties'
     )
     .action(
         hae(async options => {
