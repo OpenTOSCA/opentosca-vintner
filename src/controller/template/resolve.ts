@@ -443,7 +443,6 @@ export class VariabilityResolver {
             element.type === 'artifact' &&
             ((this.options.pruneArtifacts && listIsEmpty(conditions)) || this.options.forcePruneArtifacts)
         ) {
-            // TODO: write tests
             conditions = [{get_element_presence: element.node.name}]
         }
 
