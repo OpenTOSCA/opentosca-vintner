@@ -5,10 +5,11 @@
 import {VariabilityExpression} from './variability'
 import {RelationshipTemplate} from './relationship-template'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 export type NodeTemplate = {
     type: string
-    properties?: PropertyAssignmentMap
+    properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap
     requirements?: RequirementAssignmentList
     capabilities?: CapabilityAssignmentMap
@@ -17,15 +18,6 @@ export type NodeTemplate = {
 }
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}
-
-export type PropertyAssignmentMap = {
-    [key: string]: PropertyAssignmentValue | PropertyAssignmentConditional | PropertyAssignmentConditional[]
-}
-export type PropertyAssignmentValue = string
-export type PropertyAssignmentConditional = {
-    value: PropertyAssignmentValue
-    conditions?: VariabilityExpression | VariabilityExpression[]
-}
 
 export type AttributeAssignmentMap = {[key: string]: AttributeAssignment}
 export type AttributeAssignment = string

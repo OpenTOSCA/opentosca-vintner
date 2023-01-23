@@ -5,7 +5,8 @@ title: Specification
 # Variability4TOSCA Specification 1.0 Release Candidate
 
 This document specifies Variability4TOSCA which extends
-[TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
+[TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}
 with conditional elements.
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
@@ -20,7 +21,8 @@ Such a Service Template is also called Variable Service Template.
 | tosca_definitions_version | yes       | String | The required TOSCA Definitions Version. Must be `tosca_variability_1_0`. |
 
 The version is expected to be set to `tosca_simple_1_3` when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Topology Template Definition
 
@@ -69,7 +71,8 @@ variability:
 ```
 
 This definition is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Variability Preset Definition
 
@@ -110,10 +113,11 @@ These conditions must be satisfied otherwise the respective Node Template is not
 Furthermore, assigned Artifact Definitions can be a list of Artifact Definitions Maps which contains only one Artifact
 Definition in order to allow Artifact Definition names to be used multiple times.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
-|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| artifacts  | no        | ArtifactDefinitionsMap &#124; List(ArtifactDefinitionsMap)                 | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
+| Keyname             | Mandatory | Type                                                                                             | Description                                                                                                        |
+|---------------------|-----------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions          | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)                       | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| artifacts           | no        | ArtifactDefinitionsMap &#124; List(ArtifactDefinitionsMap)                                       | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
+
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
 
@@ -124,9 +128,10 @@ prod_database:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
-Furthermore, artifacts  must be transformed to an Artifact Definitions Map.
+Furthermore, artifacts must be transformed to an Artifact Definitions Map.
 
 ## Requirement Assignment Definition
 
@@ -148,7 +153,8 @@ requirements:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Group Template Definition
 
@@ -204,7 +210,8 @@ Variability Condition `is_prod` assigned.
 If the condition evaluates to true, then the policy is present.
 As a result, the Node Templates `wordpress` and `mysql` _must not_ be hosted on the same server.
 For more information about this example, take a look in
-the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
+the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587)
+{target=_blank}.
 
 ```linenums="1"
 node_templates:
@@ -239,7 +246,8 @@ policies:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Artifact Definition
 
@@ -250,10 +258,9 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 
-
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
-
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Topology Template Input Definition
 
@@ -274,7 +281,8 @@ ssh_key_file:
 ```
 
 The `conditions` keyword is expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Normative Group Types
 
@@ -297,7 +305,8 @@ variability.groups.ConditionalMembers
 ```
 
 These groups are expected to be removed when the Service Template is transformed
-to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+to [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
+{target=_blank}.
 
 ## Normative Interface Types
 
@@ -389,6 +398,7 @@ To resolve the variability in a Variable Service Template, conduct the following
 
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
 1. Remove all Node Templates which are not present.
+1. Remove all Properties which are not present.
 1. Remove all Artifacts which are not present.
 1. Remove all Requirement Assignments which are not present.
 1. Remove all Relationship Templates which are not used by any Requirement Assignment.
@@ -433,8 +443,10 @@ To check the consistency, conduct the following steps:
 1. Ensure that every node has at maximum one hosting relation. Otherwise, throw Ambiguous Hosting Error.
 1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable
    Service Template. Otherwise, throw Missing Hosting Error.
-1. Ensure that the node of each artifact exist. Otherwise, throw Missing Artifact Parent Error.
+1. Ensure that the node of each artifact exists. Otherwise, throw Missing Artifact Parent Error.
 1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
+1. Ensure that the node of each property exists. Otherwise, throw Missing Property Parent error.
+1. Ensure that present properties have unique names within their node. Otherwise, throw Ambiguous Property error.
 
 Since the derived Service Template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
@@ -455,6 +467,8 @@ When variability is resolved, the following errors might be thrown:
 | Missing Group Member      | Group member "${member.name}" of group "${group.name}" does not exist              | 
 | Missing Artifact Parent   | Node "${node.name}" of artifact "${artifact.name}" does not exist                  | 
 | Ambiguous Artifact        | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous  | 
+| Missing Property Parent   | Node "${node.name}" of property "${property.name}" does not exist                  | 
+| Ambiguous Property        | Property "${property.name}@${property.index}" of node "${node.name}" is ambiguous  | 
 
 ## Variability Tests
 
@@ -494,4 +508,5 @@ The `test.yaml` file describes and configures the test and has the following str
 
 There are a variety of conformance tests for Variability4TOSCA implementations.
 The tests can be found
-in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.
+in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver)
+{target=_blank}.
