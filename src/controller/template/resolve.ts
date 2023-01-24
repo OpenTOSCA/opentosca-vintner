@@ -114,7 +114,7 @@ type Property = ConditionalElementBase & {
     type: 'property'
     parent: Node | Relation
     index?: number
-    default?: boolean // TODO: implement this
+    default: boolean // TODO: implement this
     value: PropertyAssignmentValue
 }
 
@@ -369,6 +369,8 @@ export class VariabilityResolver {
     }
 
     populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+        // TODO: which conditions have default property assignments?
+
         if (validator.isObject(template.properties)) {
             // Properties is a Property Assignment List
             if (validator.isArray(template.properties)) {
@@ -384,6 +386,7 @@ export class VariabilityResolver {
                             conditions: [],
                             parent: element,
                             value: propertyAssignment,
+                            default: true,
                         }
 
                         element.properties.push(property)
@@ -395,7 +398,7 @@ export class VariabilityResolver {
                             name: propertyName,
                             display: `${propertyName}@${propertyIndex}`,
                             conditions: utils.toList(propertyAssignment.conditions),
-                            default: propertyAssignment.default,
+                            default: propertyAssignment.default || false,
                             parent: element,
                             value: propertyAssignment.value,
                         }
@@ -414,6 +417,7 @@ export class VariabilityResolver {
                         conditions: [],
                         parent: element,
                         value: propertyAssignment,
+                        default: true,
                     }
 
                     element.properties.push(property)
@@ -661,16 +665,29 @@ export class VariabilityResolver {
     }
 
     transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+        const map = element.properties.reduce<{[key: string]: Property[]}>((map, property) => {
+            if (validator.isUndefined(map[property.name])) map[property.name] = []
+            map[property.name].push(property)
+            return map
+        }, {})
+
+        Object.values(map).forEach(properties => {
+            const defaultProperties = properties.filter(property => property.default)
+            const defaultProperty = defaultProperties[0]
+            // TODO: error message also for relation
+            // TODO: if (defaultProperties.length > 1) throw new Error(`Property "${defaultProperty.name}" of node "${}" has multiple defaults`)
+
+            const presentProperties = properties.filter(property => property.present)
+        })
+
         // Select present properties
         const properties = element.properties.filter(property => property.present)
-        if (!properties.length) {
-            delete template.properties
-        } else {
-            template.properties = properties.reduce<PropertyAssignmentMap>((map, property) => {
-                map[property.name] = property.value
-                return map
-            }, {})
-        }
+        if (!properties.length) return delete template.properties
+
+        template.properties = properties.reduce<PropertyAssignmentMap>((map, property) => {
+            map[property.name] = property.value
+            return map
+        }, {})
     }
 
     transformInPlace() {
