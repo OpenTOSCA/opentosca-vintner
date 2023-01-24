@@ -22,16 +22,23 @@ export function toList<T>(data: T | T[] | undefined): T[] {
     return [data]
 }
 
-export function firstValue<K, V>(map: {[key: string]: V}): V {
+export function firstValue<V>(map: {[key: string]: V}): V {
     return Object.values(map).values().next().value
 }
 
-export function firstKey<K, V>(map: {[key: string]: V}): string {
+export function firstKey<V>(map: {[key: string]: V}): string {
     return Object.keys(map).values().next().value
 }
 
-export function listIsEmpty<T>(list: Array<T>) {
-    return list.length === 0
+export function firstEntry<V>(map: {[key: string]: V}): [string, V] {
+    return Object.entries(map)[0]
+}
+
+export function isEmpty(obj: any) {
+    if (validator.isUndefined(obj)) return true
+    if (validator.isArray(obj)) return obj.length === 0
+    if (validator.isObject(obj)) return Object.keys(obj).length === 0
+    throw new Error(`Can not check if obj ${prettyJSON(obj)} is empty`)
 }
 
 export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {

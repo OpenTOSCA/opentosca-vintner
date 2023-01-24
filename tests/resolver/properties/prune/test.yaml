@@ -1,3 +1,2 @@
-preset: dev
 resolver:
     pruneProperties: true

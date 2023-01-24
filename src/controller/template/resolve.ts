@@ -6,9 +6,11 @@ import {InputAssignmentPreset, VariabilityExpression} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
-import {listIsEmpty, prettyJSON} from '#utils'
 import * as featureIDE from '#utils/feature-ide'
 import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-assignments'
+import {RelationshipTemplate} from '#spec/relationship-template'
+import {NodeTemplate} from '#spec/node-template'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -29,6 +31,8 @@ export type ResolvingOptions = {
     forcePruneGroups?: boolean
     pruneArtifacts?: boolean
     forcePruneArtifacts?: boolean
+    pruneProperties?: boolean
+    forcePruneProperties?: boolean
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -36,6 +40,8 @@ export type ResolvingOptions = {
     disableExpectedHostingConsistencyCheck?: boolean
     disableMissingArtifactParentConsistencyCheck?: boolean
     disableAmbiguousArtifactConsistencyCheck?: boolean
+    disableMissingPropertyParentConsistencyCheck?: boolean
+    disableAmbiguousPropertyConsistencyCheck?: boolean
 }
 
 export default async function (options: TemplateResolveArguments) {
@@ -79,7 +85,7 @@ export default async function (options: TemplateResolveArguments) {
 }
 
 type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact'
+    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
     name: string
     display: string
     present?: boolean
@@ -96,6 +102,15 @@ type Node = ConditionalElementBase & {
     outgoing: Relation[]
     groups: Group[]
     artifacts: Artifact[]
+    properties: Property[]
+}
+
+type Property = ConditionalElementBase & {
+    type: 'property'
+    parent: Node | Relation
+    index?: number
+    default: boolean
+    value: PropertyAssignmentValue
 }
 
 type Relation = ConditionalElementBase & {
@@ -103,6 +118,14 @@ type Relation = ConditionalElementBase & {
     source: string
     target: string
     groups: Group[]
+    properties: Property[]
+    relationship?: Relationship
+}
+
+type Relationship = {
+    name: string
+    relation: Relation
+    _raw: RelationshipTemplate
 }
 
 type Policy = ConditionalElementBase & {
@@ -123,7 +146,7 @@ type Artifact = ConditionalElementBase & {
     _raw: ArtifactDefinition
 }
 
-type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact
+type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact | Property
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
@@ -139,7 +162,9 @@ export class VariabilityResolver {
     private nodesMap = new Map<string, Node>()
 
     private relations: Relation[] = []
-    private relationshipsMap = new Map<string, Relation[]>()
+    private relationshipsMap = new Map<string, Relationship>()
+
+    private properties: Property[] = []
 
     private policies: Policy[] = []
 
@@ -166,11 +191,6 @@ export class VariabilityResolver {
             this.inputsMap.set(name, input)
         })
 
-        // Relationship templates
-        Object.keys(serviceTemplate.topology_template?.relationship_templates || {}).forEach(name =>
-            this.relationshipsMap.set(name, [])
-        )
-
         // Node templates
         Object.entries(serviceTemplate.topology_template?.node_templates || {}).forEach(([nodeName, nodeTemplate]) => {
             const node: Node = {
@@ -182,14 +202,17 @@ export class VariabilityResolver {
                 outgoing: [],
                 groups: [],
                 artifacts: [],
+                properties: [],
             }
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
+            // Properties
+            this.populateProperties(node, nodeTemplate)
+
             // Relations
             nodeTemplate.requirements?.forEach(map => {
-                const relationName = utils.firstKey(map)
-                const assignment = map[relationName]
+                const [relationName, assignment] = utils.firstEntry(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
                 const conditions = validator.isString(assignment) ? [] : utils.toList(assignment.conditions)
 
@@ -201,18 +224,41 @@ export class VariabilityResolver {
                     target,
                     conditions,
                     groups: [],
+                    properties: [],
                 }
                 this.relations.push(relation)
                 node.outgoing.push(relation)
 
                 if (!validator.isString(assignment)) {
                     if (validator.isString(assignment.relationship)) {
-                        const relationship = this.relationshipsMap.get(assignment.relationship)
+                        const relationshipTemplate = (serviceTemplate.topology_template?.relationship_templates || {})[
+                            assignment.relationship
+                        ]
                         validator.ensureDefined(
-                            relationship,
+                            relationshipTemplate,
                             `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
                         )
-                        relationship.push(relation)
+
+                        if (this.relationshipsMap.has(assignment.relationship))
+                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
+
+                        const relationship: Relationship = {
+                            name: assignment.relationship,
+                            relation,
+                            _raw: relationshipTemplate,
+                        }
+
+                        this.relationshipsMap.set(assignment.relationship, relationship)
+                        relation.relationship = relationship
+
+                        // Properties
+                        this.populateProperties(relation, relationshipTemplate)
+                    }
+
+                    if (validator.isObject(assignment.relationship)) {
+                        throw new Error(
+                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
+                        )
                     }
                 }
             })
@@ -221,9 +267,7 @@ export class VariabilityResolver {
             if (validator.isDefined(nodeTemplate.artifacts)) {
                 if (validator.isArray(nodeTemplate.artifacts)) {
                     for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        const artifactName = utils.firstKey(artifactMap)
-                        const artifactDefinition = artifactMap[artifactName]
-
+                        const [artifactName, artifactDefinition] = utils.firstEntry(artifactMap)
                         const artifact: Artifact = {
                             type: 'artifact',
                             name: artifactName,
@@ -255,17 +299,18 @@ export class VariabilityResolver {
             }
         })
 
+        // Ensure that each relationship is used
+        for (const relationshipName of Object.keys(serviceTemplate.topology_template?.relationship_templates || {})) {
+            if (!this.relationshipsMap.has(relationshipName))
+                throw new Error(`Relation "${relationshipName}" is never used`)
+        }
+
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
             const node = this.nodesMap.get(relation.target)
             validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
             node.ingoing.push(relation)
         })
-
-        // Ensure that each relationship is at least used in one relation
-        for (const relationship of this.relationshipsMap) {
-            if (relationship[1].length === 0) throw new Error(`Relationship "${relationship[0]}" is never used`)
-        }
 
         // Groups
         Object.entries(serviceTemplate.topology_template?.groups || {}).forEach(([name, template]) => {
@@ -292,8 +337,7 @@ export class VariabilityResolver {
 
         // Policies
         serviceTemplate.topology_template?.policies?.forEach(map => {
-            const name = utils.firstKey(map)
-            const template = map[name]
+            const [name, template] = utils.firstEntry(map)
             const policy: Policy = {
                 type: 'policy',
                 name,
@@ -319,15 +363,78 @@ export class VariabilityResolver {
         })
     }
 
+    populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+        if (validator.isObject(template.properties)) {
+            // Properties is a Property Assignment List
+            if (validator.isArray(template.properties)) {
+                for (const [propertyIndex, propertyAssignmentListEntry] of template.properties.entries()) {
+                    const [propertyName, propertyAssignment] = utils.firstEntry(propertyAssignmentListEntry)
+
+                    // Property is not conditional
+                    if (
+                        validator.isString(propertyAssignment) ||
+                        validator.isNumber(propertyAssignment) ||
+                        validator.isBoolean(propertyAssignment)
+                    ) {
+                        const property: Property = {
+                            type: 'property',
+                            name: propertyName,
+                            display: `${propertyName}@${propertyIndex}`,
+                            conditions: [],
+                            parent: element,
+                            value: propertyAssignment,
+                            default: false,
+                        }
+
+                        element.properties.push(property)
+                        this.properties.push(property)
+                    } else {
+                        // Property is conditional
+                        const property: Property = {
+                            type: 'property',
+                            name: propertyName,
+                            display: `${propertyName}@${propertyIndex}`,
+                            conditions: propertyAssignment.default
+                                ? [false]
+                                : utils.toList(propertyAssignment.conditions),
+                            default: propertyAssignment.default || false,
+                            parent: element,
+                            value: propertyAssignment.value,
+                        }
+
+                        element.properties.push(property)
+                        this.properties.push(property)
+                    }
+                }
+            } else {
+                // Properties is a Property Assignment Map
+                for (const [propertyName, propertyAssignment] of Object.entries(template.properties || {})) {
+                    const property: Property = {
+                        type: 'property',
+                        name: propertyName,
+                        display: propertyName,
+                        conditions: [],
+                        parent: element,
+                        value: propertyAssignment,
+                        default: false,
+                    }
+
+                    element.properties.push(property)
+                    this.properties.push(property)
+                }
+            }
+        }
+    }
+
     getElement(member: GroupMember): Node | Relation {
         if (validator.isString(member)) return this.getNode(member)
         if (validator.isArray(member)) return this.getRelation(member)
-        throw new Error(`Member "${prettyJSON(member)}" has bad format`)
+        throw new Error(`Member "${utils.prettyJSON(member)}" has bad format`)
     }
 
     getNode(member: string) {
         const node = this.nodesMap.get(member)
-        validator.ensureDefined(node, `Node "${prettyJSON(member)}" not found`)
+        validator.ensureDefined(node, `Node "${utils.prettyJSON(member)}" not found`)
         return node
     }
 
@@ -338,14 +445,14 @@ export class VariabilityResolver {
         // Element is [node name, relation name]
         if (validator.isString(member[1])) {
             const relations = node.outgoing.filter(relation => relation.name === member[1])
-            if (relations.length > 1) throw new Error(`Relation "${prettyJSON(member)}" is ambiguous`)
+            if (relations.length > 1) throw new Error(`Relation "${utils.prettyJSON(member)}" is ambiguous`)
             relation = relations[0]
         }
 
         // Element is [node name, relation index]
         if (validator.isNumber(member[1])) relation = node.outgoing[member[1]]
 
-        validator.ensureDefined(relation, `Relation "${prettyJSON(member)}" not found`)
+        validator.ensureDefined(relation, `Relation "${utils.prettyJSON(member)}" not found`)
         return relation
     }
 
@@ -379,6 +486,7 @@ export class VariabilityResolver {
         for (const group of this.groups) this.checkPresence(group)
         for (const policy of this.policies) this.checkPresence(policy)
         for (const artifact of this.artifacts) this.checkPresence(artifact)
+        for (const property of this.properties) this.checkPresence(property)
         return this
     }
 
@@ -399,7 +507,7 @@ export class VariabilityResolver {
         // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
         if (
             element.type === 'relation' &&
-            ((this.options.pruneRelations && listIsEmpty(conditions)) || this.options.forcePruneRelations)
+            ((this.options.pruneRelations && utils.isEmpty(conditions)) || this.options.forcePruneRelations)
         ) {
             conditions = [{get_element_presence: element.source}]
         }
@@ -408,11 +516,11 @@ export class VariabilityResolver {
         // Force Prune Node: Ignore any assigned conditions and assign condition to node that checks if any ingoing relation is present
         if (
             element.type === 'node' &&
-            ((this.options.pruneNodes && listIsEmpty(conditions)) || this.options.forcePruneNodes)
+            ((this.options.pruneNodes && utils.isEmpty(conditions)) || this.options.forcePruneNodes)
         ) {
             conditions = [
                 {
-                    or: listIsEmpty(element.ingoing)
+                    or: utils.isEmpty(element.ingoing)
                         ? [true]
                         : element.ingoing.map(relation => ({get_element_presence: [relation.source, relation.name]})),
                 },
@@ -423,7 +531,7 @@ export class VariabilityResolver {
         // Force Prune Policies: Ignore any assigned conditions and assign default condition to node that checks if any target is present
         if (
             element.type === 'policy' &&
-            ((this.options.prunePolicies && listIsEmpty(conditions)) || this.options.forcePrunePolicies)
+            ((this.options.prunePolicies && utils.isEmpty(conditions)) || this.options.forcePrunePolicies)
         ) {
             conditions = [{has_present_targets: element.name}]
         }
@@ -432,18 +540,29 @@ export class VariabilityResolver {
         // Force Prune Groups: Ignore any assigned conditions and assign default condition to node that checks if any member is present
         if (
             element.type === 'group' &&
-            ((this.options.pruneGroups && listIsEmpty(conditions)) || this.options.forcePruneGroups)
+            ((this.options.pruneGroups && utils.isEmpty(conditions)) || this.options.forcePruneGroups)
         ) {
             conditions = [{has_present_members: element.name}]
         }
 
-        // Prune Artifact: Assign default condition to artifact that checks if corresponding node is present
-        // Force Prune Artifact: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
+        // Prune Artifacts: Assign default condition to artifact that checks if corresponding node is present
+        // Force Prune Artifacts: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
         if (
             element.type === 'artifact' &&
-            ((this.options.pruneArtifacts && listIsEmpty(conditions)) || this.options.forcePruneArtifacts)
+            ((this.options.pruneArtifacts && utils.isEmpty(conditions)) || this.options.forcePruneArtifacts)
         ) {
             conditions = [{get_element_presence: element.node.name}]
+        }
+
+        // Prune Properties: Assign default condition to property that checks if corresponding parent is present
+        // Force Prune Properties: Ignore any assigned conditions and assign default condition to property that checks if corresponding parent is present
+        if (
+            element.type === 'property' &&
+            ((this.options.pruneProperties && utils.isEmpty(conditions)) || this.options.forcePruneProperties)
+        ) {
+            if (element.parent.type === 'node') conditions = [{get_element_presence: element.parent.name}]
+            if (element.parent.type === 'relation')
+                conditions = [{get_element_presence: [element.parent.source, element.parent.name]}]
         }
 
         // Evaluate assigned conditions
@@ -508,7 +627,7 @@ export class VariabilityResolver {
             }
         }
 
-        // Ensure that artifacts are unique within their node (Also considering non-present nodes)
+        // Ensure that artifacts are unique within their node (also considering non-present nodes)
         if (!this.options.disableAmbiguousArtifactConsistencyCheck) {
             for (const node of this.nodes) {
                 const names = new Set()
@@ -520,7 +639,70 @@ export class VariabilityResolver {
             }
         }
 
+        // Ensure that node of each present property exists
+        if (!this.options.disableMissingPropertyParentConsistencyCheck) {
+            for (const property of this.properties.filter(property => property.present)) {
+                if (!property.parent.present) {
+                    if (property.parent.type === 'node')
+                        throw new Error(
+                            `Node "${property.parent.display}" of property "${property.display}" does not exist`
+                        )
+
+                    if (property.parent.type === 'relation')
+                        throw new Error(
+                            `Relation "${property.parent.display}" of property "${property.display}" does not exist`
+                        )
+                }
+            }
+        }
+
+        // Ensure that each property has maximum one value (also considering non-present nodes)
+        if (!this.options.disableAmbiguousPropertyConsistencyCheck) {
+            for (const node of this.nodes) {
+                const names = new Set()
+                for (const property of node.properties.filter(property => property.present)) {
+                    if (names.has(property.name))
+                        throw new Error(`Property "${property.display}" of node "${node.display}" is ambiguous`)
+                    names.add(property.name)
+                }
+            }
+        }
+
         return this
+    }
+
+    transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+        const assignments: PropertyAssignmentMap = {}
+
+        const map = element.properties.reduce<{[key: string]: Property[]}>((map, property) => {
+            if (validator.isUndefined(map[property.name])) map[property.name] = []
+            map[property.name].push(property)
+            return map
+        }, {})
+
+        for (const [propertyName, properties] of Object.entries(map)) {
+            let presentProperty = properties.find(property => property.present)
+
+            if (validator.isUndefined(presentProperty)) {
+                const defaultProperties = properties.filter(property => property.default)
+                if (defaultProperties.length > 1) {
+                    if (element.type === 'node')
+                        throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
+                    if (element.type === 'relation')
+                        throw new Error(
+                            `Property "${propertyName}" of relation "${
+                                element.relationship!.name
+                            }" has multiple defaults`
+                        )
+                }
+                presentProperty = defaultProperties[0]
+            }
+
+            if (validator.isDefined(presentProperty)) assignments[propertyName] = presentProperty.value
+        }
+        template.properties = assignments
+
+        if (utils.isEmpty(assignments)) delete template.properties
     }
 
     transformInPlace() {
@@ -540,6 +722,9 @@ export class VariabilityResolver {
                     delete this.serviceTemplate.topology_template!.node_templates![nodeName]
                 }
 
+                // Select present properties
+                this.transformProperties(node, nodeTemplate)
+
                 // Delete requirement assignment which are not present
                 nodeTemplate.requirements = nodeTemplate.requirements?.filter((map, index) => {
                     const assignment = utils.firstValue(map)
@@ -552,22 +737,22 @@ export class VariabilityResolver {
                 if (!artifacts.length) {
                     delete nodeTemplate.artifacts
                 } else {
-                    nodeTemplate.artifacts = artifacts.reduce<ArtifactDefinitionMap>((acc, artifact) => {
+                    nodeTemplate.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
                         delete artifact._raw.conditions
-                        acc[artifact.name] = artifact._raw
-                        return acc
+                        map[artifact.name] = artifact._raw
+                        return map
                     }, {})
                 }
             }
         )
 
         // Delete all relationship templates which have no present relations
-        Object.keys(this.serviceTemplate.topology_template?.relationship_templates || {}).forEach(name => {
-            const relationship = this.relationshipsMap.get(name)
-            validator.ensureDefined(relationship, `Relationship "${name}" not found`)
+        this.relationshipsMap.forEach((relationship, relationshipName) => {
+            if (!relationship.relation.present)
+                return delete this.serviceTemplate.topology_template!.relationship_templates![relationshipName]
 
-            if (relationship.every(relation => !relation.present))
-                delete this.serviceTemplate.topology_template!.relationship_templates![name]
+            // Select present properties
+            this.transformProperties(relationship.relation, relationship._raw)
         })
 
         // Delete all groups which are not present and remove all members which are not present
@@ -578,7 +763,7 @@ export class VariabilityResolver {
                     const element = this.getElement(member)
                     validator.ensureDefined(
                         element,
-                        `Group member "${prettyJSON(member)}" of group "${group.display}" does not exist`
+                        `Group member "${utils.prettyJSON(member)}" of group "${group.display}" does not exist`
                     )
                     return element.present
                 })
@@ -601,12 +786,13 @@ export class VariabilityResolver {
         if (validator.isDefined(this.serviceTemplate?.topology_template?.policies)) {
             this.serviceTemplate.topology_template!.policies = this.serviceTemplate.topology_template!.policies.filter(
                 (map, index) => {
-                    const name = utils.firstKey(map)
+                    const [name, template] = utils.firstEntry(map)
                     const policy = this.policies[index]
-                    const template = map[name]
                     // Sanity check
                     if (name !== policy.name)
-                        throw new Error(`Somehow index of policies do not match! ${prettyJSON({name, policy, index})}`)
+                        throw new Error(
+                            `Somehow index of policies do not match! ${utils.prettyJSON({name, policy, index})}`
+                        )
 
                     if (policy.present) {
                         delete template.conditions
@@ -625,6 +811,28 @@ export class VariabilityResolver {
                     return policy.present
                 }
             )
+        }
+
+        if (validator.isDefined(this.serviceTemplate.topology_template)) {
+            if (utils.isEmpty(this.serviceTemplate.topology_template.node_templates)) {
+                delete this.serviceTemplate.topology_template.node_templates
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.relationship_templates)) {
+                delete this.serviceTemplate.topology_template.relationship_templates
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.groups)) {
+                delete this.serviceTemplate.topology_template.groups
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.policies)) {
+                delete this.serviceTemplate.topology_template.policies
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template)) {
+                delete this.serviceTemplate.topology_template
+            }
         }
 
         return this.serviceTemplate
@@ -973,6 +1181,6 @@ export class VariabilityResolver {
             return element.length <= length
         }
 
-        throw new Error(`Unknown variability condition "${prettyJSON(condition)}"`)
+        throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)
     }
 }

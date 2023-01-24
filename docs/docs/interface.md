@@ -363,6 +363,8 @@ resolves variability
 | force-prune-groups |  false  | boolean | prune node if no member is present |
 | prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present and no conditions are assigned |
 | force-prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present |
+| prune-properties |  false  | boolean | prune property if corresponding parent is not present and no conditions are assigned |
+| force-prune-properties |  false  | boolean | prune property if corresponding parent is not present |
 | disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
@@ -370,6 +372,8 @@ resolves variability
 | disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 | disable-missing-artifact-parent-consistency-check |  false  | boolean | disable consistency check regarding node of artifact |
 | disable-ambiguous-artifact-consistency-check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
+| disable-missing-property-parent-consistency-check |  false  | boolean | disable consistency check regarding node of a property |
+| disable-ambiguous-property-consistency-check |  false  | boolean | disable consistency check regarding ambiguous properties |
 
 ## template query
 
@@ -732,6 +736,8 @@ resolves variability
 | force-prune-groups |  false  | boolean | prune node if no member is present |
 | prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present and no conditions are assigned |
 | force-prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present |
+| prune-properties |  false  | boolean | prune property if corresponding parent is not present and no conditions are assigned |
+| force-prune-properties |  false  | boolean | prune property if corresponding parent is not present |
 | disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
@@ -739,6 +745,8 @@ resolves variability
 | disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
 | disable-missing-artifact-parent-consistency-check |  false  | boolean | disable consistency check regarding node of artifact |
 | disable-ambiguous-artifact-consistency-check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
+| disable-missing-property-parent-consistency-check |  false  | boolean | disable consistency check regarding node of a property |
+| disable-ambiguous-property-consistency-check |  false  | boolean | disable consistency check regarding ambiguous properties |
 
 ## instances inspect
 
