@@ -671,15 +671,20 @@ export class VariabilityResolver {
             return map
         }, {})
 
-        Object.values(map).forEach(properties => {
-            const defaultProperties = properties.filter(property => property.default)
-            const defaultProperty = defaultProperties[0]
-            // TODO: error message also for relation
-            // TODO: if (defaultProperties.length > 1) throw new Error(`Property "${defaultProperty.name}" of node "${}" has multiple defaults`)
+        for (const [propertyName, properties] of Object.entries(map)) {
+            let presentProperty = properties.find(property => property.present)
 
-            const presentProperties = properties.filter(property => property.present)
+            if (validator.isUndefined(presentProperty)) {
+                const defaultProperties = properties.filter(property => property.default)
+                if (defaultProperties.length > 1) throw new Error(`Property "${propertyName}" of node "${}" has multiple defaults`)
+                presentProperty = defaultProperties[0]
+            }
+
+            template.properties[propertyName] = presentProperty.value
         })
+        // TODO: remove {}
 
+        // TODO: cleanup
         // Select present properties
         const properties = element.properties.filter(property => property.present)
         if (!properties.length) return delete template.properties
