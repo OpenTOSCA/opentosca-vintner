@@ -12,16 +12,6 @@ import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-ass
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {NodeTemplate} from '#spec/node-template'
 
-// TODO: document conditional properties at node templates
-// TODO: document conditional properties at relationship templates
-// TODO: document that relationship at requirement assignment must be string
-// TODO: document that only strings as property values are supported
-// TODO: document that conditional artifacts refers to deployment artifacts
-// TODO: document that relationship templates must be used exactly once
-// TODO: document default properties
-// TODO: document prune properties
-// TODO: document force prune properties
-
 export type TemplateResolveArguments = {
     instance?: string
     template?: string
@@ -381,7 +371,11 @@ export class VariabilityResolver {
                     const [propertyName, propertyAssignment] = utils.firstEntry(propertyAssignmentListEntry)
 
                     // Property is not conditional
-                    if (validator.isString(propertyAssignment)) {
+                    if (
+                        validator.isString(propertyAssignment) ||
+                        validator.isNumber(propertyAssignment) ||
+                        validator.isBoolean(propertyAssignment)
+                    ) {
                         const property: Property = {
                             type: 'property',
                             name: propertyName,
@@ -696,7 +690,9 @@ export class VariabilityResolver {
                         throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
                     if (element.type === 'relation')
                         throw new Error(
-                            `Property "${propertyName}" of relation "${element.display}" has multiple defaults`
+                            `Property "${propertyName}" of relation "${
+                                element.relationship!.name
+                            }" has multiple defaults`
                         )
                 }
                 presentProperty = defaultProperties[0]

@@ -8,12 +8,9 @@ import {VariabilityExpression} from '#spec/variability'
 export type PropertyAssignmentMap = {
     [key: string]: PropertyAssignmentValue
 }
-export type PropertyAssignmentValue = string
+export type PropertyAssignmentValue = string | number | boolean
 
-/** TODO
-    | string
-    | number
-    | boolean
+/** TODO: Allow complex data types as property value
     | PropertyAssignmentValue[]
     | {[key: string]: PropertyAssignmentValue}
      **/

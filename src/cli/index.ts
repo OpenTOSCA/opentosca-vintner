@@ -152,6 +152,11 @@ template
         'prune artifact if corresponding node is not present and no conditions are assigned'
     )
     .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
+    .option(
+        '--prune-properties [boolean]',
+        'prune property if corresponding parent is not present and no conditions are assigned'
+    )
+    .option('--force-prune-properties [boolean]', 'prune property if corresponding parent is not present')
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -318,6 +323,11 @@ instances
         'prune artifact if corresponding node is not present and no conditions are assigned'
     )
     .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
+    .option(
+        '--prune-properties [boolean]',
+        'prune property if corresponding parent is not present and no conditions are assigned'
+    )
+    .option('--force-prune-properties [boolean]', 'prune property if corresponding parent is not present')
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
