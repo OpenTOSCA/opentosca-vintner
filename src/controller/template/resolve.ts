@@ -369,8 +369,6 @@ export class VariabilityResolver {
     }
 
     populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
-        // TODO: which conditions have default property assignments?
-
         if (validator.isObject(template.properties)) {
             // Properties is a Property Assignment List
             if (validator.isArray(template.properties)) {
@@ -386,7 +384,7 @@ export class VariabilityResolver {
                             conditions: [],
                             parent: element,
                             value: propertyAssignment,
-                            default: true,
+                            default: false,
                         }
 
                         element.properties.push(property)
@@ -397,7 +395,9 @@ export class VariabilityResolver {
                             type: 'property',
                             name: propertyName,
                             display: `${propertyName}@${propertyIndex}`,
-                            conditions: utils.toList(propertyAssignment.conditions),
+                            conditions: propertyAssignment.default
+                                ? [false]
+                                : utils.toList(propertyAssignment.conditions),
                             default: propertyAssignment.default || false,
                             parent: element,
                             value: propertyAssignment.value,
@@ -414,7 +414,7 @@ export class VariabilityResolver {
                         type: 'property',
                         name: propertyName,
                         display: propertyName,
-                        conditions: [],
+                        conditions: [false],
                         parent: element,
                         value: propertyAssignment,
                         default: true,
@@ -665,6 +665,8 @@ export class VariabilityResolver {
     }
 
     transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+        const assignments: PropertyAssignmentMap = {}
+
         const map = element.properties.reduce<{[key: string]: Property[]}>((map, property) => {
             if (validator.isUndefined(map[property.name])) map[property.name] = []
             map[property.name].push(property)
@@ -676,23 +678,22 @@ export class VariabilityResolver {
 
             if (validator.isUndefined(presentProperty)) {
                 const defaultProperties = properties.filter(property => property.default)
-                if (defaultProperties.length > 1) throw new Error(`Property "${propertyName}" of node "${}" has multiple defaults`)
+                if (defaultProperties.length > 1) {
+                    if (element.type === 'node')
+                        throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
+                    if (element.type === 'relation')
+                        throw new Error(
+                            `Property "${propertyName}" of relation "${element.display}" has multiple defaults`
+                        )
+                }
                 presentProperty = defaultProperties[0]
             }
 
-            template.properties[propertyName] = presentProperty.value
-        })
-        // TODO: remove {}
+            assignments[propertyName] = presentProperty.value
+        }
+        template.properties = assignments
 
-        // TODO: cleanup
-        // Select present properties
-        const properties = element.properties.filter(property => property.present)
-        if (!properties.length) return delete template.properties
-
-        template.properties = properties.reduce<PropertyAssignmentMap>((map, property) => {
-            map[property.name] = property.value
-            return map
-        }, {})
+        if (Object.keys(assignments).length === 0) delete template.properties
     }
 
     transformInPlace() {
