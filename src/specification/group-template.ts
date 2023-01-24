@@ -1,6 +1,6 @@
-import {PropertyAssignmentMap} from './node-template'
 import {VariabilityExpression} from './variability'
 import {GroupMember, TOSCA_GROUP_TYPES} from './group-type'
+import {PropertyAssignmentMap} from '#spec/property-assignments'
 
 /**
  * Group Template
