@@ -18,6 +18,9 @@ import {NodeTemplate} from '#spec/node-template'
 // TODO: document that only strings as property values are supported
 // TODO: document that conditional artifacts refers to deployment artifacts
 // TODO: document that relationship templates must be used exactly once
+// TODO: document default properties
+// TODO: document prune properties
+// TODO: document force prune properties
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -38,6 +41,8 @@ export type ResolvingOptions = {
     forcePruneGroups?: boolean
     pruneArtifacts?: boolean
     forcePruneArtifacts?: boolean
+    pruneProperties?: boolean
+    forcePruneProperties?: boolean
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -114,7 +119,7 @@ type Property = ConditionalElementBase & {
     type: 'property'
     parent: Node | Relation
     index?: number
-    default: boolean // TODO: implement this
+    default: boolean
     value: PropertyAssignmentValue
 }
 
@@ -414,10 +419,10 @@ export class VariabilityResolver {
                         type: 'property',
                         name: propertyName,
                         display: propertyName,
-                        conditions: [false],
+                        conditions: [],
                         parent: element,
                         value: propertyAssignment,
-                        default: true,
+                        default: false,
                     }
 
                     element.properties.push(property)
@@ -508,7 +513,7 @@ export class VariabilityResolver {
         // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
         if (
             element.type === 'relation' &&
-            ((this.options.pruneRelations && utils.listIsEmpty(conditions)) || this.options.forcePruneRelations)
+            ((this.options.pruneRelations && utils.isEmpty(conditions)) || this.options.forcePruneRelations)
         ) {
             conditions = [{get_element_presence: element.source}]
         }
@@ -517,11 +522,11 @@ export class VariabilityResolver {
         // Force Prune Node: Ignore any assigned conditions and assign condition to node that checks if any ingoing relation is present
         if (
             element.type === 'node' &&
-            ((this.options.pruneNodes && utils.listIsEmpty(conditions)) || this.options.forcePruneNodes)
+            ((this.options.pruneNodes && utils.isEmpty(conditions)) || this.options.forcePruneNodes)
         ) {
             conditions = [
                 {
-                    or: utils.listIsEmpty(element.ingoing)
+                    or: utils.isEmpty(element.ingoing)
                         ? [true]
                         : element.ingoing.map(relation => ({get_element_presence: [relation.source, relation.name]})),
                 },
@@ -532,7 +537,7 @@ export class VariabilityResolver {
         // Force Prune Policies: Ignore any assigned conditions and assign default condition to node that checks if any target is present
         if (
             element.type === 'policy' &&
-            ((this.options.prunePolicies && utils.listIsEmpty(conditions)) || this.options.forcePrunePolicies)
+            ((this.options.prunePolicies && utils.isEmpty(conditions)) || this.options.forcePrunePolicies)
         ) {
             conditions = [{has_present_targets: element.name}]
         }
@@ -541,22 +546,30 @@ export class VariabilityResolver {
         // Force Prune Groups: Ignore any assigned conditions and assign default condition to node that checks if any member is present
         if (
             element.type === 'group' &&
-            ((this.options.pruneGroups && utils.listIsEmpty(conditions)) || this.options.forcePruneGroups)
+            ((this.options.pruneGroups && utils.isEmpty(conditions)) || this.options.forcePruneGroups)
         ) {
             conditions = [{has_present_members: element.name}]
         }
 
-        // Prune Artifact: Assign default condition to artifact that checks if corresponding node is present
-        // Force Prune Artifact: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
+        // Prune Artifacts: Assign default condition to artifact that checks if corresponding node is present
+        // Force Prune Artifacts: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
         if (
             element.type === 'artifact' &&
-            ((this.options.pruneArtifacts && utils.listIsEmpty(conditions)) || this.options.forcePruneArtifacts)
+            ((this.options.pruneArtifacts && utils.isEmpty(conditions)) || this.options.forcePruneArtifacts)
         ) {
             conditions = [{get_element_presence: element.node.name}]
         }
 
-        // TODO: prune properties
-        // TODO: force prune properties
+        // Prune Properties: Assign default condition to property that checks if corresponding parent is present
+        // Force Prune Properties: Ignore any assigned conditions and assign default condition to property that checks if corresponding parent is present
+        if (
+            element.type === 'property' &&
+            ((this.options.pruneProperties && utils.isEmpty(conditions)) || this.options.forcePruneProperties)
+        ) {
+            if (element.parent.type === 'node') conditions = [{get_element_presence: element.parent.name}]
+            if (element.parent.type === 'relation')
+                conditions = [{get_element_presence: [element.parent.source, element.parent.name]}]
+        }
 
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
@@ -689,11 +702,11 @@ export class VariabilityResolver {
                 presentProperty = defaultProperties[0]
             }
 
-            assignments[propertyName] = presentProperty.value
+            if (validator.isDefined(presentProperty)) assignments[propertyName] = presentProperty.value
         }
         template.properties = assignments
 
-        if (Object.keys(assignments).length === 0) delete template.properties
+        if (utils.isEmpty(assignments)) delete template.properties
     }
 
     transformInPlace() {
@@ -802,6 +815,28 @@ export class VariabilityResolver {
                     return policy.present
                 }
             )
+        }
+
+        if (validator.isDefined(this.serviceTemplate.topology_template)) {
+            if (utils.isEmpty(this.serviceTemplate.topology_template.node_templates)) {
+                delete this.serviceTemplate.topology_template.node_templates
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.relationship_templates)) {
+                delete this.serviceTemplate.topology_template.relationship_templates
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.groups)) {
+                delete this.serviceTemplate.topology_template.groups
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template.policies)) {
+                delete this.serviceTemplate.topology_template.policies
+            }
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template)) {
+                delete this.serviceTemplate.topology_template
+            }
         }
 
         return this.serviceTemplate

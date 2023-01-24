@@ -1,1 +1,3 @@
 preset: prod
+resolver:
+    pruneProperties: true
