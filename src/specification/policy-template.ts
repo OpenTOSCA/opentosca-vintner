@@ -1,4 +1,4 @@
-import {VariabilityExpression} from './variability'
+import {VariabilityAlternative} from './variability'
 
 /**
  * Policy Template
@@ -7,9 +7,9 @@ import {VariabilityExpression} from './variability'
 
 export type PolicyTemplate = {
     type: string
-    conditions?: VariabilityExpression | VariabilityExpression[]
     targets?: string[]
-}
+} & VariabilityAlternative
+
+export type PolicyAssignmentMap = {[name: string]: PolicyTemplate}
 
 export type PolicyTemplateList = PolicyAssignmentMap[]
-export type PolicyAssignmentMap = {[name: string]: PolicyTemplate}

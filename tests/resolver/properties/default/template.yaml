@@ -15,7 +15,7 @@ topology_template:
 
                 - key_one:
                       value: value_one_three
-                      default: true
+                      default_alternative: true
 
         node_two:
             type: node_two
@@ -30,4 +30,4 @@ topology_template:
 
                 - key_two:
                       value: value_two_three
-                      default: true
+                      default_alternative: true

@@ -1,4 +1,4 @@
-import {VariabilityExpression} from './variability'
+import {VariabilityAlternative, VariabilityExpression} from './variability'
 import {GroupMember, TOSCA_GROUP_TYPES} from './group-type'
 import {PropertyAssignmentMap} from '#spec/property-assignments'
 
@@ -11,7 +11,6 @@ export type GroupTemplate = {
     type: TOSCA_GROUP_TYPES
     members: GroupMember[]
     properties?: PropertyAssignmentMap
-    conditions?: VariabilityExpression | VariabilityExpression[]
-}
+} & VariabilityAlternative
 
 export type GroupTemplateMap = {[key: string]: GroupTemplate}
