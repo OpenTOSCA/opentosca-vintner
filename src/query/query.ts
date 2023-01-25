@@ -74,7 +74,11 @@ export class Query {
                 results[it.name] = result
             }
         }
-        return results
+
+        // TODO: return unwrapped results if only one result can be returned, e.g., when FROM is a single file
+
+        const keys = Object.keys(results)
+        return keys.length === 1 ? results[keys[0]] : results
     }
 
     /**

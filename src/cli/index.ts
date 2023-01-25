@@ -4,6 +4,7 @@ import config from '#config'
 import Controller from '#controller'
 import * as files from '#files'
 import benchmark, {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
+import console from 'console'
 
 const program = new Command()
 
@@ -126,7 +127,9 @@ program
     .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
     .action(
         hae(async options => {
-            await Controller.query.run(options)
+            const result = await Controller.query.run(options)
+            if (options.format === 'yaml') console.log(files.toYAML(result))
+            if (options.format === 'json') console.log(files.toJSON(result))
         })
     )
 

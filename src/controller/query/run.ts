@@ -13,19 +13,12 @@ export default async function (options: QueryTemplateArguments): Promise<QueryRe
     if (!options.source) options.source = 'vintner'
     if (!options.format) options.format = 'yaml'
 
-    const query = new Query()
-    const results = await query.resolve({query: options.query, source: options.source})
+    const result = await new Query().resolve({query: options.query, source: options.source})
 
     if (options.output) {
-        if (options.format === 'yaml') files.storeYAML(options.output, results)
-        if (options.format === 'json') files.storeJSON(options.output, results)
-    } else {
-        if (options.format === 'yaml') console.log(files.toYAML(results))
-        if (options.format === 'json') console.log(files.toJSON(results))
+        if (options.format === 'yaml') files.storeYAML(options.output, result)
+        if (options.format === 'json') files.storeJSON(options.output, result)
     }
 
-    // TODO: return unwrapped results if only one result can be returned, e.g., when FROM is a single file
-    const keys = Object.keys(results)
-    if (keys.length === 1) return results[keys[0]]
-    return results
+    return result
 }
