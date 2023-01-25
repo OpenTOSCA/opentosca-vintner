@@ -2,7 +2,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
 import {Instance} from '#repository/instances'
 import * as files from '#files'
-import {InputAssignmentPreset, VariabilityExpression} from '#spec/variability'
+import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
@@ -186,16 +186,10 @@ export class VariabilityResolver {
         this.serviceTemplate = serviceTemplate
 
         // Deployment inputs
-        const _inputs =
-            (validator.isArray(serviceTemplate.topology_template?.inputs)
-                ? serviceTemplate.topology_template?.inputs
-                : Object.entries(serviceTemplate.topology_template?.inputs || {}).map(([name, template]) => {
-                      const map: InputDefinitionMap = {}
-                      map[name] = template
-                      return map
-                  })) || []
-        _inputs.forEach(map => {
+        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.inputs).forEach(map => {
             const [name, definition] = utils.firstEntry(map)
+            if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
+
             const input: Input = {
                 type: 'input',
                 name,
@@ -209,16 +203,10 @@ export class VariabilityResolver {
 
         // Node templates
         // TODO: document node templates can be list
-        const _nodes =
-            (validator.isArray(serviceTemplate.topology_template?.node_templates)
-                ? serviceTemplate.topology_template?.node_templates
-                : Object.entries(serviceTemplate.topology_template?.node_templates || {}).map(([name, template]) => {
-                      const map: NodeTemplateMap = {}
-                      map[name] = template
-                      return map
-                  })) || []
-        _nodes.forEach(map => {
+        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
+            if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
+
             const node: Node = {
                 type: 'node',
                 name: nodeName,
@@ -344,17 +332,10 @@ export class VariabilityResolver {
         })
 
         // Groups
-        const _groups =
-            (validator.isArray(serviceTemplate.topology_template?.groups)
-                ? serviceTemplate.topology_template?.groups
-                : Object.entries(serviceTemplate.topology_template?.groups || {}).map(([name, template]) => {
-                      const map: GroupTemplateMap = {}
-                      map[name] = template
-                      return map
-                  })) || []
-
-        _groups.forEach(map => {
+        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.groups).forEach(map => {
             const [name, template] = utils.firstEntry(map)
+            if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
+
             const group: Group = {
                 type: 'group',
                 name,
@@ -404,6 +385,19 @@ export class VariabilityResolver {
                 throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
             })
         })
+    }
+
+    getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>) {
+        if (validator.isUndefined(data)) return []
+        return (
+            (validator.isArray(data)
+                ? data
+                : Object.entries(data).map(([name, template]) => {
+                      const map: {[name: string]: T} = {}
+                      map[name] = template
+                      return map
+                  })) || []
+        )
     }
 
     populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
