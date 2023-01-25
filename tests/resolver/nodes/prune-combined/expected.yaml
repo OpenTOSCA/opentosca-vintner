@@ -4,4 +4,3 @@ topology_template:
     node_templates:
         one:
             type: one
-            requirements: []

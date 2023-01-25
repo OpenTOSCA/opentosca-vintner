@@ -202,7 +202,6 @@ export class VariabilityResolver {
         })
 
         // Node templates
-        // TODO: document node templates can be list
         this.getFromVariabilityPointMap(serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
@@ -768,21 +767,19 @@ export class VariabilityResolver {
                         }
                         return node.outgoing[index].present
                     })
+                    if (utils.isEmpty(template.requirements)) delete template.requirements
 
                     // Delete all artifacts which are not present
                     const artifacts = node.artifacts.filter(artifact => artifact.present)
-                    if (!artifacts.length) {
-                        delete template.artifacts
-                    } else {
-                        template.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
-                            if (!validator.isString(artifact._raw)) {
-                                delete artifact._raw.conditions
-                                delete artifact._raw.default_alternative
-                            }
-                            map[artifact.name] = artifact._raw
-                            return map
-                        }, {})
-                    }
+                    template.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
+                        if (!validator.isString(artifact._raw)) {
+                            delete artifact._raw.conditions
+                            delete artifact._raw.default_alternative
+                        }
+                        map[artifact.name] = artifact._raw
+                        return map
+                    }, {})
+                    if (utils.isEmpty(template.artifacts)) delete template.artifacts
 
                     delete template.conditions
                     delete template.default_alternative
