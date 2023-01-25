@@ -7,13 +7,14 @@ title: Specification
 This document specifies Variability4TOSCA which extends
 [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
 with conditional elements.
+This includes conditional node templates, relationship templates, properties, artifacts, groups, policies, and inputs.
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
 
 ## Service Template Definition
 
-A Service Template must have the TOSCA Definitions Version `tosca_variability_1_0`.
-Such a Service Template is also called Variable Service Template.
+A service template must have the TOSCA definitions version `tosca_variability_1_0`.
+Such a service template is also called _variable service template_.
 
 | Keyname                   | Mandatory | Type   | Description                                                              |
 |---------------------------|-----------|--------|--------------------------------------------------------------------------|
@@ -260,20 +261,6 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-
-
-## Topology Template
-
-A Topology Template can have the following attributes.
-
-| Keyname        | Mandatory | Type                                                                               | Description                                                                            |
-|----------------|-----------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| inputs         | no        | Map(String, TopologyTemplateInput) &#124; List(Map(String, TopologyTemplateInput)) | An optional map of Topology Template Inputs or a list of Topology Template Input maps. |
-| groups         | no        | Map(String, GroupTemplate) &#124; List(Map(String, GroupTemplate))                 | An optional map of Group Templates or a list of Group Template maps.                   |
-| node_templates | no        | Map(String, NodeTemplate) &#124; List(Map(String, NodeTemplate))                   | An optional map of Node Templates or a list of Node Template maps.                     |
-
-Note, topology template input names, group names and node template names must be unique.
-
 
 
 ## Topology Template Input Definition
