@@ -13,6 +13,7 @@ import {RelationshipTemplate} from '#spec/relationship-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
+import {Single} from '#utils'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -81,7 +82,7 @@ export default async function (options: TemplateResolveArguments) {
     if (!options.disableConsistencyChecks) resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
-    resolver.transformInPlace()
+    resolver.transform()
 
     files.storeYAML(output, serviceTemplate)
 }
@@ -105,6 +106,7 @@ type Node = ConditionalElementBase & {
     outgoing: Relation[]
     groups: Group[]
     artifacts: Artifact[]
+    artifactsMap: Map<String, Artifact[]>
     properties: Property[]
     _raw: NodeTemplate
 }
@@ -124,6 +126,7 @@ type Relation = ConditionalElementBase & {
     groups: Group[]
     properties: Property[]
     relationship?: Relationship
+    // TODO: default
 }
 
 type Relationship = {
@@ -150,9 +153,13 @@ type Artifact = ConditionalElementBase & {
     index?: number
     node: Node
     _raw: ArtifactDefinition
+    // TODO: default
+    default: boolean
 }
 
 type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact | Property
+
+type ConditionalDefaultableElement = Property | Artifact
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
@@ -215,6 +222,7 @@ export class VariabilityResolver {
                 outgoing: [],
                 groups: [],
                 artifacts: [],
+                artifactsMap: new Map(),
                 properties: [],
                 _raw: nodeTemplate,
             }
@@ -281,39 +289,22 @@ export class VariabilityResolver {
             if (validator.isDefined(nodeTemplate.artifacts)) {
                 if (validator.isArray(nodeTemplate.artifacts)) {
                     for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        const [artifactName, artifactDefinition] = utils.firstEntry(artifactMap)
-                        const artifact: Artifact = {
-                            type: 'artifact',
-                            name: artifactName,
-                            index: artifactIndex,
-                            display: `${artifactName}@${artifactIndex}`,
-                            conditions: validator.isString(artifactDefinition)
-                                ? []
-                                : utils.toList(artifactDefinition.conditions),
-                            node,
-                            _raw: artifactDefinition,
-                        }
-
-                        node.artifacts.push(artifact)
-                        this.artifacts.push(artifact)
+                        this.populateArtifact(node, artifactMap, artifactIndex)
                     }
                 } else {
                     for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
-                        const artifact: Artifact = {
-                            type: 'artifact',
-                            name: artifactName,
-                            display: artifactName,
-                            conditions: validator.isString(artifactDefinition)
-                                ? []
-                                : utils.toList(artifactDefinition.conditions),
-                            node,
-                            _raw: artifactDefinition,
-                        }
-
-                        node.artifacts.push(artifact)
-                        this.artifacts.push(artifact)
+                        const map: ArtifactDefinitionMap = {}
+                        map[artifactName] = artifactDefinition
+                        this.populateArtifact(node, map)
                     }
                 }
+                // Ensure that there is only one default artifact
+                node.artifactsMap.forEach((artifacts, artifactName) => {
+                    const candidates = artifacts.filter(it => it.default)
+                    if (candidates.length > 1) {
+                        throw new Error(`Artifact "${artifactName}" of node "${node.display}" has multiple defaults`)
+                    }
+                })
             }
         })
 
@@ -386,17 +377,39 @@ export class VariabilityResolver {
         })
     }
 
-    getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>) {
+    getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (validator.isUndefined(data)) return []
-        return (
-            (validator.isArray(data)
-                ? data
-                : Object.entries(data).map(([name, template]) => {
-                      const map: {[name: string]: T} = {}
-                      map[name] = template
-                      return map
-                  })) || []
-        )
+        if (validator.isArray(data)) return data
+        return Object.entries(data).map(([name, template]) => {
+            const map: {[name: string]: T} = {}
+            map[name] = template
+            return map
+        })
+    }
+
+    populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
+        const [artifactName, artifactDefinition] = utils.firstEntry(map)
+
+        const artifact: Artifact = {
+            type: 'artifact',
+            name: artifactName,
+            index: index,
+            display: validator.isDefined(index) ? `${artifactName}@${index}` : artifactName,
+            conditions: validator.isString(artifactDefinition)
+                ? []
+                : artifactDefinition.default_alternative
+                ? [false]
+                : utils.toList(artifactDefinition.conditions),
+            node,
+            _raw: artifactDefinition,
+            default: (validator.isString(artifactDefinition) ? false : artifactDefinition.default_alternative) || false,
+        }
+
+        if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
+
+        node.artifactsMap.get(artifact.name)!.push(artifact)
+        node.artifacts.push(artifact)
+        this.artifacts.push(artifact)
     }
 
     populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
@@ -710,17 +723,14 @@ export class VariabilityResolver {
     transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
         const assignments: PropertyAssignmentMap = {}
 
-        const map = element.properties.reduce<{[key: string]: Property[]}>((map, property) => {
-            if (validator.isUndefined(map[property.name])) map[property.name] = []
-            map[property.name].push(property)
-            return map
-        }, {})
-
-        for (const [propertyName, properties] of Object.entries(map)) {
+        const groups = utils.groupBy(element.properties, it => it.name)
+        for (const [propertyName, properties] of Object.entries(groups)) {
             let presentProperty = properties.find(property => property.present)
 
             if (validator.isUndefined(presentProperty)) {
                 const defaultProperties = properties.filter(property => property.default)
+
+                // TODO: do this at startup
                 if (defaultProperties.length > 1) {
                     if (element.type === 'node')
                         throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
@@ -741,7 +751,7 @@ export class VariabilityResolver {
         if (utils.isEmpty(assignments)) delete template.properties
     }
 
-    transformInPlace() {
+    transform() {
         // Set TOSCA definitions version
         this.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
@@ -770,7 +780,12 @@ export class VariabilityResolver {
                     if (utils.isEmpty(template.requirements)) delete template.requirements
 
                     // Delete all artifacts which are not present
-                    const artifacts = node.artifacts.filter(artifact => artifact.present)
+                    const artifacts: Artifact[] = []
+                    const groups = utils.groupBy(node.artifacts, it => it.name)
+                    for (const [_, _artifacts] of Object.entries(groups)) {
+                        const presentArtifact = _artifacts.find(it => it.present) || _artifacts.find(it => it.default)
+                        if (validator.isDefined(presentArtifact)) artifacts.push(presentArtifact)
+                    }
                     template.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
                         if (!validator.isString(artifact._raw)) {
                             delete artifact._raw.conditions

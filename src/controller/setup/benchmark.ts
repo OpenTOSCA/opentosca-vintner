@@ -49,7 +49,7 @@ export default async function (options: BenchmarkArguments) {
                     .setVariabilityInputs({mode: 'present'})
                     .resolve()
                     .checkConsistency()
-                    .transformInPlace()
+                    .transform()
 
                 if (io) storeYAML(output, result)
 
