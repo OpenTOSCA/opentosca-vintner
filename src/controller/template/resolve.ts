@@ -1,5 +1,5 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {InputAssignmentMap} from '#spec/topology-template'
+import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
 import {Instance} from '#repository/instances'
 import * as files from '#files'
 import {InputAssignmentPreset, VariabilityExpression} from '#spec/variability'
@@ -12,7 +12,7 @@ import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-ass
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
-import {PolicyAssignmentMap, PolicyTemplate, PolicyTemplateList} from '#spec/policy-template'
+import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -96,6 +96,7 @@ type ConditionalElementBase = {
 
 type Input = ConditionalElementBase & {
     type: 'input'
+    _raw: InputDefinition
 }
 
 type Node = ConditionalElementBase & {
@@ -185,12 +186,22 @@ export class VariabilityResolver {
         this.serviceTemplate = serviceTemplate
 
         // Deployment inputs
-        Object.entries(serviceTemplate?.topology_template?.inputs || {}).forEach(([name, definition]) => {
+        const _inputs =
+            (validator.isArray(serviceTemplate.topology_template?.inputs)
+                ? serviceTemplate.topology_template?.inputs
+                : Object.entries(serviceTemplate.topology_template?.inputs || {}).map(([name, template]) => {
+                      const map: InputDefinitionMap = {}
+                      map[name] = template
+                      return map
+                  })) || []
+        _inputs.forEach(map => {
+            const [name, definition] = utils.firstEntry(map)
             const input: Input = {
                 type: 'input',
                 name,
                 display: name,
                 conditions: utils.toList(definition.conditions),
+                _raw: definition,
             }
             this.inputs.push(input)
             this.inputsMap.set(name, input)
@@ -738,8 +749,6 @@ export class VariabilityResolver {
     }
 
     transformInPlace() {
-        // TODO: delete defaults everywhere
-
         // Set TOSCA definitions version
         this.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
@@ -750,7 +759,7 @@ export class VariabilityResolver {
         if (validator.isDefined(this.serviceTemplate?.topology_template?.node_templates)) {
             this.serviceTemplate.topology_template!.node_templates = this.nodes
                 .filter(node => node.present)
-                .reduce<NodeTemplateMap>((acc, node) => {
+                .reduce<NodeTemplateMap>((map, node) => {
                     const template = node._raw
 
                     // Select present properties
@@ -759,7 +768,10 @@ export class VariabilityResolver {
                     // Delete requirement assignment which are not present
                     template.requirements = template.requirements?.filter((map, index) => {
                         const assignment = utils.firstValue(map)
-                        if (!validator.isString(assignment)) delete assignment.conditions
+                        if (!validator.isString(assignment)) {
+                            delete assignment.conditions
+                            delete assignment.default_alternative
+                        }
                         return node.outgoing[index].present
                     })
 
@@ -769,7 +781,10 @@ export class VariabilityResolver {
                         delete template.artifacts
                     } else {
                         template.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
-                            if (!validator.isString(artifact._raw)) delete artifact._raw.conditions
+                            if (!validator.isString(artifact._raw)) {
+                                delete artifact._raw.conditions
+                                delete artifact._raw.default_alternative
+                            }
                             map[artifact.name] = artifact._raw
                             return map
                         }, {})
@@ -777,8 +792,8 @@ export class VariabilityResolver {
 
                     delete template.conditions
                     delete template.default_alternative
-                    acc[node.name] = template
-                    return acc
+                    map[node.name] = template
+                    return map
                 }, {})
         }
 
@@ -795,7 +810,7 @@ export class VariabilityResolver {
         if (validator.isDefined(this.serviceTemplate?.topology_template?.groups)) {
             this.serviceTemplate.topology_template!.groups = this.groups
                 .filter(group => group.present)
-                .reduce<GroupTemplateMap>((acc, group) => {
+                .reduce<GroupTemplateMap>((map, group) => {
                     const template = group._raw
 
                     template.members = template.members.filter(member => {
@@ -809,19 +824,23 @@ export class VariabilityResolver {
 
                     delete template.conditions
                     delete template.default_alternative
-                    acc[group.name] = template
-                    return acc
+                    map[group.name] = template
+                    return map
                 }, {})
         }
 
         // Delete all topology template inputs which are not present
-        this.inputs.forEach(input => {
-            if (input.present) {
-                delete this.serviceTemplate.topology_template!.inputs![input.name].conditions
-            } else {
-                delete this.serviceTemplate.topology_template!.inputs![input.name]
-            }
-        })
+        if (validator.isDefined(this.serviceTemplate.topology_template?.inputs)) {
+            this.serviceTemplate.topology_template!.inputs = this.inputs
+                .filter(input => input.present)
+                .reduce<InputDefinitionMap>((map, input) => {
+                    const template = input._raw
+                    delete template.conditions
+                    delete template.default_alternative
+                    map[input.name] = template
+                    return map
+                }, {})
+        }
 
         // Delete all policy templates which are not present and remove all targets which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.policies)) {
@@ -851,6 +870,10 @@ export class VariabilityResolver {
         }
 
         if (validator.isDefined(this.serviceTemplate.topology_template)) {
+            if (utils.isEmpty(this.serviceTemplate.topology_template.inputs)) {
+                delete this.serviceTemplate.topology_template.inputs
+            }
+
             if (utils.isEmpty(this.serviceTemplate.topology_template.node_templates)) {
                 delete this.serviceTemplate.topology_template.node_templates
             }

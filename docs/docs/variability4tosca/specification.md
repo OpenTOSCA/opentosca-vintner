@@ -266,9 +266,10 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 
 A Topology Template can have the following attributes.
 
-| Keyname | Mandatory | Type                                                                                 | Description                                                          |
-|---------|-----------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| groups  | no        | Map(String, GroupTemplate) &#124; List(Map(String, GroupTemplate)) | An optional map of Group Templates or a list of Group Template maps. |
+| Keyname | Mandatory | Type                                                                 | Description                                                                   |
+|---------|-----------|----------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| inputs  | no        | Map(String, TopologyTemplateInput) &#124; List(Map(String, TopologyTemplateInput)) | An optional map of Topology Template Inputs or a list of Topology Template Input maps. |
+| groups  | no        | Map(String, GroupTemplate) &#124; List(Map(String, GroupTemplate))   | An optional map of Group Templates or a list of Group Template maps.          |
 
 
 

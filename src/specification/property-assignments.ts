@@ -3,7 +3,7 @@
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_PROPERTY_VALUE_ASSIGNMENT}
  */
 
-import {VariabilityAlternative, VariabilityExpression} from '#spec/variability'
+import {VariabilityAlternative} from '#spec/variability'
 
 export type PropertyAssignmentMap = {
     [key: string]: PropertyAssignmentValue

@@ -2,13 +2,13 @@
  * Node Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TEMPLATE}
  */
-import {VariabilityAlternative, VariabilityExpression, VariabilityPointList, VariabilityPointMap} from './variability'
+import {VariabilityAlternative, VariabilityPointList, VariabilityPointMap} from './variability'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 export type NodeTemplate = {
     type: string
-    // TODO: wrap properties
+    // TODO: wrap properties as variability point
     properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap
     requirements?: VariabilityPointList<RequirementAssignment>
