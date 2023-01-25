@@ -471,6 +471,8 @@ When variability is resolved, the following errors might be thrown:
 | Ambiguous Property         | Property "${property.name}@${property.index}" of node/ relation "${node.name}" is ambiguous | 
 | Ambiguous Default Property | Property "${property.name}" of node/ relation "${node.name}" has multiple defaults          | 
 | Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
+| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults         | 
+
 
 ## Variability Tests
 
