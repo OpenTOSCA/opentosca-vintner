@@ -845,6 +845,10 @@ export class VariabilityResolver {
                     map[node.name] = template
                     return map
                 }, {})
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template!.node_templates)) {
+                delete this.serviceTemplate.topology_template!.node_templates
+            }
         }
 
         // Delete all relationship templates which have no present relations
@@ -859,6 +863,10 @@ export class VariabilityResolver {
                     this.transformProperties(relation, relation.relationship._raw)
                 }
             })
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template!.relationship_templates)) {
+                delete this.serviceTemplate.topology_template!.relationship_templates
+            }
         }
 
         // Delete all groups which are not present and remove all members which are not present
@@ -882,6 +890,10 @@ export class VariabilityResolver {
                     map[group.name] = template
                     return map
                 }, {})
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template!.groups)) {
+                delete this.serviceTemplate.topology_template!.groups
+            }
         }
 
         // Delete all topology template inputs which are not present
@@ -895,6 +907,10 @@ export class VariabilityResolver {
                     map[input.name] = template
                     return map
                 }, {})
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template!.inputs)) {
+                delete this.serviceTemplate.topology_template!.inputs
+            }
         }
 
         // Delete all policy templates which are not present and remove all targets which are not present
@@ -922,33 +938,14 @@ export class VariabilityResolver {
                     map[policy.name] = template
                     return map
                 })
+
+            if (utils.isEmpty(this.serviceTemplate.topology_template!.policies)) {
+                delete this.serviceTemplate.topology_template!.policies
+            }
         }
 
-        // TODO: move these up
-        if (validator.isDefined(this.serviceTemplate.topology_template)) {
-            if (utils.isEmpty(this.serviceTemplate.topology_template.inputs)) {
-                delete this.serviceTemplate.topology_template.inputs
-            }
-
-            if (utils.isEmpty(this.serviceTemplate.topology_template.node_templates)) {
-                delete this.serviceTemplate.topology_template.node_templates
-            }
-
-            if (utils.isEmpty(this.serviceTemplate.topology_template.relationship_templates)) {
-                delete this.serviceTemplate.topology_template.relationship_templates
-            }
-
-            if (utils.isEmpty(this.serviceTemplate.topology_template.groups)) {
-                delete this.serviceTemplate.topology_template.groups
-            }
-
-            if (utils.isEmpty(this.serviceTemplate.topology_template.policies)) {
-                delete this.serviceTemplate.topology_template.policies
-            }
-
-            if (utils.isEmpty(this.serviceTemplate.topology_template)) {
-                delete this.serviceTemplate.topology_template
-            }
+        if (utils.isEmpty(this.serviceTemplate.topology_template)) {
+            delete this.serviceTemplate.topology_template
         }
 
         return this.serviceTemplate
