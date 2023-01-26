@@ -13,9 +13,10 @@ import {
 } from '#spec/query-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {Graph} from './graph'
-import * as files from '../utils/files'
+import * as files from '#files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {getTemplates} from '#/query/utils'
+import * as validator from '#validator'
 
 export type QueryResults = {[name: string]: QueryResult}
 export type QueryResult = Object
@@ -114,6 +115,8 @@ export class Query {
                     this.currentKeys = Object.keys(result)
                     result = Object.values(result)
                 } else if (i.path == 'SELF') {
+                    if (validator.isArray(this.currentTemplate?.topology_template?.node_templates))
+                        throw new Error(`Node Templates must not be a list`)
                     result = this.currentTemplate?.topology_template?.node_templates?.[this.startingContext] || {}
                 } else {
                     result = this.evaluateStep(result, i.path || '')
@@ -415,6 +418,9 @@ export class Query {
      * @param names Names of all nodes that should be included in the result set
      */
     private static getNodesByName(template: ServiceTemplate, names: string[]): {[name: string]: NodeTemplate} {
+        if (validator.isArray(template.topology_template?.node_templates))
+            throw new Error(`Node Templates must not be a list`)
+
         const result: {[name: string]: NodeTemplate} = {}
         for (const node of names) {
             if (template.topology_template?.node_templates?.[node])

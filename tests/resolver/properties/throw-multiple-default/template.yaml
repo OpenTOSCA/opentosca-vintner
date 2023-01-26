@@ -15,7 +15,11 @@ topology_template:
 
                 - key_one:
                       value: value_one_three
-                      default_alternative: false
+                      default_alternative: true
+
+                - key_one:
+                      value: value_one_four
+                      default_alternative: true
 
         node_two:
             type: node_two

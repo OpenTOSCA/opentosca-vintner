@@ -3,7 +3,7 @@
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_PROPERTY_VALUE_ASSIGNMENT}
  */
 
-import {VariabilityExpression} from '#spec/variability'
+import {VariabilityAlternative} from '#spec/variability'
 
 export type PropertyAssignmentMap = {
     [key: string]: PropertyAssignmentValue
@@ -11,16 +11,14 @@ export type PropertyAssignmentMap = {
 export type PropertyAssignmentValue = string | number | boolean
 
 /** TODO: Allow complex data types as property value
-    | PropertyAssignmentValue[]
-    | {[key: string]: PropertyAssignmentValue}
-     **/
+ | PropertyAssignmentValue[]
+ | {[key: string]: PropertyAssignmentValue}
+ **/
 
 export type PropertyAssignmentList = {
     [key: string]:
         | PropertyAssignmentValue
-        | {
+        | ({
               value: PropertyAssignmentValue
-              conditions?: VariabilityExpression | VariabilityExpression[]
-              default?: boolean
-          }
+          } & VariabilityAlternative)
 }[]

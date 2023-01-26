@@ -15,6 +15,19 @@ export type InputAssignmentPreset = {
 
 export type VariabilityExpressionMap = {[key: string]: VariabilityExpression}
 
+export type VariabilityPointMap<T> =
+    | {[name: string]: T}
+    | {
+          [name: string]: T
+      }[]
+
+export type VariabilityPointList<T> = {[name: string]: T}[]
+
+export type VariabilityAlternative = {
+    conditions?: VariabilityExpression | VariabilityExpression[]
+    default_alternative?: boolean
+}
+
 /**
  * Inspired by
  * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_WORKFLOW_COND_CLAUSE_DEFN

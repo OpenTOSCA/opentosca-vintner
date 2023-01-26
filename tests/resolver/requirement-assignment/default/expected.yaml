@@ -4,7 +4,9 @@ topology_template:
     node_templates:
         one:
             type: one
-            requirements: []
+            requirements:
+                - two_two:
+                      node: two
 
         two:
             type: two

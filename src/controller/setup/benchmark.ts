@@ -49,7 +49,7 @@ export default async function (options: BenchmarkArguments) {
                     .setVariabilityInputs({mode: 'present'})
                     .resolve()
                     .checkConsistency()
-                    .transformInPlace()
+                    .transform()
 
                 if (io) storeYAML(output, result)
 
@@ -84,7 +84,7 @@ export default async function (options: BenchmarkArguments) {
 }
 
 export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate {
-    const serviceTemplate: ServiceTemplate = {
+    const serviceTemplate: any = {
         tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
         topology_template: {
             variability: {

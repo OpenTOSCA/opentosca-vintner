@@ -16,6 +16,15 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
+export function groupBy<T>(elements: T[], by: (element: T) => string) {
+    return elements.reduce<{[name: string]: T[]}>((map, element) => {
+        const id = by(element)
+        if (validator.isUndefined(map[id])) map[id] = []
+        map[id].push(element)
+        return map
+    }, {})
+}
+
 export function toList<T>(data: T | T[] | undefined): T[] {
     if (validator.isUndefined(data)) return []
     if (Array.isArray(data)) return data

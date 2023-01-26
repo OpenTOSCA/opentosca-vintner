@@ -7,13 +7,14 @@ title: Specification
 This document specifies Variability4TOSCA which extends
 [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
 with conditional elements.
+This includes conditional node templates, relationship templates, properties, artifacts, groups, policies, and inputs.
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
 
 ## Service Template Definition
 
-A Service Template must have the TOSCA Definitions Version `tosca_variability_1_0`.
-Such a Service Template is also called Variable Service Template.
+A service template must have the TOSCA definitions version `tosca_variability_1_0`.
+Such a service template is also called _variable service template_.
 
 | Keyname                   | Mandatory | Type   | Description                                                              |
 |---------------------------|-----------|--------|--------------------------------------------------------------------------|
@@ -131,6 +132,7 @@ These conditions must be satisfied otherwise the respective relationship is not 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 
 The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition
 assigned.
@@ -160,7 +162,7 @@ A Property Assignment at Node Templates and Relationship Templates can additiona
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | value      | yes       | Property Assignment                                                        | The value of the Property.                                                                                         |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| default    | no        | Boolean                                                                    | Declare the value as default.                                                                                      |                                                                                                       |
+| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 
 
 ## Group Template Definition
@@ -260,6 +262,7 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
 
 
 ## Topology Template Input Definition
@@ -454,21 +457,23 @@ some or all of these consistency steps might be omitted.
 
 When variability is resolved, the following errors might be thrown:
 
-| Error                               | Message                                                                            |
-|-------------------------------------|------------------------------------------------------------------------------------|
-| Unsupported TOSCA Version           | TOSCA definitions version "${template.tosca_definitions_version}" not supported    |
-| Missing Relation Source             | Relation source "${relation.source}" of relation "${relation.name}" does not exist |
-| Missing Relation Target             | Relation target "${relation.target}" of relation "${relation.name}" does not exist |
-| Ambiguous Hosting                   | Node "${node.name}" has more than one hosting relations                            |
-| Missing Hosting                     | Node "${node.name}" requires a hosting relation                                    |
-| Missing Policy Target               | Policy target "${target.name}" of policy "${policy.name}" does not exist           |
-| Missing Group Member                | Group member "${member.name}" of group "${group.name}" does not exist              | 
-| Missing Artifact Parent             | Node "${node.name}" of artifact "${artifact.name}" does not exist                  | 
-| Ambiguous Artifact                  | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous  | 
-| Missing Property Parent             | Node "${node.name}" of property "${property.name}" does not exist                  | 
-| Ambiguous Property                  | Property "${property.name}@${property.index}" of node "${node.name}" is ambiguous  | 
-| Ambiguous Default Node Property     | Property "${property.name}" of node "${node.name}" has multiple defaults           | 
-| Ambiguous Default Relation Property | Property "${property.name}" of relation "${relation.name}" has multiple defaults   | 
+| Error                      | Message                                                                                     |
+|----------------------------|---------------------------------------------------------------------------------------------|
+| Unsupported TOSCA Version  | TOSCA definitions version "${template.tosca_definitions_version}" not supported             |
+| Missing Relation Source    | Relation source "${relation.source}" of relation "${relation.name}" does not exist          |
+| Missing Relation Target    | Relation target "${relation.target}" of relation "${relation.name}" does not exist          |
+| Ambiguous Hosting          | Node "${node.name}" has more than one hosting relations                                     |
+| Missing Hosting            | Node "${node.name}" requires a hosting relation                                             |
+| Missing Policy Target      | Policy target "${target.name}" of policy "${policy.name}" does not exist                    |
+| Missing Group Member       | Group member "${member.name}" of group "${group.name}" does not exist                       | 
+| Missing Artifact Parent    | Node "${node.name}" of artifact "${artifact.name}" does not exist                           | 
+| Ambiguous Artifact         | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous           | 
+| Missing Property Parent    | Node/ Relation "${node.name}" of property "${property.name}" does not exist                 | 
+| Ambiguous Property         | Property "${property.name}@${property.index}" of node/ relation "${node.name}" is ambiguous | 
+| Ambiguous Default Property | Property "${property.name}" of node/ relation "${node.name}" has multiple defaults          | 
+| Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
+| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults         | 
+
 
 ## Variability Tests
 

@@ -2,19 +2,19 @@
  * Node Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TEMPLATE}
  */
-import {VariabilityExpression} from './variability'
-import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {VariabilityAlternative, VariabilityPointList, VariabilityPointMap} from './variability'
+import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 export type NodeTemplate = {
     type: string
+    // TODO: wrap properties as variability point
     properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap
-    requirements?: RequirementAssignmentList
+    requirements?: VariabilityPointList<RequirementAssignment>
     capabilities?: CapabilityAssignmentMap
-    conditions?: VariabilityExpression | VariabilityExpression[]
-    artifacts?: ArtifactDefinitionMap | ArtifactDefinitionList
-}
+    artifacts?: VariabilityPointMap<ArtifactDefinition>
+} & VariabilityAlternative
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}
 
@@ -25,10 +25,9 @@ export type RequirementAssignmentList = RequirementAssignmentMap[]
 export type RequirementAssignmentMap = {[key: string]: RequirementAssignment}
 export type RequirementAssignment =
     | string
-    | {
+    | ({
           node: string
-          conditions?: VariabilityExpression | VariabilityExpression[]
           relationship?: string
-      }
+      } & VariabilityAlternative)
 
 export type CapabilityAssignmentMap = {[key: string]: string}

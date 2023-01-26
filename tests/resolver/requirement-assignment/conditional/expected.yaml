@@ -4,5 +4,11 @@ topology_template:
     node_templates:
         one:
             type: one
+
         two:
             type: two
+            requirements:
+                - three: three
+
+        three:
+            type: three

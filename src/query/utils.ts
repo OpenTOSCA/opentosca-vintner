@@ -3,6 +3,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
 import Plugins from '#plugins'
+import * as validator from '#validator'
 
 /**
  * Tries to load all service template from a given source and path
@@ -125,6 +126,9 @@ function getPropertyOrAttribute(
  * @param relName The name of the capability or requirement
  */
 function getRelationship(template: ServiceTemplate, node: Object, relName: string): Object | null {
+    if (validator.isArray(template.topology_template?.node_templates))
+        throw new Error(`Node Templates must not be a list`)
+
     const reqs: [] = resolvePath(node, 'requirements') || []
     const caps: [] = resolvePath(node, 'capabilities') || []
     for (const req of reqs) {
