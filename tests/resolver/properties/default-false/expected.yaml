@@ -4,6 +4,8 @@ topology_template:
     node_templates:
         node_one:
             type: node_one
+            properties:
+                key_one: value_one_three
 
         node_two:
             type: node_two

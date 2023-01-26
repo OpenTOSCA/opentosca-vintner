@@ -14,7 +14,7 @@ import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignm
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
 
-// TODO: fix default handling by checking default in checkPresence
+// TODO: default_alternative if true or false does not matter
 
 /**
  * Not documented since preparation for future work
@@ -607,7 +607,11 @@ export class VariabilityResolver {
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
-        // TODO: handle properties defaults here
+        // If property is default, then check if no other property having the same name is present
+        if (element.type === 'property' && element.default) {
+            const bratans = element.parent.propertiesMap.get(element.name)!.filter(it => it !== element)
+            conditions = [!bratans.some(it => this.checkPresence(it))]
+        }
 
         // Prune Relation: Assign default condition to relation that checks if source is present
         // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
@@ -780,15 +784,14 @@ export class VariabilityResolver {
     }
 
     transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
-        const assignments: PropertyAssignmentMap = {}
+        template.properties = element.properties
+            .filter(it => it.present)
+            .reduce<PropertyAssignmentMap>((map, property) => {
+                if (validator.isDefined(property)) map[property.name] = property.value
+                return map
+            }, {})
 
-        element.propertiesMap.forEach((properties, propertyName) => {
-            const property = properties.find(it => it.present) || properties.find(it => it.default)
-            if (validator.isDefined(property)) assignments[propertyName.toString()] = property.value
-        })
-        template.properties = assignments
-
-        if (utils.isEmpty(assignments)) delete template.properties
+        if (utils.isEmpty(template.properties)) delete template.properties
     }
 
     transform() {
@@ -847,11 +850,14 @@ export class VariabilityResolver {
         // Delete all relationship templates which have no present relations
         if (validator.isDefined(this.serviceTemplate?.topology_template?.relationship_templates)) {
             this.relations.forEach(relation => {
-                if (!relation.present && validator.isDefined(relation.relationship))
-                    delete this.serviceTemplate.topology_template!.relationship_templates![relation.relationship.name]
+                if (validator.isDefined(relation.relationship)) {
+                    if (!relation.present)
+                        delete this.serviceTemplate.topology_template!.relationship_templates![
+                            relation.relationship.name
+                        ]
 
-                if (validator.isDefined(relation.relationship))
                     this.transformProperties(relation, relation.relationship._raw)
+                }
             })
         }
 
