@@ -1,4 +1,0 @@
-name: Test for pruning nodes.
-description: Nothing is pruned since relation "three.two" prevents the pruning of node "two"
-resolver:
-    pruneNodes: true

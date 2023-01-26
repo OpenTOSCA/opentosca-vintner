@@ -142,24 +142,26 @@ template
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
-    .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
-    .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
-    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
-    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
-    .option('--prune-policies [boolean]', 'prune policy if no target is present and no conditions are assigned')
-    .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
-    .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
-    .option('--force-prune-groups [boolean]', 'prune node if no member is present')
     .option(
-        '--prune-artifacts [boolean]',
-        'prune artifact if corresponding node is not present and no conditions are assigned'
+        '--enable-relation-default-condition [boolean]',
+        'enable default condition for relations that checks is the source is present'
     )
-    .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
     .option(
-        '--prune-properties [boolean]',
-        'prune property if corresponding parent is not present and no conditions are assigned'
+        '--enable-policy-default-condition [boolean]',
+        'enable default condition for policies that checks if no target is present'
     )
-    .option('--force-prune-properties [boolean]', 'prune property if corresponding parent is not present')
+    .option(
+        '--enable-group-default-condition [boolean]',
+        'enable default condition for groups that checks if no member is present'
+    )
+    .option(
+        '--enable-artifact-default-condition [boolean]',
+        'enable default condition for artifacts that checks if corresponding node is present'
+    )
+    .option(
+        '--enable-property-default-condition [boolean]',
+        'enable default condition for properties that checks if corresponding node or relation is present'
+    )
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -313,24 +315,26 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
-    .option('--prune-relations [boolean]', 'prune relation if source is not present and no conditions are assigned')
-    .option('--force-prune-relations [boolean]', 'prune relation if source is not present')
-    .option('--prune-nodes [boolean]', 'prune node if no ingoing relation is present and no conditions are assigned')
-    .option('--force-prune-nodes [boolean]', 'prune node if no ingoing relation is present')
-    .option('--prune-policies [boolean]', 'prune policy if no target is present and no conditions are assigned')
-    .option('--force-prune-policies [boolean]', 'prune policy if no target is present')
-    .option('--prune-groups [boolean]', 'prune group if no member is present and no conditions are assigned')
-    .option('--force-prune-groups [boolean]', 'prune node if no member is present')
     .option(
-        '--prune-artifacts [boolean]',
-        'prune artifact if corresponding node is not present and no conditions are assigned'
+        '--enable-relation-default-condition [boolean]',
+        'enable default condition for relations that checks is the source is present'
     )
-    .option('--force-prune-artifacts [boolean]', 'prune artifact if corresponding node is not present')
     .option(
-        '--prune-properties [boolean]',
-        'prune property if corresponding parent is not present and no conditions are assigned'
+        '--enable-policy-default-condition [boolean]',
+        'enable default condition for policies that checks if no target is present'
     )
-    .option('--force-prune-properties [boolean]', 'prune property if corresponding parent is not present')
+    .option(
+        '--enable-group-default-condition [boolean]',
+        'enable default condition for groups that checks if no member is present'
+    )
+    .option(
+        '--enable-artifact-default-condition [boolean]',
+        'enable default condition for artifacts that checks if corresponding node is present'
+    )
+    .option(
+        '--enable-property-default-condition [boolean]',
+        'enable default condition for properties that checks if corresponding node or relation is present'
+    )
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',

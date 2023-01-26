@@ -1,3 +1,0 @@
-description: Group "group_three" is forced to be removed since no members are present.
-resolver:
-    forcePruneGroups: true

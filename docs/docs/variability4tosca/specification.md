@@ -416,24 +416,22 @@ To check if an element is present, check that all assigned conditions are satisf
 
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
+1. (Optional) Assign default conditions if no conditions have been collected yet.
 1. The element is present only if all conditions are satisfied.
 
-### Prune Elements
+### Optional Default Conditions
 
-To further support modeling, the following improvements can be taken:
+To further support modeling, the following default conditions can be assigned:
 
-1. Prune Relations: The default condition of a relation checks if the source node is present.
-1. Force Prune Relations: Ignore any assigned conditions and check instead if the source node is present.
-1. Prune Nodes: The default condition of a node checks if any ingoing relation is present.
-1. Force Prune Nodes: Ignore any assigned conditions and check instead if any ingoing relation is present.
-1. Prune Policies: The default condition of a policy checks if any targets are present.
-1. Force Prune Policies: Ignore any assigned conditions and check instead if any targets are present.
-1. Prune Groups: The default condition of a group checks if any members are present.
-1. Force Prune Groups: Ignore any assigned conditions and check instead if any members are present.
-1. Prune Artifacts: The default condition of an artifact checks if the corresponding node is present.
-1. Force Prune Artifacts: Ignore any assigned conditions and check instead if corresponding node is present.
-1. Prune Properties: The default condition of a property checks if the corresponding parent is present.
-1. Force Prune Properties: Ignore any assigned conditions and check instead if corresponding parent is present.
+
+| Element                        | Default Conditions                                                   |
+|--------------------------------|----------------------------------------------------------------------|
+| Node Template Property         | Check if the node template of the property is present.               |
+| Relationship Template Property | Check if the relationship template of the property is present.       |
+| Requirement Assignment         | Check if the node template of the requirement assignment is present. |
+| Policy                         | Check if the policy has any targets which are present.               |
+| Group                          | Check if the group has any members which are present.                |
+| Artifact                       | Check if the node template of the artifact is present.               |
 
 ### Check Consistency
 

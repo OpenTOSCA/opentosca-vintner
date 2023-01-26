@@ -1,4 +1,0 @@
-description: Combine pruning of nodes and relations
-resolver:
-    pruneNodes: true
-    pruneRelations: true
