@@ -14,8 +14,14 @@ import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignm
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
 
-// TODO: handle default by assigning default conditions ...
-// TODO: replace default_alternative with DEFAULT keyword
+// TODO: fix default handling by checking default in checkPresence
+
+/**
+ * Not documented since preparation for future work
+ *
+ * - node templates might be a list
+ * - groups might be a list
+ */
 
 export type TemplateResolveArguments = {
     instance?: string
@@ -81,7 +87,7 @@ export default async function (options: TemplateResolveArguments) {
     resolver.resolve()
 
     // Check consistency
-    if (!options.disableConsistencyChecks) resolver.checkConsistency()
+    resolver.checkConsistency()
 
     // Transform to TOSCA compliant format
     resolver.transform()
@@ -159,13 +165,10 @@ type Artifact = ConditionalElementBase & {
     index?: number
     node: Node
     _raw: ArtifactDefinition
-    // TODO: default
     default: boolean
 }
 
 type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact | Property
-
-type ConditionalDefaultableElement = Property | Artifact
 
 type VariabilityExpressionContext = {
     element?: ConditionalElement
@@ -661,6 +664,8 @@ export class VariabilityResolver {
     }
 
     checkConsistency() {
+        if (this.options.disableConsistencyChecks) return this
+
         const relations = this.relations.filter(relation => relation.present)
         const nodes = this.nodes.filter(node => node.present)
 

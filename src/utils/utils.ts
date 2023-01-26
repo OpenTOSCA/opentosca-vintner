@@ -1,8 +1,6 @@
 import {v4 as uuid4} from 'uuid'
 import * as validator from './validator'
 
-export type Single<T> = {[name: string]: T}
-
 export function generateNonce() {
     return uuid4()
 }
@@ -19,7 +17,7 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
 }
 
 export function groupBy<T>(elements: T[], by: (element: T) => string) {
-    return elements.reduce<Single<T[]>>((map, element) => {
+    return elements.reduce<{[name: string]: T[]}>((map, element) => {
         const id = by(element)
         if (validator.isUndefined(map[id])) map[id] = []
         map[id].push(element)
