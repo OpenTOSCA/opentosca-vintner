@@ -182,6 +182,7 @@ Such a group is also called Variability Group.
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
 conditions are satisfied.
