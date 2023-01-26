@@ -256,7 +256,7 @@ export class VariabilityResolver {
                     target,
                     conditions: validator.isString(assignment)
                         ? []
-                        : assignment.default_alternative
+                        : validator.isDefined(assignment.default_alternative)
                         ? [false]
                         : utils.toList(assignment.conditions),
                     groups: [],
@@ -424,7 +424,7 @@ export class VariabilityResolver {
             display: validator.isDefined(index) ? `${artifactName}@${index}` : artifactName,
             conditions: validator.isString(artifactDefinition)
                 ? []
-                : artifactDefinition.default_alternative
+                : validator.isDefined(artifactDefinition.default_alternative)
                 ? [false]
                 : utils.toList(artifactDefinition.conditions),
             node,
@@ -468,7 +468,7 @@ export class VariabilityResolver {
                             type: 'property',
                             name: propertyName,
                             display: `${propertyName}@${propertyIndex}`,
-                            conditions: propertyAssignment.default_alternative
+                            conditions: validator.isDefined(propertyAssignment.default_alternative)
                                 ? [false]
                                 : utils.toList(propertyAssignment.conditions),
                             default: propertyAssignment.default_alternative || false,
