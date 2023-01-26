@@ -594,6 +594,21 @@ export class VariabilityResolver {
             element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
 
+        // If artifact is default, then check if no other artifact having the same name is present
+        if (element.type === 'artifact' && element.default) {
+            const bratans = element.node.artifactsMap.get(element.name)!.filter(it => it !== element)
+            conditions = [!bratans.some(it => this.checkPresence(it))]
+        }
+
+        // If relation is default, then check if no other relation having the same name is present
+        if (element.type === 'relation' && element.default) {
+            const node = this.getNode(element.source)
+            const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
+            conditions = [!bratans.some(it => this.checkPresence(it))]
+        }
+
+        // TODO: handle properties defaults here
+
         // Prune Relation: Assign default condition to relation that checks if source is present
         // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
         if (
@@ -794,63 +809,32 @@ export class VariabilityResolver {
                     this.transformProperties(node, template)
 
                     // Delete requirement assignment which are not present
-                    const relations: Relation[] = []
-                    node.outgoingMap.forEach(_relations => {
-                        const relation = _relations.find(it => it.present) || _relations.find(it => it.default)
-                        if (validator.isDefined(relation)) {
-                            relations.push(relation)
+                    template.requirements = node.outgoing
+                        .filter(it => it.present)
+                        .map(relation => {
+                            const assignment = relation._raw
+                            if (!validator.isString(assignment)) {
+                                delete assignment.conditions
+                                delete assignment.default_alternative
+                            }
 
-                            // Select present properties
-                            if (validator.isDefined(relation.relationship))
-                                this.transformProperties(relation, relation.relationship._raw)
-
-                            // Delete all relationship templates which have no present relations
-                            const death: Relation[] = relation.present
-                                ? _relations.filter(it => !it.present)
-                                : _relations.filter(it => !it.default) || []
-                            death.forEach(relation => {
-                                if (validator.isDefined(relation.relationship))
-                                    return delete this.serviceTemplate.topology_template!.relationship_templates![
-                                        relation.relationship.name
-                                    ]
-                            })
-                        } else {
-                            _relations.forEach(relation => {
-                                if (validator.isDefined(relation.relationship))
-                                    return delete this.serviceTemplate.topology_template!.relationship_templates![
-                                        relation.relationship.name
-                                    ]
-                            })
-                        }
-                    })
-
-                    template.requirements = relations.map(relation => {
-                        const assignment = relation._raw
-                        if (!validator.isString(assignment)) {
-                            delete assignment.conditions
-                            delete assignment.default_alternative
-                        }
-
-                        const map: RequirementAssignmentMap = {}
-                        map[relation.name] = assignment
-                        return map
-                    })
+                            const map: RequirementAssignmentMap = {}
+                            map[relation.name] = assignment
+                            return map
+                        })
                     if (utils.isEmpty(template.requirements)) delete template.requirements
 
                     // Delete all artifacts which are not present
-                    const artifacts: Artifact[] = []
-                    node.artifactsMap.forEach(_artifacts => {
-                        const presentArtifact = _artifacts.find(it => it.present) || _artifacts.find(it => it.default)
-                        if (validator.isDefined(presentArtifact)) artifacts.push(presentArtifact)
-                    })
-                    template.artifacts = artifacts.reduce<ArtifactDefinitionMap>((map, artifact) => {
-                        if (!validator.isString(artifact._raw)) {
-                            delete artifact._raw.conditions
-                            delete artifact._raw.default_alternative
-                        }
-                        map[artifact.name] = artifact._raw
-                        return map
-                    }, {})
+                    template.artifacts = node.artifacts
+                        .filter(it => it.present)
+                        .reduce<ArtifactDefinitionMap>((map, artifact) => {
+                            if (!validator.isString(artifact._raw)) {
+                                delete artifact._raw.conditions
+                                delete artifact._raw.default_alternative
+                            }
+                            map[artifact.name] = artifact._raw
+                            return map
+                        }, {})
                     if (utils.isEmpty(template.artifacts)) delete template.artifacts
 
                     delete template.conditions
@@ -860,18 +844,16 @@ export class VariabilityResolver {
                 }, {})
         }
 
-        this.nodes
-            .filter(node => !node.present)
-            .forEach(node => {
-                node.outgoingMap.forEach(_relations => {
-                    _relations.forEach(relation => {
-                        if (validator.isDefined(relation.relationship))
-                            return delete this.serviceTemplate.topology_template!.relationship_templates![
-                                relation.relationship.name
-                            ]
-                    })
-                })
+        // Delete all relationship templates which have no present relations
+        if (validator.isDefined(this.serviceTemplate?.topology_template?.relationship_templates)) {
+            this.relations.forEach(relation => {
+                if (!relation.present && validator.isDefined(relation.relationship))
+                    delete this.serviceTemplate.topology_template!.relationship_templates![relation.relationship.name]
+
+                if (validator.isDefined(relation.relationship))
+                    this.transformProperties(relation, relation.relationship._raw)
             })
+        }
 
         // Delete all groups which are not present and remove all members which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.groups)) {
@@ -936,6 +918,7 @@ export class VariabilityResolver {
                 })
         }
 
+        // TODO: move these up
         if (validator.isDefined(this.serviceTemplate.topology_template)) {
             if (utils.isEmpty(this.serviceTemplate.topology_template.inputs)) {
                 delete this.serviceTemplate.topology_template.inputs
