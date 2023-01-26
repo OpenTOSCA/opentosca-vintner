@@ -353,18 +353,11 @@ resolves variability
 | preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
-| prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
-| force-prune-relations |  false  | boolean | prune relation if source is not present |
-| prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
-| force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
-| prune-policies |  false  | boolean | prune policy if no target is present and no conditions are assigned |
-| force-prune-policies |  false  | boolean | prune policy if no target is present |
-| prune-groups |  false  | boolean | prune group if no member is present and no conditions are assigned |
-| force-prune-groups |  false  | boolean | prune node if no member is present |
-| prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present and no conditions are assigned |
-| force-prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present |
-| prune-properties |  false  | boolean | prune property if corresponding parent is not present and no conditions are assigned |
-| force-prune-properties |  false  | boolean | prune property if corresponding parent is not present |
+| enable-relation-default-condition |  false  | boolean | enable default condition for relations that checks is the source is present |
+| enable-policy-default-condition |  false  | boolean | enable default condition for policies that checks if no target is present |
+| enable-group-default-condition |  false  | boolean | enable default condition for groups that checks if no member is present |
+| enable-artifact-default-condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
+| enable-property-default-condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
 | disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
@@ -726,18 +719,11 @@ resolves variability
 | instance |  true  | string | instance name |
 | preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
-| prune-relations |  false  | boolean | prune relation if source is not present and no conditions are assigned |
-| force-prune-relations |  false  | boolean | prune relation if source is not present |
-| prune-nodes |  false  | boolean | prune node if no ingoing relation is present and no conditions are assigned |
-| force-prune-nodes |  false  | boolean | prune node if no ingoing relation is present |
-| prune-policies |  false  | boolean | prune policy if no target is present and no conditions are assigned |
-| force-prune-policies |  false  | boolean | prune policy if no target is present |
-| prune-groups |  false  | boolean | prune group if no member is present and no conditions are assigned |
-| force-prune-groups |  false  | boolean | prune node if no member is present |
-| prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present and no conditions are assigned |
-| force-prune-artifacts |  false  | boolean | prune artifact if corresponding node is not present |
-| prune-properties |  false  | boolean | prune property if corresponding parent is not present and no conditions are assigned |
-| force-prune-properties |  false  | boolean | prune property if corresponding parent is not present |
+| enable-relation-default-condition |  false  | boolean | enable default condition for relations that checks is the source is present |
+| enable-policy-default-condition |  false  | boolean | enable default condition for policies that checks if no target is present |
+| enable-group-default-condition |  false  | boolean | enable default condition for groups that checks if no member is present |
+| enable-artifact-default-condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
+| enable-property-default-condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
 | disable-consistency-checks |  false  | boolean | disable all consistency checks |
 | disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
 | disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |

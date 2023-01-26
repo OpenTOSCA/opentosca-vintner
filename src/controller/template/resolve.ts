@@ -30,18 +30,11 @@ export type TemplateResolveArguments = {
 } & ResolvingOptions
 
 export type ResolvingOptions = {
-    pruneRelations?: boolean
-    forcePruneRelations?: boolean
-    pruneNodes?: boolean
-    forcePruneNodes?: boolean
-    prunePolicies?: boolean
-    forcePrunePolicies?: boolean
-    pruneGroups?: boolean
-    forcePruneGroups?: boolean
-    pruneArtifacts?: boolean
-    forcePruneArtifacts?: boolean
-    pruneProperties?: boolean
-    forcePruneProperties?: boolean
+    enableRelationDefaultCondition?: boolean
+    enablePolicyDefaultCondition?: boolean
+    enableGroupDefaultCondition?: boolean
+    enableArtifactDefaultCondition?: boolean
+    enablePropertyDefaultCondition?: boolean
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -611,63 +604,28 @@ export class VariabilityResolver {
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
-        // Prune Relation: Assign default condition to relation that checks if source is present
-        // Force Prune Relation: Ignore any assigned conditions and assign condition to relation that checks if source is present
-        if (
-            element.type === 'relation' &&
-            ((this.options.pruneRelations && utils.isEmpty(conditions)) || this.options.forcePruneRelations)
-        ) {
+        // Relation Default Condition: Assign default condition to relation that checks if source is present
+        if (element.type === 'relation' && this.options.enableRelationDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{get_element_presence: element.source}]
         }
 
-        // Prune Node: Assign default condition to node that checks if any ingoing relation is present
-        // Force Prune Node: Ignore any assigned conditions and assign condition to node that checks if any ingoing relation is present
-        if (
-            element.type === 'node' &&
-            ((this.options.pruneNodes && utils.isEmpty(conditions)) || this.options.forcePruneNodes)
-        ) {
-            conditions = [
-                {
-                    or: utils.isEmpty(element.ingoing)
-                        ? [true]
-                        : element.ingoing.map(relation => ({get_element_presence: [relation.source, relation.name]})),
-                },
-            ]
-        }
-
-        // Prune Policies: Assign default condition to node that checks if any target is present
-        // Force Prune Policies: Ignore any assigned conditions and assign default condition to node that checks if any target is present
-        if (
-            element.type === 'policy' &&
-            ((this.options.prunePolicies && utils.isEmpty(conditions)) || this.options.forcePrunePolicies)
-        ) {
+        // Policy Default Condition: Assign default condition to node that checks if any target is present
+        if (element.type === 'policy' && this.options.enablePolicyDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{has_present_targets: element.name}]
         }
 
-        // Prune Groups: Assign default condition to node that checks if any member is present
-        // Force Prune Groups: Ignore any assigned conditions and assign default condition to node that checks if any member is present
-        if (
-            element.type === 'group' &&
-            ((this.options.pruneGroups && utils.isEmpty(conditions)) || this.options.forcePruneGroups)
-        ) {
+        // Group Default Condition: Assign default condition to node that checks if any member is present
+        if (element.type === 'group' && this.options.enableGroupDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{has_present_members: element.name}]
         }
 
-        // Prune Artifacts: Assign default condition to artifact that checks if corresponding node is present
-        // Force Prune Artifacts: Ignore any assigned conditions and assign default condition to artifact that checks if corresponding node is present
-        if (
-            element.type === 'artifact' &&
-            ((this.options.pruneArtifacts && utils.isEmpty(conditions)) || this.options.forcePruneArtifacts)
-        ) {
+        // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
+        if (element.type === 'artifact' && this.options.enableArtifactDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{get_element_presence: element.node.name}]
         }
 
-        // Prune Properties: Assign default condition to property that checks if corresponding parent is present
-        // Force Prune Properties: Ignore any assigned conditions and assign default condition to property that checks if corresponding parent is present
-        if (
-            element.type === 'property' &&
-            ((this.options.pruneProperties && utils.isEmpty(conditions)) || this.options.forcePruneProperties)
-        ) {
+        // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
+        if (element.type === 'property' && this.options.enablePropertyDefaultCondition && utils.isEmpty(conditions)) {
             if (element.parent.type === 'node') conditions = [{get_element_presence: element.parent.name}]
             if (element.parent.type === 'relation')
                 conditions = [{get_element_presence: [element.parent.source, element.parent.name]}]
