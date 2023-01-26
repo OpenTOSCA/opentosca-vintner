@@ -512,6 +512,22 @@ export class VariabilityResolver {
                     )
             }
         })
+
+        element.properties.forEach(property => {
+            if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
+                if (element.type === 'node')
+                    throw new Error(
+                        `Property "${property.display}" of node "${element.display}" has no value or expression defined`
+                    )
+
+                if (element.type === 'relation')
+                    throw new Error(
+                        `Property "${property.display}" of relation "${
+                            element.relationship!.name
+                        }" has no value or expression defined`
+                    )
+            }
+        })
     }
 
     getElement(member: GroupMember): Node | Relation {
