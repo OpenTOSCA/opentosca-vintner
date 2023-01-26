@@ -8,17 +8,17 @@ import {VariabilityAlternative} from '#spec/variability'
 export type PropertyAssignmentMap = {
     [key: string]: PropertyAssignmentValue
 }
-export type PropertyAssignmentValue = string | number | boolean
-
-/** TODO: Allow complex data types as property value
- | PropertyAssignmentValue[]
- | {[key: string]: PropertyAssignmentValue}
- **/
+export type PropertyAssignmentValue =
+    | string
+    | number
+    | boolean
+    | PropertyAssignmentValue[]
+    | {[key: string]: PropertyAssignmentValue}
 
 export type PropertyAssignmentList = {
-    [key: string]:
-        | PropertyAssignmentValue
-        | ({
-              value: PropertyAssignmentValue
-          } & VariabilityAlternative)
+    [key: string]: ConditionalPropertyAssignmentValue
 }[]
+
+export type ConditionalPropertyAssignmentValue = {
+    value: PropertyAssignmentValue
+} & VariabilityAlternative

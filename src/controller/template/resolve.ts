@@ -442,7 +442,9 @@ export class VariabilityResolver {
                     if (
                         validator.isString(propertyAssignment) ||
                         validator.isNumber(propertyAssignment) ||
-                        validator.isBoolean(propertyAssignment)
+                        validator.isBoolean(propertyAssignment) ||
+                        validator.isArray(propertyAssignment) ||
+                        validator.isUndefined(propertyAssignment.value)
                     ) {
                         property = {
                             type: 'property',
@@ -450,7 +452,8 @@ export class VariabilityResolver {
                             display: `${propertyName}@${propertyIndex}`,
                             conditions: [],
                             parent: element,
-                            value: propertyAssignment,
+                            // This just works since we do not allow "value" as a keyword in a property assignment value
+                            value: propertyAssignment as PropertyAssignmentValue,
                             default: false,
                         }
                     } else {
