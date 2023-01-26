@@ -157,15 +157,17 @@ A Relationship Template can contain conditional Property Assignments.
 
 A Property Assignment at Node Templates and Relationship Templates can additionally contain Variability Conditions if wrapped as the following object and if they are used in a list.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
-|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| value      | yes       | Property Assignment                                                        | The value of the Property.                                                                                         |
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
+| Keyname            | Mandatory | Type                                                                          | Description                                                                                                        |
+|--------------------|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| value              | no        | Property Assignment                                                           | The value of the Property.                                                                                         |
+| expression         | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as value.                                                   |
+| conditions         | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)    | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_alternative | no        | Boolean                                                                       | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 
 
 Note, if the value is not wrapped and assigned to a property being part of a property assignment list, then the keyname `value` is a keyword, that is used to detect if the value is wrapped or not.
-Thus, if `value` must be used, then use it wrapped as follows 
+Thus, if `value` must be used, then use it wrapped as follows.
+Same applies to `expression`.
 
 ````
 properties:

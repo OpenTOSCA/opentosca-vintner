@@ -117,7 +117,8 @@ type Property = ConditionalElementBase & {
     parent: Node | Relation
     index?: number
     default: boolean
-    value: PropertyAssignmentValue
+    value?: PropertyAssignmentValue
+    expression?: VariabilityExpression
 }
 
 type Relation = ConditionalElementBase & {
@@ -444,7 +445,8 @@ export class VariabilityResolver {
                         validator.isNumber(propertyAssignment) ||
                         validator.isBoolean(propertyAssignment) ||
                         validator.isArray(propertyAssignment) ||
-                        validator.isUndefined(propertyAssignment.value)
+                        (validator.isUndefined(propertyAssignment.value) &&
+                            validator.isUndefined(propertyAssignment.expression))
                     ) {
                         property = {
                             type: 'property',
@@ -468,6 +470,7 @@ export class VariabilityResolver {
                             default: propertyAssignment.default_alternative || false,
                             parent: element,
                             value: propertyAssignment.value,
+                            expression: propertyAssignment.expression,
                         }
                     }
 
@@ -746,7 +749,13 @@ export class VariabilityResolver {
         template.properties = element.properties
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
-                if (validator.isDefined(property)) map[property.name] = property.value
+                if (validator.isDefined(property)) {
+                    if (validator.isDefined(property.value)) map[property.name] = property.value
+                    if (validator.isDefined(property.expression))
+                        map[property.name] = this.evaluateVariabilityExpression(property.expression, {
+                            element: property,
+                        })
+                }
                 return map
             }, {})
 
