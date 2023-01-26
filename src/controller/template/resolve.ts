@@ -14,8 +14,6 @@ import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignm
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
 
-// TODO: default_alternative if true or false does not matter
-
 /**
  * Not documented since preparation for future work
  *
