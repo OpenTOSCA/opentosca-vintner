@@ -67,5 +67,8 @@ jobs:
             - name: (DOCS) Generate Interface Page
               run: yarn docs:generate:interface
 
+            - name: (DOCS) Generate Conformance Test Pages
+              run: yarn docs:generate:tests
+
             - name: (DOCS) Build Docs
               run: yarn docs:build
