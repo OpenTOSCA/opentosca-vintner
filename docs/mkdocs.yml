@@ -22,7 +22,7 @@ theme:
         - navigation.tabs.sticky
         - navigation.instant
         - navigation.tracking
-        - navigation.expand
+        # - navigation.expand
         - navigation.indexes
         - content.code.annotate
         - toc.follow
