@@ -22,7 +22,7 @@ type Test = {
 }
 
 async function main() {
-    const documentationDirectory = path.join('docs', 'docs', 'variability4tosca', 'conformance-tests')
+    const documentationDirectory = path.join('docs', 'docs', 'variability4tosca', 'tests')
     files.removeDirectory(documentationDirectory)
     files.createDirectory(documentationDirectory)
 
