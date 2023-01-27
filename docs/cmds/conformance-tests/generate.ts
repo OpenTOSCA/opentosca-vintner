@@ -6,19 +6,19 @@ import {
     getDefaultVariableServiceTemplate,
     readConfig,
     readDefaultExpect,
+    VariabilityTestConfig,
 } from '../../../src/controller/template/test'
 import {ServiceTemplate} from '../../../src/specification/service-template'
+import {InputAssignmentMap} from '../../../src/specification/topology-template'
+import {snakeCase} from 'snake-case'
 
 type Test = {
     id: string
-    name: string
-    description?: string
-    preset?: string
-    error?: string
-    inputs?: string
-    template?: string
-    expected?: string
-    resolver?: string
+    config?: VariabilityTestConfig
+    inputs?: InputAssignmentMap
+    template: ServiceTemplate
+    expected?: ServiceTemplate
+    file: string
 }
 
 async function main() {
@@ -36,35 +36,32 @@ async function main() {
             const dir = path.join(groupDir, test)
             const id = `${group}-${test}`
             const config = readConfig(dir)
-            const template = getDefaultVariableServiceTemplate(dir)
-                ? files.toYAML(files.loadYAML(getDefaultVariableServiceTemplate(dir)))
+            const template = files.loadYAML<ServiceTemplate>(getDefaultVariableServiceTemplate(dir))
+            const inputs = getDefaultInputs(dir)
+                ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
                 : undefined
-            const inputs = getDefaultInputs(dir) ? files.toYAML(files.loadYAML(getDefaultInputs(dir)!)) : undefined
             tests.push({
                 id,
-                name: config?.name || id,
-                description: config.description,
-                preset: config.preset,
-                error: config.error,
-                resolver: files.toYAML(config.resolver),
+                config,
                 inputs,
                 template,
-                expected: !config.error ? files.toYAML(readDefaultExpect(dir)) : undefined,
+                expected: !config.error ? readDefaultExpect(dir) : undefined,
+                file: `test-${id}.md`,
             })
         })
     }
 
     await renderFile(
-        path.join(__dirname, 'introduction.ejs'),
+        path.join(__dirname, 'introduction.template.ejs'),
         tests,
         path.join(documentationDirectory, 'introduction.md')
     )
 
     for (const test of tests) {
         await renderFile(
-            path.join(__dirname, 'test.ejs'),
-            test,
-            path.join(documentationDirectory, `test-${test.id}.md`)
+            path.join(__dirname, 'test.template.ejs'),
+            {test, utils: {toYAML: files.toYAML, toSnakeCase: snakeCase}},
+            path.join(documentationDirectory, test.file)
         )
     }
 }

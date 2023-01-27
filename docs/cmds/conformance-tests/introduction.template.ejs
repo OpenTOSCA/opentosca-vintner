@@ -14,5 +14,5 @@ processing.
 | ID | Test |
 | --- | --- |
 <% data.forEach((test, index) => { -%>
-| <%= index + 1 %> | [<%= test.name %>](./<%= test.id %>.md) |
+| <%= index + 1 %> | [<%= test.config.name || test.id %>](./<%= test.file %>) |
 <% }) %>

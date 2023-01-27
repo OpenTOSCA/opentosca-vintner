@@ -1,8 +1,9 @@
 # properties-throw-ambiguous-property
 
 
-
 ## Variable Service Template
+
+The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
@@ -18,11 +19,17 @@ topology_template:
 
 
 
-## Variability-Resolved Service Template
 
-```yaml linenums="1"
+
+
+
+
+## Expected Error
+
+The following error is expected to be thrown, when resolving variability.
+
+```text linenums="1"
+Property "key_one@1" of node "node_one" is ambiguous
 
 ```
 
-
-TODO: add all the remaining stuff

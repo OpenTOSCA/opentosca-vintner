@@ -1,8 +1,13 @@
 # groups-default-condition-nothing
 
 
+## Description
+
+Group "group_three" is not removed since its conditions are "true".
 
 ## Variable Service Template
+
+The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
@@ -61,4 +66,68 @@ topology_template:
 
 
 
-TODO: add all the remaining stuff
+
+
+## Resolver Configuration
+
+The following resolver configuration is used.
+
+```yaml linenums="1"
+enable_group_default_condition: true
+
+```
+
+
+
+## Variability-Resolved Service Template
+
+The following variability-resolved service templated is expected.
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_simple_yaml_1_3
+topology_template:
+  groups:
+    group_two:
+      type: tosca.groups.Root
+      members:
+        - container
+    group_three:
+      type: tosca.groups.Root
+      members: []
+  node_templates:
+    application:
+      type: docker.container.application
+      requirements:
+        - host: container
+        - more: another_application
+    container:
+      type: docker.container
+      requirements:
+        - host: engine
+    engine:
+      type: docker.engine
+      requirements:
+        - host: vm
+    another_application:
+      type: another.application
+      requirements:
+        - host: another_runtime
+    another_runtime:
+      type: another.runtime
+      requirements:
+        - host: vm
+    vm:
+      type: openstack.vm
+
+```
+
+
+
+## Resolver Configuration
+
+The following resolver configuration is used.
+
+```yaml linenums="1"
+enableGroupDefaultCondition: true
+
+```

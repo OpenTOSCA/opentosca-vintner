@@ -1,8 +1,9 @@
 # other-benchmark
 
 
-
 ## Variable Service Template
+
+The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
@@ -80,5 +81,46 @@ topology_template:
 ```
 
 
+## Variability Inputs
 
-TODO: add all the remaining stuff
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+mode: present
+
+```
+
+
+
+
+
+
+## Variability-Resolved Service Template
+
+The following variability-resolved service templated is expected.
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_simple_yaml_1_3
+topology_template:
+  node_templates:
+    component_0_present:
+      type: component_type_0_present
+      requirements:
+        - relation_present:
+            node: component_1_present
+            relationship: relationship_0_present
+    component_1_present:
+      type: component_type_1_present
+      requirements:
+        - relation_present:
+            node: component_0_present
+            relationship: relationship_1_present
+  relationship_templates:
+    relationship_0_present:
+      type: relationship_type_0_present
+    relationship_1_present:
+      type: relationship_type_1_present
+
+```
+
+

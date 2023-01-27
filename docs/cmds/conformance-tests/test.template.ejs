@@ -1,0 +1,81 @@
+# <%= data.test.config.name || data.test.id %>
+
+<% if (data.test.config.description) { %>
+## Description
+
+<%- data.test.config.description %>
+<% } -%>
+
+## Variable Service Template
+
+The variability of the following variable service template shall be resolved.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(data.test.template) %>
+```
+
+<% if (data.test.inputs) { %>
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(data.test.inputs) %>
+```
+<% } -%>
+
+<% if (data.test.config?.preset) { %>
+## Variability Preset
+
+The following variability preset is used.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(data.test.config.preset) %>
+```
+<% } -%>
+
+
+<% if (data.test.config?.resolver) { %>
+## Resolver Configuration
+
+The following resolver configuration is used.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(Object.keys(data.test.config.resolver).reduce((map, key) => {
+    map[data.utils.toSnakeCase(key)] = data.test.config.resolver[key]
+    return map
+}, {})) %>
+```
+<% } -%>
+
+<% if (data.test.expected) { %>
+
+## Variability-Resolved Service Template
+
+The following variability-resolved service templated is expected.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(data.test.expected) %>
+```
+<% } -%>
+
+<% if (data.test.config?.error) { %>
+
+## Expected Error
+
+The following error is expected to be thrown, when resolving variability.
+
+```text linenums="1"
+<%- data.utils.toYAML(data.test.config.error) %>
+```
+<% } -%>
+
+<% if (data.test.config?.resolver) { %>
+## Resolver Configuration
+
+The following resolver configuration is used.
+
+```yaml linenums="1"
+<%- data.utils.toYAML(data.test.config.resolver) %>
+```
+<% } -%>

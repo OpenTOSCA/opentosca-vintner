@@ -5,6 +5,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {ResolvingOptions} from '#controller/template/resolve'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
+import * as validator from '#validator'
 
 export type TemplateTestArguments = {path: string}
 
@@ -107,7 +108,11 @@ export function readDefaultExpect(dir: string) {
 
 export function readConfig(dir: string) {
     const config = path.join(dir, 'test.yaml')
-    if (files.isFile(config)) return files.loadYAML<VariabilityTestConfig>(config)
+    if (files.isFile(config)) {
+        const data = files.loadYAML<VariabilityTestConfig>(config)
+        if (validator.isDefined(data.resolver)) data.resolver = data.resolver
+        return data
+    }
 
     return {}
 }
