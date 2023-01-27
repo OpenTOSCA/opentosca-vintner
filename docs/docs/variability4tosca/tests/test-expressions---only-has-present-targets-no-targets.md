@@ -3,7 +3,7 @@
 
 ## Description
 
-The policy "policy_one" has no targets, thus, has no present targets and is removed.
+The policy "policy_one" has no targets. Thus, the policy has no present targets and, therefore, is removed.
 
 ## Variable Service Template
 
