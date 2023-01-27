@@ -4,14 +4,14 @@ import semver from 'semver'
 import {Dependencies, Dependency} from './types'
 
 export const LICENSES: {[key: string]: string} = {
-    'Apache-2.0': 'https://www.apache.org/licenses/LICENSE-2.0',
-    'BSD-2-Clause': 'https://opensource.org/licenses/BSD-2-Clause',
-    'BSD-3-Clause': 'https://opensource.org/licenses/BSD-3-Clause',
-    MIT: 'https://opensource.org/licenses/MIT',
-    ISC: 'https://opensource.org/licenses/ISC',
+    'Apache-2.0': 'https://choosealicense.com/licenses/apache-2.0',
+    'BSD-2-Clause': 'https://choosealicense.com/licenses/bsd-2-clause',
+    'BSD-3-Clause': 'https://choosealicense.com/licenses/bsd-3-clause',
+    MIT: 'https://choosealicense.com/licenses/mit',
+    ISC: 'https://choosealicense.com/licenses/isc',
     'Python-2.0': 'https://opensource.org/licenses/Python-2.0',
-    '0BSD': 'https://opensource.org/licenses/0BSD',
-    'CC0-1.0': 'https://creativecommons.org/publicdomain/zero/1.0',
+    '0BSD': 'https://choosealicense.com/licenses/0bsd',
+    'CC0-1.0': 'https://choosealicense.com/licenses/cc0-1.0',
     'CC-BY-3.0': 'https://creativecommons.org/licenses/by/3.0/',
     PSF: 'http://docs.python.org/license.html',
 }

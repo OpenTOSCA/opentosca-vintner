@@ -96,6 +96,6 @@
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:opera": "./examples/opera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
-        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF\" --excludePackages dreamopt@0.8.0"
+        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD\" --excludePackages dreamopt@0.8.0"
     }
 }
