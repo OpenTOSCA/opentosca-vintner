@@ -54,7 +54,8 @@ export type VariabilityExpression =
           get_variability_expression?: VariabilityExpression
           get_variability_input?: VariabilityExpression
           get_variability_condition?: VariabilityExpression
-          get_element_presence?: VariabilityExpression | [VariabilityExpression, VariabilityExpression]
+          get_node_presence?: VariabilityExpression
+          get_relation_presence?: [VariabilityExpression, VariabilityExpression]
           get_source_presence?: 'SELF'
           get_target_presence?: 'SELF'
           has_present_targets?: VariabilityExpression
