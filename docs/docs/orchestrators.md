@@ -8,26 +8,26 @@ For more information see [Interface](interface.md){target=_blank}.
 
 ## Opera
 === "Opera"
-    ```linenums="1"
+    ```shell linenums="1"
     vintner orchestrators init opera
     vintner orchestrators enable --orchestrator opera
     ```
 
 === "Opera WSL"
-    ```linenums="1"
+    ```shell linenums="1"
     vintner orchestrators init opera-wsl
     vintner orchestrators enable --orchestrator opera-wsl
     ```
 
 ## Unfurl
 === "Unfurl"
-    ```linenums="1"
+    ```shell linenums="1"
     vintner orchestrators init unfurl
     vintner orchestrators enable --orchestrator unfurl
     ```
 
 === "Unfurl WSL"
-    ```linenums="1"
+    ```shell linenums="1"
     vintner orchestrators init unfurl-wsl
     vintner orchestrators enable --orchestrator unfurl-wsl
     ```

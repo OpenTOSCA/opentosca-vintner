@@ -20,6 +20,8 @@ export type VariabilityTest = {
 }
 
 export type VariabilityTestConfig = {
+    name?: string
+    description?: string
     preset?: string
     error?: string
     resolver?: ResolvingOptions
@@ -106,6 +108,5 @@ export function readDefaultExpect(dir: string) {
 export function readConfig(dir: string) {
     const config = path.join(dir, 'test.yaml')
     if (files.isFile(config)) return files.loadYAML<VariabilityTestConfig>(config)
-
     return {}
 }

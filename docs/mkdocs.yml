@@ -2,7 +2,7 @@ site_name: OpenTOSCA Vintner
 site_url: https://vintner.opentosca.org
 repo_url: https://github.com/opentosca/opentosca-vintner
 repo_name: opentosca/opentosca-vintner
-copyright: 'Copyright &copy; 2022 University of Stuttgart'
+copyright: 'Copyright &copy; 2022 - 2023 University of Stuttgart'
 edit_uri: ''
 theme:
     name: material
@@ -22,7 +22,7 @@ theme:
         - navigation.tabs.sticky
         - navigation.instant
         - navigation.tracking
-        - navigation.expand
+        # - navigation.expand
         - navigation.indexes
         - content.code.annotate
         - toc.follow
@@ -67,6 +67,7 @@ plugins:
     - glightbox
     - bibtex:
           bib_file: 'bibtex.bib'
+    - include_dir_to_nav
 
 nav:
     - index.md
@@ -76,6 +77,7 @@ nav:
     - Variability4TOSCA:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
+          - Conformance Tests: variability4tosca/conformance-tests
           - variability4tosca/feature-modeling.md
           - variability4tosca/benchmark.md
     - Queries4TOSCA:

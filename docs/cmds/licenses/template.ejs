@@ -4,7 +4,7 @@
 
 We use the following dependencies in production.
 You can download the dataset as [CSV](assets/documents/licenses.csv).
-We ensure, that only the licenses <%- "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF".split(";").sort().map(license => `[${license}](${licenses[license]}){target=_blank}`).join(", ") -%> are used.
+We ensure, that only the licenses <%- "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD".split(";").sort().map(license => `[${license}](${licenses[license]}){target=_blank}`).join(", ") -%> are used.
 
 | ID | Dependency | Version | License |
 | --- | --- | --- | --- |
@@ -18,5 +18,5 @@ We ensure, that only the licenses <%- "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BS
     <% }) -%> |
 <% }) %>
 
-Note, the release of [dreamopt@0.8.0](https://github.com/ewoudenberg/difflib.js){target=_blank} has no license.
+Note, the release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
 However, the project is according to the author licensed under MIT.

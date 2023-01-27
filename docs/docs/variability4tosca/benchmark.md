@@ -69,6 +69,6 @@ To run the benchmark on your own, run the following command.
 For more information see [Interface](../interface.md#setup-benchmark){target=_blank}.
 Feel free to open a merge request, if your benchmarking results are better.
 
-```linenums="1"
+```shell linenums="1"
 vintner setup benchmark
 ```

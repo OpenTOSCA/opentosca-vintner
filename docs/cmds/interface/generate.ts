@@ -1,14 +1,12 @@
 import {execSync} from 'child_process'
-import * as fs from 'fs'
 import * as path from 'path'
-import * as ejs from 'ejs'
+import {renderFile} from '../utils'
 
 async function main() {
     const data: any[] = []
     collectData([])
 
-    const output = await ejs.renderFile(path.join(__dirname, 'template.ejs'), {data}, {async: true})
-    fs.writeFileSync(path.join('docs', 'docs', 'interface.md'), output)
+    await renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
 
     function collectData(commands: string[]) {
         const command = `node build/cli/index.js ${commands.join(' ')} --help`

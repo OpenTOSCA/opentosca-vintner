@@ -52,6 +52,11 @@ export function loadYAML<T>(file: string) {
     return yaml.load(loadFile(file)) as T
 }
 
+export function storeFile(file: string, data: string) {
+    fs.writeFileSync(path.resolve(file), data)
+    return file
+}
+
 export function storeYAML(file: string, data: any | string) {
     if (validator.isString(data)) {
         fs.writeFileSync(path.resolve(file), data)

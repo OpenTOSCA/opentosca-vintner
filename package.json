@@ -23,6 +23,7 @@
         "ohm-js": "^16.4.0",
         "open": "^8.4.0",
         "papaparse": "^5.3.2",
+        "snake-case": "^3.0.4",
         "uuid": "^8.3.2",
         "xml2js": "^0.4.23"
     },
@@ -90,10 +91,11 @@
         "docs:deploy": "cd docs && mkdocs gh-deploy --force",
         "docs:generate:interface": "yarn build && yarn ts-node -r tsconfig-paths/register docs/cmds/interface/generate",
         "docs:generate:licenses": "yarn ts-node -r tsconfig-paths/register docs/cmds/licenses/generate",
+        "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/conformance-tests/generate",
         "docs:record:home": "cd docs/cmds/casts && ./record.sh home",
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:opera": "./examples/opera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
-        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF\" --excludePackages dreamopt@0.8.0"
+        "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD\" --excludePackages dreamopt@0.8.0"
     }
 }
