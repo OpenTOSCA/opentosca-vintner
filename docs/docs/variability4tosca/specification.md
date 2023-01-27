@@ -523,9 +523,8 @@ The `test.yaml` file describes and configures the test and has the following str
 
 ## Conformance Tests
 
-There are a variety of conformance tests for Variability4TOSCA implementations.
-The tests can be found
-in [https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver](https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/resolver){target=_blank}.
+Part of this specification is a variety of conformance tests for Variability4TOSCA implementations.
+The tests can be found [here](../conformance-tests).
 
 ## Limitations
 

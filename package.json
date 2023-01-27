@@ -90,6 +90,7 @@
         "docs:deploy": "cd docs && mkdocs gh-deploy --force",
         "docs:generate:interface": "yarn build && yarn ts-node -r tsconfig-paths/register docs/cmds/interface/generate",
         "docs:generate:licenses": "yarn ts-node -r tsconfig-paths/register docs/cmds/licenses/generate",
+        "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/conformance-tests/generate",
         "docs:record:home": "cd docs/cmds/casts && ./record.sh home",
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:opera": "./examples/opera-motivation/demo.sh",

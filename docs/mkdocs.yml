@@ -67,6 +67,7 @@ plugins:
     - glightbox
     - bibtex:
           bib_file: 'bibtex.bib'
+    - include_dir_to_nav
 
 nav:
     - index.md
@@ -78,6 +79,7 @@ nav:
           - variability4tosca/specification.md
           - variability4tosca/feature-modeling.md
           - variability4tosca/benchmark.md
+          - Conformance Tests: variability4tosca/conformance-tests
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
