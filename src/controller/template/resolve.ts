@@ -628,7 +628,7 @@ export class VariabilityResolver {
 
         // Relation Default Condition: Assign default condition to relation that checks if source is present
         if (element.type === 'relation' && this.options.enableRelationDefaultCondition && utils.isEmpty(conditions)) {
-            conditions = [{get_element_presence: element.source}]
+            conditions = [{get_node_presence: element.source}]
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
@@ -643,14 +643,14 @@ export class VariabilityResolver {
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
         if (element.type === 'artifact' && this.options.enableArtifactDefaultCondition && utils.isEmpty(conditions)) {
-            conditions = [{get_element_presence: element.node.name}]
+            conditions = [{get_node_presence: element.node.name}]
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
         if (element.type === 'property' && this.options.enablePropertyDefaultCondition && utils.isEmpty(conditions)) {
-            if (element.parent.type === 'node') conditions = [{get_element_presence: element.parent.name}]
+            if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}]
             if (element.parent.type === 'relation')
-                conditions = [{get_element_presence: [element.parent.source, element.parent.name]}]
+                conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}]
         }
 
         // Evaluate assigned conditions
@@ -1126,23 +1126,20 @@ export class VariabilityResolver {
             )
         }
 
-        if (validator.isDefined(condition.get_element_presence)) {
-            let member: GroupMember
-            if (validator.isArray(condition.get_element_presence)) {
-                const first = this.evaluateVariabilityExpression(condition.get_element_presence[0], context)
-                validator.ensureString(first)
+        if (validator.isDefined(condition.get_node_presence)) {
+            const name = this.evaluateVariabilityExpression(condition.get_node_presence, context)
+            validator.ensureString(name)
+            return this.checkPresence(this.getElement(name))
+        }
 
-                const second = this.evaluateVariabilityExpression(condition.get_element_presence[1], context)
-                validator.ensureStringOrNumber(second)
+        if (validator.isDefined(condition.get_relation_presence)) {
+            const node = this.evaluateVariabilityExpression(condition.get_relation_presence[0], context)
+            validator.ensureString(node)
 
-                member = [first, second]
-            } else {
-                const result = this.evaluateVariabilityExpression(condition.get_element_presence, context)
-                validator.ensureString(result)
-                member = result
-            }
+            const relation = this.evaluateVariabilityExpression(condition.get_relation_presence[1], context)
+            validator.ensureStringOrNumber(relation)
 
-            return this.checkPresence(this.getElement(member))
+            return this.checkPresence(this.getElement([node, relation]))
         }
 
         if (validator.isDefined(condition.get_source_presence)) {

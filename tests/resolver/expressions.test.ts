@@ -186,7 +186,7 @@ describe('expressions', () => {
         expect(result).to.equal(true)
     })
 
-    it('get_element_presence: node present', () => {
+    it('get_node_presence: node present', () => {
         const resolver = new VariabilityResolver({
             topology_template: {
                 node_templates: {
@@ -196,11 +196,11 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: 'node'}, {})
+        const result = resolver.evaluateVariabilityCondition({get_node_presence: 'node'}, {})
         expect(result).to.equal(true)
     })
 
-    it('get_element_presence: node absent', () => {
+    it('get_node_presence: node absent', () => {
         const resolver = new VariabilityResolver({
             topology_template: {
                 node_templates: {
@@ -210,11 +210,11 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: 'node'}, {})
+        const result = resolver.evaluateVariabilityCondition({get_node_presence: 'node'}, {})
         expect(result).to.equal(false)
     })
 
-    it('get_element_presence: relation by name absent', () => {
+    it('get_relation_presence: relation by name absent', () => {
         const resolver = new VariabilityResolver({
             topology_template: {
                 node_templates: {
@@ -238,11 +238,11 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 'relation']}, {})
         expect(result).to.equal(false)
     })
 
-    it('get_element_presence: relation by index absent', () => {
+    it('get_relation_presence: relation by index absent', () => {
         const resolver = new VariabilityResolver({
             topology_template: {
                 node_templates: {
@@ -266,7 +266,7 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 0]}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 0]}, {})
         expect(result).to.equal(false)
     })
 
@@ -289,7 +289,7 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 'relation']}, {})
         expect(result).to.equal(true)
     })
 
@@ -312,7 +312,7 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 'relation']}, {})
         expect(result).to.equal(false)
     })
 
@@ -336,7 +336,7 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 'relation']}, {})
         expect(result).to.equal(true)
     })
 
@@ -360,7 +360,7 @@ describe('expressions', () => {
                 },
             },
         } as any)
-        const result = resolver.evaluateVariabilityCondition({get_element_presence: ['node', 'relation']}, {})
+        const result = resolver.evaluateVariabilityCondition({get_relation_presence: ['node', 'relation']}, {})
         expect(result).to.equal(false)
     })
 
