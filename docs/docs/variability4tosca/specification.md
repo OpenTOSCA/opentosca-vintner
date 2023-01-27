@@ -44,7 +44,7 @@ The following non-normative and incomplete example contains a Variability Defini
 Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
 Furthermore, two Variability Presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
-```linenums="1"
+```yaml linenums="1"
 variability:
     inputs:
         mode:
@@ -85,7 +85,7 @@ For example, the following expression returns the total amount of costs.
 This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific
 budget.
 
-```linenums="1"
+```yaml linenums="1"
 expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_input: costs_offering_b}]}
 ```
 
@@ -95,7 +95,7 @@ A Variability Condition is a Variability Expression that returns a boolean.
 Allowed operators and functions are listed below.
 For example, the following condition evaluates to true if the Variability Input `mode` equals `prod`.
 
-```linenums="1"
+```yaml linenums="1"
 is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
 
@@ -116,7 +116,7 @@ Definition in order to allow Artifact Definition names to be used multiple times
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
 
-```linenums="1"
+```yaml linenums="1"
 prod_database:
     type: gcp.sql.db
     conditions: {get_variability_expression: is_prod}
@@ -137,7 +137,7 @@ These conditions must be satisfied otherwise the respective relationship is not 
 The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition
 assigned.
 
-```linenums="1"
+```yaml linenums="1"
 requirements:
     - host:
           node: dev_runtime
@@ -169,14 +169,14 @@ Note, if the value is not wrapped and assigned to a property being part of a pro
 Thus, if `value` must be used, then use it wrapped as follows.
 Same applies to `expression`.
 
-````
+```yaml linenums="1"
 properties:
 - key_one:
       value: {value: the_value}
     
 # This is not allowed!  
 # - key_one: { value: the_value }
-````
+```
 
 ## Group Template Definition
 
@@ -200,7 +200,7 @@ Such a group is also called Variability Group.
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
 conditions are satisfied.
 
-```linenums="1"
+```yaml linenums="1"
 conditional_group:
     type: tosca.groups.Root
     members: [prod_database, [application, prod_connects_to]]
@@ -211,7 +211,7 @@ The following non-normative and incomplete example contains the group `example_g
 Template `prod_database` and the Requirement Assignment `prod_connects_to` of the Node Template `application`.
 In contrast to the previous example this group is not derived from `variability.groups.ConditionalMembers`.
 
-```linenums="1"
+```yaml linenums="1"
 variability_group:
     type: variability.groups.ConditionalMembers
     members: [prod_database, [application, prod_connects_to]]
@@ -234,7 +234,7 @@ As a result, the Node Templates `wordpress` and `mysql` _must not_ be hosted on 
 For more information about this example, take a look in
 the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
 
-```linenums="1"
+```yaml linenums="1"
 node_templates:
     wordpress:
         type: tosca.nodes.WebServer
@@ -290,7 +290,7 @@ These conditions must be satisfied otherwise the respective input is not present
 The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition
 assigned.
 
-```linenums="1"
+```yaml linenums="1"
 ssh_key_file:
     type: string
     conditions: {get_variability_expression: is_dev}
@@ -304,14 +304,14 @@ and `variability.groups.ConditionalMembers`.
 The first Group Type is the root group every other variability-related group, such
 as `variability.groups.ConditionalMembers` should derive from.
 
-```linenums="1"
+```yaml linenums="1"
 variability.groups.Root
     derived_from: tosca.groups.Root
 ```
 
 The second Group Type should be used when a group has variability definitions assigned.
 
-```linenums="1"
+```yaml linenums="1"
 variability.groups.ConditionalMembers
     derived_from: variability.groups.Root
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
@@ -327,14 +327,14 @@ The definition is intended to be extended in other specifications.
 
 ### Variability Management Interface for Nodes
 
-```linenums="1"
+```yaml linenums="1"
 tosca.interfaces.node.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
 ### Variability Management Interface for Relationships
 
-```linenums="1"
+```yaml linenums="1"
 tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
@@ -502,7 +502,7 @@ Each test is defined inside its own directory of `/tests` and might contain the 
 
 Here is exemplary structure of a CSAR that has one Variability Test.
 
-```
+```text linenums="1"
 my-csar/
 ├─ tests/
 │  ├─ my-test-case/
@@ -521,10 +521,10 @@ The `test.yaml` file describes and configures the test and has the following str
 | preset      | false     | String | Variability Preset to used when resolving variability. | 
 | error       | false     | String | The expected error that is thrown.                     | 
 
-## Conformance Tests
+## Conformance Test Suite
 
-Part of this specification is a variety of conformance tests for Variability4TOSCA implementations.
-The tests can be found [here](../conformance-tests).
+Part of this specification is conformance test suite to evaluate Variability4TOSCA implementations.
+The test suite can be found [here](conformance-tests/introduction.md).
 
 ## Limitations
 

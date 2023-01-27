@@ -1,0 +1,31 @@
+# policies-default-condition
+
+
+
+## Variable Service Template
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  node_templates:
+    node_one:
+      type: node_one
+      conditions: false
+    node_two:
+      type: node_two
+  policies:
+    - policy_one:
+        type: policy_one
+        targets:
+          - node_one
+    - policy_two:
+        type: policy_two
+        targets:
+          - node_one
+          - node_two
+
+```
+
+
+
+TODO: add all the remaining stuff

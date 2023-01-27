@@ -1,3 +1,0 @@
-description: Remove policy "policy_one" since is has no present targets.
-resolver:
-    enablePolicyDefaultCondition: true

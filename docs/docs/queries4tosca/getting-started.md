@@ -25,11 +25,11 @@ vintner query --query "\
 
 You can use an asterisk as a wildcard operator to get all child elements. The following command returns a list of all nodes.
 
-````shell linenums="1"
+```shell linenums="1"
 vintner query --query "\
     FROM templates.getting-started \
     SELECT node_templates.*"
-````
+```
 
 You can also specify a predicate in square brackets after any part of the path expression to filter elements.
 The following command will return only nodes of type `textfile`, which may be `first` or `second`, depending on how you resolved the template.

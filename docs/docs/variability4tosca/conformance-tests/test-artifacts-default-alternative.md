@@ -1,0 +1,42 @@
+# artifacts-default-alternative
+
+
+
+## Variable Service Template
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  node_templates:
+    node_one:
+      type: node
+      artifacts:
+        - artifact_one_one:
+            type: artifact_a
+            default_alternative: true
+        - artifact_one_one:
+            type: artifact_b
+            conditions: false
+    node_two:
+      type: node
+      artifacts:
+        artifact_two_one:
+          type: artifact
+          conditions: true
+    node_three:
+      type: node
+      artifacts:
+        artifact_three_one:
+          type: artifact
+    node_four:
+      type: node
+      artifacts:
+        artifact_three_one:
+          type: artifact
+          conditions: false
+
+```
+
+
+
+TODO: add all the remaining stuff

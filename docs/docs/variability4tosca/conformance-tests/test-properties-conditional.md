@@ -1,0 +1,49 @@
+# properties-conditional
+
+
+
+## Variable Service Template
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  node_templates:
+    node_one:
+      type: node_one
+      properties:
+        - key_one:
+            value: value_one_one
+            conditions: false
+        - key_one:
+            value: value_one_two
+        - key_two: value_two
+        - key_three: value_three
+        - key_four:
+            value: value_four
+            conditions: true
+      requirements:
+        - connects_to:
+            node: node_two
+            relationship: relation_one
+    node_two:
+      type: node_two
+  relationship_templates:
+    relation_one:
+      type: relation_one
+      properties:
+        - key_one:
+            value: value_one_one
+            conditions: false
+        - key_one:
+            value: value_one_two
+        - key_two: value_two
+        - key_three: value_three
+        - key_four:
+            value: value_four
+            conditions: true
+
+```
+
+
+
+TODO: add all the remaining stuff

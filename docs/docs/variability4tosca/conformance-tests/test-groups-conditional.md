@@ -1,0 +1,64 @@
+# groups-conditional
+
+
+
+## Variable Service Template
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  groups:
+    group_one:
+      type: variability.groups.ConditionalMembers
+      members:
+        - magic
+        - - magic
+          - 0
+        - - application
+          - magic
+      conditions: false
+    group_two:
+      type: tosca.groups.Root
+      members:
+        - container
+        - magic
+    group_three:
+      type: tosca.groups.Root
+      members:
+        - vm
+      conditions: false
+  node_templates:
+    application:
+      type: docker.container.application
+      requirements:
+        - host: container
+        - magic: magic
+        - more: another_application
+    container:
+      type: docker.container
+      requirements:
+        - host: engine
+    engine:
+      type: docker.engine
+      requirements:
+        - host: vm
+    another_application:
+      type: another.application
+      requirements:
+        - host: another_runtime
+    another_runtime:
+      type: another.runtime
+      requirements:
+        - host: vm
+    vm:
+      type: openstack.vm
+    magic:
+      type: magic
+      requirements:
+        - magic: application
+
+```
+
+
+
+TODO: add all the remaining stuff

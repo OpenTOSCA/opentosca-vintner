@@ -1,0 +1,39 @@
+# policies-conditional
+
+
+
+## Variable Service Template
+
+```yaml linenums="1"
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  node_templates:
+    node_one:
+      type: node_one
+    node_two:
+      type: node_two
+      conditions: false
+  policies:
+    - policy_one:
+        type: policy_one
+        targets:
+          - node_one
+          - node_two
+        conditions: true
+    - policy_two:
+        type: policy_two
+        targets:
+          - node_one
+          - node_two
+        conditions: false
+    - policy_three:
+        type: policy_three
+        targets:
+          - node_one
+          - node_two
+
+```
+
+
+
+TODO: add all the remaining stuff

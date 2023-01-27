@@ -1,0 +1,3 @@
+description: >
+    - Removes node "node_two" from node templates and policy "policy_one" and "policy_three" since conditions is "false".
+    - Removes policy "policy_two" since conditions is "false".

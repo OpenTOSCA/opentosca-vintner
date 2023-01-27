@@ -9,7 +9,7 @@ You might add the binary to your PATH.
 The following example shows the installation on Linux.
 See [below](#signature) for verifying the signature of the binary.
 
-```linenums="1"
+```shell linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
@@ -27,19 +27,19 @@ The following binaries are available:
 
 To check, that the `vintner` can be executed, run
 
-```linenums="1"
+```shell linenums="1"
 vintner --version
 ```
 
 To start the server, run
-```linenums="1"
+```shell linenums="1"
 vintner server start
 ```
 
 To uninstall all files including the binary, run the following commands.
 _This will not undeploy currently deployed applications_.
 
-```linenums="1"
+```shell linenums="1"
 vintner setup clean
 rm "$(which vintner)"
 ```
@@ -72,7 +72,7 @@ gpg --verify vintner-linux-x64.asc
 
 The output should be something as follows.
 
-```linenums="1"
+```text linenums="1"
 gpg: assuming signed data in 'vintner-linux-x64'
 gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
 gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
@@ -91,7 +91,7 @@ uid                 [unknown] vintner-release
 sub   rsa4096/B230BD6651AA1BB8 2022-10-23 [E]
 ```
 
-```linenums="1"
+```text linenums="1"
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBGNVcowBEAC0jzKuuLE6AqCaRvjp1mwCC76Px6wG4jgvrXfraCaOf3Y3uywW

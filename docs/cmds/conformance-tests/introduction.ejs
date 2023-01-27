@@ -1,0 +1,18 @@
+---
+title: Introduction
+---
+
+# Conformance Test Suite for the Variability4TOSCA Specification 1.0 Release Candidate
+
+This is a conformance test suite for the Variability4TOSCA Specification 1.0 Release Candidate.
+These tests can be used to evaluate Variability4TOSCA implementations.
+Each test is described on a separate page.
+The description includes a variable service template, variability inputs,
+expected errors, expected variability-resolved service template and so on along with an explanation about the expected
+processing.
+
+| ID | Test |
+| --- | --- |
+<% data.forEach((test, index) => { -%>
+| <%= index + 1 %> | [<%= test.name %>](./<%= test.id %>.md) |
+<% }) %>

@@ -4,12 +4,11 @@
  * At the same time the documentation page is generated.
  */
 import * as path from 'path'
-import * as fs from 'fs'
-import * as ejs from 'ejs'
 import * as reader from './reader'
 import * as utils from './utils'
 import {Dependencies} from './types'
 import {LICENSES} from './utils'
+import {renderFile} from '../utils'
 
 const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'licenses.csv')
 
@@ -79,8 +78,12 @@ async function main() {
             licenseUrl: dependency.licenseURL.split(' '),
         }
     })
-    const output = await ejs.renderFile(path.join(__dirname, 'template.ejs'), {data, licenses: LICENSES}, {async: true})
-    fs.writeFileSync(path.join('docs', 'docs', 'dependencies.md'), output)
+
+    await renderFile(
+        path.join(__dirname, 'template.ejs'),
+        {data, licenses: LICENSES},
+        path.join('docs', 'docs', 'dependencies.md')
+    )
     console.log('Documentation page generated')
 }
 

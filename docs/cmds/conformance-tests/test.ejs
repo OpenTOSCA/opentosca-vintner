@@ -1,0 +1,21 @@
+# <%= data.name %>
+
+<% data.description %>
+
+## Variable Service Template
+
+```yaml linenums="1"
+<%- data.template %>
+```
+
+<% if (data.expected) { %>
+
+## Variability-Resolved Service Template
+
+```yaml linenums="1"
+<%- data.expected %>
+```
+<% } -%>
+
+
+TODO: add all the remaining stuff

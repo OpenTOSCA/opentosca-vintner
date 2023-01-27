@@ -20,6 +20,8 @@ export type VariabilityTest = {
 }
 
 export type VariabilityTestConfig = {
+    name?: string
+    description?: string
     preset?: string
     error?: string
     resolver?: ResolvingOptions

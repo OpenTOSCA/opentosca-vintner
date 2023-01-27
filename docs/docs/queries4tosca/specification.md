@@ -19,7 +19,7 @@ starts with the literal FROM, followed by a space and the word templates, which 
 service templates, or instances. Afterwards, either a file path needs to be provided, or an asterisk
 can be used to select all service templates or instances, respectively.
 
-```linenums="1"
+```text linenums="1"
 From = "FROM" ("instances" | "templates") ("/" | ".") ("*" | filePath)
 ```
 
@@ -30,7 +30,7 @@ described in detail later. They can start with the special keywords Group or Pol
 name of an element, or a dot to select everything. Afterwards, a series of mapping steps, filters,
 or array accesses can be used. Lastly, there is an optional return structure.
 
-```linenums="1"
+```text linenums="1"
 Select = "SELECT" Path ("," Path)*
 Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
 ```
@@ -40,7 +40,7 @@ MATCH statements are used to search for a pattern inside the nodes of a service 
 consists of at least one node, along with any number of additional nodes and relationships. 
 The syntax for denoting nodes and relationships is described in detail later.
 
-```linenums="1"
+```text linenums="1"
 Match = "MATCH" Node (Relationship Node)*
 ```
 
@@ -50,7 +50,7 @@ Multi-line comments begin with a forward slash and an asterisk and end with anot
 slash and can be inserted anywhere.
 
 Examples:
-```linenums="1"
+```text linenums="1"
 // single-line comment
 /* multi-line
 comment */
@@ -78,7 +78,7 @@ The following expressions can be used:
 | % |  Capabilities  | Shortcut for capabilities |
 
 Examples:
-```linenums="1"
+```text linenums="1"
 node_templates.localhost       // Selecting a node directly by name
 node_templates.localhost.#     // Selecting attributes of webapp
 node_templates.*               // Selecting all nodes
@@ -106,7 +106,7 @@ The following operators can be used:
 | =~ |  Matches regular expression |
 
 Examples:
-```linenums="1"
+```text linenums="1"
 node_templates.*[type='textfile']       // equality
 node_templates.*[name!='localhost']     // inequality
 node_templates.*[name=~'^local']        // regular expression
@@ -119,7 +119,7 @@ after the path of the array. If the value inside the brackets is an integer, it 
 access, otherwise, it is interpreted as a filter. Attempting to access non-existent array indices will
 return an empty result.
 
-```linenums="1"
+```text linenums="1"
 node_templates.*[0]                         // Selecting the first node template
 node_templates.localhost.requirements[1]    // Selecting the second requirement of webapp
 ```
@@ -130,7 +130,7 @@ Boolean operators can be used in predicates to link two or more conditions. Bool
 true if both predicates evaluate to true, Boolean OR returns true if at least one of the predicates
 evaluates to true.
 
-```linenums="1"
+```text linenums="1"
 node_templates.*[type='textfile' AND name='first']
 node_templates.*[name='frist' OR name='second']
 ```
@@ -151,7 +151,7 @@ namely name and type. The expression in the last line returns a list of objects 
 single key-value pair, with the name of each individual node as the key, and the corresponding type
 as the value.
 
-```linenums="1"
+```text linenums="1"
 node_templates.*{'Node Name': name, 'Node Type': type}  // Using custom key names
 node_templates.*{name, type}                            // Short form
 node_templates.*{name: type}                            // List of node names mapped to type
@@ -163,7 +163,7 @@ The following sections describes how to define patterns, which can be matched us
 Nodes are denoted by a pair of parentheses. Inside those parentheses, a variable name can be
 given to the node, otherwise they are anonymous and cannot be referenced in the SELECT clause.
 
-```linenums="1"
+```text linenums="1"
 ()  // anonymous node template
 (n) // node template with variable n
 ```
@@ -172,7 +172,7 @@ Nodes can optionally contain a filter in square brackets that allows the same pr
 described above. Selecting a node template can be seen as the equivalent of a SELECT
 clause that implicitly starts at the path node_templates.*.
 
-```linenums="1"
+```text linenums="1"
 ([type='textfile'])   // anonymous node template with filter
 (n [type='textfile']) // node template with variable n and filter
 ```
@@ -183,7 +183,7 @@ the requirement of another node is fulfilled by a capability of the current node
 relationship means that a requirement of the current node is fulfilled by the capability of the other
 node. An undirected relationship applies to both of these scenarios.
 
-```linenums="1"
+```text linenums="1"
 (a)-->(b)   // a has requirement fulfilled by capability of b
 (a)<--(b)   // a has capability that fulfills requirement of b
 (a)--(b)    // a and b have any relationship
@@ -193,7 +193,7 @@ Like node templates, relationships can be given a variable name, and their types
 using the same filter syntax. In order to do this, they need to be surrounded by curly braces inserted
 in the middle of the arrow.
 
-```linenums="1"
+```text linenums="1"
 (a)-{r}->(b)                // relationship with variable r
 (a)-{r [name='host']}->(b)  // relationship with symbolic name host and variable r
 ```
@@ -202,7 +202,7 @@ It is also possible to search for node templates connected over multiple relatio
 cardinality. This can be accomplished by putting an asterisk at the end of a relationship, followed
 optionally by a number or a range. If both are omitted, relationships of any length will be matched.
 
-```linenums="1"
+```text linenums="1"
 (a)-{*2}->(b)       // exactly two hops between a and b
 (a)-{*2..5}->(b)    // between two and five hops
 (a)-{*2..}->(b)     // at least two hops

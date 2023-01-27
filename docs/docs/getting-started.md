@@ -11,7 +11,7 @@ First, install OpenTOSCA Vintner.
 In our case, we run on a Linux machine.
 For more information see [Installation](installation.md){target=_blank}.
 
-```linenums="1"
+```shell linenums="1"
 wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
 mv vintner-linux-x64 /usr/bin/vintner
 chmod +x /usr/bin/vintner
@@ -29,7 +29,7 @@ integration for both.
 Configure and enable your orchestrator.
 For more information see [Installation](installation.md){target=_blank}.
 
-```linenums="1"
+```shell linenums="1"
 vintner orchestrators init opera
 vintner orchestrators enable --orchestrator opera
 ```
@@ -37,14 +37,14 @@ vintner orchestrators enable --orchestrator opera
 Next, we import the `getting-started` template from [`examples/opera-getting-started`]({{ get_repo_url('
 examples/opera-getting-started') }}){target=_blank} and create an application instance.
 
-```linenums="1"
+```shell linenums="1"
 vintner templates import --template getting-started --path examples/opera-getting-started
 vintner instances create --instance getting-started --template getting-started
 ```
 
 The imported template contains the following conditional node templates.
 
-```linenums="1"
+```yaml linenums="1"
 first:
     type: textfile
     conditions: {get_variability_expression: is_first}
@@ -69,19 +69,19 @@ second:
 We decide that the first textfile should be deployed.
 Therefore, we resolve the variability and finally deploy the application.
 
-```linenums="1"
+```shell linenums="1"
 vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/inputs.example.yaml
 vintner instances deploy --instance getting-started
 ```
 
 The deployed textfile `/tmp/vintner-getting-started.txt` has the content as expected.
 
-```linenums="1" title="/tmp/vintner-getting-started.txt"
+```text linenums="1" title="/tmp/vintner-getting-started.txt"
 First Textfile has been selected!
 ```
 
 To undeploy, run the following command.
 
-```linenums="1"
+```shell linenums="1"
 vintner instances undeploy --instance getting-started
 ```
