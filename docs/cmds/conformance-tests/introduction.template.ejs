@@ -13,6 +13,6 @@ processing.
 
 | ID | Test |
 | --- | --- |
-<% data.forEach((test, index) => { -%>
+<% tests.forEach((test, index) => { -%>
 | <%= index + 1 %> | [<%= test.config.name || test.id %>](./<%= test.file %>) |
 <% }) %>

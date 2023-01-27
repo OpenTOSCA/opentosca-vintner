@@ -1,9 +1,9 @@
-# <%= data.test.config.name || data.test.id %>
+# <%= test.config.name || test.id %>
 
-<% if (data.test.config.description) { %>
+<% if (test.config.description) { %>
 ## Description
 
-<%- data.test.config.description %>
+<%- test.config.description %>
 <% } -%>
 
 ## Variable Service Template
@@ -11,71 +11,71 @@
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(data.test.template) %>
+<%- utils.toYAML(test.template) %>
 ```
 
-<% if (data.test.inputs) { %>
+<% if (test.inputs) { %>
 ## Variability Inputs
 
 When resolving variability, the following variability inputs shall be used.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(data.test.inputs) %>
+<%- utils.toYAML(test.inputs) %>
 ```
 <% } -%>
 
-<% if (data.test.config?.preset) { %>
+<% if (test.config?.preset) { %>
 ## Variability Preset
 
 The following variability preset is used.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(data.test.config.preset) %>
+<%- utils.toYAML(test.config.preset) %>
 ```
 <% } -%>
 
 
-<% if (data.test.config?.resolver) { %>
+<% if (test.config?.resolver) { %>
 ## Resolver Configuration
 
 The following resolver configuration is used.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(Object.keys(data.test.config.resolver).reduce((map, key) => {
-    map[data.utils.toSnakeCase(key)] = data.test.config.resolver[key]
+<%- utils.toYAML(Object.keys(test.config.resolver).reduce((map, key) => {
+    map[utils.toSnakeCase(key)] = test.config.resolver[key]
     return map
 }, {})) %>
 ```
 <% } -%>
 
-<% if (data.test.expected) { %>
+<% if (test.expected) { %>
 
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(data.test.expected) %>
+<%- utils.toYAML(test.expected) %>
 ```
 <% } -%>
 
-<% if (data.test.config?.error) { %>
+<% if (test.config?.error) { %>
 
 ## Expected Error
 
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-<%- data.utils.toYAML(data.test.config.error) %>
+<%- utils.toYAML(test.config.error) %>
 ```
 <% } -%>
 
-<% if (data.test.config?.resolver) { %>
+<% if (test.config?.resolver) { %>
 ## Resolver Configuration
 
 The following resolver configuration is used.
 
 ```yaml linenums="1"
-<%- data.utils.toYAML(data.test.config.resolver) %>
+<%- utils.toYAML(test.config.resolver) %>
 ```
 <% } -%>

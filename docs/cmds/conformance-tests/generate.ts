@@ -53,7 +53,7 @@ async function main() {
 
     await renderFile(
         path.join(__dirname, 'introduction.template.ejs'),
-        tests,
+        {tests},
         path.join(documentationDirectory, 'introduction.md')
     )
 
