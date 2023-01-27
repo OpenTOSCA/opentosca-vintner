@@ -8,7 +8,13 @@ topology_template:
                 - value:
                       expression: {has_present_targets: policy_one}
 
+        node_one:
+            type: node_one
+
+        node_two:
+            type: node_two
+
     policies:
         - policy_one:
               type: policy_one
-              targets: []
+              targets: [node_one, node_two]

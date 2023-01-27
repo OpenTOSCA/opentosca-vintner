@@ -40,44 +40,46 @@ processing.
 | 25 | [expressions---only-get-variability-condition](./test-expressions---only-get-variability-condition.md) |
 | 26 | [expressions---only-get-variability-expression](./test-expressions---only-get-variability-expression.md) |
 | 27 | [expressions---only-get-variability-input](./test-expressions---only-get-variability-input.md) |
-| 28 | [expressions---only-has-present-targets-empty](./test-expressions---only-has-present-targets-empty.md) |
-| 29 | [expressions---only-has-present-targets-ffff-t](./test-expressions---only-has-present-targets-ffff-t.md) |
-| 30 | [expressions---only-has-present-targets-ffft-f](./test-expressions---only-has-present-targets-ffft-f.md) |
-| 31 | [expressions---only-has-present-targets-tf-t](./test-expressions---only-has-present-targets-tf-t.md) |
-| 32 | [Conditional Group](./test-groups-conditional.md) |
-| 33 | [groups-default-condition](./test-groups-default-condition.md) |
-| 34 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
-| 35 | [inputs-conditional](./test-inputs-conditional.md) |
-| 36 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
-| 37 | [nodes-conditional](./test-nodes-conditional.md) |
-| 38 | [other-benchmark](./test-other-benchmark.md) |
-| 39 | [other-nothing](./test-other-nothing.md) |
-| 40 | [other-preset](./test-other-preset.md) |
-| 41 | [other-version](./test-other-version.md) |
-| 42 | [policies-conditional](./test-policies-conditional.md) |
-| 43 | [policies-default-condition](./test-policies-default-condition.md) |
-| 44 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
-| 45 | [properties-conditional](./test-properties-conditional.md) |
-| 46 | [properties-default-alternative](./test-properties-default-alternative.md) |
-| 47 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
-| 48 | [properties-default-condition](./test-properties-default-condition.md) |
-| 49 | [properties-expression](./test-properties-expression.md) |
-| 50 | [properties-list](./test-properties-list.md) |
-| 51 | [properties-list-another](./test-properties-list-another.md) |
-| 52 | [properties-map](./test-properties-map.md) |
-| 53 | [properties-map-another](./test-properties-map-another.md) |
-| 54 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
-| 55 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
-| 56 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
-| 57 | [relationships-conditional](./test-relationships-conditional.md) |
-| 58 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 59 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 60 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 61 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 62 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 63 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 64 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 65 | [requirement-assignment-default-condition-throw](./test-requirement-assignment-default-condition-throw.md) |
-| 66 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 67 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 28 | [Policy Targets Absent Members](./test-expressions---only-has-present-targets-absent-members.md) |
+| 29 | [Policy Targets Absent Nodes](./test-expressions---only-has-present-targets-absent-nodes.md) |
+| 30 | [Policy Has No Targets](./test-expressions---only-has-present-targets-no-targets.md) |
+| 31 | [Policy Targets Present Member](./test-expressions---only-has-present-targets-present-member.md) |
+| 32 | [Policy Targets One Present Node](./test-expressions---only-has-present-targets-present-node.md) |
+| 33 | [Policy Targets Present Nodes](./test-expressions---only-has-present-targets-present-nodes.md) |
+| 34 | [Conditional Group](./test-groups-conditional.md) |
+| 35 | [groups-default-condition](./test-groups-default-condition.md) |
+| 36 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
+| 37 | [inputs-conditional](./test-inputs-conditional.md) |
+| 38 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
+| 39 | [nodes-conditional](./test-nodes-conditional.md) |
+| 40 | [other-benchmark](./test-other-benchmark.md) |
+| 41 | [other-nothing](./test-other-nothing.md) |
+| 42 | [other-preset](./test-other-preset.md) |
+| 43 | [other-version](./test-other-version.md) |
+| 44 | [policies-conditional](./test-policies-conditional.md) |
+| 45 | [policies-default-condition](./test-policies-default-condition.md) |
+| 46 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
+| 47 | [properties-conditional](./test-properties-conditional.md) |
+| 48 | [properties-default-alternative](./test-properties-default-alternative.md) |
+| 49 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
+| 50 | [properties-default-condition](./test-properties-default-condition.md) |
+| 51 | [properties-expression](./test-properties-expression.md) |
+| 52 | [properties-list](./test-properties-list.md) |
+| 53 | [properties-list-another](./test-properties-list-another.md) |
+| 54 | [properties-map](./test-properties-map.md) |
+| 55 | [properties-map-another](./test-properties-map-another.md) |
+| 56 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
+| 57 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
+| 58 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
+| 59 | [relationships-conditional](./test-relationships-conditional.md) |
+| 60 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 61 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 62 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 63 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 64 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 65 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 66 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 67 | [requirement-assignment-default-condition-throw](./test-requirement-assignment-default-condition-throw.md) |
+| 68 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 69 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
 

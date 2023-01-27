@@ -1,5 +1,9 @@
-# expressions---only-has-present-targets-tf-t
+# Policy Targets Present Member
 
+
+## Description
+
+The policy "policy_one" targets two absent nodes and a group which has one absent and one present node. Since one node is present, the policy "policy_one" has present targets.
 
 ## Variable Service Template
 
@@ -17,16 +21,29 @@ topology_template:
               has_present_targets: policy_one
     node_one:
       type: node_one
-      conditions: true
+      conditions: false
     node_two:
       type: node_two
       conditions: false
+    node_three:
+      type: node_three
+      conditions: false
+    node_four:
+      type: node_four
+      conditions: true
+  groups:
+    group_one:
+      type: group_one
+      members:
+        - node_three
+        - node_four
   policies:
     - policy_one:
         type: policy_one
         targets:
           - node_one
           - node_two
+          - group_one
 
 ```
 
@@ -48,13 +65,18 @@ topology_template:
       type: container
       properties:
         value: true
-    node_one:
-      type: node_one
+    node_four:
+      type: node_four
+  groups:
+    group_one:
+      type: group_one
+      members:
+        - node_four
   policies:
     - policy_one:
         type: policy_one
         targets:
-          - node_one
+          - group_one
 
 ```
 

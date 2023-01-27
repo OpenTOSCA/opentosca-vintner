@@ -1,0 +1,2 @@
+name: Policy Targets Absent Nodes
+description: The policy "policy_one" targets two absent nodes, thus, has no present targets.

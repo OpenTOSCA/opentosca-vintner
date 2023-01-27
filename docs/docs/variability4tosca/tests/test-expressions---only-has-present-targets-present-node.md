@@ -1,5 +1,9 @@
-# expressions---only-has-present-targets-ffft-f
+# Policy Targets One Present Node
 
+
+## Description
+
+The policy "policy_one" targets one absent and one present node, thus, has present targets.
 
 ## Variable Service Template
 
@@ -17,29 +21,16 @@ topology_template:
               has_present_targets: policy_one
     node_one:
       type: node_one
-      conditions: false
+      conditions: true
     node_two:
       type: node_two
       conditions: false
-    node_three:
-      type: node_three
-      conditions: false
-    node_four:
-      type: node_four
-      conditions: false
-  groups:
-    group_one:
-      type: group_one
-      members:
-        - node_three
-        - node_four
   policies:
     - policy_one:
         type: policy_one
         targets:
           - node_one
           - node_two
-          - group_one
 
 ```
 
@@ -60,16 +51,14 @@ topology_template:
     container:
       type: container
       properties:
-        value: false
-  groups:
-    group_one:
-      type: group_one
-      members: []
+        value: true
+    node_one:
+      type: node_one
   policies:
     - policy_one:
         type: policy_one
         targets:
-          - group_one
+          - node_one
 
 ```
 
