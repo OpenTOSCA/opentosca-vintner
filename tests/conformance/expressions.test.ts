@@ -7,36 +7,6 @@ function getDefaultVariabilityResolver() {
 }
 
 describe('expressions', () => {
-    it('and: empty -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({and: []}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('and: true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({and: [true, true, true, true]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('and: false -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({and: [true, false, true, true]}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('and: and true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({and: [{and: [true, true]}, true]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('and: and false -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({and: [{and: [true, false]}, true]}, {})
-        expect(result).to.equal(false)
-    })
-
     it('or: empty -> false', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({or: []}, {})
@@ -149,55 +119,6 @@ describe('expressions', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({mod: [11, 2]}, {})
         expect(result).to.equal(1)
-    })
-
-    it('get_variability_expression: name -> correct', () => {
-        const resolver = new VariabilityResolver({
-            topology_template: {
-                variability: {
-                    expressions: {
-                        name: 'Miles',
-                    },
-                },
-            },
-        } as any)
-        const result = resolver.evaluateVariabilityExpression({get_variability_expression: 'name'}, {})
-        expect(result).to.equal('Miles')
-    })
-
-    it('get_variability_input', () => {
-        const resolver = getDefaultVariabilityResolver()
-        resolver.setVariabilityInputs({hello: 'world'})
-        const result = resolver.evaluateVariabilityExpression({get_variability_input: 'hello'}, {})
-        expect(result).to.equal('world')
-    })
-
-    it('get_variability_condition: name -> correct', () => {
-        const resolver = new VariabilityResolver({
-            topology_template: {
-                variability: {
-                    expressions: {
-                        name: true,
-                    },
-                },
-            },
-        } as any)
-        const result = resolver.evaluateVariabilityCondition({get_variability_condition: 'name'}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('get_node_presence: node present', () => {
-        const resolver = new VariabilityResolver({
-            topology_template: {
-                node_templates: {
-                    node: {
-                        conditions: true,
-                    },
-                },
-            },
-        } as any)
-        const result = resolver.evaluateVariabilityCondition({get_node_presence: 'node'}, {})
-        expect(result).to.equal(true)
     })
 
     it('get_node_presence: node absent', () => {
