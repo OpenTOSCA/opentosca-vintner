@@ -77,7 +77,7 @@ nav:
     - Variability4TOSCA:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
-          - Conformance Tests: variability4tosca/conformance-tests
+          - Conformance Tests: variability4tosca/tests
           - variability4tosca/feature-modeling.md
           - variability4tosca/benchmark.md
     - Queries4TOSCA:

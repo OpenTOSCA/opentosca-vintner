@@ -779,12 +779,6 @@ export class VariabilityResolver {
     }
 
     transform() {
-        // Set TOSCA definitions version
-        this.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
-
-        // Delete variability definition
-        delete this.serviceTemplate.topology_template?.variability
-
         // Delete node templates which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.node_templates)) {
             this.serviceTemplate.topology_template!.node_templates = this.nodes
@@ -927,6 +921,12 @@ export class VariabilityResolver {
                 delete this.serviceTemplate.topology_template!.policies
             }
         }
+
+        // Set TOSCA definitions version
+        this.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
+
+        // Delete variability definition
+        delete this.serviceTemplate.topology_template?.variability
 
         if (utils.isEmpty(this.serviceTemplate.topology_template)) {
             delete this.serviceTemplate.topology_template

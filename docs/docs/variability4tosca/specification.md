@@ -524,7 +524,7 @@ The `test.yaml` file describes and configures the test and has the following str
 ## Conformance Test Suite
 
 Part of this specification is conformance test suite to evaluate Variability4TOSCA implementations.
-The test suite can be found [here](conformance-tests/introduction.md).
+The test suite can be found [here](tests/introduction.md).
 
 ## Limitations
 

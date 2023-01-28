@@ -122,7 +122,7 @@ jobs:
               run: yarn docs:generate:interface
 
             - name: (DOCS) Generate Conformance Test Pages
-              run: yarn docs:generate:test
+              run: yarn docs:generate:tests
 
             - name: (DOCS) Deploy Docs
               run: yarn docs:deploy

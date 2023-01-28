@@ -24,4 +24,5 @@ RUN apt-get update -y \
 RUN yarn docs:install
 RUN yarn docs:generate:licenses
 RUN yarn docs:generate:interface
+RUN yarn docs:generate:tests
 RUN yarn docs:build

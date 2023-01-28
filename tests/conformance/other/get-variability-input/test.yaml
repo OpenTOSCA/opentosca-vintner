@@ -1,0 +1,2 @@
+name: Get Variability Input
+description: Assigns "Miles" to property "value" of the node "container" since the input "name" has the value "Miles".

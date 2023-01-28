@@ -1,0 +1,2 @@
+name: Get Variability Expression
+description: Assigns "Miles" to the variable "value" of the node "container" since the variability expression "name" resolves to "Miles".

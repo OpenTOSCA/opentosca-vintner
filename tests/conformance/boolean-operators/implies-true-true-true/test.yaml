@@ -1,0 +1,2 @@
+name: 'Operator "implies": true true -> true'
+description: Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
