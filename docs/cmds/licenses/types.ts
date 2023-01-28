@@ -3,22 +3,11 @@ export const UNKNOWN = 'UNKNOWN'
 export type Dependency = {
     name: string
     version: string
-    licenseName: string
-    environment: string
-    licenseURL: string
-    sourceCodeURL: string
-}
-
-export type Dependencies = Dependency[]
-
-export type ReaderDataEntry = {
-    name: string
-    version: string
     license: string
-    URL?: string
+    url: string
 }
 
-export type ReaderData = ReaderDataEntry[]
+export type DependencyList = Dependency[]
 
 export type CheckerEntry = {
     licenses: string
@@ -27,4 +16,4 @@ export type CheckerEntry = {
     version: string
 }
 
-export type CheckerEntries = CheckerEntry[]
+export type CheckerEntryList = CheckerEntry[]
