@@ -1,7 +1,10 @@
 import Papa from 'papaparse'
 import * as fs from 'fs'
 import semver from 'semver'
-import {Dependencies, Dependency} from './types'
+import {CheckerEntryList, DependencyList, Dependency, UNKNOWN} from './types'
+import {execSync} from 'child_process'
+import * as licenseChecker from 'license-checker'
+import path from 'path'
 
 export const LICENSES: {[key: string]: string} = {
     'Apache-2.0': 'https://choosealicense.com/licenses/apache-2.0',
@@ -17,10 +20,56 @@ export const LICENSES: {[key: string]: string} = {
 }
 
 /**
+ * Gather dependencies with `yarn licenses`
+ */
+export async function gatherFromYarnLicenses(production = true): Promise<DependencyList> {
+    return new Promise((resolve, reject) => {
+        const yarnOutput = execSync('yarn licenses ls --json' + (production ? ' --prod' : ''))
+            .toString()
+            .split('\n')
+        const dataCurrent: DependencyList = JSON.parse(yarnOutput[yarnOutput.length - 2]).data.body.map(
+            (entry: string[]) => ({
+                name: entry[0],
+                version: entry[1] || UNKNOWN,
+                license: entry[2] || UNKNOWN,
+                url: formatSourceCodeUrl(entry[3]),
+            })
+        )
+        resolve(dataCurrent)
+    })
+}
+
+/**
+ * Gather dependencies with the license-checker library
+ */
+export async function gatherFromLicenseChecker(production = true): Promise<DependencyList> {
+    return new Promise((resolve, reject) => {
+        licenseChecker.init(
+            {
+                start: path.join(),
+                production,
+                unknown: true,
+                customPath: path.join(__dirname, 'license-checker-format.json'),
+            },
+            function (error, packages) {
+                if (error) return reject(error)
+                const data: DependencyList = (Object.values(packages) as CheckerEntryList).map(entry => ({
+                    name: entry.name,
+                    version: entry.version ?? UNKNOWN,
+                    license: entry.licenses ?? UNKNOWN,
+                    url: formatSourceCodeUrl(entry.repository ?? ''),
+                }))
+                resolve(data)
+            }
+        )
+    })
+}
+
+/**
  * Read latest list from CSV file
  */
-export function readLatestList(path: string): Dependencies {
-    let data: Dependencies = []
+export function readLatestList(path: string): DependencyList {
+    let data: DependencyList = []
     if (fs.existsSync(path)) {
         data = Papa.parse<Dependency>(fs.readFileSync(path, 'utf8'), {skipEmptyLines: true, header: true}).data
         console.log('Latest list read. It has ', data.length, ' Entries')
@@ -33,7 +82,7 @@ export function readLatestList(path: string): Dependencies {
 /**
  * Writes csv data to file
  */
-export function storeData(data: Dependencies, file: string): void {
+export function storeData(data: DependencyList, file: string): void {
     fs.writeFileSync(file, Papa.unparse(data))
     console.log('File ', file, ' written')
 }
@@ -41,14 +90,14 @@ export function storeData(data: Dependencies, file: string): void {
 /**
  * Sort by name and version
  */
-export function sortData(data: Dependencies): void {
+export function sortData(data: DependencyList): void {
     data.sort((a, b) => a.name.localeCompare(b.name) || semver.compare(b.version, a.version))
 }
 
 /**
- * Prune older version if a newer version with the same license exists
+ * Remove older version if a newer version with the same license exists
  */
-export function prunePastVersionsWithSameLicense(data: Dependencies): void {
+export function removeDependencyVersionsWithSameLicense(data: DependencyList): void {
     sortData(data)
 
     data.forEach((entry, index) => {
@@ -59,7 +108,7 @@ export function prunePastVersionsWithSameLicense(data: Dependencies): void {
             if (successorEntry.name.localeCompare(entry.name) == 1) break
 
             // Third condition of lower version number implicit because of sorting
-            if (successorEntry.name == entry.name && successorEntry.licenseName == entry.licenseName) {
+            if (successorEntry.name == entry.name && successorEntry.license == entry.license) {
                 console.log(
                     'Removing',
                     successorEntry.name,
@@ -89,38 +138,4 @@ export function formatSourceCodeUrl(url: string): string {
 
     console.log(`Unsupported source code url ${url}`)
     return url
-}
-
-/**
- * Return string with license URL(s) from license name
- */
-export function getLicenseUrlFromName(licenseName: string): string {
-    let licenseUrl = ''
-    if (licenseName in LICENSES) {
-        licenseUrl = LICENSES[licenseName]
-    } else {
-        licenseName.split(' ').forEach(license => {
-            if (license.match('OR')) return
-            if (license.match('AND')) return
-            if (license.startsWith('(')) license = license.substring(1)
-            else if (license.endsWith(')')) license = license.substring(0, license.length - 1)
-
-            licenseUrl += LICENSES[license] + ' '
-        })
-    }
-    return licenseUrl.trimEnd()
-}
-
-/**
- * Format license name, useful for multi-licensing
- */
-export function formatLicenseName(licenseName: string): string {
-    let formattedName = ''
-    licenseName.split(' ').forEach(license => {
-        if (license.startsWith('(')) license = license.substring(1)
-        else if (license.endsWith(')')) license = license.substring(0, license.length - 1)
-
-        formattedName += license + ' '
-    })
-    return formattedName.trimEnd()
 }
