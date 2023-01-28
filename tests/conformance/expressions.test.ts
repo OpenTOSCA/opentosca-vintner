@@ -6,61 +6,7 @@ function getDefaultVariabilityResolver() {
     return new VariabilityResolver({} as any)
 }
 
-describe('expressions', () => {
-    it('not: false -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({not: false}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('not: true -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({not: true}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('xor: one true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({xor: [true, false, false, false]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('xor: all false -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({xor: [false, false, false, false]}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('xor: all true -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({xor: [true, true, true, true]}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('implies: all true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({implies: [true, true]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('implies: left true and right false -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({implies: [true, false]}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('implies: left false and right false -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({implies: [false, false]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('implies: left false and right true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({implies: [false, true]}, {})
-        expect(result).to.equal(true)
-    })
-
+describe('arithmetic', () => {
     it('add: correct -> true', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({add: [10, 1, 1, 1, 1, 1]}, {})
@@ -96,7 +42,9 @@ describe('expressions', () => {
         const result = resolver.evaluateVariabilityExpression({mod: [11, 2]}, {})
         expect(result).to.equal(1)
     })
+})
 
+describe('intrinsic', () => {
     it('concat', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({concat: ['hello', ' ', 'world']}, {})
@@ -114,7 +62,8 @@ describe('expressions', () => {
         const result = resolver.evaluateVariabilityExpression({token: ['hello world', ' ', 1]}, {})
         expect(result).to.equal('world')
     })
-
+})
+describe('constraint', () => {
     it('equal true', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({equal: [1, 1, 1]}, {})
@@ -270,7 +219,9 @@ describe('expressions', () => {
         const result = resolver.evaluateVariabilityExpression({max_length: ['hallo', 4]}, {})
         expect(result).to.equal(false)
     })
+})
 
+describe('cache', () => {
     it('cache: caching', () => {
         const resolver = getDefaultVariabilityResolver()
         const condition: VariabilityExpression = {max_length: ['hallo', 4]}
