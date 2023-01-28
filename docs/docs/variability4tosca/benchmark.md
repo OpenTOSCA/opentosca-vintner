@@ -66,7 +66,7 @@ The following computing resources have been used for the benchmark.
 ## Running the Benchmark
 
 To run the benchmark on your own, run the following command.
-For more information see [Interface](../interface.md#setup-benchmark){target=_blank}.
+For more information see [Interface](../interface.md#vintner-setup-benchmark){target=_blank}.
 Feel free to open a merge request, if your benchmarking results are better.
 
 ```shell linenums="1"

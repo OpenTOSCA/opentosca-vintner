@@ -1,59 +1,49 @@
-import {execSync} from 'child_process'
 import * as path from 'path'
 import {renderFile} from '../utils'
+import {program} from '../../../src/cli/program'
+import {Command, Option} from 'commander'
+import * as utils from '#utils'
+import * as validator from '#validator'
 
 async function main() {
     const data: any[] = []
-    collectData([])
-
+    run(program, [])
     await renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
 
-    function collectData(commands: string[]) {
-        const command = `node build/cli/index.js ${commands.join(' ')} --help`
-        const raw: string[] = execSync(command)
-            .toString()
-            .replace(/\(default:\n */gm, '(default: ')
-            .split('\n')
+    function run(command: Command, commands: string[]) {
+        if (command.name() !== 'vintner') commands.push(command.name())
 
-        const usage = raw[0].slice(7).slice(0, -10)
-        const description = raw[2]
+        const options = (command as any).options.map((option: Option) => {
+            let description = option.description
 
-        const optionsIndex = raw.findIndex(s => s === 'Options:')
+            const defaultDescription = validator.isDefined(option.defaultValue)
+                ? `default: ${JSON.stringify(option.defaultValue)}`
+                : undefined
 
-        const commandsIndex = raw.findIndex(s => s === 'Commands:')
+            const choicesDescription = validator.isDefined(option.argChoices)
+                ? `choices: ${JSON.stringify(option.argChoices)}`
+                : undefined
 
-        const options =
-            optionsIndex !== -1
-                ? raw.slice(optionsIndex + 1, commandsIndex - 1).map(s => {
-                      const data = s.trim().split(' ')
-                      const optionIndex = data.findIndex(s => s.includes('--'))
+            const additionalDescription = utils.joinNotNull([choicesDescription, defaultDescription], ', ')
+            if (additionalDescription !== '') description += ' (' + additionalDescription + ')'
 
-                      const type = data[optionIndex + 1]
-                      const typed = type.startsWith('<') || type.startsWith('[')
+            return {
+                option: option.long?.slice(2),
+                type: option.flags?.split(' ')[1]?.slice(1, -1),
+                description,
+                mandatory: option.required || option.mandatory,
+            }
+        })
 
-                      return {
-                          short: data.find(s => s.includes('-')),
-                          option: data[optionIndex].slice(2),
-                          type: typed ? type.slice(1, -1) : undefined,
-                          mandatory: typed ? type.startsWith('<') : false,
-                          description: data.slice(data.lastIndexOf('') + 1).join(' '),
-                      }
-                  })
-                : []
-
-        const children =
-            commandsIndex !== -1
-                ? raw.slice(commandsIndex + 1, raw.length - 2).map(s => {
-                      const data = s.trim().split(' ')
-                      return {
-                          command: data[0],
-                          description: data.slice(data.lastIndexOf('') + 1).join(' '),
-                      }
-                  })
-                : []
-
-        if (!children.length) data.push({commands, usage, description, options, cliOnly: isCLIOnly(commands)})
-        children.forEach(sc => collectData([...commands, sc.command]))
+        if (utils.isEmpty(command.commands))
+            data.push({
+                commands,
+                usage: 'vintner ' + commands.join(' '),
+                description: command.description(),
+                options,
+                cliOnly: isCLIOnly(commands),
+            })
+        command.commands.forEach(it => run(it, [...commands]))
     }
 }
 
