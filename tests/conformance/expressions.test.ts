@@ -6,63 +6,6 @@ function getDefaultVariabilityResolver() {
     return new VariabilityResolver({} as any)
 }
 
-describe('arithmetic', () => {
-    it('add: correct -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({add: [10, 1, 1, 1, 1, 1]}, {})
-        expect(result).to.equal(15)
-    })
-
-    it('sub: correct -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({sub: [10, 1, 1, 1, 1, 1]}, {})
-        expect(result).to.equal(5)
-    })
-
-    it('mul: correct -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({mul: [10, 1, 3, 4]}, {})
-        expect(result).to.equal(120)
-    })
-
-    it('div: correct -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({div: [10, 1, 2, 5]}, {})
-        expect(result).to.equal(1)
-    })
-
-    it('mod: 0 -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({mod: [10, 2]}, {})
-        expect(result).to.equal(0)
-    })
-
-    it('mod: 1 -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({mod: [11, 2]}, {})
-        expect(result).to.equal(1)
-    })
-})
-
-describe('intrinsic', () => {
-    it('concat', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({concat: ['hello', ' ', 'world']}, {})
-        expect(result).to.equal('hello world')
-    })
-
-    it('join', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({join: [['hello', 'world'], ' ']}, {})
-        expect(result).to.equal('hello world')
-    })
-
-    it('token', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({token: ['hello world', ' ', 1]}, {})
-        expect(result).to.equal('world')
-    })
-})
 describe('constraint', () => {
     it('equal true', () => {
         const resolver = getDefaultVariabilityResolver()

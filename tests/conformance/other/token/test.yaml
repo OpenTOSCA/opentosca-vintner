@@ -1,0 +1,2 @@
+name: 'Operator "concat"'
+description: Assigns the value of the intrinsic function to the property "value" of the node "container".
