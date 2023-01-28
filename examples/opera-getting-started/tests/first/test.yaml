@@ -1,2 +1,2 @@
 resolver:
-    enablePropertyDefaultCondition: true
+    enable_property_default_condition: true
