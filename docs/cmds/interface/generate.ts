@@ -11,7 +11,7 @@ async function main() {
     await renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
 
     function run(command: Command, commands: string[]) {
-        commands.push(command.name())
+        if (command.name() !== 'vintner') commands.push(command.name())
 
         const options = (command as any).options.map((option: Option) => {
             let description = option.description
