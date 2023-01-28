@@ -1,4 +1,4 @@
-# Operator &#34;and&#34;  Evaluates to &#34;true&#34; (Nested)
+# Operator "and"  Evaluates to "true" (Nested)
 
 ## Description
 

@@ -1,4 +1,4 @@
-# Operator &#34;implies&#34;: false true -&gt; true
+# Operator "implies": false true -> true
 
 ## Description
 

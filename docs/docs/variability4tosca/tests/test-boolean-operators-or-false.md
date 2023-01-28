@@ -1,4 +1,4 @@
-# Operator &#34;or&#34; Evaluates to &#34;False&#34;
+# Operator "or" Evaluates to "False"
 
 ## Description
 

@@ -1,4 +1,4 @@
-# Operator &#34;not&#34; Evaluates to &#34;true&#34;
+# Operator "not" Evaluates to "true"
 
 ## Description
 

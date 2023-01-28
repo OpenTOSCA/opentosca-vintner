@@ -1,4 +1,4 @@
-# Operator &#34;and&#34; Evaluates to &#34;True&#34; (Empty)
+# Operator "and" Evaluates to "True" (Empty)
 
 ## Description
 

@@ -1,0 +1,2 @@
+name: 'Operator "max_length" Evaluates to "true" (Equal)'
+description: Assigns "true" to the property "value" of the node "container" since the parameter "hallo" has exactly 5 characters.

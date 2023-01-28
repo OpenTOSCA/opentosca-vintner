@@ -1,4 +1,4 @@
-# Operator &#34;and&#34; Evaluates to &#34;true&#34;
+# Operator "and" Evaluates to "true"
 
 ## Description
 

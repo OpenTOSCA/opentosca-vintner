@@ -1,0 +1,2 @@
+name: 'Operator "mul"'
+description: Assigns the value of the expression to the property "value" of the node "container".
