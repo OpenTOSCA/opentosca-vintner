@@ -1,4 +1,4 @@
-# Operator &#34;xor&#34;: One ture -&gt; true
+# Operator "xor": One ture -> true
 
 ## Description
 

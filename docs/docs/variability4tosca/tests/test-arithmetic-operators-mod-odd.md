@@ -1,4 +1,4 @@
-# Operator &#34;add&#34; (Odd)
+# Operator "add" (Odd)
 
 ## Description
 

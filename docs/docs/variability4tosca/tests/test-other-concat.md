@@ -1,4 +1,4 @@
-# Operator &#34;concat&#34;
+# Operator "concat"
 
 ## Description
 

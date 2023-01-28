@@ -1,4 +1,4 @@
-# Operator &#34;or&#34; Evaluates to &#34;true&#34; (All &#34;true&#34;)
+# Operator "or" Evaluates to "true" (All "true")
 
 ## Description
 

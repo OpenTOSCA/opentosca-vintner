@@ -1,4 +1,4 @@
-# Operator &#34;div&#34;
+# Operator "div"
 
 ## Description
 

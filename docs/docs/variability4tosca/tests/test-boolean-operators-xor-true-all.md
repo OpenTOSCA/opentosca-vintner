@@ -1,4 +1,4 @@
-# Operator &#34;xor&#34;: all true -&gt; false
+# Operator "xor": all true -> false
 
 ## Description
 

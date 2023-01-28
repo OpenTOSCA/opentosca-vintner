@@ -1,4 +1,4 @@
-# Operator &#34;mod&#34; (Even)
+# Operator "mod" (Even)
 
 ## Description
 

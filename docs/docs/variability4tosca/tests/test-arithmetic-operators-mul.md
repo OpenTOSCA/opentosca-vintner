@@ -1,4 +1,4 @@
-# Operator &#34;mul&#34;
+# Operator "mul"
 
 ## Description
 

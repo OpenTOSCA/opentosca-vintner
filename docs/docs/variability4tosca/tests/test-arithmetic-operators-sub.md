@@ -1,4 +1,4 @@
-# Operator &#34;sub&#34;
+# Operator "sub"
 
 ## Description
 
