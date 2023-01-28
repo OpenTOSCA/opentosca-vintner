@@ -1,0 +1,2 @@
+name: 'Operator "greater_than" Evaluates to "false" (Equal)'
+description: Assigns "false" to the property "value" of the node "container" since the parameter are equal.

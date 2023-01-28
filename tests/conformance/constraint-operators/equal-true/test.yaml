@@ -1,0 +1,2 @@
+name: 'Operator "equal" Evaluates to "true"'
+description: Assigns "true" to the property "value" of the node "container" since all parameters are equal.

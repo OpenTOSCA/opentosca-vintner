@@ -1,0 +1,2 @@
+name: 'Operator "less_or_equal" Evaluates to "true" (Less)'
+description: Assigns "true" to the property "value" of the node "container" since the first parameter is less than the second.
