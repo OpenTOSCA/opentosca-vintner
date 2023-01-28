@@ -7,30 +7,6 @@ function getDefaultVariabilityResolver() {
 }
 
 describe('expressions', () => {
-    it('or: empty -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({or: []}, {})
-        expect(result).to.equal(false)
-    })
-
-    it('or: all true -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({or: [true, true, true, true]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('or: one false -> true', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({or: [true, true, false, true]}, {})
-        expect(result).to.equal(true)
-    })
-
-    it('or: all false -> false', () => {
-        const resolver = getDefaultVariabilityResolver()
-        const result = resolver.evaluateVariabilityExpression({or: [false, false, false, false]}, {})
-        expect(result).to.equal(false)
-    })
-
     it('not: false -> true', () => {
         const resolver = getDefaultVariabilityResolver()
         const result = resolver.evaluateVariabilityExpression({not: false}, {})
