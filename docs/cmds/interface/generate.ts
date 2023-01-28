@@ -38,7 +38,7 @@ async function main() {
         if (utils.isEmpty(command.commands))
             data.push({
                 commands,
-                usage: commands.join(' '),
+                usage: 'vintner ' + commands.join(' '),
                 description: command.description(),
                 options,
                 cliOnly: isCLIOnly(commands),
