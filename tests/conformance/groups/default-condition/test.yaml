@@ -1,3 +1,3 @@
 description:
 resolver:
-    enableGroupDefaultCondition: true
+    enable_group_default_condition: true
