@@ -1,41 +1,39 @@
 # <%= test.config.name || test.id %>
 
-<% if (test.config.description) { %>
+<% if (test.config.description) { -%>
 ## Description
 
 <%- test.config.description %>
-<% } -%>
-
+<% } %>
 ## Variable Service Template
 
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
-<%- utils.toYAML(test.template) %>
+<%- utils.toYAML(test.template) -%>
 ```
 
-<% if (test.inputs) { %>
+<% if (test.inputs) { -%>
 ## Variability Inputs
 
 When resolving variability, the following variability inputs shall be used.
 
 ```yaml linenums="1"
-<%- utils.toYAML(test.inputs) %>
+<%- utils.toYAML(test.inputs) -%>
 ```
 <% } -%>
 
-<% if (test.config?.preset) { %>
+<% if (test.config?.preset) { -%>
 ## Variability Preset
 
 The following variability preset is used.
 
 ```yaml linenums="1"
-<%- utils.toYAML(test.config.preset) %>
+<%- utils.toYAML(test.config.preset) -%>
 ```
 <% } -%>
 
-
-<% if (test.config?.resolver) { %>
+<% if (test.config?.resolver) { -%>
 ## Resolver Configuration
 
 The following resolver configuration is used.
@@ -48,34 +46,32 @@ The following resolver configuration is used.
 ```
 <% } -%>
 
-<% if (test.expected) { %>
-
+<% if (test.expected) { -%>
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
-<%- utils.toYAML(test.expected) %>
+<%- utils.toYAML(test.expected) -%>
 ```
 <% } -%>
 
-<% if (test.config?.error) { %>
-
+<% if (test.config?.error) { -%>
 ## Expected Error
 
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-<%- utils.toYAML(test.config.error) %>
+<%- utils.toYAML(test.config.error) -%>
 ```
 <% } -%>
 
-<% if (test.config?.resolver) { %>
+<% if (test.config?.resolver) { -%>
 ## Resolver Configuration
 
 The following resolver configuration is used.
 
 ```yaml linenums="1"
-<%- utils.toYAML(test.config.resolver) %>
+<%- utils.toYAML(test.config.resolver) -%>
 ```
 <% } -%>

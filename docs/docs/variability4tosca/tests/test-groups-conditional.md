@@ -1,6 +1,5 @@
 # Conditional Group
 
-
 ## Description
 
 - Removes node "magic" and relations "magic.0" und "application.magic" from topology (and from group members of group "group_one") since "group_one" is a variability group and its conditions are "false".
@@ -65,11 +64,7 @@ topology_template:
       type: magic
       requirements:
         - magic: application
-
 ```
-
-
-
 
 
 
@@ -110,7 +105,6 @@ topology_template:
         - host: vm
     vm:
       type: openstack.vm
-
 ```
 
 

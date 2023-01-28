@@ -1,6 +1,5 @@
 # Operator &#34;implies&#34;: false false -&gt; true
 
-
 ## Description
 
 Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
@@ -21,11 +20,7 @@ topology_template:
               implies:
                 - false
                 - false
-
 ```
-
-
-
 
 
 
@@ -42,7 +37,6 @@ topology_template:
       type: container
       properties:
         value: true
-
 ```
 
 

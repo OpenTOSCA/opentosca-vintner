@@ -28,11 +28,7 @@ topology_template:
       type: rtwo
     rthree:
       type: rthree
-
 ```
-
-
-
 
 
 
@@ -44,6 +40,5 @@ The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
 Relation "rthree" is never used
-
 ```
 

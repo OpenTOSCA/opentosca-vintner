@@ -1,6 +1,5 @@
 # policies-conditional
 
-
 ## Description
 
 - Removes node "node_two" from node templates and policy "policy_one" and "policy_three" since conditions is "false". - Removes policy "policy_two" since conditions is "false".
@@ -37,11 +36,7 @@ topology_template:
         targets:
           - node_one
           - node_two
-
 ```
-
-
-
 
 
 
@@ -65,7 +60,6 @@ topology_template:
         type: policy_three
         targets:
           - node_one
-
 ```
 
 

@@ -41,9 +41,7 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
-
 
 
 ## Variability Preset
@@ -52,11 +50,7 @@ The following variability preset is used.
 
 ```yaml linenums="1"
 two
-
 ```
-
-
-
 
 
 ## Variability-Resolved Service Template
@@ -73,7 +67,6 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
 
 

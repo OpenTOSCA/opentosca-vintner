@@ -33,11 +33,7 @@ topology_template:
         - key_two:
             value: value_two_three
             default_alternative: true
-
 ```
-
-
-
 
 
 
@@ -56,7 +52,6 @@ topology_template:
       type: node_two
       properties:
         key_two: value_two_two
-
 ```
 
 

@@ -19,11 +19,7 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
-
-
-
 
 
 
@@ -46,7 +42,6 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
 
 

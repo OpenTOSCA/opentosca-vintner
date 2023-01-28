@@ -1,6 +1,5 @@
 # Operator &#34;not&#34; Evaluates to &#34;true&#34;
 
-
 ## Description
 
 Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
@@ -19,11 +18,7 @@ topology_template:
         - value:
             expression:
               not: false
-
 ```
-
-
-
 
 
 
@@ -40,7 +35,6 @@ topology_template:
       type: container
       properties:
         value: true
-
 ```
 
 

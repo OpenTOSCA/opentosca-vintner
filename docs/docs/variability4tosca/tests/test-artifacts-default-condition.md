@@ -17,10 +17,7 @@ topology_template:
           type: artifact
     node_two:
       type: node
-
 ```
-
-
 
 
 
@@ -33,8 +30,6 @@ enable_artifact_default_condition: true
 
 ```
 
-
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.
@@ -45,9 +40,7 @@ topology_template:
   node_templates:
     node_two:
       type: node
-
 ```
-
 
 
 ## Resolver Configuration
@@ -56,5 +49,4 @@ The following resolver configuration is used.
 
 ```yaml linenums="1"
 enableArtifactDefaultCondition: true
-
 ```

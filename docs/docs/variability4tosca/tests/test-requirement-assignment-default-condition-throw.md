@@ -22,11 +22,7 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
-
-
-
 
 
 
@@ -38,6 +34,5 @@ The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
 Relation source "one" of relation "one.two" does not exist
-
 ```
 

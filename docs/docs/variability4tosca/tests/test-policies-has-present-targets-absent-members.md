@@ -1,6 +1,5 @@
 # Policy Targets Absent Members
 
-
 ## Description
 
 The policy "policy_one" targets two absent nodes and a group whose both members are absent. Thus, the policy "policy_one" has no present targets.
@@ -44,11 +43,7 @@ topology_template:
           - node_one
           - node_two
           - group_one
-
 ```
-
-
-
 
 
 
@@ -74,7 +69,6 @@ topology_template:
         type: policy_one
         targets:
           - group_one
-
 ```
 
 

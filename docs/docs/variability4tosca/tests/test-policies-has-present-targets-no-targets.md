@@ -1,6 +1,5 @@
 # Policy Has No Targets
 
-
 ## Description
 
 The policy "policy_one" has no targets. Thus, the policy has no present targets and, therefore, is removed.
@@ -18,11 +17,7 @@ topology_template:
         targets: []
         conditions:
           has_present_targets: policy_one
-
 ```
-
-
-
 
 
 
@@ -33,7 +28,6 @@ The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-
 ```
 
 

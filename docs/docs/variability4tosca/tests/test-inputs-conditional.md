@@ -17,11 +17,7 @@ topology_template:
     three:
       type: string
       conditions: true
-
 ```
-
-
-
 
 
 
@@ -38,7 +34,6 @@ topology_template:
       type: string
     three:
       type: string
-
 ```
 
 

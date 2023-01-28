@@ -1,6 +1,5 @@
 # Get Variability Condition
 
-
 ## Description
 
 Assigns "true" to the property "value" of the node "container" since the variability condition "condition" evaluates to "true".
@@ -25,11 +24,7 @@ topology_template:
         - value:
             expression:
               get_variability_condition: condition
-
 ```
-
-
-
 
 
 
@@ -46,7 +41,6 @@ topology_template:
       type: container
       properties:
         value: true
-
 ```
 
 

@@ -20,10 +20,7 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
-
-
 
 
 
@@ -35,8 +32,6 @@ The following resolver configuration is used.
 enable_relation_default_condition: true
 
 ```
-
-
 
 ## Variability-Resolved Service Template
 
@@ -52,9 +47,7 @@ topology_template:
         - three: three
     three:
       type: three
-
 ```
-
 
 
 ## Resolver Configuration
@@ -63,5 +56,4 @@ The following resolver configuration is used.
 
 ```yaml linenums="1"
 enableRelationDefaultCondition: true
-
 ```

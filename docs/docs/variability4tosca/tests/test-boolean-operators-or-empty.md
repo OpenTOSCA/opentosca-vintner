@@ -1,6 +1,5 @@
 # Operator &#34;or&#34; Evaluates to &#34;False&#34; (Empty)
 
-
 ## Description
 
 Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".
@@ -19,11 +18,7 @@ topology_template:
         - value:
             expression:
               or: []
-
 ```
-
-
-
 
 
 
@@ -40,7 +35,6 @@ topology_template:
       type: container
       properties:
         value: false
-
 ```
 
 

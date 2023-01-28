@@ -1,6 +1,5 @@
 # Policy Targets Absent Nodes
 
-
 ## Description
 
 The policy "policy_one" targets two absent nodes, thus, has no present targets.
@@ -31,11 +30,7 @@ topology_template:
         targets:
           - node_one
           - node_two
-
 ```
-
-
-
 
 
 
@@ -56,7 +51,6 @@ topology_template:
     - policy_one:
         type: policy_one
         targets: []
-
 ```
 
 

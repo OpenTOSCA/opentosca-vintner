@@ -15,9 +15,7 @@ topology_template:
         - key_one:
             expression:
               get_variability_input: some_input
-
 ```
-
 
 ## Variability Inputs
 
@@ -25,11 +23,7 @@ When resolving variability, the following variability inputs shall be used.
 
 ```yaml linenums="1"
 some_input: some_value
-
 ```
-
-
-
 
 
 
@@ -45,7 +39,6 @@ topology_template:
       type: node_one
       properties:
         key_one: some_value
-
 ```
 
 

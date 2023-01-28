@@ -1,6 +1,5 @@
 # Get Variability Expression
 
-
 ## Description
 
 Assigns "Miles" to the variable "value" of the node "container" since the variability expression "name" resolves to "Miles".
@@ -22,11 +21,7 @@ topology_template:
         - value:
             expression:
               get_variability_expression: name
-
 ```
-
-
-
 
 
 
@@ -43,7 +38,6 @@ topology_template:
       type: container
       properties:
         value: Miles
-
 ```
 
 

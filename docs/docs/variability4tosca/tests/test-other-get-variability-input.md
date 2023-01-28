@@ -1,6 +1,5 @@
 # Get Variability Input
 
-
 ## Description
 
 Assigns "Miles" to property "value" of the node "container" since the input "name" has the value "Miles".
@@ -19,9 +18,7 @@ topology_template:
         - value:
             expression:
               get_variability_input: name
-
 ```
-
 
 ## Variability Inputs
 
@@ -29,11 +26,7 @@ When resolving variability, the following variability inputs shall be used.
 
 ```yaml linenums="1"
 name: Miles
-
 ```
-
-
-
 
 
 
@@ -49,7 +42,6 @@ topology_template:
       type: container
       properties:
         value: Miles
-
 ```
 
 

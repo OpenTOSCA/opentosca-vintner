@@ -1,6 +1,5 @@
 # policies-default-condition-nothing
 
-
 ## Description
 
 Do not remove policy "policy_one" since pruning is not forced.
@@ -29,10 +28,7 @@ topology_template:
         targets:
           - node_one
           - node_two
-
 ```
-
-
 
 
 
@@ -44,8 +40,6 @@ The following resolver configuration is used.
 enable_policy_default_condition: true
 
 ```
-
-
 
 ## Variability-Resolved Service Template
 
@@ -65,9 +59,7 @@ topology_template:
         type: policy_two
         targets:
           - node_two
-
 ```
-
 
 
 ## Resolver Configuration
@@ -76,5 +68,4 @@ The following resolver configuration is used.
 
 ```yaml linenums="1"
 enablePolicyDefaultCondition: true
-
 ```

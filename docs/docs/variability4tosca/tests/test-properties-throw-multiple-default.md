@@ -36,11 +36,7 @@ topology_template:
         - key_two:
             value: value_two_three
             default_alternative: true
-
 ```
-
-
-
 
 
 
@@ -52,6 +48,5 @@ The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
 Property "key_one" of node "node_one" has multiple defaults
-
 ```
 

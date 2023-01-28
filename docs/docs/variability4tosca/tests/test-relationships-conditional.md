@@ -30,11 +30,7 @@ topology_template:
       type: rtwo
     rthree:
       type: tthree
-
 ```
-
-
-
 
 
 
@@ -58,7 +54,6 @@ topology_template:
   relationship_templates:
     rthree:
       type: tthree
-
 ```
 
 

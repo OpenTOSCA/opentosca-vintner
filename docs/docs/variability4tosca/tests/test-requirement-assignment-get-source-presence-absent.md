@@ -27,11 +27,7 @@ topology_template:
               get_source_presence: SELF
     node_two:
       type: node_two
-
 ```
-
-
-
 
 
 
@@ -50,7 +46,6 @@ topology_template:
         value: false
     node_two:
       type: node_two
-
 ```
 
 

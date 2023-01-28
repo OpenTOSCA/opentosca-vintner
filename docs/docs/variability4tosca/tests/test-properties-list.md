@@ -20,11 +20,7 @@ topology_template:
               - value_one_two
               - value_one_three
             conditions: true
-
 ```
-
-
-
 
 
 
@@ -43,7 +39,6 @@ topology_template:
         key_one:
           - value_one_two
           - value_one_three
-
 ```
 
 

@@ -1,6 +1,5 @@
 # Policy Targets Present Nodes
 
-
 ## Description
 
 The policy "policy_one" targets two present nodes, thus, has present targets.
@@ -29,11 +28,7 @@ topology_template:
         targets:
           - node_one
           - node_two
-
 ```
-
-
-
 
 
 
@@ -60,7 +55,6 @@ topology_template:
         targets:
           - node_one
           - node_two
-
 ```
 
 

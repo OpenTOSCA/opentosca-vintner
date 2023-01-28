@@ -77,9 +77,7 @@ topology_template:
       type: relationship_type_1_present
     relationship_1_removed:
       type: relationship_type_1_removed
-
 ```
-
 
 ## Variability Inputs
 
@@ -87,11 +85,7 @@ When resolving variability, the following variability inputs shall be used.
 
 ```yaml linenums="1"
 mode: present
-
 ```
-
-
-
 
 
 
@@ -120,7 +114,6 @@ topology_template:
       type: relationship_type_0_present
     relationship_1_present:
       type: relationship_type_1_present
-
 ```
 
 

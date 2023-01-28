@@ -27,11 +27,7 @@ topology_template:
     node_two:
       type: node_two
       conditions: false
-
 ```
-
-
-
 
 
 
@@ -50,7 +46,6 @@ topology_template:
         value: false
     node_one:
       type: node_one
-
 ```
 
 

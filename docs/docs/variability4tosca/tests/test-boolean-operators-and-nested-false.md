@@ -1,6 +1,5 @@
 # Operator &#34;and&#34; Evaluates to &#34;false&#34; (Nested)
 
-
 ## Description
 
 Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".
@@ -23,11 +22,7 @@ topology_template:
                     - true
                     - false
                 - true
-
 ```
-
-
-
 
 
 
@@ -44,7 +39,6 @@ topology_template:
       type: container
       properties:
         value: false
-
 ```
 
 

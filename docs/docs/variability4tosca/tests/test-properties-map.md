@@ -19,11 +19,7 @@ topology_template:
             value:
               some_key: some_value
             conditions: true
-
 ```
-
-
-
 
 
 
@@ -41,7 +37,6 @@ topology_template:
       properties:
         key_one:
           some_key: some_value
-
 ```
 
 

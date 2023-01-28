@@ -14,10 +14,7 @@ topology_template:
       properties:
         key_one: value_one
       conditions: false
-
 ```
-
-
 
 
 
@@ -30,17 +27,13 @@ enable_property_default_condition: true
 
 ```
 
-
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-
 ```
-
 
 
 ## Resolver Configuration
@@ -49,5 +42,4 @@ The following resolver configuration is used.
 
 ```yaml linenums="1"
 enablePropertyDefaultCondition: true
-
 ```

@@ -27,11 +27,7 @@ topology_template:
     node_two:
       type: node_two
       conditions: true
-
 ```
-
-
-
 
 
 
@@ -55,7 +51,6 @@ topology_template:
             node: node_two
     node_two:
       type: node_two
-
 ```
 
 

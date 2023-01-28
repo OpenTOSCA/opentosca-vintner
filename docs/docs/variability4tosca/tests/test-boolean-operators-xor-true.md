@@ -1,6 +1,5 @@
 # Operator &#34;xor&#34;: One ture -&gt; true
 
-
 ## Description
 
 Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
@@ -23,11 +22,7 @@ topology_template:
                 - false
                 - false
                 - false
-
 ```
-
-
-
 
 
 
@@ -44,7 +39,6 @@ topology_template:
       type: container
       properties:
         value: true
-
 ```
 
 

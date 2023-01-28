@@ -1,6 +1,5 @@
 # groups-default-condition-nothing
 
-
 ## Description
 
 Group "group_three" is not removed since its conditions are "true".
@@ -61,10 +60,7 @@ topology_template:
       type: magic
       requirements:
         - magic: application
-
 ```
-
-
 
 
 
@@ -76,8 +72,6 @@ The following resolver configuration is used.
 enable_group_default_condition: true
 
 ```
-
-
 
 ## Variability-Resolved Service Template
 
@@ -118,9 +112,7 @@ topology_template:
         - host: vm
     vm:
       type: openstack.vm
-
 ```
-
 
 
 ## Resolver Configuration
@@ -129,5 +121,4 @@ The following resolver configuration is used.
 
 ```yaml linenums="1"
 enableGroupDefaultCondition: true
-
 ```

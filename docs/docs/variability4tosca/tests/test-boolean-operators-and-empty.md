@@ -1,6 +1,5 @@
 # Operator &#34;and&#34; Evaluates to &#34;True&#34; (Empty)
 
-
 ## Description
 
 Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
@@ -19,11 +18,7 @@ topology_template:
         - value:
             expression:
               and: []
-
 ```
-
-
-
 
 
 
@@ -40,7 +35,6 @@ topology_template:
       type: container
       properties:
         value: true
-
 ```
 
 

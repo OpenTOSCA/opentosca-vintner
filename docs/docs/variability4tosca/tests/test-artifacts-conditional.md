@@ -35,11 +35,7 @@ topology_template:
         artifact_three_one:
           type: artifact
           conditions: false
-
 ```
-
-
-
 
 
 
@@ -69,7 +65,6 @@ topology_template:
           type: artifact
     node_four:
       type: node
-
 ```
 
 

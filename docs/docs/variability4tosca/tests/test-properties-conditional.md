@@ -42,11 +42,7 @@ topology_template:
         - key_four:
             value: value_four
             conditions: true
-
 ```
-
-
-
 
 
 
@@ -80,7 +76,6 @@ topology_template:
         key_two: value_two
         key_three: value_three
         key_four: value_four
-
 ```
 
 
