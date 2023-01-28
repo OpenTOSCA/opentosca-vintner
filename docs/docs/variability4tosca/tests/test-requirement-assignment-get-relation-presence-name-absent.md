@@ -1,4 +1,4 @@
-# expressions---only-get-source-presence-present
+# requirement-assignment-get-relation-presence-name-absent
 
 
 ## Variable Service Template
@@ -19,12 +19,13 @@ topology_template:
                 - relation_one
     node_one:
       type: node_one
-      conditions: true
       requirements:
         - relation_one:
+            node: node_one
+            conditions: false
+        - relation_two:
             node: node_two
-            conditions:
-              get_source_presence: SELF
+            conditions: true
     node_two:
       type: node_two
 
@@ -47,11 +48,11 @@ topology_template:
     container:
       type: container
       properties:
-        value: true
+        value: false
     node_one:
       type: node_one
       requirements:
-        - relation_one:
+        - relation_two:
             node: node_two
     node_two:
       type: node_two

@@ -1,5 +1,9 @@
-# expressions---only-get-node-presence-absent
+# Get Variability Expression
 
+
+## Description
+
+Assigns "Miles" to the variable "value" of the node "container" since the variability expression "name" resolves to "Miles".
 
 ## Variable Service Template
 
@@ -8,16 +12,16 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    expressions:
+      name: Miles
   node_templates:
     container:
       type: container
       properties:
         - value:
             expression:
-              get_node_presence: node
-    node:
-      type: node
-      conditions: false
+              get_variability_expression: name
 
 ```
 
@@ -38,7 +42,7 @@ topology_template:
     container:
       type: container
       properties:
-        value: false
+        value: Miles
 
 ```
 

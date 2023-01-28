@@ -1,5 +1,9 @@
-# expressions---only-get-variability-condition
+# Operator &#34;and&#34; Evaluates to &#34;true&#34;
 
+
+## Description
+
+Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
 
 ## Variable Service Template
 
@@ -8,16 +12,17 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    expressions:
-      condition: true
   node_templates:
     container:
       type: container
       properties:
         - value:
             expression:
-              get_variability_condition: condition
+              and:
+                - true
+                - true
+                - true
+                - true
 
 ```
 

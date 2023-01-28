@@ -1,4 +1,4 @@
-# expressions---only-get-variability-expression
+# requirement-assignment-get-target-presence-absent
 
 
 ## Variable Service Template
@@ -8,16 +8,25 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    expressions:
-      name: Miles
   node_templates:
     container:
       type: container
       properties:
         - value:
             expression:
-              get_variability_expression: name
+              get_relation_presence:
+                - node_one
+                - relation_one
+    node_one:
+      type: node_one
+      requirements:
+        - relation_one:
+            node: node_two
+            conditions:
+              get_target_presence: SELF
+    node_two:
+      type: node_two
+      conditions: true
 
 ```
 
@@ -38,7 +47,14 @@ topology_template:
     container:
       type: container
       properties:
-        value: Miles
+        value: true
+    node_one:
+      type: node_one
+      requirements:
+        - relation_one:
+            node: node_two
+    node_two:
+      type: node_two
 
 ```
 

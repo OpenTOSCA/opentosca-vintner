@@ -1,0 +1,2 @@
+name: Get Variability Condition
+description: Assigns "true" to the property "value" of the node "container" since the variability condition "condition" evaluates to "true".

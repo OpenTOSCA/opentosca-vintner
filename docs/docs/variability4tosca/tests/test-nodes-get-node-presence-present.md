@@ -1,4 +1,4 @@
-# expressions---only-get-relation-presence-index-absent
+# nodes-get-node-presence-present
 
 
 ## Variable Service Template
@@ -14,20 +14,10 @@ topology_template:
       properties:
         - value:
             expression:
-              get_relation_presence:
-                - node_one
-                - 0
-    node_one:
-      type: node_one
-      requirements:
-        - relation_one:
-            node: node_one
-            conditions: false
-        - relation_two:
-            node: node_two
-            conditions: true
-    node_two:
-      type: node_two
+              get_node_presence: node
+    node:
+      type: node
+      conditions: true
 
 ```
 
@@ -48,14 +38,9 @@ topology_template:
     container:
       type: container
       properties:
-        value: false
-    node_one:
-      type: node_one
-      requirements:
-        - relation_two:
-            node: node_two
-    node_two:
-      type: node_two
+        value: true
+    node:
+      type: node
 
 ```
 

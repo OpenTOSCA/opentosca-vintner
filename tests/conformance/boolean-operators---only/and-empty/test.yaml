@@ -1,0 +1,2 @@
+name: 'Operator "and" Evaluates to "True" (Empty)'
+description: Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".

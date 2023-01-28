@@ -1,5 +1,9 @@
-# expressions---only-get-target-presence-present
+# Operator &#34;and&#34;  Evaluates to &#34;true&#34; (Nested)
 
+
+## Description
+
+Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
 
 ## Variable Service Template
 
@@ -14,19 +18,11 @@ topology_template:
       properties:
         - value:
             expression:
-              get_relation_presence:
-                - node_one
-                - relation_one
-    node_one:
-      type: node_one
-      requirements:
-        - relation_one:
-            node: node_two
-            conditions:
-              get_target_presence: SELF
-    node_two:
-      type: node_two
-      conditions: false
+              and:
+                - and:
+                    - true
+                    - true
+                - true
 
 ```
 
@@ -47,9 +43,7 @@ topology_template:
     container:
       type: container
       properties:
-        value: false
-    node_one:
-      type: node_one
+        value: true
 
 ```
 

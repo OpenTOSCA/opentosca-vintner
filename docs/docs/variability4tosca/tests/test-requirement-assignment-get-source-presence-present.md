@@ -1,4 +1,4 @@
-# expressions---only-get-target-presence-absent
+# requirement-assignment-get-source-presence-present
 
 
 ## Variable Service Template
@@ -19,14 +19,14 @@ topology_template:
                 - relation_one
     node_one:
       type: node_one
+      conditions: true
       requirements:
         - relation_one:
             node: node_two
             conditions:
-              get_target_presence: SELF
+              get_source_presence: SELF
     node_two:
       type: node_two
-      conditions: true
 
 ```
 

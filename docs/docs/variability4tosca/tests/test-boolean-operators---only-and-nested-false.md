@@ -1,5 +1,9 @@
-# expressions---only-get-source-presence-absent
+# Operator &#34;and&#34; Evaluates to &#34;false&#34; (Nested)
 
+
+## Description
+
+Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".
 
 ## Variable Service Template
 
@@ -14,19 +18,11 @@ topology_template:
       properties:
         - value:
             expression:
-              get_relation_presence:
-                - node_one
-                - relation_one
-    node_one:
-      type: node_one
-      conditions: false
-      requirements:
-        - relation_one:
-            node: node_two
-            conditions:
-              get_source_presence: SELF
-    node_two:
-      type: node_two
+              and:
+                - and:
+                    - true
+                    - false
+                - true
 
 ```
 
@@ -48,8 +44,6 @@ topology_template:
       type: container
       properties:
         value: false
-    node_two:
-      type: node_two
 
 ```
 

@@ -1,4 +1,4 @@
-# expressions---only-and-and-tt-t-t
+# requirement-assignment-get-target-presence-present
 
 
 ## Variable Service Template
@@ -14,11 +14,19 @@ topology_template:
       properties:
         - value:
             expression:
-              and:
-                - true
-                - true
-                - true
-                - true
+              get_relation_presence:
+                - node_one
+                - relation_one
+    node_one:
+      type: node_one
+      requirements:
+        - relation_one:
+            node: node_two
+            conditions:
+              get_target_presence: SELF
+    node_two:
+      type: node_two
+      conditions: false
 
 ```
 
@@ -39,7 +47,9 @@ topology_template:
     container:
       type: container
       properties:
-        value: true
+        value: false
+    node_one:
+      type: node_one
 
 ```
 

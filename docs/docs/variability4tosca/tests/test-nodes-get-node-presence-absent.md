@@ -1,4 +1,4 @@
-# expressions---only-and-and-tf-t-f
+# nodes-get-node-presence-absent
 
 
 ## Variable Service Template
@@ -14,11 +14,10 @@ topology_template:
       properties:
         - value:
             expression:
-              and:
-                - and:
-                    - true
-                    - false
-                - true
+              get_node_presence: node
+    node:
+      type: node
+      conditions: false
 
 ```
 

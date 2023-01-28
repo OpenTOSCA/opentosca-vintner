@@ -1,5 +1,9 @@
-# expressions---only-and-tftt-f
+# Operator &#34;and&#34; Evaluates to &#34;false&#34;
 
+
+## Description
+
+Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".
 
 ## Variable Service Template
 

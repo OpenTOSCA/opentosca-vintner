@@ -1,5 +1,9 @@
-# expressions---only-get-variability-input
+# Operator &#34;and&#34; Evaluates to &#34;True&#34; (Empty)
 
+
+## Description
+
+Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
 
 ## Variable Service Template
 
@@ -14,19 +18,10 @@ topology_template:
       properties:
         - value:
             expression:
-              get_variability_input: name
+              and: []
 
 ```
 
-
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-name: Miles
-
-```
 
 
 
@@ -44,7 +39,7 @@ topology_template:
     container:
       type: container
       properties:
-        value: Miles
+        value: true
 
 ```
 
