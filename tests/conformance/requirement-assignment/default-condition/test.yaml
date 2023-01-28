@@ -1,2 +1,2 @@
 resolver:
-    enableRelationDefaultCondition: true
+    enable_relation_default_condition: true
