@@ -305,14 +305,14 @@ The first Group Type is the root group every other variability-related group, su
 as `variability.groups.ConditionalMembers` should derive from.
 
 ```yaml linenums="1"
-variability.groups.Root
+variability.groups.Root:
     derived_from: tosca.groups.Root
 ```
 
 The second Group Type should be used when a group has variability definitions assigned.
 
 ```yaml linenums="1"
-variability.groups.ConditionalMembers
+variability.groups.ConditionalMembers:
     derived_from: variability.groups.Root
     conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
 ```

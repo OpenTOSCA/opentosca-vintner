@@ -162,6 +162,26 @@ template
         '--enable-property-default-condition [boolean]',
         'enable default condition for properties that checks if corresponding node or relation is present'
     )
+    .option(
+        '--enable-relation-pruning [boolean]',
+        'enable relation pruning and additionally check for each relation if is source is present'
+    )
+    .option(
+        '--enable-policy-pruning [boolean]',
+        'enable policy pruning and additionally check for each policy if no target is present'
+    )
+    .option(
+        '--enable-group-pruning [boolean]',
+        'enable group pruning and additionally check for each group if no member is present'
+    )
+    .option(
+        '--enable-artifact-pruning [boolean]',
+        'enable artifact pruning and additionally check for each artifact if source is present'
+    )
+    .option(
+        '--enable-property-pruning [boolean]',
+        'enable property pruning and additionally check for each property if corresponding node or relation is present'
+    )
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
         '--disable-relation-source-consistency-check [boolean]',
@@ -334,6 +354,26 @@ instances
     .option(
         '--enable-property-default-condition [boolean]',
         'enable default condition for properties that checks if corresponding node or relation is present'
+    )
+    .option(
+        '--enable-relation-pruning [boolean]',
+        'enable relation pruning and additionally check for each relation if is source is present'
+    )
+    .option(
+        '--enable-policy-pruning [boolean]',
+        'enable policy pruning and additionally check for each policy if no target is present'
+    )
+    .option(
+        '--enable-group-pruning [boolean]',
+        'enable group pruning and additionally check for each group if no member is present'
+    )
+    .option(
+        '--enable-artifact-pruning [boolean]',
+        'enable artifact pruning and additionally check for each artifact if source is present'
+    )
+    .option(
+        '--enable-property-pruning [boolean]',
+        'enable property pruning and additionally check for each property if corresponding node or relation is present'
     )
     .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
     .option(
