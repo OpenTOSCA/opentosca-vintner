@@ -55,4 +55,3 @@ topology_template:
         targets: []
 ```
 
-

@@ -43,4 +43,3 @@ topology_template:
         value: 1
 ```
 
-

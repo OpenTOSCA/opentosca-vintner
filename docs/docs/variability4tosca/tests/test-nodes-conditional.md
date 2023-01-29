@@ -45,4 +45,3 @@ topology_template:
       type: three
 ```
 
-

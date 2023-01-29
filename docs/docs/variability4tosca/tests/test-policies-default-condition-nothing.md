@@ -63,11 +63,3 @@ topology_template:
           - node_two
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enablePolicyDefaultCondition: true
-```

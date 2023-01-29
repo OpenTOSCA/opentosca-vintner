@@ -59,4 +59,3 @@ topology_template:
           - node_two
 ```
 
-

@@ -109,4 +109,3 @@ topology_template:
       type: openstack.vm
 ```
 
-

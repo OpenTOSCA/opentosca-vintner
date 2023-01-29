@@ -33,4 +33,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Relation target "two" of relation "one.two" does not exist
 ```
-

@@ -43,4 +43,3 @@ topology_template:
         key_one: some_value
 ```
 
-

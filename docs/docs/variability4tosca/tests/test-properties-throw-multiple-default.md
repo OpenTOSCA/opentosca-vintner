@@ -51,4 +51,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Property "key_one" of node "node_one" has multiple defaults
 ```
-

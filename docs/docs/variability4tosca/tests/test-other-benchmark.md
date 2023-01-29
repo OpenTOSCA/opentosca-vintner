@@ -121,4 +121,3 @@ topology_template:
       type: relationship_type_1_present
 ```
 
-

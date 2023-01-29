@@ -31,4 +31,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Artifact "artifact_one@1" of node "node_one" is ambiguous
 ```
-

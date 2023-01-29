@@ -43,4 +43,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Relationship "rthree" of relation "three" of node "two" does not exist!
 ```
-

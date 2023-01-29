@@ -80,4 +80,3 @@ topology_template:
         key_four: value_four
 ```
 
-

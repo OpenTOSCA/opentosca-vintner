@@ -41,4 +41,3 @@ topology_template:
       type: node
 ```
 
-

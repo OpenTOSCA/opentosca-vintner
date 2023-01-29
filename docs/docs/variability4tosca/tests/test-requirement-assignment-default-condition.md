@@ -51,11 +51,3 @@ topology_template:
       type: three
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableRelationDefaultCondition: true
-```
