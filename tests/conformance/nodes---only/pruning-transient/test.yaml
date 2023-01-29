@@ -1,0 +1,10 @@
+name: Pruning Nodes (Transient)
+description: |
+    - Node and relation pruning is enabled.
+    - Node "node_three" has two incoming relations whose sources are the node "node_one" and "node_two". 
+    - Node "node_one" is transient and node "node_two" is not present.
+    - Thus, node "node_three" is not present since only a transient node has an incoming relation.
+    - Node "node_four" also has incoming relations, however, is present since there had not been any incoming relation at all.
+resolver:
+    enable_relation_pruning: true
+    enable_node_pruning: true

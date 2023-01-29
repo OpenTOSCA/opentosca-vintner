@@ -1,0 +1,21 @@
+name: Pruning Nodes (Combined)
+description: |
+    The following is a complex example using transient and unprunable nodes.
+    The variable service topology is structured as follows.
+
+    - A user application is hosted on a web server hosted on a virtual machine. 
+    - The virtual machine is hosted on a hypervisor.
+    - Furthermore, a monitoring agent is hosted on the virtual machine.
+
+    The variability-resolved service template only contains the hypervisor.
+
+    - The user application is not present.
+    - Thus, corresponding relations are also not present. 
+    - Thus, the web server and corresponding relations are not present. 
+    - At this moment, the virtual machine is hosting only the monitoring agent which is transient.
+    - Since the virtual machine only hosts a transient component, the virtual machine and the monitoring agent are not present.
+    - The hypervisor is present even though all incoming relations are not present since the hypervisor is unprunable.
+
+resolver:
+    enable_relation_pruning: true
+    enable_node_pruning: true

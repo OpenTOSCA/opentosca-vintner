@@ -1,0 +1,7 @@
+name: Pruning Nodes (Prevent)
+description: |
+    - Node "node_three" is present even though incoming relations are not present since it declares that it can not be pruned.
+    - Node, that node "node_four" also has no incoming relations, however, is present since there had not been any incoming relation at all.
+resolver:
+    enable_relation_pruning: true
+    enable_node_pruning: true
