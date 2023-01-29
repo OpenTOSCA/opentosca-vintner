@@ -35,6 +35,13 @@ export type ResolvingOptions = {
     enableGroupDefaultCondition?: boolean
     enableArtifactDefaultCondition?: boolean
     enablePropertyDefaultCondition?: boolean
+} & {
+    enableRelationPruning?: boolean
+    enablePolicyPruning?: boolean
+    enableGroupPruning?: boolean
+    enableArtifactPruning?: boolean
+    enablePropertyPruning?: boolean
+} & {
     disableConsistencyChecks?: boolean
     disableRelationSourceConsistencyCheck?: boolean
     disableRelationTargetConsistencyCheck?: boolean
@@ -368,6 +375,11 @@ export class VariabilityResolver {
         })
 
         // Policies
+        if (
+            validator.isDefined(serviceTemplate.topology_template?.policies) &&
+            !validator.isArray(serviceTemplate.topology_template?.policies)
+        )
+            throw new Error(`Policies must be an array`)
         serviceTemplate.topology_template?.policies?.forEach(map => {
             const [name, template] = utils.firstEntry(map)
             const policy: Policy = {
@@ -594,6 +606,7 @@ export class VariabilityResolver {
         return this
     }
 
+    // TODO: check "default" vs "prune"
     checkPresence(element: ConditionalElement) {
         // Variability group are never present
         if (element.type === 'group' && element.variability) element.present = false
@@ -631,9 +644,19 @@ export class VariabilityResolver {
             conditions = [{get_node_presence: element.source}]
         }
 
+        // Prune Relations: Additionally check that source is present
+        if (element.type === 'relation' && this.options.enableRelationPruning) {
+            conditions = [{get_node_presence: element.source}, ...conditions]
+        }
+
         // Policy Default Condition: Assign default condition to node that checks if any target is present
         if (element.type === 'policy' && this.options.enablePolicyDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{has_present_targets: element.name}]
+        }
+
+        // Prune Policy: Additionally check if any target is present
+        if (element.type === 'policy' && this.options.enablePolicyPruning) {
+            conditions = [{has_present_targets: element.name}, ...conditions]
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -641,9 +664,19 @@ export class VariabilityResolver {
             conditions = [{has_present_members: element.name}]
         }
 
+        // Prune Group: Additionally check if any member is present
+        if (element.type === 'group' && this.options.enableGroupPruning) {
+            conditions = [{has_present_members: element.name}, ...conditions]
+        }
+
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
         if (element.type === 'artifact' && this.options.enableArtifactDefaultCondition && utils.isEmpty(conditions)) {
             conditions = [{get_node_presence: element.node.name}]
+        }
+
+        // Prune Artifact: Additionally check if node is present
+        if (element.type === 'artifact' && this.options.enableArtifactPruning) {
+            conditions = [{get_node_presence: element.node.name}, ...conditions]
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -651,6 +684,13 @@ export class VariabilityResolver {
             if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}]
             if (element.parent.type === 'relation')
                 conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}]
+        }
+
+        // Prune Artifact: Additionally check if corresponding parent is present
+        if (element.type === 'property' && this.options.enablePropertyPruning) {
+            if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}, ...conditions]
+            if (element.parent.type === 'relation')
+                conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}, ...conditions]
         }
 
         // Evaluate assigned conditions
