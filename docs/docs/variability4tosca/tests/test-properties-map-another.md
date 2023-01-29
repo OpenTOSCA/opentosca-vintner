@@ -39,4 +39,3 @@ topology_template:
           some_key: some_value
 ```
 
-

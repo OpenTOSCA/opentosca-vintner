@@ -45,11 +45,3 @@ topology_template:
       type: node
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableArtifactPruning: true
-```

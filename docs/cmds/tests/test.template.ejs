@@ -67,13 +67,3 @@ The following error is expected to be thrown, when resolving variability.
 <%- utils.toYAML(test.config.error) -%>
 ```
 <% } -%>
-
-<% if (test.config?.resolver) { -%>
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-<%- utils.toYAML(test.config.resolver) -%>
-```
-<% } -%>

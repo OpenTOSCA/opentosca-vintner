@@ -116,11 +116,3 @@ topology_template:
       type: openstack.vm
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableGroupDefaultCondition: true
-```

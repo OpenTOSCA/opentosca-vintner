@@ -29,4 +29,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Property "key_one@1" of node "node_one" is ambiguous
 ```
-

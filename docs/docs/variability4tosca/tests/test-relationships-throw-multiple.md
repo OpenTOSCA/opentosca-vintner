@@ -39,4 +39,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Relation "relation_one" is used multiple times
 ```
-

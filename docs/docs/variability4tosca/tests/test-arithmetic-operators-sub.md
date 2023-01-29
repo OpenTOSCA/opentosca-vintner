@@ -45,4 +45,3 @@ topology_template:
         value: 5
 ```
 
-
