@@ -1,0 +1,3 @@
+name: Artifact Pruning
+resolver:
+    enable_artifact_pruning: true
