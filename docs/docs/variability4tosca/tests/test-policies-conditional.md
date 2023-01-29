@@ -64,4 +64,3 @@ topology_template:
           - node_one
 ```
 
-

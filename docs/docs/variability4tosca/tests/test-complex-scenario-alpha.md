@@ -110,15 +110,3 @@ topology_template:
           - node_one
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableRelationPruning: true
-enablePolicyPruning: true
-enableGroupPruning: true
-enablePropertyPruning: true
-enableArtifactPruning: true
-```

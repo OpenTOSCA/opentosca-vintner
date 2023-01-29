@@ -48,11 +48,3 @@ topology_template:
       type: node_two
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableRelationPruning: true
-```

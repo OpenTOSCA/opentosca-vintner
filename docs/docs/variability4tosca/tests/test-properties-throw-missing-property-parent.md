@@ -29,4 +29,3 @@ The following error is expected to be thrown, when resolving variability.
 ```text linenums="1"
 Node "node_one" of property "key_one" does not exist
 ```
-

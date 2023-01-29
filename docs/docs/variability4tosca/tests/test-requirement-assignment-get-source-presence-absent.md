@@ -50,4 +50,3 @@ topology_template:
       type: node_two
 ```
 
-

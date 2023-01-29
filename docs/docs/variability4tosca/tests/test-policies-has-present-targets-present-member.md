@@ -76,4 +76,3 @@ topology_template:
           - group_one
 ```
 
-

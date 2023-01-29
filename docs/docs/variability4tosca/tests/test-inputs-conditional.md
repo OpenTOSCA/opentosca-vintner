@@ -38,4 +38,3 @@ topology_template:
       type: string
 ```
 
-

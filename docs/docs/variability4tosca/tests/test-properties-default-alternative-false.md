@@ -58,4 +58,3 @@ topology_template:
         key_two: value_two_two
 ```
 
-

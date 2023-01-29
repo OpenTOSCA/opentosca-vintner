@@ -42,4 +42,3 @@ topology_template:
         value: world
 ```
 
-

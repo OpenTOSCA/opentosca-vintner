@@ -58,4 +58,3 @@ topology_template:
       type: tthree
 ```
 
-
