@@ -4,5 +4,7 @@ import Plugins from '#plugins'
 export type InstancesUndeployArguments = {instance: string}
 
 export default async function (options: InstancesUndeployArguments) {
-    await Plugins.getOrchestrator().undeploy(new Instance(options.instance))
+    const instance = new Instance(options.instance)
+    if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    await Plugins.getOrchestrator().undeploy(instance)
 }

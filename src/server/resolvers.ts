@@ -1,6 +1,7 @@
 import * as express from 'express'
 import hae from './hae'
 import Controller from '#controller'
+import adapt from '#controller/instances/adapt'
 
 const resolvers = express.Router()
 
@@ -177,6 +178,14 @@ resolvers.post(
     hae(async (req, res, next) => {
         const result = await Controller.query.run(req.body)
         res.json(result)
+    })
+)
+
+resolvers.post(
+    '/instances/adapt',
+    hae(async (req, res, next) => {
+        await adapt(req.body)
+        res.json({})
     })
 )
 
