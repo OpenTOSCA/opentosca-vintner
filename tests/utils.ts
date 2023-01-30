@@ -49,7 +49,6 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 inputs: getDefaultInputs(dir),
                 output,
                 preset: config.preset,
-                ...config.resolver,
             })
         }
 

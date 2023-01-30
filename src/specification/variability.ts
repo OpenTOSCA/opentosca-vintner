@@ -4,6 +4,31 @@ export type VariabilityDefinition = {
     inputs: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
+    options?: VariabilityResolvingOptions
+}
+
+export type VariabilityResolvingOptions = {
+    enable_relation_default_condition?: boolean
+    enable_policy_default_condition?: boolean
+    enable_group_default_condition?: boolean
+    enable_artifact_default_condition?: boolean
+    enable_property_default_condition?: boolean
+} & {
+    enable_relation_pruning?: boolean
+    enable_policy_pruning?: boolean
+    enable_group_pruning?: boolean
+    enable_artifact_pruning?: boolean
+    enable_property_pruning?: boolean
+} & {
+    disable_consistency_checks?: boolean
+    disable_relation_source_consistency_check?: boolean
+    disable_relation_target_consistency_check?: boolean
+    disable_ambiguous_hosting_consistency_check?: boolean
+    disable_expected_hosting_consistency_check?: boolean
+    disable_missing_artifact_parent_consistency_check?: boolean
+    disable_ambiguous_artifact_consistency_check?: boolean
+    disable_missing_property_parent_consistency_check?: boolean
+    disable_ambiguous_property_consistency_check?: boolean
 }
 
 export type InputAssignmentPresetMap = {[key: string]: InputAssignmentPreset}

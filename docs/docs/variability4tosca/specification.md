@@ -39,6 +39,8 @@ A Variability Definition defines Variability Inputs, Variability Presets, and Va
 | inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
+| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.
+
 
 The following non-normative and incomplete example contains a Variability Definition which declares the Variability
 Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
@@ -66,6 +68,55 @@ variability:
         is_dev: {equal: [{get_variability_input: mode}, dev]}
         is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
+
+## Variability Resolving Options
+
+There are the following variability resolving options. 
+
+| Keyname     | Mandatory | Type                                  | Description                                         |
+|-------------|-----------|---------------------------------------|-----------------------------------------------------|
+| enable_relation_default_condition |  false  | boolean | enable default condition for relations that checks is the source is present |
+| enable_policy_default_condition |  false  | boolean | enable default condition for policies that checks if no target is present |
+| enable_group_default_condition |  false  | boolean | enable default condition for groups that checks if no member is present |
+| enable_artifact_default_condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
+| enable_property_default_condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
+| enable_relation_pruning |  false  | boolean | enable relation pruning and additionally check for each relation if is source is present |
+| enable_policy_pruning |  false  | boolean | enable policy pruning and additionally check for each policy if no target is present |
+| enable_group_pruning |  false  | boolean | enable group pruning and additionally check for each group if no member is present |
+| enable_artifact_pruning |  false  | boolean | enable artifact pruning and additionally check for each artifact if source is present |
+| enable_property_pruning |  false  | boolean | enable property pruning and additionally check for each property if corresponding node or relation is present |
+| disable_consistency_checks |  false  | boolean | disable all consistency checks |
+| disable_relation_source_consistency_check |  false  | boolean | disable consistency check regarding relation sources |
+| disable_relation_target_consistency_check |  false  | boolean | disable consistency check regarding relation targets |
+| disable_ambiguous_hosting_consistency_check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable_expected_hosting_consistency_check |  false  | boolean | disable consistency check regarding expected hosting relation |
+| disable_missing_artifact_parent_consistency_check |  false  | boolean | disable consistency check regarding node of artifact |
+| disable_ambiguous_artifact_consistency_check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
+| disable_missing_property_parent_consistency_check |  false  | boolean | disable consistency check regarding node of a property |
+| disable_ambiguous_property_consistency_check |  false  | boolean | disable consistency check regarding ambiguous properties |
+
+
+## Variability Default Conditions
+
+To further support modeling, the following default conditions can be assigned:
+
+
+| Element                        | Default Conditions                                                   |
+|--------------------------------|----------------------------------------------------------------------|
+| Node Template Property         | Check if the node template of the property is present.               |
+| Relationship Template Property | Check if the relationship template of the property is present.       |
+| Requirement Assignment         | Check if the node template of the requirement assignment is present. |
+| Policy                         | Check if the policy has any targets which are present.               |
+| Group                          | Check if the group has any members which are present.                |
+| Artifact                       | Check if the node template of the artifact is present.               |
+
+## Variability Pruning Conditions
+
+To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
+For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
+This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
+Such pruning propagates through the whole topology.
+For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
 
 
 ## Variability Preset Definition
@@ -433,29 +484,6 @@ To check if an element is present, check that all assigned conditions are satisf
 1. (Optional) Assign default conditions if no conditions have been collected yet.
 1. (Optional) Assign pruning conditions.
 1. The element is present only if all conditions are satisfied.
-
-### Optional Default Conditions
-
-To further support modeling, the following default conditions can be assigned:
-
-
-| Element                        | Default Conditions                                                   |
-|--------------------------------|----------------------------------------------------------------------|
-| Node Template Property         | Check if the node template of the property is present.               |
-| Relationship Template Property | Check if the relationship template of the property is present.       |
-| Requirement Assignment         | Check if the node template of the requirement assignment is present. |
-| Policy                         | Check if the policy has any targets which are present.               |
-| Group                          | Check if the group has any members which are present.                |
-| Artifact                       | Check if the node template of the artifact is present.               |
-
-### Optional Pruning Conditions
-
-To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions. 
-For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
-This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
-Such pruning propagates through the whole topology. 
-For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
-
 
 ### Check Consistency
 

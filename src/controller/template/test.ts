@@ -2,11 +2,9 @@ import * as files from '#files'
 import path from 'path'
 import Controller from '#controller'
 import {ServiceTemplate} from '#spec/service-template'
-import {ResolvingOptions} from '#controller/template/resolve'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
 import * as validator from '#validator'
-import {camelCase} from 'camel-case'
 
 export type TemplateTestArguments = {path: string}
 
@@ -26,7 +24,6 @@ export type VariabilityTestConfig = {
     description?: string
     preset?: string
     error?: string
-    resolver?: ResolvingOptions
 }
 
 export default async function (options: TemplateTestArguments) {
@@ -59,11 +56,10 @@ async function runTest(dir: string, vstdir: string) {
             inputs: getDefaultInputs(dir),
             output,
             preset: config.preset,
-            ...config.resolver,
         })
     }
 
-    if (config.error) {
+    if (validator.isDefined(config.error)) {
         try {
             await fn()
         } catch (e) {
@@ -109,15 +105,6 @@ export function readDefaultExpect(dir: string) {
 
 export function readConfig(dir: string) {
     const config = path.join(dir, 'test.yaml')
-    if (files.isFile(config)) {
-        const data = files.loadYAML<any>(config)
-        data.resolver = validator.isDefined(data.resolver)
-            ? Object.keys(data.resolver).reduce<any>((map, key) => {
-                  map[camelCase(key)] = data.resolver[key]
-                  return map
-              }, {})
-            : undefined
-        return data as VariabilityTestConfig
-    }
+    if (files.isFile(config)) return files.loadYAML<VariabilityTestConfig>(config)
     return {}
 }

@@ -1,4 +1,2 @@
 name: Relation Pruning
 description: Node "node_one" is not present. The relation "relation_two" is also not present even though assigned conditions evaluate to "true" since relation pruning is enabled.
-resolver:
-    enable_relation_pruning: true

@@ -353,25 +353,6 @@ resolves variability
 | preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
-| enable-relation-default-condition |  false  | boolean | enable default condition for relations that checks is the source is present |
-| enable-policy-default-condition |  false  | boolean | enable default condition for policies that checks if no target is present |
-| enable-group-default-condition |  false  | boolean | enable default condition for groups that checks if no member is present |
-| enable-artifact-default-condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
-| enable-property-default-condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
-| enable-relation-pruning |  false  | boolean | enable relation pruning and additionally check for each relation if is source is present |
-| enable-policy-pruning |  false  | boolean | enable policy pruning and additionally check for each policy if no target is present |
-| enable-group-pruning |  false  | boolean | enable group pruning and additionally check for each group if no member is present |
-| enable-artifact-pruning |  false  | boolean | enable artifact pruning and additionally check for each artifact if source is present |
-| enable-property-pruning |  false  | boolean | enable property pruning and additionally check for each property if corresponding node or relation is present |
-| disable-consistency-checks |  false  | boolean | disable all consistency checks |
-| disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
-| disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
-| disable-ambiguous-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
-| disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
-| disable-missing-artifact-parent-consistency-check |  false  | boolean | disable consistency check regarding node of artifact |
-| disable-ambiguous-artifact-consistency-check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
-| disable-missing-property-parent-consistency-check |  false  | boolean | disable consistency check regarding node of a property |
-| disable-ambiguous-property-consistency-check |  false  | boolean | disable consistency check regarding ambiguous properties |
 
 ## vintner template query
 
@@ -724,25 +705,6 @@ resolves variability
 | instance |  true  | string | instance name |
 | preset |  false  | string | name of the variability preset |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
-| enable-relation-default-condition |  false  | boolean | enable default condition for relations that checks is the source is present |
-| enable-policy-default-condition |  false  | boolean | enable default condition for policies that checks if no target is present |
-| enable-group-default-condition |  false  | boolean | enable default condition for groups that checks if no member is present |
-| enable-artifact-default-condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
-| enable-property-default-condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
-| enable-relation-pruning |  false  | boolean | enable relation pruning and additionally check for each relation if is source is present |
-| enable-policy-pruning |  false  | boolean | enable policy pruning and additionally check for each policy if no target is present |
-| enable-group-pruning |  false  | boolean | enable group pruning and additionally check for each group if no member is present |
-| enable-artifact-pruning |  false  | boolean | enable artifact pruning and additionally check for each artifact if source is present |
-| enable-property-pruning |  false  | boolean | enable property pruning and additionally check for each property if corresponding node or relation is present |
-| disable-consistency-checks |  false  | boolean | disable all consistency checks |
-| disable-relation-source-consistency-check |  false  | boolean | disable consistency check regarding relation sources |
-| disable-relation-target-consistency-check |  false  | boolean | disable consistency check regarding relation targets |
-| disable-ambiguous-hosting-consistency-check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
-| disable-expected-hosting-consistency-check |  false  | boolean | disable consistency check regarding expected hosting relation |
-| disable-missing-artifact-parent-consistency-check |  false  | boolean | disable consistency check regarding node of artifact |
-| disable-ambiguous-artifact-consistency-check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
-| disable-missing-property-parent-consistency-check |  false  | boolean | disable consistency check regarding node of a property |
-| disable-ambiguous-property-consistency-check |  false  | boolean | disable consistency check regarding ambiguous properties |
 
 ## vintner instances inspect
 

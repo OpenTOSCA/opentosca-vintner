@@ -24,7 +24,6 @@ export default async function (options: SensorData) {
     /**
      * Plan: Resolve variability
      */
-    // TODO: resolver flags
     // TODO: preset
     await resolve({instance: instance.getName(), inputs: variabilityInputsPath})
 
