@@ -41,4 +41,4 @@ The orchestrators provide more features than we integrated, thus, checkout [TOSS
 | Deploy a Service Template | :material-check: | :material-check: |
 | Update a Service Template | :material-check: | :material-close: | 
 | Undeploy a Service Template | :material-check: |:material-check: |
-| Access Node Template Attributes | :material-check: | :material-close: |
+| Access Node Instance Attributes | :material-check: | :material-close: |
