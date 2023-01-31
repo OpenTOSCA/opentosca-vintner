@@ -11,7 +11,7 @@ const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION
 
 if (!integrationTestsEnabled) {
     console.log()
-    console.log('Skipping integration tests')
+    console.warn('Skipping integration tests')
 } else {
     describe('adaptation', () => {
         beforeEach(async () => {
@@ -24,10 +24,10 @@ if (!integrationTestsEnabled) {
             // Setup xOpera
             if (insideWorkflow) {
                 await Controller.orchestrators.initxOpera({venv: false, dir: 'none'})
-                await Controller.orchestrators.enable({orchestrator: 'opera'})
+                await Controller.orchestrators.enable({orchestrator: 'xopera'})
             } else {
                 await Controller.orchestrators.initxOperaWSL({venv: true, dir: '~/opera'})
-                await Controller.orchestrators.enable({orchestrator: 'opera-wsl'})
+                await Controller.orchestrators.enable({orchestrator: 'xopera-wsl'})
             }
         })
 
