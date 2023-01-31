@@ -13,6 +13,9 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    options:
+      enable_policy_pruning: true
   node_templates:
     node_one:
       type: node_one
@@ -33,15 +36,6 @@ topology_template:
 ```
 
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enable_policy_pruning: true
-
-```
 
 ## Variability-Resolved Service Template
 
