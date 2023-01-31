@@ -15,8 +15,6 @@ export default async function (options: InstanceResolveArguments) {
     const time = options.time || utils.getTime()
     const instance = new Instance(options.instance)
 
-    console.log({time, ...options, target: instance.getVariabilityInputs(time)})
-
     // Store used variability inputs
     // Basically only when used in the CLI as preparation for self-adaptation
     // TODO: handle xml

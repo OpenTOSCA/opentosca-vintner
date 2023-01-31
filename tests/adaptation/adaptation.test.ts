@@ -7,9 +7,8 @@ import {expect} from 'chai'
 import {sleep} from '../../src/utils/utils'
 
 describe('adaptation', () => {
-    // TODO: install opera?! or mock it
-    // TODO: set vintner home
-    // TODO: run test
+    // TODO: skip this test suite if not CI, see https://stackoverflow.com/questions/32723167/how-to-programmatically-skip-a-test-in-mocha/32820119#32820119
+    // TODO: set vintner home (even though only to be expected to be run inside CI only)
 
     beforeEach(async () => {
         // Setup filesystem
