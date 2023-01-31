@@ -264,7 +264,7 @@ instances
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .action(
         hae(async options => {
-            await Controller.template.resolve(options)
+            await Controller.instances.resolve({...options, first: true})
         })
     )
 

@@ -6,6 +6,7 @@ import {Template} from './templates'
 import _ from 'lodash'
 import {InputAssignmentMap} from '#spec/topology-template'
 import Plugins from '#plugins'
+import * as utils from '#utils'
 
 export class Instances {
     static all() {
@@ -49,7 +50,7 @@ export class Instance {
     }
 
     setServiceInputs(path: string) {
-        files.copy(path, this.getServiceInputsPath())
+        files.copy(path, this.getServiceInputs())
         return this
     }
 
@@ -70,9 +71,9 @@ export class Instance {
      */
     getInstanceTemplate(): ServiceTemplate {
         // TODO: does not handle relationships
-        const template = this.getServiceTemplate()
+        const template = this.loadServiceTemplate()
         const attributes = Plugins.getOrchestrator().getAttributes(this)
-        const inputs = this.hasServiceInputs() ? this.getServiceInputs() : {}
+        const inputs = this.hasServiceInputs() ? this.loadServiceInputs() : {}
         if (template.topology_template?.node_templates) {
             template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)
         }
@@ -81,19 +82,19 @@ export class Instance {
     }
 
     hasServiceInputs() {
-        return files.exists(this.getServiceInputsPath())
-    }
-
-    getServiceInputsPath() {
-        return path.join(this.getInstanceDirectory(), 'service-inputs.yaml')
+        return files.exists(this.getServiceInputs())
     }
 
     getServiceInputs() {
-        return files.loadYAML<InputAssignmentMap>(this.getServiceInputsPath())
+        return path.join(this.getInstanceDirectory(), 'service-inputs.yaml')
     }
 
-    generateServiceTemplatePath() {
-        return this.getServiceTemplatePath(new Date().getTime().toString())
+    loadServiceInputs() {
+        return files.loadYAML<InputAssignmentMap>(this.getServiceInputs())
+    }
+
+    generateServiceTemplatePath(id?: string) {
+        return this.getServiceTemplate(id || utils.getTime())
     }
 
     getServiceTemplateID() {
@@ -112,19 +113,43 @@ export class Instance {
         return `service-template.${id || this.getServiceTemplateID()}.yaml`
     }
 
-    getServiceTemplatePath(id?: string) {
+    getServiceTemplate(id?: string) {
         return path.join(this.getTemplateDirectory(), this.getServiceTemplateFile(id))
     }
 
-    getServiceTemplate() {
-        return files.loadYAML<ServiceTemplate>(this.getServiceTemplatePath())
-    }
-
-    getVariableServiceTemplatePath() {
-        return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
+    loadServiceTemplate() {
+        return files.loadYAML<ServiceTemplate>(this.getServiceTemplate())
     }
 
     getVariableServiceTemplate() {
-        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
+        return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
+    }
+
+    loadVariableServiceTemplate() {
+        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplate())
+    }
+
+    getVariabilityInputs(id?: string) {
+        return path.join(this.getTemplateDirectory(), `variability-inputs.${id || this.getVariabilityInputsID()}.yaml`)
+    }
+
+    loadVariabilityInputs() {
+        return files.loadYAML<InputAssignmentMap>(this.getVariabilityInputs())
+    }
+
+    getVariabilityInputsID() {
+        const id = Math.max(
+            ...files
+                .listFiles(this.getTemplateDirectory())
+                .map(file => file.match(/^variability-inputs\.(?<id>\d+)\.yaml$/)?.groups?.id)
+                .filter(Boolean)
+                .map(Number)
+        )
+        if (id === -Infinity) throw new Error('Did not find a variability inputs')
+        return id.toString()
+    }
+
+    setVariabilityInputs(inputs: InputAssignmentMap, id?: string) {
+        files.storeYAML(this.getVariabilityInputs(id || utils.getTime()), inputs)
     }
 }

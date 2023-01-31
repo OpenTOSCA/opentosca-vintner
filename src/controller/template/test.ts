@@ -47,7 +47,7 @@ export default async function (options: TemplateTestArguments) {
 
 async function runTest(dir: string, vstdir: string) {
     files.assertDirectory(dir)
-    const config = readConfig(dir)
+    const config = loadConfig(dir)
     const output = files.temporaryFile()
 
     async function fn() {
@@ -70,7 +70,7 @@ async function runTest(dir: string, vstdir: string) {
     } else {
         await fn()
         const result = files.loadYAML<ServiceTemplate>(output)
-        const expected = readDefaultExpect(dir)
+        const expected = loadDefaultExpect(dir)
 
         const diff = jsonDiff.diffString(expected, result)
         if (diff) {
@@ -95,7 +95,7 @@ export function getDefaultInputs(dir: string) {
     }
 }
 
-export function readDefaultExpect(dir: string) {
+export function loadDefaultExpect(dir: string) {
     for (const name of ['est.yaml', 'expected.yaml']) {
         const file = path.join(dir, name)
         if (files.isFile(file)) return files.loadYAML<ServiceTemplate>(file)
@@ -103,7 +103,7 @@ export function readDefaultExpect(dir: string) {
     throw new Error(`Did not find expected service template in directory "${dir}"`)
 }
 
-export function readConfig(dir: string) {
+export function loadConfig(dir: string) {
     const config = path.join(dir, 'test.yaml')
     if (files.isFile(config)) return files.loadYAML<VariabilityTestConfig>(config)
     return {}

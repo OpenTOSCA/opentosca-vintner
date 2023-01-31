@@ -27,36 +27,27 @@ import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
  */
 
 export type TemplateResolveArguments = {
-    instance?: string
-    template?: string
+    template: string
     preset?: string
     inputs?: string
-    output?: string
-} & VariabilityResolvingOptions
+    output: string
+}
 
 export default async function (options: TemplateResolveArguments) {
-    let instance: Instance | undefined
-    if (options.instance) instance = new Instance(options.instance)
+    if (validator.isUndefined(options.template)) throw new Error('Template not defined')
+    if (validator.isUndefined(options.output)) throw new Error('Output not defined')
 
-    let template = options.template
-    if (instance) template = instance.getVariableServiceTemplatePath()
-    if (!template) throw new Error('Either instance or template must be set')
-
-    let output = options.output
-    if (instance) output = instance.generateServiceTemplatePath()
-    if (!output) throw new Error('Either instance or output must be set')
+    const inputs = options.inputs
+        ? options.inputs.endsWith('.xml')
+            ? await featureIDE.loadConfiguration(options.inputs)
+            : files.loadYAML<InputAssignmentMap>(options.inputs)
+        : {}
 
     // Load service template
-    const serviceTemplate = files.loadYAML<ServiceTemplate>(template)
+    const serviceTemplate = files.loadYAML<ServiceTemplate>(options.template)
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(
-            options.inputs
-                ? options.inputs.endsWith('.xml')
-                    ? await featureIDE.loadConfiguration(options.inputs)
-                    : files.loadYAML<InputAssignmentMap>(options.inputs)
-                : {}
-        )
+        .setVariabilityInputs(inputs)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -70,7 +61,8 @@ export default async function (options: TemplateResolveArguments) {
     // Transform to TOSCA compliant format
     resolver.transform()
 
-    files.storeYAML(output, serviceTemplate)
+    // Store variability-resolved service template
+    files.storeYAML(options.output, serviceTemplate)
 }
 
 type ConditionalElementBase = {

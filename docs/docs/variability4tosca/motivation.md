@@ -62,7 +62,7 @@ vintner instances resolve --instance motivation --preset dev
 vintner instances inspect --instance motivation
 
 # Deploy instance
-# See examples/opera-motivation/inputs.example.yaml as reference
+# See examples/opera-motivation/variability-inputs.example.yaml as reference
 vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 ```
 

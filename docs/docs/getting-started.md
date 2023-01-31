@@ -70,7 +70,7 @@ We decide that the first textfile should be deployed.
 Therefore, we resolve the variability and finally deploy the application.
 
 ```shell linenums="1"
-vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/inputs.example.yaml
+vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/variability-inputs.example.yaml
 vintner instances deploy --instance getting-started
 ```
 

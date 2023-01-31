@@ -21,6 +21,8 @@ import openInstance from './instances/open'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
+import resolveInstance from './instances/resolve'
+import adaptInstance from './instances/adapt'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
@@ -36,6 +38,8 @@ const Controller = {
         open: openInstance,
         undeploy: undeployInstance,
         update: updateInstance,
+        resolve: resolveInstance,
+        adapt: adaptInstance,
     },
     query: {
         run: runQuery,

@@ -36,24 +36,24 @@ export class OperaPlugin implements OrchestratorPlugin {
         const command = [
             this.binary,
             'deploy',
-            this.shell.resolve(instance.getServiceTemplatePath()),
+            this.shell.resolve(instance.getServiceTemplate()),
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
 
-        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
         await this.shell.execute(command)
     }
 
-    async update(instance: Instance) {
+    async update(instance: Instance, time?: string) {
         const command = [
             this.binary,
             'update',
-            this.shell.resolve(instance.getServiceTemplatePath()),
+            this.shell.resolve(instance.getServiceTemplate(time)),
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputsPath()))
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
 
         await this.shell.execute(command)
     }
@@ -74,7 +74,7 @@ export class OperaPlugin implements OrchestratorPlugin {
      */
     async getAttributes(instance: Instance) {
         const attributes: NodeTemplateAttributesMap = {}
-        for (const node in instance.getServiceTemplate().topology_template?.node_templates || {}) {
+        for (const node in instance.loadServiceTemplate().topology_template?.node_templates || {}) {
             const attributesPath = `${instance.getDataDirectory()}/instances/${node}_0`
             if (files.isFile(attributesPath)) {
                 const entries = files.loadYAML<{[s: string]: {is_set: string; data: string}}>(attributesPath)

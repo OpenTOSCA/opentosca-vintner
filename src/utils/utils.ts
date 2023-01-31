@@ -111,3 +111,11 @@ export function hrtime2ms(data: [number, number]) {
 export function normalizeString(value: string) {
     return value.toLowerCase().replaceAll(' ', '_')
 }
+
+export function getTime() {
+    return new Date().getTime().toString()
+}
+
+export async function sleep(ms = 1000) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}

@@ -37,7 +37,7 @@ pe 'vintner templates import --template getting-started --path examples/opera-ge
 pe 'vintner instances create --instance getting-started --template getting-started'
 # sleep 0.5
 
-pe 'vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/inputs.example.yaml'
+pe 'vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/variability-inputs.example.yaml'
 ## sleep 0.5
 
 pe 'vintner instances deploy --instance getting-started'
