@@ -75,24 +75,24 @@ orchestrators
 const initOrchestrators = orchestrators.command('init').description('initializes an orchestrator plugin')
 
 initOrchestrators
-    .command('opera')
-    .description('initializes opera plugin')
+    .command('xopera')
+    .description('initializes xopera plugin')
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of opera', '~/opera')
+    .option('--dir [string]', 'directory of xopera', '~/opera')
     .action(
         hae(async options => {
-            await Controller.orchestrators.initOpera(options)
+            await Controller.orchestrators.initxOpera(options)
         })
     )
 
 initOrchestrators
-    .command('opera-wsl')
-    .description('initializes opera-wsl plugin')
+    .command('xopera-wsl')
+    .description('initializes xopera-wsl plugin')
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of opera', '~/opera')
     .action(
         hae(async options => {
-            await Controller.orchestrators.initOperaWSL(options)
+            await Controller.orchestrators.initxOperaWSL(options)
         })
     )
 

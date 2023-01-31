@@ -72,7 +72,7 @@
         "git:open": "open-cli https://github.com/opentosca/opentosca-vintner",
         "build": "tsc --build && tsc-alias -p tsconfig.json && syncdir src/assets build/assets --quiet",
         "package": "pkg --config .pkgrc.json build/cli/index.js",
-        "deploy": "cp ./dist/vintner-linux-x64 /usr/bin/vintner",
+        "deploy": "sudo cp ./dist/vintner-linux-x64 /usr/bin/vintner",
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "style:check": "prettier --check --end-of-line auto \"./**/*.{ts,json,yaml,yml}\"",
@@ -86,7 +86,7 @@
         "benchmark": "yarn cli setup benchmark --latex",
         "server:start": "node -r dotenv/config -r ts-node/register -r tsconfig-paths/register src/cli/index.ts server start",
         "server:serve": "nodemon -r dotenv/config -r tsconfig-paths/register --ext \"ts,json\" src/cli/index.ts server start",
-        "docs:install": "cd docs && pip install -r requirements.txt",
+        "docs:install": "cd docs && pip install -r requirements.txt && sudo apt-get install pv",
         "docs:serve": "cd docs && MKDOCS_IS_DEV=true mkdocs serve --watch-theme",
         "docs:open": "open-cli http://localhost:8000",
         "docs:build": "cd docs && mkdocs build",
@@ -97,7 +97,7 @@
         "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/tests/generate",
         "docs:record:home": "cd docs/cmds/casts && ./record.sh home",
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
-        "examples:opera": "./examples/opera-motivation/demo.sh",
+        "examples:xopera": "./examples/xopera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
         "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD\" --excludePackages dreamopt@0.8.0"
     }

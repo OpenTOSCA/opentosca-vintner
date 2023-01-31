@@ -9,14 +9,14 @@ For more information see [Interface](interface.md){target=_blank}.
 
 ## xOpera
 ```shell linenums="1"
-vintner orchestrators init opera
-vintner orchestrators enable --orchestrator opera
+vintner orchestrators init xopera
+vintner orchestrators enable --orchestrator xopera
 ```
 
 ## xOpera WSL
 ```shell linenums="1"
-vintner orchestrators init opera-wsl
-vintner orchestrators enable --orchestrator opera-wsl
+vintner orchestrators init xopera-wsl
+vintner orchestrators enable --orchestrator xopera-wsl
 ```
 
 ## Unfurl

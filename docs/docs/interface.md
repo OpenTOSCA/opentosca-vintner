@@ -140,65 +140,65 @@ enables an orchestrator plugin
 | --- | --- | --- | --- |
 | orchestrator |  true  | string | orchestrator plugin |
 
-## vintner orchestrators init opera
+## vintner orchestrators init xopera
 
-initializes opera plugin
+initializes xopera plugin
 
 === "CLI"
     ```shell linenums="1"
-    vintner orchestrators init opera 
+    vintner orchestrators init xopera 
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            ${SERVER_ADDRESS}/orchestrators/init/opera
+            ${SERVER_ADDRESS}/orchestrators/init/xopera
     ```
 
 === "JavaScript"
     ```javascript linenums="1"
     const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/orchestrators/init/opera")
+    await axios.post(SERVER_ADDRESS + "/orchestrators/init/xopera")
     ```
 
 === "Python"
     ```python linenums="1"
     import requests
-    requests.post(SERVER_ADDRESS + "/orchestrators/init/opera")
+    requests.post(SERVER_ADDRESS + "/orchestrators/init/xopera")
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
-| dir |  false  | string | directory of opera (default: "~/opera") |
+| dir |  false  | string | directory of xopera (default: "~/opera") |
 
-## vintner orchestrators init opera-wsl
+## vintner orchestrators init xopera-wsl
 
-initializes opera-wsl plugin
+initializes xopera-wsl plugin
 
 === "CLI"
     ```shell linenums="1"
-    vintner orchestrators init opera-wsl 
+    vintner orchestrators init xopera-wsl 
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            ${SERVER_ADDRESS}/orchestrators/init/opera-wsl
+            ${SERVER_ADDRESS}/orchestrators/init/xopera-wsl
     ```
 
 === "JavaScript"
     ```javascript linenums="1"
     const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/orchestrators/init/opera-wsl")
+    await axios.post(SERVER_ADDRESS + "/orchestrators/init/xopera-wsl")
     ```
 
 === "Python"
     ```python linenums="1"
     import requests
-    requests.post(SERVER_ADDRESS + "/orchestrators/init/opera-wsl")
+    requests.post(SERVER_ADDRESS + "/orchestrators/init/xopera-wsl")
     ```
 
 | Option | Mandatory | Type | Description |

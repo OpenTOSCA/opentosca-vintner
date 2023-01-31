@@ -30,17 +30,17 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/orchestrators/init/opera',
+    '/orchestrators/init/xopera',
     hae(async (req, res, next) => {
-        await Controller.orchestrators.initOpera(req.body)
+        await Controller.orchestrators.initxOpera(req.body)
         res.json({})
     })
 )
 
 resolvers.post(
-    '/orchestrators/init/opera-wsl',
+    '/orchestrators/init/xopera-wsl',
     hae(async (req, res, next) => {
-        await Controller.orchestrators.initOperaWSL(req.body)
+        await Controller.orchestrators.initxOperaWSL(req.body)
         res.json({})
     })
 )
@@ -181,6 +181,7 @@ resolvers.post(
     })
 )
 
+// TODO: document this endpoint
 resolvers.post(
     '/instances/adapt',
     hae(async (req, res, next) => {

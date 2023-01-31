@@ -5,21 +5,21 @@ import {Shell} from '#shell'
 import * as files from '#files'
 import _ from 'lodash'
 
-export type OperaConfig = (OperaNativeConfig & {wsl: false}) | (OperaWLSConfig & {wsl: true})
+export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWLSConfig & {wsl: true})
 
-export type OperaNativeConfig = {
+export type xOperaNativeConfig = {
     venv: boolean
     dir: string
 }
 
-export type OperaWLSConfig = OperaNativeConfig
+export type xOperaWLSConfig = xOperaNativeConfig
 
-export class OperaPlugin implements OrchestratorPlugin {
-    private readonly config: OperaConfig
+export class xOperaPlugin implements OrchestratorPlugin {
+    private readonly config: xOperaConfig
     private readonly binary: string
     private readonly shell: Shell
 
-    constructor(config: OperaConfig) {
+    constructor(config: xOperaConfig) {
         this.config = config
         this.binary = joinNotNull(
             [

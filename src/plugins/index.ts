@@ -6,7 +6,7 @@ import config from '#config'
 import * as files from '#files'
 import {OrchestratorsConfig} from './types'
 import * as validator from '#validator'
-import {OperaPlugin} from '#plugins/opera'
+import {xOperaPlugin} from '#plugins/xopera'
 import {UnfurlPlugin} from '#plugins/unfurl'
 
 const configPath = path.join(config.home, 'plugins.yaml')
@@ -23,13 +23,13 @@ function getOrchestrator() {
     const config = getConfig()
 
     switch (config.enabled) {
-        case 'opera':
-            validator.ensureDefined(config.opera, 'Opera is enabled but no config was found')
-            return new OperaPlugin({...config.opera, wsl: false})
+        case 'xopera':
+            validator.ensureDefined(config.xOpera, 'xOpera is enabled but no config was found')
+            return new xOperaPlugin({...config.xOpera, wsl: false})
 
-        case 'opera-wsl':
-            validator.ensureDefined(config.operaWSL, 'OperaWSL is enabled but no config was found')
-            return new OperaPlugin({...config.operaWSL, wsl: true})
+        case 'xopera-wsl':
+            validator.ensureDefined(config.xOperaWSL, 'xOperaWSL is enabled but no config was found')
+            return new xOperaPlugin({...config.xOperaWSL, wsl: true})
 
         case 'unfurl':
             validator.ensureDefined(config.unfurl, 'Unfurl is enabled but no config was found')

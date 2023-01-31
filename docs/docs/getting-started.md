@@ -30,15 +30,15 @@ Configure and enable your orchestrator.
 For more information see [Installation](installation.md){target=_blank}.
 
 ```shell linenums="1"
-vintner orchestrators init opera
-vintner orchestrators enable --orchestrator opera
+vintner orchestrators init xopera
+vintner orchestrators enable --orchestrator xopera
 ```
 
-Next, we import the `getting-started` template from [`examples/opera-getting-started`]({{ get_repo_url('
-examples/opera-getting-started') }}){target=_blank} and create an application instance.
+Next, we import the `getting-started` template from [`examples/xopera-getting-started`]({{ get_repo_url('
+examples/xopera-getting-started') }}){target=_blank} and create an application instance.
 
 ```shell linenums="1"
-vintner templates import --template getting-started --path examples/opera-getting-started
+vintner templates import --template getting-started --path examples/xopera-getting-started
 vintner instances create --instance getting-started --template getting-started
 ```
 
@@ -70,7 +70,7 @@ We decide that the first textfile should be deployed.
 Therefore, we resolve the variability and finally deploy the application.
 
 ```shell linenums="1"
-vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/variability-inputs.example.yaml
+vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml
 vintner instances deploy --instance getting-started
 ```
 

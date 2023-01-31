@@ -23,18 +23,18 @@ if (!integrationTestsEnabled) {
 
             // Setup xOpera
             if (insideWorkflow) {
-                await Controller.orchestrators.initOpera({venv: false, dir: 'none'})
+                await Controller.orchestrators.initxOpera({venv: false, dir: 'none'})
                 await Controller.orchestrators.enable({orchestrator: 'opera'})
             } else {
-                await Controller.orchestrators.initOperaWSL({venv: true, dir: '~/opera'})
+                await Controller.orchestrators.initxOperaWSL({venv: true, dir: '~/opera'})
                 await Controller.orchestrators.enable({orchestrator: 'opera-wsl'})
             }
         })
 
         it('adapt', async () => {
             // Import template
-            const template = 'opera-getting-started-template'
-            const templateDirectory = path.join(__dirname, '..', '..', 'examples', 'opera-getting-started')
+            const template = 'xopera-getting-started-template'
+            const templateDirectory = path.join(__dirname, '..', '..', 'examples', 'xopera-getting-started')
             const firstTemplate = files.loadYAML<ServiceTemplate>(
                 path.join(templateDirectory, 'tests', 'first', 'expected.yaml')
             )
@@ -48,7 +48,7 @@ if (!integrationTestsEnabled) {
             })
 
             // Create instance
-            const instanceName = 'opera-getting-started-instance'
+            const instanceName = 'xopera-getting-started-instance'
             const instance = new Instance(instanceName)
             await Controller.instances.create({
                 instance: instanceName,

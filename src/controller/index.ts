@@ -1,6 +1,6 @@
 import enableOrchestrator from './orchestrators/enable'
-import initOpera from './orchestrators/init-opera'
-import initOperaWSL from './orchestrators/init-opera-wsl'
+import initxOpera from './orchestrators/init-xopera'
+import initxOperaWSL from './orchestrators/init-xopera-wsl'
 import initUnfurl from './orchestrators/init-unfurl'
 import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
 import startServer from './server/start'
@@ -46,8 +46,8 @@ const Controller = {
     },
     orchestrators: {
         enable: enableOrchestrator,
-        initOpera: initOpera,
-        initOperaWSL: initOperaWSL,
+        initxOpera: initxOpera,
+        initxOperaWSL: initxOperaWSL,
         initUnfurl: initUnfurl,
         initUnfurlWSL: initUnfurlWSL,
     },
