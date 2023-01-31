@@ -89,7 +89,31 @@ if (!integrationTestsEnabled) {
 
             // Adapt mode from "second" to "first"
             // TODO: did not abort when xOpera#deploy threw error
-            await Controller.instances.adapt({
+            const _ = Controller.instances.adapt({
+                instance: instanceName,
+                key: 'mode',
+                value: 'third',
+            })
+
+            const __ = Controller.instances.adapt({
+                instance: instanceName,
+                key: 'mode',
+                value: 'fourth',
+            })
+
+            const ___ = Controller.instances.adapt({
+                instance: instanceName,
+                key: 'mode',
+                value: 'fifth',
+            })
+
+            const ____ = Controller.instances.adapt({
+                instance: instanceName,
+                key: 'mode',
+                value: 'sixth',
+            })
+
+            const _____ = Controller.instances.adapt({
                 instance: instanceName,
                 key: 'mode',
                 value: 'first',
