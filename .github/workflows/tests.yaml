@@ -22,8 +22,17 @@ jobs:
                   node-version: 16
                   cache: yarn
 
-            - name: (PREPARE) Install Dependencies
+            - name: (PREPARE) Install Node Modules
               run: rm -rf node_modules && yarn --frozen-lockfile
+
+            - name: (PREPARE) Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.x
+                  cache: pip
+
+            - name: (PREPARE) Install xOpera
+              run: pip install opera
 
             - name: (TEST) Check ESLint
               run: yarn lint:check
@@ -51,12 +60,6 @@ jobs:
 
             - name: (BUILD) Package Binaries
               run: yarn package
-
-            - name: (DOCS) Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: 3.x
-                  cache: pip
 
             - name: (DOCS) Install Dependencies
               run: yarn docs:install

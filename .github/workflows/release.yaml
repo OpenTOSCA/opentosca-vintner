@@ -26,6 +26,8 @@ jobs:
             - name: (PREPARE) Install Dependencies
               run: rm -rf node_modules && yarn --frozen-lockfile
 
+            # TODO: install xOpera
+
             - name: (TEST) Check ESLint
               run: yarn lint:check
 

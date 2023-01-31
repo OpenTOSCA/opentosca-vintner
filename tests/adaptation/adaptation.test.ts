@@ -17,8 +17,13 @@ describe('adaptation', () => {
         await Controller.setup.init()
 
         // Setup xOpera
-        await Controller.orchestrators.initOperaWSL({venv: true, dir: '~/opera'})
-        await Controller.orchestrators.enable({orchestrator: 'opera-wsl'})
+        if (process.env.CI === 'true') {
+            await Controller.orchestrators.initOpera({venv: false, dir: 'none'})
+            await Controller.orchestrators.enable({orchestrator: 'opera'})
+        } else {
+            await Controller.orchestrators.initOperaWSL({venv: true, dir: '~/opera'})
+            await Controller.orchestrators.enable({orchestrator: 'opera-wsl'})
+        }
     })
 
     it('adapt', async () => {
@@ -78,6 +83,7 @@ describe('adaptation', () => {
         expect(instance.loadVariabilityInputs()).to.deep.equal({mode: 'second'})
 
         // Adapt mode from "second" to "first"
+        // TODO: did not abort when xOpera#deploy threw error
         await Controller.instances.adapt({
             instance: instanceName,
             key: 'mode',
