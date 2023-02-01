@@ -13,8 +13,6 @@ type AdaptationArguments = {instance: string; key: string; value: string}
 /**
  * Monitor: Collect sensor data and trigger adaptation
  */
-// TODO: during adaptation its unclear which template is actually deployed?
-// TODO: are sensor data stored in the correct time order?
 export default async function (options: AdaptationArguments) {
     const entry = {key: options.key, value: options.value}
     if (cache.has(options.instance)) return cache.get(options.instance)!.push(entry)
@@ -27,26 +25,17 @@ export default async function (options: AdaptationArguments) {
 }
 
 /**
- * Run adaptation if not already running
+ * Run adaptation if not already running and if there are cached values
  */
-emitter.on('adapt', async (instance: Instance) => {
-    if (!running[instance.getName()]) {
-        running[instance.getName()] = true
-        await adapt(instance)
-        running[instance.getName()] = false
-    }
-})
+emitter.on('adapt', _on)
+emitter.on('adapted', _on)
 
-/**
- * Run adaptation if not already running after one run stopped
- */
-emitter.on('adapted', async (instance: Instance) => {
-    if (validator.isDefined(cache.get(instance.getName()))) {
+async function _on(instance: Instance) {
+    if (validator.isDefined(cache.get(instance.getName())) && !running[instance.getName()]) {
         running[instance.getName()] = true
         await adapt(instance)
-        running[instance.getName()] = false
     }
-})
+}
 
 /**
  * Adapt instance
@@ -91,5 +80,6 @@ async function adapt(instance: Instance) {
         time,
     })
 
+    running[instance.getName()] = false
     emitter.emit('adapted', instance)
 }

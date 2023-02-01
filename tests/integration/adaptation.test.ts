@@ -71,8 +71,6 @@ if (!integrationTestsEnabled) {
                 instance: instanceName,
             })
 
-            // TODO: current time precision is not high enough?! throttle monitor (collect for e.g. 5 seconds)
-
             // Adapt mode from "first" to "second"
             await Controller.instances.adapt({
                 instance: instanceName,
@@ -80,7 +78,7 @@ if (!integrationTestsEnabled) {
                 value: 'second',
             })
 
-            // TODO: wait for emit of finished deployment
+            // Wait until adaptation finished
             await sleep(5 * 1000)
 
             // Assert that variability-resolved service template and variability inputs are as expected
@@ -88,38 +86,16 @@ if (!integrationTestsEnabled) {
             expect(instance.loadVariabilityInputs()).to.deep.equal({mode: 'second'})
 
             // Adapt mode from "second" to "first"
-            // TODO: did not abort when xOpera#deploy threw error
-            const _ = Controller.instances.adapt({
-                instance: instanceName,
-                key: 'mode',
-                value: 'third',
-            })
+            for (const value of ['third', 'fourth', 'fifth', 'sixth', 'first']) {
+                const _ = Controller.instances.adapt({
+                    instance: instanceName,
+                    key: 'mode',
+                    value,
+                })
+            }
 
-            const __ = Controller.instances.adapt({
-                instance: instanceName,
-                key: 'mode',
-                value: 'fourth',
-            })
-
-            const ___ = Controller.instances.adapt({
-                instance: instanceName,
-                key: 'mode',
-                value: 'fifth',
-            })
-
-            const ____ = Controller.instances.adapt({
-                instance: instanceName,
-                key: 'mode',
-                value: 'sixth',
-            })
-
-            const _____ = Controller.instances.adapt({
-                instance: instanceName,
-                key: 'mode',
-                value: 'first',
-            })
-
-            await sleep(5 * 1000)
+            // Wait until everything is adapted
+            await sleep(10 * 1000)
 
             // Assert that variability-resolved service template and variability inputs are as expected
             expect(instance.loadServiceTemplate()).to.deep.equal(firstTemplate)
@@ -127,7 +103,7 @@ if (!integrationTestsEnabled) {
 
             // Undeploy instance
             await Controller.instances.undeploy({instance: instanceName})
-        }).timeout(20 * 1000)
+        }).timeout(60 * 1000)
 
         afterEach(async () => {
             // Cleanup filesystem
