@@ -8,6 +8,7 @@ argparse,2.0.1,Python-2.0,https://github.com/nodeca/argparse
 array-flatten,1.1.1,MIT,https://github.com/blakeembrey/array-flatten
 assertion-error,1.1.0,MIT,https://github.com/chaijs/assertion-error
 async,3.2.4,MIT,https://github.com/caolan/async
+async-mutex,0.4.0,MIT,https://github.com/DirtyHairy/async-mutex
 asynckit,0.4.0,MIT,https://github.com/alexindigo/asynckit
 axios,0.27.2,MIT,https://github.com/axios/axios
 balanced-match,1.0.2,MIT,https://github.com/juliangruber/balanced-match
@@ -125,6 +126,7 @@ statuses,2.0.1,MIT,https://github.com/jshttp/statuses
 supports-color,7.2.0,MIT,https://github.com/chalk/supports-color
 timers-ext,0.1.7,ISC,https://github.com/medikoo/timers-ext
 toidentifier,1.0.1,MIT,https://github.com/component/toidentifier
+tslib,2.5.0,0BSD,https://github.com/Microsoft/tslib
 type,2.7.2,ISC,https://github.com/medikoo/type
 type-detect,4.0.8,MIT,https://github.com/chaijs/type-detect
 type-is,1.6.18,MIT,https://github.com/jshttp/type-is

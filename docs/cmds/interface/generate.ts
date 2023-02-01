@@ -5,9 +5,60 @@ import {Command, Option} from 'commander'
 import * as utils from '#utils'
 import * as validator from '#validator'
 
+type CommandInformation = {
+    commands: string[]
+    usage: string
+    description: string
+    options: OptionInformation[]
+    cli: boolean
+    server: boolean
+}
+type OptionInformation = {option: string; type: string; description: string; mandatory: boolean}
+
 async function main() {
-    const data: any[] = []
+    const data: CommandInformation[] = []
     run(program, [])
+
+    data.push({
+        commands: ['instances', 'adapt'],
+        usage: 'vintner instances adapt',
+        description: 'submit sensor data used for adapting the instance',
+        options: [
+            {
+                option: 'instance',
+                type: 'string',
+                description: 'instance name',
+                mandatory: true,
+            },
+            {option: 'key', type: 'string', description: 'sensor data key', mandatory: true},
+            {
+                option: 'value',
+                type: 'string',
+                description: 'sensor data value',
+                mandatory: true,
+            },
+        ],
+        cli: false,
+        server: true,
+    })
+    data.push({
+        commands: ['instances', 'unadapt'],
+        usage: 'vintner instances unadapt',
+        description: 'stop adaptation loop of instance',
+        options: [
+            {
+                option: 'instance',
+                type: 'string',
+                description: 'instance name',
+                mandatory: true,
+            },
+        ],
+        cli: false,
+        server: true,
+    })
+
+    data.sort((a, b) => a.usage.localeCompare(b.usage))
+
     await renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
 
     function run(command: Command, commands: string[]) {
@@ -31,7 +82,7 @@ async function main() {
                 option: option.long?.slice(2),
                 type: option.flags?.split(' ')[1]?.slice(1, -1),
                 description,
-                mandatory: option.required || option.mandatory,
+                mandatory: option.required || option.mandatory || false,
             }
         })
 
@@ -41,7 +92,8 @@ async function main() {
                 usage: 'vintner ' + commands.join(' '),
                 description: command.description(),
                 options,
-                cliOnly: isCLIOnly(commands),
+                cli: true,
+                server: !isCLIOnly(commands),
             })
         command.commands.forEach(it => run(it, [...commands]))
     }

@@ -1,10 +1,13 @@
 import {Instance} from '#repository/instances'
 import Plugins from '#plugins'
+import {emitter, events} from '#utils/emitter'
+import {critical} from '#utils/lock'
 
 export type InstancesUndeployArguments = {instance: string}
 
 export default async function (options: InstancesUndeployArguments) {
     const instance = new Instance(options.instance)
     if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
-    await Plugins.getOrchestrator().undeploy(instance)
+    emitter.emit(events.stop_adaptation, instance)
+    await critical(instance.getName(), () => Plugins.getOrchestrator().undeploy(instance))
 }

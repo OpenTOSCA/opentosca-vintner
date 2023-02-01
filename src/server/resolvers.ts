@@ -181,11 +181,18 @@ resolvers.post(
     })
 )
 
-// TODO: document this endpoint
 resolvers.post(
     '/instances/adapt',
     hae(async (req, res, next) => {
-        await adapt(req.body)
+        await Controller.instances.adapt(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/unadapt',
+    hae(async (req, res, next) => {
+        await Controller.instances.unadapt(req.body)
         res.json({})
     })
 )
