@@ -6,14 +6,14 @@ export class VintnerPlugin implements TemplatesRepositoryPlugin {
     async getTemplate(name: string) {
         return {
             name,
-            template: new Instance(name).getServiceTemplate(),
+            template: new Instance(name).loadServiceTemplate(),
         }
     }
 
     async getTemplates() {
         return Instances.all().map(it => ({
             name: it.getName(),
-            template: it.getServiceTemplate(),
+            template: it.loadServiceTemplate(),
         }))
     }
 }

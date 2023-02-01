@@ -1,6 +1,6 @@
 import enableOrchestrator from './orchestrators/enable'
-import initOpera from './orchestrators/init-opera'
-import initOperaWSL from './orchestrators/init-opera-wsl'
+import initxOpera from './orchestrators/init-xopera'
+import initxOperaWSL from './orchestrators/init-xopera-wsl'
 import initUnfurl from './orchestrators/init-unfurl'
 import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
 import startServer from './server/start'
@@ -21,6 +21,9 @@ import openInstance from './instances/open'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
+import resolveInstance from './instances/resolve'
+import adaptInstance from './instances/adapt'
+import unadaptInstance from './instances/unadapt'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
@@ -36,14 +39,17 @@ const Controller = {
         open: openInstance,
         undeploy: undeployInstance,
         update: updateInstance,
+        resolve: resolveInstance,
+        adapt: adaptInstance,
+        unadapt: unadaptInstance,
     },
     query: {
         run: runQuery,
     },
     orchestrators: {
         enable: enableOrchestrator,
-        initOpera: initOpera,
-        initOperaWSL: initOperaWSL,
+        initxOpera: initxOpera,
+        initxOperaWSL: initxOperaWSL,
         initUnfurl: initUnfurl,
         initUnfurlWSL: initUnfurlWSL,
     },

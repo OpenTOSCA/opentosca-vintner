@@ -1,6 +1,5 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
-import {Instance} from '#repository/instances'
 import * as files from '#files'
 import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
@@ -22,61 +21,27 @@ import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
  */
 
 export type TemplateResolveArguments = {
-    instance?: string
-    template?: string
+    template: string
     preset?: string
     inputs?: string
-    output?: string
-} & ResolvingOptions
-
-export type ResolvingOptions = {
-    enableRelationDefaultCondition?: boolean
-    enablePolicyDefaultCondition?: boolean
-    enableGroupDefaultCondition?: boolean
-    enableArtifactDefaultCondition?: boolean
-    enablePropertyDefaultCondition?: boolean
-} & {
-    enableRelationPruning?: boolean
-    enablePolicyPruning?: boolean
-    enableGroupPruning?: boolean
-    enableArtifactPruning?: boolean
-    enablePropertyPruning?: boolean
-} & {
-    disableConsistencyChecks?: boolean
-    disableRelationSourceConsistencyCheck?: boolean
-    disableRelationTargetConsistencyCheck?: boolean
-    disableAmbiguousHostingConsistencyCheck?: boolean
-    disableExpectedHostingConsistencyCheck?: boolean
-    disableMissingArtifactParentConsistencyCheck?: boolean
-    disableAmbiguousArtifactConsistencyCheck?: boolean
-    disableMissingPropertyParentConsistencyCheck?: boolean
-    disableAmbiguousPropertyConsistencyCheck?: boolean
+    output: string
 }
 
 export default async function (options: TemplateResolveArguments) {
-    let instance: Instance | undefined
-    if (options.instance) instance = new Instance(options.instance)
+    if (validator.isUndefined(options.template)) throw new Error('Template not defined')
+    if (validator.isUndefined(options.output)) throw new Error('Output not defined')
 
-    let template = options.template
-    if (instance) template = instance.getVariableServiceTemplatePath()
-    if (!template) throw new Error('Either instance or template must be set')
-
-    let output = options.output
-    if (instance) output = instance.generateServiceTemplatePath()
-    if (!output) throw new Error('Either instance or output must be set')
+    const inputs = options.inputs
+        ? options.inputs.endsWith('.xml')
+            ? await featureIDE.loadConfiguration(options.inputs)
+            : files.loadYAML<InputAssignmentMap>(options.inputs)
+        : {}
 
     // Load service template
-    const serviceTemplate = files.loadYAML<ServiceTemplate>(template)
+    const serviceTemplate = files.loadYAML<ServiceTemplate>(options.template)
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(
-            options.inputs
-                ? options.inputs.endsWith('.xml')
-                    ? await featureIDE.loadConfiguration(options.inputs)
-                    : files.loadYAML<InputAssignmentMap>(options.inputs)
-                : {}
-        )
-        .setOptions(options)
+        .setVariabilityInputs(inputs)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -90,7 +55,8 @@ export default async function (options: TemplateResolveArguments) {
     // Transform to TOSCA compliant format
     resolver.transform()
 
-    files.storeYAML(output, serviceTemplate)
+    // Store variability-resolved service template
+    files.storeYAML(options.output, serviceTemplate)
 }
 
 type ConditionalElementBase = {
@@ -177,7 +143,6 @@ export class VariabilityResolver {
     private readonly serviceTemplate: ServiceTemplate
 
     private variabilityInputs: InputAssignmentMap = {}
-    private options: ResolvingOptions = {}
 
     private nodes: Node[] = []
     private nodesMap = new Map<string, Node>()
@@ -640,54 +605,74 @@ export class VariabilityResolver {
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source is present
-        if (element.type === 'relation' && this.options.enableRelationDefaultCondition && utils.isEmpty(conditions)) {
+        if (
+            element.type === 'relation' &&
+            this.getVariabilityResolvingOptions().enable_relation_default_condition &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [{get_node_presence: element.source}]
         }
 
         // Prune Relations: Additionally check that source is present
-        if (element.type === 'relation' && this.options.enableRelationPruning) {
+        if (element.type === 'relation' && this.getVariabilityResolvingOptions().enable_relation_pruning) {
             conditions = [{get_node_presence: element.source}, ...conditions]
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
-        if (element.type === 'policy' && this.options.enablePolicyDefaultCondition && utils.isEmpty(conditions)) {
+        if (
+            element.type === 'policy' &&
+            this.getVariabilityResolvingOptions().enable_policy_default_condition &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [{has_present_targets: element.name}]
         }
 
         // Prune Policy: Additionally check if any target is present
-        if (element.type === 'policy' && this.options.enablePolicyPruning) {
+        if (element.type === 'policy' && this.getVariabilityResolvingOptions().enable_policy_pruning) {
             conditions = [{has_present_targets: element.name}, ...conditions]
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
-        if (element.type === 'group' && this.options.enableGroupDefaultCondition && utils.isEmpty(conditions)) {
+        if (
+            element.type === 'group' &&
+            this.getVariabilityResolvingOptions().enable_group_default_condition &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [{has_present_members: element.name}]
         }
 
         // Prune Group: Additionally check if any member is present
-        if (element.type === 'group' && this.options.enableGroupPruning) {
+        if (element.type === 'group' && this.getVariabilityResolvingOptions().enable_group_pruning) {
             conditions = [{has_present_members: element.name}, ...conditions]
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
-        if (element.type === 'artifact' && this.options.enableArtifactDefaultCondition && utils.isEmpty(conditions)) {
+        if (
+            element.type === 'artifact' &&
+            this.getVariabilityResolvingOptions().enable_artifact_default_condition &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [{get_node_presence: element.node.name}]
         }
 
         // Prune Artifact: Additionally check if node is present
-        if (element.type === 'artifact' && this.options.enableArtifactPruning) {
+        if (element.type === 'artifact' && this.getVariabilityResolvingOptions().enable_artifact_pruning) {
             conditions = [{get_node_presence: element.node.name}, ...conditions]
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
-        if (element.type === 'property' && this.options.enablePropertyDefaultCondition && utils.isEmpty(conditions)) {
+        if (
+            element.type === 'property' &&
+            this.getVariabilityResolvingOptions().enable_property_default_condition &&
+            utils.isEmpty(conditions)
+        ) {
             if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}]
             if (element.parent.type === 'relation')
                 conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
-        if (element.type === 'property' && this.options.enablePropertyPruning) {
+        if (element.type === 'property' && this.getVariabilityResolvingOptions().enable_property_pruning) {
             if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}, ...conditions]
             if (element.parent.type === 'relation')
                 conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}, ...conditions]
@@ -700,14 +685,18 @@ export class VariabilityResolver {
         return present
     }
 
+    getVariabilityResolvingOptions() {
+        return this.serviceTemplate.topology_template?.variability?.options || {}
+    }
+
     checkConsistency() {
-        if (this.options.disableConsistencyChecks) return this
+        if (this.getVariabilityResolvingOptions().disable_consistency_checks) return this
 
         const relations = this.relations.filter(relation => relation.present)
         const nodes = this.nodes.filter(node => node.present)
 
         // Ensure that each relation source exists
-        if (!this.options.disableRelationSourceConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_relation_source_consistency_check) {
             for (const relation of relations) {
                 if (!this.nodesMap.get(relation.source)?.present)
                     throw new Error(
@@ -717,7 +706,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that each relation target exists
-        if (!this.options.disableRelationTargetConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_relation_target_consistency_check) {
             for (const relation of relations) {
                 if (!this.nodesMap.get(relation.target)?.present)
                     throw new Error(
@@ -727,7 +716,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that every component has at maximum one hosting relation
-        if (!this.options.disableAmbiguousHostingConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_ambiguous_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host' && relation.present
@@ -737,7 +726,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that every component that had a hosting relation previously still has one
-        if (!this.options.disableExpectedHostingConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_expected_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host'
@@ -749,7 +738,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that node of each artifact exists
-        if (!this.options.disableMissingArtifactParentConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_missing_artifact_parent_consistency_check) {
             const artifacts = this.artifacts.filter(artifact => artifact.present)
             for (const artifact of artifacts) {
                 if (!artifact.node.present)
@@ -758,7 +747,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that artifacts are unique within their node (also considering non-present nodes)
-        if (!this.options.disableAmbiguousArtifactConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_ambiguous_artifact_consistency_check) {
             for (const node of this.nodes) {
                 const names = new Set()
                 for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
@@ -770,7 +759,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that node of each present property exists
-        if (!this.options.disableMissingPropertyParentConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_missing_property_parent_consistency_check) {
             for (const property of this.properties.filter(property => property.present)) {
                 if (!property.parent.present) {
                     if (property.parent.type === 'node')
@@ -787,7 +776,7 @@ export class VariabilityResolver {
         }
 
         // Ensure that each property has maximum one value (also considering non-present nodes)
-        if (!this.options.disableAmbiguousPropertyConsistencyCheck) {
+        if (!this.getVariabilityResolvingOptions().disable_ambiguous_property_consistency_check) {
             for (const node of this.nodes) {
                 const names = new Set()
                 for (const property of node.properties.filter(property => property.present)) {
@@ -993,11 +982,6 @@ export class VariabilityResolver {
 
     setVariabilityInputs(inputs: InputAssignmentMap) {
         this.variabilityInputs = {...this.variabilityInputs, ...inputs}
-        return this
-    }
-
-    setOptions(options: ResolvingOptions) {
-        this.options = options
         return this
     }
 

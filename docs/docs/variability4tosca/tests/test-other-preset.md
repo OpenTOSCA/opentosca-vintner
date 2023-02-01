@@ -54,7 +54,6 @@ The following variability preset is used.
 two
 ```
 
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.

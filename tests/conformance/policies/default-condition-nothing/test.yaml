@@ -1,3 +1,1 @@
 description: Do not remove policy "policy_one" since pruning is not forced.
-resolver:
-    enable_policy_default_condition: true

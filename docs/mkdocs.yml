@@ -58,7 +58,9 @@ markdown_extensions:
     - footnotes
     - toc:
           permalink: true
-
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
 plugins:
     - search
     - macros:
@@ -85,6 +87,7 @@ nav:
           - queries4tosca/specification.md
     - dynamic-deployment-artifacts.md
     - interface.md
+    - technical-notes.md
     - dependencies.md
     - development.md
     - code-of-conduct.md

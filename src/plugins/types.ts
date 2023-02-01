@@ -1,7 +1,7 @@
 import {ServiceTemplate} from '#spec/service-template'
 import {AttributeAssignmentMap} from '#spec/node-template'
 import {Instance} from '#repository/instances'
-import {OperaNativeConfig, OperaWLSConfig} from '#plugins/opera'
+import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
 import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
 
 type NamedServiceTemplate = {name: string; template: ServiceTemplate}
@@ -32,8 +32,8 @@ export interface OrchestratorPlugin {
 
 export type OrchestratorsConfig = {
     enabled?: string
-    opera?: OperaNativeConfig
-    operaWSL?: OperaWLSConfig
+    xOpera?: xOperaNativeConfig
+    xOperaWSL?: xOperaWLSConfig
     unfurl?: UnfurlNativeConfig
     unfurlWSL?: UnfurlWSLConfig
 }

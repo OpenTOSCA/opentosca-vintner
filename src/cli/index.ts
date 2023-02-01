@@ -1,3 +1,3 @@
-import {program} from 'commander'
+import {program} from './program'
 
 program.parse()

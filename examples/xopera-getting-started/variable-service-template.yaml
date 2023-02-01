@@ -26,6 +26,9 @@ topology_template:
             is_first: {equal: [{get_variability_input: mode}, first]}
             is_second: {equal: [{get_variability_input: mode}, second]}
 
+        options:
+            enable_property_default_condition: true
+
     node_templates:
         localhost:
             type: tosca.nodes.Compute

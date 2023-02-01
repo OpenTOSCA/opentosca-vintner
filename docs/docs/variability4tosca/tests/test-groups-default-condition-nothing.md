@@ -66,15 +66,6 @@ topology_template:
 
 
 
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enable_group_default_condition: true
-
-```
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.

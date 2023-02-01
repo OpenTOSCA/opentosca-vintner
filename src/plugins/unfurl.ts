@@ -27,7 +27,7 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
         files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))
         files.copy(instance.getTemplateDirectory(), this.getEnsembleDirectory(instance))
-        files.copy(instance.getServiceInputsPath(), this.getEnsembleInputsPath(instance))
+        files.copy(instance.getServiceInputs(), this.getEnsembleInputsPath(instance))
         await this.shell.execute([this.getBinary(instance), 'deploy', '--approve'])
     }
 

@@ -38,15 +38,15 @@ In our case, we run on a Linux machine and use xOpera.
 For more information see [Orchestrators](../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"
-vintner orchestrators init opera
-vintner orchestrators enable --orchestrator opera
+vintner orchestrators init xopera
+vintner orchestrators enable --orchestrator xopera
 ```
 
 ## Deployment
 
 Deploy the development variant of the motivating scenario.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
-An example for the deployment inputs is given in [`examples/opera-motivation/inputs.example.yaml`]({{ get_repo_url('examples/opera-motivation/inputs.example.yaml') }}){target=_blank}
+An example for the deployment inputs is given in [`examples/xopera-motivation/inputs.example.yaml`]({{ get_repo_url('examples/xopera-motivation/inputs.example.yaml') }}){target=_blank}
 
 ```shell linenums="1"
 # Add variable service template
@@ -62,7 +62,7 @@ vintner instances resolve --instance motivation --preset dev
 vintner instances inspect --instance motivation
 
 # Deploy instance
-# See examples/opera-motivation/inputs.example.yaml as reference
+# See examples/xopera-motivation/variability-inputs.example.yaml as reference
 vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 ```
 

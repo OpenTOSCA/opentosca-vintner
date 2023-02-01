@@ -93,7 +93,6 @@ mode: present
 ```
 
 
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.

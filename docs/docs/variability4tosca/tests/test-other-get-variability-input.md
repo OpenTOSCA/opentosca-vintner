@@ -31,7 +31,6 @@ name: Miles
 ```
 
 
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.

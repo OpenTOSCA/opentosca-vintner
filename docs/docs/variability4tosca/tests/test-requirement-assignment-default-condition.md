@@ -10,6 +10,9 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    options:
+      enable_relation_default_condition: true
   node_templates:
     one:
       type: one
@@ -25,15 +28,6 @@ topology_template:
 ```
 
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enable_relation_default_condition: true
-
-```
 
 ## Variability-Resolved Service Template
 

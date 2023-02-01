@@ -76,6 +76,9 @@ topology_template:
             is_dev: {equal: [{get_variability_input: mode}, dev]}
             is_prod: {equal: [{get_variability_input: mode}, prod]}
 
+        options:
+            enable_property_default_condition: true
+
     node_templates:
         web_component:
             type: node.application

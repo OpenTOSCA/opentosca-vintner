@@ -75,24 +75,24 @@ orchestrators
 const initOrchestrators = orchestrators.command('init').description('initializes an orchestrator plugin')
 
 initOrchestrators
-    .command('opera')
-    .description('initializes opera plugin')
+    .command('xopera')
+    .description('initializes xopera plugin')
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of opera', '~/opera')
+    .option('--dir [string]', 'directory of xopera', '~/opera')
     .action(
         hae(async options => {
-            await Controller.orchestrators.initOpera(options)
+            await Controller.orchestrators.initxOpera(options)
         })
     )
 
 initOrchestrators
-    .command('opera-wsl')
-    .description('initializes opera-wsl plugin')
+    .command('xopera-wsl')
+    .description('initializes xopera-wsl plugin')
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of opera', '~/opera')
     .action(
         hae(async options => {
-            await Controller.orchestrators.initOperaWSL(options)
+            await Controller.orchestrators.initxOperaWSL(options)
         })
     )
 
@@ -142,79 +142,6 @@ template
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
-    .option(
-        '--enable-relation-default-condition [boolean]',
-        'enable default condition for relations that checks is the source is present'
-    )
-    .option(
-        '--enable-policy-default-condition [boolean]',
-        'enable default condition for policies that checks if no target is present'
-    )
-    .option(
-        '--enable-group-default-condition [boolean]',
-        'enable default condition for groups that checks if no member is present'
-    )
-    .option(
-        '--enable-artifact-default-condition [boolean]',
-        'enable default condition for artifacts that checks if corresponding node is present'
-    )
-    .option(
-        '--enable-property-default-condition [boolean]',
-        'enable default condition for properties that checks if corresponding node or relation is present'
-    )
-    .option(
-        '--enable-relation-pruning [boolean]',
-        'enable relation pruning and additionally check for each relation if is source is present'
-    )
-    .option(
-        '--enable-policy-pruning [boolean]',
-        'enable policy pruning and additionally check for each policy if no target is present'
-    )
-    .option(
-        '--enable-group-pruning [boolean]',
-        'enable group pruning and additionally check for each group if no member is present'
-    )
-    .option(
-        '--enable-artifact-pruning [boolean]',
-        'enable artifact pruning and additionally check for each artifact if source is present'
-    )
-    .option(
-        '--enable-property-pruning [boolean]',
-        'enable property pruning and additionally check for each property if corresponding node or relation is present'
-    )
-    .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
-    .option(
-        '--disable-relation-source-consistency-check [boolean]',
-        'disable consistency check regarding relation sources'
-    )
-    .option(
-        '--disable-relation-target-consistency-check [boolean]',
-        'disable consistency check regarding relation targets'
-    )
-    .option(
-        '--disable-ambiguous-hosting-consistency-check [boolean]',
-        'disable consistency check regarding maximum one hosting relation'
-    )
-    .option(
-        '--disable-expected-hosting-consistency-check [boolean]',
-        'disable consistency check regarding expected hosting relation'
-    )
-    .option(
-        '--disable-missing-artifact-parent-consistency-check [boolean]',
-        'disable consistency check regarding node of artifact'
-    )
-    .option(
-        '--disable-ambiguous-artifact-consistency-check [boolean]',
-        'disable consistency check regarding ambiguous artifacts'
-    )
-    .option(
-        '--disable-missing-property-parent-consistency-check [boolean]',
-        'disable consistency check regarding node of a property'
-    )
-    .option(
-        '--disable-ambiguous-property-consistency-check [boolean]',
-        'disable consistency check regarding ambiguous properties'
-    )
     .action(
         hae(async options => {
             await Controller.template.resolve(options)
@@ -335,82 +262,9 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
-    .option(
-        '--enable-relation-default-condition [boolean]',
-        'enable default condition for relations that checks is the source is present'
-    )
-    .option(
-        '--enable-policy-default-condition [boolean]',
-        'enable default condition for policies that checks if no target is present'
-    )
-    .option(
-        '--enable-group-default-condition [boolean]',
-        'enable default condition for groups that checks if no member is present'
-    )
-    .option(
-        '--enable-artifact-default-condition [boolean]',
-        'enable default condition for artifacts that checks if corresponding node is present'
-    )
-    .option(
-        '--enable-property-default-condition [boolean]',
-        'enable default condition for properties that checks if corresponding node or relation is present'
-    )
-    .option(
-        '--enable-relation-pruning [boolean]',
-        'enable relation pruning and additionally check for each relation if is source is present'
-    )
-    .option(
-        '--enable-policy-pruning [boolean]',
-        'enable policy pruning and additionally check for each policy if no target is present'
-    )
-    .option(
-        '--enable-group-pruning [boolean]',
-        'enable group pruning and additionally check for each group if no member is present'
-    )
-    .option(
-        '--enable-artifact-pruning [boolean]',
-        'enable artifact pruning and additionally check for each artifact if source is present'
-    )
-    .option(
-        '--enable-property-pruning [boolean]',
-        'enable property pruning and additionally check for each property if corresponding node or relation is present'
-    )
-    .option('--disable-consistency-checks [boolean]', 'disable all consistency checks')
-    .option(
-        '--disable-relation-source-consistency-check [boolean]',
-        'disable consistency check regarding relation sources'
-    )
-    .option(
-        '--disable-relation-target-consistency-check [boolean]',
-        'disable consistency check regarding relation targets'
-    )
-    .option(
-        '--disable-ambiguous-hosting-consistency-check [boolean]',
-        'disable consistency check regarding maximum one hosting relation'
-    )
-    .option(
-        '--disable-expected-hosting-consistency-check [boolean]',
-        'disable consistency check regarding expected hosting relation'
-    )
-    .option(
-        '--disable-missing-artifact-parent-consistency-check [boolean]',
-        'disable consistency check regarding node of artifact'
-    )
-    .option(
-        '--disable-ambiguous-artifact-consistency-check [boolean]',
-        'disable consistency check regarding ambiguous artifacts'
-    )
-    .option(
-        '--disable-missing-property-parent-consistency-check [boolean]',
-        'disable consistency check regarding node of a property'
-    )
-    .option(
-        '--disable-ambiguous-property-consistency-check [boolean]',
-        'disable consistency check regarding ambiguous properties'
-    )
     .action(
         hae(async options => {
-            await Controller.template.resolve(options)
+            await Controller.instances.resolve({...options, first: true})
         })
     )
 
