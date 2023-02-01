@@ -1,7 +1,6 @@
 import {Instance} from '#repository/instances'
 import * as utils from '#utils'
 import resolve from '#controller/template/resolve'
-import * as files from '#files'
 
 export type InstanceResolveArguments = {
     instance: string
@@ -17,8 +16,8 @@ export default async function (options: InstanceResolveArguments) {
 
     // Store used variability inputs
     // Basically only when used in the CLI as preparation for self-adaptation
-    // TODO: handle xml
-    if (options.inputs && options.first) files.copy(options.inputs, instance.getVariabilityInputs(time))
+    if (options.inputs && options.first) await instance.setVariabilityInputs(options.inputs, time)
+    if (options.preset && options.first) instance.setVariabilityPreset(options.preset)
 
     // Resolve variability
     await resolve({

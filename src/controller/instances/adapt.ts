@@ -68,8 +68,12 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             /**
              * Analyze: Resolve variability
              */
-            // TODO: also handle variability preset
-            await resolve({instance: instance.getName(), inputs: instance.getVariabilityInputs(), time})
+            await resolve({
+                instance: instance.getName(),
+                inputs: instance.hasVariabilityInputs() ? instance.getVariabilityInputs() : undefined,
+                time,
+                preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
+            })
 
             /**
              * Analyze and Execute: Update deployment

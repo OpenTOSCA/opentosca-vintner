@@ -81,6 +81,7 @@
         "vintner": "node build/cli/index",
         "cli": "yarn ts-node -r tsconfig-paths/register src/cli/index",
         "test": "yarn test:local",
+        "test:all": "cross-env ENABLE_INTEGRATION_TESTS=true yarn test:local",
         "test:local": "nyc mocha \"tests/**/*.ts\"",
         "test:docker": "docker build .",
         "test:integration": "cross-env ENABLE_INTEGRATION_TESTS=true nyc mocha \"tests/integration/**/*.ts\"",

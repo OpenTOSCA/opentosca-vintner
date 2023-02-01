@@ -7,6 +7,8 @@ import _ from 'lodash'
 import {InputAssignmentMap} from '#spec/topology-template'
 import Plugins from '#plugins'
 import * as utils from '#utils'
+import * as validator from '#validator'
+import * as featureIDE from '#utils/feature-ide'
 
 export class Instances {
     static all() {
@@ -129,8 +131,28 @@ export class Instance {
         return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplate())
     }
 
+    hasVariabilityInputs() {
+        return files.exists(this.getVariabilityInputs())
+    }
+
     getVariabilityInputs(id?: string) {
         return path.join(this.getTemplateDirectory(), `variability-inputs.${id || this.getVariabilityInputsID()}.yaml`)
+    }
+
+    hasVariabilityPreset() {
+        return files.exists(this.getVariabilityPreset())
+    }
+
+    setVariabilityPreset(preset: string) {
+        files.storeFile(this.getVariabilityPreset(), preset)
+    }
+
+    getVariabilityPreset() {
+        return path.join(this.getInstanceDirectory(), 'preset')
+    }
+
+    loadVariabilityPreset() {
+        return files.loadFile(this.getVariabilityPreset())
     }
 
     loadVariabilityInputs() {
@@ -149,7 +171,12 @@ export class Instance {
         return id.toString()
     }
 
-    setVariabilityInputs(inputs: InputAssignmentMap, id?: string) {
-        files.storeYAML(this.getVariabilityInputs(id || utils.getTime()), inputs)
+    async setVariabilityInputs(inputs: InputAssignmentMap | string, id?: string) {
+        const target = this.getVariabilityInputs(id || utils.getTime())
+        if (validator.isString(inputs)) {
+            if (inputs.endsWith('.xml')) return files.storeYAML(target, await featureIDE.loadConfiguration(inputs))
+            return files.copy(inputs, target)
+        }
+        files.storeYAML(target, inputs)
     }
 }

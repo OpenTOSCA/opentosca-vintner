@@ -1,13 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
-import {Instance} from '#repository/instances'
 import * as files from '#files'
-import {
-    InputAssignmentPreset,
-    VariabilityExpression,
-    VariabilityPointMap,
-    VariabilityResolvingOptions,
-} from '#spec/variability'
+import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
