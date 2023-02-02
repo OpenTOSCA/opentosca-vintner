@@ -9,12 +9,30 @@ You might add the binary to your PATH.
 The following example shows the installation on Linux.
 See [below](#signature) for verifying the signature of the binary.
 
-```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
-mv vintner-linux-x64 /usr/bin/vintner
-chmod +x /usr/bin/vintner
-vintner setup init
-```
+=== "Linux x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+    sudo mv vintner-linux-x64 /usr/bin/vintner
+    sudo chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Linux arm64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64
+    sudo mv vintner-linux-arm64 /usr/bin/vintner
+    sudo chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Alpine x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64
+    sudo mv vintner-alpine-x64 /usr/bin/vintner
+    sudo chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
 
 The following binaries are available:
 

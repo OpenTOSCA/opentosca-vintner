@@ -84,5 +84,11 @@ sudo npm install -g yarn
 ## General Helpful Tools on Linux
 
 ```
-sudo apt-get install tree nano wget jq net-tools curl git -y
+sudo apt-get install tree nano wget jq net-tools curl git stress -y
+```
+
+## Put Some Stress on CPU and Memory
+
+```
+stress --cpu 18 --vm 36 --vm-bytes 1024M
 ```

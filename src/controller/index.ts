@@ -28,6 +28,7 @@ import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
 import testTemplate from './template/test'
+import computeSensor from '#controller/sensors/compute'
 
 const Controller = {
     instances: {
@@ -73,6 +74,9 @@ const Controller = {
         inspect: inspectTemplate,
         list: listTemplates,
         open: openTemplate,
+    },
+    sensors: {
+        compute: computeSensor,
     },
 }
 

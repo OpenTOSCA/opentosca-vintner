@@ -333,3 +333,11 @@ server
             await Controller.server.start(options)
         })
     )
+
+const sensors = program.command('sensors').description('handles sensors')
+
+sensors.command('compute').action(
+    hae(async options => {
+        await Controller.sensors.compute(options)
+    })
+)
