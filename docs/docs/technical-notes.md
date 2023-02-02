@@ -72,3 +72,17 @@ ${vintner_home}/
 - `get${data}` returns path to the data, e.g., `Instance#getServiceInputs`.
 - `load${data}` returns data loaded from the filesystem, e.g. `Instance#loadServiceInputs`.
 - `set${data}` writes data to filesystem, e.g. `Instance#setService`.
+
+## Install NodeJS on Linux
+
+```
+curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+sudo apt-get install nodejs -y
+sudo npm install -g yarn
+```
+
+## General Helpful Tools on Linux
+
+```
+sudo apt-get install tree nano wget jq net-tools curl git -y
+```

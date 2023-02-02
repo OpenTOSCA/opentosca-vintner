@@ -5,12 +5,15 @@ But please follow the following guidelines and our [Code of Conduct](code-of-con
 
 ## Repository
 
-The repository is a monorepo consisting of the CLI, server, docs and tests.
-First, clone the repository and install the dependencies.
+The repository is a monorepo consisting of the CLI, server, docs and tests using
+[git lfs](https://git-lfs.com){target=_blank}
+for larger files, e.g., used in examples.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner
 cd opentosca-vintner
+git lfs install
+git lfs pull
 yarn --frozen-lockfile
 ```
 
@@ -33,7 +36,11 @@ The commit message should not have a link to the merge request.
 
 Commits are required to be signed.
 Therefore, you need to register a signing key.
-For more information see [Generating a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key){target=_blank}, [Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account){target=_blank}, [Telling Git About Your Signing Key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key){target=_blank} and [Signing Commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits){target=_blank}.
+For more information see
+[Generating a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key){target=_blank},
+[Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account){target=_blank},
+[Telling Git About Your Signing Key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key){target=_blank}
+and [Signing Commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits){target=_blank}.
 
 You can enable auto-signing for a specific repository with the following command
 
@@ -43,7 +50,9 @@ git config commit.gpgsign true
 
 ## JetBrains
 
-We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank} or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
+We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank}
+or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed
+using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
 Both are [for free](https://www.jetbrains.com/community/education/#students){target=_blank} for students.
 Open the Project Settings using `Ctrl + Alt + S` to configure ESLint and Prettier.
 
@@ -83,7 +92,7 @@ To execute a CLI command during development, run
 yarn cli [command] [options]
 ```
 
-## Server 
+## Server
 
 The server is build using [express](https://github.com/expressjs/express){target=_blank}.
 The entry point is `src/server/index.ts`.
@@ -103,11 +112,13 @@ Custom macros are implemented in `docs/macros.py` using [mkdocs-macros](https://
 
 We expect that Python and [pandoc](https://pandoc.org){target=_blank} is already installed.
 To install [pandoc](https://pandoc.org){target=_blank} on Ubuntu you might run
+
 ```shell linenums="1"
 sudo apt-get install pandoc
 ```
 
 With the following command you can install `mkdocs-material` along with its requirements globally on your system.
+
 ```shell linenums="1"
 yarn docs:install
 ```
@@ -160,11 +171,11 @@ Behind the scenes, the following Markdown is injected.
 
 The docs contain recorded demos. Thereby, we use the following tools
 
--   [asciinema](https://asciinema.org/){target=_blank} to record a terminal session
--   [demo-magic](https://github.com/paxtonhare/demo-magic){target=_blank} to automate the terminal session
--   [asciinema-player](https://github.com/asciinema/asciinema-player){target=_blank} embed casts in a standalone manner
+- [asciinema](https://asciinema.org/){target=_blank} to record a terminal session
+- [demo-magic](https://github.com/paxtonhare/demo-magic){target=_blank} to automate the terminal session
+- [asciinema-player](https://github.com/asciinema/asciinema-player){target=_blank} embed casts in a standalone manner
 
-Casts are not recorded during any workflow. 
+Casts are not recorded during any workflow.
 The following command can be used to record the `home` cast for the landing page
 
 ```shell linenums="1"
@@ -192,7 +203,7 @@ Behind the scenes, the following HTML is injected.
 ## Tests
 
 We use [mocha](https://mochajs.org){target=_blank} and [chai](https://www.chaijs.com){target=_blank} for testing.
-Respective tests are inside the `tests` directory. 
+Respective tests are inside the `tests` directory.
 To run the tests, use
 
 ```shell linenums="1"
@@ -200,13 +211,14 @@ yarn test
 ```
 
 To run the tests inside docker, use
+
 ```shell linenums="1"
 yarn test:docker
 ```
 
 On pushes to the `main` branch these tests are executed.
 
-## Benchmark 
+## Benchmark
 
 Run the following command, to run to benchmark the variability resolving.
 
@@ -246,7 +258,8 @@ yarn style:fix
 
 ## Licenses
 
-[license-checker](https://github.com/davglass/license-checker){target=_blank} is used for handling licenses of (transitive) dependencies.
+[license-checker](https://github.com/davglass/license-checker){target=_blank} is used for handling licenses of (
+transitive) dependencies.
 To check that (transitive) dependencies are licensed as expected, run the following command.
 This check is also executed inside workflows.
 
@@ -264,21 +277,22 @@ The list includes information such as package name, version, license, etc. and i
 At the same time, the [Dependencies](dependencies.md){target=_blank} page is generated.
 This command is also executed during the `release` workflow and, therefore, overwrites respective files.
 
-## Build 
+## Build
 
-To locally build the project, run the following command. 
+To locally build the project, run the following command.
 This will generate Javascript inside the `/build` directory.
 
 ```shell linenums="1"
 yarn build
 ```
 
-## Package 
+## Package
 
 {{ linux_only_notice() }}
 
-To locally package the project, run the following command. 
-This will package the previously build Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and generate binaries inside the `/dist` directory.
+To locally package the project, run the following command.
+This will package the previously build Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
+generate binaries inside the `/dist` directory.
 
 ```shell linenums="1"
 yarn package
@@ -288,7 +302,7 @@ yarn package
 
 On pushes to the `main` branch, the `release` workflow is triggered.
 This workflow runs several tests, builds and packages the project and creates a new release.
-Thereby, an existing release and `latest` tag is deleted. 
+Thereby, an existing release and `latest` tag is deleted.
 There is only one release at total.
 During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
 The current version can be checked using `vintner --version`.

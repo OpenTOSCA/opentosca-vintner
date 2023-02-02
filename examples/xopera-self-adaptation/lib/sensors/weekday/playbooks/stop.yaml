@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: false
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Stop systemd service
+        systemd:
+            name: sensor-weekday
+            state: stopped

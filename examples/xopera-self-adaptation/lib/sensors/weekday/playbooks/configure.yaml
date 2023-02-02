@@ -1,0 +1,15 @@
+---
+- hosts: all
+  gather_facts: false
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Configure weekday sensor
+        copy:
+            dest: /var/lib/sensor-weekday/.env
+            content: |
+                VINTNER_HOST={{ vintner_host }}
+                VINTNER_PORT={{ vintner_port }}
+                TIME_FACTOR={{ time_factor }}

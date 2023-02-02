@@ -1,0 +1,43 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    sensor.weekday:
+        derived_from: tosca.nodes.SoftwareComponent
+        properties:
+            vintner_host:
+                type: string
+                default: localhost
+            vintner_port:
+                type: string
+                default: 3000
+            time_factor:
+                type: string
+                default: 1
+        interfaces:
+            Standard:
+                type: tosca.interfaces.node.lifecycle.Standard
+                inputs:
+                    vintner_host:
+                        value:
+                            get_property: [SELF, vintner_host]
+                        type: string
+                    vintner_port:
+                        value:
+                            get_property: [SELF, vintner_port]
+                        type: string
+                    time_factor:
+                        value:
+                            get_property: [SELF, time_factor]
+                        type: string
+                    binary_path:
+                        value:
+                            get_artifact: [SELF, binary]
+                        type: string
+                operations:
+                    create: weekday/playbooks/create.yaml
+                    configure: weekday/playbooks/configure.yaml
+                    start: weekday/playbooks/start.yaml
+                    stop: weekday/playbooks/stop.yaml
+                    delete: weekday/playbooks/delete.yaml
+        artifacts:
+            binary: weekday/files/sensor.bin

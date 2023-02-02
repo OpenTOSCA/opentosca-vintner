@@ -1,0 +1,43 @@
+---
+- hosts: all
+  gather_facts: false
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Create working directory
+        file:
+            path: /var/lib/sensor-weekday
+            state: directory
+
+        # TODO: copy instead of extract
+      - name: Extract deployment artifact in application directory
+        unarchive:
+            src: '{{ deployment_artifact }}'
+            dest: /var/lib/mcms-abstraction
+
+      - name: Create systemd service
+        copy:
+            dest: /etc/systemd/system/sensor-weekday.service
+            content: |
+                [Unit]
+                Description=Sensor Weekday
+                After=multi-user.target
+
+                [Service]
+                Type=simple
+                Restart=always
+                WorkingDirectory=/var/lib/sensor-weekday
+                ExecStart=sensor.bin
+                EnvironmentFile=.env
+
+                [Install]
+                WantedBy=multi-user.target
+
+      - name: Enable systemd service
+        systemd:
+            name: sensor-weekday
+            status: stopped
+            enabled: true
+            daemon_reload: true
