@@ -5,26 +5,28 @@ import * as utils from '#utils'
 import * as validator from '#validator'
 import {emitter, events} from '#utils/emitter'
 import {critical} from '#utils/lock'
+import {InputAssignmentMap} from '#spec/topology-template'
+import _ from 'lodash'
 
-const cache: Map<string, {key: string; value: string}[]> = new Map()
-const running: {[key: string]: boolean} = {}
-const stopped: {[key: string]: boolean} = {}
+const cache: {[key: string]: InputAssignmentMap | undefined} = {}
+const queue: {[key: string]: InputAssignmentMap[] | undefined} = {}
+const running: {[key: string]: boolean | undefined} = {}
+const stopped: {[key: string]: boolean | undefined} = {}
 
-type AdaptationArguments = {instance: string; key: string; value: string}
+type InstancesAdaptationOptions = {instance: string; inputs: InputAssignmentMap}
 
 /**
  * Monitor: Collect sensor data and trigger adaptation
  */
-export default async function (options: AdaptationArguments) {
+export default async function (options: InstancesAdaptationOptions) {
     if (stopped[options.instance]) return
 
-    const entry = {key: options.key, value: options.value}
-    if (cache.has(options.instance)) return cache.get(options.instance)!.push(entry)
+    if (queue[options.instance]) return queue[options.instance]!.push(options.inputs)
 
     const instance = new Instance(options.instance)
     if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
 
-    cache.set(options.instance, [entry])
+    queue[options.instance] = [options.inputs]
     emitter.emit(events.start_adaptation, instance)
 }
 
@@ -32,62 +34,57 @@ export default async function (options: AdaptationArguments) {
  * Adaptation Loop
  */
 emitter.on(events.start_adaptation, async (instance: Instance) => {
-    if (
-        // If there are cached entries
-        validator.isDefined(cache.get(instance.getName())) &&
-        // If adaptation is not currently running
-        !running[instance.getName()] &&
-        // If adaptation has not been stopped
-        !stopped[instance.getName()]
-    ) {
-        running[instance.getName()] = true
-        await critical(instance.getName(), async () => {
-            // Sanity
-            if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    // Stop loop if there are no enqueued entries
+    if (!validator.isDefined(queue[instance.getName()])) return
+    // Stop current process if there is already another one running
+    if (running[instance.getName()]) return
+    // Stop loop if adaptation is stopped
+    if (stopped[instance.getName()]) return
 
-            // Current time used as correlation identifier
-            const time = utils.getTime()
+    running[instance.getName()] = true
+    await critical(instance.getName(), async () => {
+        // Sanity
+        if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
 
-            /**
-             * Monitor: Store sensor data
-             */
-            // Get cache entries
-            const entries = cache.get(instance.getName())
-            if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
+        // Current time used as correlation identifier
+        const time = utils.getTime()
 
-            // Construct current variability inputs
-            const inputs = instance.loadVariabilityInputs()
-            for (const entry of entries) {
-                inputs[entry.key] = entry.value
-            }
-            instance.setVariabilityInputs(inputs, time)
+        /**
+         * Monitor: Store sensor data
+         */
+        // Get enqueued entries
+        const entries = queue[instance.getName()]
+        if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
 
-            // Reset cache
-            cache.delete(instance.getName())
+        // Construct current variability inputs
+        if (!cache[instance.getName()]) cache[instance.getName()] = instance.loadVariabilityInputs()
+        _.merge(cache[instance.getName()], ...entries)
 
-            /**
-             * Analyze: Resolve variability
-             */
-            await resolve({
-                instance: instance.getName(),
-                inputs: instance.hasVariabilityInputs() ? instance.getVariabilityInputs() : undefined,
-                time,
-                preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
-            })
+        // Reset queue
+        delete queue[instance.getName()]
 
-            /**
-             * Analyze and Execute: Update deployment
-             */
-            await update({
-                instance: instance.getName(),
-                inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
-                time,
-            })
-
-            running[instance.getName()] = false
-            emitter.emit(events.start_adaptation, instance)
+        /**
+         * Analyze: Resolve variability
+         */
+        await resolve({
+            instance: instance.getName(),
+            inputs: cache[instance.getName()],
+            time,
+            preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
         })
-    }
+
+        /**
+         * Analyze and Execute: Update deployment
+         */
+        await update({
+            instance: instance.getName(),
+            inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
+            time,
+        })
+
+        running[instance.getName()] = false
+        emitter.emit(events.start_adaptation, instance)
+    })
 })
 
 /**

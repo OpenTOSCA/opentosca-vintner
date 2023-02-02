@@ -5,13 +5,13 @@ import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from 
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
-import * as featureIDE from '#utils/feature-ide'
 import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignmentMap} from '#spec/node-template'
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
+import * as featureIDE from '#utils/feature-ide'
 
 /**
  * Not documented since preparation for future work
@@ -20,25 +20,27 @@ import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
  * - groups might be a list
  */
 
-export type TemplateResolveArguments = {
+export type TemplateResolveOptions = {
     template: string
     preset?: string
-    inputs?: string
+    inputs?: string | InputAssignmentMap
     output: string
 }
 
-export default async function (options: TemplateResolveArguments) {
+export default async function (options: TemplateResolveOptions) {
     if (validator.isUndefined(options.template)) throw new Error('Template not defined')
     if (validator.isUndefined(options.output)) throw new Error('Output not defined')
 
-    const inputs = options.inputs
-        ? options.inputs.endsWith('.xml')
-            ? await featureIDE.loadConfiguration(options.inputs)
-            : files.loadYAML<InputAssignmentMap>(options.inputs)
-        : {}
-
     // Load service template
     const serviceTemplate = files.loadYAML<ServiceTemplate>(options.template)
+    const inputs = validator.isDefined(options.inputs)
+        ? validator.isString(options.inputs)
+            ? options.inputs.endsWith('.xml')
+                ? await featureIDE.loadConfiguration(options.inputs)
+                : files.loadYAML<InputAssignmentMap>(options.inputs)
+            : options.inputs
+        : {}
+
     const resolver = new VariabilityResolver(serviceTemplate)
         .setVariabilityPreset(options.preset)
         .setVariabilityInputs(inputs)
@@ -980,7 +982,8 @@ export class VariabilityResolver {
         return this
     }
 
-    setVariabilityInputs(inputs: InputAssignmentMap) {
+    setVariabilityInputs(inputs?: InputAssignmentMap) {
+        if (validator.isUndefined(inputs)) return this
         this.variabilityInputs = {...this.variabilityInputs, ...inputs}
         return this
     }

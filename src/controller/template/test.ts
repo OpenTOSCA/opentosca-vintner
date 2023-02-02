@@ -6,7 +6,7 @@ import * as console from 'console'
 import jsonDiff from 'json-diff'
 import * as validator from '#validator'
 
-export type TemplateTestArguments = {path: string}
+export type TemplateTestOptions = {path: string}
 
 export type VariabilityTestGroup = {
     name: string
@@ -26,7 +26,7 @@ export type VariabilityTestConfig = {
     error?: string
 }
 
-export default async function (options: TemplateTestArguments) {
+export default async function (options: TemplateTestOptions) {
     const testsPath = path.join(options.path, 'tests')
 
     const tests: VariabilityTest[] = files

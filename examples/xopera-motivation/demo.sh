@@ -1,11 +1,17 @@
 #! /usr/bin/bash
 set -e
 
-yarn vintner setup init
-yarn vintner orchestrators init xopera-wsl
-yarn vintner orchestrators enable --orchestrator xopera-wsl
+# Ensure that vintner is installed
+if ! which vintner &>/dev/null; then
+    echo "\"vintner\" not installed"
+    exit 1
+fi
 
-yarn vintner templates import --template motivation --path examples/xopera-motivation
-yarn vintner instances create --instance motivation --template motivation
-yarn vintner instances resolve --instance motivation --preset dev
-yarn vintner instances deploy --instance motivation --inputs examples/xopera-motivation/inputs.yaml
+vintner setup init
+vintner orchestrators init xopera-wsl
+vintner orchestrators enable --orchestrator xopera-wsl
+
+vintner templates import --template motivation --path examples/xopera-motivation
+vintner instances create --instance motivation --template motivation
+vintner instances resolve --instance motivation --preset dev
+vintner instances deploy --instance motivation --inputs examples/xopera-motivation/inputs.yaml

@@ -136,7 +136,7 @@ resolvers.post(
 resolvers.post(
     '/instances/resolve',
     hae(async (req, res, next) => {
-        await Controller.template.resolve(req.body)
+        await Controller.instances.resolve(req.body)
         res.json({})
     })
 )
