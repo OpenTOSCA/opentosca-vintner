@@ -5,12 +5,12 @@ import * as validator from '#validator'
 import {isString} from '#validator'
 import {getParentNode} from '#/query/utils'
 
-export type TemplateQueryArguments = {
+export type TemplateQueryOptions = {
     template: string
     output: string
 }
 
-export default function (options: TemplateQueryArguments) {
+export default function (options: TemplateQueryOptions) {
     const template = files.loadYAML<ServiceTemplate>(options.template)
     if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
         throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)

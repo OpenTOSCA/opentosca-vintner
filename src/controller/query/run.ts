@@ -2,14 +2,14 @@ import {Query, QueryResult, QueryResults} from '#/query/query'
 import * as files from '../../utils/files'
 import * as console from 'console'
 
-export type QueryTemplateArguments = {
+export type QueryTemplateOptions = {
     query: string
     output?: string
     source?: 'file' | 'vintner' | 'winery'
     format?: 'json' | 'yaml'
 }
 
-export default async function (options: QueryTemplateArguments): Promise<QueryResults | QueryResult> {
+export default async function (options: QueryTemplateOptions): Promise<QueryResults | QueryResult> {
     if (!options.source) options.source = 'vintner'
     if (!options.format) options.format = 'yaml'
 

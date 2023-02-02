@@ -10,12 +10,12 @@ const cache: Map<string, {key: string; value: string}[]> = new Map()
 const running: {[key: string]: boolean} = {}
 const stopped: {[key: string]: boolean} = {}
 
-type AdaptationArguments = {instance: string; key: string; value: string}
+type InstancesAdaptationOptions = {instance: string; key: string; value: string}
 
 /**
  * Monitor: Collect sensor data and trigger adaptation
  */
-export default async function (options: AdaptationArguments) {
+export default async function (options: InstancesAdaptationOptions) {
     if (stopped[options.instance]) return
 
     const entry = {key: options.key, value: options.value}
@@ -32,62 +32,60 @@ export default async function (options: AdaptationArguments) {
  * Adaptation Loop
  */
 emitter.on(events.start_adaptation, async (instance: Instance) => {
-    if (
-        // If there are cached entries
-        validator.isDefined(cache.get(instance.getName())) &&
-        // If adaptation is not currently running
-        !running[instance.getName()] &&
-        // If adaptation has not been stopped
-        !stopped[instance.getName()]
-    ) {
-        running[instance.getName()] = true
-        await critical(instance.getName(), async () => {
-            // Sanity
-            if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    // Stop loop if there are no cache entries
+    if (!validator.isDefined(cache.get(instance.getName()))) return
+    // Stop current process if there is already another one running
+    if (running[instance.getName()]) return
+    // Stop loop if adaptation is stopped
+    if (stopped[instance.getName()]) return
 
-            // Current time used as correlation identifier
-            const time = utils.getTime()
+    running[instance.getName()] = true
+    await critical(instance.getName(), async () => {
+        // Sanity
+        if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
 
-            /**
-             * Monitor: Store sensor data
-             */
-            // Get cache entries
-            const entries = cache.get(instance.getName())
-            if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
+        // Current time used as correlation identifier
+        const time = utils.getTime()
 
-            // Construct current variability inputs
-            const inputs = instance.loadVariabilityInputs()
-            for (const entry of entries) {
-                inputs[entry.key] = entry.value
-            }
-            instance.setVariabilityInputs(inputs, time)
+        /**
+         * Monitor: Store sensor data
+         */
+        // Get cache entries
+        const entries = cache.get(instance.getName())
+        if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
 
-            // Reset cache
-            cache.delete(instance.getName())
+        // Construct current variability inputs
+        const inputs = instance.loadVariabilityInputs()
+        for (const entry of entries) {
+            inputs[entry.key] = entry.value
+        }
+        await instance.setVariabilityInputs(inputs, time)
 
-            /**
-             * Analyze: Resolve variability
-             */
-            await resolve({
-                instance: instance.getName(),
-                inputs: instance.hasVariabilityInputs() ? instance.getVariabilityInputs() : undefined,
-                time,
-                preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
-            })
+        // Reset cache
+        cache.delete(instance.getName())
 
-            /**
-             * Analyze and Execute: Update deployment
-             */
-            await update({
-                instance: instance.getName(),
-                inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
-                time,
-            })
-
-            running[instance.getName()] = false
-            emitter.emit(events.start_adaptation, instance)
+        /**
+         * Analyze: Resolve variability
+         */
+        await resolve({
+            instance: instance.getName(),
+            inputs: instance.hasVariabilityInputs() ? instance.getVariabilityInputs() : undefined,
+            time,
+            preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
         })
-    }
+
+        /**
+         * Analyze and Execute: Update deployment
+         */
+        await update({
+            instance: instance.getName(),
+            inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
+            time,
+        })
+
+        running[instance.getName()] = false
+        emitter.emit(events.start_adaptation, instance)
+    })
 })
 
 /**

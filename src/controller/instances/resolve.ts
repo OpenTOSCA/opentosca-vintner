@@ -2,7 +2,7 @@ import {Instance} from '#repository/instances'
 import * as utils from '#utils'
 import resolve from '#controller/template/resolve'
 
-export type InstanceResolveArguments = {
+export type InstanceResolveOptions = {
     instance: string
     preset?: string
     inputs?: string
@@ -10,7 +10,7 @@ export type InstanceResolveArguments = {
     time?: string
 }
 
-export default async function (options: InstanceResolveArguments) {
+export default async function (options: InstanceResolveOptions) {
     const time = options.time || utils.getTime()
     const instance = new Instance(options.instance)
 

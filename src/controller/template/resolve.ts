@@ -20,14 +20,14 @@ import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
  * - groups might be a list
  */
 
-export type TemplateResolveArguments = {
+export type TemplateResolveOptions = {
     template: string
     preset?: string
     inputs?: string
     output: string
 }
 
-export default async function (options: TemplateResolveArguments) {
+export default async function (options: TemplateResolveOptions) {
     if (validator.isUndefined(options.template)) throw new Error('Template not defined')
     if (validator.isUndefined(options.output)) throw new Error('Output not defined')
 

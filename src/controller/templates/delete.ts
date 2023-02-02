@@ -1,7 +1,7 @@
 import {Template} from '#repository/templates'
 
-export type TemplatesDeleteArguments = {template: string}
+export type TemplatesDeleteOptions = {template: string}
 
-export default async function (options: TemplatesDeleteArguments) {
+export default async function (options: TemplatesDeleteOptions) {
     new Template(options.template).delete()
 }
