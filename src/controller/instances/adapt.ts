@@ -5,12 +5,15 @@ import * as utils from '#utils'
 import * as validator from '#validator'
 import {emitter, events} from '#utils/emitter'
 import {critical} from '#utils/lock'
+import {InputAssignmentMap} from '#spec/topology-template'
+import _ from 'lodash'
 
-const cache: Map<string, {key: string; value: string}[]> = new Map()
-const running: {[key: string]: boolean} = {}
-const stopped: {[key: string]: boolean} = {}
+const cache: {[key: string]: InputAssignmentMap | undefined} = {}
+const queue: {[key: string]: InputAssignmentMap[] | undefined} = {}
+const running: {[key: string]: boolean | undefined} = {}
+const stopped: {[key: string]: boolean | undefined} = {}
 
-type InstancesAdaptationOptions = {instance: string; key: string; value: string}
+type InstancesAdaptationOptions = {instance: string; inputs: InputAssignmentMap}
 
 /**
  * Monitor: Collect sensor data and trigger adaptation
@@ -18,13 +21,12 @@ type InstancesAdaptationOptions = {instance: string; key: string; value: string}
 export default async function (options: InstancesAdaptationOptions) {
     if (stopped[options.instance]) return
 
-    const entry = {key: options.key, value: options.value}
-    if (cache.has(options.instance)) return cache.get(options.instance)!.push(entry)
+    if (queue[options.instance]) return queue[options.instance]!.push(options.inputs)
 
     const instance = new Instance(options.instance)
     if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
 
-    cache.set(options.instance, [entry])
+    queue[options.instance] = [options.inputs]
     emitter.emit(events.start_adaptation, instance)
 }
 
@@ -32,8 +34,8 @@ export default async function (options: InstancesAdaptationOptions) {
  * Adaptation Loop
  */
 emitter.on(events.start_adaptation, async (instance: Instance) => {
-    // Stop loop if there are no cache entries
-    if (!validator.isDefined(cache.get(instance.getName()))) return
+    // Stop loop if there are no enqueued entries
+    if (!validator.isDefined(queue[instance.getName()])) return
     // Stop current process if there is already another one running
     if (running[instance.getName()]) return
     // Stop loop if adaptation is stopped
@@ -50,26 +52,23 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
         /**
          * Monitor: Store sensor data
          */
-        // Get cache entries
-        const entries = cache.get(instance.getName())
+        // Get enqueued entries
+        const entries = queue[instance.getName()]
         if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
 
         // Construct current variability inputs
-        const inputs = instance.loadVariabilityInputs()
-        for (const entry of entries) {
-            inputs[entry.key] = entry.value
-        }
-        await instance.setVariabilityInputs(inputs, time)
+        if (!cache[instance.getName()]) cache[instance.getName()] = instance.loadVariabilityInputs()
+        _.merge(cache[instance.getName()], ...entries)
 
-        // Reset cache
-        cache.delete(instance.getName())
+        // Reset queue
+        delete queue[instance.getName()]
 
         /**
          * Analyze: Resolve variability
          */
         await resolve({
             instance: instance.getName(),
-            inputs: instance.hasVariabilityInputs() ? instance.getVariabilityInputs() : undefined,
+            inputs: cache[instance.getName()],
             time,
             preset: instance.hasVariabilityPreset() ? instance.getVariabilityPreset() : undefined,
         })

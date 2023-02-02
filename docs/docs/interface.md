@@ -11,7 +11,7 @@ submit sensor data used for adapting the instance
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"instance": "${INSTANCE}", "key": "${KEY}", "value": "${VALUE}"}' \
+            --data '{"instance": "${INSTANCE}", "inputs": "${INPUTS}"}' \
             ${SERVER_ADDRESS}/instances/adapt
     ```
 
@@ -20,8 +20,7 @@ submit sensor data used for adapting the instance
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/instances/adapt", {
 		instance: INSTANCE,
-		key: KEY,
-		value: VALUE
+		inputs: INPUTS
     })
     ```
 
@@ -30,16 +29,14 @@ submit sensor data used for adapting the instance
     import requests
     requests.post(SERVER_ADDRESS + "/instances/adapt", json={
 		"instance": INSTANCE,
-		"key": KEY,
-		"value": VALUE
+		"inputs": INPUTS
     })
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| key |  true  | string | sensor data key |
-| value |  true  | string | sensor data value |
+| inputs |  true  | InputAssignmentMap | sensor data |
 
 ## vintner instances create
 

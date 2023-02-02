@@ -59,7 +59,6 @@ if (!integrationTestsEnabled) {
             await Controller.instances.resolve({
                 instance: instanceName,
                 inputs: path.join(templateDirectory, 'variability-inputs.example.yaml'),
-                first: true,
             })
 
             // Assert that variability-resolved service template and variability inputs are as expected
@@ -74,8 +73,7 @@ if (!integrationTestsEnabled) {
             // Adapt mode from "first" to "second"
             await Controller.instances.adapt({
                 instance: instanceName,
-                key: 'mode',
-                value: 'second',
+                inputs: {mode: 'second'},
             })
 
             // Wait until adaptation finished
@@ -89,8 +87,7 @@ if (!integrationTestsEnabled) {
             for (const value of ['third', 'fourth', 'fifth', 'sixth', 'first']) {
                 const _ = Controller.instances.adapt({
                     instance: instanceName,
-                    key: 'mode',
-                    value,
+                    inputs: {mode: value},
                 })
             }
 
