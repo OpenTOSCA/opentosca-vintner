@@ -5,6 +5,8 @@ import {ServiceTemplate} from '../../src/specification/service-template'
 import {Instance} from '../../src/repository/instances'
 import {expect} from 'chai'
 import {sleep} from '../../src/utils/utils'
+import {before} from 'mocha'
+import {Shell} from '../../src/utils/shell'
 
 const insideWorkflow = process.env.CI === 'true'
 const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION_TESTS === 'true'
@@ -14,6 +16,21 @@ if (!integrationTestsEnabled) {
     console.warn('Skipping integration tests')
 } else {
     describe('adaptation', () => {
+        before(async () => {
+            // Check that xOpera is installed
+            if (insideWorkflow) {
+                await new Shell().execute(['which opera &>/dev/null'])
+            } else {
+                await new Shell(true).execute([
+                    'cd ~/opera',
+                    '&&',
+                    '. .venv/bin/activate',
+                    '&&',
+                    'which opera &>/dev/null',
+                ])
+            }
+        })
+
         beforeEach(async () => {
             // TODO: set vintner home to not nuke local setups
 
