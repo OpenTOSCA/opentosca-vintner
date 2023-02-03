@@ -1,20 +1,29 @@
 import si from 'systeminformation'
+import {SensorBaseOptions} from '#controller/sensors/utils'
+import cron from 'node-cron'
+import console from 'console'
+import hae from '#utils/hae'
 
-export type SensorComputeOptions = {vintner_host: string; vintner_port: string; interval?: number}
+export type SensorComputeOptions = SensorBaseOptions
 
 export default async function (options: SensorComputeOptions) {
     const system = await si.osInfo()
-    if (system.platform.startsWith('win')) throw new Error(`Windows is not supported`)
+    if (system.platform.toLowerCase().startsWith('win')) throw new Error(`Windows is not supported`)
 
-    setInterval(async () => {
-        const load = await si.currentLoad()
-        const mem = await si.mem()
-        console.log({
-            cpi: load.currentLoad,
-            mem: format(mem.used / mem.total),
+    // TODO: human-to-cron
+    cron.schedule(
+        options.time_interval || '* * * * * *',
+        hae.log(async () => {
+            // TODO: catch error
+            const load = await si.currentLoad()
+            const mem = await si.mem()
+            console.log({
+                cpu: format(load.currentLoad),
+                mem: format(mem.used / mem.total),
+            })
+            // TODO: get host metrics and send them to vintner
         })
-        // TODO: get host metrics and send them to vintner
-    }, options.interval || 1000)
+    )
 }
 
 function format(value: number) {

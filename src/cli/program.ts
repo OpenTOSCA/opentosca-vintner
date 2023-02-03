@@ -1,10 +1,10 @@
 import {Command, Option} from 'commander'
-import hae from './hae'
 import config from '#config'
 import Controller from '#controller'
 import * as files from '#files'
 import benchmark, {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 import console from 'console'
+import hae from '#utils/hae'
 
 export const program = new Command()
 
@@ -16,7 +16,7 @@ setup
     .command('init')
     .description('initialises the filesystem')
     .action(
-        hae(async () => {
+        hae.exit(async () => {
             await Controller.setup.init()
         })
     )
@@ -25,7 +25,7 @@ setup
     .command('clean')
     .description('cleans up the filesystem')
     .action(
-        hae(async () => {
+        hae.exit(async () => {
             await Controller.setup.clean()
         })
     )
@@ -34,7 +34,7 @@ setup
     .command('open')
     .description('opens the home directory')
     .action(
-        hae(async () => {
+        hae.exit(async () => {
             await Controller.setup.open()
         })
     )
@@ -52,7 +52,7 @@ setup
     .option('--latex [boolean]', 'plot results as latex', false)
     .option('--markdown [boolean]', 'plot results as markdown', false)
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             const results = await Controller.setup.benchmark(options)
             console.table(results)
             if (options.markdown) console.log('\n', benchmark2markdown(results))
@@ -67,7 +67,7 @@ orchestrators
     .description('enables an orchestrator plugin')
     .requiredOption('--orchestrator <string>', 'orchestrator plugin')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.orchestrators.enable(options)
         })
     )
@@ -80,7 +80,7 @@ initOrchestrators
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of xopera', '~/opera')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.orchestrators.initxOpera(options)
         })
     )
@@ -91,7 +91,7 @@ initOrchestrators
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of opera', '~/opera')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.orchestrators.initxOperaWSL(options)
         })
     )
@@ -102,7 +102,7 @@ initOrchestrators
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of unfurl', '~/.unfurl_home')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.orchestrators.initUnfurl(options)
         })
     )
@@ -113,7 +113,7 @@ initOrchestrators
     .option('--venv [boolean]', 'enable the use of a virtual environment', true)
     .option('--dir [string]', 'directory of unfurl', '~/.unfurl_home')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.orchestrators.initUnfurlWSL(options)
         })
     )
@@ -126,7 +126,7 @@ program
     .option('--output [string]', 'path of the output')
     .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             const result = await Controller.query.run(options)
             if (options.format === 'yaml') console.log(files.toYAML(result))
             if (options.format === 'json') console.log(files.toJSON(result))
@@ -143,7 +143,7 @@ template
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.template.resolve(options)
         })
     )
@@ -154,7 +154,7 @@ template
     .requiredOption('--template <string>', 'path to service template')
     .requiredOption('--output <string>', 'path of the output')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             Controller.template.query(options)
         })
     )
@@ -164,7 +164,7 @@ template
     .description('runs tests defined in the CSAR')
     .requiredOption('--path <string>', 'path or link to the extracted CSAR')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.template.test(options)
         })
     )
@@ -175,7 +175,7 @@ templates
     .command('list')
     .description('lists all templates')
     .action(
-        hae(async () => {
+        hae.exit(async () => {
             const templates = await Controller.templates.list()
             console.log(templates.map(template => template.getName()).join('\n'))
         })
@@ -187,7 +187,7 @@ templates
     .requiredOption('--template <string>', 'template name')
     .requiredOption('--path <string>', 'path or link to the csar')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.templates.import(options)
         })
     )
@@ -197,7 +197,7 @@ templates
     .description('opens template directory in a file browser')
     .requiredOption('--template <string>', 'template name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.templates.open(options)
         })
     )
@@ -207,7 +207,7 @@ templates
     .description('inspects the variable service template')
     .requiredOption('--template <string>', 'template name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             const template = await Controller.templates.inspect(options)
             console.log(files.toYAML(template))
         })
@@ -218,7 +218,7 @@ templates
     .description('deletes a template')
     .requiredOption('--template <string>', 'template name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.templates.delete(options)
         })
     )
@@ -229,7 +229,7 @@ instances
     .command('list')
     .description('lists all instances')
     .action(
-        hae(async () => {
+        hae.exit(async () => {
             const instances = await Controller.instances.list()
             console.log(instances.map(instance => instance.getName()).join('\n'))
         })
@@ -241,7 +241,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--template <string>', 'template name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.create(options)
         })
     )
@@ -251,7 +251,7 @@ instances
     .description('opens template directory in a file browser')
     .requiredOption('--instance <string>', 'instance name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.open(options)
         })
     )
@@ -263,7 +263,7 @@ instances
     .option('--preset [string]', 'name of the variability preset')
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.resolve(options)
         })
     )
@@ -273,7 +273,7 @@ instances
     .description('inspects variability-resolved service template')
     .requiredOption('--instance <string>', 'instance name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             const template = await Controller.instances.inspect(options)
             console.log(files.toYAML(template))
         })
@@ -285,7 +285,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.deploy(options)
         })
     )
@@ -296,7 +296,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.update(options)
         })
     )
@@ -306,7 +306,7 @@ instances
     .description('undeploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.undeploy(options)
         })
     )
@@ -316,7 +316,7 @@ instances
     .description('deletes instance')
     .requiredOption('--instance <string>', 'instance name')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.instances.delete(options)
         })
     )
@@ -329,7 +329,7 @@ server
     .option('--host [string]', 'host on which to listen', '127.0.0.1')
     .option('--port [number}', 'port on which to listen', '3000')
     .action(
-        hae(async options => {
+        hae.exit(async options => {
             await Controller.server.start(options)
         })
     )
@@ -337,7 +337,7 @@ server
 const sensors = program.command('sensors').description('handles sensors')
 
 sensors.command('compute').action(
-    hae(async options => {
+    hae.exit(async options => {
         await Controller.sensors.compute(options)
     })
 )
