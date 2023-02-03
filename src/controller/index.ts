@@ -31,6 +31,7 @@ import testTemplate from './template/test'
 import computeSensor from '#controller/sensors/compute'
 import locationSensor from '#controller/sensors/location'
 import weekdaySensor from '#controller/sensors/weekday'
+import fileSensor from '#controller/sensors/file'
 
 const Controller = {
     instances: {
@@ -81,6 +82,7 @@ const Controller = {
         compute: computeSensor,
         location: locationSensor,
         weekday: weekdaySensor,
+        file: fileSensor,
     },
 }
 

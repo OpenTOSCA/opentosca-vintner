@@ -338,6 +338,7 @@ const sensors = program.command('sensors').description('handles sensors')
 
 sensors
     .command('compute')
+    .description('starts a sensor for compute utilization such as cpu and memory')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
     .requiredOption('--template <string>', 'node template name')
@@ -351,6 +352,7 @@ sensors
 
 sensors
     .command('location')
+    .description('starts a sensor for the current location')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
     .requiredOption('--template <string>', 'node template name')
@@ -364,6 +366,7 @@ sensors
 
 sensors
     .command('weekday')
+    .description('starts a sensor for the weekday')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
     .option('--time-interval [string]', 'interval to submit data', 'every day')
@@ -372,5 +375,20 @@ sensors
     .action(
         hae.exit(async options => {
             await Controller.sensors.weekday(options)
+        })
+    )
+
+sensors
+    .command('file')
+    .description('starts a sensor for data stored in a file')
+    .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
+    .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
+    .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
+    .requiredOption('--file <string>', 'path to file')
+    .option('--disable-watch [boolean]', 'do not watch file but send data once', false)
+    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .action(
+        hae.exit(async options => {
+            await Controller.sensors.file(options)
         })
     )
