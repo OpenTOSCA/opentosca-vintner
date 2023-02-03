@@ -3,9 +3,9 @@ import http from 'http'
 import express from 'express'
 import resolvers from './resolvers'
 import type {ErrorRequestHandler} from 'express'
-import hae from './hae'
 import createError from 'http-errors'
 import cors from 'cors'
+import hae from '#utils/hae'
 
 export default {
     create: function () {
@@ -24,7 +24,7 @@ export default {
          */
         expressServer.use(
             '*',
-            hae((req, res, next) => {
+            hae.express((req, res, next) => {
                 throw new createError.NotFound()
             })
         )

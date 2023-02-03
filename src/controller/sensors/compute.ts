@@ -1,27 +1,29 @@
 import si from 'systeminformation'
-import {SensorBaseOptions} from '#controller/sensors/utils'
+import {SensorBaseOptions, human2cron, submit} from '#controller/sensors/utils'
 import cron from 'node-cron'
 import console from 'console'
 import hae from '#utils/hae'
+import {InputAssignmentMap} from '#spec/topology-template'
 
-export type SensorComputeOptions = SensorBaseOptions
+export type SensorComputeOptions = SensorBaseOptions & {template: string}
 
 export default async function (options: SensorComputeOptions) {
     const system = await si.osInfo()
     if (system.platform.toLowerCase().startsWith('win')) throw new Error(`Windows is not supported`)
 
-    // TODO: human-to-cron
     cron.schedule(
-        options.time_interval || '* * * * * *',
+        human2cron(options.timeInterval),
         hae.log(async () => {
-            // TODO: catch error
             const load = await si.currentLoad()
             const mem = await si.mem()
-            console.log({
-                cpu: format(load.currentLoad),
-                mem: format(mem.used / mem.total),
-            })
-            // TODO: get host metrics and send them to vintner
+
+            const inputs: InputAssignmentMap = {}
+            inputs[`${options.template}_cpu_utilization`] = format(load.currentLoad)
+            inputs[`${options.template}_memory_utilization`] = format(mem.used / mem.total)
+            console.log(inputs)
+
+            if (options.disableSubmission) return
+            await submit(options.vintnerHost, options.vintnerHost, options.instance, inputs)
         })
     )
 }

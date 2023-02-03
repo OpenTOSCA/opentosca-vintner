@@ -1985,6 +1985,11 @@ fresh@0.5.2:
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==
 
+friendly-node-cron@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/friendly-node-cron/-/friendly-node-cron-1.4.1.tgz#92062f25e6bb9d9c2d0bc6063b1e6d9420056740"
+  integrity sha512-BH28emerssFUsBj/pCbuBuWzRBqhdwv6qXHi3hKwUwOREFkTKv5Ak1fPd2UqPg4GHOrjY1lOks7/4NFJ3t2wCQ==
+
 from2@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/from2/-/from2-2.3.0.tgz#8bfb5502bde4a4d36cfdeea007fcca21d7e382af"

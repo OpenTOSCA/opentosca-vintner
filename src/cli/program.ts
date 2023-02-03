@@ -336,8 +336,41 @@ server
 
 const sensors = program.command('sensors').description('handles sensors')
 
-sensors.command('compute').action(
-    hae.exit(async options => {
-        await Controller.sensors.compute(options)
-    })
-)
+sensors
+    .command('compute')
+    .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
+    .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
+    .requiredOption('--template <string>', 'node template name')
+    .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
+    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .action(
+        hae.exit(async options => {
+            await Controller.sensors.compute(options)
+        })
+    )
+
+sensors
+    .command('location')
+    .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
+    .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
+    .requiredOption('--template <string>', 'node template name')
+    .option('--time-interval [string]', 'interval to submit data', 'every minute')
+    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .action(
+        hae.exit(async options => {
+            await Controller.sensors.location(options)
+        })
+    )
+
+sensors
+    .command('weekday')
+    .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
+    .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
+    .option('--time-interval [string]', 'interval to submit data', 'every day')
+    .option('--start [string]', 'set day to start from')
+    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .action(
+        hae.exit(async options => {
+            await Controller.sensors.weekday(options)
+        })
+    )

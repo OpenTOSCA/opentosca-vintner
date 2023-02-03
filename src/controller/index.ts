@@ -29,6 +29,8 @@ import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
 import testTemplate from './template/test'
 import computeSensor from '#controller/sensors/compute'
+import locationSensor from '#controller/sensors/location'
+import weekdaySensor from '#controller/sensors/weekday'
 
 const Controller = {
     instances: {
@@ -77,6 +79,8 @@ const Controller = {
     },
     sensors: {
         compute: computeSensor,
+        location: locationSensor,
+        weekday: weekdaySensor,
     },
 }
 
