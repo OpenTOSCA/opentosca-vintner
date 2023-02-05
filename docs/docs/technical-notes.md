@@ -4,7 +4,7 @@
 
 ### Home Directory
 
-```text
+```text linenums="1"
 ${vintner_home}/
 ├─ templates/
 ├─ instances/
@@ -13,7 +13,7 @@ ${vintner_home}/
 
 ### Instance Directory
 
-```text
+```text linenums="1"
 ${vintner_home}/
 ├─ instances/
 │  ├─ ${instance-name}/
@@ -75,20 +75,20 @@ ${vintner_home}/
 
 ## Install NodeJS on Linux
 
-```
-curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+```shell linenums="1"
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo bash -
 sudo apt-get install nodejs -y
 sudo npm install -g yarn
 ```
 
 ## General Helpful Tools on Linux
 
-```
-sudo apt-get install tree nano wget jq net-tools curl git stress -y
+```shell linenums="1"
+sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
 ```
 
 ## Put Some Stress on CPU and Memory
 
-```
+```shell linenums="1"
 stress --cpu 18 --vm 36 --vm-bytes 1024M
 ```

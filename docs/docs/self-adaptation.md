@@ -6,4 +6,4 @@
 - file
 - location
 - weekday
-- api is available, thus, custom ones can be easily implemented
+- api is available, thus, custom sensors can be easily implemented

@@ -6,8 +6,6 @@ But please follow the following guidelines and our [Code of Conduct](code-of-con
 ## Repository
 
 The repository is a monorepo consisting of the CLI, server, docs and tests using
-[git lfs](https://git-lfs.com){target=_blank}
-for larger files, e.g., used in examples.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner
@@ -16,6 +14,11 @@ git lfs install
 git lfs pull
 yarn --frozen-lockfile
 ```
+
+## Large Files
+
+Larges files, such as binaries or archives used in examples, are added using [git lfs](https://git-lfs.com){target=_blank}.
+This includes the following file extensions `.bin`, `.gz`, `.tar`, and `.zip`.
 
 ## Branch Naming Convention
 
