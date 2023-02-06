@@ -1,0 +1,45 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/scenario/types.yaml
+    - lib/compute/types.yaml
+    - lib/sensors/types.yaml
+
+topology_template:
+    inputs:
+        vintner_host:
+            type: string
+            default: localhost
+
+        vintner_port:
+            type: string
+            default: 3000
+
+    node_templates:
+        application:
+            type: scenario.application
+            properties:
+                scale: 4
+            requirements:
+                - host:
+                      node: compute_vm
+            artifacts:
+                binary:
+                    file: files/application-linux-x64.bin
+
+        compute_vm:
+            type: compute.vm
+
+        sensor_compute_vm:
+            type: sensors.compute
+            properties:
+                vintner_host: {get_input: vintner_host}
+                vintner_port: {get_input: vintner_port}
+            requirements:
+                - host: compute_vm
+
+        sensor_weekday:
+            type: sensors.weekday
+            properties:
+                vintner_host: {get_input: vintner_host}
+                vintner_port: {get_input: vintner_port}

@@ -1,0 +1,133 @@
+tosca_definitions_version: tosca_variability_1_0
+
+# TODO: types
+imports:
+    - lib/scenario/types.yaml
+    - lib/compute/types.yaml
+    - lib/sensors/types.yaml
+
+# TODO: cloud if cheap
+# TODO: cloud if heavy workload
+# TODO: implement sensor
+
+topology_template:
+    inputs:
+        vintner_host:
+            type: string
+            default: localhost
+
+        vintner_port:
+            type: string
+            default: 3000
+
+        instance:
+            type: string
+
+    variability:
+        inputs:
+            weekday:
+                type: string
+            compute_raspberry_cpu:
+                type: number
+            compute_vm_up:
+                type: boolean
+            compute_vm_uptime:
+                type: number
+            compute_vm_cpu:
+                type: number
+
+        expressions:
+            is_raspberry_present:
+                {and: [{get_variability_condition: is_weekend}, {get_variability_condition: not_is_cloud_burst}]}
+            is_weekend: {valid_values: [get_variability_input: weekday, ['saturday', 'sunday']]}
+            not_is_cloud_burst:
+                {
+                    or:
+                        [
+                            {
+                                and:
+                                    [
+                                        {get_variability_condition: not_is_raspberry_under_load},
+                                        {get_variability_condition: not_is_vm_up},
+                                    ],
+                            },
+                            {
+                                and:
+                                    [
+                                        {get_variability_condition: not_is_vm_under_load},
+                                        {get_variability_condition: is_vm_up_enough},
+                                    ],
+                            },
+                        ],
+                }
+            not_is_raspberry_under_load: {less_than: [{get_variability_input: compute_raspberry_cpu}, 80]}
+            not_is_vm_under_load: {less_than: [{get_variability_input: compute_vm_cpu}, 40]}
+            not_is_vm_up: {not: {get_variability_input: compute_vm_up}}
+            is_vm_up_enough: {greater_than: [{get_variability_input: compute_vm_uptime}, 600]}
+
+        options:
+            enable_relation_pruning: true
+            enable_policy_pruning: true
+            enable_group_pruning: true
+            enable_property_pruning: true
+            enable_artifact_pruning: true
+
+    node_templates:
+        application:
+            type: scenario.application
+            properties:
+                - scale:
+                      value: 1
+                      conditions: {get_node_presence: compute_raspberry}
+                - scale:
+                      value: 4
+                      conditions: {get_node_presence: compute_vm}
+            requirements:
+                - host:
+                      node: compute_raspberry
+                      conditions: {get_node_presence: compute_raspberry}
+                - host:
+                      node: compute_vm
+                      conditions: {get_node_presence: compute_vm}
+            artifacts:
+                - binary:
+                      file: files/application-linux-arm64.bin
+                      conditions: {get_node_presence: compute_raspberry}
+                - binary:
+                      file: files/application-linux-x64.bin
+                      conditions: {get_node_presence: compute_vm}
+
+        compute_raspberry:
+            type: compute.raspberry
+            conditions: {get_variability_condition: is_raspberry_present}
+
+        compute_vm:
+            type: compute.vm
+            conditions: {not: {get_node_presence: compute_raspberry}}
+
+        sensor_compute_vm:
+            type: sensors.compute
+            conditions: {get_node_presence: compute_vm}
+            properties:
+                vintner_host: {get_input: vintner_host}
+                vintner_port: {get_input: vintner_port}
+                instance: {get_input: instance}
+            requirements:
+                - host: compute_vm
+
+        sensor_compute_raspberry:
+            type: sensors.compute
+            conditions: {get_node_presence: compute_raspberry}
+            properties:
+                vintner_host: {get_input: vintner_host}
+                vintner_port: {get_input: vintner_port}
+                instance: {get_input: instance}
+            requirements:
+                - host: compute_raspberry
+
+        sensor_weekday:
+            type: sensors.weekday
+            properties:
+                vintner_host: {get_input: vintner_host}
+                vintner_port: {get_input: vintner_port}
+                instance: {get_input: instance}

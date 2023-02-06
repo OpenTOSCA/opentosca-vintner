@@ -4,22 +4,25 @@ import hae from '#utils/hae'
 import {InputAssignmentMap} from '#spec/topology-template'
 import console from 'console'
 import * as files from '#files'
+import death from '#utils/death'
 
 export type SensorFileOptions = SensorBaseOptions & {file: string; disableWatch?: boolean}
 
 export default async function (options: SensorFileOptions) {
-    if (options.disableWatch) return fn(options)
+    async function handle() {
+        const inputs = files.loadYAML<InputAssignmentMap>(options.file)
+        console.log(inputs)
 
-    cron.schedule(
+        if (options.disableSubmission) return
+        await submit(options.vintnerHost, options.vintnerHost, options.instance, inputs)
+    }
+
+    if (options.disableWatch) await handle()
+
+    const task = cron.schedule(
         human2cron(options.timeInterval),
-        hae.log(() => fn(options))
+        hae.log(async () => await handle())
     )
-}
-
-async function fn(options: SensorFileOptions) {
-    const inputs = files.loadYAML<InputAssignmentMap>(options.file)
-    console.log(inputs)
-
-    if (options.disableSubmission) return
-    await submit(options.vintnerHost, options.vintnerHost, options.instance, inputs)
+    task.start()
+    death.register(task)
 }

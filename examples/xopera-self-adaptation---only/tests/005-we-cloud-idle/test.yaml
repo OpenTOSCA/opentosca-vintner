@@ -1,0 +1,6 @@
+description: |
+    - running in the cloud due to previous burst
+    - the vm load however is low by now
+    - the vm is up at least 10min, thus, raspberry should be used
+
+    - note, this is the same scenario, as when its under the week, the vm is running and its switching to saturday

@@ -1,0 +1,52 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Check if target is supported
+        fail:
+            msg: Target not linux or not arm64 or x64
+        when: (ansible_system != 'Linux') and (ansible_architecture != 'x86_64' and ansible_architecture != 'aarch64')
+
+      - name: Install vintner on x64
+        when: ansible_architecture == 'x86_64'
+        shell: |
+            if ! which vintner &>/dev/null; then
+              wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+              mv vintner-linux-x64 /usr/bin/vintner
+            fi
+
+      - name: Install vintner on arm64
+        when: ansible_architecture == 'aarch64'
+        shell: |
+            if ! which vintner &>/dev/null; then
+              wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64
+              mv vintner-linux-arm64 /usr/bin/vintner
+            fi
+
+      - name: Create systemd service
+        copy:
+            dest: /etc/systemd/system/sensor-weekday.service
+            content: |
+                [Unit]
+                Description=Sensor Weekday
+                After=multi-user.target
+
+                [Service]
+                Type=simple
+                Restart=always
+                WorkingDirectory=/var/lib/sensor-weekday
+                ExecStart=/usr/bin/vintner sensors weekday $VINTNER_SENSOR_ARGS
+                EnvironmentFile=.env
+
+                [Install]
+                WantedBy=multi-user.target
+
+      - name: Enable systemd service
+        systemd:
+            name: sensor-weekday
+            status: stopped
+            enabled: true
+            daemon_reload: true

@@ -25,3 +25,10 @@ export async function submit(host: string, port: string, instance: string, input
         inputs,
     })
 }
+
+export function prefix(data: InputAssignmentMap, prefix: string) {
+    return Object.entries(data).reduce<InputAssignmentMap>((acc, cur) => {
+        acc[`${prefix}_${cur[0]}`] = cur[1]
+        return acc
+    }, {})
+}

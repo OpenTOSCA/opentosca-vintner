@@ -1,0 +1,3 @@
+description: |
+    - after deployment application is running not under load on raspberry
+    - thus, nothing happens

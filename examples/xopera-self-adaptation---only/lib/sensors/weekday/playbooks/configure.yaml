@@ -10,6 +10,4 @@
         copy:
             dest: /var/lib/sensor-weekday/.env
             content: |
-                VINTNER_HOST={{ vintner_host }}
-                VINTNER_PORT={{ vintner_port }}
-                TIME_FACTOR={{ time_factor }}
+                $VINTNER_SENSOR_ARGS=--vintner-host {{ vintner_host }} --vintner-port {{ vintner_port }} --instance {{ instance }} --time-interval {{ time_interval }} --disable-submission {{ disable_submission }}

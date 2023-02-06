@@ -1,6 +1,9 @@
 # Allow any assets
 !docs/docs/assets
 
+#
+*.ignored.yaml
+
 # IDE
 .idea
 .code
