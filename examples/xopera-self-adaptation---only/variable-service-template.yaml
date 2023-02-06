@@ -6,10 +6,6 @@ imports:
     - lib/compute/types.yaml
     - lib/sensors/types.yaml
 
-# TODO: cloud if cheap
-# TODO: cloud if heavy workload
-# TODO: implement sensor
-
 topology_template:
     inputs:
         vintner_host:
@@ -106,7 +102,7 @@ topology_template:
             conditions: {not: {get_node_presence: compute_raspberry}}
 
         sensor_compute_vm:
-            type: sensors.compute
+            type: sensor.compute
             conditions: {get_node_presence: compute_vm}
             properties:
                 vintner_host: {get_input: vintner_host}
@@ -116,7 +112,7 @@ topology_template:
                 - host: compute_vm
 
         sensor_compute_raspberry:
-            type: sensors.compute
+            type: sensor.compute
             conditions: {get_node_presence: compute_raspberry}
             properties:
                 vintner_host: {get_input: vintner_host}
@@ -126,7 +122,7 @@ topology_template:
                 - host: compute_raspberry
 
         sensor_weekday:
-            type: sensors.weekday
+            type: sensor.weekday
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}

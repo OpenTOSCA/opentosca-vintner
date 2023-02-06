@@ -1,0 +1,60 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Check if target is supported
+        when: (ansible_system != 'Linux') and (ansible_architecture != 'x86_64' or ansible_architecture != 'aarch64')
+        fail:
+            msg: Target not linux or not arm64 or x64
+
+      - name: Install vintner on x64
+        when: ansible_architecture == 'x86_64'
+        shell: |
+            if [ ! -f /usr/bin/vintner ]; then
+                wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
+                mv vintner-linux-x64 /usr/bin/vintner
+                chmod +x  /usr/bin/vintner
+            fi
+
+      - name: Install vintner on arm64
+        when: ansible_architecture == 'aarch64'
+        shell: |
+            if [ ! -f /usr/bin/vintner ]; then
+                wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64
+                mv vintner-linux-arm64 /usr/bin/vintner
+                chmod +x  /usr/bin/vintner
+            fi
+
+      - name: Create working directory
+        file:
+            path: /var/lib/sensor-compute
+            state: directory
+
+      - name: Create systemd service
+        copy:
+            dest: /etc/systemd/system/sensor-compute.service
+            content: |
+                [Unit]
+                Description=Sensor compute
+                After=multi-user.target
+
+                [Service]
+                Type=simple
+                Restart=always
+                WorkingDirectory=/var/lib/sensor-compute
+                ExecStart=/usr/bin/vintner sensors compute $VINTNER_SENSOR_ARGS
+                EnvironmentFile=/var/lib/sensor-compute/.env
+
+                [Install]
+                WantedBy=multi-user.target
+
+      - name: Enable systemd service
+        systemd:
+            name: sensor-compute
+            status: stopped
+            enabled: true
+            daemon_reload: true

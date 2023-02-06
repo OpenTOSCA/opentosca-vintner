@@ -31,7 +31,7 @@ topology_template:
             type: compute.raspberry
 
         sensor_compute_raspberry:
-            type: sensors.compute
+            type: sensor.compute
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}
@@ -39,7 +39,7 @@ topology_template:
                 - host: compute_raspberry
 
         sensor_weekday:
-            type: sensors.weekday
+            type: sensor.weekday
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}

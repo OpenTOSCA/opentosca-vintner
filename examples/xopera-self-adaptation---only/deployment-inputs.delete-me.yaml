@@ -1,0 +1,4 @@
+instance: my-test
+
+compute_raspberry_user_name: pi
+compute_raspberry_ssh_key_file: /home/stoetzms/.ssh/id_ed25519

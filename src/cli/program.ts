@@ -339,9 +339,10 @@ const sensors = program.command('sensors').description('handles sensors')
 sensors
     .command('compute')
     .description('starts a sensor for compute utilization such as cpu and memory')
+    .requiredOption('--instance <string>', 'monitored instance')
+    .requiredOption('--template <string>', 'node template name')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
-    .requiredOption('--template <string>', 'node template name')
     .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
     .option('--disable-submission [boolean]', 'disable submission of data', false)
     .action(
@@ -353,9 +354,10 @@ sensors
 sensors
     .command('location')
     .description('starts a sensor for the current location')
+    .requiredOption('--instance <string>', 'monitored instance')
+    .requiredOption('--template <string>', 'node template name')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
-    .requiredOption('--template <string>', 'node template name')
     .option('--time-interval [string]', 'interval to submit data', 'every minute')
     .option('--disable-submission [boolean]', 'disable submission of data', false)
     .action(
@@ -367,6 +369,7 @@ sensors
 sensors
     .command('weekday')
     .description('starts a sensor for the weekday')
+    .requiredOption('--instance <string>', 'monitored instance')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
     .option('--time-interval [string]', 'interval to submit data', 'every day')
@@ -381,10 +384,11 @@ sensors
 sensors
     .command('file')
     .description('starts a sensor for data stored in a file')
+    .requiredOption('--instance <string>', 'monitored instance')
+    .requiredOption('--file <string>', 'path to file')
     .option('--vintner-host [string]', 'vintner host to submit sensors data', '127.0.0.1')
     .option('--vintner-port [number]', 'vintner port to submit sensors data', '3000')
     .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
-    .requiredOption('--file <string>', 'path to file')
     .option('--disable-watch [boolean]', 'do not watch file but send data once', false)
     .option('--disable-submission [boolean]', 'disable submission of data', false)
     .action(

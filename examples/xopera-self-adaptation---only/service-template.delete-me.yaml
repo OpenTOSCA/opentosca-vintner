@@ -1,9 +1,7 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - lib/scenario/types.yaml
-    - lib/compute/types.yaml
-    - lib/sensors/types.yaml
+    - lib/sensor/types.yaml
 
 topology_template:
     inputs:
@@ -15,26 +13,32 @@ topology_template:
             type: string
             default: 3000
 
-    node_templates:
-        application:
-            type: scenario.application
-            properties:
-                scale: 1
-            requirements:
-                - host:
-                      node: compute_raspberry
-            artifacts:
-                binary:
-                    file: files/application-linux-arm64.bin
+        instance:
+            type: string
 
+        compute_raspberry_user_name:
+            type: string
+
+        compute_raspberry_ssh_key_file:
+            type: string
+
+    node_templates:
         compute_raspberry:
             type: compute.raspberry
+            properties:
+                ssh_user: {get_input: compute_raspberry_user_name}
+                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
+            attributes:
+                private_address: 192.168.178.45
+                public_address: 192.168.178.45
 
         sensor_compute_raspberry:
             type: sensor.compute
+            conditions: {get_node_presence: compute_raspberry}
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}
+                instance: {get_input: instance}
             requirements:
                 - host: compute_raspberry
 
@@ -43,3 +47,6 @@ topology_template:
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}
+                instance: {get_input: instance}
+            requirements:
+                - host: compute_raspberry
