@@ -1,6 +1,7 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
+    - lib/compute/types.yaml
     - lib/sensor/types.yaml
 
 topology_template:
@@ -34,11 +35,13 @@ topology_template:
 
         sensor_compute_raspberry:
             type: sensor.compute
-            conditions: {get_node_presence: compute_raspberry}
             properties:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}
                 instance: {get_input: instance}
+                template: compute_raspberry
+                ssh_user: {get_input: compute_raspberry_user_name}
+                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
             requirements:
                 - host: compute_raspberry
 

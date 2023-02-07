@@ -15,13 +15,6 @@ node_types:
             instance:
                 type: string
 
-            template:
-                type: template
-
-            time_interval:
-                type: string
-                default: 'every 10 seconds'
-
             disable_submission:
                 type: boolean
                 default: false
@@ -33,6 +26,18 @@ node_types:
             ssh_key_file:
                 type: string
                 default: {get_property: [SELF, host, ssh_key_file]}
+
+            template:
+                type: string
+
+            time_interval:
+                type: string
+                default: 'every 10 seconds'
+
+            service_name:
+                type: string
+                default: {concat: ['vintner-sensor-compute-', {get_property: [SELF, instance]}]}
+
         interfaces:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard
@@ -67,20 +72,24 @@ node_types:
                             get_property: [SELF, disable_submission]
                         type: boolean
 
-                    ssh_user:
+                    service_name:
+                        value: {get_property: [SELF, service_name]}
                         type: string
-                        default: {get_property: [SELF, host, ssh_user]}
+
+                    ssh_user:
+                        value: {get_property: [SELF, ssh_user]}
+                        type: string
 
                     ssh_key_file:
+                        value: {get_property: [SELF, ssh_key_file]}
                         type: string
-                        default: {get_property: [SELF, host, ssh_key_file]}
 
                 operations:
-                    create: compute/playbooks/create.yaml
+                    create: abstract/playbooks/create.yaml
                     configure: compute/playbooks/configure.yaml
-                    start: compute/playbooks/start.yaml
-                    delete: compute/playbooks/delete.yaml
-                    stop: compute/playbooks/stop.yaml
+                    start: abstract/playbooks/start.yaml
+                    delete: abstract/playbooks/delete.yaml
+                    stop: abstract/playbooks/stop.yaml
 
     sensor.weekday:
         derived_from: tosca.nodes.SoftwareComponent
@@ -96,10 +105,6 @@ node_types:
             instance:
                 type: string
 
-            time_interval:
-                type: string
-                default: 'every day'
-
             disable_submission:
                 type: boolean
                 default: false
@@ -111,6 +116,14 @@ node_types:
             ssh_key_file:
                 type: string
                 default: {get_property: [SELF, host, ssh_key_file]}
+
+            time_interval:
+                type: string
+                default: 'every day'
+
+            service_name:
+                type: string
+                default: {concat: ['vintner-sensor-weekday-', {get_property: [SELF, instance]}]}
         interfaces:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard
@@ -119,34 +132,41 @@ node_types:
                         value:
                             get_property: [SELF, vintner_host]
                         type: string
+
                     vintner_port:
                         value:
                             get_property: [SELF, vintner_port]
                         type: string
+
                     instance:
                         value:
                             get_property: [SELF, instance]
                         type: string
+
                     time_interval:
                         value:
                             get_property: [SELF, time_interval]
                         type: string
+
                     disable_submission:
                         value:
                             get_property: [SELF, disable_submission]
                         type: boolean
 
-                    ssh_user:
+                    service_name:
+                        value: {get_property: [SELF, service_name]}
                         type: string
-                        default: {get_property: [SELF, host, ssh_user]}
+
+                    ssh_user:
+                        value: {get_property: [SELF, ssh_user]}
+                        type: string
 
                     ssh_key_file:
+                        value: {get_property: [SELF, ssh_key_file]}
                         type: string
-                        default: {get_property: [SELF, host, ssh_key_file]}
-
                 operations:
-                    create: weekday/playbooks/create.yaml
+                    create: abstract/playbooks/create.yaml
                     configure: weekday/playbooks/configure.yaml
-                    start: weekday/playbooks/start.yaml
-                    delete: weekday/playbooks/delete.yaml
-                    stop: weekday/playbooks/stop.yaml
+                    start: abstract/playbooks/start.yaml
+                    delete: abstract/playbooks/delete.yaml
+                    stop: abstract/playbooks/stop.yaml
