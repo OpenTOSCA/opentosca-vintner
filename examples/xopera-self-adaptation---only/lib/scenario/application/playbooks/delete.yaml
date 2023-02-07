@@ -8,12 +8,12 @@
   tasks:
       - name: Delete working directory
         file:
-            path: /var/lib/sensor-compute
+            path: '/var/lib/{{ service_name }}'
             state: absent
 
       - name: Delete systemd service
         file:
-            path: /etc/systemd/system/sensor-compute.service
+            path: '/etc/systemd/system/{{ service_name }}@.service'
             state: absent
 
       - name: Reload daemon

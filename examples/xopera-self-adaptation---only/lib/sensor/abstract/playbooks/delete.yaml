@@ -8,12 +8,12 @@
   tasks:
       - name: Delete working directory
         file:
-            path: /var/lib/{{ service_name }}
+            path: '/var/lib/{{ service_name }}'
             state: absent
 
       - name: Delete systemd service
         file:
-            path: /etc/systemd/system/{{ service_name }}.service
+            path: '/etc/systemd/system/{{ service_name }}.service'
             state: absent
 
       - name: Reload daemon

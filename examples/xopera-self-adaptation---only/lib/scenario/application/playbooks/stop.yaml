@@ -8,5 +8,6 @@
   tasks:
       - name: Stop systemd service
         systemd:
-            name: sensor-compute
+            name: '{{service_name}}@{{ item }}'
             state: stopped
+        with_sequence: count='{{ scale }}'
