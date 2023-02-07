@@ -39,7 +39,7 @@
             dest: '/etc/systemd/system/{{ service_name }}.service'
             content: |
                 [Unit]
-                Description=Sensor compute
+                Description=Vintner Sensor {{ service_name }}
                 After=multi-user.target
 
                 [Service]

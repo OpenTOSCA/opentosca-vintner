@@ -17,9 +17,9 @@
             state: directory
 
       - name: Copy binary
-        copy:
+        unarchive:
             src: '{{ artifact }}'
-            dest: '/var/lib/{{ service_name}}/artifact'
+            dest: '/var/lib/{{ service_name}}'
             mode: a+x
 
       - name: Create systemd service
@@ -27,14 +27,15 @@
             dest: '/etc/systemd/system/{{ service_name }}@.service'
             content: |
                 [Unit]
-                Description=Sensor compute
+                Description=Scenario Application Instance %i
                 After=multi-user.target
 
                 [Service]
                 Type=simple
                 Restart=always
                 WorkingDirectory=/var/lib/{{ service_name }}
-                ExecStart=PORT=300%i artifact
+                ExecStart=artifact
+                Environment="PORT=300%i"
 
                 [Install]
                 WantedBy=multi-user.target

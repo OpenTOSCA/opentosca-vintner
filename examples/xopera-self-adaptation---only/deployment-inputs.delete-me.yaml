@@ -18,5 +18,5 @@ os_region_name: Mannheim
 os_interface: public
 
 # TODO: delete these
-os_application_credential_id: 2d5ae7161f6b471a94fd533c56b0a6d1
-os_application_credential_secret: m7s3NqvSZ-W1KbEfu1yWR2-b5bP0hY7HjXwmF1JaeyJIVdgggYvwPeMcM1tePOFnpj8KRLo0Vldywo-pmX9cxg
+os_application_credential_id: <id>
+os_application_credential_secret: <secret>
