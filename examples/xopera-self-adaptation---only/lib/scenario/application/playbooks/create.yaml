@@ -34,7 +34,7 @@
                 Type=simple
                 Restart=always
                 WorkingDirectory=/var/lib/{{ service_name }}
-                ExecStart=artifact
+                ExecStart=/var/lib/{{ service_name }}/application
                 Environment="PORT=300%i"
 
                 [Install]
@@ -43,7 +43,7 @@
       - name: Enable systemd service
         systemd:
             name: '{{service_name}}@{{ item }}'
-            status: stopped
+            state: stopped
             enabled: true
             daemon_reload: true
         with_sequence: count='{{ scale }}'

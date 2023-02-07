@@ -55,6 +55,6 @@
       - name: Enable systemd service
         systemd:
             name: '{{service_name}}'
-            status: stopped
+            state: stopped
             enabled: true
             daemon_reload: true
