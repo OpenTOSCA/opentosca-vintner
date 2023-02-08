@@ -65,59 +65,6 @@ topology_template:
             type: string
 
     node_templates:
-        # VM
-        ################################################################
-
-        compute_application:
-            type: scenario.application
-            properties:
-                scale: 4
-            requirements:
-                - host: compute_vm
-            artifacts:
-                binary: files/application-linux-x64.xz
-
-        sensor_compute_vm:
-            type: sensor.compute
-            properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
-                instance: {get_input: instance}
-                template: compute_vm
-            requirements:
-                - host: compute_vm
-
-        compute_vm:
-            type: compute.vm
-            properties:
-                ports: [80, 3000, 3001, 3002, 3003, 3004]
-                name: {concat: ['compute-vm-', {get_input: instance}]}
-                image: Ubuntu 20.04
-                flavor: m1.medium
-                network: {get_input: compute_vm_network}
-                security_groups: {get_input: compute_vm_security_groups}
-                key_name: {get_input: compute_vm_key_name}
-                ssh_user: {get_input: compute_vm_ssh_user}
-                ssh_key_file: {get_input: compute_vm_ssh_key_file}
-            attributes:
-                public_address: 'make-validator-work'
-            requirements:
-                - host: compute_hypervisor
-
-        compute_hypervisor:
-            type: compute.hypervisor
-            properties:
-                region_name: {get_input: os_region_name}
-                auth_type: {get_input: os_auth_type}
-                auth_url: {get_input: os_auth_url}
-                identity_api_version: {get_input: os_identity_api_version}
-                interface: {get_input: os_interface}
-                application_credential_id: {get_input: os_application_credential_id}
-                application_credential_secret: {get_input: os_application_credential_secret}
-
-        # Raspberry
-        ################################################################
-
         raspberry_application:
             type: scenario.application
             properties:
@@ -145,9 +92,6 @@ topology_template:
                 template: compute_raspberry
             requirements:
                 - host: compute_raspberry
-
-        # Always
-        ################################################################
 
         sensor_weekday:
             type: sensor.weekday
