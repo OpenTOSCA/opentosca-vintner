@@ -7,13 +7,9 @@ imports:
 
 topology_template:
     inputs:
-        vintner_host:
+        vintner:
             type: string
-            default: localhost
-
-        vintner_port:
-            type: string
-            default: 3000
+            default: http://localhost:3000
 
     node_templates:
         application:
@@ -33,13 +29,11 @@ topology_template:
         sensor_compute_raspberry:
             type: sensor.compute
             properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
+                vintner: {get_input: vintner}
             requirements:
                 - host: compute_raspberry
 
         sensor_weekday:
             type: sensor.weekday
             properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
+                vintner: {get_input: vintner}

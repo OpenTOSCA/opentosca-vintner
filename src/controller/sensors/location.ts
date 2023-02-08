@@ -33,7 +33,7 @@ export default async function (options: SensorLocationOptions) {
             console.log(inputs)
 
             if (options.disableSubmission) return
-            await submit(options.vintnerHost, options.vintnerPort, options.instance, inputs)
+            await submit(options, inputs)
         })
     )
     death.register(task)

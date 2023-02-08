@@ -7,6 +7,7 @@ import createError from 'http-errors'
 import cors from 'cors'
 import hae from '#utils/hae'
 import death from '#utils/death'
+import console from 'console'
 
 export default {
     create: function () {
@@ -35,7 +36,7 @@ export default {
          */
         const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
             console.log(error.stack)
-            return res.status(error.status || 500).json({error})
+            return res.status(error.status || 500).json({error: error.msg || error.message || error})
         }
         expressServer.use(errorHandler)
 

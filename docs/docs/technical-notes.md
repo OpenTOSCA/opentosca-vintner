@@ -92,3 +92,9 @@ sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
 ```shell linenums="1"
 stress --cpu 18 --vm 36 --vm-bytes 1024M
 ```
+
+## Reverse SSH Tunnel 
+
+```shell linenums="1"
+ssh -N -R 2999:192.168.178.46:3001 pi
+```

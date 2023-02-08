@@ -7,13 +7,9 @@ imports:
 
 topology_template:
     inputs:
-        vintner_host:
+        vintner:
             type: string
-            default: localhost
-
-        vintner_port:
-            type: string
-            default: 3000
+            default: http://localhost:3000
 
         instance:
             type: string
@@ -178,8 +174,7 @@ topology_template:
             type: sensor.compute
             conditions: {get_node_presence: compute_vm}
             properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
+                vintner: {get_input: vintner}
                 instance: {get_input: instance}
             requirements:
                 - host: compute_vm
@@ -188,8 +183,7 @@ topology_template:
             type: sensor.compute
             conditions: {get_node_presence: compute_raspberry}
             properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
+                vintner: {get_input: vintner}
                 instance: {get_input: instance}
             requirements:
                 - host: compute_raspberry
@@ -197,8 +191,7 @@ topology_template:
         sensor_weekday:
             type: sensor.weekday
             properties:
-                vintner_host: {get_input: vintner_host}
-                vintner_port: {get_input: vintner_port}
+                vintner: {get_input: vintner}
                 instance: {get_input: instance}
             requirements:
                 - host: compute_raspberry

@@ -610,16 +610,36 @@ starts a sensor for compute utilization such as cpu and memory
 
 === "CLI"
     ```shell linenums="1"
-    vintner sensors compute --template ${TEMPLATE}
+    vintner sensors compute --instance ${INSTANCE} --template ${TEMPLATE}
     ```
 
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| vintner-host |  false  | string | vintner host to submit sensors data (default: "127.0.0.1") |
-| vintner-port |  false  | number | vintner port to submit sensors data (default: "3000") |
+| instance |  true  | string | monitored instance |
 | template |  true  | string | node template name |
+| vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
+| disable-submission |  false  | boolean | disable submission of data (default: false) |
+
+## vintner sensors file
+
+starts a sensor for data stored in a file
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner sensors file --instance ${INSTANCE} --file ${FILE}
+    ```
+
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | monitored instance |
+| file |  true  | string | path to file |
+| vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
+| time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
+| disable-watch |  false  | boolean | do not watch file but send data once (default: false) |
 | disable-submission |  false  | boolean | disable submission of data (default: false) |
 
 ## vintner sensors location
@@ -629,15 +649,15 @@ starts a sensor for the current location
 
 === "CLI"
     ```shell linenums="1"
-    vintner sensors location --template ${TEMPLATE}
+    vintner sensors location --instance ${INSTANCE} --template ${TEMPLATE}
     ```
 
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| vintner-host |  false  | string | vintner host to submit sensors data (default: "127.0.0.1") |
-| vintner-port |  false  | number | vintner port to submit sensors data (default: "3000") |
+| instance |  true  | string | monitored instance |
 | template |  true  | string | node template name |
+| vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every minute") |
 | disable-submission |  false  | boolean | disable submission of data (default: false) |
 
@@ -648,14 +668,14 @@ starts a sensor for the weekday
 
 === "CLI"
     ```shell linenums="1"
-    vintner sensors weekday 
+    vintner sensors weekday --instance ${INSTANCE}
     ```
 
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| vintner-host |  false  | string | vintner host to submit sensors data (default: "127.0.0.1") |
-| vintner-port |  false  | number | vintner port to submit sensors data (default: "3000") |
+| instance |  true  | string | monitored instance |
+| vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every day") |
 | start |  false  | string | set day to start from |
 | disable-submission |  false  | boolean | disable submission of data (default: false) |

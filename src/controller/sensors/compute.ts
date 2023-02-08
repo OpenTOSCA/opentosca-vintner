@@ -59,7 +59,7 @@ class SensorCompute {
         console.log(inputs)
 
         if (this.options.disableSubmission) return
-        await submit(this.options.vintnerHost, this.options.vintnerPort, this.options.instance, inputs)
+        await submit(this.options, inputs)
     }
 
     async stop() {

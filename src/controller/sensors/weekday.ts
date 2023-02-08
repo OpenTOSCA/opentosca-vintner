@@ -27,7 +27,7 @@ export default async function (options: SensorWeekdayOptions) {
             index = (index + 1) % 7
 
             if (options.disableSubmission) return
-            await submit(options.vintnerHost, options.vintnerPort, options.instance, inputs)
+            await submit(options, inputs)
         })
     )
     death.register(task)

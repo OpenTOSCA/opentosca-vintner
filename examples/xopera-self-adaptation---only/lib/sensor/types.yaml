@@ -4,13 +4,9 @@ node_types:
     sensor.compute:
         derived_from: tosca.nodes.SoftwareComponent
         properties:
-            vintner_host:
+            vintner:
                 type: string
                 default: localhost
-
-            vintner_port:
-                type: string
-                default: 3000
 
             instance:
                 type: string
@@ -42,14 +38,9 @@ node_types:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard
                 inputs:
-                    vintner_host:
+                    vintner:
                         value:
-                            get_property: [SELF, vintner_host]
-                        type: string
-
-                    vintner_port:
-                        value:
-                            get_property: [SELF, vintner_port]
+                            get_property: [SELF, vintner]
                         type: string
 
                     instance:
@@ -94,13 +85,9 @@ node_types:
     sensor.weekday:
         derived_from: tosca.nodes.SoftwareComponent
         properties:
-            vintner_host:
+            vintner:
                 type: string
                 default: localhost
-
-            vintner_port:
-                type: string
-                default: 3000
 
             instance:
                 type: string
@@ -128,14 +115,9 @@ node_types:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard
                 inputs:
-                    vintner_host:
+                    vintner:
                         value:
-                            get_property: [SELF, vintner_host]
-                        type: string
-
-                    vintner_port:
-                        value:
-                            get_property: [SELF, vintner_port]
+                            get_property: [SELF, vintner]
                         type: string
 
                     instance:

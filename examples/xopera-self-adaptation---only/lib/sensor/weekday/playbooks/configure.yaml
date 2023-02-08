@@ -10,4 +10,4 @@
         copy:
             dest: '/var/lib/{{ service_name }}/.env'
             content: |
-                $VINTNER_SENSOR_ARGS=--vintner-host {{ vintner_host }} --vintner-port {{ vintner_port }} --instance {{ instance }} --time-interval {{ time_interval }} --disable-submission {{ disable_submission }}
+                $VINTNER_SENSOR_ARGS=--vintner {{ vintner }} --instance {{ instance }} --time-interval {{ time_interval }} --disable-submission {{ disable_submission }}
