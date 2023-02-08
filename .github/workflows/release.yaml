@@ -75,6 +75,14 @@ jobs:
                     gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
                   done
 
+            - name: (COMPRESS) Compress Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    tar -cJf ${BINARY}.xz ${BINARY}             
+                  done
+
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
               env:

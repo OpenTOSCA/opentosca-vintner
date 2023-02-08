@@ -12,9 +12,7 @@ In our case, we run on a Linux machine.
 For more information see [Installation](installation.md){target=_blank}.
 
 ```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
-mv vintner-linux-x64 /usr/bin/vintner
-chmod +x /usr/bin/vintner
+curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 

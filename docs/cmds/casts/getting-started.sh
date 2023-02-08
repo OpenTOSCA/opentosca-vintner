@@ -13,17 +13,10 @@ TYPE_SPEED=100
 cd ../../../
 
 echo '# Installation'
-p 'wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64'
-sleep 1
-
-p 'mv vintner-linux-x64 /usr/bin/vintner'
-# sleep 0.5
-
-p 'chmod +x /usr/bin/vintner'
-# sleep 0.5
+p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'
+sleep 3
 
 pe 'vintner setup init'
-# sleep 0.5
 
 echo ''
 echo '# Orchestrator'
