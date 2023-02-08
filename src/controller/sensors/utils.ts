@@ -6,7 +6,7 @@ import {InputAssignmentMap} from '#spec/topology-template'
 
 export type SensorBaseOptions = {
     vintnerHost: string
-    vintnerPort: string
+    vintnerPort: number
     instance: string
     timeInterval: string
     disableSubmission: string
@@ -18,7 +18,7 @@ export function human2cron(value: string) {
     return output
 }
 
-export async function submit(host: string, port: string, instance: string, inputs: InputAssignmentMap) {
+export async function submit(host: string, port: number, instance: string, inputs: InputAssignmentMap) {
     // TODO: some random sleep (but ensure no overlap) to prevent hard spikes
     await axios.post(`http://${host}:${port}/instances/adapt`, {
         instance,

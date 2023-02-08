@@ -19,6 +19,7 @@ type InstancesAdaptationOptions = {instance: string; inputs: InputAssignmentMap}
  * Monitor: Collect sensor data and trigger adaptation
  */
 export default async function (options: InstancesAdaptationOptions) {
+    console.log(options)
     if (stopped[options.instance]) return
 
     if (queue[options.instance]) return queue[options.instance]!.push(options.inputs)

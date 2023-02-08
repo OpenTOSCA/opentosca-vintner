@@ -38,6 +38,7 @@ class SensorCompute {
         this.task = cron.schedule(
             human2cron(this.options.timeInterval),
             hae.log(async () => {
+                // TODO: these data are not as expected
                 const load = await si.currentLoad()
                 const mem = await si.mem()
                 const uptime = Math.round((new Date().getTime() - start) / 1000)
@@ -58,7 +59,7 @@ class SensorCompute {
         console.log(inputs)
 
         if (this.options.disableSubmission) return
-        await submit(this.options.vintnerHost, this.options.vintnerHost, this.options.instance, inputs)
+        await submit(this.options.vintnerHost, this.options.vintnerPort, this.options.instance, inputs)
     }
 
     async stop() {

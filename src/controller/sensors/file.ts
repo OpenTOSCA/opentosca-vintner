@@ -14,7 +14,7 @@ export default async function (options: SensorFileOptions) {
         console.log(inputs)
 
         if (options.disableSubmission) return
-        await submit(options.vintnerHost, options.vintnerHost, options.instance, inputs)
+        await submit(options.vintnerHost, options.vintnerPort, options.instance, inputs)
     }
 
     if (options.disableWatch) await handle()

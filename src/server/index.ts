@@ -6,6 +6,7 @@ import type {ErrorRequestHandler} from 'express'
 import createError from 'http-errors'
 import cors from 'cors'
 import hae from '#utils/hae'
+import death from '#utils/death'
 
 export default {
     create: function () {
@@ -41,6 +42,13 @@ export default {
         /**
          * HTTP server
          */
-        return http.createServer(expressServer)
+        const server = http.createServer(expressServer)
+        death.register({
+            stop: function () {
+                server.close()
+            },
+        })
+
+        return server
     },
 }
