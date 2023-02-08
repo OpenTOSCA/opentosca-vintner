@@ -9,7 +9,7 @@
       - name: Check if target is supported
         when: (ansible_system != 'Linux') and (ansible_architecture != 'x86_64' or ansible_architecture != 'aarch64')
         fail:
-            msg: Target not linux or not arm64 or x64
+            msg: Target not linux-x64 or linux-arm64
 
       - name: Create working directory
         file:
@@ -21,6 +21,20 @@
             src: '{{ artifact }}'
             dest: '/var/lib/{{ service_name}}'
             mode: a+x
+
+      - name: Create symlink
+        file:
+            state: link
+            src: '/var/lib/{{ service_name}}/application-linux-x64'
+            dest: '/var/lib/{{ service_name}}/application'
+        when: ansible_architecture == 'x86_64'
+
+      - name: Create symlink
+        file:
+            state: link
+            src: '/var/lib/{{ service_name}}/application-linux-arm64'
+            dest: '/var/lib/{{ service_name}}/application'
+        when: ansible_architecture == 'aarch64'
 
       - name: Create systemd service
         copy:

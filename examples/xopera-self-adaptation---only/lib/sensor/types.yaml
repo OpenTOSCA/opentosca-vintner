@@ -164,6 +164,7 @@ node_types:
                     ssh_key_file:
                         value: {get_property: [SELF, ssh_key_file]}
                         type: string
+
                 operations:
                     create: abstract/playbooks/create.yaml
                     configure: weekday/playbooks/configure.yaml

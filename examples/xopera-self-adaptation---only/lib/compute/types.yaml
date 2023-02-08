@@ -10,6 +10,34 @@ node_types:
             ssh_key_file:
                 type: string
 
+    compute.hypervisor:
+        derived_from: tosca.nodes.Root
+        properties:
+            region_name:
+                type: string
+
+            auth_type:
+                type: string
+
+            auth_url:
+                type: string
+
+            identity_api_version:
+                type: string
+
+            interface:
+                type: string
+
+            application_credential_id:
+                type: string
+
+            application_credential_secret:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [compute.vm]
+
     compute.vm:
         derived_from: tosca.nodes.Compute
         properties:
@@ -39,27 +67,6 @@ node_types:
             ssh_key_file:
                 type: string
                 description: Path to the local SSH private key file that will be used for the ssh connection to the VM
-
-            region_name:
-                type: string
-
-            auth_type:
-                type: string
-
-            auth_url:
-                type: string
-
-            identity_api_version:
-                type: string
-
-            interface:
-                type: string
-
-            application_credential_id:
-                type: string
-
-            application_credential_secret:
-                type: string
         attributes:
             private_address:
                 description: Openstack private address of the VM
@@ -70,6 +77,10 @@ node_types:
             id:
                 type: string
                 description: OpenStack id of the VM
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
         interfaces:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard
@@ -85,25 +96,25 @@ node_types:
                     ssh_key_file: {value: {get_property: [SELF, ssh_key_file]}, type: string}
 
                     region_name:
-                        value: {get_property: [SELF, region_name]}
+                        value: {get_property: [SELF, host, region_name]}
 
                     auth_type:
-                        value: {get_property: [SELF, auth_type]}
+                        value: {get_property: [SELF, host, auth_type]}
 
                     auth_url:
-                        value: {get_property: [SELF, auth_url]}
+                        value: {get_property: [SELF, host, auth_url]}
 
                     identity_api_version:
-                        value: {get_property: [SELF, identity_api_version]}
+                        value: {get_property: [SELF, host, identity_api_version]}
 
                     interface:
-                        value: {get_property: [SELF, interface]}
+                        value: {get_property: [SELF, host, interface]}
 
                     application_credential_id:
-                        value: {get_property: [SELF, application_credential_id]}
+                        value: {get_property: [SELF, host, application_credential_id]}
 
                     application_credential_secret:
-                        value: {get_property: [SELF, application_credential_secret]}
+                        value: {get_property: [SELF, host, application_credential_secret]}
 
                 operations:
                     create: vm/playbooks/create.yaml

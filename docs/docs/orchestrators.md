@@ -8,12 +8,16 @@ We expect, that the orchestrator is already installed.
 For more information see [Interface](interface.md){target=_blank}.
 
 ## xOpera
+Note, that xOpera must be version 0.6.9 since 0.7.0 does not parse the templates as expected.
+
 ```shell linenums="1"
 vintner orchestrators init xopera
 vintner orchestrators enable --orchestrator xopera
 ```
 
 ## xOpera WSL
+Note, that xOpera must be version 0.6.9 since 0.7.0 does not parse the templates as expected.
+
 ```shell linenums="1"
 vintner orchestrators init xopera-wsl
 vintner orchestrators enable --orchestrator xopera-wsl

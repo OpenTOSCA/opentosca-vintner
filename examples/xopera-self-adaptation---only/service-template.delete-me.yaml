@@ -5,8 +5,6 @@ imports:
     - lib/sensor/types.yaml
     - lib/scenario/types.yaml
 
-# TODO: fix get property of hosts does not work ...
-
 topology_template:
     inputs:
         vintner_host:
@@ -74,12 +72,10 @@ topology_template:
             type: scenario.application
             properties:
                 scale: 4
-                ssh_user: {get_input: compute_vm_ssh_user}
-                ssh_key_file: {get_input: compute_vm_ssh_key_file}
             requirements:
                 - host: compute_vm
             artifacts:
-                binary: files/application-linux-x64.tar.gz
+                binary: files/application-linux-x64.xz
 
         sensor_compute_vm:
             type: sensor.compute
@@ -88,8 +84,6 @@ topology_template:
                 vintner_port: {get_input: vintner_port}
                 instance: {get_input: instance}
                 template: compute_vm
-                ssh_user: {get_input: compute_vm_ssh_user}
-                ssh_key_file: {get_input: compute_vm_ssh_key_file}
             requirements:
                 - host: compute_vm
 
@@ -105,6 +99,14 @@ topology_template:
                 key_name: {get_input: compute_vm_key_name}
                 ssh_user: {get_input: compute_vm_ssh_user}
                 ssh_key_file: {get_input: compute_vm_ssh_key_file}
+            attributes:
+                public_address: 'make-validator-work'
+            requirements:
+                - host: compute_hypervisor
+
+        compute_hypervisor:
+            type: compute.hypervisor
+            properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}
                 auth_url: {get_input: os_auth_url}
@@ -120,12 +122,10 @@ topology_template:
             type: scenario.application
             properties:
                 scale: 1
-                ssh_user: {get_input: compute_raspberry_user_name}
-                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
             requirements:
                 - host: compute_raspberry
             artifacts:
-                binary: files/application-linux-arm64.tar.gz
+                binary: files/application-linux-arm64.xz
 
         compute_raspberry:
             type: compute.raspberry
@@ -143,8 +143,6 @@ topology_template:
                 vintner_port: {get_input: vintner_port}
                 instance: {get_input: instance}
                 template: compute_raspberry
-                ssh_user: {get_input: compute_raspberry_user_name}
-                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
             requirements:
                 - host: compute_raspberry
 
@@ -157,7 +155,5 @@ topology_template:
                 vintner_host: {get_input: vintner_host}
                 vintner_port: {get_input: vintner_port}
                 instance: {get_input: instance}
-                ssh_user: {get_input: compute_raspberry_user_name}
-                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
             requirements:
                 - host: compute_raspberry
