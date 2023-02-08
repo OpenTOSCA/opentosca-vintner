@@ -1,10 +1,6 @@
-name: Release
+name: Build
 on:
     workflow_dispatch:
-    push:
-        branches:
-            - main
-            - fix/workflow
 
 jobs:
     release:
@@ -25,27 +21,6 @@ jobs:
 
             - name: (PREPARE) Install Dependencies
               run: rm -rf node_modules && yarn --frozen-lockfile
-
-            - name: (PREPARE) Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: 3.x
-                  cache: pip
-
-            - name: (PREPARE) Install xOpera
-              run: pip install opera
-
-            - name: (TEST) Check ESLint
-              run: yarn lint:check
-
-            - name: (TEST) Check Prettier
-              run: yarn style:check
-
-            - name: (TEST) Check Licenses
-              run: yarn licenses:check
-
-            - name: (TEST) Run Tests
-              run: yarn test
 
             - name: (BUILD) Build Project
               run: yarn build
@@ -83,12 +58,12 @@ jobs:
                     tar -cJf ${BINARY}.xz ${BINARY}             
                   done
 
-            - name: (RELEASE) Delete Latest Release
-              run: gh release delete latest || true
+            - name: (RELEASE) Delete Build Release
+              run: gh release delete build-${GITHUB_SHA} || true
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (RELEASE) Delete Latest Tag
+            - name: (RELEASE) Delete Build Tag
               uses: actions/github-script@v3
               with:
                   script: |
@@ -96,44 +71,24 @@ jobs:
                           await github.git.deleteRef({
                               owner: context.repo.owner,
                               repo: context.repo.repo,
-                              ref: "tags/latest"
+                              ref: "tags/build-${GITHUB_SHA}"
                           })
                       } catch (e) {
                           console.log("Did not delete tag:", e)
                       }
 
-            - name: (RELEASE) Create Latest Tag
+            - name: (RELEASE) Create Build Tag
               uses: actions/github-script@v3
               with:
                   script: |
                       await github.git.createRef({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
-                          ref: "refs/tags/latest",
+                          ref: "refs/tags/build-${GITHUB_SHA}",
                           sha: context.sha
                       })
 
-            - name: (RELEASE) Create Latest Release
-              run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
+            - name: (RELEASE) Create Build Release
+              run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: (DOCS) Setup Git
-              run: |
-                  git config --global user.name "${GITHUB_ACTOR}"
-                  git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
-
-            - name: (DOCS) Install Dependencies
-              run: yarn docs:install
-
-            - name: (DOCS) Generate Licenses Page
-              run: yarn docs:generate:licenses
-
-            - name: (DOCS) Generate Interface Page
-              run: yarn docs:generate:interface
-
-            - name: (DOCS) Generate Conformance Test Pages
-              run: yarn docs:generate:tests
-
-            - name: (DOCS) Deploy Docs
-              run: yarn docs:deploy
