@@ -71,7 +71,7 @@ jobs:
                           await github.git.deleteRef({
                               owner: context.repo.owner,
                               repo: context.repo.repo,
-                              ref: "tags/build-${GITHUB_SHA}"
+                              ref: `tags/build-${context.sha}`
                           })
                       } catch (e) {
                           console.log("Did not delete tag:", e)
@@ -84,7 +84,7 @@ jobs:
                       await github.git.createRef({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
-                          ref: "refs/tags/build-${GITHUB_SHA}",
+                          ref: `refs/tags/build-${context.sha}`,
                           sha: context.sha
                       })
 
