@@ -58,7 +58,7 @@ class SensorCompute {
                 })
 
                 const cpu = info.currentLoad.currentLoad
-                const mem = info.mem.used / info.mem.total
+                const mem = (info.mem.used / info.mem.total) * 100
 
                 cpu_history.push({value: cpu, time: now})
                 cpu_history = clean(cpu_history, now)
@@ -67,6 +67,7 @@ class SensorCompute {
                 mem_history = clean(mem_history, now)
             })
         )
+        this.collector.start()
 
         this.sender = cron.schedule(
             human2cron(this.options.timeInterval),
@@ -107,6 +108,7 @@ class SensorCompute {
 }
 
 function getAverage(entries: HistoryEntry[]) {
+    if (entries.length === 0) return 0
     return (
         entries.reduce((sum, entry) => {
             sum += entry.value
@@ -124,5 +126,5 @@ function clean(entries: HistoryEntry[], now: number) {
 }
 
 function format(value: number) {
-    return Number((value * 100).toFixed(2))
+    return Number(value.toFixed(2))
 }
