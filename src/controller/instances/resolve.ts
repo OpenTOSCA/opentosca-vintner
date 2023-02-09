@@ -24,7 +24,7 @@ export default async function (options: InstanceResolveOptions) {
 
     // Store used variability inputs
     // Basically only when used in the CLI as preparation for self-adaptation
-    if (options.inputs) await instance.setVariabilityInputs(options.inputs, time)
+    await instance.setVariabilityInputs(options.inputs || {}, time)
     if (options.preset) instance.setVariabilityPreset(options.preset)
     // Note, variability-resolved service template is stored inside resolve function
 }

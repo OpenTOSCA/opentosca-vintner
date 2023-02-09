@@ -15,6 +15,7 @@
         openstack.cloud.server:
             state: absent
             name: '{{ vm_name }}'
+            delete_fip: true
 
       - name: delete security group
         openstack.cloud.security_group:

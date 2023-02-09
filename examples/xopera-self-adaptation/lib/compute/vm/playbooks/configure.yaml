@@ -20,20 +20,7 @@
       ansible_ssh_user: '{{ ssh_user }}'
   tasks:
       - name: Install tools
-        package:
-            name: '{{item}}'
-            state: present
-            update_cache: yes
-        loop:
-            - net-tools
-            - nano
-            - git
-            - wget
-            - curl
-            - tree
-            - nmap
-            - stress
-            - jq
+        shell: apt-get update -y && apt-get install net-tools nano git wget curl tree nmap stress jq -y
 
       - name: Install NodeJS
         shell: |

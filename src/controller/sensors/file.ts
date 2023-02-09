@@ -17,7 +17,7 @@ export default async function (options: SensorFileOptions) {
         await submit(options, inputs)
     }
 
-    if (options.disableWatch) await handle()
+    if (options.disableWatch) return await handle()
 
     const task = cron.schedule(
         human2cron(options.timeInterval),

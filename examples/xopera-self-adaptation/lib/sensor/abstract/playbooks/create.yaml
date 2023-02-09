@@ -7,7 +7,7 @@
       ansible_ssh_user: '{{ ssh_user }}'
   tasks:
       - name: Install vintner
-        shell: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+        shell: 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION={{ version }} bash -'
 
       - name: Create working directory
         file:

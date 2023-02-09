@@ -8,6 +8,10 @@ node_types:
                 type: string
                 default: localhost
 
+            version:
+                type: string
+                default: latest
+
             instance:
                 type: string
 
@@ -41,6 +45,11 @@ node_types:
                     vintner:
                         value:
                             get_property: [SELF, vintner]
+                        type: string
+
+                    version:
+                        value:
+                            get_property: [SELF, version]
                         type: string
 
                     instance:
@@ -89,6 +98,10 @@ node_types:
                 type: string
                 default: localhost
 
+            version:
+                type: string
+                default: latest
+
             instance:
                 type: string
 
@@ -118,6 +131,11 @@ node_types:
                     vintner:
                         value:
                             get_property: [SELF, vintner]
+                        type: string
+
+                    version:
+                        value:
+                            get_property: [SELF, version]
                         type: string
 
                     instance:

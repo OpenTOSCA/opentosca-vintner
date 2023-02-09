@@ -7,7 +7,7 @@ export default async function lock(key: string) {
     return mutexes[key].acquire()
 }
 
-export const critical = async (key: string, fn: () => Promise<void>) => {
+export const critical = async (key: string, fn: () => Promise<void> | void) => {
     if (!mutexes[key]) mutexes[key] = new Mutex()
     await mutexes[key].runExclusive(fn)
 }

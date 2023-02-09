@@ -118,9 +118,10 @@ node_types:
 
                 operations:
                     create: vm/playbooks/create.yaml
-                    configure:
-                        inputs:
-                            public_address:
-                                value: {get_attribute: [SELF, public_address]}
-                        implementation: vm/playbooks/configure.yaml
+                    # TODO: this does somehow not work anymore
+                    #configure:
+                    #    inputs:
+                    #        public_address:
+                    #            value: {get_attribute: [SELF, public_address]}
+                    #    implementation: vm/playbooks/configure.yaml
                     delete: vm/playbooks/delete.yaml

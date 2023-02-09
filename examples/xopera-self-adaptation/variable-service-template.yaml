@@ -3,10 +3,14 @@ tosca_definitions_version: tosca_variability_1_0
 imports:
     - lib/scenario/types.yaml
     - lib/compute/types.yaml
-    - lib/sensors/types.yaml
+    - lib/sensor/types.yaml
 
 topology_template:
     inputs:
+        vintner_version:
+            type: string
+            default: latest
+
         vintner:
             type: string
             default: http://localhost:3000
@@ -59,8 +63,11 @@ topology_template:
 
         compute_raspberry_ssh_key_file:
             type: string
+
     variability:
         inputs:
+            sensors_enabled:
+                type: boolean
             weekday:
                 type: string
             compute_raspberry_cpu:
@@ -71,6 +78,25 @@ topology_template:
                 type: number
             compute_vm_cpu:
                 type: number
+
+        presets:
+            raspberry:
+                inputs:
+                    sensors_enabled: false
+                    weekday: saturday
+                    compute_raspberry_cpu: 0
+                    compute_vm_up: false
+                    compute_vm_uptime: 0
+                    compute_vm_cpu: 0
+
+            cloud:
+                inputs:
+                    sensors_enabled: false
+                    weekday: monday
+                    compute_raspberry_cpu: 0
+                    compute_vm_up: false
+                    compute_vm_uptime: 0
+                    compute_vm_cpu: 0
 
         expressions:
             is_raspberry_present:
@@ -127,9 +153,11 @@ topology_template:
                       conditions: {get_node_presence: compute_vm}
             artifacts:
                 - binary:
+                      type: tosca.artifacts.File
                       file: files/application-linux-arm64.xz
                       conditions: {get_node_presence: compute_raspberry}
                 - binary:
+                      type: tosca.artifacts.File
                       file: files/application-linux-x64.xz
                       conditions: {get_node_presence: compute_vm}
 
@@ -176,6 +204,9 @@ topology_template:
             properties:
                 vintner: {get_input: vintner}
                 instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                template: compute_vm
+                disable_submission: true
             requirements:
                 - host: compute_vm
 
@@ -185,6 +216,9 @@ topology_template:
             properties:
                 vintner: {get_input: vintner}
                 instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                template: compute_raspberry
+                disable_submission: true
             requirements:
                 - host: compute_raspberry
 
@@ -193,5 +227,12 @@ topology_template:
             properties:
                 vintner: {get_input: vintner}
                 instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                disable_submission: true
             requirements:
-                - host: compute_raspberry
+                - host:
+                      node: compute_raspberry
+                      conditions: {get_node_presence: compute_raspberry}
+                - host:
+                      node: compute_vm
+                      conditions: {get_node_presence: compute_vm}
