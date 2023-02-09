@@ -6,7 +6,18 @@ import hae from '#utils/hae'
 import * as validator from '#validator'
 import death from '#utils/death'
 
-// TODO: first tick is strange
+export default async function (options: SensorComputeOptions) {
+    const sensor = new SensorCompute(options)
+    await sensor.start()
+}
+
+type HistoryEntry = {
+    value: number
+    time: number
+}
+
+let cpu_history: HistoryEntry[] = []
+let mem_history: HistoryEntry[] = []
 
 export type SensorComputeData = {
     // Is running
@@ -22,7 +33,8 @@ export type SensorComputeOptions = SensorBaseOptions & {template: string}
 
 class SensorCompute {
     options: SensorComputeOptions
-    task: cron.ScheduledTask | undefined
+    sender: cron.ScheduledTask | undefined
+    collector: cron.ScheduledTask | undefined
 
     constructor(options: SensorComputeOptions) {
         this.options = options
@@ -33,25 +45,45 @@ class SensorCompute {
         const start = new Date().getTime()
 
         const system = await si.osInfo()
-        if (system.platform.toLowerCase().startsWith('win')) throw new Error(`Windows is not supported`)
+        if (system.platform.toLowerCase().includes('win')) throw new Error(`Windows is not supported`)
 
-        this.task = cron.schedule(
+        this.collector = cron.schedule(
+            human2cron('every 2 seconds'),
+            hae.log(async () => {
+                const now = new Date().getTime()
+
+                const info = await si.get({
+                    currentLoad: 'currentLoad',
+                    mem: 'total,used',
+                })
+
+                const cpu = info.currentLoad.currentLoad
+                const mem = info.mem.used / info.mem.total
+
+                cpu_history.push({value: cpu, time: now})
+                cpu_history = clean(cpu_history, now)
+
+                mem_history.push({value: mem, time: now})
+                mem_history = clean(mem_history, now)
+            })
+        )
+
+        this.sender = cron.schedule(
             human2cron(this.options.timeInterval),
             hae.log(async () => {
-                // TODO: these data are not as expected
-                const load = await si.currentLoad()
-                const mem = await si.mem()
                 const uptime = Math.round((new Date().getTime() - start) / 1000)
+                const cpu = getAverage(cpu_history)
+                const mem = getAverage(mem_history)
 
                 await this.handle({
                     up: true,
                     uptime,
-                    cpu: format(load.currentLoad),
-                    memory: format(mem.used / mem.total),
+                    cpu: format(cpu),
+                    memory: format(mem),
                 })
             })
         )
-        this.task.start()
+        this.sender.start()
     }
 
     async handle(data: SensorComputeData) {
@@ -63,7 +95,8 @@ class SensorCompute {
     }
 
     async stop() {
-        if (validator.isDefined(this.task)) this.task.stop()
+        if (validator.isDefined(this.sender)) this.sender.stop()
+        if (validator.isDefined(this.collector)) this.collector.stop()
         await this.handle({
             up: false,
             uptime: 0,
@@ -73,9 +106,21 @@ class SensorCompute {
     }
 }
 
-export default async function (options: SensorComputeOptions) {
-    const sensor = new SensorCompute(options)
-    await sensor.start()
+function getAverage(entries: HistoryEntry[]) {
+    return (
+        entries.reduce((sum, entry) => {
+            sum += entry.value
+            return sum
+        }, 0) / entries.length
+    )
+}
+
+function clean(entries: HistoryEntry[], now: number) {
+    const ago = now - 5 * 60 * 1000
+    const index = entries.findIndex(entry => entry.time > ago)
+    if (index === -1) return []
+    if (index === 0) return entries
+    return entries.slice(index)
 }
 
 function format(value: number) {
