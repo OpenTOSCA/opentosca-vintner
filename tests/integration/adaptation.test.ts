@@ -11,6 +11,8 @@ import {Shell} from '../../src/utils/shell'
 const insideWorkflow = process.env.CI === 'true'
 const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION_TESTS === 'true'
 
+const examplesDir = path.join(__dirname, '..', '..', 'examples')
+
 if (!integrationTestsEnabled) {
     console.log()
     console.warn('Skipping integration tests')
@@ -48,10 +50,10 @@ if (!integrationTestsEnabled) {
             }
         })
 
-        it('adapt', async () => {
+        it('xopera-getting-started', async () => {
             // Import template
             const template = 'xopera-getting-started-template'
-            const templateDirectory = path.join(__dirname, '..', '..', 'examples', 'xopera-getting-started')
+            const templateDirectory = path.join(examplesDir, 'xopera-getting-started')
             const firstTemplate = files.loadYAML<ServiceTemplate>(
                 path.join(templateDirectory, 'tests', 'first', 'expected.yaml')
             )

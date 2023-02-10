@@ -2,7 +2,7 @@
 set -e
 
 write_input() {
-  echo $1 | socat EXEC:"docker attach vpi",pty STDIN
+  echo "$1" | socat EXEC:"docker attach vpi",pty STDIN
 }
 
 write_input 'pi'
@@ -16,5 +16,3 @@ sleep 2
 
 write_input 'exit'
 sleep 2
-
-# TODO: install libc5
