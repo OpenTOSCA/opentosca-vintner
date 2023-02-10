@@ -24,6 +24,7 @@ export type VariabilityTestConfig = {
     description?: string
     preset?: string
     error?: string
+    expected?: string
 }
 
 export default async function (options: TemplateTestOptions) {

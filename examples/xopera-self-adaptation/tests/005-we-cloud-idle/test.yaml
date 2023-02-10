@@ -1,3 +1,4 @@
+expected: ../service-template.raspberry.yaml
 description: |
     - running in the cloud due to previous burst
     - the vm load however is low by now

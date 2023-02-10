@@ -39,7 +39,7 @@ A Variability Definition defines Variability Inputs, Variability Presets, and Va
 | inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
-| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.
+| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.                                |
 
 
 The following non-normative and incomplete example contains a Variability Definition which declares the Variability
@@ -553,12 +553,13 @@ my-csar/
 
 The `test.yaml` file describes and configures the test and has the following structure.
 
-| Keyname     | Mandatory | Type   | Description                                            |
-|-------------|-----------|--------|--------------------------------------------------------|
-| name        | false     | String | Display name of the test case.                         | 
-| description | false     | String | Description of the test case.                          | 
-| preset      | false     | String | Variability Preset to used when resolving variability. | 
-| error       | false     | String | The expected error that is thrown.                     | 
+| Keyname     | Mandatory | Type   | Description                                                                                  |
+|-------------|-----------|--------|----------------------------------------------------------------------------------------------|
+| name        | false     | String | Display name of the test case.                                                               | 
+| description | false     | String | Description of the test case.                                                                | 
+| preset      | false     | String | Variability Preset to used when resolving variability.                                       | 
+| error       | false     | String | The expected error that is thrown.                                                           | 
+| expected    | false     | String | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
 
 ## Conformance Test Suite
 

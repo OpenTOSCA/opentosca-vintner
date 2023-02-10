@@ -4,6 +4,7 @@ import Controller from '../src/controller'
 import {ServiceTemplate} from '#spec/service-template'
 import {getDefaultInputs, getDefaultVariableServiceTemplate, loadConfig} from '#controller/template/test'
 import * as files from '#files'
+import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {
@@ -52,7 +53,9 @@ export function getDefaultTest(dir: string, vstdir?: string) {
         } else {
             await fn()
             const result = files.loadYAML<ServiceTemplate>(output)
-            const expected = loadDefaultExpect(dir)
+            const expected = config.expected
+                ? files.loadYAML<ServiceTemplate>(path.resolve(dir, config.expected))
+                : loadDefaultExpect(dir)
             expect(result).to.deep.equal(expected)
         }
     }

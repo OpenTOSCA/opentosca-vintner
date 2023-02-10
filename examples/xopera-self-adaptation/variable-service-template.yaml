@@ -89,7 +89,7 @@ topology_template:
                     compute_vm_uptime: 0
                     compute_vm_cpu: 0
 
-            cloud:
+            vm:
                 inputs:
                     sensors_enabled: false
                     weekday: monday
@@ -189,6 +189,7 @@ topology_template:
 
         compute_hypervisor:
             type: compute.hypervisor
+            conditions: {get_node_presence: compute_vm}
             properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}
