@@ -26,8 +26,7 @@
                 Type=simple
                 Restart=always
                 WorkingDirectory=/var/lib/{{ service_name }}
-                ExecStart=/usr/bin/vintner sensors compute $VINTNER_SENSOR_ARGS
-                EnvironmentFile=/var/lib/{{ service_name }}/.env
+                ExecStart=/usr/bin/vintner sensors compute --vintner {{ vintner }} --instance {{ instance }} --template {{ template }} --time-interval "{{ time_interval }}" --disable-submission {{ disable_submission }}
 
                 [Install]
                 WantedBy=multi-user.target

@@ -10,7 +10,6 @@ export type SensorWeekdayOptions = SensorBaseOptions & {start?: string}
 
 const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
-// TODO: tick directly
 export default async function (options: SensorWeekdayOptions) {
     let index = new Date().getDay()
     if (validator.isDefined(options.start)) {
@@ -18,16 +17,20 @@ export default async function (options: SensorWeekdayOptions) {
         if (index === -1) throw new Error(`Did not find day "${options.start}"`)
     }
 
+    async function handle() {
+        const inputs: InputAssignmentMap = {weekday: week[index]}
+        console.log(inputs)
+
+        if (options.disableSubmission) return
+        await submit(options, inputs)
+    }
+
+    await handle()
     const task = cron.schedule(
         human2cron(options.timeInterval),
         hae.log(async () => {
-            const inputs: InputAssignmentMap = {weekday: week[index]}
-            console.log(inputs)
-
+            await handle()
             index = (index + 1) % 7
-
-            if (options.disableSubmission) return
-            await submit(options, inputs)
         })
     )
     death.register(task)

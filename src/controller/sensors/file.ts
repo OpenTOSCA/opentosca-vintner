@@ -19,10 +19,10 @@ export default async function (options: SensorFileOptions) {
 
     if (options.disableWatch) return await handle()
 
+    await handle()
     const task = cron.schedule(
         human2cron(options.timeInterval),
         hae.log(async () => await handle())
     )
-    task.start()
     death.register(task)
 }

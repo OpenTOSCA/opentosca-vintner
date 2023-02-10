@@ -85,8 +85,7 @@ node_types:
                         type: string
 
                 operations:
-                    create: abstract/playbooks/create.yaml
-                    configure: compute/playbooks/configure.yaml
+                    create: compute/playbooks/create.yaml
                     start: abstract/playbooks/start.yaml
                     delete: abstract/playbooks/delete.yaml
                     stop: abstract/playbooks/stop.yaml
@@ -166,8 +165,7 @@ node_types:
                         type: string
 
                 operations:
-                    create: abstract/playbooks/create.yaml
-                    configure: weekday/playbooks/configure.yaml
+                    create: weekday/playbooks/create.yaml
                     start: abstract/playbooks/start.yaml
                     delete: abstract/playbooks/delete.yaml
                     stop: abstract/playbooks/stop.yaml

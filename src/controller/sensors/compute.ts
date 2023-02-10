@@ -35,6 +35,7 @@ class SensorCompute {
     options: SensorComputeOptions
     sender: cron.ScheduledTask | undefined
     collector: cron.ScheduledTask | undefined
+    time: number | undefined
 
     constructor(options: SensorComputeOptions) {
         this.options = options
@@ -42,57 +43,58 @@ class SensorCompute {
     }
 
     async start() {
-        const start = new Date().getTime()
+        this.time = new Date().getTime()
 
         const system = await si.osInfo()
         if (system.platform.toLowerCase().includes('win')) throw new Error(`Windows is not supported`)
 
+        await this.collect()
         this.collector = cron.schedule(
             human2cron('every 2 seconds'),
             hae.log(async () => {
-                const now = new Date().getTime()
-
-                const info = await si.get({
-                    currentLoad: 'currentLoad',
-                    mem: 'total,used',
-                })
-
-                const cpu = info.currentLoad.currentLoad
-                const mem = (info.mem.used / info.mem.total) * 100
-
-                cpu_history.push({value: cpu, time: now})
-                cpu_history = clean(cpu_history, now)
-
-                mem_history.push({value: mem, time: now})
-                mem_history = clean(mem_history, now)
+                await this.collect()
             })
         )
-        this.collector.start()
 
+        await this.send()
         this.sender = cron.schedule(
             human2cron(this.options.timeInterval),
             hae.log(async () => {
-                const uptime = Math.round((new Date().getTime() - start) / 1000)
-                const cpu = getAverage(cpu_history)
-                const mem = getAverage(mem_history)
-
-                await this.handle({
-                    up: true,
-                    uptime,
-                    cpu: format(cpu),
-                    memory: format(mem),
-                })
+                await this.send()
             })
         )
-        this.sender.start()
     }
 
-    async handle(data: SensorComputeData) {
-        const inputs = prefix(data, this.options.template)
-        console.log(inputs)
+    async collect() {
+        const now = new Date().getTime()
 
-        if (this.options.disableSubmission) return
-        await submit(this.options, inputs)
+        const info = await si.get({
+            currentLoad: 'currentLoad',
+            mem: 'total,used',
+        })
+
+        const cpu = info.currentLoad.currentLoad
+        const mem = (info.mem.used / info.mem.total) * 100
+
+        cpu_history.push({value: cpu, time: now})
+        cpu_history = clean(cpu_history, now)
+
+        mem_history.push({value: mem, time: now})
+        mem_history = clean(mem_history, now)
+    }
+
+    async send() {
+        if (validator.isUndefined(this.time)) throw new Error('Sensor has not been started')
+        const uptime = Math.round((new Date().getTime() - this.time) / 1000)
+        const cpu = getAverage(cpu_history)
+        const mem = getAverage(mem_history)
+
+        await this.handle({
+            up: true,
+            uptime,
+            cpu: format(cpu),
+            memory: format(mem),
+        })
     }
 
     async stop() {
@@ -104,6 +106,14 @@ class SensorCompute {
             cpu: 0,
             memory: 0,
         })
+    }
+
+    async handle(data: SensorComputeData) {
+        const inputs = prefix(data, this.options.template)
+        console.log(inputs)
+
+        if (this.options.disableSubmission) return
+        await submit(this.options, inputs)
     }
 }
 
