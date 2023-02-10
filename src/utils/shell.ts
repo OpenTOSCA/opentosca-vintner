@@ -1,5 +1,6 @@
 import {spawn} from 'child_process'
 import path from 'path'
+import wsl from '#utils/wsl'
 
 export class Shell {
     private readonly wsl: boolean
@@ -13,13 +14,8 @@ export class Shell {
      * For example, C:\a\b returns /mnt/c/a/b if WSL is used.
      */
     resolve(file: string) {
-        const resolved = path.resolve(file)
-        if (this.wsl) {
-            const root = path.parse(resolved).root
-            const disk = root.split(':')[0].toLowerCase()
-            return resolved.replace(root, `/mnt/${disk}/`).replace(/\\/g, '/')
-        }
-        return resolved
+        if (this.wsl) return wsl.win2wsl(file)
+        return path.resolve(file)
     }
 
     async execute(parts: string[]) {

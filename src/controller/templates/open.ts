@@ -1,8 +1,8 @@
 import {Template} from '#repository/templates'
-import open from 'open'
+import open from '#utils/open'
 
 export type TemplatesOpenOptions = {template: string}
 
 export default async function (options: TemplatesOpenOptions) {
-    await open(new Template(options.template).getTemplateDirectory())
+    await open.file(new Template(options.template).getTemplateDirectory())
 }

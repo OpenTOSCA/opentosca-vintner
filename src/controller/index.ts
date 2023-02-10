@@ -6,7 +6,9 @@ import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
 import startServer from './server/start'
 import cleanSetup from './setup/clean'
 import initSetup from './setup/init'
-import openHome from './setup/open-home'
+import openSetup from './setup/open'
+import pathSetup from './setup/path'
+import codeSetup from './setup/code'
 import resolveTemplate from './template/resolve'
 import listTemplates from './templates/list'
 import importTemplate from './templates/import'
@@ -59,8 +61,10 @@ const Controller = {
     setup: {
         clean: cleanSetup,
         init: initSetup,
-        open: openHome,
+        open: openSetup,
         benchmark: benchmarkSetup,
+        path: pathSetup,
+        code: codeSetup,
     },
     template: {
         resolve: resolveTemplate,

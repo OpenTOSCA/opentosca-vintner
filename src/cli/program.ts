@@ -40,6 +40,24 @@ setup
     )
 
 setup
+    .command('code')
+    .description('opens the home directory in visual studio code')
+    .action(
+        hae(async () => {
+            await Controller.setup.code()
+        })
+    )
+
+setup
+    .command('path')
+    .description('returns the path to the home directory')
+    .action(
+        hae(async () => {
+            console.log(await Controller.setup.path())
+        })
+    )
+
+setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
     .option('--no-io [boolean]', 'disable read and writes to the filesystem')
