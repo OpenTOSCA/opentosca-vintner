@@ -13,6 +13,12 @@ curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 
+To install a specific version, run 
+
+```shell linenums="1"
+curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
+```
+
 ## Manual
 
 To manually install `vintner`, download the binary for your system.

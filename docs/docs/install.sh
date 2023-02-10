@@ -42,7 +42,9 @@ if [ -f /etc/alpine-release ]; then
   PLAT=alpine
 fi
 
-wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-${PLAT}-${ARCH}.xz
+VERSION=${VERSION:-latest}
+
+wget https://github.com/opentosca/opentosca-vintner/releases/download/${VERSION}/vintner-${PLAT}-${ARCH}.xz
 tar -xf vintner-${PLAT}-${ARCH}.xz
 rm vintner-${PLAT}-${ARCH}.xz
 mv vintner-${PLAT}-${ARCH} /usr/bin/vintner
