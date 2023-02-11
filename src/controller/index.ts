@@ -15,11 +15,15 @@ import importTemplate from './templates/import'
 import inspectTemplate from './templates/inspect'
 import deleteTemplate from './templates/delete'
 import openTemplate from './templates/open'
+import pathTemplate from './templates/path'
+import codeTemplate from './templates/code'
 import createInstance from './instances/create'
 import deployInstance from './instances/deploy'
 import inspectInstance from './instances/inspect'
 import listInstances from './instances/list'
 import openInstance from './instances/open'
+import pathInstance from './instances/path'
+import codeInstance from './instances/code'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
@@ -39,6 +43,8 @@ const Controller = {
         inspect: inspectInstance,
         list: listInstances,
         open: openInstance,
+        code: codeInstance,
+        path: pathInstance,
         undeploy: undeployInstance,
         update: updateInstance,
         resolve: resolveInstance,
@@ -77,6 +83,8 @@ const Controller = {
         inspect: inspectTemplate,
         list: listTemplates,
         open: openTemplate,
+        code: codeTemplate,
+        path: pathTemplate,
     },
 }
 

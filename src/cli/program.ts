@@ -221,6 +221,26 @@ templates
     )
 
 templates
+    .command('code')
+    .description('opens the template directory in visual studio code')
+    .requiredOption('--template <string>', 'template name')
+    .action(
+        hae(async options => {
+            await Controller.templates.code(options)
+        })
+    )
+
+templates
+    .command('path')
+    .description('returns the path to the template directory')
+    .requiredOption('--template <string>', 'template name')
+    .action(
+        hae(async options => {
+            console.log(await Controller.templates.path(options))
+        })
+    )
+
+templates
     .command('inspect')
     .description('inspects the variable service template')
     .requiredOption('--template <string>', 'template name')
@@ -271,6 +291,26 @@ instances
     .action(
         hae(async options => {
             await Controller.instances.open(options)
+        })
+    )
+
+instances
+    .command('code')
+    .description('opens the instance directory in visual studio code')
+    .requiredOption('--instance <string>', 'instance name')
+    .action(
+        hae(async options => {
+            await Controller.instances.code(options)
+        })
+    )
+
+instances
+    .command('path')
+    .description('returns the path to the instance directory')
+    .requiredOption('--instance <string>', 'instance name')
+    .action(
+        hae(async options => {
+            console.log(await Controller.instances.path(options))
         })
     )
 
