@@ -1,31 +1,33 @@
 import {Instance} from '#repository/instances'
 import * as utils from '#utils'
-import resolve from '#controller/template/resolve'
-import {InputAssignmentMap} from '#spec/topology-template'
+import {critical} from '#utils/lock'
+import Resolver from '#resolver'
 
 export type InstanceResolveOptions = {
     instance: string
     presets?: string[]
-    inputs?: string | InputAssignmentMap
-    time?: string
+    inputs?: string
 }
 
 export default async function (options: InstanceResolveOptions) {
-    const time = options.time || utils.getTime()
+    const time = utils.getTime()
     const instance = new Instance(options.instance)
 
-    // Resolve variability
-    const result = await resolve({
-        template: instance.getVariableServiceTemplate(),
-        inputs: options.inputs,
-        presets: options.presets,
-        output: instance.generateServiceTemplatePath(time),
-    })
+    await critical(instance.getLockKey(), async () => {
+        // Resolve variability
+        const result = await Resolver.resolve({
+            template: instance.getVariableServiceTemplate(),
+            inputs: await Resolver.loadInputs(options.inputs),
+            presets: options.presets,
+        })
 
-    // Store used variability inputs
-    // Basically only when used in the CLI during initial deployment
-    // Required later for self-adaptation
-    await instance.setVariabilityInputs(result.inputs, time)
-    // Note, variability-resolved service template is stored inside resolve function
-    // Note, used preset is resolved to respective variability inputs
+        // Store used variability inputs
+        // Basically only when used in the CLI during initial deployment
+        // Required later for self-adaptation
+        // Note, used preset is resolved to respective variability inputs
+        await instance.setVariabilityInputs(result.inputs, time)
+
+        // Store variability resolved service template
+        await instance.setServiceTemplate(result.template, time)
+    })
 }

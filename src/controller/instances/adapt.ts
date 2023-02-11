@@ -1,6 +1,4 @@
 import {Instance} from '#repository/instances'
-import update from '#controller/instances/update'
-import resolve from '#controller/instances/resolve'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {emitter, events} from '#utils/emitter'
@@ -9,7 +7,8 @@ import {InputAssignmentMap} from '#spec/topology-template'
 import _ from 'lodash'
 import jsonDiff from 'json-diff'
 import hae from '#utils/hae'
-import console from 'console'
+import Controller from '#controller'
+import Resolver from '#resolver'
 
 const cache: {[key: string]: InputAssignmentMap | undefined} = {}
 const queue: {[key: string]: InputAssignmentMap[] | undefined} = {}
@@ -69,36 +68,29 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             // Reset queue
             delete queue[instance.getName()]
 
-            // TODO: this is however not the currently deployed one? or is it?
-            const previous = instance.loadServiceTemplate()
-
             /**
              * Analyze: Resolve variability
              */
-            await resolve({
-                instance: instance.getName(),
+            const result = await Resolver.resolve({
+                template: instance.getVariableServiceTemplate(),
                 inputs: cache[instance.getName()],
-                time,
             })
 
             /**
-             * Analyze: Print Difference
+             * Analyze: Check difference
+             * Note, that current service template might have failed components, e.g, when the previous deployment did not succeed
              */
-            const adapted = instance.loadServiceTemplate()
-            const diff = jsonDiff.diffString(previous, adapted)
-            if (diff) {
-                console.log('The differences between the previous and adapted service templates is as follows')
-                console.log(diff)
-            } else {
-                console.log(
-                    'There is no difference between the previous and adapted service templates. However, deployment will still take place in order to fix, e.g., failed components.'
-                )
-            }
+            const diff = jsonDiff.diffString(instance.loadServiceTemplate(), result.template)
+            if (!diff) return console.log('There is no difference between the previous and adapted service templates.')
+            console.log('The previous and adapted service templates differs as follows')
+            console.log(diff)
 
             /**
              * Analyze and Execute: Update deployment
              */
-            await update({
+            await instance.setServiceTemplate(result.template, time)
+            await instance.setVariabilityInputs(result.inputs, time)
+            await Controller.instances.update({
                 instance: instance.getName(),
                 inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
                 time,

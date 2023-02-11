@@ -127,6 +127,10 @@ export class Instance {
         return files.loadYAML<ServiceTemplate>(this.getServiceTemplate())
     }
 
+    setServiceTemplate(template: ServiceTemplate, id?: string) {
+        files.storeYAML(this.generateServiceTemplatePath(id), template)
+    }
+
     getVariableServiceTemplate() {
         return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
     }
@@ -159,12 +163,8 @@ export class Instance {
         return id.toString()
     }
 
-    async setVariabilityInputs(inputs: InputAssignmentMap | string, id?: string) {
+    async setVariabilityInputs(inputs: InputAssignmentMap, id?: string) {
         const target = this.getVariabilityInputs(id || utils.getTime())
-        if (validator.isString(inputs)) {
-            if (inputs.endsWith('.xml')) return files.storeYAML(target, await featureIDE.loadConfiguration(inputs))
-            return files.copy(inputs, target)
-        }
         files.storeYAML(target, inputs)
     }
 }
