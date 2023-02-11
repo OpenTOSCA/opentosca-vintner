@@ -94,7 +94,7 @@ async function main() {
 }
 
 function isCLIOnly(commands: string[]) {
-    return commands[0] === 'server' || commands[0] === 'sensors' || commands[1] === 'open'
+    return ['server', 'sensors'].includes(commands[0]) || ['open', 'path', 'code'].includes(commands[1])
 }
 
 main()

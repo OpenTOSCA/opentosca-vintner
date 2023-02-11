@@ -61,7 +61,7 @@ export class Template {
         return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
     }
 
-    getVariableServiceTemplate() {
+    loadVariableServiceTemplate() {
         return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
     }
 
