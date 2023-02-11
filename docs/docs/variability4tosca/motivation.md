@@ -54,7 +54,7 @@ vintner templates import --template motivation --path motivation
 vintner instances create --instance motivation --template motivation
 
 # Resolve variability
-vintner instances resolve --instance motivation --preset dev
+vintner instances resolve --instance motivation --presets dev
 
 # (optional) Inspect service template
 vintner instances inspect --instance motivation

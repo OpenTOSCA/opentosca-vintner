@@ -5,7 +5,7 @@ import {InputAssignmentMap} from '#spec/topology-template'
 
 export type InstanceResolveOptions = {
     instance: string
-    preset?: string
+    presets?: string[]
     inputs?: string | InputAssignmentMap
     time?: string
 }
@@ -18,7 +18,7 @@ export default async function (options: InstanceResolveOptions) {
     const result = await resolve({
         template: instance.getVariableServiceTemplate(),
         inputs: options.inputs,
-        preset: options.preset,
+        presets: options.presets,
         output: instance.generateServiceTemplatePath(time),
     })
 

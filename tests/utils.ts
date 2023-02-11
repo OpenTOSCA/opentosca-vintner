@@ -5,6 +5,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {getDefaultInputs, getDefaultVariableServiceTemplate, loadConfig} from '#controller/template/test'
 import * as files from '#files'
 import path from 'path'
+import {toList} from '../src/utils/utils'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {
@@ -44,7 +45,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 template: getDefaultVariableServiceTemplate(vstdir || dir),
                 inputs: getDefaultInputs(dir),
                 output,
-                preset: config.preset,
+                presets: toList(config.presets),
             })
         }
 

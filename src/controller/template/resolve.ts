@@ -12,6 +12,7 @@ import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignm
 import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
 import * as featureIDE from '#utils/feature-ide'
+import _ from 'lodash'
 
 /**
  * Not documented since preparation for future work
@@ -22,7 +23,7 @@ import * as featureIDE from '#utils/feature-ide'
 
 export type TemplateResolveOptions = {
     template: string
-    preset?: string
+    presets?: string[]
     inputs?: string | InputAssignmentMap
     output: string
 }
@@ -35,6 +36,8 @@ export type TemplateResolveResult = {
 export default async function (options: TemplateResolveOptions): Promise<TemplateResolveResult> {
     if (validator.isUndefined(options.template)) throw new Error('Template not defined')
     if (validator.isUndefined(options.output)) throw new Error('Output not defined')
+    if (validator.isUndefined(options.presets)) options.presets = []
+    if (!validator.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
     // Load service template
     const serviceTemplate = files.loadYAML<ServiceTemplate>(options.template)
@@ -47,8 +50,14 @@ export default async function (options: TemplateResolveOptions): Promise<Templat
         : {}
 
     const resolver = new VariabilityResolver(serviceTemplate)
-        .setVariabilityPreset(options.preset)
-        .setVariabilityInputs(inputs)
+
+    // Apply variability presets
+    for (const preset of options.presets) {
+        resolver.setVariabilityPreset(preset)
+    }
+
+    // Apply variability inputs
+    resolver.setVariabilityInputs(inputs)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -988,13 +997,14 @@ export class VariabilityResolver {
 
     setVariabilityPreset(name?: string) {
         if (validator.isUndefined(name)) return this
-        this.variabilityInputs = this.getVariabilityPreset(name).inputs
+        const inputs = this.getVariabilityPreset(name).inputs
+        this.variabilityInputs = _.merge(this.variabilityInputs, inputs)
         return this
     }
 
     setVariabilityInputs(inputs?: InputAssignmentMap) {
         if (validator.isUndefined(inputs)) return this
-        this.variabilityInputs = {...this.variabilityInputs, ...inputs}
+        this.variabilityInputs = _.merge(this.variabilityInputs, inputs)
         return this
     }
 

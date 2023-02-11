@@ -19,7 +19,7 @@ sleep 0.5
 p 'vintner instances create --instance ${INSTANCE_NAME} --template ${TEMPLATE_NAME}'
 sleep 0.5
 
-p 'vintner instances resolve --instance ${INSTANCE_NAME} --preset ${PRESET_NAME}'
+p 'vintner instances resolve --instance ${INSTANCE_NAME} --presets ${PRESET_NAME}'
 sleep 0.5
 
 p 'vintner instances deploy --instance ${INSTANCE_NAME} --inputs ${INPUTS_PATH}'

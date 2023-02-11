@@ -157,7 +157,7 @@ template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
-    .option('--preset [string]', 'name of the variability preset')
+    .option('--presets [strings...]', 'names of variability presets', [])
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .requiredOption('--output <string>', 'path of the output')
     .action(
@@ -318,7 +318,7 @@ instances
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--preset [string]', 'name of the variability preset')
+    .option('--presets [string...]', 'names of variability presets', [])
     .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
     .action(
         hae.exit(async options => {

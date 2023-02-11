@@ -5,6 +5,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
 import * as validator from '#validator'
+import {toList} from '#utils'
 
 export type TemplateTestOptions = {path: string}
 
@@ -22,7 +23,7 @@ export type VariabilityTest = {
 export type VariabilityTestConfig = {
     name?: string
     description?: string
-    preset?: string
+    presets?: string | string[]
     error?: string
     expected?: string
 }
@@ -56,7 +57,7 @@ async function runTest(dir: string, vstdir: string) {
             template: getDefaultVariableServiceTemplate(vstdir),
             inputs: getDefaultInputs(dir),
             output,
-            preset: config.preset,
+            presets: toList(config.presets),
         })
     }
 
