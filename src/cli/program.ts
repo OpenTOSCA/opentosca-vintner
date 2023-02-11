@@ -40,6 +40,24 @@ setup
     )
 
 setup
+    .command('code')
+    .description('opens the home directory in visual studio code')
+    .action(
+        hae(async () => {
+            await Controller.setup.code()
+        })
+    )
+
+setup
+    .command('path')
+    .description('returns the path to the home directory')
+    .action(
+        hae(async () => {
+            console.log(await Controller.setup.path())
+        })
+    )
+
+setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
     .option('--no-io [boolean]', 'disable read and writes to the filesystem')
@@ -203,6 +221,26 @@ templates
     )
 
 templates
+    .command('code')
+    .description('opens the template directory in visual studio code')
+    .requiredOption('--template <string>', 'template name')
+    .action(
+        hae(async options => {
+            await Controller.templates.code(options)
+        })
+    )
+
+templates
+    .command('path')
+    .description('returns the path to the template directory')
+    .requiredOption('--template <string>', 'template name')
+    .action(
+        hae(async options => {
+            console.log(await Controller.templates.path(options))
+        })
+    )
+
+templates
     .command('inspect')
     .description('inspects the variable service template')
     .requiredOption('--template <string>', 'template name')
@@ -253,6 +291,26 @@ instances
     .action(
         hae(async options => {
             await Controller.instances.open(options)
+        })
+    )
+
+instances
+    .command('code')
+    .description('opens the instance directory in visual studio code')
+    .requiredOption('--instance <string>', 'instance name')
+    .action(
+        hae(async options => {
+            await Controller.instances.code(options)
+        })
+    )
+
+instances
+    .command('path')
+    .description('returns the path to the instance directory')
+    .requiredOption('--instance <string>', 'instance name')
+    .action(
+        hae(async options => {
+            console.log(await Controller.instances.path(options))
         })
     )
 
