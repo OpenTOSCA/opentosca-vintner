@@ -1,9 +1,13 @@
 import {Template} from '#repository/templates'
+import {critical} from '#utils/lock'
 
 export type TemplatesCreateOptions = {template: string; path: string}
 
 export default async function (options: TemplatesCreateOptions) {
     const template = new Template(options.template)
-    if (template.exists()) throw new Error(`Template ${options.template} already exists`)
-    await template.create().importTemplate(options.path)
+
+    await critical(template.getLockKey(), async () => {
+        if (template.exists()) throw new Error(`Template ${options.template} already exists`)
+        await template.create().importTemplate(options.path)
+    })
 }

@@ -64,6 +64,7 @@ function getTemplateRepository(name: string) {
 }
 
 export default {
+    getLockKey: () => 'plugins',
     getConfig,
     setConfig,
     getOrchestrator,

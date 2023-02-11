@@ -1,4 +1,5 @@
 import exprs from 'express'
+import console from 'console'
 
 function express(fn: exprs.RequestHandler): exprs.RequestHandler {
     return (req, res, next) => {

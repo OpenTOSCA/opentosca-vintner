@@ -31,6 +31,10 @@ export class Instance {
         return this._name
     }
 
+    getLockKey() {
+        return 'instances:' + this.getName()
+    }
+
     exists() {
         return files.exists(this.getInstanceDirectory())
     }

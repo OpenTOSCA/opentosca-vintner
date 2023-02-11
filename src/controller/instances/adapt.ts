@@ -47,7 +47,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
 
     running[instance.getName()] = true
     await critical(
-        instance.getName(),
+        instance.getLockKey(),
         hae.log(async () => {
             // Sanity
             if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
