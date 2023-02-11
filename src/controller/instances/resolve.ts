@@ -15,7 +15,7 @@ export default async function (options: InstanceResolveOptions) {
     const instance = new Instance(options.instance)
 
     // Resolve variability
-    await resolve({
+    const result = await resolve({
         template: instance.getVariableServiceTemplate(),
         inputs: options.inputs,
         preset: options.preset,
@@ -23,8 +23,9 @@ export default async function (options: InstanceResolveOptions) {
     })
 
     // Store used variability inputs
-    // Basically only when used in the CLI as preparation for self-adaptation
-    await instance.setVariabilityInputs(options.inputs || {}, time)
-    if (options.preset) instance.setVariabilityPreset(options.preset)
+    // Basically only when used in the CLI during initial deployment
+    // Required later for self-adaptation
+    await instance.setVariabilityInputs(result.inputs, time)
     // Note, variability-resolved service template is stored inside resolve function
+    // Note, used preset is resolved to respective variability inputs
 }

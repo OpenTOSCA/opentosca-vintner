@@ -139,22 +139,6 @@ export class Instance {
         return path.join(this.getTemplateDirectory(), `variability-inputs.${id || this.getVariabilityInputsID()}.yaml`)
     }
 
-    hasVariabilityPreset() {
-        return files.exists(this.getVariabilityPreset())
-    }
-
-    setVariabilityPreset(preset: string) {
-        files.storeFile(this.getVariabilityPreset(), preset)
-    }
-
-    getVariabilityPreset() {
-        return path.join(this.getInstanceDirectory(), 'preset')
-    }
-
-    loadVariabilityPreset() {
-        return files.loadFile(this.getVariabilityPreset())
-    }
-
     loadVariabilityInputs() {
         return files.loadYAML<InputAssignmentMap>(this.getVariabilityInputs())
     }

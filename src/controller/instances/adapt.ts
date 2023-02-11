@@ -79,7 +79,6 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
                 instance: instance.getName(),
                 inputs: cache[instance.getName()],
                 time,
-                preset: instance.hasVariabilityPreset() ? instance.loadVariabilityPreset() : undefined,
             })
 
             /**

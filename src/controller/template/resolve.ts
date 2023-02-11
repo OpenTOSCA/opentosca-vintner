@@ -27,7 +27,12 @@ export type TemplateResolveOptions = {
     output: string
 }
 
-export default async function (options: TemplateResolveOptions) {
+export type TemplateResolveResult = {
+    inputs: InputAssignmentMap
+    template: ServiceTemplate
+}
+
+export default async function (options: TemplateResolveOptions): Promise<TemplateResolveResult> {
     if (validator.isUndefined(options.template)) throw new Error('Template not defined')
     if (validator.isUndefined(options.output)) throw new Error('Output not defined')
 
@@ -59,6 +64,11 @@ export default async function (options: TemplateResolveOptions) {
 
     // Store variability-resolved service template
     files.storeYAML(options.output, serviceTemplate)
+
+    return {
+        inputs: resolver.getVariabilityInputs(),
+        template: serviceTemplate,
+    }
 }
 
 type ConditionalElementBase = {
@@ -989,9 +999,13 @@ export class VariabilityResolver {
     }
 
     getVariabilityInput(name: string) {
-        const input = this.variabilityInputs?.[name]
+        const input = this.variabilityInputs[name]
         validator.ensureDefined(input, `Did not find variability input "${name}"`)
         return input
+    }
+
+    getVariabilityInputs() {
+        return this.variabilityInputs
     }
 
     getVariabilityPreset(name: string) {
