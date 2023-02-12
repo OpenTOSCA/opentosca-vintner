@@ -91,7 +91,7 @@ creates a new instance
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| instance |  true  | string | instance name |
+| instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
 | template |  true  | string | template name |
 
 ## vintner instances delete
