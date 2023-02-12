@@ -72,7 +72,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
              * Analyze: Resolve variability
              */
             const result = await Resolver.resolve({
-                template: instance.getVariableServiceTemplate(),
+                template: instance.loadVariableServiceTemplate(),
                 inputs: cache[instance.getName()],
             })
 

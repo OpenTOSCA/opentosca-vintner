@@ -18,7 +18,7 @@ yarn --frozen-lockfile
 ## Large Files
 
 Larges files, such as binaries or archives used in examples, are added using [git lfs](https://git-lfs.com){target=_blank}.
-This includes the following file extensions `.bin`, `.gz`, `.tar`, and `.zip`.
+This includes the following file extensions `.bin`, `.gz`, `.tar`, `xz`, and `.zip`.
 
 ## Branch Naming Convention
 

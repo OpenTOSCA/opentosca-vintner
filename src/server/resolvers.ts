@@ -149,14 +149,6 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/instances/update',
-    hae.express(async (req, res, next) => {
-        await Controller.instances.update(req.body)
-        res.json({})
-    })
-)
-
-resolvers.post(
     '/instances/undeploy',
     hae.express(async (req, res, next) => {
         await Controller.instances.undeploy(req.body)

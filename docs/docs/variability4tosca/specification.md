@@ -478,7 +478,7 @@ To resolve the variability in a Variable Service Template, conduct the following
 
 ### Retrieve Variability Inputs Assignments
 
-Variability Inputs can be assigned either by directly or indirectly using possibly multiple variability presets.
+Variability Inputs can be assigned either directly or indirectly using possibly multiple variability presets.
 Thereby, first the variability presets are applied in the order they are specified, and then directly assigned inputs.
 Thus, directly assigned variability inputs have the highest priority.
 

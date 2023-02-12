@@ -27,7 +27,7 @@ export default {
 }
 
 export type ResolveOptions = {
-    template: string
+    template: ServiceTemplate
     presets?: string[]
     inputs?: InputAssignmentMap
 }
@@ -38,21 +38,11 @@ export type ResolveResult = {
 }
 
 async function resolve(options: ResolveOptions): Promise<ResolveResult> {
-    if (validator.isUndefined(options.template)) throw new Error('Template not defined')
     if (validator.isUndefined(options.presets)) options.presets = []
     if (!validator.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
     // Load service template
-    const serviceTemplate = files.loadYAML<ServiceTemplate>(options.template)
-    const inputs = validator.isDefined(options.inputs)
-        ? validator.isString(options.inputs)
-            ? options.inputs.endsWith('.xml')
-                ? await featureIDE.loadConfiguration(options.inputs)
-                : files.loadYAML<InputAssignmentMap>(options.inputs)
-            : options.inputs
-        : {}
-
-    const resolver = new VariabilityResolver(serviceTemplate)
+    const resolver = new VariabilityResolver(options.template)
 
     // Apply variability presets
     for (const preset of options.presets) {
@@ -60,7 +50,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     }
 
     // Apply variability inputs
-    resolver.setVariabilityInputs(inputs)
+    resolver.setVariabilityInputs(options.inputs)
 
     // Ensure correct TOSCA definitions version
     resolver.ensureCompatibility()
@@ -76,7 +66,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 
     return {
         inputs: resolver.getVariabilityInputs(),
-        template: serviceTemplate,
+        template: options.template,
     }
 }
 

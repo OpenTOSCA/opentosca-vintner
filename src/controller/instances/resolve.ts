@@ -16,15 +16,14 @@ export default async function (options: InstanceResolveOptions) {
     await lock.try(instance.getLockKey(), async () => {
         // Resolve variability
         const result = await Resolver.resolve({
-            template: instance.getVariableServiceTemplate(),
+            template: instance.loadVariableServiceTemplate(),
             inputs: await Resolver.loadInputs(options.inputs),
             presets: options.presets,
         })
 
         // Store used variability inputs
-        // Basically only when used in the CLI during initial deployment
         // Required later for self-adaptation
-        // Note, used preset is resolved to respective variability inputs
+        // Note, used presets are resolved to respective variability inputs
         await instance.setVariabilityInputs(result.inputs, time)
 
         // Store variability resolved service template

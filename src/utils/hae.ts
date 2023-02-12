@@ -1,7 +1,7 @@
-import exprs from 'express'
+import Express from 'express'
 import console from 'console'
 
-function express(fn: exprs.RequestHandler): exprs.RequestHandler {
+function express(fn: Express.RequestHandler): Express.RequestHandler {
     return (req, res, next) => {
         Promise.resolve(fn(req, res, next)).catch(next)
     }
@@ -29,7 +29,7 @@ function log(fn: () => Promise<void>): () => void {
 }
 
 export default {
+    express,
     exit,
     log,
-    express,
 }

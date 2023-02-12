@@ -1,7 +1,0 @@
-{
-    "artifact": "/workspaces/opentosca-vintner/examples/xopera-self-adaptation---only/files/application-linux-arm64.tar.gz",
-    "scale": 1,
-    "service_name": "scenario-application",
-    "ssh_key_file": "/home/stoetzms/.ssh/id_ed25519",
-    "ssh_user": "pi"
-}
