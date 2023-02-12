@@ -38,6 +38,21 @@ submit sensor data used for adapting the instance
 | instance |  true  | string | instance name |
 | inputs |  true  | InputAssignmentMap | sensor data |
 
+## vintner instances code
+
+opens the instance directory in visual studio code
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances code --instance ${INSTANCE}
+    ```
+
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+
 ## vintner instances create
 
 creates a new instance
@@ -155,6 +170,7 @@ deploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
+| verbose |  false  | boolean | verbose |
 
 ## vintner instances inspect
 
@@ -238,6 +254,60 @@ opens template directory in a file browser
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
+## vintner instances path
+
+returns the path to the instance directory
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances path --instance ${INSTANCE}
+    ```
+
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+
+## vintner instances redeploy
+
+redeploy instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances redeploy --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/redeploy
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/redeploy", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/redeploy", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| verbose |  false  | boolean | verbose |
+
 ## vintner instances resolve
 
 resolves variability
@@ -275,7 +345,7 @@ resolves variability
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| preset |  false  | string | name of the variability preset |
+| presets |  false  | string... | names of variability presets (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 
 ## vintner instances unadapt
@@ -348,45 +418,7 @@ undeploys instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-
-## vintner instances update
-
-updates instance
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances update --instance ${INSTANCE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}"}' \
-            ${SERVER_ADDRESS}/instances/update
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/update", {
-		instance: INSTANCE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/update", json={
-		"instance": INSTANCE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name |
-| inputs |  false  | string | path to the deployment inputs |
+| verbose |  false  | boolean | verbose |
 
 ## vintner orchestrators enable
 
@@ -762,6 +794,17 @@ cleans up the filesystem
     requests.post(SERVER_ADDRESS + "/setup/clean")
     ```
 
+## vintner setup code
+
+opens the home directory in visual studio code
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup code 
+    ```
+
+
 ## vintner setup init
 
 initialises the filesystem
@@ -799,6 +842,17 @@ opens the home directory
 === "CLI"
     ```shell linenums="1"
     vintner setup open 
+    ```
+
+
+## vintner setup path
+
+returns the path to the home directory
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup path 
     ```
 
 
@@ -882,7 +936,7 @@ resolves variability
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
-| preset |  false  | string | name of the variability preset |
+| presets |  false  | strings... | names of variability presets (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
 
@@ -923,6 +977,21 @@ runs tests defined in the CSAR
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path or link to the extracted CSAR |
+
+## vintner templates code
+
+opens the template directory in visual studio code
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner templates code --template ${TEMPLATE}
+    ```
+
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | template name |
 
 ## vintner templates delete
 
@@ -1078,6 +1147,21 @@ opens template directory in a file browser
 === "CLI"
     ```shell linenums="1"
     vintner templates open --template ${TEMPLATE}
+    ```
+
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | template name |
+
+## vintner templates path
+
+returns the path to the template directory
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner templates path --template ${TEMPLATE}
     ```
 
 
