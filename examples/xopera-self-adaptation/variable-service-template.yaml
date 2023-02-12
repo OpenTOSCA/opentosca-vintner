@@ -1,0 +1,239 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - lib/scenario/types.yaml
+    - lib/compute/types.yaml
+    - lib/sensor/types.yaml
+
+topology_template:
+    inputs:
+        vintner_version:
+            type: string
+            default: latest
+
+        vintner:
+            type: string
+            default: http://localhost:3000
+
+        instance:
+            type: string
+
+        compute_vm_network:
+            type: string
+
+        compute_vm_security_groups:
+            type: string
+
+        compute_vm_key_name:
+            type: string
+
+        compute_vm_ssh_user:
+            type: string
+
+        compute_vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+        compute_raspberry_address:
+            type: string
+            default: raspberrypi
+
+        compute_raspberry_user_name:
+            type: string
+
+        compute_raspberry_ssh_key_file:
+            type: string
+
+    variability:
+        inputs:
+            sensors_enabled:
+                type: boolean
+            weekday:
+                type: string
+            compute_raspberry_cpu:
+                type: number
+            compute_vm_up:
+                type: boolean
+            compute_vm_uptime:
+                type: number
+            compute_vm_cpu:
+                type: number
+
+        presets:
+            raspberry:
+                inputs:
+                    sensors_enabled: false
+                    weekday: saturday
+                    compute_raspberry_cpu: 0
+                    compute_vm_up: false
+                    compute_vm_uptime: 0
+                    compute_vm_cpu: 0
+
+            vm:
+                inputs:
+                    sensors_enabled: false
+                    weekday: monday
+                    compute_raspberry_cpu: 0
+                    compute_vm_up: false
+                    compute_vm_uptime: 0
+                    compute_vm_cpu: 0
+
+        expressions:
+            is_raspberry_present:
+                {and: [{get_variability_condition: is_weekend}, {get_variability_condition: not_is_cloud_burst}]}
+            is_weekend: {valid_values: [get_variability_input: weekday, ['saturday', 'sunday']]}
+            not_is_cloud_burst:
+                {
+                    or:
+                        [
+                            {
+                                and:
+                                    [
+                                        {get_variability_condition: not_is_raspberry_under_load},
+                                        {get_variability_condition: not_is_vm_up},
+                                    ],
+                            },
+                            {
+                                and:
+                                    [
+                                        {get_variability_condition: not_is_vm_under_load},
+                                        {get_variability_condition: is_vm_up_enough},
+                                    ],
+                            },
+                        ],
+                }
+            not_is_raspberry_under_load: {less_than: [{get_variability_input: compute_raspberry_cpu}, 80]}
+            not_is_vm_under_load: {less_than: [{get_variability_input: compute_vm_cpu}, 40]}
+            not_is_vm_up: {not: {get_variability_input: compute_vm_up}}
+            is_vm_up_enough: {greater_than: [{get_variability_input: compute_vm_uptime}, 600]}
+
+        options:
+            enable_relation_pruning: true
+            enable_policy_pruning: true
+            enable_group_pruning: true
+            enable_property_pruning: true
+            enable_artifact_pruning: true
+
+    node_templates:
+        application:
+            type: scenario.application
+            properties:
+                - scale:
+                      value: 1
+                      conditions: {get_node_presence: compute_raspberry}
+                - scale:
+                      value: 4
+                      conditions: {get_node_presence: compute_vm}
+            requirements:
+                - host:
+                      node: compute_raspberry
+                      conditions: {get_node_presence: compute_raspberry}
+                - host:
+                      node: compute_vm
+                      conditions: {get_node_presence: compute_vm}
+            artifacts:
+                - binary:
+                      type: tosca.artifacts.File
+                      file: files/application-linux-arm64.xz
+                      conditions: {get_node_presence: compute_raspberry}
+                - binary:
+                      type: tosca.artifacts.File
+                      file: files/application-linux-x64.xz
+                      conditions: {get_node_presence: compute_vm}
+
+        compute_raspberry:
+            type: compute.raspberry
+            conditions: {get_variability_condition: is_raspberry_present}
+            properties:
+                ssh_user: {get_input: compute_raspberry_user_name}
+                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
+            attributes:
+                private_address: {get_input: compute_raspberry_address}
+                public_address: {get_input: compute_raspberry_address}
+
+        compute_vm:
+            type: compute.vm
+            conditions: {not: {get_node_presence: compute_raspberry}}
+            properties:
+                ports: [80, 3000, 3001, 3002, 3003, 3004]
+                name: {concat: ['compute-vm-', {get_input: instance}]}
+                image: Ubuntu 20.04
+                flavor: m1.medium
+                network: {get_input: compute_vm_network}
+                security_groups: {get_input: compute_vm_security_groups}
+                key_name: {get_input: compute_vm_key_name}
+                ssh_user: {get_input: compute_vm_ssh_user}
+                ssh_key_file: {get_input: compute_vm_ssh_key_file}
+            requirements:
+                - host: compute_hypervisor
+
+        compute_hypervisor:
+            type: compute.hypervisor
+            conditions: {get_node_presence: compute_vm}
+            properties:
+                region_name: {get_input: os_region_name}
+                auth_type: {get_input: os_auth_type}
+                auth_url: {get_input: os_auth_url}
+                identity_api_version: {get_input: os_identity_api_version}
+                interface: {get_input: os_interface}
+                application_credential_id: {get_input: os_application_credential_id}
+                application_credential_secret: {get_input: os_application_credential_secret}
+
+        sensor_compute_vm:
+            type: sensor.compute
+            conditions: {get_node_presence: compute_vm}
+            properties:
+                vintner: {get_input: vintner}
+                instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                template: compute_vm
+                disable_submission: true
+            requirements:
+                - host: compute_vm
+
+        sensor_compute_raspberry:
+            type: sensor.compute
+            conditions: {get_node_presence: compute_raspberry}
+            properties:
+                vintner: {get_input: vintner}
+                instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                template: compute_raspberry
+                disable_submission: true
+            requirements:
+                - host: compute_raspberry
+
+        sensor_weekday:
+            type: sensor.weekday
+            properties:
+                vintner: {get_input: vintner}
+                instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                disable_submission: true
+            requirements:
+                - host:
+                      node: compute_raspberry
+                      conditions: {get_node_presence: compute_raspberry}
+                - host:
+                      node: compute_vm
+                      conditions: {get_node_presence: compute_vm}
