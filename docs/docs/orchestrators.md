@@ -43,6 +43,7 @@ The orchestrators provide more features than we integrated, thus, checkout [TOSS
 | Feature | xOpera | Unfurl |
 | -- |-------| --- |
 | Deploy a Service Template | :material-check: | :material-check: |
+| Redeploy a Service Template | :material-check: | :material-close: | 
 | Update a Service Template | :material-check: | :material-close: | 
 | Undeploy a Service Template | :material-check: |:material-check: |
 | Access Node Instance Attributes | :material-check: | :material-close: |

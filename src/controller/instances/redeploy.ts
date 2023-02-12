@@ -10,6 +10,6 @@ export default async function (options: InstancesDeployOptions) {
     await critical(instance.getLockKey(), async () => {
         if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
         if (options.inputs) instance.setServiceInputs(options.inputs)
-        await Plugins.getOrchestrator().deploy(instance, {verbose: options.verbose})
+        await Plugins.getOrchestrator().redeploy(instance, {verbose: options.verbose})
     })
 }

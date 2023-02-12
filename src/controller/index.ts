@@ -25,6 +25,7 @@ import openInstance from './instances/open'
 import pathInstance from './instances/path'
 import codeInstance from './instances/code'
 import undeployInstance from './instances/undeploy'
+import redeployInstance from './instances/redeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
 import resolveInstance from './instances/resolve'
@@ -50,6 +51,7 @@ const Controller = {
         code: codeInstance,
         path: pathInstance,
         undeploy: undeployInstance,
+        redeploy: redeployInstance,
         update: updateInstance,
         resolve: resolveInstance,
         adapt: adaptInstance,

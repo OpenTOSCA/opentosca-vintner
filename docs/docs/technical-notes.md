@@ -48,10 +48,16 @@ ${vintner_home}/
 1. Deployment inputs are copied to the instance directory.
 1. Deployment command is sent to orchestrator. Variability-resolved service template is used.
 
-### Instance Update
+### Instance Redeployment 
 
-1. Deployment inputs are copied to the instance directory.
-1. Command is sent to orchestrator to update variability-resolved service template.
+1. Deployment command is sent once again to the orchestrator. Variability-resolve service templated is used. For example, to rerun a failed deployment.
+
+### Instance Adaptation
+
+1. Sensor data is collected and stored as variability inputs.
+2. Variability is resolved based on the new variability inputs.
+3. Instance is updated based on the new variability-resolved deployment model.
+
 
 ### Instance Undeployment
 
@@ -60,12 +66,6 @@ ${vintner_home}/
 ### Instance Deletion
 
 1. Instance directory is deleted.
-
-### Instance Adaptation
-
-1. Sensor data is collected and stored as variability inputs.
-2. Variability is resolved based on the new variability inputs.
-3. Instance is updated based on the new variability-resolved deployment model.
 
 ## Conventions
 
@@ -84,7 +84,7 @@ sudo npm install -g yarn
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
-sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
+sudo apt-get update -y && sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
 ```
 
 ## Put Some Stress on CPU and Memory

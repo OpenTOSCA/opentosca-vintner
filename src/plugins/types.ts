@@ -23,10 +23,15 @@ export type NodeTemplateAttributes = {
 
 export type NodeTemplateAttributesMap = {[key: string]: NodeTemplateAttributes}
 
+export type OrchestratorOperationOptions = {
+    verbose?: boolean
+}
+
 export interface OrchestratorPlugin {
-    deploy: (instance: Instance) => Promise<void>
-    update: (instance: Instance) => Promise<void>
-    undeploy: (instance: Instance) => Promise<void>
+    deploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
+    redeploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
+    update: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
+    undeploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     getAttributes: (instance: Instance) => Promise<NodeTemplateAttributesMap>
 }
 

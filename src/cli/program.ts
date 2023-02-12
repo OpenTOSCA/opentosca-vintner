@@ -342,6 +342,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
             await Controller.instances.deploy(options)
@@ -349,13 +350,13 @@ instances
     )
 
 instances
-    .command('update')
-    .description('updates instance')
+    .command('redeploy')
+    .description('redeploy instance')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
-            await Controller.instances.update(options)
+            await Controller.instances.redeploy(options)
         })
     )
 
@@ -363,6 +364,7 @@ instances
     .command('undeploy')
     .description('undeploys instance')
     .requiredOption('--instance <string>', 'instance name')
+    .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
             await Controller.instances.undeploy(options)
