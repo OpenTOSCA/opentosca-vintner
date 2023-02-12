@@ -24,6 +24,10 @@ export class Template {
         return this._name
     }
 
+    getLockKey() {
+        return 'templates:' + this.getName()
+    }
+
     create() {
         files.createDirectory(this.getTemplateDirectory())
         return this

@@ -112,8 +112,8 @@ export function normalizeString(value: string) {
     return value.toLowerCase().replaceAll(' ', '_')
 }
 
-export function getTime() {
-    return new Date().getTime().toString()
+export function now() {
+    return new Date().getTime()
 }
 
 export async function sleep(ms = 1000) {

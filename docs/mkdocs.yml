@@ -87,10 +87,10 @@ nav:
           - queries4tosca/specification.md
     - dynamic-deployment-artifacts.md
     - interface.md
-    - technical-notes.md
     - dependencies.md
     - development.md
     - code-of-conduct.md
     - resources.md
     - about-us.md
+    - notes.md
     - faq.md

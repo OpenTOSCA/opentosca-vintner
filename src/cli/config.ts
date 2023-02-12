@@ -11,5 +11,4 @@ const config: Config = {
     version: '__VERSION__',
     home: path.resolve(process.env.OPENTOSCA_VINTNER_HOME_DIR || path.join(os.homedir(), '.opentosca_vintner')),
 }
-
 export default config

@@ -30,3 +30,5 @@
             - wget
             - curl
             - tree
+            - nmap
+            - stress

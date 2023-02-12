@@ -10,6 +10,7 @@ For the remaining supported platforms and architectures, see the manual installa
 
 ```shell linenums="1"
 curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+vintner setup init
 ```
 
 To install a specific version, run 
@@ -26,14 +27,35 @@ You might add the binary to your $PATH.
 The following example shows the installation on Linux.
 See [below](#signature) for verifying the signature of the binary.
 
-```shell linenums="1"
-wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
-tar -xf vintner-linux-x64.xz
-rm vintner-linux-x64.xz
-mv vintner-linux-x64 /usr/bin/vintner
-chmod +x /usr/bin/vintner
-vintner setup init
-```
+=== "Linux x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
+    tar -xf vintner-linux-x64.xz
+    rm vintner-linux-x64.xz
+    mv vintner-linux-x64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Linux arm64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz
+    tar -xf vintner-linux-arm64.xz
+    rm vintner-linux-arm64.xz
+    mv vintner-linux-arm64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Alpine x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz
+    tar -xf vintner-alpine-x64.xz
+    rm vintner-alpine-x64.xz
+    mv vintner-alpine-x64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
 
 The following binaries are available:
 
@@ -85,7 +107,7 @@ curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import
 Then download and verify the respective signature.
 
 ```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
 gpg --verify vintner-linux-x64.asc
 ```
 

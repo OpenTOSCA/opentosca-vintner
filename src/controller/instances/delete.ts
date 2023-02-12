@@ -1,7 +1,11 @@
 import {Instance} from '#repository/instances'
+import lock from '#utils/lock'
 
 export type InstancesDeleteOptions = {instance: string}
 
 export default async function (options: InstancesDeleteOptions) {
-    new Instance(options.instance).delete()
+    const instance = new Instance(options.instance)
+    await lock.try(instance.getLockKey(), () => {
+        instance.delete()
+    })
 }

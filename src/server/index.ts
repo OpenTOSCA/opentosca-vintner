@@ -3,9 +3,11 @@ import http from 'http'
 import express from 'express'
 import resolvers from './resolvers'
 import type {ErrorRequestHandler} from 'express'
-import hae from './hae'
 import createError from 'http-errors'
 import cors from 'cors'
+import hae from '#utils/hae'
+import death from '#utils/death'
+import console from 'console'
 
 export default {
     create: function () {
@@ -24,7 +26,7 @@ export default {
          */
         expressServer.use(
             '*',
-            hae((req, res, next) => {
+            hae.express((req, res, next) => {
                 throw new createError.NotFound()
             })
         )
@@ -34,13 +36,20 @@ export default {
          */
         const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
             console.log(error.stack)
-            return res.status(error.status || 500).json({error})
+            return res.status(error.status || 500).json({error: error.msg || error.message || error})
         }
         expressServer.use(errorHandler)
 
         /**
          * HTTP server
          */
-        return http.createServer(expressServer)
+        const server = http.createServer(expressServer)
+        death.register({
+            stop: function () {
+                server.close()
+            },
+        })
+
+        return server
     },
 }

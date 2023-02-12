@@ -24,9 +24,7 @@ First, install OpenTOSCA Vintner.
 For more information see [Installation](../installation.md){target=_blank}.
 
 ```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
-mv vintner-linux-x64 /usr/bin/vintner
-chmod +x /usr/bin/vintner
+curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 
@@ -56,7 +54,7 @@ vintner templates import --template motivation --path motivation
 vintner instances create --instance motivation --template motivation
 
 # Resolve variability
-vintner instances resolve --instance motivation --preset dev
+vintner instances resolve --instance motivation --presets dev
 
 # (optional) Inspect service template
 vintner instances inspect --instance motivation

@@ -39,7 +39,7 @@ A Variability Definition defines Variability Inputs, Variability Presets, and Va
 | inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
-| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.
+| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.                                |
 
 
 The following non-normative and incomplete example contains a Variability Definition which declares the Variability
@@ -445,6 +445,7 @@ The following constraint operators can be used inside a Variability Expression.
 | less_than        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
 | less_or_equal    | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less or equal to the second value.    |
 | in_range         | Tuple(NumericExpression, Tuple(NumericExpression, NumericExpression)) | Boolean | Evaluates if the value is in a given range.                           |
+| valid_values     | Tuple(ValueExpression, List(ValueExpression))                         | Boolean | Evaluates if the value is element of the list.                        |
 | length           | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a given length.                            |
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
@@ -459,6 +460,7 @@ Service Template.
 
 To resolve the variability in a Variable Service Template, conduct the following steps:
 
+1. Retrieve Variability Inputs Assignments.
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
 1. Remove all Node Templates which are not present.
 1. Remove all Node Template Properties which are not present.
@@ -471,9 +473,14 @@ To resolve the variability in a Variable Service Template, conduct the following
 1. Remove all Group Members which are not present from Group Template.
 1. Remove all Policy Templates which are not present.
 1. Remove all Policy Targets which are not present from Policy Template.
-1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node
-   Templates.
+1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
+
+### Retrieve Variability Inputs Assignments
+
+Variability Inputs can be assigned either directly or indirectly using possibly multiple variability presets.
+Thereby, first the variability presets are applied in the order they are specified, and then directly assigned inputs.
+Thus, directly assigned variability inputs have the highest priority.
 
 ### Check Element Presence
 
@@ -552,12 +559,13 @@ my-csar/
 
 The `test.yaml` file describes and configures the test and has the following structure.
 
-| Keyname     | Mandatory | Type   | Description                                            |
-|-------------|-----------|--------|--------------------------------------------------------|
-| name        | false     | String | Display name of the test case.                         | 
-| description | false     | String | Description of the test case.                          | 
-| preset      | false     | String | Variability Preset to used when resolving variability. | 
-| error       | false     | String | The expected error that is thrown.                     | 
+| Keyname     | Mandatory | Type                       | Description                                                                                 |
+|-------------|-----------|----------------------------|---------------------------------------------------------------------------------------------|
+| name        | false     | String                     | Display name of the test case.                                                              | 
+| description | false     | String                     | Description of the test case.                                                               | 
+| presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                      | 
+| error       | false     | String                     | The expected error that is thrown.                                                          | 
+| expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
 
 ## Conformance Test Suite
 

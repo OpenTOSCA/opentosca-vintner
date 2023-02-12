@@ -1,5 +1,5 @@
 import {Instance} from '#repository/instances'
-import {NodeTemplateAttributesMap, OrchestratorPlugin} from './types'
+import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
 import * as files from '#files'
@@ -32,7 +32,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
         this.shell = new Shell(config.wsl)
     }
 
-    async deploy(instance: Instance) {
+    async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'deploy',
@@ -40,33 +40,48 @@ export class xOperaPlugin implements OrchestratorPlugin {
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-
         if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
+        if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
 
-    async update(instance: Instance, time?: string) {
+    async redeploy(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [
+            this.binary,
+            'deploy',
+            '--resume',
+            '--force',
+            '--instance-path',
+            this.shell.resolve(instance.getDataDirectory()),
+        ]
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
+    }
+
+    async update(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'update',
-            this.shell.resolve(instance.getServiceTemplate(time)),
+            this.shell.resolve(instance.getServiceTemplate(options?.time)),
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
         if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
-
+        if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
 
-    async undeploy(instance: Instance) {
-        await this.shell.execute([
+    async undeploy(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [
             this.binary,
             'undeploy',
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
             '--resume',
             '--force',
-        ])
+        ]
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
     }
 
     /**

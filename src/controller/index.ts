@@ -25,6 +25,7 @@ import openInstance from './instances/open'
 import pathInstance from './instances/path'
 import codeInstance from './instances/code'
 import undeployInstance from './instances/undeploy'
+import redeployInstance from './instances/redeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
 import resolveInstance from './instances/resolve'
@@ -34,6 +35,10 @@ import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
 import testTemplate from './template/test'
+import computeSensor from '#controller/sensors/compute'
+import locationSensor from '#controller/sensors/location'
+import weekdaySensor from '#controller/sensors/weekday'
+import fileSensor from '#controller/sensors/file'
 
 const Controller = {
     instances: {
@@ -46,6 +51,7 @@ const Controller = {
         code: codeInstance,
         path: pathInstance,
         undeploy: undeployInstance,
+        redeploy: redeployInstance,
         update: updateInstance,
         resolve: resolveInstance,
         adapt: adaptInstance,
@@ -85,6 +91,12 @@ const Controller = {
         open: openTemplate,
         code: codeTemplate,
         path: pathTemplate,
+    },
+    sensors: {
+        compute: computeSensor,
+        location: locationSensor,
+        weekday: weekdaySensor,
+        file: fileSensor,
     },
 }
 
