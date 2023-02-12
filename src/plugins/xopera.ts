@@ -58,7 +58,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute(command)
     }
 
-    async update(instance: Instance, options?: OrchestratorOperationOptions & {time?: string}) {
+    async update(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'update',

@@ -1,7 +1,7 @@
 import {Instance} from '#repository/instances'
 import Plugins from '#plugins'
 
-export type InstancesUpdateOptions = {instance: string; inputs?: string; time?: string; verbose?: boolean}
+export type InstancesUpdateOptions = {instance: string; inputs?: string; time?: number; verbose?: boolean}
 
 // TODO: lock but consider deadlock during adaptation
 export default async function (options: InstancesUpdateOptions) {

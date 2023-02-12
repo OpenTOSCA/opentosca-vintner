@@ -8,7 +8,11 @@ import {InputAssignmentMap} from '#spec/topology-template'
 import Plugins from '#plugins'
 import * as utils from '#utils'
 import * as validator from '#validator'
-import * as featureIDE from '#utils/feature-ide'
+
+type InstanceInfo = {
+    name: string
+    time?: number
+}
 
 export class Instances {
     static all() {
@@ -42,6 +46,7 @@ export class Instance {
     create() {
         files.createDirectory(this.getInstanceDirectory())
         files.createDirectory(this.getDataDirectory())
+        this.setInfo({name: this.getName()})
         return this
     }
 
@@ -52,6 +57,24 @@ export class Instance {
 
     setTemplate(name: string) {
         files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory())
+        return this
+    }
+
+    getInfo() {
+        return path.join(this.getInstanceDirectory(), 'info.yaml')
+    }
+
+    setInfo(info: InstanceInfo) {
+        files.storeYAML(this.getInfo(), info)
+        return this
+    }
+
+    loadInfo() {
+        return files.loadYAML<InstanceInfo>(this.getInfo())
+    }
+
+    setTime(time: number) {
+        this.setInfo({...this.loadInfo(), time})
         return this
     }
 
@@ -99,36 +122,27 @@ export class Instance {
         return files.loadYAML<InputAssignmentMap>(this.getServiceInputs())
     }
 
-    generateServiceTemplatePath(id?: string) {
-        return this.getServiceTemplate(id || utils.getTime())
+    loadTime() {
+        const info = this.loadInfo()
+        if (validator.isUndefined(info.time))
+            throw new Error(`Instance "${this.getName()}" does not a service template`)
+        return info.time
     }
 
-    getServiceTemplateID() {
-        const id = Math.max(
-            ...files
-                .listFiles(this.getTemplateDirectory())
-                .map(file => file.match(/^service-template\.(?<id>\d+)\.yaml$/)?.groups?.id)
-                .filter(Boolean)
-                .map(Number)
-        )
-        if (id === -Infinity) throw new Error('Did not find a service template')
-        return id.toString()
+    getServiceTemplateFile(time?: number) {
+        return `service-template.${time || this.loadTime()}.yaml`
     }
 
-    getServiceTemplateFile(id?: string) {
-        return `service-template.${id || this.getServiceTemplateID()}.yaml`
-    }
-
-    getServiceTemplate(id?: string) {
-        return path.join(this.getTemplateDirectory(), this.getServiceTemplateFile(id))
+    getServiceTemplate(time?: number) {
+        return path.join(this.getTemplateDirectory(), this.getServiceTemplateFile(time))
     }
 
     loadServiceTemplate() {
         return files.loadYAML<ServiceTemplate>(this.getServiceTemplate())
     }
 
-    setServiceTemplate(template: ServiceTemplate, id?: string) {
-        files.storeYAML(this.generateServiceTemplatePath(id), template)
+    setServiceTemplate(template: ServiceTemplate, time: number) {
+        files.storeYAML(this.getServiceTemplate(time), template)
     }
 
     getVariableServiceTemplate() {
@@ -143,28 +157,16 @@ export class Instance {
         return files.exists(this.getVariabilityInputs())
     }
 
-    getVariabilityInputs(id?: string) {
-        return path.join(this.getTemplateDirectory(), `variability-inputs.${id || this.getVariabilityInputsID()}.yaml`)
+    getVariabilityInputs(time?: number) {
+        return path.join(this.getTemplateDirectory(), `variability-inputs.${time || this.loadTime()}.yaml`)
     }
 
     loadVariabilityInputs() {
         return files.loadYAML<InputAssignmentMap>(this.getVariabilityInputs())
     }
 
-    getVariabilityInputsID() {
-        const id = Math.max(
-            ...files
-                .listFiles(this.getTemplateDirectory())
-                .map(file => file.match(/^variability-inputs\.(?<id>\d+)\.yaml$/)?.groups?.id)
-                .filter(Boolean)
-                .map(Number)
-        )
-        if (id === -Infinity) throw new Error('Did not find a variability inputs')
-        return id.toString()
-    }
-
-    async setVariabilityInputs(inputs: InputAssignmentMap, id?: string) {
-        const target = this.getVariabilityInputs(id || utils.getTime())
+    async setVariabilityInputs(inputs: InputAssignmentMap, time: number) {
+        const target = this.getVariabilityInputs(time)
         files.storeYAML(target, inputs)
     }
 }

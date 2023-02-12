@@ -10,7 +10,7 @@ export type InstanceResolveOptions = {
 }
 
 export default async function (options: InstanceResolveOptions) {
-    const time = utils.getTime()
+    const time = utils.now()
     const instance = new Instance(options.instance)
 
     await lock.try(instance.getLockKey(), async () => {
@@ -29,5 +29,6 @@ export default async function (options: InstanceResolveOptions) {
 
         // Store variability resolved service template
         await instance.setServiceTemplate(result.template, time)
+        await instance.setTime(time)
     })
 }

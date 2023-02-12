@@ -9,6 +9,9 @@ For more information see [Interface](interface.md){target=_blank}.
 
 ## xOpera
 Note, that xOpera must be version 0.6.9 since 0.7.0 does not parse the templates as expected.
+See [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
+[#258](https://github.com/xlab-si/xopera-opera/issues/258){target=_blank}, and
+[#261](https://github.com/xlab-si/xopera-opera/issues/261){target=_blank}.
 
 ```shell linenums="1"
 vintner orchestrators init xopera
@@ -17,6 +20,9 @@ vintner orchestrators enable --orchestrator xopera
 
 ## xOpera WSL
 Note, that xOpera must be version 0.6.9 since 0.7.0 does not parse the templates as expected.
+See [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
+[#258](https://github.com/xlab-si/xopera-opera/issues/258){target=_blank}, and
+[#261](https://github.com/xlab-si/xopera-opera/issues/261){target=_blank}.
 
 ```shell linenums="1"
 vintner orchestrators init xopera-wsl

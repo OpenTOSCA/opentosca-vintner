@@ -52,7 +52,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
 
             // Current time used as correlation identifier
-            const time = utils.getTime()
+            const time = utils.now()
 
             /**
              * Monitor: Store sensor data
@@ -90,6 +90,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
              */
             await instance.setServiceTemplate(result.template, time)
             await instance.setVariabilityInputs(result.inputs, time)
+            instance.setTime(time)
             await Controller.instances.update({
                 instance: instance.getName(),
                 inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,

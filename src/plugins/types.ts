@@ -25,6 +25,7 @@ export type NodeTemplateAttributesMap = {[key: string]: NodeTemplateAttributes}
 
 export type OrchestratorOperationOptions = {
     verbose?: boolean
+    time?: number
 }
 
 export interface OrchestratorPlugin {

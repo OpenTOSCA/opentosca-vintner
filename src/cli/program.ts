@@ -276,7 +276,7 @@ instances
 instances
     .command('create')
     .description('creates a new instance')
-    .requiredOption('--instance <string>', 'instance name')
+    .requiredOption('--instance <string>', 'instance name (must match /^[a-z\\-]+$/)')
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
