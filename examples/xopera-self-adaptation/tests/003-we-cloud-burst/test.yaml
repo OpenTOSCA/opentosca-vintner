@@ -1,4 +1,0 @@
-expected: ../service-template.vm.yaml
-description: |
-    - raspberry is under heavy load 
-    - thus, vm is used

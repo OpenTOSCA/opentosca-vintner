@@ -1,4 +1,0 @@
----
-collections:
-    # https://docs.ansible.com/ansible/latest/collections/openstack/cloud/index.html
-    - openstack.cloud
