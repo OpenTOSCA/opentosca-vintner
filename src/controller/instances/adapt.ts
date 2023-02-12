@@ -2,7 +2,7 @@ import {Instance} from '#repository/instances'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {emitter, events} from '#utils/emitter'
-import {critical} from '#utils/lock'
+import lock from '#utils/lock'
 import {InputAssignmentMap} from '#spec/topology-template'
 import _ from 'lodash'
 import jsonDiff from 'json-diff'
@@ -45,7 +45,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
     if (stopped[instance.getName()]) return
 
     running[instance.getName()] = true
-    await critical(
+    await lock.wait(
         instance.getLockKey(),
         hae.log(async () => {
             // Sanity

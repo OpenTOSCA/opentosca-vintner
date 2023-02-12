@@ -1,6 +1,6 @@
 import {Instance} from '#repository/instances'
 import * as utils from '#utils'
-import {critical} from '#utils/lock'
+import lock from '#utils/lock'
 import Resolver from '#resolver'
 
 export type InstanceResolveOptions = {
@@ -13,7 +13,7 @@ export default async function (options: InstanceResolveOptions) {
     const time = utils.getTime()
     const instance = new Instance(options.instance)
 
-    await critical(instance.getLockKey(), async () => {
+    await lock.try(instance.getLockKey(), async () => {
         // Resolve variability
         const result = await Resolver.resolve({
             template: instance.getVariableServiceTemplate(),

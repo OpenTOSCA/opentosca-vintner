@@ -1,4 +1,4 @@
-# Technical Notes
+# Notes
 
 ## Filesystem
 

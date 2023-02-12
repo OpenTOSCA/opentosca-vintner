@@ -1,13 +1,24 @@
-import {Mutex} from 'async-mutex'
+import {Mutex, tryAcquire} from 'async-mutex'
 
 const mutexes: {[key: string]: Mutex} = {}
 
-export default async function lock(key: string) {
+async function lock(key: string) {
     if (!mutexes[key]) mutexes[key] = new Mutex()
     return mutexes[key].acquire()
 }
 
-export const critical = async (key: string, fn: () => Promise<void> | void) => {
+async function wait(key: string, fn: () => Promise<void> | void) {
     if (!mutexes[key]) mutexes[key] = new Mutex()
     await mutexes[key].runExclusive(fn)
+}
+
+async function _try(key: string, fn: () => Promise<void> | void) {
+    if (!mutexes[key]) mutexes[key] = new Mutex()
+    await tryAcquire(mutexes[key]).runExclusive(fn)
+}
+
+export default {
+    lock,
+    wait,
+    try: _try,
 }
