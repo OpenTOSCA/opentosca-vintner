@@ -539,7 +539,7 @@ export class VariabilityResolver {
                         `Property "${propertyName}" of relation "${element.relationship!.name}" has multiple defaults`
                     )
 
-                throw new Error(`Unexpected`)
+                throw new Error('Unexpected')
             }
         })
 
@@ -556,6 +556,23 @@ export class VariabilityResolver {
                             element.relationship!.name
                         }" has no value or expression defined`
                     )
+
+                if (element.type === 'group')
+                    throw new Error(
+                        `Property "${property.display}" of group "${element.display}" has multiple defaults`
+                    )
+
+                if (element.type === 'policy')
+                    throw new Error(
+                        `Property "${property.display}" of policy "${element.display}" has multiple defaults`
+                    )
+
+                if (element.type === 'artifact')
+                    throw new Error(
+                        `Property "${property.display}" of artifact "${element.display}" of node "${element.node.display}" has multiple defaults`
+                    )
+
+                throw new Error('Unexpected')
             }
         })
     }
@@ -838,6 +855,8 @@ export class VariabilityResolver {
                         throw new Error(
                             `Node "${property.parent.display}" of property "${property.display}" does not exist`
                         )
+
+                    throw new Error('Unexpected')
                 }
             }
         }
@@ -857,7 +876,12 @@ export class VariabilityResolver {
         return this
     }
 
-    transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+    transformProperties(
+        element: Node | Relation | Group | Policy | Artifact,
+        template: NodeTemplate | RelationshipTemplate | GroupTemplate | PolicyTemplate | ArtifactDefinition
+    ) {
+        if (validator.isString(template)) return
+
         template.properties = element.properties
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
@@ -909,6 +933,9 @@ export class VariabilityResolver {
                                 delete artifact._raw.conditions
                                 delete artifact._raw.default_alternative
                             }
+
+                            this.transformProperties(artifact, artifact._raw)
+
                             map[artifact.name] = artifact._raw
                             return map
                         }, {})
@@ -959,6 +986,8 @@ export class VariabilityResolver {
                         return element.present
                     })
 
+                    this.transformProperties(group, template)
+
                     delete template.conditions
                     delete template.default_alternative
                     map[group.name] = template
@@ -995,6 +1024,8 @@ export class VariabilityResolver {
                     const template = policy._raw
                     delete template.conditions
                     delete template.default_alternative
+
+                    this.transformProperties(policy, template)
 
                     template.targets = template.targets?.filter(target => {
                         const node = this.nodesMap.get(target)

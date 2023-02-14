@@ -1,5 +1,5 @@
 import {VariabilityAlternative} from './variability'
-import {PropertyAssignmentMap} from '#spec/property-assignments'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 /**
  * Policy Template
@@ -9,7 +9,7 @@ import {PropertyAssignmentMap} from '#spec/property-assignments'
 export type PolicyTemplate = {
     type: string
     targets?: string[]
-    properties?: PropertyAssignmentMap
+    properties?: PropertyAssignmentMap | PropertyAssignmentList
 } & VariabilityAlternative
 
 export type PolicyAssignmentMap = {[name: string]: PolicyTemplate}
