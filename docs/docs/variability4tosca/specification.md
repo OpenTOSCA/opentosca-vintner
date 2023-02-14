@@ -247,6 +247,7 @@ Such a group is also called Variability Group.
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
 conditions are satisfied.
@@ -277,6 +278,7 @@ These conditions must be satisfied otherwise the respective policy is not presen
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the
 Variability Condition `is_prod` assigned.
@@ -327,6 +329,7 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 
 ## Topology Template Input Definition
@@ -527,9 +530,9 @@ When variability is resolved, the following errors might be thrown:
 | Ambiguous Artifact         | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous           | 
 | Missing Property Parent    | Node/ Relation "${node.name}" of property "${property.name}" does not exist                 | 
 | Ambiguous Property         | Property "${property.name}@${property.index}" of node/ relation "${node.name}" is ambiguous | 
-| Ambiguous Default Property | Property "${property.name}" of node/ relation "${node.name}" has multiple defaults          | 
+| Ambiguous Default Property | Property "${property.name}" of ${parent.type} "${parent.name}" has multiple defaults        | 
 | Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
-| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults         | 
+| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults                 | 
 
 
 ## Variability Tests
