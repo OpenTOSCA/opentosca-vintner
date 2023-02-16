@@ -385,9 +385,9 @@ tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
-## Boolean Operators
+## Logical Operators
 
-The following Boolean operators can be used inside a Variability Expression.
+The following logical operators can be used inside a Variability Expression.
 
 | Keyname | Input                                      | Output  | Description                                        |
 |---------|--------------------------------------------|---------|----------------------------------------------------|
