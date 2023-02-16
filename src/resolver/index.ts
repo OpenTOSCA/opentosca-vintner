@@ -104,7 +104,7 @@ type Node = ConditionalElementBase & {
 
 type Property = ConditionalElementBase & {
     type: 'property'
-    parent: Node | Relation
+    parent: Node | Relation | Policy | Group | Artifact
     index?: number
     default: boolean
     value?: PropertyAssignmentValue
@@ -132,6 +132,8 @@ type Relationship = {
 type Policy = ConditionalElementBase & {
     type: 'policy'
     targets: (Node | Group)[]
+    properties: Property[]
+    propertiesMap: Map<String, Property[]>
     _raw: PolicyTemplate
 }
 
@@ -139,6 +141,8 @@ type Group = ConditionalElementBase & {
     type: 'group'
     variability: boolean
     members: (Node | Relation)[]
+    properties: Property[]
+    propertiesMap: Map<String, Property[]>
     _raw: GroupTemplate
 }
 
@@ -146,6 +150,8 @@ type Artifact = ConditionalElementBase & {
     type: 'artifact'
     index?: number
     node: Node
+    properties: Property[]
+    propertiesMap: Map<String, Property[]>
     _raw: ArtifactDefinition
     default: boolean
 }
@@ -345,6 +351,8 @@ export class VariabilityResolver {
                 ].includes(template.type),
                 members: [],
                 _raw: template,
+                properties: [],
+                propertiesMap: new Map(),
             }
             this.groups.push(group)
             this.groupsMap.set(name, group)
@@ -354,6 +362,8 @@ export class VariabilityResolver {
                 element.groups.push(group)
                 group.members.push(element)
             })
+
+            this.populateProperties(group, template)
         })
 
         // Policies
@@ -371,6 +381,8 @@ export class VariabilityResolver {
                 conditions: utils.toList(template.conditions),
                 targets: [],
                 _raw: template,
+                properties: [],
+                propertiesMap: new Map(),
             }
             this.policies.push(policy)
 
@@ -387,6 +399,8 @@ export class VariabilityResolver {
 
                 throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
             })
+
+            this.populateProperties(policy, template)
         })
     }
 
@@ -416,7 +430,11 @@ export class VariabilityResolver {
             node,
             _raw: artifactDefinition,
             default: (validator.isString(artifactDefinition) ? false : artifactDefinition.default_alternative) || false,
+            properties: [],
+            propertiesMap: new Map(),
         }
+
+        this.populateProperties(artifact, artifactDefinition)
 
         if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
         node.artifactsMap.get(artifact.name)!.push(artifact)
@@ -424,7 +442,12 @@ export class VariabilityResolver {
         this.artifacts.push(artifact)
     }
 
-    populateProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+    populateProperties(
+        element: Node | Relation | Policy | Group | Artifact,
+        template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate | ArtifactDefinition
+    ) {
+        if (validator.isString(template)) return
+
         if (validator.isObject(template.properties)) {
             // Properties is a Property Assignment List
             if (validator.isArray(template.properties)) {
@@ -500,10 +523,23 @@ export class VariabilityResolver {
                 if (element.type === 'node')
                     throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
 
+                if (element.type === 'group')
+                    throw new Error(`Property "${propertyName}" of group "${element.display}" has multiple defaults`)
+
+                if (element.type === 'policy')
+                    throw new Error(`Property "${propertyName}" of policy "${element.display}" has multiple defaults`)
+
+                if (element.type === 'artifact')
+                    throw new Error(
+                        `Property "${propertyName}" of artifact "${element.display}" of node "${element.node.display}" has multiple defaults`
+                    )
+
                 if (element.type === 'relation')
                     throw new Error(
                         `Property "${propertyName}" of relation "${element.relationship!.name}" has multiple defaults`
                     )
+
+                throw new Error('Unexpected')
             }
         })
 
@@ -520,6 +556,23 @@ export class VariabilityResolver {
                             element.relationship!.name
                         }" has no value or expression defined`
                     )
+
+                if (element.type === 'group')
+                    throw new Error(
+                        `Property "${property.display}" of group "${element.display}" has multiple defaults`
+                    )
+
+                if (element.type === 'policy')
+                    throw new Error(
+                        `Property "${property.display}" of policy "${element.display}" has multiple defaults`
+                    )
+
+                if (element.type === 'artifact')
+                    throw new Error(
+                        `Property "${property.display}" of artifact "${element.display}" of node "${element.node.display}" has multiple defaults`
+                    )
+
+                throw new Error('Unexpected')
             }
         })
     }
@@ -588,7 +641,6 @@ export class VariabilityResolver {
         return this
     }
 
-    // TODO: check "default" vs "prune"
     checkPresence(element: ConditionalElement) {
         // Variability group are never present
         if (element.type === 'group' && element.variability) element.present = false
@@ -788,6 +840,23 @@ export class VariabilityResolver {
                         throw new Error(
                             `Relation "${property.parent.display}" of property "${property.display}" does not exist`
                         )
+
+                    if (property.parent.type === 'group')
+                        throw new Error(
+                            `Group "${property.parent.display}" of property "${property.display}" does not exist`
+                        )
+
+                    if (property.parent.type === 'policy')
+                        throw new Error(
+                            `Policy "${property.parent.display}" of property "${property.display}" does not exist`
+                        )
+
+                    if (property.parent.type === 'artifact')
+                        throw new Error(
+                            `Node "${property.parent.display}" of property "${property.display}" does not exist`
+                        )
+
+                    throw new Error('Unexpected')
                 }
             }
         }
@@ -807,7 +876,12 @@ export class VariabilityResolver {
         return this
     }
 
-    transformProperties(element: Node | Relation, template: NodeTemplate | RelationshipTemplate) {
+    transformProperties(
+        element: Node | Relation | Group | Policy | Artifact,
+        template: NodeTemplate | RelationshipTemplate | GroupTemplate | PolicyTemplate | ArtifactDefinition
+    ) {
+        if (validator.isString(template)) return
+
         template.properties = element.properties
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
@@ -859,6 +933,9 @@ export class VariabilityResolver {
                                 delete artifact._raw.conditions
                                 delete artifact._raw.default_alternative
                             }
+
+                            this.transformProperties(artifact, artifact._raw)
+
                             map[artifact.name] = artifact._raw
                             return map
                         }, {})
@@ -909,6 +986,8 @@ export class VariabilityResolver {
                         return element.present
                     })
 
+                    this.transformProperties(group, template)
+
                     delete template.conditions
                     delete template.default_alternative
                     map[group.name] = template
@@ -945,6 +1024,8 @@ export class VariabilityResolver {
                     const template = policy._raw
                     delete template.conditions
                     delete template.default_alternative
+
+                    this.transformProperties(policy, template)
 
                     template.targets = template.targets?.filter(target => {
                         const node = this.nodesMap.get(target)
