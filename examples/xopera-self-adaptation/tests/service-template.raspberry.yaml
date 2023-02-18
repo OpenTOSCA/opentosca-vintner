@@ -70,12 +70,20 @@ topology_template:
             properties:
                 scale: 1
             requirements:
+                - input: queue_input
+                - output: queue_output
                 - host:
                       node: compute_raspberry
             artifacts:
                 binary:
                     type: tosca.artifacts.File
                     file: files/application-linux-arm64.xz
+
+        queue_input:
+            type: queue.queue
+
+        queue_output:
+            type: queue.queue
 
         compute_raspberry:
             type: compute.raspberry

@@ -70,12 +70,20 @@ topology_template:
             properties:
                 scale: 4
             requirements:
+                - input: queue_input
+                - output: queue_output
                 - host:
                       node: compute_vm
             artifacts:
                 binary:
                     type: tosca.artifacts.File
                     file: files/application-linux-x64.xz
+
+        queue_input:
+            type: queue.queue
+
+        queue_output:
+            type: queue.queue
 
         compute_vm:
             type: compute.vm

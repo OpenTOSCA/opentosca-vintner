@@ -19,6 +19,13 @@ node_types:
             service_name:
                 type: string
                 default: 'scenario-application'
+        requirements:
+            - input:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+            - output:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
         interfaces:
             Standard:
                 type: tosca.interfaces.node.lifecycle.Standard

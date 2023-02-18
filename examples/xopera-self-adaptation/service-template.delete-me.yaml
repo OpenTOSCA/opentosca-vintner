@@ -4,6 +4,7 @@ imports:
     - lib/compute/types.yaml
     - lib/sensor/types.yaml
     - lib/scenario/types.yaml
+    - lib/queue/types.yaml
 
 topology_template:
     inputs:

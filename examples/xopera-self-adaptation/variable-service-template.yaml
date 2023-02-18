@@ -4,6 +4,7 @@ imports:
     - lib/scenario/types.yaml
     - lib/compute/types.yaml
     - lib/sensor/types.yaml
+    - lib/queue/types.yaml
 
 topology_template:
     inputs:
@@ -145,6 +146,8 @@ topology_template:
                       value: 4
                       conditions: {get_node_presence: compute_vm}
             requirements:
+                - input: queue_input
+                - output: queue_output
                 - host:
                       node: compute_raspberry
                       conditions: {get_node_presence: compute_raspberry}
@@ -160,6 +163,12 @@ topology_template:
                       type: tosca.artifacts.File
                       file: files/application-linux-x64.xz
                       conditions: {get_node_presence: compute_vm}
+
+        queue_input:
+            type: queue.queue
+
+        queue_output:
+            type: queue.queue
 
         compute_raspberry:
             type: compute.raspberry
