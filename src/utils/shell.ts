@@ -25,20 +25,12 @@ export class Shell {
 
             let child
             if (this.wsl) {
-                child = spawn('wsl')
+                child = spawn('wsl', {stdio: ['pipe', process.stdout, process.stdout]})
                 child.stdin.write(command)
                 child.stdin.end()
             } else {
-                child = spawn(command, {shell: true})
+                child = spawn(command, {shell: true, stdio: ['pipe', process.stdout, process.stdout]})
             }
-
-            child.stdout.on('data', data => {
-                console.log(data.toString())
-            })
-
-            child.stderr.on('data', data => {
-                console.log(data.toString())
-            })
 
             child.on('error', error => {
                 console.log(error.message)
