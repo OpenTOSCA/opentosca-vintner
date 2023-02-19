@@ -453,6 +453,27 @@ The following constraint operators can be used inside a Variability Expression.
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
 
+## Analytical Operators
+
+The following analytical operators can be used inside a Variability Expression.
+
+| Keyname                | Input                                     | Output  | Description                                          |
+|------------------------|-------------------------------------------|---------|------------------------------------------------------|
+| sum                    | List(Number)                              | Number  | Returns the sum of the given values.                 |
+| count                  | List(Number)                              | Number | Returns the count of the given values.               |
+| min                    | List(Number)                              | Number | Returns the min of the given values.                 |
+| max                    | List(Number)                              | Number | Returns the max of the given values.                 |
+| mean                   | List(Number)                              | Number | Returns the mean of the given values.                |
+| median                 | List(Number)                              | Number | Returns the median of the given values.              |
+| variance               | List(Number)                              | Number | Returns the variance of the given values.            |
+| standard_deviation     | List(Number)                              | Number | Returns the standard deviation of the given values.  |
+| linear_regression      | List(List(Tuple(Number, Number)), Number) | Number | Returns the prediction using linear regression.      |
+| quadratic_regression   | List(List(Tuple(Number, Number)), Number) | Number | Returns the prediction using quadric regression.     |
+| logarithmic_regression | List(List(Tuple(Number, Number)), Number) | Number | Returns the prediction using logarithmic regression. |
+| exponential_regression | List(List(Tuple(Number, Number)), Number) | Number | Returns the prediction using exponential regression. |
+| power_regression       | List(List(Tuple(Number, Number)), Number) | Number | Returns the prediction using power law regression.   |
+
+
 ## Processing
 
 In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a

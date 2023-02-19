@@ -101,6 +101,21 @@ export type VariabilityExpression =
           min_length?: [VariabilityExpression, VariabilityExpression]
           max_length?: [VariabilityExpression, VariabilityExpression]
 
+          // Analytical operators
+          sum?: number[]
+          count?: number[]
+          min?: number[]
+          max?: number[]
+          mean?: number[]
+          median?: number[]
+          variance?: number[]
+          standard_deviation?: number[]
+          linear_regression?: [[number, number][], number]
+          quadratic_regression?: [[number, number][], number]
+          logarithmic_regression?: [[number, number][], number]
+          exponential_regression?: [[number, number][], number]
+          power_regression?: [[number, number][], number]
+
           // Cache
           cached_result?: boolean | string | number
       }
