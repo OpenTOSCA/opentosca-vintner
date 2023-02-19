@@ -5,6 +5,7 @@ import console from 'console'
 import hae from '#utils/hae'
 import * as validator from '#validator'
 import death from '#utils/death'
+import {toFixed} from '#utils'
 
 export default async function (options: SensorComputeOptions) {
     const sensor = new SensorCompute(options)
@@ -92,8 +93,8 @@ class SensorCompute {
         await this.handle({
             up: true,
             uptime,
-            cpu: format(cpu),
-            memory: format(mem),
+            cpu: toFixed(cpu),
+            memory: toFixed(mem),
         })
     }
 
@@ -133,8 +134,4 @@ function clean(entries: HistoryEntry[], now: number) {
     if (index === -1) return []
     if (index === 0) return entries
     return entries.slice(index)
-}
-
-function format(value: number) {
-    return Number(value.toFixed(2))
 }

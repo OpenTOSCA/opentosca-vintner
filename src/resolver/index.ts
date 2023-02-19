@@ -1410,7 +1410,7 @@ export class VariabilityResolver {
         if (validator.isDefined(condition.sum)) {
             const elements = condition.sum
             validator.ensureNumbers(elements)
-            return stats.sum(elements)
+            return utils.toFixed(stats.sum(elements))
         }
 
         if (validator.isDefined(condition.count)) {
@@ -1444,73 +1444,69 @@ export class VariabilityResolver {
         if (validator.isDefined(condition.mean)) {
             const elements = condition.mean
             validator.ensureNumbers(elements)
-            return stats.mean(elements)
+            return utils.toFixed(stats.mean(elements))
         }
 
         if (validator.isDefined(condition.variance)) {
             const elements = condition.variance
             validator.ensureNumbers(elements)
-            return stats.variance(elements)
+            return utils.toFixed(stats.variance(elements))
         }
 
         if (validator.isDefined(condition.standard_deviation)) {
             const elements = condition.standard_deviation
             validator.ensureNumbers(elements)
-            return stats.stdev(elements)
+            return utils.toFixed(stats.stdev(elements))
         }
 
         if (validator.isDefined(condition.linear_regression)) {
             ensureArray(condition.linear_regression)
             const elements = condition.linear_regression[0]
-            validator.ensureNumbers(elements)
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
 
             const prediction = condition.linear_regression[1]
             validator.ensureNumber(prediction)
 
-            return regression.linear(elements).predict(prediction)[0]
+            return utils.toFixed(regression.linear(elements).predict(prediction)[1])
         }
 
-        if (validator.isDefined(condition.quadratic_regression)) {
-            ensureArray(condition.quadratic_regression)
-            const elements = condition.quadratic_regression[0]
-            validator.ensureNumbers(elements)
+        if (validator.isDefined(condition.polynomial_regression)) {
+            ensureArray(condition.polynomial_regression)
+            const elements = condition.polynomial_regression[0]
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
 
-            const prediction = condition.quadratic_regression[1]
+            const order = condition.polynomial_regression[1]
+            validator.ensureNumber(order)
+
+            const prediction = condition.polynomial_regression[2]
             validator.ensureNumber(prediction)
 
-            return regression.polynomial(elements, {order: 2}).predict(prediction)[0]
+            return utils.toFixed(regression.polynomial(elements, {order}).predict(prediction)[1])
         }
 
         if (validator.isDefined(condition.logarithmic_regression)) {
             ensureArray(condition.logarithmic_regression)
             const elements = condition.logarithmic_regression[0]
-            validator.ensureNumbers(elements)
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
 
             const prediction = condition.logarithmic_regression[1]
             validator.ensureNumber(prediction)
 
-            return regression.polynomial(elements).predict(prediction)[0]
+            return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
         }
         if (validator.isDefined(condition.exponential_regression)) {
             ensureArray(condition.exponential_regression)
             const elements = condition.exponential_regression[0]
-            validator.ensureNumbers(elements)
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
 
             const prediction = condition.exponential_regression[1]
             validator.ensureNumber(prediction)
 
-            return regression.exponential(elements).predict(prediction)[0]
-        }
-
-        if (validator.isDefined(condition.power_regression)) {
-            ensureArray(condition.power_regression)
-            const elements = condition.power_regression[0]
-            validator.ensureNumbers(elements)
-
-            const prediction = condition.power_regression[1]
-            validator.ensureNumber(prediction)
-
-            return regression.power(elements).predict(prediction)[0]
+            return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

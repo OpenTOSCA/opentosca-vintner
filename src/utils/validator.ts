@@ -1,5 +1,3 @@
-import * as assert from 'assert'
-
 export function isUndefined(element: unknown): element is undefined {
     return typeof element === 'undefined'
 }

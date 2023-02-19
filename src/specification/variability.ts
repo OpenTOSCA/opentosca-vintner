@@ -111,10 +111,9 @@ export type VariabilityExpression =
           variance?: number[]
           standard_deviation?: number[]
           linear_regression?: [[number, number][], number]
-          quadratic_regression?: [[number, number][], number]
+          polynomial_regression?: [[number, number][], number, number]
           logarithmic_regression?: [[number, number][], number]
           exponential_regression?: [[number, number][], number]
-          power_regression?: [[number, number][], number]
 
           // Cache
           cached_result?: boolean | string | number
