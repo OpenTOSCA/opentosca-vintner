@@ -1,6 +1,9 @@
-import {spawn} from 'child_process'
+import {spawn, ChildProcessByStdio} from 'child_process'
 import path from 'path'
 import wsl from '#utils/wsl'
+import death from '#utils/death'
+import * as stream from 'stream'
+import * as validator from '#validator'
 
 export class Shell {
     private readonly wsl: boolean
@@ -23,21 +26,19 @@ export class Shell {
             const command = parts.join(' ')
             console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)
 
-            let child
+            let child: ChildProcessByStdio<stream.Writable, null, null>
             if (this.wsl) {
-                child = spawn('wsl')
+                child = spawn('wsl', {stdio: ['pipe', process.stdout, process.stdout]})
                 child.stdin.write(command)
                 child.stdin.end()
             } else {
-                child = spawn(command, {shell: true})
+                child = spawn(command, {shell: true, stdio: ['pipe', process.stdout, process.stdout]})
             }
 
-            child.stdout.on('data', data => {
-                console.log(data.toString())
-            })
-
-            child.stderr.on('data', data => {
-                console.log(data.toString())
+            death.register({
+                stop: function () {
+                    if (validator.isDefined(child)) child.kill()
+                },
             })
 
             child.on('error', error => {

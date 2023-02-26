@@ -2,7 +2,7 @@ import * as validator from '#validator'
 import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as featureIDE from '#utils/feature-ide'
-import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
+import {InputAssignmentMap, InputAssignmentValue, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
 import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignmentMap} from '#spec/node-template'
 import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -16,7 +16,7 @@ import _ from 'lodash'
 import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
-import {prettyJSON} from '#utils'
+import dayjs from 'dayjs'
 
 /**
  * Not documented since preparation for future work
@@ -188,6 +188,8 @@ export class VariabilityResolver {
     private inputsMap = new Map<string, Input>()
 
     private artifacts: Artifact[] = []
+
+    private weekday = dayjs().format('dddd').toLowerCase()
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -1092,10 +1094,36 @@ export class VariabilityResolver {
         return this
     }
 
+    setVariabilityInput(name: string, value: InputAssignmentValue) {
+        this.variabilityInputs[name] = value
+    }
+
     getVariabilityInput(name: string) {
-        const input = this.variabilityInputs[name]
-        validator.ensureDefined(input, `Did not find variability input "${name}"`)
-        return input
+        let value
+
+        // Get variability input definition
+        const definition = this.serviceTemplate.topology_template?.variability?.inputs[name]
+        validator.ensureDefined(definition, `Variability input "${name}" is not defined`)
+
+        // Return assigned value
+        value = this.variabilityInputs[name]
+        if (validator.isDefined(value)) return value
+
+        // Return default value
+        if (validator.isDefined(definition.default)) {
+            this.setVariabilityInput(name, definition.default)
+            return definition.default
+        }
+
+        // Return default expression
+        validator.ensureDefined(
+            definition.default_expression,
+            `Variability input "${name}" has no value nor default (expression) assigned`
+        )
+        value = this.evaluateVariabilityExpression(definition.default_expression, {})
+        validator.ensureDefined(value, `Did not find variability input "${name}"`)
+        this.setVariabilityInput(name, value)
+        return value
     }
 
     getVariabilityInputs() {
@@ -1125,8 +1153,8 @@ export class VariabilityResolver {
     evaluateVariabilityExpression(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): boolean | string | number {
-        if (validator.isObject(condition)) {
+    ): InputAssignmentValue {
+        if (validator.isObject(condition) && !validator.isArray(condition)) {
             if (validator.isDefined(condition.cached_result)) return condition.cached_result
             const result = this.evaluateVariabilityExpressionRunner(condition, context)
             condition.cached_result = result
@@ -1139,12 +1167,13 @@ export class VariabilityResolver {
     evaluateVariabilityExpressionRunner(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): boolean | string | number {
+    ): InputAssignmentValue {
         validator.ensureDefined(condition, `Received condition that is undefined or null`)
 
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
         if (validator.isNumber(condition)) return condition
+        if (validator.isArray(condition)) return condition
 
         if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
@@ -1510,6 +1539,10 @@ export class VariabilityResolver {
             validator.ensureNumber(prediction)
 
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
+        }
+
+        if (validator.isDefined(condition.get_current_weekday)) {
+            return this.weekday
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

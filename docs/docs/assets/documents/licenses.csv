@@ -32,6 +32,7 @@ cookie,0.5.0,MIT,https://github.com/jshttp/cookie
 cookie-signature,1.0.6,MIT,https://github.com/visionmedia/node-cookie-signature
 cors,2.8.5,MIT,https://github.com/expressjs/cors
 d,1.0.1,ISC,https://github.com/medikoo/d
+dayjs,1.11.7,MIT,https://github.com/iamkun/dayjs
 debug,4.3.4,MIT,https://github.com/debug-js/debug
 deep-eql,3.0.1,MIT,https://github.com/chaijs/deep-eql
 delayed-stream,1.0.0,MIT,https://github.com/felixge/node-delayed-stream
@@ -80,6 +81,7 @@ ipaddr.js,1.9.1,MIT,https://github.com/whitequark/ipaddr.js
 is-docker,2.2.1,MIT,https://github.com/sindresorhus/is-docker
 is-promise,2.2.2,MIT,https://github.com/then/is-promise
 is-wsl,2.2.0,MIT,https://github.com/sindresorhus/is-wsl
+isnumber,1.0.0,MIT,https://github.com/brycebaril/node-isnumber
 jake,10.8.5,Apache-2.0,https://github.com/jakejs/jake
 js-yaml,4.1.0,MIT,https://github.com/nodeca/js-yaml
 json-diff,1.0.0,MIT,https://github.com/andreyvit/json-diff
@@ -115,6 +117,7 @@ pump,3.0.0,MIT,https://github.com/mafintosh/pump
 qs,6.10.3,BSD-3-Clause,https://github.com/ljharb/qs
 range-parser,1.2.1,MIT,https://github.com/jshttp/range-parser
 raw-body,2.5.1,MIT,https://github.com/stream-utils/raw-body
+regression,2.0.1,MIT,https://github.com/Tom-Alexander/regression-js
 safe-buffer,5.2.1,MIT,https://github.com/feross/safe-buffer
 safer-buffer,2.1.2,MIT,https://github.com/ChALkeR/safer-buffer
 sax,1.2.4,ISC,https://github.com/isaacs/sax-js
@@ -122,6 +125,7 @@ send,0.18.0,MIT,https://github.com/pillarjs/send
 serve-static,1.15.0,MIT,https://github.com/expressjs/serve-static
 setprototypeof,1.2.0,ISC,https://github.com/wesleytodd/setprototypeof
 side-channel,1.0.4,MIT,https://github.com/ljharb/side-channel
+stats-lite,2.2.0,MIT,https://github.com/brycebaril/node-stats-lite
 statuses,2.0.1,MIT,https://github.com/jshttp/statuses
 supports-color,7.2.0,MIT,https://github.com/chalk/supports-color
 systeminformation,5.17.8,MIT,https://github.com/sebhildebrandt/systeminformation

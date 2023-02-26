@@ -1,4 +1,4 @@
-import {InputAssignmentMap, InputDefinitionMap} from './topology-template'
+import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
@@ -115,9 +115,10 @@ export type VariabilityExpression =
           logarithmic_regression?: [[number, number][], number]
           exponential_regression?: [[number, number][], number]
 
+          // Date operators
+          get_current_weekday?: []
+
           // Cache
-          cached_result?: boolean | string | number
+          cached_result?: InputAssignmentValue
       }
-    | string
-    | number
-    | boolean
+    | InputAssignmentValue

@@ -1,5 +1,6 @@
 import {v4 as uuid4} from 'uuid'
 import * as validator from './validator'
+import dayjs from 'dayjs'
 
 export function generateNonce() {
     return uuid4()
@@ -113,7 +114,7 @@ export function normalizeString(value: string) {
 }
 
 export function now() {
-    return new Date().getTime()
+    return dayjs().millisecond()
 }
 
 export async function sleep(ms = 1000) {
