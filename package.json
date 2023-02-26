@@ -103,6 +103,7 @@
         "docs:build": "cd docs && mkdocs build",
         "docs:clean": "cd docs && rm -rf site",
         "docs:deploy": "cd docs && mkdocs gh-deploy --force",
+        "docs:generate": "yarn docs:generate:interface && yarn docs:generate:licenses && yarn docs:generate:tests",
         "docs:generate:interface": "yarn build && yarn ts-node -r tsconfig-paths/register docs/cmds/interface/generate",
         "docs:generate:licenses": "yarn ts-node -r tsconfig-paths/register docs/cmds/licenses/generate",
         "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/tests/generate",

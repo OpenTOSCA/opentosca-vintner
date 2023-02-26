@@ -15,128 +15,142 @@ processing.
 
 | ID | Test |
 | --- | --- |
-| 1 | [Operator "add"](./test-arithmetic-operators-add.md) |
-| 2 | [Operator "div"](./test-arithmetic-operators-div.md) |
-| 3 | [Operator "mod" (Even)](./test-arithmetic-operators-mod-even.md) |
-| 4 | [Operator "add" (Odd)](./test-arithmetic-operators-mod-odd.md) |
-| 5 | [Operator "mul"](./test-arithmetic-operators-mul.md) |
-| 6 | [Operator "sub"](./test-arithmetic-operators-sub.md) |
-| 7 | [artifacts-conditional](./test-artifacts-conditional.md) |
-| 8 | [artifacts-default-alternative](./test-artifacts-default-alternative.md) |
-| 9 | [artifacts-default-alternative-false](./test-artifacts-default-alternative-false.md) |
-| 10 | [artifacts-default-condition](./test-artifacts-default-condition.md) |
-| 11 | [Artifact Pruning](./test-artifacts-prune.md) |
-| 12 | [artifacts-throw-ambiguous-artifact](./test-artifacts-throw-ambiguous-artifact.md) |
-| 13 | [artifacts-throw-ambiguous-default](./test-artifacts-throw-ambiguous-default.md) |
-| 14 | [artifacts-throw-missing-artifact-parent](./test-artifacts-throw-missing-artifact-parent.md) |
-| 15 | [Operator "and" Evaluates to "True" (Empty)](./test-boolean-operators-and-empty.md) |
-| 16 | [Operator "and" Evaluates to "false"](./test-boolean-operators-and-false.md) |
-| 17 | [Operator "and" Evaluates to "false" (Nested)](./test-boolean-operators-and-nested-false.md) |
-| 18 | [Operator "and" Evaluates to "true"](./test-boolean-operators-and-nested-true.md) |
-| 19 | [Operator "and"  Evaluates to "true" (Nested)](./test-boolean-operators-and-true.md) |
-| 20 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
-| 21 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
-| 22 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
-| 23 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
-| 24 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
-| 25 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
-| 26 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
-| 27 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
-| 28 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
-| 29 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
-| 30 | [Operator "xor": all false -> false](./test-boolean-operators-xor-false-all.md) |
-| 31 | [Operator "xor": One ture -> true](./test-boolean-operators-xor-true.md) |
-| 32 | [Operator "xor": all true -> false](./test-boolean-operators-xor-true-all.md) |
-| 33 | [Scenario "Alpha"](./test-complex-scenario-alpha.md) |
-| 34 | [consistency-throw-hosting-relation-missing](./test-consistency-throw-hosting-relation-missing.md) |
-| 35 | [consistency-throw-multiple-hosting-relations](./test-consistency-throw-multiple-hosting-relations.md) |
-| 36 | [consistency-throw-relation-source-missing](./test-consistency-throw-relation-source-missing.md) |
-| 37 | [consistency-throw-relation-target-missing](./test-consistency-throw-relation-target-missing.md) |
-| 38 | [Operator "equal" Evaluates to "false"](./test-constraint-operators-equal-false.md) |
-| 39 | [Operator "equal" Evaluates to "true"](./test-constraint-operators-equal-true.md) |
-| 40 | [Operator "greater_or_equal" Evaluates to "true" (Greater)](./test-constraint-operators-greater-or-equal-equal.md) |
-| 41 | [Operator "greater_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-greater-or-equal-greater.md) |
-| 42 | [Operator "greater_or_equal" Evaluates to "false" (Less)](./test-constraint-operators-greater-or-equal-less.md) |
-| 43 | [Operator "greater_than" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
-| 44 | [Operator "greater_than" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
-| 45 | [Operator "greater_than" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
-| 46 | [Operator "in_range" Evaluates to "false"](./test-constraint-operators-in_range_false.md) |
-| 47 | [Operator "in_range" Evaluates to "true"](./test-constraint-operators-in_range_true.md) |
-| 48 | [Operator "length" Evaluates to "false"](./test-constraint-operators-length_false.md) |
-| 49 | [Operator "length" Evaluates to "true"](./test-constraint-operators-length_true.md) |
-| 50 | [Operator "less_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-less_or_equal_equal.md) |
-| 51 | [Operator "less_or_equal" Evaluates to "false" (Greater)](./test-constraint-operators-less_or_equal_greater.md) |
-| 52 | [Operator "less_or_equal" Evaluates to "true" (Less)](./test-constraint-operators-less_or_equal_less.md) |
-| 53 | [Operator "less_than" Evaluates to "false" (Equal)](./test-constraint-operators-less_than_equal.md) |
-| 54 | [Operator "less_than" Evaluates to "false" (Greater)](./test-constraint-operators-less_than_greater.md) |
-| 55 | [Operator "less_than" Evaluates to "true" (Less)](./test-constraint-operators-less_than_less.md) |
-| 56 | [Operator "max_length" Evaluates to "true" (Equal)](./test-constraint-operators-max_length_equal.md) |
-| 57 | [Operator "max_length" Evaluates to "false" (Greater)](./test-constraint-operators-max_length_greater.md) |
-| 58 | [Operator "max_length" Evaluates to "true" (Less)](./test-constraint-operators-max_length_less.md) |
-| 59 | [Operator "min_length" Evaluates to "true" (Equal)](./test-constraint-operators-min_length_equal.md) |
-| 60 | [Operator "min_length" Evaluates to "true" (Greater)](./test-constraint-operators-min_length_greater.md) |
-| 61 | [Operator "min_length" Evaluates to "false" (Less)](./test-constraint-operators-min_length_less.md) |
-| 62 | [Operator "valid_values" Evaluates to "false"](./test-constraint-operators-valid_values_false.md) |
-| 63 | [Operator "valid_values" Evaluates to "true"](./test-constraint-operators-valid_values_true.md) |
-| 64 | [Conditional Group](./test-groups-conditional.md) |
-| 65 | [groups-default-condition](./test-groups-default-condition.md) |
-| 66 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
-| 67 | [groups-prune](./test-groups-prune.md) |
-| 68 | [inputs-conditional](./test-inputs-conditional.md) |
-| 69 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
-| 70 | [nodes-conditional](./test-nodes-conditional.md) |
-| 71 | [nodes-get-node-presence-absent](./test-nodes-get-node-presence-absent.md) |
-| 72 | [nodes-get-node-presence-present](./test-nodes-get-node-presence-present.md) |
-| 73 | [Benchmark](./test-other-benchmark.md) |
-| 74 | [Operator "concat"](./test-other-concat.md) |
-| 75 | [Get Variability Condition](./test-other-get-variability-condition.md) |
-| 76 | [Get Variability Expression](./test-other-get-variability-expression.md) |
-| 77 | [Get Variability Input](./test-other-get-variability-input.md) |
-| 78 | [Operator "concat"](./test-other-join.md) |
-| 79 | [other-nothing](./test-other-nothing.md) |
-| 80 | [other-preset](./test-other-preset.md) |
-| 81 | [other-presets](./test-other-presets.md) |
-| 82 | [Operator "concat"](./test-other-token.md) |
-| 83 | [other-version](./test-other-version.md) |
-| 84 | [policies-conditional](./test-policies-conditional.md) |
-| 85 | [policies-default-condition](./test-policies-default-condition.md) |
-| 86 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
-| 87 | [Policy Targets Absent Members](./test-policies-has-present-targets-absent-members.md) |
-| 88 | [Policy Targets Absent Nodes](./test-policies-has-present-targets-absent-nodes.md) |
-| 89 | [Policy Has No Targets](./test-policies-has-present-targets-no-targets.md) |
-| 90 | [Policy Targets Present Member](./test-policies-has-present-targets-present-member.md) |
-| 91 | [Policy Targets One Present Node](./test-policies-has-present-targets-present-node.md) |
-| 92 | [Policy Targets Present Nodes](./test-policies-has-present-targets-present-nodes.md) |
-| 93 | [Policy Pruning](./test-policies-prune.md) |
-| 94 | [properties-conditional](./test-properties-conditional.md) |
-| 95 | [properties-default-alternative](./test-properties-default-alternative.md) |
-| 96 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
-| 97 | [properties-default-condition](./test-properties-default-condition.md) |
-| 98 | [properties-expression](./test-properties-expression.md) |
-| 99 | [properties-list](./test-properties-list.md) |
-| 100 | [properties-list-another](./test-properties-list-another.md) |
-| 101 | [properties-map](./test-properties-map.md) |
-| 102 | [properties-map-another](./test-properties-map-another.md) |
-| 103 | [properties-prune](./test-properties-prune.md) |
-| 104 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
-| 105 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
-| 106 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
-| 107 | [relationships-conditional](./test-relationships-conditional.md) |
-| 108 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 109 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 110 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 111 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 112 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 113 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 114 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 115 | [requirement-assignment-default-condition-throw](./test-requirement-assignment-default-condition-throw.md) |
-| 116 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
-| 117 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
-| 118 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
-| 119 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
-| 120 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
-| 121 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
-| 122 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 123 | [Relation Pruning](./test-requirement-assignment-prune.md) |
-| 124 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 1 | [Operator "count"](./test-analytical-operators-count.md) |
+| 2 | [Operator "exponential_regression"](./test-analytical-operators-exponential_regression.md) |
+| 3 | [Operator "variance"](./test-analytical-operators-linear_regression.md) |
+| 4 | [Operator "logarithmic_regression"](./test-analytical-operators-logarithmic_regression.md) |
+| 5 | [Operator "max"](./test-analytical-operators-max.md) |
+| 6 | [Operator "mean"](./test-analytical-operators-mean.md) |
+| 7 | [Operator "median"](./test-analytical-operators-median.md) |
+| 8 | [Operator "min"](./test-analytical-operators-min.md) |
+| 9 | [Operator "polynomial_regression"](./test-analytical-operators-polynomial_regression.md) |
+| 10 | [Operator "standard_deviation"](./test-analytical-operators-standard_deviation.md) |
+| 11 | [Operator "sum"](./test-analytical-operators-sum.md) |
+| 12 | [Operator "variance"](./test-analytical-operators-variance.md) |
+| 13 | [Operator "add"](./test-arithmetic-operators-add.md) |
+| 14 | [Operator "div"](./test-arithmetic-operators-div.md) |
+| 15 | [Operator "mod" (Even)](./test-arithmetic-operators-mod-even.md) |
+| 16 | [Operator "add" (Odd)](./test-arithmetic-operators-mod-odd.md) |
+| 17 | [Operator "mul"](./test-arithmetic-operators-mul.md) |
+| 18 | [Operator "sub"](./test-arithmetic-operators-sub.md) |
+| 19 | [artifacts-conditional](./test-artifacts-conditional.md) |
+| 20 | [artifacts-default-alternative](./test-artifacts-default-alternative.md) |
+| 21 | [artifacts-default-alternative-false](./test-artifacts-default-alternative-false.md) |
+| 22 | [artifacts-default-condition](./test-artifacts-default-condition.md) |
+| 23 | [Artifact Pruning](./test-artifacts-prune.md) |
+| 24 | [artifacts-throw-ambiguous-artifact](./test-artifacts-throw-ambiguous-artifact.md) |
+| 25 | [artifacts-throw-ambiguous-default](./test-artifacts-throw-ambiguous-default.md) |
+| 26 | [artifacts-throw-missing-artifact-parent](./test-artifacts-throw-missing-artifact-parent.md) |
+| 27 | [Operator "and" Evaluates to "True" (Empty)](./test-boolean-operators-and-empty.md) |
+| 28 | [Operator "and" Evaluates to "false"](./test-boolean-operators-and-false.md) |
+| 29 | [Operator "and" Evaluates to "false" (Nested)](./test-boolean-operators-and-nested-false.md) |
+| 30 | [Operator "and" Evaluates to "true"](./test-boolean-operators-and-nested-true.md) |
+| 31 | [Operator "and"  Evaluates to "true" (Nested)](./test-boolean-operators-and-true.md) |
+| 32 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
+| 33 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
+| 34 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
+| 35 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
+| 36 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
+| 37 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
+| 38 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
+| 39 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
+| 40 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
+| 41 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
+| 42 | [Operator "xor": all false -> false](./test-boolean-operators-xor-false-all.md) |
+| 43 | [Operator "xor": One ture -> true](./test-boolean-operators-xor-true.md) |
+| 44 | [Operator "xor": all true -> false](./test-boolean-operators-xor-true-all.md) |
+| 45 | [Scenario "Alpha"](./test-complex-scenario-alpha.md) |
+| 46 | [consistency-throw-hosting-relation-missing](./test-consistency-throw-hosting-relation-missing.md) |
+| 47 | [consistency-throw-multiple-hosting-relations](./test-consistency-throw-multiple-hosting-relations.md) |
+| 48 | [consistency-throw-relation-source-missing](./test-consistency-throw-relation-source-missing.md) |
+| 49 | [consistency-throw-relation-target-missing](./test-consistency-throw-relation-target-missing.md) |
+| 50 | [Operator "equal" Evaluates to "false"](./test-constraint-operators-equal-false.md) |
+| 51 | [Operator "equal" Evaluates to "true"](./test-constraint-operators-equal-true.md) |
+| 52 | [Operator "greater_or_equal" Evaluates to "true" (Greater)](./test-constraint-operators-greater-or-equal-equal.md) |
+| 53 | [Operator "greater_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-greater-or-equal-greater.md) |
+| 54 | [Operator "greater_or_equal" Evaluates to "false" (Less)](./test-constraint-operators-greater-or-equal-less.md) |
+| 55 | [Operator "greater_than" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
+| 56 | [Operator "greater_than" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
+| 57 | [Operator "greater_than" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
+| 58 | [Operator "in_range" Evaluates to "false"](./test-constraint-operators-in_range_false.md) |
+| 59 | [Operator "in_range" Evaluates to "true"](./test-constraint-operators-in_range_true.md) |
+| 60 | [Operator "length" Evaluates to "false"](./test-constraint-operators-length_false.md) |
+| 61 | [Operator "length" Evaluates to "true"](./test-constraint-operators-length_true.md) |
+| 62 | [Operator "less_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-less_or_equal_equal.md) |
+| 63 | [Operator "less_or_equal" Evaluates to "false" (Greater)](./test-constraint-operators-less_or_equal_greater.md) |
+| 64 | [Operator "less_or_equal" Evaluates to "true" (Less)](./test-constraint-operators-less_or_equal_less.md) |
+| 65 | [Operator "less_than" Evaluates to "false" (Equal)](./test-constraint-operators-less_than_equal.md) |
+| 66 | [Operator "less_than" Evaluates to "false" (Greater)](./test-constraint-operators-less_than_greater.md) |
+| 67 | [Operator "less_than" Evaluates to "true" (Less)](./test-constraint-operators-less_than_less.md) |
+| 68 | [Operator "max_length" Evaluates to "true" (Equal)](./test-constraint-operators-max_length_equal.md) |
+| 69 | [Operator "max_length" Evaluates to "false" (Greater)](./test-constraint-operators-max_length_greater.md) |
+| 70 | [Operator "max_length" Evaluates to "true" (Less)](./test-constraint-operators-max_length_less.md) |
+| 71 | [Operator "min_length" Evaluates to "true" (Equal)](./test-constraint-operators-min_length_equal.md) |
+| 72 | [Operator "min_length" Evaluates to "true" (Greater)](./test-constraint-operators-min_length_greater.md) |
+| 73 | [Operator "min_length" Evaluates to "false" (Less)](./test-constraint-operators-min_length_less.md) |
+| 74 | [Operator "valid_values" Evaluates to "false"](./test-constraint-operators-valid_values_false.md) |
+| 75 | [Operator "valid_values" Evaluates to "true"](./test-constraint-operators-valid_values_true.md) |
+| 76 | [Conditional Group](./test-groups-conditional.md) |
+| 77 | [groups-default-condition](./test-groups-default-condition.md) |
+| 78 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
+| 79 | [groups-prune](./test-groups-prune.md) |
+| 80 | [inputs-conditional](./test-inputs-conditional.md) |
+| 81 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
+| 82 | [nodes-conditional](./test-nodes-conditional.md) |
+| 83 | [nodes-get-node-presence-absent](./test-nodes-get-node-presence-absent.md) |
+| 84 | [nodes-get-node-presence-present](./test-nodes-get-node-presence-present.md) |
+| 85 | [Benchmark](./test-other-benchmark.md) |
+| 86 | [Operator "concat"](./test-other-concat.md) |
+| 87 | [Get Variability Expression](./test-other-default-variability-input.md) |
+| 88 | [Get Variability Condition](./test-other-get-variability-condition.md) |
+| 89 | [Get Variability Expression](./test-other-get-variability-expression.md) |
+| 90 | [Get Variability Input](./test-other-get-variability-input.md) |
+| 91 | [Operator "concat"](./test-other-join.md) |
+| 92 | [other-nothing](./test-other-nothing.md) |
+| 93 | [other-preset](./test-other-preset.md) |
+| 94 | [other-presets](./test-other-presets.md) |
+| 95 | [Operator "concat"](./test-other-token.md) |
+| 96 | [other-version](./test-other-version.md) |
+| 97 | [policies-conditional](./test-policies-conditional.md) |
+| 98 | [policies-default-condition](./test-policies-default-condition.md) |
+| 99 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
+| 100 | [Policy Targets Absent Members](./test-policies-has-present-targets-absent-members.md) |
+| 101 | [Policy Targets Absent Nodes](./test-policies-has-present-targets-absent-nodes.md) |
+| 102 | [Policy Has No Targets](./test-policies-has-present-targets-no-targets.md) |
+| 103 | [Policy Targets Present Member](./test-policies-has-present-targets-present-member.md) |
+| 104 | [Policy Targets One Present Node](./test-policies-has-present-targets-present-node.md) |
+| 105 | [Policy Targets Present Nodes](./test-policies-has-present-targets-present-nodes.md) |
+| 106 | [Policy Pruning](./test-policies-prune.md) |
+| 107 | [properties-conditional](./test-properties-conditional.md) |
+| 108 | [properties-default-alternative](./test-properties-default-alternative.md) |
+| 109 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
+| 110 | [properties-default-condition](./test-properties-default-condition.md) |
+| 111 | [properties-expression](./test-properties-expression.md) |
+| 112 | [properties-list](./test-properties-list.md) |
+| 113 | [properties-list-another](./test-properties-list-another.md) |
+| 114 | [properties-map](./test-properties-map.md) |
+| 115 | [properties-map-another](./test-properties-map-another.md) |
+| 116 | [properties-prune](./test-properties-prune.md) |
+| 117 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
+| 118 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
+| 119 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
+| 120 | [relationships-conditional](./test-relationships-conditional.md) |
+| 121 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 122 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 123 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 124 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 125 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 126 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 127 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 128 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 129 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 130 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
+| 131 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
+| 132 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
+| 133 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
+| 134 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
+| 135 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
+| 136 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 137 | [Relation Pruning](./test-requirement-assignment-prune.md) |
+| 138 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
 
