@@ -36,10 +36,10 @@ A Variability Definition defines Variability Inputs, Variability Presets, and Va
 
 | Keyname     | Mandatory | Type                                         | Description                                                                       |
 |-------------|-----------|----------------------------------------------|-----------------------------------------------------------------------------------|
-| inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
+| inputs      | yes       | Map(String, VariabilityInputDefinition)      | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
-| options | no | Map(String, Boolean) | An optional map of Variability Resolving options.                                |
+| options | no | Map(String, Boolean)                         | An optional map of Variability Resolving options.                                |
 
 
 The following non-normative and incomplete example contains a Variability Definition which declares the Variability
@@ -68,6 +68,16 @@ variability:
         is_dev: {equal: [{get_variability_input: mode}, dev]}
         is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
+
+
+## Variability Input Definition
+
+A variability input definition is an input parameter definition which additionally has the following keywords.
+
+| Keyname            | Mandatory | Type                                                                          | Description                                                        |
+|--------------------|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| default_expression | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as default. |
+
 
 ## Variability Resolving Options
 

@@ -2,7 +2,7 @@ import * as validator from '#validator'
 import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as featureIDE from '#utils/feature-ide'
-import {InputAssignmentMap, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
+import {InputAssignmentMap, InputAssignmentValue, InputDefinition, InputDefinitionMap} from '#spec/topology-template'
 import {InputAssignmentPreset, VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import {NodeTemplate, NodeTemplateMap, RequirementAssignment, RequirementAssignmentMap} from '#spec/node-template'
 import {PropertyAssignmentMap, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -1091,10 +1091,11 @@ export class VariabilityResolver {
         return this
     }
 
+    setVariabilityInput(name: string, value: InputAssignmentValue) {
+        this.variabilityInputs[name] = value
+    }
+
     getVariabilityInput(name: string) {
-        // TODO: better: already populate default value at start?
-        // TODO: type check
-        // TODO: default_expression
         let value
 
         // Get variability input definition
@@ -1106,10 +1107,19 @@ export class VariabilityResolver {
         if (validator.isDefined(value)) return value
 
         // Return default value
-        validator.ensureDefined(definition.default, `Variability input "${name}" has no value nor default assigned`)
-        // TODO: this does not allow arrays or maps
-        value = this.evaluateVariabilityExpression(definition.default, {})
+        if (validator.isDefined(definition.default)) {
+            this.setVariabilityInput(name, definition.default)
+            return definition.default
+        }
+
+        // Return default expression
+        validator.ensureDefined(
+            definition.default_expression,
+            `Variability input "${name}" has no value nor default (expression) assigned`
+        )
+        value = this.evaluateVariabilityExpression(definition.default_expression, {})
         validator.ensureDefined(value, `Did not find variability input "${name}"`)
+        this.setVariabilityInput(name, value)
         return value
     }
 
@@ -1140,8 +1150,8 @@ export class VariabilityResolver {
     evaluateVariabilityExpression(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): boolean | string | number {
-        if (validator.isObject(condition)) {
+    ): InputAssignmentValue {
+        if (validator.isObject(condition) && !validator.isArray(condition)) {
             if (validator.isDefined(condition.cached_result)) return condition.cached_result
             const result = this.evaluateVariabilityExpressionRunner(condition, context)
             condition.cached_result = result
@@ -1154,12 +1164,13 @@ export class VariabilityResolver {
     evaluateVariabilityExpressionRunner(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): boolean | string | number {
+    ): InputAssignmentValue {
         validator.ensureDefined(condition, `Received condition that is undefined or null`)
 
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
         if (validator.isNumber(condition)) return condition
+        if (validator.isArray(condition)) return condition
 
         if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
