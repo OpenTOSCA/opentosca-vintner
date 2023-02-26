@@ -111,22 +111,14 @@ There are the following variability resolving options.
 To further support modeling, the following default conditions can be assigned:
 
 
-| Element                        | Default Conditions                                                   |
-|--------------------------------|----------------------------------------------------------------------|
-| Node Template Property         | Check if the node template of the property is present.               |
-| Relationship Template Property | Check if the relationship template of the property is present.       |
-| Requirement Assignment         | Check if the node template of the requirement assignment is present. |
-| Policy                         | Check if the policy has any targets which are present.               |
-| Group                          | Check if the group has any members which are present.                |
-| Artifact                       | Check if the node template of the artifact is present.               |
-
-## Variability Pruning Conditions
-
-To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
-For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
-This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
-Such pruning propagates through the whole topology.
-For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
+| Element                        | Default Conditions                                                       |
+|--------------------------------|--------------------------------------------------------------------------|
+| Node Template Property         | Check if the node template of the property is present.                   |
+| Relationship Template Property | Check if the relationship template of the property is present.           |
+| Requirement Assignment         | Check if the source and target of the requirement assignment is present. |
+| Policy                         | Check if the policy has any targets which are present.                   |
+| Group                          | Check if the group has any members which are present.                    |
+| Artifact                       | Check if the node template of the artifact is present.                   |
 
 
 ## Variability Preset Definition
@@ -403,9 +395,9 @@ tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
-## Boolean Operators
+## Logical Operators
 
-The following Boolean operators can be used inside a Variability Expression.
+The following logical operators can be used inside a Variability Expression.
 
 | Keyname | Input                                      | Output  | Description                                        |
 |---------|--------------------------------------------|---------|----------------------------------------------------|
@@ -550,6 +542,15 @@ To check the consistency, conduct the following steps:
 Since the derived Service Template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
 some or all of these consistency steps might be omitted.
+
+### Pruning Elements
+
+To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
+For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
+This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
+Such pruning propagates through the whole topology.
+For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
+
 
 ### Processing Errors
 
