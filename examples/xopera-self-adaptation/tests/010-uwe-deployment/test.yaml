@@ -1,3 +1,0 @@
-expected: ../service-template.vm.yaml
-description: |
-    - its under the week, thus, vm is used

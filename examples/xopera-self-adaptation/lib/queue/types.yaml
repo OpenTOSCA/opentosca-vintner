@@ -1,7 +1,0 @@
-tosca_definitions_version: tosca_simple_yaml_1_3
-
-node_types:
-    queue.queue:
-        derived_from: tosca.nodes.Root
-        capabilities:
-            connect: tosca.capabilities.Endpoint
