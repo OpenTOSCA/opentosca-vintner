@@ -5,7 +5,7 @@ import console from 'console'
 import hae from '#utils/hae'
 import * as validator from '#validator'
 import death from '#utils/death'
-import {toFixed} from '#utils'
+import * as utils from '#utils'
 
 export default async function (options: SensorComputeOptions) {
     const sensor = new SensorCompute(options)
@@ -44,7 +44,7 @@ class SensorCompute {
     }
 
     async start() {
-        this.time = new Date().getTime()
+        this.time = utils.now()
 
         const system = await si.osInfo()
         if (system.platform.toLowerCase().includes('win')) throw new Error(`Windows is not supported`)
@@ -67,7 +67,7 @@ class SensorCompute {
     }
 
     async collect() {
-        const now = new Date().getTime()
+        const now = utils.now()
 
         const info = await si.get({
             currentLoad: 'currentLoad',
@@ -86,15 +86,15 @@ class SensorCompute {
 
     async send() {
         if (validator.isUndefined(this.time)) throw new Error('Sensor has not been started')
-        const uptime = Math.round((new Date().getTime() - this.time) / 1000)
+        const uptime = Math.round((utils.now() - this.time) / 1000)
         const cpu = getAverage(cpu_history)
         const mem = getAverage(mem_history)
 
         await this.handle({
             up: true,
             uptime,
-            cpu: toFixed(cpu),
-            memory: toFixed(mem),
+            cpu: utils.toFixed(cpu),
+            memory: utils.toFixed(mem),
         })
     }
 

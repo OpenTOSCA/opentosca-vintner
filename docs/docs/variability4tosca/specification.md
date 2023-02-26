@@ -473,6 +473,14 @@ The following analytical operators can be used inside a Variability Expression.
 | exponential_regression | List(List(Tuple(Number, Number)), Number)         | Number | Returns the prediction using exponential regression. |
 
 
+## Date Operators
+
+The following date operators can be used inside a Variability Expression.
+
+| Keyname             | Input              | Output | Description                                     |
+|---------------------|--------------------|--------|-------------------------------------------------|
+| get_current_weekday | Empty List | String | Returns the current weekday. |
+
 ## Processing
 
 In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a

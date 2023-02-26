@@ -115,6 +115,9 @@ export type VariabilityExpression =
           logarithmic_regression?: [[number, number][], number]
           exponential_regression?: [[number, number][], number]
 
+          // Date operators
+          get_current_weekday?: []
+
           // Cache
           cached_result?: boolean | string | number
       }

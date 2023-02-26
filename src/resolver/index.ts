@@ -16,6 +16,8 @@ import _ from 'lodash'
 import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
+import dayjs from 'dayjs'
+import console from 'console'
 
 /**
  * Not documented since preparation for future work
@@ -1522,6 +1524,10 @@ export class VariabilityResolver {
             validator.ensureNumber(prediction)
 
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
+        }
+
+        if (validator.isDefined(condition.get_current_weekday)) {
+            return dayjs().format('dddd').toLowerCase()
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

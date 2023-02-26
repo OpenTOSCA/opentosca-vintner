@@ -67,23 +67,25 @@ topology_template:
 
     variability:
         inputs:
-            sensors_enabled:
-                type: boolean
             weekday:
                 type: string
+                default: {get_current_weekday: []}
             compute_raspberry_cpu:
                 type: number
+                default: 0
             compute_vm_up:
                 type: boolean
+                default: false
             compute_vm_uptime:
                 type: number
+                default: 0
             compute_vm_cpu:
                 type: number
+                default: 0
 
         presets:
             raspberry:
                 inputs:
-                    sensors_enabled: false
                     weekday: saturday
                     compute_raspberry_cpu: 0
                     compute_vm_up: false
@@ -92,7 +94,6 @@ topology_template:
 
             vm:
                 inputs:
-                    sensors_enabled: false
                     weekday: monday
                     compute_raspberry_cpu: 0
                     compute_vm_up: false
