@@ -677,18 +677,21 @@ export class VariabilityResolver {
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
-        // Relation Default Condition: Assign default condition to relation that checks if source is present
+        // Relation Default Condition: Assign default condition to relation that checks if source and target are present
         if (
             element.type === 'relation' &&
             this.getVariabilityResolvingOptions().enable_relation_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{get_node_presence: element.source}]
+            conditions = [{and: [{get_node_presence: element.source}, {get_node_presence: element.target}]}]
         }
 
-        // Prune Relations: Additionally check that source is present
+        // Prune Relations: Additionally check that source and target are present
         if (element.type === 'relation' && this.getVariabilityResolvingOptions().enable_relation_pruning) {
-            conditions = [{get_node_presence: element.source}, ...conditions]
+            conditions = [
+                {and: [{get_node_presence: element.source}, {get_node_presence: element.target}]},
+                ...conditions,
+            ]
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
