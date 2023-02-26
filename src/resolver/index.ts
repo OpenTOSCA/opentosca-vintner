@@ -17,7 +17,6 @@ import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
 import dayjs from 'dayjs'
-import console from 'console'
 
 /**
  * Not documented since preparation for future work
@@ -189,6 +188,8 @@ export class VariabilityResolver {
     private inputsMap = new Map<string, Input>()
 
     private artifacts: Artifact[] = []
+
+    private weekday = dayjs().format('dddd').toLowerCase()
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -1527,7 +1528,7 @@ export class VariabilityResolver {
         }
 
         if (validator.isDefined(condition.get_current_weekday)) {
-            return dayjs().format('dddd').toLowerCase()
+            return this.weekday
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)
