@@ -16,7 +16,6 @@ import _ from 'lodash'
 import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
-import {prettyJSON} from '#utils'
 
 /**
  * Not documented since preparation for future work
@@ -1090,9 +1089,25 @@ export class VariabilityResolver {
     }
 
     getVariabilityInput(name: string) {
-        const input = this.variabilityInputs[name]
-        validator.ensureDefined(input, `Did not find variability input "${name}"`)
-        return input
+        // TODO: better: already populate default value at start?
+        // TODO: type check
+        // TODO: default_expression
+        let value
+
+        // Get variability input definition
+        const definition = this.serviceTemplate.topology_template?.variability?.inputs[name]
+        validator.ensureDefined(definition, `Variability input "${name}" is not defined`)
+
+        // Return assigned value
+        value = this.variabilityInputs[name]
+        if (validator.isDefined(value)) return value
+
+        // Return default value
+        validator.ensureDefined(definition.default, `Variability input "${name}" has no value nor default assigned`)
+        // TODO: this does not allow arrays or maps
+        value = this.evaluateVariabilityExpression(definition.default, {})
+        validator.ensureDefined(value, `Did not find variability input "${name}"`)
+        return value
     }
 
     getVariabilityInputs() {
