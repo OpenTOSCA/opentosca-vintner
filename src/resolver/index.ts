@@ -13,6 +13,9 @@ import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definiti
 import * as utils from '#utils'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
 import _ from 'lodash'
+import stats from 'stats-lite'
+import regression from 'regression'
+import {ensureArray, ensureDefined} from '#validator'
 
 /**
  * Not documented since preparation for future work
@@ -1086,9 +1089,25 @@ export class VariabilityResolver {
     }
 
     getVariabilityInput(name: string) {
-        const input = this.variabilityInputs[name]
-        validator.ensureDefined(input, `Did not find variability input "${name}"`)
-        return input
+        // TODO: better: already populate default value at start?
+        // TODO: type check
+        // TODO: default_expression
+        let value
+
+        // Get variability input definition
+        const definition = this.serviceTemplate.topology_template?.variability?.inputs[name]
+        validator.ensureDefined(definition, `Variability input "${name}" is not defined`)
+
+        // Return assigned value
+        value = this.variabilityInputs[name]
+        if (validator.isDefined(value)) return value
+
+        // Return default value
+        validator.ensureDefined(definition.default, `Variability input "${name}" has no value nor default assigned`)
+        // TODO: this does not allow arrays or maps
+        value = this.evaluateVariabilityExpression(definition.default, {})
+        validator.ensureDefined(value, `Did not find variability input "${name}"`)
+        return value
     }
 
     getVariabilityInputs() {
@@ -1401,6 +1420,108 @@ export class VariabilityResolver {
             validator.ensureNumber(length)
 
             return element.length <= length
+        }
+
+        if (validator.isDefined(condition.sum)) {
+            const elements = condition.sum
+            validator.ensureNumbers(elements)
+            return utils.toFixed(stats.sum(elements))
+        }
+
+        if (validator.isDefined(condition.count)) {
+            const elements = condition.count
+            validator.ensureNumbers(elements)
+            return elements.length
+        }
+
+        if (validator.isDefined(condition.min)) {
+            const elements = condition.min
+            validator.ensureNumbers(elements)
+            const min = _.min(elements)
+            ensureDefined(min, `Minimum of "${JSON.stringify(elements)}" does not exist`)
+            return min
+        }
+
+        if (validator.isDefined(condition.max)) {
+            const elements = condition.max
+            validator.ensureNumbers(elements)
+            const max = _.max(elements)
+            ensureDefined(max, `Maximum of "${JSON.stringify(elements)}" does not exist`)
+            return max
+        }
+
+        if (validator.isDefined(condition.median)) {
+            const elements = condition.median
+            validator.ensureNumbers(elements)
+            return stats.median(elements)
+        }
+
+        if (validator.isDefined(condition.mean)) {
+            const elements = condition.mean
+            validator.ensureNumbers(elements)
+            return utils.toFixed(stats.mean(elements))
+        }
+
+        if (validator.isDefined(condition.variance)) {
+            const elements = condition.variance
+            validator.ensureNumbers(elements)
+            return utils.toFixed(stats.variance(elements))
+        }
+
+        if (validator.isDefined(condition.standard_deviation)) {
+            const elements = condition.standard_deviation
+            validator.ensureNumbers(elements)
+            return utils.toFixed(stats.stdev(elements))
+        }
+
+        if (validator.isDefined(condition.linear_regression)) {
+            ensureArray(condition.linear_regression)
+            const elements = condition.linear_regression[0]
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
+
+            const prediction = condition.linear_regression[1]
+            validator.ensureNumber(prediction)
+
+            return utils.toFixed(regression.linear(elements).predict(prediction)[1])
+        }
+
+        if (validator.isDefined(condition.polynomial_regression)) {
+            ensureArray(condition.polynomial_regression)
+            const elements = condition.polynomial_regression[0]
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
+
+            const order = condition.polynomial_regression[1]
+            validator.ensureNumber(order)
+
+            const prediction = condition.polynomial_regression[2]
+            validator.ensureNumber(prediction)
+
+            return utils.toFixed(regression.polynomial(elements, {order}).predict(prediction)[1])
+        }
+
+        if (validator.isDefined(condition.logarithmic_regression)) {
+            ensureArray(condition.logarithmic_regression)
+            const elements = condition.logarithmic_regression[0]
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
+
+            const prediction = condition.logarithmic_regression[1]
+            validator.ensureNumber(prediction)
+
+            return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
+        }
+        if (validator.isDefined(condition.exponential_regression)) {
+            ensureArray(condition.exponential_regression)
+            const elements = condition.exponential_regression[0]
+            validator.ensureArray(elements)
+            elements.forEach(it => validator.ensureNumbers(it))
+
+            const prediction = condition.exponential_regression[1]
+            validator.ensureNumber(prediction)
+
+            return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

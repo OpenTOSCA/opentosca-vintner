@@ -43,8 +43,17 @@ export function ensureNumber(element: unknown): asserts element is number {
     if (!isNumber(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a number`)
 }
 
+export function ensureNumbers(element: unknown[]): asserts element is number[] {
+    ensureArray(element)
+    element.forEach(ensureNumber)
+}
+
 export function isArray(element: unknown): element is Array<unknown> {
     return Array.isArray(element)
+}
+
+export function ensureArray(element: unknown[]): asserts element is Array<unknown> {
+    if (!isArray(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an array`)
 }
 
 export function isObject(element: unknown): element is object {

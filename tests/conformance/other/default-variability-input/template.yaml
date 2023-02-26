@@ -3,12 +3,12 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     variability:
         inputs:
-            name:
-                type: string
+            some_input:
+                default: {concat: ['some', '_', 'value']}
 
     node_templates:
         container:
             type: container
             properties:
                 - value:
-                      expression: {get_variability_input: name}
+                      expression: {get_variability_input: some_input}

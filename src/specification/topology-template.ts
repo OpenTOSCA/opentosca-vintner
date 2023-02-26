@@ -28,7 +28,7 @@ export type InputDefinitionMap = {[key: string]: InputDefinition}
 export type InputDefinition = {
     type: string
     description?: string
-    required?: boolean
+    default?: VariabilityExpression
 } & VariabilityAlternative
 
 export type InputAssignmentMap = {[key: string]: string | boolean | number}
