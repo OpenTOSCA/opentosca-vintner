@@ -1,0 +1,127 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    compute.raspberry:
+        derived_from: tosca.nodes.Compute
+        properties:
+            ssh_user:
+                type: string
+
+            ssh_key_file:
+                type: string
+
+    compute.hypervisor:
+        derived_from: tosca.nodes.Root
+        properties:
+            region_name:
+                type: string
+
+            auth_type:
+                type: string
+
+            auth_url:
+                type: string
+
+            identity_api_version:
+                type: string
+
+            interface:
+                type: string
+
+            application_credential_id:
+                type: string
+
+            application_credential_secret:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [compute.vm]
+
+    compute.vm:
+        derived_from: tosca.nodes.Compute
+        properties:
+            ports:
+                type: list
+            name:
+                type: string
+                description: Name that should be given to the VM in OpenStack
+            image:
+                type: string
+                description: OpenStack image id (image names are not accepted)
+            flavor:
+                type: string
+                description: OpenStack flavor id (flavor names are not accepted)
+            network:
+                type: string
+                description: OpenStack network id (network names are not accepted)
+            security_groups:
+                type: string
+                description: OpenStack names of the security groups to which the instance should be added (comma separated string)
+            key_name:
+                type: string
+                description: OpenStack SSH key name that should be placed on the VM
+            ssh_user:
+                type: string
+                description: The username that will be used to connect to the created VM
+            ssh_key_file:
+                type: string
+                description: Path to the local SSH private key file that will be used for the ssh connection to the VM
+        attributes:
+            private_address:
+                description: Openstack private address of the VM
+                type: string
+            public_address:
+                description: OpenStack public address of the VM
+                type: string
+            id:
+                type: string
+                description: OpenStack id of the VM
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+        interfaces:
+            Standard:
+                type: tosca.interfaces.node.lifecycle.Standard
+                inputs:
+                    ports: {value: {get_property: [SELF, ports]}, type: string}
+                    vm_name: {value: {get_property: [SELF, name]}, type: string}
+                    image: {value: {get_property: [SELF, image]}, type: string}
+                    flavor: {value: {get_property: [SELF, flavor]}, type: string}
+                    network: {value: {get_property: [SELF, network]}, type: string}
+                    key_name: {value: {get_property: [SELF, key_name]}, type: string}
+                    security_groups: {value: {get_property: [SELF, security_groups]}, type: string}
+                    ssh_user: {value: {get_property: [SELF, ssh_user]}, type: string}
+                    ssh_key_file: {value: {get_property: [SELF, ssh_key_file]}, type: string}
+
+                    region_name:
+                        value: {get_property: [SELF, host, region_name]}
+
+                    auth_type:
+                        value: {get_property: [SELF, host, auth_type]}
+
+                    auth_url:
+                        value: {get_property: [SELF, host, auth_url]}
+
+                    identity_api_version:
+                        value: {get_property: [SELF, host, identity_api_version]}
+
+                    interface:
+                        value: {get_property: [SELF, host, interface]}
+
+                    application_credential_id:
+                        value: {get_property: [SELF, host, application_credential_id]}
+
+                    application_credential_secret:
+                        value: {get_property: [SELF, host, application_credential_secret]}
+
+                operations:
+                    create: vm/playbooks/create.yaml
+                    # TODO: this does somehow not work anymore
+                    #configure:
+                    #    inputs:
+                    #        public_address:
+                    #            value: {get_attribute: [SELF, public_address]}
+                    #    implementation: vm/playbooks/configure.yaml
+                    delete: vm/playbooks/delete.yaml

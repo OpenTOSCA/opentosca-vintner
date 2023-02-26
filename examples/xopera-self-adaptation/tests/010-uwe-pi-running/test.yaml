@@ -1,0 +1,4 @@
+expected: ../service-template.vm.yaml
+description: |
+    - raspberry was running at saturday 
+    - its now monday, thus, vm is used
