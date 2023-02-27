@@ -17,7 +17,6 @@ import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
 import dayjs from 'dayjs'
-import console from 'console'
 
 /**
  * Not documented since preparation for future work
@@ -687,12 +686,12 @@ export class VariabilityResolver {
             utils.isEmpty(conditions)
         ) {
             // !utils.isEmpty(element.ingoing)
-            conditions = [{or: [{is_target: element.name}, {not: {was_target: element.name}}]}]
+            conditions = [{or: [{is_present_target: element.name}, {not: {is_target: element.name}}]}]
         }
 
         // Prune Nodes: Additionally check that no incoming relation is present and that there is at least one potential incoming relations.
         if (element.type === 'node' && this.getVariabilityResolvingOptions().enable_node_pruning) {
-            conditions.unshift({or: [{is_target: element.name}, {not: {was_target: element.name}}]})
+            conditions.unshift({or: [{is_present_target: element.name}, {not: {is_target: element.name}}]})
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
@@ -1356,16 +1355,16 @@ export class VariabilityResolver {
             return this.getGroup(element).members.some(member => this.checkPresence(member))
         }
 
-        if (validator.isDefined(condition.is_target)) {
-            const name = this.evaluateVariabilityExpression(condition.is_target, context)
+        if (validator.isDefined(condition.is_present_target)) {
+            const name = this.evaluateVariabilityExpression(condition.is_present_target, context)
             validator.ensureString(name)
 
             const node = this.getNode(name)
             return node.ingoing.some(it => this.checkPresence(it))
         }
 
-        if (validator.isDefined(condition.was_target)) {
-            const name = this.evaluateVariabilityExpression(condition.was_target, context)
+        if (validator.isDefined(condition.is_target)) {
+            const name = this.evaluateVariabilityExpression(condition.is_target, context)
             validator.ensureString(name)
 
             const node = this.getNode(name)
