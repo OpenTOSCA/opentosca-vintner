@@ -1,6 +1,6 @@
 import {VariabilityAlternative, VariabilityExpression} from './variability'
 import {GroupMember, TOSCA_GROUP_TYPES} from './group-type'
-import {PropertyAssignmentMap} from '#spec/property-assignments'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 /**
  * Group Template
@@ -10,7 +10,7 @@ import {PropertyAssignmentMap} from '#spec/property-assignments'
 export type GroupTemplate = {
     type: TOSCA_GROUP_TYPES
     members: GroupMember[]
-    properties?: PropertyAssignmentMap
+    properties?: PropertyAssignmentMap | PropertyAssignmentList
 } & VariabilityAlternative
 
 export type GroupTemplateMap = {[key: string]: GroupTemplate}

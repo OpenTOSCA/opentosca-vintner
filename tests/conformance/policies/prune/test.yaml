@@ -1,4 +1,2 @@
 name: Policy Pruning
 description: Remove policy "policy_one" even though assigned conditions evaluate to "true" since policy pruning is enabled.
-resolver:
-    enable_policy_pruning: true

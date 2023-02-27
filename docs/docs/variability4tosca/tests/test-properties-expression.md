@@ -10,6 +10,10 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    inputs:
+      some_input:
+        type: string
   node_templates:
     node_one:
       type: node_one
@@ -26,7 +30,6 @@ When resolving variability, the following variability inputs shall be used.
 ```yaml linenums="1"
 some_input: some_value
 ```
-
 
 
 ## Variability-Resolved Service Template

@@ -3,7 +3,7 @@ import * as files from '#files'
 import path from 'path'
 import {joinNotNull} from '#utils'
 import {Shell} from '#shell'
-import {OrchestratorPlugin} from '#plugins/types'
+import {OrchestratorOperationOptions, OrchestratorPlugin} from '#plugins/types'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -23,19 +23,28 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         this.shell = new Shell(config.wsl)
     }
 
-    async deploy(instance: Instance) {
+    async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
         files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))
         files.copy(instance.getTemplateDirectory(), this.getEnsembleDirectory(instance))
-        files.copy(instance.getServiceInputsPath(), this.getEnsembleInputsPath(instance))
-        await this.shell.execute([this.getBinary(instance), 'deploy', '--approve'])
+        files.copy(instance.getServiceInputs(), this.getEnsembleInputsPath(instance))
+
+        const command = [this.getBinary(instance), 'deploy', '--approve']
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
     }
 
-    async undeploy(instance: Instance) {
-        await this.shell.execute([this.getBinary(instance), 'undeploy', '--approve'])
+    async undeploy(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [this.getBinary(instance), 'undeploy', '--approve']
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
     }
 
     update(instance: Instance) {
+        return Promise.reject('Not Implemented')
+    }
+
+    redeploy(instance: Instance) {
         return Promise.reject('Not Implemented')
     }
 

@@ -4,3 +4,5 @@ node_modules
 
 **/*.min.js
 **/*.min.css
+
+.nyc_output

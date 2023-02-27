@@ -1,5 +1,6 @@
 import {v4 as uuid4} from 'uuid'
 import * as validator from './validator'
+import dayjs from 'dayjs'
 
 export function generateNonce() {
     return uuid4()
@@ -110,4 +111,16 @@ export function hrtime2ms(data: [number, number]) {
 
 export function normalizeString(value: string) {
     return value.toLowerCase().replaceAll(' ', '_')
+}
+
+export function now() {
+    return dayjs().millisecond()
+}
+
+export async function sleep(ms = 1000) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export function toFixed(value: number) {
+    return Number(value.toFixed(2))
 }

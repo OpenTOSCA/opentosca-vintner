@@ -1,8 +1,10 @@
 import {Template} from '#repository/templates'
-import open from 'open'
+import open from '#utils/open'
 
-export type TemplatesOpenArguments = {template: string}
+export type TemplatesOpenOptions = {template: string}
 
-export default async function (options: TemplatesOpenArguments) {
-    await open(new Template(options.template).getTemplateDirectory())
+export default async function (options: TemplatesOpenOptions) {
+    const template = new Template(options.template)
+    if (!template.exists()) throw new Error(`Template "${options.template}" does not exist`)
+    await open.file(template.getTemplateDirectory())
 }

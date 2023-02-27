@@ -1,6 +1,6 @@
 import {expect} from 'chai'
-import {VariabilityResolver} from '#controller/template/resolve'
 import {VariabilityExpression} from '#spec/variability'
+import {VariabilityResolver} from '#/resolver'
 
 function getDefaultVariabilityResolver() {
     return new VariabilityResolver({} as any)

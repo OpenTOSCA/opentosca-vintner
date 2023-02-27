@@ -24,6 +24,10 @@ export class Template {
         return this._name
     }
 
+    getLockKey() {
+        return 'templates:' + this.getName()
+    }
+
     create() {
         files.createDirectory(this.getTemplateDirectory())
         return this
@@ -61,7 +65,7 @@ export class Template {
         return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
     }
 
-    getVariableServiceTemplate() {
+    loadVariableServiceTemplate() {
         return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
     }
 

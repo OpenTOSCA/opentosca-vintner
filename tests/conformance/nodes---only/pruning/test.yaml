@@ -3,6 +3,3 @@ description: |
     - Node and relation pruning is enabled.
     - Node "node_three" is not present since incoming relations are not present. 
     - Node "node_four" also has no incoming relations, however, is present since there had not been any incoming relation at all.
-resolver:
-    enable_relation_pruning: true
-    enable_node_pruning: true

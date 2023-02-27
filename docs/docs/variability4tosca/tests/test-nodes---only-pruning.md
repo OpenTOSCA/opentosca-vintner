@@ -38,16 +38,6 @@ topology_template:
 
 
 
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enable_relation_pruning: true
-enable_node_pruning: true
-
-```
-
 ## Variability-Resolved Service Template
 
 The following variability-resolved service templated is expected.
@@ -60,12 +50,3 @@ topology_template:
       type: node_four
 ```
 
-
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-enableRelationPruning: true
-enableNodePruning: true
-```

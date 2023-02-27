@@ -1,43 +1,42 @@
 #!/usr/bin/env sh
 set -e
 
+# Ensure that vintner is installed
+if ! which vintner &>/dev/null; then
+    echo "\"vintner\" not installed"
+    exit 1
+fi
+
 . magic.sh -n
 TYPE_SPEED=100
 
 cd ../../../
 
 echo '# Installation'
-p 'wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64'
-sleep 1
-
-p 'mv vintner-linux-x64 /usr/bin/vintner'
-# sleep 0.5
-
-p 'chmod +x /usr/bin/vintner'
-# sleep 0.5
+p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'
+sleep 3
 
 pe 'vintner setup init'
-# sleep 0.5
 
 echo ''
 echo '# Orchestrator'
 
-pe 'vintner plugins init opera'
+pe 'vintner orchestrators init xopera'
 # sleep 0.5
 
-pe 'vintner plugins enable --orchestrator opera'
+pe 'vintner orchestrators enable --orchestrator xopera'
 # sleep 0.5
 
 echo ''
 echo '# Deployment'
 
-pe 'vintner templates import --template getting-started --path examples/opera-getting-started'
+pe 'vintner templates import --template getting-started --path examples/xopera-getting-started'
 # sleep 0.5
 
 pe 'vintner instances create --instance getting-started --template getting-started'
 # sleep 0.5
 
-pe 'vintner instances resolve --instance getting-started --inputs examples/opera-getting-started/inputs.example.yaml'
+pe 'vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml'
 ## sleep 0.5
 
 pe 'vintner instances deploy --instance getting-started'

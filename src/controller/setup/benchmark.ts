@@ -1,9 +1,9 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '#files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '#utils'
-import {VariabilityResolver} from '../template/resolve'
+import {VariabilityResolver} from '#/resolver'
 
-type BenchmarkArguments = {
+type BenchmarkOptions = {
     io?: boolean
     seeds: number[]
     runs: number
@@ -22,7 +22,7 @@ export type BenchmarkResult = {
 }
 export type BenchmarkResults = BenchmarkResult[]
 
-export default async function (options: BenchmarkArguments) {
+export default async function (options: BenchmarkOptions) {
     console.log('Running benchmark with following options', options)
 
     const results: BenchmarkResults = []
@@ -172,7 +172,7 @@ export function benchmark2markdown(results: BenchmarkResults) {
     return data.join(`\n`)
 }
 
-export function benchmark2latex(results: BenchmarkResults, options: BenchmarkArguments) {
+export function benchmark2latex(results: BenchmarkResults, options: BenchmarkOptions) {
     const data = []
     data.push('Test & Seed & Templates & Median & Median per Template & I/O & File Size & File Lines \\\\')
     data.push('\\toprule')

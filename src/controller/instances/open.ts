@@ -1,8 +1,10 @@
-import open from 'open'
 import {Instance} from '#repository/instances'
+import open from '#utils/open'
 
-export type InstancesOpenArguments = {instance: string}
+export type InstancesOpenOptions = {instance: string}
 
-export default async function (options: InstancesOpenArguments) {
-    await open(new Instance(options.instance).getInstanceDirectory())
+export default async function (options: InstancesOpenOptions) {
+    const instance = new Instance(options.instance)
+    if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    await open.file(instance.getInstanceDirectory())
 }

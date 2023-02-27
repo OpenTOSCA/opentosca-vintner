@@ -1,31 +1,72 @@
 # Installation
 
-## Binaries
+In this document, we describe ways to install `vintner`.
 
-To install `vintner`, download the binary for your system.
-There are no other dependencies required. 
-You might add the binary to your PATH.
+## Script
 
-The following example shows the installation on Linux.
-See [below](#signature) for verifying the signature of the binary.
+The simplest way to install `vintner` is to run the installation script. 
+The script currently supports only Linux x64 and arm64.
+For the remaining supported platforms and architectures, see the manual installation.
 
 ```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64
-mv vintner-linux-x64 /usr/bin/vintner
-chmod +x /usr/bin/vintner
+curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 
+To install a specific version, run 
+
+```shell linenums="1"
+curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
+```
+
+## Manual
+
+To manually install `vintner`, download the binary for your system.
+There are no other dependencies required. 
+You might add the binary to your $PATH.
+The following example shows the installation on Linux.
+See [below](#signature) for verifying the signature of the binary.
+
+=== "Linux x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
+    tar -xf vintner-linux-x64.xz
+    rm vintner-linux-x64.xz
+    mv vintner-linux-x64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Linux arm64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz
+    tar -xf vintner-linux-arm64.xz
+    rm vintner-linux-arm64.xz
+    mv vintner-linux-arm64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Alpine x64"
+    ```shell linenums="1"
+    wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz
+    tar -xf vintner-alpine-x64.xz
+    rm vintner-alpine-x64.xz
+    mv vintner-alpine-x64 /usr/bin/vintner
+    chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
 The following binaries are available:
 
-| Platform | Architecture | Binary | Signature | 
-| -- | -- | -- | -- |
-| Alpine | x64 | [vintner-alpine-x64](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [vintner-alpine-x64.asc](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} |
-| Linux | arm64 | [vintner-linux-arm64](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [vintner-linux-arm64.asc](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} |
-| Linux | x64 | [vintner-linux-x64](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [vintner-linux-x64.asc](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} |
-| Windows | x64 | [vintner-win-x64.exe](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} | [vintner-win-x64.exe.asc](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} |
+| Platform | Architecture | Binary | Archive | Signature | 
+| -- | -- | -- | -- | -- |
+| Alpine | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} |
+| Linux | arm64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} |
+| Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} |
+| Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} |
 
-To check, that the `vintner` can be executed, run
+To check, that `vintner` can be executed, run
 
 ```shell linenums="1"
 vintner --version
@@ -60,13 +101,13 @@ The following is a walkthrough for `vintner-linux-x64` using `gpg`.
 First, import our public key.
 
 ```shell linenums="1"
-curl https://vintner.opentosca.org/assets/documents/vintner-release.gpg | gpg --import
+curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import
 ```
 
 Then download and verify the respective signature.
 
 ```shell linenums="1"
-wget -q https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
 gpg --verify vintner-linux-x64.asc
 ```
 
@@ -82,7 +123,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
 ```
 
-This is the public key that should be used for verification ([download]({{ fix_url('assets/documents/vintner-release.gpg') }}){target=_blank}).
+This is the public key that should be used for verification ([download](https://vintner.opentosca.org/vintner-release.gpg){target=_blank}).
 
 ```shell linenums="1"
 pub   rsa4096/964183A1485881AD 2022-10-23 [SC]

@@ -1,14 +1,11 @@
 import {expect} from 'chai'
-import {VariabilityTestGroup} from '../src/controller/template/test'
+import {loadDefaultExpect, VariabilityTestGroup} from '../src/controller/template/test'
 import Controller from '../src/controller'
 import {ServiceTemplate} from '#spec/service-template'
-import {
-    getDefaultInputs,
-    getDefaultVariableServiceTemplate,
-    readConfig,
-    readDefaultExpect,
-} from '#controller/template/test'
+import {getDefaultInputs, getDefaultVariableServiceTemplate, loadConfig} from '#controller/template/test'
 import * as files from '#files'
+import path from 'path'
+import {toList} from '../src/utils/utils'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {
@@ -40,7 +37,7 @@ export function runGroups(groups: VariabilityTestGroup[]) {
 export function getDefaultTest(dir: string, vstdir?: string) {
     return async function () {
         files.assertDirectory(dir)
-        const config = readConfig(dir)
+        const config = loadConfig(dir)
         const output = files.temporaryFile()
 
         async function fn() {
@@ -48,8 +45,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 template: getDefaultVariableServiceTemplate(vstdir || dir),
                 inputs: getDefaultInputs(dir),
                 output,
-                preset: config.preset,
-                ...config.resolver,
+                presets: toList(config.presets),
             })
         }
 
@@ -58,7 +54,9 @@ export function getDefaultTest(dir: string, vstdir?: string) {
         } else {
             await fn()
             const result = files.loadYAML<ServiceTemplate>(output)
-            const expected = readDefaultExpect(dir)
+            const expected = config.expected
+                ? files.loadYAML<ServiceTemplate>(path.resolve(dir, config.expected))
+                : loadDefaultExpect(dir)
             expect(result).to.deep.equal(expected)
         }
     }

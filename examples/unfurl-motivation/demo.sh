@@ -1,11 +1,17 @@
 #! /usr/bin/bash
 set -e
 
-yarn vintner setup init
-yarn vintner orchestrators init unfurl
-yarn vintner orchestrators enable --orchestrator unfurl
+# Ensure that vintner is installed
+if ! which vintner &>/dev/null; then
+    echo "\"vintner\" not installed"
+    exit 1
+fi
 
-yarn vintner templates import --template motivation --path examples/unfurl-motivation
-yarn vintner instances create --instance motivation --template motivation
-yarn vintner instances resolve --instance motivation --preset dev
-yarn vintner instances deploy --instance motivation --inputs examples/unfurl-motivation/inputs.yaml
+vintner setup init
+vintner orchestrators init unfurl
+vintner orchestrators enable --orchestrator unfurl
+
+vintner templates import --template motivation --path examples/unfurl-motivation
+vintner instances create --instance motivation --template motivation
+vintner instances resolve --instance motivation --presets dev
+vintner instances deploy --instance motivation --inputs examples/unfurl-motivation/inputs.yaml

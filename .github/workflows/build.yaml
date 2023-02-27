@@ -1,0 +1,94 @@
+name: Build
+on:
+    workflow_dispatch:
+
+jobs:
+    release:
+        name: Build
+        runs-on: ubuntu-22.04
+        steps:
+            - name: (PREPARE) Set up QEMU
+              uses: docker/setup-qemu-action@v2
+
+            - name: (PREPARE) Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: (PREPARE) Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+                  cache: yarn
+
+            - name: (PREPARE) Install Dependencies
+              run: rm -rf node_modules && yarn --frozen-lockfile
+
+            - name: (BUILD) Build Project
+              run: yarn build
+
+            - name: (BUILD) Set Version
+              run: sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
+
+            - name: (BUILD) Setup Packaging Cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.pkg-cache
+                  key: pkg
+
+            - name: (BUILD) Package Binaries
+              run: yarn package
+
+            - name: (SIGN) Import Signing Key
+              uses: crazy-max/ghaction-import-gpg@v5
+              with:
+                  gpg_private_key: ${{ secrets.VINTNER_RELEASE_PRIVATE_KEY }}
+
+            - name: (SIGN) Sign Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
+                  done
+
+            - name: (COMPRESS) Compress Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    tar -cJf ${BINARY}.xz ${BINARY}             
+                  done
+
+            - name: (RELEASE) Delete Build Release
+              run: gh release delete build-${GITHUB_SHA} || true
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: (RELEASE) Delete Build Tag
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      try {
+                          await github.git.deleteRef({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              ref: `tags/build-${context.sha}`
+                          })
+                      } catch (e) {
+                          console.log("Did not delete tag:", e)
+                      }
+
+            - name: (RELEASE) Create Build Tag
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      await github.git.createRef({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          ref: `refs/tags/build-${context.sha}`,
+                          sha: context.sha
+                      })
+
+            - name: (RELEASE) Create Build Release
+              run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

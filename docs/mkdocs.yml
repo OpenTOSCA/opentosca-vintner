@@ -58,7 +58,9 @@ markdown_extensions:
     - footnotes
     - toc:
           permalink: true
-
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
 plugins:
     - search
     - macros:
@@ -90,4 +92,5 @@ nav:
     - code-of-conduct.md
     - resources.md
     - about-us.md
+    - notes.md
     - faq.md

@@ -21,6 +21,16 @@ topology_template:
                 - connects_to:
                       node: node_two
                       relationship: relation_one
+            artifacts:
+                artifact_one:
+                    properties:
+                        - property_artifact_one_one:
+                              value: value_artifact_one_one
+                              conditions: false
+
+                        - property_artifact_one_one:
+                              value: value_artifact_one_two
+                              conditions: true
 
         node_two:
             type: node_two
@@ -41,3 +51,27 @@ topology_template:
                 - key_four:
                       value: value_four
                       conditions: true
+
+    groups:
+        group_one:
+            members: [node_one]
+            properties:
+                - property_group_one_one:
+                      value: value_group_one_one
+                      conditions: false
+
+                - property_group_one_one:
+                      value: value_group_one_two
+                      conditions: true
+
+    policies:
+        - policy_one:
+              targets: [node_one]
+              properties:
+                  - property_policy_one_one:
+                        value: value_policy_one_one
+                        conditions: false
+
+                  - property_policy_one_one:
+                        value: value_policy_one_two
+                        conditions: true

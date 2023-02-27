@@ -4,13 +4,13 @@ import {renderFile} from '../utils'
 import {
     getDefaultInputs,
     getDefaultVariableServiceTemplate,
-    readConfig,
-    readDefaultExpect,
+    loadConfig,
+    loadDefaultExpect,
     VariabilityTestConfig,
 } from '../../../src/controller/template/test'
 import {ServiceTemplate} from '../../../src/specification/service-template'
 import {InputAssignmentMap} from '../../../src/specification/topology-template'
-import {snakeCase} from 'snake-case'
+import * as validator from '#validator'
 
 type Test = {
     id: string
@@ -35,7 +35,7 @@ async function main() {
         files.listDirectories(groupDir).forEach(test => {
             const dir = path.join(groupDir, test)
             const id = `${group}-${test}`
-            const config = readConfig(dir)
+            const config = loadConfig(dir)
             const template = files.loadYAML<ServiceTemplate>(getDefaultVariableServiceTemplate(dir))
             const inputs = getDefaultInputs(dir)
                 ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
@@ -45,7 +45,7 @@ async function main() {
                 config,
                 inputs,
                 template,
-                expected: !config.error ? readDefaultExpect(dir) : undefined,
+                expected: validator.isUndefined(config.error) ? loadDefaultExpect(dir) : undefined,
                 file: `test-${id}.md`,
             })
         })
@@ -60,7 +60,7 @@ async function main() {
     for (const test of tests) {
         await renderFile(
             path.join(__dirname, 'test.template.ejs'),
-            {test, utils: {toYAML: files.toYAML, toSnakeCase: snakeCase}},
+            {test, utils: {toYAML: files.toYAML}},
             path.join(documentationDirectory, test.file)
         )
     }

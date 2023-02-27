@@ -1,3 +1,0 @@
-preset: prod
-resolver:
-    enable_property_default_condition: true

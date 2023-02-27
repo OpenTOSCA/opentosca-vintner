@@ -1,30 +1,44 @@
 import enableOrchestrator from './orchestrators/enable'
-import initOpera from './orchestrators/init-opera'
-import initOperaWSL from './orchestrators/init-opera-wsl'
+import initxOpera from './orchestrators/init-xopera'
+import initxOperaWSL from './orchestrators/init-xopera-wsl'
 import initUnfurl from './orchestrators/init-unfurl'
 import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
 import startServer from './server/start'
 import cleanSetup from './setup/clean'
 import initSetup from './setup/init'
-import openHome from './setup/open-home'
+import openSetup from './setup/open'
+import pathSetup from './setup/path'
+import codeSetup from './setup/code'
 import resolveTemplate from './template/resolve'
 import listTemplates from './templates/list'
 import importTemplate from './templates/import'
 import inspectTemplate from './templates/inspect'
 import deleteTemplate from './templates/delete'
 import openTemplate from './templates/open'
+import pathTemplate from './templates/path'
+import codeTemplate from './templates/code'
 import createInstance from './instances/create'
 import deployInstance from './instances/deploy'
 import inspectInstance from './instances/inspect'
 import listInstances from './instances/list'
 import openInstance from './instances/open'
+import pathInstance from './instances/path'
+import codeInstance from './instances/code'
 import undeployInstance from './instances/undeploy'
+import redeployInstance from './instances/redeploy'
 import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
+import resolveInstance from './instances/resolve'
+import adaptInstance from './instances/adapt'
+import unadaptInstance from './instances/unadapt'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
 import queryTemplate from './template/query'
 import testTemplate from './template/test'
+import computeSensor from '#controller/sensors/compute'
+import locationSensor from '#controller/sensors/location'
+import weekdaySensor from '#controller/sensors/weekday'
+import fileSensor from '#controller/sensors/file'
 
 const Controller = {
     instances: {
@@ -34,16 +48,22 @@ const Controller = {
         inspect: inspectInstance,
         list: listInstances,
         open: openInstance,
+        code: codeInstance,
+        path: pathInstance,
         undeploy: undeployInstance,
+        redeploy: redeployInstance,
         update: updateInstance,
+        resolve: resolveInstance,
+        adapt: adaptInstance,
+        unadapt: unadaptInstance,
     },
     query: {
         run: runQuery,
     },
     orchestrators: {
         enable: enableOrchestrator,
-        initOpera: initOpera,
-        initOperaWSL: initOperaWSL,
+        initxOpera: initxOpera,
+        initxOperaWSL: initxOperaWSL,
         initUnfurl: initUnfurl,
         initUnfurlWSL: initUnfurlWSL,
     },
@@ -53,8 +73,10 @@ const Controller = {
     setup: {
         clean: cleanSetup,
         init: initSetup,
-        open: openHome,
+        open: openSetup,
         benchmark: benchmarkSetup,
+        path: pathSetup,
+        code: codeSetup,
     },
     template: {
         resolve: resolveTemplate,
@@ -67,6 +89,14 @@ const Controller = {
         inspect: inspectTemplate,
         list: listTemplates,
         open: openTemplate,
+        code: codeTemplate,
+        path: pathTemplate,
+    },
+    sensors: {
+        compute: computeSensor,
+        location: locationSensor,
+        weekday: weekdaySensor,
+        file: fileSensor,
     },
 }
 

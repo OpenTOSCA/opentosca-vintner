@@ -1,7 +1,11 @@
 import {Template} from '#repository/templates'
+import lock from '#utils/lock'
 
-export type TemplatesDeleteArguments = {template: string}
+export type TemplatesDeleteOptions = {template: string}
 
-export default async function (options: TemplatesDeleteArguments) {
-    new Template(options.template).delete()
+export default async function (options: TemplatesDeleteOptions) {
+    const template = new Template(options.template)
+    await lock.try(template.getLockKey(), () => {
+        template.delete()
+    })
 }

@@ -35,19 +35,6 @@ The following variability preset is used.
 ```
 <% } -%>
 
-<% if (test.config?.resolver) { -%>
-## Resolver Configuration
-
-The following resolver configuration is used.
-
-```yaml linenums="1"
-<%- utils.toYAML(Object.keys(test.config.resolver).reduce((map, key) => {
-    map[utils.toSnakeCase(key)] = test.config.resolver[key]
-    return map
-}, {})) %>
-```
-<% } -%>
-
 <% if (test.expected) { -%>
 ## Variability-Resolved Service Template
 

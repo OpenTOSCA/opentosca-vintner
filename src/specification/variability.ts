@@ -1,9 +1,36 @@
-import {InputAssignmentMap, InputDefinitionMap} from './topology-template'
+import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
+    options?: VariabilityResolvingOptions
+}
+
+export type VariabilityResolvingOptions = {
+    enable_node_default_condition?: boolean
+    enable_relation_default_condition?: boolean
+    enable_policy_default_condition?: boolean
+    enable_group_default_condition?: boolean
+    enable_artifact_default_condition?: boolean
+    enable_property_default_condition?: boolean
+} & {
+    enable_node_pruning?: boolean
+    enable_relation_pruning?: boolean
+    enable_policy_pruning?: boolean
+    enable_group_pruning?: boolean
+    enable_artifact_pruning?: boolean
+    enable_property_pruning?: boolean
+} & {
+    disable_consistency_checks?: boolean
+    disable_relation_source_consistency_check?: boolean
+    disable_relation_target_consistency_check?: boolean
+    disable_ambiguous_hosting_consistency_check?: boolean
+    disable_expected_hosting_consistency_check?: boolean
+    disable_missing_artifact_parent_consistency_check?: boolean
+    disable_ambiguous_artifact_consistency_check?: boolean
+    disable_missing_property_parent_consistency_check?: boolean
+    disable_ambiguous_property_consistency_check?: boolean
 }
 
 export type InputAssignmentPresetMap = {[key: string]: InputAssignmentPreset}
@@ -60,6 +87,8 @@ export type VariabilityExpression =
           get_target_presence?: 'SELF'
           has_present_targets?: VariabilityExpression
           has_present_members?: VariabilityExpression
+          is_target?: string
+          was_target?: string
           concat?: VariabilityExpression[]
           join?: [VariabilityExpression[], string]
           token?: [VariabilityExpression, string, number]
@@ -76,9 +105,24 @@ export type VariabilityExpression =
           min_length?: [VariabilityExpression, VariabilityExpression]
           max_length?: [VariabilityExpression, VariabilityExpression]
 
+          // Analytical operators
+          sum?: number[]
+          count?: number[]
+          min?: number[]
+          max?: number[]
+          mean?: number[]
+          median?: number[]
+          variance?: number[]
+          standard_deviation?: number[]
+          linear_regression?: [[number, number][], number]
+          polynomial_regression?: [[number, number][], number, number]
+          logarithmic_regression?: [[number, number][], number]
+          exponential_regression?: [[number, number][], number]
+
+          // Date operators
+          get_current_weekday?: []
+
           // Cache
-          cached_result?: boolean | string | number
+          cached_result?: InputAssignmentValue
       }
-    | string
-    | number
-    | boolean
+    | InputAssignmentValue

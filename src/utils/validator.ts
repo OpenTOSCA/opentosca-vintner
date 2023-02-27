@@ -43,8 +43,17 @@ export function ensureNumber(element: unknown): asserts element is number {
     if (!isNumber(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a number`)
 }
 
+export function ensureNumbers(element: unknown[]): asserts element is number[] {
+    ensureArray(element)
+    element.forEach(ensureNumber)
+}
+
 export function isArray(element: unknown): element is Array<unknown> {
     return Array.isArray(element)
+}
+
+export function ensureArray(element: unknown[]): asserts element is Array<unknown> {
+    if (!isArray(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an array`)
 }
 
 export function isObject(element: unknown): element is object {
@@ -53,4 +62,9 @@ export function isObject(element: unknown): element is object {
 
 export function ensureObject(element: unknown): asserts element is object {
     if (!isObject(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an object`)
+}
+
+export function ensureName(name: string) {
+    if (!name.match(/^[a-z-]+$/))
+        throw new Error(`Name "${name}" not allowed. Only small characters and hyphens are allowed.`)
 }

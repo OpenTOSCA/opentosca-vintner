@@ -36,9 +36,11 @@ A Variability Definition defines Variability Inputs, Variability Presets, and Va
 
 | Keyname     | Mandatory | Type                                         | Description                                                                       |
 |-------------|-----------|----------------------------------------------|-----------------------------------------------------------------------------------|
-| inputs      | yes       | Map(String, InputParameterDefinition)        | A required map of Input Parameter Definitions used inside Variability Conditions. |
+| inputs      | yes       | Map(String, VariabilityInputDefinition)      | A required map of Input Parameter Definitions used inside Variability Conditions. |
 | presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
 | expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
+| options | no | Map(String, Boolean)                         | An optional map of Variability Resolving options.                                |
+
 
 The following non-normative and incomplete example contains a Variability Definition which declares the Variability
 Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
@@ -66,6 +68,59 @@ variability:
         is_dev: {equal: [{get_variability_input: mode}, dev]}
         is_prod: {equal: [{get_variability_input: mode}, prod]}
 ```
+
+
+## Variability Input Definition
+
+A variability input definition is an input parameter definition which additionally has the following keywords.
+
+| Keyname            | Mandatory | Type                                                                          | Description                                                        |
+|--------------------|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| default_expression | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as default. |
+
+
+## Variability Resolving Options
+
+There are the following variability resolving options. 
+
+| Keyname                                           | Mandatory | Type                                  | Description                                                      |
+|---------------------------------------------------|-----------|---------------------------------------|------------------------------------------------------------------|
+| enable_node_default_condition                     |  false  | boolean | enable default condition for nodes                               |
+| enable_relation_default_condition                 |  false  | boolean | enable default condition for relations                           |
+| enable_policy_default_condition                   |  false  | boolean | enable default condition for policies                            |
+| enable_group_default_condition                    |  false  | boolean | enable default condition for groups                              |
+| enable_artifact_default_condition                 |  false  | boolean | enable default condition for artifacts                           |
+| enable_property_default_condition                 |  false  | boolean | enable default condition for properties                          |
+| enable_node_pruning                               |  false  | boolean | enable pruning of nodes                                          |
+| enable_relation_pruning                           |  false  | boolean | enable pruning of relations                                      |
+| enable_policy_pruning                             |  false  | boolean | enable pruning of policies                                       |
+| enable_group_pruning                              |  false  | boolean | enable pruning of groups                                         |
+| enable_artifact_pruning                           |  false  | boolean | enable pruning of artifacts                                      |
+| enable_property_pruning                           |  false  | boolean | enable pruning of properties                                     |
+| disable_consistency_checks                        |  false  | boolean | disable all consistency checks                                   |
+| disable_relation_source_consistency_check         |  false  | boolean | disable consistency check regarding relation sources             |
+| disable_relation_target_consistency_check         |  false  | boolean | disable consistency check regarding relation targets             |
+| disable_ambiguous_hosting_consistency_check       |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable_expected_hosting_consistency_check        |  false  | boolean | disable consistency check regarding expected hosting relation    |
+| disable_missing_artifact_parent_consistency_check |  false  | boolean | disable consistency check regarding node of artifact             |
+| disable_ambiguous_artifact_consistency_check      |  false  | boolean | disable consistency check regarding ambiguous artifacts          |
+| disable_missing_property_parent_consistency_check |  false  | boolean | disable consistency check regarding node of a property           |
+| disable_ambiguous_property_consistency_check      |  false  | boolean | disable consistency check regarding ambiguous properties         |
+
+
+## Variability Default Conditions
+
+To further support modeling, the following default conditions can be assigned:
+
+
+| Element                | Default Conditions                                                                                                                                      |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Node Template          | Check if the node template is target of at least one present relation or if the node template is not target of at least one present or absent relation. |
+| Property               | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present.                                    |
+| Requirement Assignment | Check if the source and target of the requirement assignment is present.                                                                                |
+| Policy                 | Check if the policy has any targets which are present.                                                                                                  |
+| Group                  | Check if the group has any members which are present.                                                                                                   |
+| Artifact               | Check if the node template of the artifact is present.                                                                                                  |
 
 
 ## Variability Preset Definition
@@ -196,6 +251,7 @@ Such a group is also called Variability Group.
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
 conditions are satisfied.
@@ -226,6 +282,7 @@ These conditions must be satisfied otherwise the respective policy is not presen
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the
 Variability Condition `is_prod` assigned.
@@ -276,6 +333,7 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 
 
 ## Topology Template Input Definition
@@ -339,9 +397,9 @@ tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
-## Boolean Operators
+## Logical Operators
 
-The following Boolean operators can be used inside a Variability Expression.
+The following logical operators can be used inside a Variability Expression.
 
 | Keyname | Input                                      | Output  | Description                                        |
 |---------|--------------------------------------------|---------|----------------------------------------------------|
@@ -378,9 +436,13 @@ The following intrinsic functions can be used inside a Variability Expression.
 | get_target_presence        | SELF                                                       | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
 | has_present_targets        | String                                                     | Boolean | Returns if any target of the given policy is present.                                                                    |
 | has_present_members        | String                                                     | Boolean | Returns if any member of the given group is present.                                                                     |
+| is_target                  | String                                                     | Boolean | Returns if the node template is target of at least one present incoming relationship.                                    |
+| was_target                 | String                                                     | Boolean | Returns if the node template is target of at least one present or absent incoming relationship.                          |
 | concat                     | List(ValueExpression)                                      | String  | Concatenates the given values.                                                                                           |
 | join                       | Tuple(List(ValueExpression), String)                       | String  | Joins the given values using the provided delimiter.                                                                     |
 | token                      | Tuple(ValueExpression, String, Number)                     | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+
+
 
 ## Constraint Operators
 
@@ -394,9 +456,38 @@ The following constraint operators can be used inside a Variability Expression.
 | less_than        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
 | less_or_equal    | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less or equal to the second value.    |
 | in_range         | Tuple(NumericExpression, Tuple(NumericExpression, NumericExpression)) | Boolean | Evaluates if the value is in a given range.                           |
+| valid_values     | Tuple(ValueExpression, List(ValueExpression))                         | Boolean | Evaluates if the value is element of the list.                        |
 | length           | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a given length.                            |
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
+
+## Analytical Operators
+
+The following analytical operators can be used inside a Variability Expression.
+
+| Keyname                | Input                                             | Output  | Description                                          |
+|------------------------|---------------------------------------------------|---------|------------------------------------------------------|
+| sum                    | List(Number)                                      | Number  | Returns the sum of the given values.                 |
+| count                  | List(Number)                                      | Number | Returns the count of the given values.               |
+| min                    | List(Number)                                      | Number | Returns the min of the given values.                 |
+| max                    | List(Number)                                      | Number | Returns the max of the given values.                 |
+| mean                   | List(Number)                                      | Number | Returns the mean of the given values.                |
+| median                 | List(Number)                                      | Number | Returns the median of the given values.              |
+| variance               | List(Number)                                      | Number | Returns the variance of the given values.            |
+| standard_deviation     | List(Number)                                      | Number | Returns the standard deviation of the given values.  |
+| linear_regression      | List(List(Tuple(Number, Number)), Number)         | Number | Returns the prediction using linear regression.      |
+| polynomial_regression  | List(List(Tuple(Number, Number)), Number, Number) | Number | Returns the prediction using polynomial regression.  |
+| logarithmic_regression | List(List(Tuple(Number, Number)), Number)         | Number | Returns the prediction using logarithmic regression. |
+| exponential_regression | List(List(Tuple(Number, Number)), Number)         | Number | Returns the prediction using exponential regression. |
+
+
+## Date Operators
+
+The following date operators can be used inside a Variability Expression.
+
+| Keyname             | Input              | Output | Description                                     |
+|---------------------|--------------------|--------|-------------------------------------------------|
+| get_current_weekday | Empty List | String | Returns the current weekday. |
 
 ## Processing
 
@@ -408,6 +499,7 @@ Service Template.
 
 To resolve the variability in a Variable Service Template, conduct the following steps:
 
+1. Retrieve Variability Inputs Assignments.
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
 1. Remove all Node Templates which are not present.
 1. Remove all Node Template Properties which are not present.
@@ -420,9 +512,14 @@ To resolve the variability in a Variable Service Template, conduct the following
 1. Remove all Group Members which are not present from Group Template.
 1. Remove all Policy Templates which are not present.
 1. Remove all Policy Targets which are not present from Policy Template.
-1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node
-   Templates.
+1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
+
+### Retrieve Variability Inputs Assignments
+
+Variability Inputs can be assigned either directly or indirectly using possibly multiple variability presets.
+Thereby, first the variability presets are applied in the order they are specified, and then directly assigned inputs.
+Thus, directly assigned variability inputs have the highest priority.
 
 ### Check Element Presence
 
@@ -433,29 +530,6 @@ To check if an element is present, check that all assigned conditions are satisf
 1. (Optional) Assign default conditions if no conditions have been collected yet.
 1. (Optional) Assign pruning conditions.
 1. The element is present only if all conditions are satisfied.
-
-### Optional Default Conditions
-
-To further support modeling, the following default conditions can be assigned:
-
-
-| Element                        | Default Conditions                                                   |
-|--------------------------------|----------------------------------------------------------------------|
-| Node Template Property         | Check if the node template of the property is present.               |
-| Relationship Template Property | Check if the relationship template of the property is present.       |
-| Requirement Assignment         | Check if the node template of the requirement assignment is present. |
-| Policy                         | Check if the policy has any targets which are present.               |
-| Group                          | Check if the group has any members which are present.                |
-| Artifact                       | Check if the node template of the artifact is present.               |
-
-### Optional Pruning Conditions
-
-To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions. 
-For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
-This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
-Such pruning propagates through the whole topology. 
-For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
-
 
 ### Check Consistency
 
@@ -475,6 +549,15 @@ Since the derived Service Template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
 some or all of these consistency steps might be omitted.
 
+### Pruning Elements
+
+To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
+For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
+This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
+Such pruning propagates through the whole topology.
+For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
+
+
 ### Processing Errors
 
 When variability is resolved, the following errors might be thrown:
@@ -492,9 +575,9 @@ When variability is resolved, the following errors might be thrown:
 | Ambiguous Artifact         | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous           | 
 | Missing Property Parent    | Node/ Relation "${node.name}" of property "${property.name}" does not exist                 | 
 | Ambiguous Property         | Property "${property.name}@${property.index}" of node/ relation "${node.name}" is ambiguous | 
-| Ambiguous Default Property | Property "${property.name}" of node/ relation "${node.name}" has multiple defaults          | 
+| Ambiguous Default Property | Property "${property.name}" of ${parent.type} "${parent.name}" has multiple defaults        | 
 | Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
-| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults         | 
+| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults                 | 
 
 
 ## Variability Tests
@@ -524,12 +607,13 @@ my-csar/
 
 The `test.yaml` file describes and configures the test and has the following structure.
 
-| Keyname     | Mandatory | Type   | Description                                            |
-|-------------|-----------|--------|--------------------------------------------------------|
-| name        | false     | String | Display name of the test case.                         | 
-| description | false     | String | Description of the test case.                          | 
-| preset      | false     | String | Variability Preset to used when resolving variability. | 
-| error       | false     | String | The expected error that is thrown.                     | 
+| Keyname     | Mandatory | Type                       | Description                                                                                 |
+|-------------|-----------|----------------------------|---------------------------------------------------------------------------------------------|
+| name        | false     | String                     | Display name of the test case.                                                              | 
+| description | false     | String                     | Description of the test case.                                                               | 
+| presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                      | 
+| error       | false     | String                     | The expected error that is thrown.                                                          | 
+| expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
 
 ## Conformance Test Suite
 

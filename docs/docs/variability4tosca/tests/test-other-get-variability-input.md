@@ -13,6 +13,10 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    inputs:
+      name:
+        type: string
   node_templates:
     container:
       type: container
@@ -29,7 +33,6 @@ When resolving variability, the following variability inputs shall be used.
 ```yaml linenums="1"
 name: Miles
 ```
-
 
 
 ## Variability-Resolved Service Template
