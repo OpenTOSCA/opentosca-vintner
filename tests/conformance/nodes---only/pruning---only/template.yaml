@@ -5,6 +5,7 @@ topology_template:
         options:
             enable_node_pruning: true
             enable_relation_pruning: true
+
     node_templates:
         node_one:
             type: node_one
@@ -19,6 +20,7 @@ topology_template:
             conditions: false
             requirements:
                 - relation_three: node_three
+                - relation_five: node_five
 
         node_three:
             type: node_three
@@ -26,3 +28,11 @@ topology_template:
 
         node_four:
             type: node_four
+
+        node_five:
+            type: node_five
+
+        node_six:
+            type: node_six
+            requirements:
+                - relation_six: node_five
