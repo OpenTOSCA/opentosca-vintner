@@ -1,0 +1,16 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    node_templates:
+        node_one:
+            type: node_one
+
+        node_two:
+            type: node_two
+            requirements:
+                - relation_two_one: node_one
+
+        node_three:
+            type: node_three
+            requirements:
+                - relation_three_one: node_one

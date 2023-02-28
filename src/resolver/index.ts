@@ -80,11 +80,17 @@ async function loadInputs(file?: string) {
     return files.loadYAML<InputAssignmentMap>(file)
 }
 
+type Presence = 'present' | 'absent' | 'unknown'
+function isPresent(element?: ConditionalElementBase) {
+    if (validator.isUndefined(element)) return false
+    return element.presence === 'present'
+}
+
 type ConditionalElementBase = {
     type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
     name: string
     display: string
-    present?: boolean
+    presence?: Presence
     conditions: VariabilityExpression[]
 }
 
@@ -637,22 +643,43 @@ export class VariabilityResolver {
     }
 
     resolve() {
-        for (const node of this.nodes) this.checkPresence(node)
-        for (const relation of this.relations) this.checkPresence(relation)
-        for (const input of this.inputs) this.checkPresence(input)
-        for (const group of this.groups) this.checkPresence(group)
-        for (const policy of this.policies) this.checkPresence(policy)
-        for (const artifact of this.artifacts) this.checkPresence(artifact)
-        for (const property of this.properties) this.checkPresence(property)
+        for (const node of this.nodes) this.checkPresence(node, true)
+        for (const relation of this.relations) this.checkPresence(relation, true)
+        for (const input of this.inputs) this.checkPresence(input, true)
+        for (const group of this.groups) this.checkPresence(group, true)
+        for (const policy of this.policies) this.checkPresence(policy, true)
+        for (const artifact of this.artifacts) this.checkPresence(artifact, true)
+        for (const property of this.properties) this.checkPresence(property, true)
         return this
     }
 
-    checkPresence(element: ConditionalElement) {
+    private visited: Set<ConditionalElement> = new Set()
+
+    checkPresence(element: ConditionalElement, first = false) {
+        console.log({element: element.display, first})
+        this._checkPresence(element, first)
+        console.log({element: element.display, first, present: element.presence})
+        return element.presence
+    }
+
+    _checkPresence(element: ConditionalElement, first?: boolean) {
         // Variability group are never present
-        if (element.type === 'group' && element.variability) element.present = false
+        if (element.type === 'group' && element.variability) element.presence = 'absent'
 
         // Check if presence already has been evaluated
-        if (validator.isDefined(element.present)) return element.present
+        if (validator.isDefined(element.presence)) {
+            console.log('already')
+            return element.presence
+        }
+
+        // Detect circles
+        if (first) this.visited = new Set()
+        if (this.visited.has(element)) {
+            // TODO: cant do this! need to kinda wait for the others
+            console.log('circle')
+            return false
+        }
+        this.visited.add(element)
 
         // Collect assigned conditions
         let conditions = [...element.conditions]
@@ -770,9 +797,12 @@ export class VariabilityResolver {
 
         // Evaluate assigned conditions
         const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
-        element.present = present
+        element.presence = present ? 'present' : 'absent'
 
-        return present
+        // Cleanup circle detection
+        this.visited = new Set()
+
+        return element.presence
     }
 
     getVariabilityResolvingOptions() {
@@ -782,13 +812,13 @@ export class VariabilityResolver {
     checkConsistency() {
         if (this.getVariabilityResolvingOptions().disable_consistency_checks) return this
 
-        const relations = this.relations.filter(relation => relation.present)
-        const nodes = this.nodes.filter(node => node.present)
+        const relations = this.relations.filter(isPresent)
+        const nodes = this.nodes.filter(isPresent)
 
         // Ensure that each relation source exists
         if (!this.getVariabilityResolvingOptions().disable_relation_source_consistency_check) {
             for (const relation of relations) {
-                if (!this.nodesMap.get(relation.source)?.present)
+                if (!isPresent(this.nodesMap.get(relation.source)))
                     throw new Error(
                         `Relation source "${relation.source}" of relation "${relation.display}" does not exist`
                     )
@@ -798,7 +828,7 @@ export class VariabilityResolver {
         // Ensure that each relation target exists
         if (!this.getVariabilityResolvingOptions().disable_relation_target_consistency_check) {
             for (const relation of relations) {
-                if (!this.nodesMap.get(relation.target)?.present)
+                if (isPresent(this.nodesMap.get(relation.target)))
                     throw new Error(
                         `Relation target "${relation.target}" of relation "${relation.display}" does not exist`
                     )
@@ -809,7 +839,7 @@ export class VariabilityResolver {
         if (!this.getVariabilityResolvingOptions().disable_ambiguous_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source === node.name && relation.name === 'host' && relation.present
+                    relation => relation.source === node.name && relation.name === 'host' && isPresent(relation)
                 )
                 if (relations.length > 1) throw new Error(`Node "${node.display}" has more than one hosting relations`)
             }
@@ -822,16 +852,16 @@ export class VariabilityResolver {
                     relation => relation.source === node.name && relation.name === 'host'
                 )
 
-                if (relations.length !== 0 && !relations.some(relation => relation.present))
+                if (relations.length !== 0 && !relations.some(isPresent))
                     throw new Error(`Node "${node.display}" requires a hosting relation`)
             }
         }
 
         // Ensure that node of each artifact exists
         if (!this.getVariabilityResolvingOptions().disable_missing_artifact_parent_consistency_check) {
-            const artifacts = this.artifacts.filter(artifact => artifact.present)
+            const artifacts = this.artifacts.filter(isPresent)
             for (const artifact of artifacts) {
-                if (!artifact.node.present)
+                if (!isPresent(artifact.node))
                     throw new Error(`Node "${artifact.node.display}" of artifact "${artifact.display}" does not exist`)
             }
         }
@@ -840,7 +870,7 @@ export class VariabilityResolver {
         if (!this.getVariabilityResolvingOptions().disable_ambiguous_artifact_consistency_check) {
             for (const node of this.nodes) {
                 const names = new Set()
-                for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
+                for (const artifact of node.artifacts.filter(isPresent)) {
                     if (names.has(artifact.name))
                         throw new Error(`Artifact "${artifact.display}" of node "${node.display}" is ambiguous`)
                     names.add(artifact.name)
@@ -850,8 +880,8 @@ export class VariabilityResolver {
 
         // Ensure that node of each present property exists
         if (!this.getVariabilityResolvingOptions().disable_missing_property_parent_consistency_check) {
-            for (const property of this.properties.filter(property => property.present)) {
-                if (!property.parent.present) {
+            for (const property of this.properties.filter(isPresent)) {
+                if (!isPresent(property.parent)) {
                     if (property.parent.type === 'node')
                         throw new Error(
                             `Node "${property.parent.display}" of property "${property.display}" does not exist`
@@ -886,7 +916,7 @@ export class VariabilityResolver {
         if (!this.getVariabilityResolvingOptions().disable_ambiguous_property_consistency_check) {
             for (const node of this.nodes) {
                 const names = new Set()
-                for (const property of node.properties.filter(property => property.present)) {
+                for (const property of node.properties.filter(isPresent)) {
                     if (names.has(property.name))
                         throw new Error(`Property "${property.display}" of node "${node.display}" is ambiguous`)
                     names.add(property.name)
@@ -903,18 +933,16 @@ export class VariabilityResolver {
     ) {
         if (validator.isString(template)) return
 
-        template.properties = element.properties
-            .filter(it => it.present)
-            .reduce<PropertyAssignmentMap>((map, property) => {
-                if (validator.isDefined(property)) {
-                    if (validator.isDefined(property.value)) map[property.name] = property.value
-                    if (validator.isDefined(property.expression))
-                        map[property.name] = this.evaluateVariabilityExpression(property.expression, {
-                            element: property,
-                        })
-                }
-                return map
-            }, {})
+        template.properties = element.properties.filter(isPresent).reduce<PropertyAssignmentMap>((map, property) => {
+            if (validator.isDefined(property)) {
+                if (validator.isDefined(property.value)) map[property.name] = property.value
+                if (validator.isDefined(property.expression))
+                    map[property.name] = this.evaluateVariabilityExpression(property.expression, {
+                        element: property,
+                    })
+            }
+            return map
+        }, {})
 
         if (utils.isEmpty(template.properties)) delete template.properties
     }
@@ -923,7 +951,7 @@ export class VariabilityResolver {
         // Delete node templates which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.node_templates)) {
             this.serviceTemplate.topology_template!.node_templates = this.nodes
-                .filter(node => node.present)
+                .filter(isPresent)
                 .reduce<NodeTemplateMap>((map, node) => {
                     const template = node._raw
 
@@ -931,24 +959,22 @@ export class VariabilityResolver {
                     this.transformProperties(node, template)
 
                     // Delete requirement assignment which are not present
-                    template.requirements = node.outgoing
-                        .filter(it => it.present)
-                        .map(relation => {
-                            const assignment = relation._raw
-                            if (!validator.isString(assignment)) {
-                                delete assignment.conditions
-                                delete assignment.default_alternative
-                            }
+                    template.requirements = node.outgoing.filter(isPresent).map(relation => {
+                        const assignment = relation._raw
+                        if (!validator.isString(assignment)) {
+                            delete assignment.conditions
+                            delete assignment.default_alternative
+                        }
 
-                            const map: RequirementAssignmentMap = {}
-                            map[relation.name] = assignment
-                            return map
-                        })
+                        const map: RequirementAssignmentMap = {}
+                        map[relation.name] = assignment
+                        return map
+                    })
                     if (utils.isEmpty(template.requirements)) delete template.requirements
 
                     // Delete all artifacts which are not present
                     template.artifacts = node.artifacts
-                        .filter(it => it.present)
+                        .filter(isPresent)
                         .reduce<ArtifactDefinitionMap>((map, artifact) => {
                             if (!validator.isString(artifact._raw)) {
                                 delete artifact._raw.conditions
@@ -977,7 +1003,7 @@ export class VariabilityResolver {
         if (validator.isDefined(this.serviceTemplate?.topology_template?.relationship_templates)) {
             this.relations.forEach(relation => {
                 if (validator.isDefined(relation.relationship)) {
-                    if (!relation.present)
+                    if (!relation.presence)
                         delete this.serviceTemplate.topology_template!.relationship_templates![
                             relation.relationship.name
                         ]
@@ -994,7 +1020,7 @@ export class VariabilityResolver {
         // Delete all groups which are not present and remove all members which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.groups)) {
             this.serviceTemplate.topology_template!.groups = this.groups
-                .filter(group => group.present)
+                .filter(isPresent)
                 .reduce<GroupTemplateMap>((map, group) => {
                     const template = group._raw
 
@@ -1004,7 +1030,7 @@ export class VariabilityResolver {
                             element,
                             `Group member "${utils.prettyJSON(member)}" of group "${group.display}" does not exist`
                         )
-                        return element.present
+                        return isPresent(element)
                     })
 
                     this.transformProperties(group, template)
@@ -1023,7 +1049,7 @@ export class VariabilityResolver {
         // Delete all topology template inputs which are not present
         if (validator.isDefined(this.serviceTemplate.topology_template?.inputs)) {
             this.serviceTemplate.topology_template!.inputs = this.inputs
-                .filter(input => input.present)
+                .filter(isPresent)
                 .reduce<InputDefinitionMap>((map, input) => {
                     const template = input._raw
                     delete template.conditions
@@ -1039,31 +1065,29 @@ export class VariabilityResolver {
 
         // Delete all policy templates which are not present and remove all targets which are not present
         if (validator.isDefined(this.serviceTemplate?.topology_template?.policies)) {
-            this.serviceTemplate.topology_template!.policies = this.policies
-                .filter(policy => policy.present)
-                .map(policy => {
-                    const template = policy._raw
-                    delete template.conditions
-                    delete template.default_alternative
+            this.serviceTemplate.topology_template!.policies = this.policies.filter(isPresent).map(policy => {
+                const template = policy._raw
+                delete template.conditions
+                delete template.default_alternative
 
-                    this.transformProperties(policy, template)
+                this.transformProperties(policy, template)
 
-                    template.targets = template.targets?.filter(target => {
-                        const node = this.nodesMap.get(target)
-                        if (validator.isDefined(node)) return node.present
+                template.targets = template.targets?.filter(target => {
+                    const node = this.nodesMap.get(target)
+                    if (validator.isDefined(node)) return isPresent(node)
 
-                        const group = this.groupsMap.get(target)
-                        if (validator.isDefined(group)) return group.present
+                    const group = this.groupsMap.get(target)
+                    if (validator.isDefined(group)) return isPresent(group)
 
-                        throw new Error(
-                            `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
-                        )
-                    })
-
-                    const map: PolicyAssignmentMap = {}
-                    map[policy.name] = template
-                    return map
+                    throw new Error(
+                        `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
+                    )
                 })
+
+                const map: PolicyAssignmentMap = {}
+                map[policy.name] = template
+                return map
+            })
 
             if (utils.isEmpty(this.serviceTemplate.topology_template!.policies)) {
                 delete this.serviceTemplate.topology_template!.policies

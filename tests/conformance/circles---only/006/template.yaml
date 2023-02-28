@@ -1,0 +1,23 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            enable_node_pruning: true
+            enable_relation_pruning: true
+
+    node_templates:
+        node_one:
+            type: node_one
+
+        node_two:
+            type: node_two
+            conditions: {get_node_presence: node_one}
+            requirements:
+                - relation_two_one: node_one
+
+        node_three:
+            type: node_three
+            requirements:
+                - relation_three_one: node_one
+1
