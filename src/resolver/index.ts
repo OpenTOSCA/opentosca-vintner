@@ -657,9 +657,9 @@ export class VariabilityResolver {
 
     checkPresence(element: ConditionalElement, first = false) {
         console.log({element: element.display, first})
-        this._checkPresence(element, first)
+        const presence = this._checkPresence(element, first)
         console.log({element: element.display, first, present: element.presence})
-        return element.presence
+        return presence
     }
 
     _checkPresence(element: ConditionalElement, first?: boolean) {
