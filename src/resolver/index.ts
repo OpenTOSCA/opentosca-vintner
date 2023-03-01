@@ -17,6 +17,7 @@ import stats from 'stats-lite'
 import regression from 'regression'
 import {ensureArray, ensureDefined} from '#validator'
 import dayjs from 'dayjs'
+import EventEmitter from 'events'
 
 /**
  * Not documented since preparation for future work
@@ -80,7 +81,21 @@ async function loadInputs(file?: string) {
     return files.loadYAML<InputAssignmentMap>(file)
 }
 
-type Presence = 'present' | 'absent' | 'unknown'
+enum Presence {
+    PRESENT = 'present',
+    ABSENT = 'absent',
+    // TODO: could be element.present? since UNCERTAIN is never stored?!
+    UNCERTAIN = 'uncertain',
+}
+
+function ensurePresence(value: any): asserts value is Presence {
+    if (value === Presence.PRESENT) return
+    if (value === Presence.ABSENT) return
+    if (value === Presence.UNCERTAIN) return
+
+    throw new Error(`Value "${value}" is not presence value`)
+}
+
 function isPresent(element?: ConditionalElementBase) {
     if (validator.isUndefined(element)) return false
     return element.presence === 'present'
@@ -662,22 +677,41 @@ export class VariabilityResolver {
         return presence
     }
 
-    _checkPresence(element: ConditionalElement, first?: boolean) {
+    emitter = new EventEmitter()
+
+    listen() {
+        // TODO: requires conditions
+        // TODO: requires (all?!) events to listen on
+        // TODO: recheck results on update
+        const event = 'resolver_' + utils.generateNonce()
+        return {event}
+    }
+
+    emitPresence(element: ConditionalElement) {
+        const event = this.elementPresenceEvent(element)
+        this.emitter.emit(event)
+    }
+
+    elementPresenceEvent(element: ConditionalElement) {
+        return 'resolver_presence_' + element.type + '_' + element.display
+    }
+
+    _checkPresence(element: ConditionalElement, first?: boolean): {presence: Presence; event?: string} {
         // Variability group are never present
-        if (element.type === 'group' && element.variability) element.presence = 'absent'
+        if (element.type === 'group' && element.variability) element.presence = Presence.ABSENT
 
         // Check if presence already has been evaluated
         if (validator.isDefined(element.presence)) {
             console.log('already')
-            return element.presence
+            return {presence: element.presence}
         }
 
         // Detect circles
         if (first) this.visited = new Set()
         if (this.visited.has(element)) {
-            // TODO: cant do this! need to kinda wait for the others
             console.log('circle')
-            return false
+            // Tell caller to wait until presence is known
+            return {presence: Presence.UNCERTAIN, event: this.elementPresenceEvent(element)}
         }
         this.visited.add(element)
 
@@ -796,13 +830,29 @@ export class VariabilityResolver {
         }
 
         // Evaluate assigned conditions
-        const present = conditions.every(condition => this.evaluateVariabilityCondition(condition, {element}))
-        element.presence = present ? 'present' : 'absent'
+        const results = conditions.map(condition => this.evaluateVariabilityCondition(condition, {element}))
 
         // Cleanup circle detection
         this.visited = new Set()
 
-        return element.presence
+        // Since "and" then a single "false" is sufficient to decide
+        if (results.includes(Presence.ABSENT)) {
+            element.presence = Presence.ABSENT
+            this.emitPresence(element)
+            return {presence: element.presence}
+        }
+
+        // Can not decide currently
+        if (results.includes(Presence.UNCERTAIN)) {
+            const event = this.listen(conditions, results).event
+            return {presence: Presence.UNCERTAIN, event}
+        }
+
+        // Element is present since there is no "absent" or "uncertain"
+        // TODO: empty conditions?!
+        element.presence = Presence.PRESENT
+        this.emitPresence(element)
+        return {presence: element.presence}
     }
 
     getVariabilityResolvingOptions() {
@@ -1180,9 +1230,9 @@ export class VariabilityResolver {
         return condition
     }
 
-    evaluateVariabilityCondition(condition: VariabilityExpression, context: VariabilityExpressionContext): boolean {
+    evaluateVariabilityCondition(condition: VariabilityExpression, context: VariabilityExpressionContext): Presence {
         const result = this.evaluateVariabilityExpression(condition, context)
-        validator.ensureBoolean(result)
+        ensurePresence(result)
         return result
     }
 
@@ -1213,6 +1263,7 @@ export class VariabilityResolver {
         if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
                 const value = this.evaluateVariabilityExpression(element, context)
+                // TODO: this is not a boolean ... ?
                 validator.ensureBoolean(value)
                 return value
             })
