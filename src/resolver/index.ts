@@ -681,17 +681,30 @@ export class VariabilityResolver {
 
     emitter = new EventEmitter()
 
-    listen(conditions: VariabilityExpression[], results: ExpressionResult[]) {
-        // TODO: requires conditions
-        // TODO: requires (all?!) events to listen on
-        // TODO: recheck results on update
-        const event = 'resolver_' + utils.generateNonce()
+    listen(results: ExpressionResult[], fn: (result: ExpressionResult[]) => {done: boolean; result?: boolean}) {
+        const event = 'resolver_result_' + utils.generateNonce()
+        let done = false
+
+        for (const [index, result] of results.entries()) {
+            if (validator.isDefined(result.event)) {
+                this.emitter.on(result.event, (result: Presence) => {
+                    if (done) return
+                    results[index] = {result}
+
+                    const r = fn(results)
+                    done = r.done
+
+                    if (done) this.emitter.emit(event, r.result)
+                })
+            }
+        }
+
         return {event}
     }
 
     emitPresence(element: ConditionalElement) {
         const event = this.elementPresenceEvent(element)
-        this.emitter.emit(event)
+        this.emitter.emit(event, element.presence)
     }
 
     elementPresenceEvent(element: ConditionalElement) {
@@ -846,7 +859,17 @@ export class VariabilityResolver {
 
         // Can not decide currently
         if (validator.isDefined(results.find(it => it.result === Presence.UNCERTAIN))) {
-            const event = this.listen(conditions, results).event
+            const event = this.listen(results, results => {
+                if (validator.isDefined(results.find(it => it.result === Presence.ABSENT))) {
+                    return {done: true, result: false}
+                }
+
+                if (validator.isDefined(results.find(it => it.result === Presence.UNCERTAIN))) {
+                    return {done: false}
+                }
+
+                return {done: true, result: true}
+            }).event
             return {result: Presence.UNCERTAIN, event}
         }
 
@@ -1261,10 +1284,10 @@ export class VariabilityResolver {
         context: VariabilityExpressionContext
     ): ExpressionResult {
         validator.ensureDefined(condition, `Received condition that is undefined or null`)
-        if (validator.isString(condition)) return condition
-        if (validator.isBoolean(condition)) return condition
-        if (validator.isNumber(condition)) return condition
-        if (validator.isArray(condition)) return condition
+        if (validator.isString(condition)) return {result: condition}
+        if (validator.isBoolean(condition)) return {result: condition}
+        if (validator.isNumber(condition)) return {result: condition}
+        if (validator.isArray(condition)) return {result: condition}
 
         if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
@@ -1564,7 +1587,7 @@ export class VariabilityResolver {
             validator.ensureNumbers(elements)
             const min = _.min(elements)
             ensureDefined(min, `Minimum of "${JSON.stringify(elements)}" does not exist`)
-            return min
+            return {result: min}
         }
 
         if (validator.isDefined(condition.max)) {
@@ -1572,7 +1595,7 @@ export class VariabilityResolver {
             validator.ensureNumbers(elements)
             const max = _.max(elements)
             ensureDefined(max, `Maximum of "${JSON.stringify(elements)}" does not exist`)
-            return max
+            return {result: max}
         }
 
         if (validator.isDefined(condition.median)) {
@@ -1635,7 +1658,7 @@ export class VariabilityResolver {
             const prediction = condition.logarithmic_regression[1]
             validator.ensureNumber(prediction)
 
-            return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
+            return {result: utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])}
         }
         if (validator.isDefined(condition.exponential_regression)) {
             ensureArray(condition.exponential_regression)
@@ -1646,11 +1669,11 @@ export class VariabilityResolver {
             const prediction = condition.exponential_regression[1]
             validator.ensureNumber(prediction)
 
-            return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
+            return {result: utils.toFixed(regression.exponential(elements).predict(prediction)[1])}
         }
 
         if (validator.isDefined(condition.get_current_weekday)) {
-            return this.weekday
+            return {result: this.weekday}
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)
