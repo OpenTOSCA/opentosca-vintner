@@ -101,6 +101,8 @@ function isPresent(element?: ConditionalElementBase) {
     return element.presence === 'present'
 }
 
+type ExpressionResult = {result: InputAssignmentValue; event?: string}
+
 type ConditionalElementBase = {
     type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
     name: string
@@ -679,7 +681,7 @@ export class VariabilityResolver {
 
     emitter = new EventEmitter()
 
-    listen() {
+    listen(conditions: VariabilityExpression[], results: ExpressionResult[]) {
         // TODO: requires conditions
         // TODO: requires (all?!) events to listen on
         // TODO: recheck results on update
@@ -696,14 +698,14 @@ export class VariabilityResolver {
         return 'resolver_presence_' + element.type + '_' + element.display
     }
 
-    _checkPresence(element: ConditionalElement, first?: boolean): {presence: Presence; event?: string} {
+    _checkPresence(element: ConditionalElement, first?: boolean): ExpressionResult {
         // Variability group are never present
         if (element.type === 'group' && element.variability) element.presence = Presence.ABSENT
 
         // Check if presence already has been evaluated
         if (validator.isDefined(element.presence)) {
             console.log('already')
-            return {presence: element.presence}
+            return {result: element.presence}
         }
 
         // Detect circles
@@ -711,7 +713,7 @@ export class VariabilityResolver {
         if (this.visited.has(element)) {
             console.log('circle')
             // Tell caller to wait until presence is known
-            return {presence: Presence.UNCERTAIN, event: this.elementPresenceEvent(element)}
+            return {result: Presence.UNCERTAIN, event: this.elementPresenceEvent(element)}
         }
         this.visited.add(element)
 
@@ -836,23 +838,23 @@ export class VariabilityResolver {
         this.visited = new Set()
 
         // Since "and" then a single "false" is sufficient to decide
-        if (results.includes(Presence.ABSENT)) {
+        if (validator.isDefined(results.find(it => it.result === Presence.ABSENT))) {
             element.presence = Presence.ABSENT
             this.emitPresence(element)
-            return {presence: element.presence}
+            return {result: element.presence}
         }
 
         // Can not decide currently
-        if (results.includes(Presence.UNCERTAIN)) {
+        if (validator.isDefined(results.find(it => it.result === Presence.UNCERTAIN))) {
             const event = this.listen(conditions, results).event
-            return {presence: Presence.UNCERTAIN, event}
+            return {result: Presence.UNCERTAIN, event}
         }
 
         // Element is present since there is no "absent" or "uncertain"
         // TODO: empty conditions?!
         element.presence = Presence.PRESENT
         this.emitPresence(element)
-        return {presence: element.presence}
+        return {result: element.presence}
     }
 
     getVariabilityResolvingOptions() {
@@ -1230,16 +1232,19 @@ export class VariabilityResolver {
         return condition
     }
 
-    evaluateVariabilityCondition(condition: VariabilityExpression, context: VariabilityExpressionContext): Presence {
+    evaluateVariabilityCondition(
+        condition: VariabilityExpression,
+        context: VariabilityExpressionContext
+    ): ExpressionResult {
         const result = this.evaluateVariabilityExpression(condition, context)
         ensurePresence(result)
-        return result
+        return {result}
     }
 
     evaluateVariabilityExpression(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): InputAssignmentValue {
+    ): ExpressionResult {
         if (validator.isObject(condition) && !validator.isArray(condition)) {
             if (validator.isDefined(condition.cached_result)) return condition.cached_result
             const result = this.evaluateVariabilityExpressionRunner(condition, context)
@@ -1247,13 +1252,14 @@ export class VariabilityResolver {
             return result
         }
 
+        // TODO: logic to unwrap, e.g., on initial run?
         return this.evaluateVariabilityExpressionRunner(condition, context)
     }
 
     evaluateVariabilityExpressionRunner(
         condition: VariabilityExpression,
         context: VariabilityExpressionContext
-    ): InputAssignmentValue {
+    ): ExpressionResult {
         validator.ensureDefined(condition, `Received condition that is undefined or null`)
         if (validator.isString(condition)) return condition
         if (validator.isBoolean(condition)) return condition
