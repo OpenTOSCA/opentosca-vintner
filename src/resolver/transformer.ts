@@ -50,7 +50,7 @@ export default class Transformer {
         return this.graph.serviceTemplate
     }
 
-    transformNodes() {
+    private transformNodes() {
         // Delete node templates which are not present
         if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.node_templates)) {
             this.graph.serviceTemplate.topology_template!.node_templates = this.graph.nodes
@@ -105,7 +105,7 @@ export default class Transformer {
         }
     }
 
-    transformRelations() {
+    private transformRelations() {
         // Delete all relationship templates which have no present relations
         if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.relationship_templates)) {
             this.graph.relations.forEach(relation => {
@@ -125,7 +125,7 @@ export default class Transformer {
         }
     }
 
-    transformGroups() {
+    private transformGroups() {
         // Delete all groups which are not present and remove all members which are not present
         if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.groups)) {
             this.graph.serviceTemplate.topology_template!.groups = this.graph.groups
@@ -148,7 +148,7 @@ export default class Transformer {
         }
     }
 
-    transformPolicies() {
+    private transformPolicies() {
         // Delete all policy templates which are not present and remove all targets which are not present
         if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.policies)) {
             this.graph.serviceTemplate.topology_template!.policies = this.graph.policies
@@ -183,7 +183,7 @@ export default class Transformer {
         }
     }
 
-    transformInputs() {
+    private transformInputs() {
         // Delete all topology template inputs which are not present
         if (validator.isDefined(this.graph.serviceTemplate.topology_template?.inputs)) {
             this.graph.serviceTemplate.topology_template!.inputs = this.graph.inputs
@@ -202,7 +202,7 @@ export default class Transformer {
         }
     }
 
-    transformProperties(
+    private transformProperties(
         element: Node | Relation | Group | Policy | Artifact,
         template: NodeTemplate | RelationshipTemplate | GroupTemplate | PolicyTemplate | ArtifactDefinition
     ) {

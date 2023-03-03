@@ -124,7 +124,5 @@ export default class Checker {
                 }
             }
         }
-
-        return
     }
 }
