@@ -12,7 +12,7 @@ type VariabilityExpressionContext = {
     element?: ConditionalElement
 }
 
-export class Solver {
+export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
@@ -365,7 +365,7 @@ export class Solver {
         if (validator.isDefined(condition.get_node_presence)) {
             const name = this.evaluateVariabilityExpression(condition.get_node_presence, context)
             validator.ensureString(name)
-            return this.checkPresence(this.graph.getElement(name))
+            return this.checkPresence(this.graph.getNode(name))
         }
 
         if (validator.isDefined(condition.get_relation_presence)) {
@@ -375,7 +375,7 @@ export class Solver {
             const relation = this.evaluateVariabilityExpression(condition.get_relation_presence[1], context)
             validator.ensureStringOrNumber(relation)
 
-            return this.checkPresence(this.graph.getElement([node, relation]))
+            return this.checkPresence(this.graph.getRelation([node, relation]))
         }
 
         if (validator.isDefined(condition.get_source_presence)) {
@@ -384,7 +384,7 @@ export class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
             if (context?.element?.type !== 'relation')
                 throw new Error(`"get_source_presence" is only valid inside a relation`)
-            return this.checkPresence(this.graph.getElement(context.element.source))
+            return this.checkPresence(this.graph.getNode(context.element.source))
         }
 
         if (validator.isDefined(condition.get_target_presence)) {
@@ -393,7 +393,7 @@ export class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
             if (context?.element?.type !== 'relation')
                 throw new Error(`"get_target_presence" is only valid inside a relation`)
-            return this.checkPresence(this.graph.getElement(context.element.target))
+            return this.checkPresence(this.graph.getNode(context.element.target))
         }
 
         if (validator.isDefined(condition.has_present_targets)) {

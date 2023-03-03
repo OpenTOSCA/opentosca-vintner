@@ -10,6 +10,8 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
+import {mem} from 'systeminformation'
+import {ensureDefined} from '#validator'
 
 /**
  * Not documented since preparation for future work
@@ -42,6 +44,7 @@ export type Node = ConditionalElementBase & {
     properties: Property[]
     propertiesMap: Map<String, Property[]>
     _raw: NodeTemplate
+    _id: string
 }
 
 export type Property = ConditionalElementBase & {
@@ -63,6 +66,7 @@ export type Relation = ConditionalElementBase & {
     relationship?: Relationship
     default: boolean
     _raw: RequirementAssignment
+    _id: [string, string]
 }
 
 export type Relationship = {
@@ -132,223 +136,20 @@ export class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        // Deployment inputs
-        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.inputs).forEach(map => {
-            const [name, definition] = utils.firstEntry(map)
-            if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
+        // Inputs
+        this.populateInputs()
 
-            const input: Input = {
-                type: 'input',
-                name,
-                display: name,
-                conditions: utils.toList(definition.conditions),
-                _raw: definition,
-            }
-            this.inputs.push(input)
-            this.inputsMap.set(name, input)
-        })
-
-        // Node templates
-        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.node_templates).forEach(map => {
-            const [nodeName, nodeTemplate] = utils.firstEntry(map)
-            if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
-
-            const node: Node = {
-                type: 'node',
-                name: nodeName,
-                display: nodeName,
-                conditions: utils.toList(nodeTemplate.conditions),
-                ingoing: [],
-                outgoing: [],
-                outgoingMap: new Map(),
-                groups: [],
-                artifacts: [],
-                artifactsMap: new Map(),
-                properties: [],
-                propertiesMap: new Map(),
-                _raw: nodeTemplate,
-            }
-            this.nodes.push(node)
-            this.nodesMap.set(nodeName, node)
-
-            // Properties
-            this.populateProperties(node, nodeTemplate)
-
-            // Relations
-            nodeTemplate.requirements?.forEach(map => {
-                const [relationName, assignment] = utils.firstEntry(map)
-                const target = validator.isString(assignment) ? assignment : assignment.node
-
-                const relation: Relation = {
-                    type: 'relation',
-                    name: relationName,
-                    display: `${nodeName}.${relationName}`,
-                    source: nodeName,
-                    target,
-                    conditions: validator.isString(assignment)
-                        ? []
-                        : validator.isDefined(assignment.default_alternative)
-                        ? [false]
-                        : utils.toList(assignment.conditions),
-                    groups: [],
-                    properties: [],
-                    propertiesMap: new Map(),
-                    default: validator.isString(assignment) ? false : assignment.default_alternative || false,
-                    _raw: assignment,
-                }
-                if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
-                node.outgoingMap.get(relation.name)!.push(relation)
-                node.outgoing.push(relation)
-                this.relations.push(relation)
-
-                if (!validator.isString(assignment)) {
-                    if (validator.isString(assignment.relationship)) {
-                        const relationshipTemplate = (serviceTemplate.topology_template?.relationship_templates || {})[
-                            assignment.relationship
-                        ]
-                        validator.ensureDefined(
-                            relationshipTemplate,
-                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
-                        )
-
-                        if (this.relationshipsMap.has(assignment.relationship))
-                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
-
-                        const relationship: Relationship = {
-                            name: assignment.relationship,
-                            relation,
-                            _raw: relationshipTemplate,
-                        }
-
-                        this.relationshipsMap.set(assignment.relationship, relationship)
-                        relation.relationship = relationship
-
-                        // Properties
-                        this.populateProperties(relation, relationshipTemplate)
-                    }
-
-                    if (validator.isObject(assignment.relationship)) {
-                        throw new Error(
-                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
-                        )
-                    }
-                }
-            })
-
-            // Ensure that there are no multiple outgoing defaults
-            node.outgoingMap.forEach((relations, relationName) => {
-                const candidates = relations.filter(it => it.default)
-                if (candidates.length > 1) {
-                    throw new Error(`Relation "${relationName}" of node "${node.display}" has multiple defaults`)
-                }
-            })
-
-            // Artifacts
-            if (validator.isDefined(nodeTemplate.artifacts)) {
-                if (validator.isArray(nodeTemplate.artifacts)) {
-                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        this.populateArtifact(node, artifactMap, artifactIndex)
-                    }
-                } else {
-                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
-                        const map: ArtifactDefinitionMap = {}
-                        map[artifactName] = artifactDefinition
-                        this.populateArtifact(node, map)
-                    }
-                }
-                // Ensure that there is only one default artifact
-                node.artifactsMap.forEach((artifacts, artifactName) => {
-                    const candidates = artifacts.filter(it => it.default)
-                    if (candidates.length > 1) {
-                        throw new Error(`Artifact "${artifactName}" of node "${node.display}" has multiple defaults`)
-                    }
-                })
-            }
-        })
-
-        // Ensure that each relationship is used
-        for (const relationshipName of Object.keys(serviceTemplate.topology_template?.relationship_templates || {})) {
-            if (!this.relationshipsMap.has(relationshipName))
-                throw new Error(`Relation "${relationshipName}" is never used`)
-        }
-
-        // Assign ingoing relations to nodes
-        this.relations.forEach(relation => {
-            const node = this.nodesMap.get(relation.target)
-            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
-            node.ingoing.push(relation)
-        })
+        // Nodes and relations
+        this.populateNodesAndRelations()
 
         // Groups
-        this.getFromVariabilityPointMap(serviceTemplate.topology_template?.groups).forEach(map => {
-            const [name, template] = utils.firstEntry(map)
-            if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
-
-            const group: Group = {
-                type: 'group',
-                name,
-                display: name,
-                conditions: utils.toList(template.conditions),
-                variability: [
-                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
-                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
-                ].includes(template.type),
-                members: [],
-                _raw: template,
-                properties: [],
-                propertiesMap: new Map(),
-            }
-            this.groups.push(group)
-            this.groupsMap.set(name, group)
-
-            template.members.forEach(member => {
-                const element = this.getElement(member)
-                element.groups.push(group)
-                group.members.push(element)
-            })
-
-            this.populateProperties(group, template)
-        })
+        this.populateGroups()
 
         // Policies
-        if (
-            validator.isDefined(serviceTemplate.topology_template?.policies) &&
-            !validator.isArray(serviceTemplate.topology_template?.policies)
-        )
-            throw new Error(`Policies must be an array`)
-        serviceTemplate.topology_template?.policies?.forEach(map => {
-            const [name, template] = utils.firstEntry(map)
-            const policy: Policy = {
-                type: 'policy',
-                name,
-                display: name,
-                conditions: utils.toList(template.conditions),
-                targets: [],
-                _raw: template,
-                properties: [],
-                propertiesMap: new Map(),
-            }
-            this.policies.push(policy)
-
-            template.targets?.forEach(target => {
-                const node = this.nodesMap.get(target)
-                if (validator.isDefined(node)) {
-                    return policy.targets.push(node)
-                }
-
-                const group = this.groupsMap.get(target)
-                if (validator.isDefined(group)) {
-                    return policy.targets.push(group)
-                }
-
-                throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
-            })
-
-            this.populateProperties(policy, template)
-        })
+        this.populatePolicies()
     }
 
-    getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
+    private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (validator.isUndefined(data)) return []
         if (validator.isArray(data)) return data
         return Object.entries(data).map(([name, template]) => {
@@ -358,7 +159,7 @@ export class Graph {
         })
     }
 
-    populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
+    private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
         const artifact: Artifact = {
@@ -386,7 +187,7 @@ export class Graph {
         this.artifacts.push(artifact)
     }
 
-    populateProperties(
+    private populateProperties(
         element: Node | Relation | Policy | Group | Artifact,
         template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate | ArtifactDefinition
     ) {
@@ -521,10 +322,231 @@ export class Graph {
         })
     }
 
-    getElement(member: GroupMember): Node | Relation {
-        if (validator.isString(member)) return this.getNode(member)
-        if (validator.isArray(member)) return this.getRelation(member)
-        throw new Error(`Member "${utils.prettyJSON(member)}" has bad format`)
+    private populateInputs() {
+        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.inputs).forEach(map => {
+            const [name, definition] = utils.firstEntry(map)
+            if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
+
+            const input: Input = {
+                type: 'input',
+                name,
+                display: name,
+                conditions: utils.toList(definition.conditions),
+                _raw: definition,
+            }
+            this.inputs.push(input)
+            this.inputsMap.set(name, input)
+        })
+    }
+
+    private populateNodesAndRelations() {
+        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
+            const [nodeName, nodeTemplate] = utils.firstEntry(map)
+            if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
+
+            const node: Node = {
+                type: 'node',
+                name: nodeName,
+                display: nodeName,
+                conditions: utils.toList(nodeTemplate.conditions),
+                ingoing: [],
+                outgoing: [],
+                outgoingMap: new Map(),
+                groups: [],
+                artifacts: [],
+                artifactsMap: new Map(),
+                properties: [],
+                propertiesMap: new Map(),
+                _raw: nodeTemplate,
+                _id: nodeName,
+            }
+            this.nodes.push(node)
+            this.nodesMap.set(nodeName, node)
+
+            // Properties
+            this.populateProperties(node, nodeTemplate)
+
+            // Relations
+            nodeTemplate.requirements?.forEach(map => {
+                const [relationName, assignment] = utils.firstEntry(map)
+                const target = validator.isString(assignment) ? assignment : assignment.node
+
+                const relation: Relation = {
+                    type: 'relation',
+                    name: relationName,
+                    display: `${nodeName}.${relationName}`,
+                    source: nodeName,
+                    target,
+                    conditions: validator.isString(assignment)
+                        ? []
+                        : validator.isDefined(assignment.default_alternative)
+                        ? [false]
+                        : utils.toList(assignment.conditions),
+                    groups: [],
+                    properties: [],
+                    propertiesMap: new Map(),
+                    default: validator.isString(assignment) ? false : assignment.default_alternative || false,
+                    _raw: assignment,
+                    _id: [nodeName, relationName],
+                }
+                if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
+                node.outgoingMap.get(relation.name)!.push(relation)
+                node.outgoing.push(relation)
+                this.relations.push(relation)
+
+                if (!validator.isString(assignment)) {
+                    if (validator.isString(assignment.relationship)) {
+                        const relationshipTemplate = (this.serviceTemplate.topology_template?.relationship_templates ||
+                            {})[assignment.relationship]
+                        validator.ensureDefined(
+                            relationshipTemplate,
+                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
+                        )
+
+                        if (this.relationshipsMap.has(assignment.relationship))
+                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
+
+                        const relationship: Relationship = {
+                            name: assignment.relationship,
+                            relation,
+                            _raw: relationshipTemplate,
+                        }
+
+                        this.relationshipsMap.set(assignment.relationship, relationship)
+                        relation.relationship = relationship
+
+                        // Properties
+                        this.populateProperties(relation, relationshipTemplate)
+                    }
+
+                    if (validator.isObject(assignment.relationship)) {
+                        throw new Error(
+                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
+                        )
+                    }
+                }
+            })
+
+            // Ensure that there are no multiple outgoing defaults
+            node.outgoingMap.forEach((relations, relationName) => {
+                const candidates = relations.filter(it => it.default)
+                if (candidates.length > 1) {
+                    throw new Error(`Relation "${relationName}" of node "${node.display}" has multiple defaults`)
+                }
+            })
+
+            // Artifacts
+            if (validator.isDefined(nodeTemplate.artifacts)) {
+                if (validator.isArray(nodeTemplate.artifacts)) {
+                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
+                        this.populateArtifact(node, artifactMap, artifactIndex)
+                    }
+                } else {
+                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
+                        const map: ArtifactDefinitionMap = {}
+                        map[artifactName] = artifactDefinition
+                        this.populateArtifact(node, map)
+                    }
+                }
+                // Ensure that there is only one default artifact
+                node.artifactsMap.forEach((artifacts, artifactName) => {
+                    const candidates = artifacts.filter(it => it.default)
+                    if (candidates.length > 1) {
+                        throw new Error(`Artifact "${artifactName}" of node "${node.display}" has multiple defaults`)
+                    }
+                })
+            }
+        })
+
+        // Ensure that each relationship is used
+        for (const relationshipName of Object.keys(
+            this.serviceTemplate.topology_template?.relationship_templates || {}
+        )) {
+            if (!this.relationshipsMap.has(relationshipName))
+                throw new Error(`Relation "${relationshipName}" is never used`)
+        }
+
+        // Assign ingoing relations to nodes
+        this.relations.forEach(relation => {
+            const node = this.nodesMap.get(relation.target)
+            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
+            node.ingoing.push(relation)
+        })
+    }
+
+    private populateGroups() {
+        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.groups).forEach(map => {
+            const [name, template] = utils.firstEntry(map)
+            if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
+
+            const group: Group = {
+                type: 'group',
+                name,
+                display: name,
+                conditions: utils.toList(template.conditions),
+                variability: [
+                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
+                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
+                ].includes(template.type),
+                members: [],
+                _raw: template,
+                properties: [],
+                propertiesMap: new Map(),
+            }
+            this.groups.push(group)
+            this.groupsMap.set(name, group)
+
+            template.members.forEach(member => {
+                let element: Node | Relation | undefined
+
+                if (validator.isString(member)) element = this.getNode(member)
+                if (validator.isArray(member)) element = this.getRelation(member)
+                ensureDefined(element, `Member "${utils.prettyJSON(member)}" has bad format`)
+
+                element.groups.push(group)
+                group.members.push(element)
+            })
+
+            this.populateProperties(group, template)
+        })
+    }
+
+    private populatePolicies() {
+        if (
+            validator.isDefined(this.serviceTemplate.topology_template?.policies) &&
+            !validator.isArray(this.serviceTemplate.topology_template?.policies)
+        )
+            throw new Error(`Policies must be an array`)
+        this.serviceTemplate.topology_template?.policies?.forEach(map => {
+            const [name, template] = utils.firstEntry(map)
+            const policy: Policy = {
+                type: 'policy',
+                name,
+                display: name,
+                conditions: utils.toList(template.conditions),
+                targets: [],
+                _raw: template,
+                properties: [],
+                propertiesMap: new Map(),
+            }
+            this.policies.push(policy)
+
+            template.targets?.forEach(target => {
+                const node = this.nodesMap.get(target)
+                if (validator.isDefined(node)) {
+                    return policy.targets.push(node)
+                }
+
+                const group = this.groupsMap.get(target)
+                if (validator.isDefined(group)) {
+                    return policy.targets.push(group)
+                }
+
+                throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
+            })
+
+            this.populateProperties(policy, template)
+        })
     }
 
     getNode(member: string) {
@@ -574,3 +596,5 @@ export class Graph {
         return policy
     }
 }
+
+export default Graph

@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import {VariabilityExpression} from '#spec/variability'
-import {Solver} from '#resolver/solver'
+import Solver from '../../src/resolver/solver'
 
 function getDefaultSolver() {
     return new Solver({} as any)

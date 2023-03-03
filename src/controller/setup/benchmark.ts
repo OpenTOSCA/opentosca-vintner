@@ -1,11 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '#files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '#utils'
-import {Solver} from '#resolver/solver'
-import {Graph} from '#resolver/graph'
-import {check} from '#resolver/check'
-import {transform} from '#resolver/transform'
-import Resolver from '#resolver/resolver'
+import Resolver from '#resolver'
 
 type BenchmarkOptions = {
     io?: boolean

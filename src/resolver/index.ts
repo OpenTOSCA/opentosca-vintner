@@ -3,10 +3,10 @@ import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import * as featureIDE from '#utils/feature-ide'
 import {InputAssignmentMap} from '#spec/topology-template'
-import {Graph} from '#/resolver/graph'
-import {check} from '#/resolver/check'
-import {transform} from '#/resolver/transform'
-import {Solver} from '#resolver/solver'
+import Graph from './graph'
+import Checker from './checker'
+import Solver from './solver'
+import Transformer from './transformer'
 
 export default {
     resolve,
@@ -31,7 +31,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     // Generate graph
     const graph = new Graph(options.template)
 
-    // Load service template
+    // Create solver
     const solver = new Solver(graph, options.template.topology_template?.variability)
 
     // Apply variability presets
@@ -46,10 +46,10 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     solver.run()
 
     // Check consistency
-    check(graph, options.template.topology_template?.variability?.options)
+    new Checker(graph, options.template.topology_template?.variability?.options).run()
 
     // Transform to TOSCA compliant format
-    transform(graph, solver)
+    new Transformer(graph, solver).run()
 
     return {
         inputs: solver.getVariabilityInputs(),
