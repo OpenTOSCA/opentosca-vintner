@@ -117,6 +117,10 @@ export function now() {
     return dayjs().millisecond()
 }
 
+export function weekday() {
+    return dayjs().format('dddd').toLowerCase()
+}
+
 export async function sleep(ms = 1000) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }

@@ -8,7 +8,7 @@ import _ from 'lodash'
 import jsonDiff from 'json-diff'
 import hae from '#utils/hae'
 import Controller from '#controller'
-import Resolver from '#resolver'
+import Resolver from '#resolver/resolver'
 
 const cache: {[key: string]: InputAssignmentMap | undefined} = {}
 const queue: {[key: string]: InputAssignmentMap[] | undefined} = {}

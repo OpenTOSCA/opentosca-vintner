@@ -9,7 +9,7 @@
             "#controller/*": ["src/controller/*"],
             "#controller": ["src/controller"],
             "#repository/*": ["src/repository/*"],
-            "#resolver": ["src/resolver"],
+            "#resolver/*": ["src/resolver/*"],
             "#plugins/*": ["src/plugins/*"],
             "#plugins": ["src/plugins"],
             "#spec/*": ["src/specification/*"],
