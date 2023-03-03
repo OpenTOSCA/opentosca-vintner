@@ -1,22 +1,24 @@
 import {expect} from 'chai'
 import {VariabilityExpression} from '#spec/variability'
 import Solver from '../../src/resolver/solver'
+import Graph from '../../src/resolver/graph'
+import {TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
 function getDefaultSolver() {
-    return new Solver({} as any)
+    return new Solver(new Graph({tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0}))
 }
 
 describe('cache', () => {
     it('cache: caching', () => {
-        const resolver = getDefaultSolver()
+        const solver = getDefaultSolver()
         const condition: VariabilityExpression = {max_length: ['hallo', 4]}
-        resolver.evaluateVariabilityExpression(condition, {})
-        expect(condition.cached_result).to.equal(false)
+        solver.evaluateExpression(condition, {})
+        expect(condition._cached_result).to.equal(false)
     })
 
     it('cache: cached', () => {
-        const resolver = getDefaultSolver()
-        const result = resolver.evaluateVariabilityExpression({max_length: ['hallo', 4], cached_result: 'cached'}, {})
+        const solver = getDefaultSolver()
+        const result = solver.evaluateExpression({max_length: ['hallo', 4], _cached_result: 'cached'}, {})
         expect(result).to.equal('cached')
     })
 })

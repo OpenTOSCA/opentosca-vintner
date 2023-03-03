@@ -5,9 +5,9 @@ export default class Checker {
     private readonly graph: Graph
     private readonly options: ConsistencyOptions
 
-    constructor(graph: Graph, options: ConsistencyOptions = {}) {
+    constructor(graph: Graph) {
         this.graph = graph
-        this.options = options
+        this.options = graph.serviceTemplate.topology_template?.variability?.options || {}
     }
 
     run() {

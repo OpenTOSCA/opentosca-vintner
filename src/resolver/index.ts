@@ -32,27 +32,27 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     const graph = new Graph(options.template)
 
     // Create solver
-    const solver = new Solver(graph, options.template.topology_template?.variability)
+    const solver = new Solver(graph)
 
     // Apply variability presets
     for (const preset of options.presets) {
-        solver.setVariabilityPreset(preset)
+        solver.setPreset(preset)
     }
 
     // Apply variability inputs
-    solver.setVariabilityInputs(options.inputs)
+    solver.setInputs(options.inputs)
 
     // Resolve variability
     solver.run()
 
     // Check consistency
-    new Checker(graph, options.template.topology_template?.variability?.options).run()
+    new Checker(graph).run()
 
     // Transform to TOSCA compliant format
     new Transformer(graph, solver).run()
 
     return {
-        inputs: solver.getVariabilityInputs(),
+        inputs: solver.getInputs(),
         template: options.template,
     }
 }

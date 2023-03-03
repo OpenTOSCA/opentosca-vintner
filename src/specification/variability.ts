@@ -121,6 +121,6 @@ export type VariabilityExpression =
           get_current_weekday?: []
 
           // Cache
-          cached_result?: InputAssignmentValue
+          _cached_result?: InputAssignmentValue
       }
     | InputAssignmentValue

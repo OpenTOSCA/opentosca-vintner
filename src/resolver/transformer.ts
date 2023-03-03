@@ -6,7 +6,7 @@ import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definiti
 import * as validator from '#validator'
 import {PropertyAssignmentMap} from '#spec/property-assignments'
 import * as utils from '#utils'
-import {InputDefinitionMap} from '#spec/topology-template'
+import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {Artifact, Graph, Group, Node, Policy, Relation} from './graph'
 import Solver from './solver'
@@ -14,10 +14,12 @@ import Solver from './solver'
 export default class Transformer {
     private readonly graph: Graph
     private readonly solver: Solver
+    private readonly topology: TopologyTemplate
 
     constructor(graph: Graph, solver: Solver) {
         this.graph = graph
         this.solver = solver
+        this.topology = graph.serviceTemplate.topology_template || {}
     }
 
     run() {
@@ -40,20 +42,18 @@ export default class Transformer {
         this.graph.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
         // Delete variability definition
-        delete this.graph.serviceTemplate.topology_template?.variability
+        delete this.topology.variability
 
         // Delete empty topology template
-        if (utils.isEmpty(this.graph.serviceTemplate.topology_template)) {
+        if (utils.isEmpty(this.topology)) {
             delete this.graph.serviceTemplate.topology_template
         }
-
-        return this.graph.serviceTemplate
     }
 
     private transformNodes() {
         // Delete node templates which are not present
-        if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.node_templates)) {
-            this.graph.serviceTemplate.topology_template!.node_templates = this.graph.nodes
+        if (validator.isDefined(this.topology.node_templates)) {
+            this.topology.node_templates = this.graph.nodes
                 .filter(node => node.present)
                 .reduce<NodeTemplateMap>((map, node) => {
                     const template = node._raw
@@ -99,36 +99,33 @@ export default class Transformer {
                     return map
                 }, {})
 
-            if (utils.isEmpty(this.graph.serviceTemplate.topology_template!.node_templates)) {
-                delete this.graph.serviceTemplate.topology_template!.node_templates
+            if (utils.isEmpty(this.topology.node_templates)) {
+                delete this.topology.node_templates
             }
         }
     }
 
     private transformRelations() {
         // Delete all relationship templates which have no present relations
-        if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.relationship_templates)) {
+        if (validator.isDefined(this.topology.relationship_templates)) {
             this.graph.relations.forEach(relation => {
                 if (validator.isDefined(relation.relationship)) {
-                    if (!relation.present)
-                        delete this.graph.serviceTemplate.topology_template!.relationship_templates![
-                            relation.relationship.name
-                        ]
+                    if (!relation.present) delete this.topology.relationship_templates![relation.relationship.name]
 
                     this.transformProperties(relation, relation.relationship._raw)
                 }
             })
 
-            if (utils.isEmpty(this.graph.serviceTemplate.topology_template!.relationship_templates)) {
-                delete this.graph.serviceTemplate.topology_template!.relationship_templates
+            if (utils.isEmpty(this.topology.relationship_templates)) {
+                delete this.topology.relationship_templates
             }
         }
     }
 
     private transformGroups() {
         // Delete all groups which are not present and remove all members which are not present
-        if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.groups)) {
-            this.graph.serviceTemplate.topology_template!.groups = this.graph.groups
+        if (validator.isDefined(this.topology.groups)) {
+            this.topology.groups = this.graph.groups
                 .filter(group => group.present)
                 .reduce<GroupTemplateMap>((map, group) => {
                     const template = group._raw
@@ -142,16 +139,16 @@ export default class Transformer {
                     return map
                 }, {})
 
-            if (utils.isEmpty(this.graph.serviceTemplate.topology_template!.groups)) {
-                delete this.graph.serviceTemplate.topology_template!.groups
+            if (utils.isEmpty(this.topology.groups)) {
+                delete this.topology.groups
             }
         }
     }
 
     private transformPolicies() {
         // Delete all policy templates which are not present and remove all targets which are not present
-        if (validator.isDefined(this.graph.serviceTemplate?.topology_template?.policies)) {
-            this.graph.serviceTemplate.topology_template!.policies = this.graph.policies
+        if (validator.isDefined(this.topology.policies)) {
+            this.topology.policies = this.graph.policies
                 .filter(policy => policy.present)
                 .map(policy => {
                     const template = policy._raw
@@ -177,16 +174,16 @@ export default class Transformer {
                     return map
                 })
 
-            if (utils.isEmpty(this.graph.serviceTemplate.topology_template!.policies)) {
-                delete this.graph.serviceTemplate.topology_template!.policies
+            if (utils.isEmpty(this.topology.policies)) {
+                delete this.topology.policies
             }
         }
     }
 
     private transformInputs() {
         // Delete all topology template inputs which are not present
-        if (validator.isDefined(this.graph.serviceTemplate.topology_template?.inputs)) {
-            this.graph.serviceTemplate.topology_template!.inputs = this.graph.inputs
+        if (validator.isDefined(this.topology.inputs)) {
+            this.topology.inputs = this.graph.inputs
                 .filter(input => input.present)
                 .reduce<InputDefinitionMap>((map, input) => {
                     const template = input._raw
@@ -196,8 +193,8 @@ export default class Transformer {
                     return map
                 }, {})
 
-            if (utils.isEmpty(this.graph.serviceTemplate.topology_template!.inputs)) {
-                delete this.graph.serviceTemplate.topology_template!.inputs
+            if (utils.isEmpty(this.topology.inputs)) {
+                delete this.topology.inputs
             }
         }
     }
@@ -214,7 +211,7 @@ export default class Transformer {
                 if (validator.isDefined(property)) {
                     if (validator.isDefined(property.value)) map[property.name] = property.value
                     if (validator.isDefined(property.expression))
-                        map[property.name] = this.solver.evaluateVariabilityExpression(property.expression, {
+                        map[property.name] = this.solver.evaluateExpression(property.expression, {
                             element: property,
                         })
                 }
