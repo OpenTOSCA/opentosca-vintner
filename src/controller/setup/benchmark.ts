@@ -1,7 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '#files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '#utils'
-import {VariabilityResolver} from '#/resolver'
+import Resolver from '#resolver'
 
 type BenchmarkOptions = {
     io?: boolean
@@ -45,11 +45,10 @@ export default async function (options: BenchmarkOptions) {
 
                 if (io) storeYAML(input, serviceTemplate)
 
-                const result = new VariabilityResolver(io ? loadYAML<ServiceTemplate>(input) : serviceTemplate)
-                    .setVariabilityInputs({mode: 'present'})
-                    .resolve()
-                    .checkConsistency()
-                    .transform()
+                const result = await Resolver.resolve({
+                    template: io ? loadYAML<ServiceTemplate>(input) : serviceTemplate,
+                    inputs: {mode: 'present'},
+                })
 
                 if (io) storeYAML(output, result)
 

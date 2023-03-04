@@ -21,7 +21,9 @@ topology_template:
                 username: dbuser
                 password: dbpwd
             requirements:
-                - my_db_connection: dbms
+                - my_db_connection:
+                      node: dbms
+                      relationship: my_db_connection
         dbms:
             type: DBMS
             requirements:

@@ -19,7 +19,9 @@ export type VariabilityResolvingOptions = {
     enable_group_pruning?: boolean
     enable_artifact_pruning?: boolean
     enable_property_pruning?: boolean
-} & {
+} & ConsistencyOptions
+
+export type ConsistencyOptions = {
     disable_consistency_checks?: boolean
     disable_relation_source_consistency_check?: boolean
     disable_relation_target_consistency_check?: boolean
@@ -119,6 +121,6 @@ export type VariabilityExpression =
           get_current_weekday?: []
 
           // Cache
-          cached_result?: InputAssignmentValue
+          _cached_result?: InputAssignmentValue
       }
     | InputAssignmentValue
