@@ -35,6 +35,7 @@ export type Input = ConditionalElementBase & {
 
 export type Node = ConditionalElementBase & {
     type: 'node'
+    relations: Relation[]
     ingoing: Relation[]
     outgoing: Relation[]
     outgoingMap: Map<String, Relation[]>
@@ -349,6 +350,7 @@ export class Graph {
                 name: nodeName,
                 display: nodeName,
                 conditions: utils.toList(nodeTemplate.conditions),
+                relations: [],
                 ingoing: [],
                 outgoing: [],
                 outgoingMap: new Map(),
@@ -392,6 +394,7 @@ export class Graph {
                 if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
                 node.outgoingMap.get(relation.name)!.push(relation)
                 node.outgoing.push(relation)
+                node.relations.push(relation)
                 this.relations.push(relation)
 
                 if (!validator.isString(assignment)) {
@@ -471,6 +474,7 @@ export class Graph {
             const node = this.nodesMap.get(relation.target)
             validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
             node.ingoing.push(relation)
+            node.relations.push(relation)
         })
     }
 

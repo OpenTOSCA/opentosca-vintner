@@ -3,7 +3,9 @@
       username: dbuser
       password: dbpwd
   requirements:
-      - my_db_connection: dbms
+      - my_db_connection:
+            node: dbms
+            relationship: my_db_connection
 - type: DBMS
   requirements:
       - host: vm_2
