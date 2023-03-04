@@ -43,7 +43,7 @@ export default class Solver {
         if (validator.isDefined(element.present)) return element.present
 
         // Collect assigned conditions
-        let conditions = element.conditions
+        let conditions = [...element.conditions]
         if (element.type === 'node' || element.type === 'relation')
             element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
         conditions = utils.filterNotNull<VariabilityExpression>(conditions)
@@ -78,10 +78,7 @@ export default class Solver {
 
         // Prune Relations: Additionally check that source and target are present
         if (element.type === 'relation' && this.getResolvingOptions().enable_relation_pruning) {
-            conditions = [
-                {and: [{get_node_presence: element.source}, {get_node_presence: element.target}]},
-                ...conditions,
-            ]
+            conditions.unshift({and: [{get_node_presence: element.source}, {get_node_presence: element.target}]})
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
@@ -95,7 +92,7 @@ export default class Solver {
 
         // Prune Policy: Additionally check if any target is present
         if (element.type === 'policy' && this.getResolvingOptions().enable_policy_pruning) {
-            conditions = [{has_present_targets: element.name}, ...conditions]
+            conditions.unshift({has_present_targets: element.name})
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -109,7 +106,7 @@ export default class Solver {
 
         // Prune Group: Additionally check if any member is present
         if (element.type === 'group' && this.getResolvingOptions().enable_group_pruning) {
-            conditions = [{has_present_members: element.name}, ...conditions]
+            conditions.unshift({has_present_members: element.name})
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
@@ -123,7 +120,7 @@ export default class Solver {
 
         // Prune Artifact: Additionally check if node is present
         if (element.type === 'artifact' && this.getResolvingOptions().enable_artifact_pruning) {
-            conditions = [{get_node_presence: element.node.name}, ...conditions]
+            conditions.unshift({get_node_presence: element.node.name})
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -139,13 +136,20 @@ export default class Solver {
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.type === 'property' && this.getResolvingOptions().enable_property_pruning) {
-            if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}, ...conditions]
+            if (element.parent.type === 'node') conditions.unshift({get_node_presence: element.parent.name})
             if (element.parent.type === 'relation')
-                conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}, ...conditions]
+                conditions.unshift({get_relation_presence: [element.parent.source, element.parent.name]})
         }
 
         // Evaluate assigned conditions
-        const present = conditions.every(condition => this.evaluateCondition(condition, {element}))
+        const condition = conditions.reduce<{and: VariabilityExpression[]}>(
+            (acc, curr) => {
+                acc.and.push(curr)
+                return acc
+            },
+            {and: []}
+        )
+        const present = this.evaluateCondition(condition, {element})
         element.present = present
 
         return present
