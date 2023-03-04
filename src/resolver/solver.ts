@@ -50,7 +50,7 @@ export default class Solver {
 
         // If artifact is default, then check if no other artifact having the same name is present
         if (element.type === 'artifact' && element.default) {
-            const bratans = element.node.artifactsMap.get(element.name)!.filter(it => it !== element)
+            const bratans = element.container.artifactsMap.get(element.name)!.filter(it => it !== element)
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
@@ -63,7 +63,7 @@ export default class Solver {
 
         // If property is default, then check if no other property having the same name is present
         if (element.type === 'property' && element.default) {
-            const bratans = element.parent.propertiesMap.get(element.name)!.filter(it => it !== element)
+            const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
@@ -115,12 +115,12 @@ export default class Solver {
             this.getResolvingOptions().enable_artifact_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{get_node_presence: element.node.name}]
+            conditions = [{get_node_presence: element.container.name}]
         }
 
         // Prune Artifact: Additionally check if node is present
         if (element.type === 'artifact' && this.getResolvingOptions().enable_artifact_pruning) {
-            conditions.unshift({get_node_presence: element.node.name})
+            conditions.unshift({get_node_presence: element.container.name})
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -129,16 +129,16 @@ export default class Solver {
             this.getResolvingOptions().enable_property_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            if (element.parent.type === 'node') conditions = [{get_node_presence: element.parent.name}]
-            if (element.parent.type === 'relation')
-                conditions = [{get_relation_presence: [element.parent.source, element.parent.name]}]
+            if (element.container.type === 'node') conditions = [{get_node_presence: element.container.name}]
+            if (element.container.type === 'relation')
+                conditions = [{get_relation_presence: [element.container.source, element.container.name]}]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.type === 'property' && this.getResolvingOptions().enable_property_pruning) {
-            if (element.parent.type === 'node') conditions.unshift({get_node_presence: element.parent.name})
-            if (element.parent.type === 'relation')
-                conditions.unshift({get_relation_presence: [element.parent.source, element.parent.name]})
+            if (element.container.type === 'node') conditions.unshift({get_node_presence: element.container.name})
+            if (element.container.type === 'relation')
+                conditions.unshift({get_relation_presence: [element.container.source, element.container.name]})
         }
 
         // Evaluate assigned conditions

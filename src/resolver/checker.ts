@@ -20,9 +20,7 @@ export default class Checker {
         if (!this.options.disable_relation_source_consistency_check) {
             for (const relation of relations) {
                 if (!this.graph.nodesMap.get(relation.source)?.present)
-                    throw new Error(
-                        `Relation source "${relation.source}" of relation "${relation.display}" does not exist`
-                    )
+                    throw new Error(`Relation source "${relation.source}" of ${relation.display} does not exist`)
             }
         }
 
@@ -30,9 +28,7 @@ export default class Checker {
         if (!this.options.disable_relation_target_consistency_check) {
             for (const relation of relations) {
                 if (!this.graph.nodesMap.get(relation.target)?.present)
-                    throw new Error(
-                        `Relation target "${relation.target}" of relation "${relation.display}" does not exist`
-                    )
+                    throw new Error(`Relation target "${relation.target}" of ${relation.display} does not exist`)
             }
         }
 
@@ -42,7 +38,7 @@ export default class Checker {
                 const relations = node.outgoing.filter(
                     relation => relation.source === node.name && relation.name === 'host' && relation.present
                 )
-                if (relations.length > 1) throw new Error(`Node "${node.display}" has more than one hosting relations`)
+                if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
         }
 
@@ -54,7 +50,7 @@ export default class Checker {
                 )
 
                 if (relations.length !== 0 && !relations.some(relation => relation.present))
-                    throw new Error(`Node "${node.display}" requires a hosting relation`)
+                    throw new Error(`${node.Display} requires a hosting relation`)
             }
         }
 
@@ -62,8 +58,8 @@ export default class Checker {
         if (!this.options.disable_missing_artifact_parent_consistency_check) {
             const artifacts = this.graph.artifacts.filter(artifact => artifact.present)
             for (const artifact of artifacts) {
-                if (!artifact.node.present)
-                    throw new Error(`Node "${artifact.node.display}" of artifact "${artifact.display}" does not exist`)
+                if (!artifact.container.present)
+                    throw new Error(`${artifact.container.Display} of ${artifact.display} does not exist`)
             }
         }
 
@@ -72,8 +68,7 @@ export default class Checker {
             for (const node of this.graph.nodes) {
                 const names = new Set()
                 for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
-                    if (names.has(artifact.name))
-                        throw new Error(`Artifact "${artifact.display}" of node "${node.display}" is ambiguous`)
+                    if (names.has(artifact.name)) throw new Error(`${artifact.Display} of ${node.display} is ambiguous`)
                     names.add(artifact.name)
                 }
             }
@@ -82,31 +77,23 @@ export default class Checker {
         // Ensure that node of each present property exists
         if (!this.options.disable_missing_property_parent_consistency_check) {
             for (const property of this.graph.properties.filter(property => property.present)) {
-                if (!property.parent.present) {
-                    if (property.parent.type === 'node')
-                        throw new Error(
-                            `Node "${property.parent.display}" of property "${property.display}" does not exist`
-                        )
+                if (!property.container.present) {
+                    // TODO: replace these with Display and display
 
-                    if (property.parent.type === 'relation')
-                        throw new Error(
-                            `Relation "${property.parent.display}" of property "${property.display}" does not exist`
-                        )
+                    if (property.container.type === 'node')
+                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
 
-                    if (property.parent.type === 'group')
-                        throw new Error(
-                            `Group "${property.parent.display}" of property "${property.display}" does not exist`
-                        )
+                    if (property.container.type === 'relation')
+                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
 
-                    if (property.parent.type === 'policy')
-                        throw new Error(
-                            `Policy "${property.parent.display}" of property "${property.display}" does not exist`
-                        )
+                    if (property.container.type === 'group')
+                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
 
-                    if (property.parent.type === 'artifact')
-                        throw new Error(
-                            `Node "${property.parent.display}" of property "${property.display}" does not exist`
-                        )
+                    if (property.container.type === 'policy')
+                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
+
+                    if (property.container.type === 'artifact')
+                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
 
                     throw new Error('Unexpected')
                 }
@@ -118,8 +105,7 @@ export default class Checker {
             for (const node of this.graph.nodes) {
                 const names = new Set()
                 for (const property of node.properties.filter(property => property.present)) {
-                    if (names.has(property.name))
-                        throw new Error(`Property "${property.display}" of node "${node.display}" is ambiguous`)
+                    if (names.has(property.name)) throw new Error(`${property.Display} of ${node.display} is ambiguous`)
                     names.add(property.name)
                 }
             }

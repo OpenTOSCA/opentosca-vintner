@@ -26,7 +26,7 @@ export class BfsGraph extends Graph {
         for (const relation of node.relations) {
             if (
                 isUndefined(predicate) ||
-                this.resolver.evaluatePredicate(relation.name, relation.relationship?._raw || {}, predicate)
+                this.resolver.evaluatePredicate(relation.name, relation.relationship?.raw || {}, predicate)
             ) {
                 if ((direction == 'both' || direction == 'out') && relation.source == nodeName)
                     targets.push(relation.target)

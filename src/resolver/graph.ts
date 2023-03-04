@@ -1,7 +1,7 @@
 import {VariabilityExpression, VariabilityPointMap} from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
 import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
-import {PropertyAssignmentValue} from '#spec/property-assignments'
+import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {GroupTemplate} from '#spec/group-template'
@@ -9,8 +9,7 @@ import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definiti
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
-import {GroupMember, TOSCA_GROUP_TYPES} from '#spec/group-type'
-import {mem} from 'systeminformation'
+import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {ensureDefined} from '#validator'
 
 /**
@@ -20,87 +19,247 @@ import {ensureDefined} from '#validator'
  * - groups might be a list
  */
 
-export type ConditionalElementBase = {
+// TODO: name, sid, fid?
+
+type ConditionalElementBase = {
     type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
+    id: string
     name: string
     display: string
+    Display: string
     present?: boolean
     conditions: VariabilityExpression[]
 }
 
-export type Input = ConditionalElementBase & {
-    type: 'input'
-    _raw: InputDefinition
+export class Input implements ConditionalElementBase {
+    readonly type = 'input'
+    raw: InputDefinition
+    id: string
+    name: string
+    display: string
+    Display: string
+    present?: boolean
+    conditions: VariabilityExpression[]
+
+    constructor(data: {name: string; raw: InputDefinition}) {
+        this.name = data.name
+        this.display = 'input "' + data.name + '"'
+        this.Display = 'Input "' + data.name + '"'
+        this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
+        this.id = this.type + ':' + data.name
+    }
 }
 
-export type Node = ConditionalElementBase & {
-    type: 'node'
-    relations: Relation[]
-    ingoing: Relation[]
-    outgoing: Relation[]
-    outgoingMap: Map<String, Relation[]>
-    groups: Group[]
-    artifacts: Artifact[]
-    artifactsMap: Map<String, Artifact[]>
-    properties: Property[]
-    propertiesMap: Map<String, Property[]>
-    _raw: NodeTemplate
+export class Node implements ConditionalElementBase {
+    readonly type = 'node'
+    raw: NodeTemplate
+    id: string
+    name: string
+    display: string
+    Display: string
     _id: string
+    relations: Relation[] = []
+    ingoing: Relation[] = []
+    outgoing: Relation[] = []
+    outgoingMap: Map<String, Relation[]> = new Map()
+    groups: Group[] = []
+    artifacts: Artifact[] = []
+    artifactsMap: Map<String, Artifact[]> = new Map()
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
+    present?: boolean
+    conditions: VariabilityExpression[]
+
+    constructor(data: {name: string; raw: NodeTemplate}) {
+        this.name = data.name
+        this.display = 'node "' + data.name + '"'
+        this.Display = 'Node "' + data.name + '"'
+        this._id = data.name
+        this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
+        this.id = this.type + ':' + this.name
+    }
 }
 
-export type Property = ConditionalElementBase & {
-    type: 'property'
-    parent: Node | Relation | Policy | Group | Artifact
+export class Property implements ConditionalElementBase {
+    readonly type = 'property'
+    raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
+    id: string // TODO: this
+    name: string
+    display: string
+    Display: string
+    container: Node | Relation | Policy | Group | Artifact
     index?: number
     default: boolean
     value?: PropertyAssignmentValue
     expression?: VariabilityExpression
+    present?: boolean
+    conditions: VariabilityExpression[]
+
+    constructor(data: {
+        name: string
+        raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
+        container: Node | Relation | Policy | Group | Artifact
+        index?: number
+        value?: PropertyAssignmentValue
+        expression?: VariabilityExpression
+        default: boolean
+        conditions: VariabilityExpression[] // TODO: this is stupid
+    }) {
+        this.raw = data.raw
+        this.name = data.name
+        this.display = 'property "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.Display = 'Property "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.value = data.value
+        this.expression = data.expression
+        this.container = data.container
+        this.default = data.default
+        this.conditions = data.conditions
+
+        this.id = this.type + ':' + this.container.name + ':' + this.name // TODO: index of container?! // TODO: index of property?!
+    }
 }
 
-export type Relation = ConditionalElementBase & {
-    type: 'relation'
+export class Relation implements ConditionalElementBase {
+    readonly type = 'relation'
+    raw: RequirementAssignment
+    id: string
+    name: string
+    display: string
+    Display: string
+    _id: [string, string]
     source: string
     target: string
-    groups: Group[]
-    properties: Property[]
-    propertiesMap: Map<String, Property[]>
+    groups: Group[] = []
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
+    present?: boolean
+    conditions: VariabilityExpression[]
     relationship?: Relationship
     default: boolean
-    _raw: RequirementAssignment
-    _id: [string, string]
+
+    constructor(data: {name: string; raw: RequirementAssignment; source: Node; target: string; id: [string, string]}) {
+        this.name = data.name
+        this.display = 'relation "' + `${data.source.name}.${data.name}` + '"'
+        this.Display = 'Relation "' + `${data.source.name}.${data.name}` + '"'
+
+        this.source = data.source.name
+        this.target = data.target
+        this.raw = data.raw
+        this.conditions = validator.isString(data.raw)
+            ? []
+            : validator.isDefined(data.raw.default_alternative)
+            ? [false]
+            : utils.toList(data.raw.conditions)
+        this._id = data.id
+        this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+
+        this.id = this.type + ':' + this.source + ':' + this.name // TODO: index?!
+    }
 }
 
-export type Relationship = {
+export class Relationship {
+    readonly type = 'relationship'
+    raw: RelationshipTemplate
+    id: string
     name: string
     relation: Relation
-    _raw: RelationshipTemplate
+
+    constructor(data: {name: string; raw: InputDefinition; relation: Relation}) {
+        this.name = data.name
+        this.relation = data.relation
+        this.raw = data.raw
+
+        this.id = this.type + ':' + this.name
+    }
 }
 
-export type Policy = ConditionalElementBase & {
-    type: 'policy'
-    targets: (Node | Group)[]
-    properties: Property[]
-    propertiesMap: Map<String, Property[]>
-    _raw: PolicyTemplate
+export class Policy implements ConditionalElementBase {
+    readonly type = 'policy'
+    raw: PolicyTemplate
+    id: string
+    name: string
+    display: string
+    Display: string
+    targets: (Node | Group)[] = []
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
+    present?: boolean
+    conditions: VariabilityExpression[]
+
+    constructor(data: {name: string; raw: PolicyTemplate}) {
+        this.name = data.name
+        this.display = 'policy "' + data.name + '"'
+        this.Display = 'Policy "' + data.name + '"'
+        this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
+        this.id = this.type + ':' + this.name
+    }
 }
 
-export type Group = ConditionalElementBase & {
-    type: 'group'
+export class Group implements ConditionalElementBase {
+    readonly type = 'group'
+    raw: GroupTemplate
+    id: string
+    name: string
+    display: string
+    Display: string
+    members: (Node | Relation)[] = []
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
     variability: boolean
-    members: (Node | Relation)[]
-    properties: Property[]
-    propertiesMap: Map<String, Property[]>
-    _raw: GroupTemplate
+    present?: boolean
+    conditions: VariabilityExpression[]
+
+    constructor(data: {name: string; raw: GroupTemplate}) {
+        this.name = data.name
+        this.display = 'group "' + data.name + '"'
+        this.Display = 'Group "' + data.name + '"'
+        this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
+        this.variability = [
+            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
+            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
+        ].includes(this.raw.type)
+
+        this.id = this.type + ':' + this.name
+    }
 }
 
-export type Artifact = ConditionalElementBase & {
-    type: 'artifact'
+export class Artifact implements ConditionalElementBase {
+    readonly type = 'artifact'
+    raw: ArtifactDefinition
+    id: string
+    name: string
+    display: string
+    Display: string
     index?: number
-    node: Node
-    properties: Property[]
-    propertiesMap: Map<String, Property[]>
-    _raw: ArtifactDefinition
+    container: Node
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
+    present?: boolean
+    conditions: VariabilityExpression[]
     default: boolean
+
+    constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
+        this.name = data.name
+        this.display = 'artifact "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.Display = 'Artifact "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.raw = data.raw
+        this.index = data.index
+        this.container = data.container
+        this.conditions = validator.isString(data.raw)
+            ? []
+            : validator.isDefined(data.raw.default_alternative)
+            ? [false]
+            : utils.toList(data.raw.conditions)
+        this.default = (validator.isString(data.raw) ? false : data.raw.default_alternative) || false
+
+        let id = this.type + ':' + this.container.name + ':' + this.name
+        if (validator.isDefined(data.index)) id += ':' + this.index
+        this.id = id
+    }
 }
 
 export type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact | Property
@@ -163,23 +322,7 @@ export class Graph {
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
-        const artifact: Artifact = {
-            type: 'artifact',
-            name: artifactName,
-            index: index,
-            display: validator.isDefined(index) ? `${artifactName}@${index}` : artifactName,
-            conditions: validator.isString(artifactDefinition)
-                ? []
-                : validator.isDefined(artifactDefinition.default_alternative)
-                ? [false]
-                : utils.toList(artifactDefinition.conditions),
-            node,
-            _raw: artifactDefinition,
-            default: (validator.isString(artifactDefinition) ? false : artifactDefinition.default_alternative) || false,
-            properties: [],
-            propertiesMap: new Map(),
-        }
-
+        const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
         this.populateProperties(artifact, artifactDefinition)
 
         if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
@@ -211,30 +354,30 @@ export class Graph {
                         (validator.isUndefined(propertyAssignment.value) &&
                             validator.isUndefined(propertyAssignment.expression))
                     ) {
-                        property = {
-                            type: 'property',
+                        property = new Property({
                             name: propertyName,
-                            display: `${propertyName}@${propertyIndex}`,
                             conditions: [],
-                            parent: element,
+                            container: element,
                             // This just works since we do not allow "value" as a keyword in a property assignment value
                             value: propertyAssignment as PropertyAssignmentValue,
                             default: false,
-                        }
+                            index: propertyIndex,
+                            raw: propertyAssignment,
+                        })
                     } else {
                         // Property is conditional
-                        property = {
-                            type: 'property',
+                        property = new Property({
                             name: propertyName,
-                            display: `${propertyName}@${propertyIndex}`,
                             conditions: validator.isDefined(propertyAssignment.default_alternative)
                                 ? [false]
                                 : utils.toList(propertyAssignment.conditions),
                             default: propertyAssignment.default_alternative || false,
-                            parent: element,
+                            container: element,
                             value: propertyAssignment.value,
                             expression: propertyAssignment.expression,
-                        }
+                            index: propertyIndex,
+                            raw: propertyAssignment,
+                        })
                     }
 
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
@@ -245,15 +388,14 @@ export class Graph {
             } else {
                 // Properties is a Property Assignment Map
                 for (const [propertyName, propertyAssignment] of Object.entries(template.properties || {})) {
-                    const property: Property = {
-                        type: 'property',
+                    const property = new Property({
                         name: propertyName,
-                        display: propertyName,
                         conditions: [],
-                        parent: element,
+                        container: element,
                         value: propertyAssignment,
                         default: false,
-                    }
+                        raw: propertyAssignment,
+                    })
 
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
                     element.propertiesMap.get(propertyName)!.push(property)
@@ -266,18 +408,19 @@ export class Graph {
         element.propertiesMap.forEach((properties, propertyName) => {
             const candidates = properties.filter(it => it.default)
             if (candidates.length > 1) {
+                // TODO: replace this with Display and display
                 if (element.type === 'node')
-                    throw new Error(`Property "${propertyName}" of node "${element.display}" has multiple defaults`)
+                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
 
                 if (element.type === 'group')
-                    throw new Error(`Property "${propertyName}" of group "${element.display}" has multiple defaults`)
+                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
 
                 if (element.type === 'policy')
-                    throw new Error(`Property "${propertyName}" of policy "${element.display}" has multiple defaults`)
+                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
 
                 if (element.type === 'artifact')
                     throw new Error(
-                        `Property "${propertyName}" of artifact "${element.display}" of node "${element.node.display}" has multiple defaults`
+                        `Property "${propertyName}" of ${element.display} of ${element.container.display} has multiple defaults`
                     )
 
                 if (element.type === 'relation')
@@ -291,31 +434,27 @@ export class Graph {
 
         element.properties.forEach(property => {
             if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
+                // TODO: replace this with Display and display
+
                 if (element.type === 'node')
-                    throw new Error(
-                        `Property "${property.display}" of node "${element.display}" has no value or expression defined`
-                    )
+                    throw new Error(`${property.Display} of ${element.display} has no value or expression defined`)
 
                 if (element.type === 'relation')
                     throw new Error(
-                        `Property "${property.display}" of relation "${
+                        `${property.Display} of relation "${
                             element.relationship!.name
                         }" has no value or expression defined`
                     )
 
                 if (element.type === 'group')
-                    throw new Error(
-                        `Property "${property.display}" of group "${element.display}" has multiple defaults`
-                    )
+                    throw new Error(`${property.Display} of ${element.display} has multiple defaults`)
 
                 if (element.type === 'policy')
-                    throw new Error(
-                        `Property "${property.display}" of policy "${element.display}" has multiple defaults`
-                    )
+                    throw new Error(`${property.Display} of ${element.display} has multiple defaults`)
 
                 if (element.type === 'artifact')
                     throw new Error(
-                        `Property "${property.display}" of artifact "${element.display}" of node "${element.node.display}" has multiple defaults`
+                        `${property.Display} of ${element.display} of ${element.container.display} has multiple defaults`
                     )
 
                 throw new Error('Unexpected')
@@ -328,13 +467,7 @@ export class Graph {
             const [name, definition] = utils.firstEntry(map)
             if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
-            const input: Input = {
-                type: 'input',
-                name,
-                display: name,
-                conditions: utils.toList(definition.conditions),
-                _raw: definition,
-            }
+            const input = new Input({name, raw: definition})
             this.inputs.push(input)
             this.inputsMap.set(name, input)
         })
@@ -345,23 +478,7 @@ export class Graph {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
 
-            const node: Node = {
-                type: 'node',
-                name: nodeName,
-                display: nodeName,
-                conditions: utils.toList(nodeTemplate.conditions),
-                relations: [],
-                ingoing: [],
-                outgoing: [],
-                outgoingMap: new Map(),
-                groups: [],
-                artifacts: [],
-                artifactsMap: new Map(),
-                properties: [],
-                propertiesMap: new Map(),
-                _raw: nodeTemplate,
-                _id: nodeName,
-            }
+            const node = new Node({name: nodeName, raw: nodeTemplate})
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
@@ -373,24 +490,14 @@ export class Graph {
                 const [relationName, assignment] = utils.firstEntry(map)
                 const target = validator.isString(assignment) ? assignment : assignment.node
 
-                const relation: Relation = {
-                    type: 'relation',
+                const relation = new Relation({
                     name: relationName,
-                    display: `${nodeName}.${relationName}`,
-                    source: nodeName,
+                    source: node,
                     target,
-                    conditions: validator.isString(assignment)
-                        ? []
-                        : validator.isDefined(assignment.default_alternative)
-                        ? [false]
-                        : utils.toList(assignment.conditions),
-                    groups: [],
-                    properties: [],
-                    propertiesMap: new Map(),
-                    default: validator.isString(assignment) ? false : assignment.default_alternative || false,
-                    _raw: assignment,
-                    _id: [nodeName, relationName],
-                }
+                    raw: assignment,
+                    id: [nodeName, relationName],
+                })
+
                 if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
                 node.outgoingMap.get(relation.name)!.push(relation)
                 node.outgoing.push(relation)
@@ -409,11 +516,11 @@ export class Graph {
                         if (this.relationshipsMap.has(assignment.relationship))
                             throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
 
-                        const relationship: Relationship = {
+                        const relationship = new Relationship({
                             name: assignment.relationship,
                             relation,
-                            _raw: relationshipTemplate,
-                        }
+                            raw: relationshipTemplate,
+                        })
 
                         this.relationshipsMap.set(assignment.relationship, relationship)
                         relation.relationship = relationship
@@ -434,7 +541,7 @@ export class Graph {
             node.outgoingMap.forEach((relations, relationName) => {
                 const candidates = relations.filter(it => it.default)
                 if (candidates.length > 1) {
-                    throw new Error(`Relation "${relationName}" of node "${node.display}" has multiple defaults`)
+                    throw new Error(`Relation "${relationName}" of ${node.display} has multiple defaults`)
                 }
             })
 
@@ -455,7 +562,7 @@ export class Graph {
                 node.artifactsMap.forEach((artifacts, artifactName) => {
                     const candidates = artifacts.filter(it => it.default)
                     if (candidates.length > 1) {
-                        throw new Error(`Artifact "${artifactName}" of node "${node.display}" has multiple defaults`)
+                        throw new Error(`Artifact "${artifactName}" of ${node.display} has multiple defaults`)
                     }
                 })
             }
@@ -472,7 +579,7 @@ export class Graph {
         // Assign ingoing relations to nodes
         this.relations.forEach(relation => {
             const node = this.nodesMap.get(relation.target)
-            validator.ensureDefined(node, `Target "${relation.target}" of "${relation.display}" does not exist`)
+            validator.ensureDefined(node, `Target "${relation.target}" of ${relation.display} does not exist`)
             node.ingoing.push(relation)
             node.relations.push(relation)
         })
@@ -483,20 +590,7 @@ export class Graph {
             const [name, template] = utils.firstEntry(map)
             if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
 
-            const group: Group = {
-                type: 'group',
-                name,
-                display: name,
-                conditions: utils.toList(template.conditions),
-                variability: [
-                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
-                    TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
-                ].includes(template.type),
-                members: [],
-                _raw: template,
-                properties: [],
-                propertiesMap: new Map(),
-            }
+            const group = new Group({name, raw: template})
             this.groups.push(group)
             this.groupsMap.set(name, group)
 
@@ -523,16 +617,7 @@ export class Graph {
             throw new Error(`Policies must be an array`)
         this.serviceTemplate.topology_template?.policies?.forEach(map => {
             const [name, template] = utils.firstEntry(map)
-            const policy: Policy = {
-                type: 'policy',
-                name,
-                display: name,
-                conditions: utils.toList(template.conditions),
-                targets: [],
-                _raw: template,
-                properties: [],
-                propertiesMap: new Map(),
-            }
+            const policy = new Policy({name, raw: template})
             this.policies.push(policy)
 
             template.targets?.forEach(target => {
@@ -546,7 +631,7 @@ export class Graph {
                     return policy.targets.push(group)
                 }
 
-                throw new Error(`Policy target "${target}" of policy "${policy.display} does not exist`)
+                throw new Error(`Policy target "${target}" of ${policy.display} does not exist`)
             })
 
             this.populateProperties(policy, template)
