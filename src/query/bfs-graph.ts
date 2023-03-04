@@ -14,18 +14,18 @@ export class BfsGraph extends Graph {
      * Returns a set of neighboring nodes for the given node, given that their relationship fulfills the predicate
      * and has the proper direction
      * @param nodeName Name of node from which to start the search
-     * @param predicate Optional predicate that relationships need to fulfill
      * @param direction Whether to traverse inbound or outbound relationships, or both
+     * @param predicate Optional predicate that relationships need to fulfill
      * @private
      */
-    private getNext(nodeName: string, predicate: PredicateExpression | undefined, direction: string): string[] {
+    private getNext(nodeName: string, direction: string, predicate?: PredicateExpression): string[] {
         const targets: string[] = []
         const node = this.nodesMap.get(nodeName)
         if (isUndefined(node)) return targets
 
         for (const relation of node.relations) {
             if (
-                !predicate ||
+                isUndefined(predicate) ||
                 this.resolver.evaluatePredicate(relation.name, relation.relationship?._raw || {}, predicate)
             ) {
                 if ((direction == 'both' || direction == 'out') && relation.source == nodeName)
@@ -51,7 +51,7 @@ export class BfsGraph extends Graph {
                 nodes.add(null)
                 if (nodes.peek() == null) break
             }
-            const next = this.getNext(current, predicate, direction)
+            const next = this.getNext(current, direction, predicate)
             if (next.length > 0) {
                 for (const n of next) {
                     if (level >= minimum - 1) visited.add(n)
@@ -65,15 +65,19 @@ export class BfsGraph extends Graph {
 
 class Queue<T> {
     private items: T[] = []
+
     add(item: T) {
         this.items.push(item)
     }
+
     pop(): T | undefined {
         return this.items.shift()
     }
+
     peek(): T {
         return this.items[0]
     }
+
     isEmpty(): boolean {
         return this.items.length == 0
     }
