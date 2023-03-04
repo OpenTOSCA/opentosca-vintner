@@ -165,7 +165,7 @@ export default class Transformer {
                         if (validator.isDefined(group)) return group.present
 
                         throw new Error(
-                            `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
+                            `Policy target "${target}" of "${policy.display}" is neither a node template nor a group template`
                         )
                     })
 

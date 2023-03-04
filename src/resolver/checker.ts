@@ -58,8 +58,7 @@ export default class Checker {
         if (!this.options.disable_missing_artifact_parent_consistency_check) {
             const artifacts = this.graph.artifacts.filter(artifact => artifact.present)
             for (const artifact of artifacts) {
-                if (!artifact.container.present)
-                    throw new Error(`${artifact.container.Display} of ${artifact.display} does not exist`)
+                if (!artifact.container.present) throw new Error(`Container of ${artifact.display} does not exist`)
             }
         }
 
@@ -68,7 +67,7 @@ export default class Checker {
             for (const node of this.graph.nodes) {
                 const names = new Set()
                 for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
-                    if (names.has(artifact.name)) throw new Error(`${artifact.Display} of ${node.display} is ambiguous`)
+                    if (names.has(artifact.name)) throw new Error(`${artifact.Display} is ambiguous`)
                     names.add(artifact.name)
                 }
             }
@@ -78,24 +77,7 @@ export default class Checker {
         if (!this.options.disable_missing_property_parent_consistency_check) {
             for (const property of this.graph.properties.filter(property => property.present)) {
                 if (!property.container.present) {
-                    // TODO: replace these with Display and display
-
-                    if (property.container.type === 'node')
-                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
-
-                    if (property.container.type === 'relation')
-                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
-
-                    if (property.container.type === 'group')
-                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
-
-                    if (property.container.type === 'policy')
-                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
-
-                    if (property.container.type === 'artifact')
-                        throw new Error(`${property.container.Display} of ${property.display} does not exist`)
-
-                    throw new Error('Unexpected')
+                    throw new Error(`Container of ${property.display} does not exist`)
                 }
             }
         }
@@ -105,7 +87,7 @@ export default class Checker {
             for (const node of this.graph.nodes) {
                 const names = new Set()
                 for (const property of node.properties.filter(property => property.present)) {
-                    if (names.has(property.name)) throw new Error(`${property.Display} of ${node.display} is ambiguous`)
+                    if (names.has(property.name)) throw new Error(`${property.Display} is ambiguous`)
                     names.add(property.name)
                 }
             }

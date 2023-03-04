@@ -1,1 +1,1 @@
-error: Node "node_one" of artifact "artifact_one" does not exist
+error: Container of artifact "artifact_one" of node "node_one" does not exist

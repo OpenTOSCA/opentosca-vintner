@@ -19,8 +19,6 @@ import {ensureDefined} from '#validator'
  * - groups might be a list
  */
 
-// TODO: name, sid, fid?
-
 type ConditionalElementBase = {
     type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
     id: string
@@ -74,7 +72,7 @@ export class Node implements ConditionalElementBase {
     constructor(data: {name: string; raw: NodeTemplate}) {
         this.name = data.name
         this.display = 'node "' + data.name + '"'
-        this.Display = 'Node "' + data.name + '"'
+        this.Display = utils.toFirstUpperCase(this.display)
         this._id = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
@@ -85,7 +83,7 @@ export class Node implements ConditionalElementBase {
 export class Property implements ConditionalElementBase {
     readonly type = 'property'
     raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
-    id: string // TODO: this
+    id: string
     name: string
     display: string
     Display: string
@@ -109,8 +107,12 @@ export class Property implements ConditionalElementBase {
     }) {
         this.raw = data.raw
         this.name = data.name
-        this.display = 'property "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
-        this.Display = 'Property "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.display =
+            'property "' +
+            (validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name) +
+            '" of ' +
+            data.container.display
+        this.Display = utils.toFirstUpperCase(this.display)
         this.value = data.value
         this.expression = data.expression
         this.container = data.container
@@ -141,8 +143,8 @@ export class Relation implements ConditionalElementBase {
 
     constructor(data: {name: string; raw: RequirementAssignment; source: Node; target: string; id: [string, string]}) {
         this.name = data.name
-        this.display = 'relation "' + `${data.source.name}.${data.name}` + '"'
-        this.Display = 'Relation "' + `${data.source.name}.${data.name}` + '"'
+        this.display = 'relation "' + `${data.name}` + '" of ' + data.source.display
+        this.Display = utils.toFirstUpperCase(this.display)
 
         this.source = data.source.name
         this.target = data.target
@@ -191,7 +193,7 @@ export class Policy implements ConditionalElementBase {
     constructor(data: {name: string; raw: PolicyTemplate}) {
         this.name = data.name
         this.display = 'policy "' + data.name + '"'
-        this.Display = 'Policy "' + data.name + '"'
+        this.Display = utils.toFirstUpperCase(this.display)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
         this.id = this.type + ':' + this.name
@@ -215,7 +217,7 @@ export class Group implements ConditionalElementBase {
     constructor(data: {name: string; raw: GroupTemplate}) {
         this.name = data.name
         this.display = 'group "' + data.name + '"'
-        this.Display = 'Group "' + data.name + '"'
+        this.Display = utils.toFirstUpperCase(this.display)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
         this.variability = [
@@ -229,23 +231,27 @@ export class Group implements ConditionalElementBase {
 
 export class Artifact implements ConditionalElementBase {
     readonly type = 'artifact'
-    raw: ArtifactDefinition
-    id: string
-    name: string
-    display: string
-    Display: string
-    index?: number
-    container: Node
-    properties: Property[] = []
-    propertiesMap: Map<String, Property[]> = new Map()
+    readonly raw: ArtifactDefinition
+    readonly id: string
+    readonly name: string
+    readonly display: string
+    readonly Display: string
+    readonly index?: number
+    readonly container: Node
+    readonly properties: Property[] = []
+    readonly propertiesMap: Map<String, Property[]> = new Map()
     present?: boolean
-    conditions: VariabilityExpression[]
-    default: boolean
+    readonly conditions: VariabilityExpression[]
+    readonly default: boolean
 
     constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
         this.name = data.name
-        this.display = 'artifact "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
-        this.Display = 'Artifact "' + validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name + '"'
+        this.display =
+            'artifact "' +
+            (validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name) +
+            '" of ' +
+            data.container.display
+        this.Display = utils.toFirstUpperCase(this.display)
         this.raw = data.raw
         this.index = data.index
         this.container = data.container
@@ -405,59 +411,16 @@ export class Graph {
             }
         }
 
-        element.propertiesMap.forEach((properties, propertyName) => {
+        element.propertiesMap.forEach(properties => {
             const candidates = properties.filter(it => it.default)
             if (candidates.length > 1) {
-                // TODO: replace this with Display and display
-                if (element.type === 'node')
-                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
-
-                if (element.type === 'group')
-                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
-
-                if (element.type === 'policy')
-                    throw new Error(`Property "${propertyName}" of ${element.display} has multiple defaults`)
-
-                if (element.type === 'artifact')
-                    throw new Error(
-                        `Property "${propertyName}" of ${element.display} of ${element.container.display} has multiple defaults`
-                    )
-
-                if (element.type === 'relation')
-                    throw new Error(
-                        `Property "${propertyName}" of relation "${element.relationship!.name}" has multiple defaults`
-                    )
-
-                throw new Error('Unexpected')
+                throw new Error(`${properties[0].Display} has multiple defaults`)
             }
         })
 
         element.properties.forEach(property => {
             if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
-                // TODO: replace this with Display and display
-
-                if (element.type === 'node')
-                    throw new Error(`${property.Display} of ${element.display} has no value or expression defined`)
-
-                if (element.type === 'relation')
-                    throw new Error(
-                        `${property.Display} of relation "${
-                            element.relationship!.name
-                        }" has no value or expression defined`
-                    )
-
-                if (element.type === 'group')
-                    throw new Error(`${property.Display} of ${element.display} has multiple defaults`)
-
-                if (element.type === 'policy')
-                    throw new Error(`${property.Display} of ${element.display} has multiple defaults`)
-
-                if (element.type === 'artifact')
-                    throw new Error(
-                        `${property.Display} of ${element.display} of ${element.container.display} has multiple defaults`
-                    )
-
-                throw new Error('Unexpected')
+                throw new Error(`${property.Display} has no value or expression defined`)
             }
         })
     }
@@ -538,11 +501,9 @@ export class Graph {
             })
 
             // Ensure that there are no multiple outgoing defaults
-            node.outgoingMap.forEach((relations, relationName) => {
+            node.outgoingMap.forEach(relations => {
                 const candidates = relations.filter(it => it.default)
-                if (candidates.length > 1) {
-                    throw new Error(`Relation "${relationName}" of ${node.display} has multiple defaults`)
-                }
+                if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
             })
 
             // Artifacts
@@ -559,11 +520,9 @@ export class Graph {
                     }
                 }
                 // Ensure that there is only one default artifact
-                node.artifactsMap.forEach((artifacts, artifactName) => {
+                node.artifactsMap.forEach(artifacts => {
                     const candidates = artifacts.filter(it => it.default)
-                    if (candidates.length > 1) {
-                        throw new Error(`Artifact "${artifactName}" of ${node.display} has multiple defaults`)
-                    }
+                    if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
                 })
             }
         })
@@ -673,7 +632,7 @@ export class Graph {
 
         if (validator.isString(element)) {
             const policies = this.policies.filter(policy => policy.name === element)
-            if (policies.length > 1) throw new Error(`Policy name "${element}" is ambiguous`)
+            if (policies.length > 1) throw new Error(`Policy "${element}" is ambiguous`)
             policy = policies[0]
         }
 
