@@ -481,7 +481,7 @@ The following date operators can be used inside a Variability Expression.
 
 | Keyname             | Input              | Output | Description                                     |
 |---------------------|--------------------|--------|-------------------------------------------------|
-| get_current_weekday | Empty List | String | Returns the current weekday. |
+| weekday | Empty List | String | Returns the current weekday. |
 
 ## Processing
 

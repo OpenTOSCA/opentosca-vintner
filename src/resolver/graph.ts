@@ -587,7 +587,7 @@ export class Graph {
         return node
     }
 
-    getRelation(member: [string, string] | [string, number]) {
+    getRelation(member: [string, string | number]) {
         let relation
         const node = this.getNode(member[0])
 

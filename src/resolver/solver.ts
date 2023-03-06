@@ -1,4 +1,4 @@
-import {Artifact, ConditionalElement, Graph, Group, Node, Policy, Property, Relation} from '#/resolver/graph'
+import {ConditionalElement, Graph} from '#/resolver/graph'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
@@ -363,23 +363,24 @@ export default class Solver {
         }
 
         if (validator.isDefined(condition.get_node_presence)) {
-            const name = this.evaluateExpression(condition.get_node_presence, context)
-            validator.ensureString(name)
-            return this.checkPresence(this.graph.getNode(name))
+            const node = condition.get_node_presence
+            validator.ensureString(node)
+            return this.checkPresence(this.graph.getNode(node))
         }
 
         if (validator.isDefined(condition.get_relation_presence)) {
-            const node = this.evaluateExpression(condition.get_relation_presence[0], context)
+            const node = condition.get_relation_presence[0]
             validator.ensureString(node)
 
-            const relation = this.evaluateExpression(condition.get_relation_presence[1], context)
+            const relation = condition.get_relation_presence[1]
             validator.ensureStringOrNumber(relation)
 
             return this.checkPresence(this.graph.getRelation([node, relation]))
         }
 
         if (validator.isDefined(condition.get_source_presence)) {
-            const element = this.evaluateExpression(condition.get_source_presence, context)
+            const element = condition.get_source_presence
+            validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
@@ -388,7 +389,8 @@ export default class Solver {
         }
 
         if (validator.isDefined(condition.get_target_presence)) {
-            const element = this.evaluateExpression(condition.get_target_presence, context)
+            const element = condition.get_target_presence
+            validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
@@ -397,8 +399,9 @@ export default class Solver {
         }
 
         if (validator.isDefined(condition.has_present_targets)) {
-            const element = this.evaluateExpression(condition.has_present_targets, context)
+            const element = condition.has_present_targets
             validator.ensureString(element)
+
             return this.graph.getPolicy(element).targets.some(target => {
                 if (target.isNode()) {
                     return this.checkPresence(target)
@@ -411,7 +414,7 @@ export default class Solver {
         }
 
         if (validator.isDefined(condition.has_present_members)) {
-            const element = this.evaluateExpression(condition.has_present_members, context)
+            const element = condition.has_present_members
             validator.ensureString(element)
             return this.graph.getGroup(element).members.some(member => this.checkPresence(member))
         }
@@ -614,7 +617,7 @@ export default class Solver {
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
 
-        if (validator.isDefined(condition.get_current_weekday)) {
+        if (validator.isDefined(condition.weekday)) {
             return this.weekday
         }
 

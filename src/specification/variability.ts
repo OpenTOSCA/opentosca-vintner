@@ -78,15 +78,17 @@ export type VariabilityExpression =
           mod?: [VariabilityExpression, VariabilityExpression]
 
           // Intrinsic functions
-          get_variability_expression?: VariabilityExpression
-          get_variability_input?: VariabilityExpression
-          get_variability_condition?: VariabilityExpression
-          get_node_presence?: VariabilityExpression
-          get_relation_presence?: [VariabilityExpression, VariabilityExpression]
+          get_variability_expression?: string
+          get_variability_input?: string
+          get_variability_condition?: string
+          get_node_presence?: string
+          get_relation_presence?: [string, string | number]
           get_source_presence?: 'SELF'
           get_target_presence?: 'SELF'
-          has_present_targets?: VariabilityExpression
-          has_present_members?: VariabilityExpression
+          has_present_targets?: string
+          has_present_members?: string
+
+          // Intrinsic functions
           concat?: VariabilityExpression[]
           join?: [VariabilityExpression[], string]
           token?: [VariabilityExpression, string, number]
@@ -118,7 +120,7 @@ export type VariabilityExpression =
           exponential_regression?: [[number, number][], number]
 
           // Date operators
-          get_current_weekday?: []
+          weekday?: []
 
           // Cache
           _cached_result?: InputAssignmentValue
