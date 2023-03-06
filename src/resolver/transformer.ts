@@ -9,16 +9,15 @@ import * as utils from '#utils'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {Artifact, Graph, Group, Node, Policy, Relation} from './graph'
-import Solver from './solver'
+import {ensureDefined} from '#validator'
+import {GroupMember} from '#spec/group-type'
 
 export default class Transformer {
     private readonly graph: Graph
-    private readonly solver: Solver
     private readonly topology: TopologyTemplate
 
-    constructor(graph: Graph, solver: Solver) {
+    constructor(graph: Graph) {
         this.graph = graph
-        this.solver = solver
         this.topology = graph.serviceTemplate.topology_template || {}
     }
 
@@ -129,8 +128,17 @@ export default class Transformer {
                 .filter(group => group.present)
                 .reduce<GroupTemplateMap>((map, group) => {
                     const template = group.raw
-                    // TODO: get rid of toscaId
-                    template.members = group.members.filter(it => it.present).map(it => it.toscaId)
+
+                    template.members = template.members.reduce<GroupMember[]>((acc, it) => {
+                        let element: Node | Relation | undefined
+
+                        if (validator.isString(it)) element = this.graph.getNode(it)
+                        if (validator.isArray(it)) element = this.graph.getRelation(it)
+                        ensureDefined(element, `Member "${utils.prettyJSON(it)}" has bad format`)
+
+                        if (element.present) acc.push(it)
+                        return acc
+                    }, [])
 
                     this.transformProperties(group, template)
 
@@ -210,11 +218,8 @@ export default class Transformer {
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
                 if (validator.isDefined(property)) {
-                    if (validator.isDefined(property.value)) map[property.name] = property.value
-                    if (validator.isDefined(property.expression))
-                        map[property.name] = this.solver.evaluateExpression(property.expression, {
-                            element: property,
-                        })
+                    if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+                    map[property.name] = property.value
                 }
                 return map
             }, {})

@@ -107,7 +107,6 @@ export class Input extends ConditionalElement {
 
 export class Node extends ConditionalElement {
     raw: NodeTemplate
-    toscaId: string
     relations: Relation[] = []
     ingoing: Relation[] = []
     outgoing: Relation[] = []
@@ -120,7 +119,6 @@ export class Node extends ConditionalElement {
 
     constructor(data: {name: string; raw: NodeTemplate}) {
         super('node', data)
-        this.toscaId = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
     }
@@ -144,7 +142,7 @@ export class Property extends ConditionalElement {
         value?: PropertyAssignmentValue
         expression?: VariabilityExpression
         default: boolean
-        conditions: VariabilityExpression[] // TODO: this is stupid
+        conditions?: VariabilityExpression[]
     }) {
         super('property', data)
         this.raw = data.raw
@@ -152,13 +150,12 @@ export class Property extends ConditionalElement {
         this.expression = data.expression
         this.container = data.container
         this.default = data.default
-        this.conditions = data.conditions
+        this.conditions = data.conditions || []
     }
 }
 
 export class Relation extends ConditionalElement {
     raw: RequirementAssignment
-    toscaId: [string, string]
     source: Node
 
     private _target?: Node
@@ -178,22 +175,15 @@ export class Relation extends ConditionalElement {
     relationship?: Relationship
     default: boolean
 
-    constructor(data: {
-        name: string
-        raw: RequirementAssignment
-        source: Node
-        index: number
-        toscaId: [string, string] // TODO: why is this not also string, index?!
-    }) {
-        super('relation', {...data, container: data.source})
-        this.source = data.source
+    constructor(data: {name: string; raw: RequirementAssignment; container: Node; index: number}) {
+        super('relation', data)
+        this.source = data.container
         this.raw = data.raw
         this.conditions = validator.isString(data.raw)
             ? []
             : validator.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this.toscaId = data.toscaId
         this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 }
@@ -348,9 +338,8 @@ export class Graph {
 
                 const relation = new Relation({
                     name: relationName,
-                    source: node,
+                    container: node,
                     raw: assignment,
-                    toscaId: [nodeName, relationName], // TODO: index?!
                     index,
                 })
 
@@ -477,7 +466,6 @@ export class Graph {
                     ) {
                         property = new Property({
                             name: propertyName,
-                            conditions: [],
                             container: element,
                             // This just works since we do not allow "value" as a keyword in a property assignment value
                             value: propertyAssignment as PropertyAssignmentValue,
@@ -511,7 +499,6 @@ export class Graph {
                 for (const [propertyName, propertyAssignment] of Object.entries(template.properties || {})) {
                     const property = new Property({
                         name: propertyName,
-                        conditions: [],
                         container: element,
                         value: propertyAssignment,
                         default: false,

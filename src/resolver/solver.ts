@@ -32,6 +32,12 @@ export default class Solver {
         for (const policy of this.graph.policies) this.checkPresence(policy)
         for (const artifact of this.graph.artifacts) this.checkPresence(artifact)
         for (const property of this.graph.properties) this.checkPresence(property)
+        for (const property of this.graph.properties.filter(it => it.present)) {
+            if (validator.isDefined(property.expression))
+                property.value = this.evaluateExpression(property.expression, {
+                    element: property,
+                })
+        }
         return this
     }
 
