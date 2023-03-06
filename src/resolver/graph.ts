@@ -15,8 +15,9 @@ import {ensureDefined} from '#validator'
 /**
  * Not documented since preparation for future work
  *
+ * - inputs might be a list
  * - node templates might be a list
- * - groups might be a list
+ * - groups might be a list (consider variability groups ...)
  */
 
 export abstract class ConditionalElement {
