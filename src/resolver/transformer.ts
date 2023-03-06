@@ -9,16 +9,15 @@ import * as utils from '#utils'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {Artifact, Graph, Group, Node, Policy, Relation} from './graph'
-import Solver from './solver'
+import {ensureDefined} from '#validator'
+import {GroupMember} from '#spec/group-type'
 
 export default class Transformer {
     private readonly graph: Graph
-    private readonly solver: Solver
     private readonly topology: TopologyTemplate
 
-    constructor(graph: Graph, solver: Solver) {
+    constructor(graph: Graph) {
         this.graph = graph
-        this.solver = solver
         this.topology = graph.serviceTemplate.topology_template || {}
     }
 
@@ -56,7 +55,7 @@ export default class Transformer {
             this.topology.node_templates = this.graph.nodes
                 .filter(node => node.present)
                 .reduce<NodeTemplateMap>((map, node) => {
-                    const template = node._raw
+                    const template = node.raw
 
                     // Select present properties
                     this.transformProperties(node, template)
@@ -65,7 +64,7 @@ export default class Transformer {
                     template.requirements = node.outgoing
                         .filter(it => it.present)
                         .map(relation => {
-                            const assignment = relation._raw
+                            const assignment = relation.raw
                             if (!validator.isString(assignment)) {
                                 delete assignment.conditions
                                 delete assignment.default_alternative
@@ -81,14 +80,14 @@ export default class Transformer {
                     template.artifacts = node.artifacts
                         .filter(it => it.present)
                         .reduce<ArtifactDefinitionMap>((map, artifact) => {
-                            if (!validator.isString(artifact._raw)) {
-                                delete artifact._raw.conditions
-                                delete artifact._raw.default_alternative
+                            if (!validator.isString(artifact.raw)) {
+                                delete artifact.raw.conditions
+                                delete artifact.raw.default_alternative
                             }
 
-                            this.transformProperties(artifact, artifact._raw)
+                            this.transformProperties(artifact, artifact.raw)
 
-                            map[artifact.name] = artifact._raw
+                            map[artifact.name] = artifact.raw
                             return map
                         }, {})
                     if (utils.isEmpty(template.artifacts)) delete template.artifacts
@@ -112,7 +111,7 @@ export default class Transformer {
                 if (validator.isDefined(relation.relationship)) {
                     if (!relation.present) delete this.topology.relationship_templates![relation.relationship.name]
 
-                    this.transformProperties(relation, relation.relationship._raw)
+                    this.transformProperties(relation, relation.relationship.raw)
                 }
             })
 
@@ -128,8 +127,18 @@ export default class Transformer {
             this.topology.groups = this.graph.groups
                 .filter(group => group.present)
                 .reduce<GroupTemplateMap>((map, group) => {
-                    const template = group._raw
-                    template.members = group.members.filter(it => it.present).map(it => it._id)
+                    const template = group.raw
+
+                    template.members = template.members.reduce<GroupMember[]>((acc, it) => {
+                        let element: Node | Relation | undefined
+
+                        if (validator.isString(it)) element = this.graph.getNode(it)
+                        if (validator.isArray(it)) element = this.graph.getRelation(it)
+                        ensureDefined(element, `Member "${utils.prettyJSON(it)}" has bad format`)
+
+                        if (element.present) acc.push(it)
+                        return acc
+                    }, [])
 
                     this.transformProperties(group, template)
 
@@ -151,7 +160,7 @@ export default class Transformer {
             this.topology.policies = this.graph.policies
                 .filter(policy => policy.present)
                 .map(policy => {
-                    const template = policy._raw
+                    const template = policy.raw
                     delete template.conditions
                     delete template.default_alternative
 
@@ -165,7 +174,7 @@ export default class Transformer {
                         if (validator.isDefined(group)) return group.present
 
                         throw new Error(
-                            `Policy target "${target}" of policy template "${policy.name}" is neither a node template nor a group template`
+                            `Policy target "${target}" of "${policy.display}" is neither a node template nor a group template`
                         )
                     })
 
@@ -186,7 +195,7 @@ export default class Transformer {
             this.topology.inputs = this.graph.inputs
                 .filter(input => input.present)
                 .reduce<InputDefinitionMap>((map, input) => {
-                    const template = input._raw
+                    const template = input.raw
                     delete template.conditions
                     delete template.default_alternative
                     map[input.name] = template
@@ -209,11 +218,8 @@ export default class Transformer {
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
                 if (validator.isDefined(property)) {
-                    if (validator.isDefined(property.value)) map[property.name] = property.value
-                    if (validator.isDefined(property.expression))
-                        map[property.name] = this.solver.evaluateExpression(property.expression, {
-                            element: property,
-                        })
+                    if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+                    map[property.name] = property.value
                 }
                 return map
             }, {})

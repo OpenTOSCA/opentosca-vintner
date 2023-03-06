@@ -1,1 +1,1 @@
-error: Relation target "two" of relation "one.two" does not exist
+error: Relation target "two" of relation "two@0" of node "one" does not exist

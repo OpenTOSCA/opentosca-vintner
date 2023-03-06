@@ -1,1 +1,1 @@
-error: Artifact "artifact_one_one" of node "node_one" has multiple defaults
+error: Artifact "artifact_one_one@0" of node "node_one" has multiple defaults

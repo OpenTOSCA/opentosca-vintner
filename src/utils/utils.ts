@@ -128,3 +128,7 @@ export async function sleep(ms = 1000) {
 export function toFixed(value: number) {
     return Number(value.toFixed(2))
 }
+
+export function toFirstUpperCase(value: string) {
+    return value.charAt(0).toUpperCase() + value.slice(1)
+}

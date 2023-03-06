@@ -222,8 +222,8 @@ export class Query {
             for (const n of targets || []) {
                 if (
                     !nodePredicate ||
-                    (this.graph?.getNode(n)?._raw &&
-                        this.evaluatePredicate(n, this.graph?.getNode(n)?._raw || {}, nodePredicate))
+                    (this.graph?.getNode(n)?.raw &&
+                        this.evaluatePredicate(n, this.graph?.getNode(n)?.raw || {}, nodePredicate))
                 ) {
                     newPaths.add(p.concat(n))
                 }

@@ -1,1 +1,1 @@
-error: Property "key_one" of node "node_one" has multiple defaults
+error: Property "key_one@0" of node "node_one" has multiple defaults

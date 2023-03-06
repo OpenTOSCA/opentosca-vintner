@@ -49,7 +49,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     new Checker(graph).run()
 
     // Transform to TOSCA compliant format
-    new Transformer(graph, solver).run()
+    new Transformer(graph).run()
 
     return {
         inputs: solver.getInputs(),
