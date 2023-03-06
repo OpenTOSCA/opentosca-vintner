@@ -19,44 +19,102 @@ import {ensureDefined} from '#validator'
  * - groups might be a list
  */
 
-type ConditionalElementBase = {
-    type: 'node' | 'relation' | 'input' | 'policy' | 'group' | 'artifact' | 'property'
-    id: string
-    name: string
-    display: string
-    Display: string
-    present?: boolean
-    conditions: VariabilityExpression[]
-}
+export abstract class ConditionalElement {
+    readonly type: string
+    readonly id: string
+    readonly name: string
+    readonly container?: ConditionalElement
+    readonly index?: number
+    readonly display: string
+    readonly raw: any
 
-export class Input implements ConditionalElementBase {
-    readonly type = 'input'
-    raw: InputDefinition
-    id: string
-    name: string
-    display: string
-    Display: string
-    present?: boolean
-    conditions: VariabilityExpression[]
+    get Display() {
+        return utils.toFirstUpperCase(this.display)
+    }
 
-    constructor(data: {name: string; raw: InputDefinition}) {
+    present?: boolean
+    conditions: VariabilityExpression[] = []
+
+    // TODO: raw
+
+    protected constructor(
+        type: string,
+        data: {name: string; raw: any; container?: ConditionalElement; index?: number}
+    ) {
+        this.type = type
         this.name = data.name
-        this.display = 'input "' + data.name + '"'
-        this.Display = 'Input "' + data.name + '"'
+        this.container = data.container
+        this.index = data.index
         this.raw = data.raw
-        this.conditions = utils.toList(data.raw.conditions)
-        this.id = this.type + ':' + data.name
+
+        /**
+         * Construct display name
+         */
+        let _display = this.type + ' "' + data.name
+        if (validator.isDefined(data.index)) {
+            _display += '@' + data.index.toString()
+        }
+        _display += '"'
+        if (validator.isDefined(this.container)) {
+            _display += ' of ' + this.container.display
+        }
+        this.display = _display
+
+        /**
+         * Construct id
+         */
+        let _id = this.type + '.' + this.name
+        if (validator.isDefined(this.index)) {
+            _id += '@' + this.index.toString()
+        }
+        if (validator.isDefined(this.container)) {
+            _id += '.' + this.container.id
+        }
+        this.id = _id
+    }
+
+    isInput(): this is Input {
+        return this instanceof Input
+    }
+
+    isNode(): this is Node {
+        return this instanceof Node
+    }
+
+    isRelation(): this is Relation {
+        return this instanceof Relation
+    }
+
+    isProperty(): this is Property {
+        return this instanceof Property
+    }
+
+    isPolicy(): this is Policy {
+        return this instanceof Policy
+    }
+
+    isGroup(): this is Group {
+        return this instanceof Group
+    }
+
+    isArtifact(): this is Artifact {
+        return this instanceof Artifact
     }
 }
 
-export class Node implements ConditionalElementBase {
-    readonly type = 'node'
+export class Input extends ConditionalElement {
+    raw: InputDefinition
+
+    constructor(data: {name: string; raw: InputDefinition}) {
+        super('input', data)
+        this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
+    }
+}
+
+export class Node extends ConditionalElement {
     raw: NodeTemplate
-    id: string
-    name: string
-    display: string
-    Display: string
-    _id: string
+    toscaId: string
     relations: Relation[] = []
     ingoing: Relation[] = []
     outgoing: Relation[] = []
@@ -66,27 +124,17 @@ export class Node implements ConditionalElementBase {
     artifactsMap: Map<String, Artifact[]> = new Map()
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
-    present?: boolean
-    conditions: VariabilityExpression[]
 
     constructor(data: {name: string; raw: NodeTemplate}) {
-        this.name = data.name
-        this.display = 'node "' + data.name + '"'
-        this.Display = utils.toFirstUpperCase(this.display)
-        this._id = data.name
+        super('node', data)
+        this.toscaId = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-        this.id = this.type + ':' + this.name
     }
 }
 
-export class Property implements ConditionalElementBase {
-    readonly type = 'property'
+export class Property extends ConditionalElement {
     raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
-    id: string
-    name: string
-    display: string
-    Display: string
     container: Node | Relation | Policy | Group | Artifact
     index?: number
     default: boolean
@@ -105,47 +153,35 @@ export class Property implements ConditionalElementBase {
         default: boolean
         conditions: VariabilityExpression[] // TODO: this is stupid
     }) {
+        super('property', data)
         this.raw = data.raw
-        this.name = data.name
-        this.display =
-            'property "' +
-            (validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name) +
-            '" of ' +
-            data.container.display
-        this.Display = utils.toFirstUpperCase(this.display)
         this.value = data.value
         this.expression = data.expression
         this.container = data.container
         this.default = data.default
         this.conditions = data.conditions
-
-        this.id = this.type + ':' + this.container.name + ':' + this.name // TODO: index of container?! // TODO: index of property?!
     }
 }
 
-export class Relation implements ConditionalElementBase {
-    readonly type = 'relation'
+export class Relation extends ConditionalElement {
     raw: RequirementAssignment
-    id: string
-    name: string
-    display: string
-    Display: string
-    _id: [string, string]
+    toscaId: [string, string]
     source: string
     target: string
     groups: Group[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
-    present?: boolean
-    conditions: VariabilityExpression[]
     relationship?: Relationship
     default: boolean
 
-    constructor(data: {name: string; raw: RequirementAssignment; source: Node; target: string; id: [string, string]}) {
-        this.name = data.name
-        this.display = 'relation "' + `${data.name}` + '" of ' + data.source.display
-        this.Display = utils.toFirstUpperCase(this.display)
-
+    constructor(data: {
+        name: string
+        raw: RequirementAssignment
+        source: Node
+        target: string
+        toscaId: [string, string] // TODO: why is this not also string, index?!
+    }) {
+        super('relation', {...data, container: data.source})
         this.source = data.source.name
         this.target = data.target
         this.raw = data.raw
@@ -154,10 +190,8 @@ export class Relation implements ConditionalElementBase {
             : validator.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this._id = data.id
+        this.toscaId = data.toscaId
         this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
-
-        this.id = this.type + ':' + this.source + ':' + this.name // TODO: index?!
     }
 }
 
@@ -172,88 +206,51 @@ export class Relationship {
         this.name = data.name
         this.relation = data.relation
         this.raw = data.raw
-
         this.id = this.type + ':' + this.name
     }
 }
 
-export class Policy implements ConditionalElementBase {
-    readonly type = 'policy'
+export class Policy extends ConditionalElement {
     raw: PolicyTemplate
-    id: string
-    name: string
-    display: string
-    Display: string
     targets: (Node | Group)[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
-    present?: boolean
-    conditions: VariabilityExpression[]
 
     constructor(data: {name: string; raw: PolicyTemplate}) {
-        this.name = data.name
-        this.display = 'policy "' + data.name + '"'
-        this.Display = utils.toFirstUpperCase(this.display)
+        super('policy', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-        this.id = this.type + ':' + this.name
     }
 }
 
-export class Group implements ConditionalElementBase {
-    readonly type = 'group'
+export class Group extends ConditionalElement {
     raw: GroupTemplate
-    id: string
-    name: string
-    display: string
-    Display: string
     members: (Node | Relation)[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
     variability: boolean
-    present?: boolean
-    conditions: VariabilityExpression[]
 
     constructor(data: {name: string; raw: GroupTemplate}) {
-        this.name = data.name
-        this.display = 'group "' + data.name + '"'
-        this.Display = utils.toFirstUpperCase(this.display)
+        super('group', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
         this.variability = [
             TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
             TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
         ].includes(this.raw.type)
-
-        this.id = this.type + ':' + this.name
     }
 }
 
-export class Artifact implements ConditionalElementBase {
-    readonly type = 'artifact'
+export class Artifact extends ConditionalElement {
     readonly raw: ArtifactDefinition
-    readonly id: string
-    readonly name: string
-    readonly display: string
-    readonly Display: string
-    readonly index?: number
     readonly container: Node
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
-    present?: boolean
-    readonly conditions: VariabilityExpression[]
     readonly default: boolean
 
     constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
-        this.name = data.name
-        this.display =
-            'artifact "' +
-            (validator.isDefined(data.index) ? `${data.name}@${data.index}` : data.name) +
-            '" of ' +
-            data.container.display
-        this.Display = utils.toFirstUpperCase(this.display)
+        super('artifact', data)
         this.raw = data.raw
-        this.index = data.index
         this.container = data.container
         this.conditions = validator.isString(data.raw)
             ? []
@@ -261,14 +258,8 @@ export class Artifact implements ConditionalElementBase {
             ? [false]
             : utils.toList(data.raw.conditions)
         this.default = (validator.isString(data.raw) ? false : data.raw.default_alternative) || false
-
-        let id = this.type + ':' + this.container.name + ':' + this.name
-        if (validator.isDefined(data.index)) id += ':' + this.index
-        this.id = id
     }
 }
-
-export type ConditionalElement = Input | Node | Relation | Policy | Group | Artifact | Property
 
 export class Graph {
     serviceTemplate: ServiceTemplate
@@ -458,7 +449,7 @@ export class Graph {
                     source: node,
                     target,
                     raw: assignment,
-                    id: [nodeName, relationName],
+                    toscaId: [nodeName, relationName],
                 })
 
                 if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
