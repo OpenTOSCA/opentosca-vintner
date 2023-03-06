@@ -58,6 +58,7 @@ export default class Solver {
         // If artifact is default, then check if no other artifact having the same name is present
         if (element.isArtifact() && element.default) {
             const bratans = element.container.artifactsMap.get(element.name)!.filter(it => it !== element)
+            // TODO: transform this to expression
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
@@ -65,12 +66,14 @@ export default class Solver {
         if (element.isRelation() && element.default) {
             const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
+            // TODO: transform this to expression
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
         // If property is default, then check if no other property having the same name is present
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
+            // TODO: transform this to expression
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
 
@@ -349,7 +352,7 @@ export default class Solver {
 
         if (validator.isDefined(condition.get_variability_input)) {
             validator.ensureString(condition.get_variability_input)
-            return this.evaluateExpression(this.getInput(condition.get_variability_input), context)
+            return this.getInput(condition.get_variability_input)
         }
 
         if (validator.isDefined(condition.get_variability_expression)) {
@@ -385,7 +388,7 @@ export default class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_source_presence" is only valid inside a relation`)
-            return this.checkPresence(context.element.source)
+            return this.evaluateExpression({get_node_presence: context.element.source.name}, {})
         }
 
         if (validator.isDefined(condition.get_target_presence)) {
@@ -395,13 +398,14 @@ export default class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_target_presence" is only valid inside a relation`)
-            return this.checkPresence(context.element.target)
+            return this.evaluateExpression({get_node_presence: context.element.target.name}, {})
         }
 
         if (validator.isDefined(condition.has_present_targets)) {
             const element = condition.has_present_targets
             validator.ensureString(element)
 
+            // TODO: transform this to expression
             return this.graph.getPolicy(element).targets.some(target => {
                 if (target.isNode()) {
                     return this.checkPresence(target)
@@ -416,6 +420,7 @@ export default class Solver {
         if (validator.isDefined(condition.has_present_members)) {
             const element = condition.has_present_members
             validator.ensureString(element)
+            // TODO: transform this to expression
             return this.graph.getGroup(element).members.some(member => this.checkPresence(member))
         }
 
