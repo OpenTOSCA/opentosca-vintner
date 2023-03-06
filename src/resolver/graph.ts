@@ -25,9 +25,8 @@ export abstract class ConditionalElement {
     readonly name: string
     readonly container?: ConditionalElement
     readonly index?: number
-    readonly display: string
-    readonly raw: any
 
+    readonly display: string
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -35,17 +34,11 @@ export abstract class ConditionalElement {
     present?: boolean
     conditions: VariabilityExpression[] = []
 
-    // TODO: raw
-
-    protected constructor(
-        type: string,
-        data: {name: string; raw: any; container?: ConditionalElement; index?: number}
-    ) {
+    protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
         this.name = data.name
         this.container = data.container
         this.index = data.index
-        this.raw = data.raw
 
         /**
          * Construct display name
@@ -166,8 +159,19 @@ export class Property extends ConditionalElement {
 export class Relation extends ConditionalElement {
     raw: RequirementAssignment
     toscaId: [string, string]
-    source: string
-    target: string
+    source: Node
+
+    private _target?: Node
+    set target(target: Node) {
+        if (validator.isDefined(this._target)) throw new Error(`Target of ${this.display} is already set`)
+        this._target = target
+    }
+
+    get target() {
+        if (validator.isUndefined(this._target)) throw new Error(`Target of ${this.display} is not set`)
+        return this._target
+    }
+
     groups: Group[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
@@ -178,12 +182,11 @@ export class Relation extends ConditionalElement {
         name: string
         raw: RequirementAssignment
         source: Node
-        target: string
+        index: number
         toscaId: [string, string] // TODO: why is this not also string, index?!
     }) {
         super('relation', {...data, container: data.source})
-        this.source = data.source.name
-        this.target = data.target
+        this.source = data.source
         this.raw = data.raw
         this.conditions = validator.isString(data.raw)
             ? []
@@ -316,6 +319,127 @@ export class Graph {
         })
     }
 
+    private populateInputs() {
+        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.inputs).forEach(map => {
+            const [name, definition] = utils.firstEntry(map)
+            if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
+
+            const input = new Input({name, raw: definition})
+            this.inputs.push(input)
+            this.inputsMap.set(name, input)
+        })
+    }
+
+    private populateNodesAndRelations() {
+        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
+            const [nodeName, nodeTemplate] = utils.firstEntry(map)
+            if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
+
+            const node = new Node({name: nodeName, raw: nodeTemplate})
+            this.nodes.push(node)
+            this.nodesMap.set(nodeName, node)
+
+            // Properties
+            this.populateProperties(node, nodeTemplate)
+
+            // Relations
+            for (const [index, map] of nodeTemplate.requirements?.entries() || []) {
+                const [relationName, assignment] = utils.firstEntry(map)
+
+                const relation = new Relation({
+                    name: relationName,
+                    source: node,
+                    raw: assignment,
+                    toscaId: [nodeName, relationName], // TODO: index?!
+                    index,
+                })
+
+                if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
+                node.outgoingMap.get(relation.name)!.push(relation)
+                node.outgoing.push(relation)
+                node.relations.push(relation)
+                this.relations.push(relation)
+
+                if (!validator.isString(assignment)) {
+                    if (validator.isString(assignment.relationship)) {
+                        const relationshipTemplate = (this.serviceTemplate.topology_template?.relationship_templates ||
+                            {})[assignment.relationship]
+                        validator.ensureDefined(
+                            relationshipTemplate,
+                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
+                        )
+
+                        if (this.relationshipsMap.has(assignment.relationship))
+                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
+
+                        const relationship = new Relationship({
+                            name: assignment.relationship,
+                            relation,
+                            raw: relationshipTemplate,
+                        })
+
+                        this.relationshipsMap.set(assignment.relationship, relationship)
+                        relation.relationship = relationship
+
+                        // Properties
+                        this.populateProperties(relation, relationshipTemplate)
+                    }
+
+                    if (validator.isObject(assignment.relationship)) {
+                        throw new Error(
+                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
+                        )
+                    }
+                }
+            }
+
+            // Ensure that there are no multiple outgoing defaults
+            node.outgoingMap.forEach(relations => {
+                const candidates = relations.filter(it => it.default)
+                if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
+            })
+
+            // Artifacts
+            if (validator.isDefined(nodeTemplate.artifacts)) {
+                if (validator.isArray(nodeTemplate.artifacts)) {
+                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
+                        this.populateArtifact(node, artifactMap, artifactIndex)
+                    }
+                } else {
+                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
+                        const map: ArtifactDefinitionMap = {}
+                        map[artifactName] = artifactDefinition
+                        this.populateArtifact(node, map)
+                    }
+                }
+                // Ensure that there is only one default artifact
+                node.artifactsMap.forEach(artifacts => {
+                    const candidates = artifacts.filter(it => it.default)
+                    if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
+                })
+            }
+        })
+
+        // Ensure that each relationship is used
+        for (const relationshipName of Object.keys(
+            this.serviceTemplate.topology_template?.relationship_templates || {}
+        )) {
+            if (!this.relationshipsMap.has(relationshipName))
+                throw new Error(`Relation "${relationshipName}" is never used`)
+        }
+
+        // Assign ingoing relations to nodes and assign target to relation
+        this.relations.forEach(relation => {
+            const targetName = validator.isString(relation.raw) ? relation.raw : relation.raw.node
+            const target = this.nodesMap.get(targetName)
+            validator.ensureDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
+
+            relation.target = target
+            target.ingoing.push(relation)
+            target.relations.push(relation)
+        })
+    }
+
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
@@ -413,125 +537,6 @@ export class Graph {
             if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
                 throw new Error(`${property.Display} has no value or expression defined`)
             }
-        })
-    }
-
-    private populateInputs() {
-        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.inputs).forEach(map => {
-            const [name, definition] = utils.firstEntry(map)
-            if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
-
-            const input = new Input({name, raw: definition})
-            this.inputs.push(input)
-            this.inputsMap.set(name, input)
-        })
-    }
-
-    private populateNodesAndRelations() {
-        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
-            const [nodeName, nodeTemplate] = utils.firstEntry(map)
-            if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
-
-            const node = new Node({name: nodeName, raw: nodeTemplate})
-            this.nodes.push(node)
-            this.nodesMap.set(nodeName, node)
-
-            // Properties
-            this.populateProperties(node, nodeTemplate)
-
-            // Relations
-            nodeTemplate.requirements?.forEach(map => {
-                const [relationName, assignment] = utils.firstEntry(map)
-                const target = validator.isString(assignment) ? assignment : assignment.node
-
-                const relation = new Relation({
-                    name: relationName,
-                    source: node,
-                    target,
-                    raw: assignment,
-                    toscaId: [nodeName, relationName],
-                })
-
-                if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
-                node.outgoingMap.get(relation.name)!.push(relation)
-                node.outgoing.push(relation)
-                node.relations.push(relation)
-                this.relations.push(relation)
-
-                if (!validator.isString(assignment)) {
-                    if (validator.isString(assignment.relationship)) {
-                        const relationshipTemplate = (this.serviceTemplate.topology_template?.relationship_templates ||
-                            {})[assignment.relationship]
-                        validator.ensureDefined(
-                            relationshipTemplate,
-                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
-                        )
-
-                        if (this.relationshipsMap.has(assignment.relationship))
-                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
-
-                        const relationship = new Relationship({
-                            name: assignment.relationship,
-                            relation,
-                            raw: relationshipTemplate,
-                        })
-
-                        this.relationshipsMap.set(assignment.relationship, relationship)
-                        relation.relationship = relationship
-
-                        // Properties
-                        this.populateProperties(relation, relationshipTemplate)
-                    }
-
-                    if (validator.isObject(assignment.relationship)) {
-                        throw new Error(
-                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
-                        )
-                    }
-                }
-            })
-
-            // Ensure that there are no multiple outgoing defaults
-            node.outgoingMap.forEach(relations => {
-                const candidates = relations.filter(it => it.default)
-                if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
-            })
-
-            // Artifacts
-            if (validator.isDefined(nodeTemplate.artifacts)) {
-                if (validator.isArray(nodeTemplate.artifacts)) {
-                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        this.populateArtifact(node, artifactMap, artifactIndex)
-                    }
-                } else {
-                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
-                        const map: ArtifactDefinitionMap = {}
-                        map[artifactName] = artifactDefinition
-                        this.populateArtifact(node, map)
-                    }
-                }
-                // Ensure that there is only one default artifact
-                node.artifactsMap.forEach(artifacts => {
-                    const candidates = artifacts.filter(it => it.default)
-                    if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
-                })
-            }
-        })
-
-        // Ensure that each relationship is used
-        for (const relationshipName of Object.keys(
-            this.serviceTemplate.topology_template?.relationship_templates || {}
-        )) {
-            if (!this.relationshipsMap.has(relationshipName))
-                throw new Error(`Relation "${relationshipName}" is never used`)
-        }
-
-        // Assign ingoing relations to nodes
-        this.relations.forEach(relation => {
-            const node = this.nodesMap.get(relation.target)
-            validator.ensureDefined(node, `Target "${relation.target}" of ${relation.display} does not exist`)
-            node.ingoing.push(relation)
-            node.relations.push(relation)
         })
     }
 

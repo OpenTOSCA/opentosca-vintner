@@ -129,6 +129,7 @@ export default class Transformer {
                 .filter(group => group.present)
                 .reduce<GroupTemplateMap>((map, group) => {
                     const template = group.raw
+                    // TODO: get rid of toscaId
                     template.members = group.members.filter(it => it.present).map(it => it.toscaId)
 
                     this.transformProperties(group, template)

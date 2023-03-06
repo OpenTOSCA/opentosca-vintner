@@ -19,16 +19,16 @@ export default class Checker {
         // Ensure that each relation source exists
         if (!this.options.disable_relation_source_consistency_check) {
             for (const relation of relations) {
-                if (!this.graph.nodesMap.get(relation.source)?.present)
-                    throw new Error(`Relation source "${relation.source}" of ${relation.display} does not exist`)
+                if (!relation.source.present)
+                    throw new Error(`Relation source "${relation.source.name}" of ${relation.display} does not exist`)
             }
         }
 
         // Ensure that each relation target exists
         if (!this.options.disable_relation_target_consistency_check) {
             for (const relation of relations) {
-                if (!this.graph.nodesMap.get(relation.target)?.present)
-                    throw new Error(`Relation target "${relation.target}" of ${relation.display} does not exist`)
+                if (!relation.target.present)
+                    throw new Error(`Relation target "${relation.target.name}" of ${relation.display} does not exist`)
             }
         }
 
@@ -36,7 +36,7 @@ export default class Checker {
         if (!this.options.disable_ambiguous_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source === node.name && relation.name === 'host' && relation.present
+                    relation => relation.source.name === node.name && relation.name === 'host' && relation.present
                 )
                 if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
@@ -46,7 +46,7 @@ export default class Checker {
         if (!this.options.disable_expected_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source === node.name && relation.name === 'host'
+                    relation => relation.source.name === node.name && relation.name === 'host'
                 )
 
                 if (relations.length !== 0 && !relations.some(relation => relation.present))

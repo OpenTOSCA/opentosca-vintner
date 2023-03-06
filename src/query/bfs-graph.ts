@@ -28,10 +28,10 @@ export class BfsGraph extends Graph {
                 isUndefined(predicate) ||
                 this.resolver.evaluatePredicate(relation.name, relation.relationship?.raw || {}, predicate)
             ) {
-                if ((direction == 'both' || direction == 'out') && relation.source == nodeName)
-                    targets.push(relation.target)
-                if ((direction == 'both' || direction == 'in') && relation.target == nodeName)
-                    targets.push(relation.source)
+                if ((direction == 'both' || direction == 'out') && relation.source.name == nodeName)
+                    targets.push(relation.target.name)
+                if ((direction == 'both' || direction == 'in') && relation.target.name == nodeName)
+                    targets.push(relation.source.name)
             }
         }
 

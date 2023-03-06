@@ -57,7 +57,7 @@ export default class Solver {
 
         // If relation is default, then check if no other relation having the same name is present
         if (element.isRelation() && element.default) {
-            const node = this.graph.getNode(element.source)
+            const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
             conditions = [!bratans.some(it => this.checkPresence(it))]
         }
@@ -74,12 +74,14 @@ export default class Solver {
             this.getResolvingOptions().enable_relation_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{and: [{get_node_presence: element.source}, {get_node_presence: element.target}]}]
+            conditions = [{and: [{get_node_presence: element.source.name}, {get_node_presence: element.target.name}]}]
         }
 
         // Prune Relations: Additionally check that source and target are present
         if (element.isRelation() && this.getResolvingOptions().enable_relation_pruning) {
-            conditions.unshift({and: [{get_node_presence: element.source}, {get_node_presence: element.target}]})
+            conditions.unshift({
+                and: [{get_node_presence: element.source.name}, {get_node_presence: element.target.name}],
+            })
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
@@ -132,14 +134,14 @@ export default class Solver {
         ) {
             if (element.container.isNode()) conditions = [{get_node_presence: element.container.name}]
             if (element.container.isRelation())
-                conditions = [{get_relation_presence: [element.container.source, element.container.name]}]
+                conditions = [{get_relation_presence: [element.container.source.name, element.container.name]}]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.isProperty() && this.getResolvingOptions().enable_property_pruning) {
             if (element.container.isNode()) conditions.unshift({get_node_presence: element.container.name})
             if (element.container.isRelation())
-                conditions.unshift({get_relation_presence: [element.container.source, element.container.name]})
+                conditions.unshift({get_relation_presence: [element.container.source.name, element.container.name]})
         }
 
         // Evaluate assigned conditions
@@ -376,7 +378,7 @@ export default class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_source_presence" is only valid inside a relation`)
-            return this.checkPresence(this.graph.getNode(context.element.source))
+            return this.checkPresence(context.element.source)
         }
 
         if (validator.isDefined(condition.get_target_presence)) {
@@ -385,7 +387,7 @@ export default class Solver {
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_target_presence" is only valid inside a relation`)
-            return this.checkPresence(this.graph.getNode(context.element.target))
+            return this.checkPresence(context.element.target)
         }
 
         if (validator.isDefined(condition.has_present_targets)) {
