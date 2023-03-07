@@ -423,20 +423,25 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 The following intrinsic functions can be used inside a Variability Expression.
 
-| Keyname                    | Input                                                      | Output  | Description                                                                                                              |
-|----------------------------|------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                     | Any     | Returns the value of a Variability Input.                                                                                |
-| get_variability_expression | String                                                     | Any     | Returns the value of the Variability Expression.                                                                         |
-| get_variability_condition  | String                                                     | Boolean | Returns the value of the Variability Condition.                                                                          |
-| get_node_presence          | String                                                     | Boolean | Returns if node is present.                                                                                              |
-| get_relation_presence      | Tuple(String, String) &#124; Tuple(String, Number)         | Boolean | Returns if relation is present.                                                                                          |
-| get_source_presence        | SELF                                                       | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| get_target_presence        | SELF                                                       | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| has_present_targets        | String                                                     | Boolean | Returns if any target of the given policy is present.                                                                    |
-| has_present_members        | String                                                     | Boolean | Returns if any member of the given group is present.                                                                     |
-| concat                     | List(ValueExpression)                                      | String  | Concatenates the given values.                                                                                           |
-| join                       | Tuple(List(ValueExpression), String)                       | String  | Joins the given values using the provided delimiter.                                                                     |
-| token                      | Tuple(ValueExpression, String, Number)                     | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+| Keyname                    | Input                                              | Output  | Description                                                                                                              |
+|----------------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| get_variability_input      | String                                             | Any     | Returns the value of a Variability Input.                                                                                |
+| get_variability_expression | String                                             | Any     | Returns the value of the Variability Expression.                                                                         |
+| get_variability_condition  | String                                             | Boolean | Returns the value of the Variability Condition.                                                                          |
+| get_node_presence          | String                                             | Boolean | Returns if node is present.                                                                                              |
+| get_relation_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                          |
+| get_property_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                          |
+| get_artifact_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                          |
+| get_policy_presence        | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                            |
+| get_group_presence         | String                                             | Boolean | Returns if group is present.                                                                                             |
+| get_input_presence         | String                                             | Boolean | Returns if input is present.                                                                                             |
+| get_source_presence        | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| get_target_presence        | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| has_present_targets        | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                    |
+| has_present_members        | String                                             | Boolean | Returns if any member of the given group is present.                                                                     |
+| concat                     | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                           |
+| join                       | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                     |
+| token                      | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
 
 ## Constraint Operators
 
@@ -481,7 +486,7 @@ The following date operators can be used inside a Variability Expression.
 
 | Keyname             | Input              | Output | Description                                     |
 |---------------------|--------------------|--------|-------------------------------------------------|
-| get_current_weekday | Empty List | String | Returns the current weekday. |
+| weekday | Empty List | String | Returns the current weekday. |
 
 ## Processing
 

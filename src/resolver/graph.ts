@@ -28,12 +28,16 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
+
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
 
     present?: boolean
     conditions: VariabilityExpression[] = []
+
+    abstract toscaId: string | number | [string, string | number]
+    abstract condition: VariabilityExpression
 
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
@@ -104,6 +108,14 @@ export class Input extends ConditionalElement {
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
     }
+
+    get toscaId() {
+        return this.name
+    }
+
+    get condition() {
+        return {get_input_presence: this.toscaId}
+    }
 }
 
 export class Node extends ConditionalElement {
@@ -123,17 +135,22 @@ export class Node extends ConditionalElement {
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
     }
+
+    get toscaId() {
+        return this.name
+    }
+
+    get condition() {
+        return {get_node_presence: this.toscaId}
+    }
 }
 
 export class Property extends ConditionalElement {
     raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
     container: Node | Relation | Policy | Group | Artifact
-    index?: number
     default: boolean
     value?: PropertyAssignmentValue
     expression?: VariabilityExpression
-    present?: boolean
-    conditions: VariabilityExpression[]
 
     constructor(data: {
         name: string
@@ -152,6 +169,15 @@ export class Property extends ConditionalElement {
         this.container = data.container
         this.default = data.default
         this.conditions = data.conditions || []
+    }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isDefined(this.index)) return [this.container.name, this.index]
+        return [this.container.name, this.name]
+    }
+
+    get condition() {
+        return {get_property_presence: this.toscaId}
     }
 }
 
@@ -187,6 +213,15 @@ export class Relation extends ConditionalElement {
             : utils.toList(data.raw.conditions)
         this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isDefined(this.index)) return [this.source.name, this.index]
+        return [this.source.name, this.name]
+    }
+
+    get condition() {
+        return {get_relation_presence: this.toscaId}
+    }
 }
 
 export class Relationship {
@@ -210,10 +245,19 @@ export class Policy extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
 
-    constructor(data: {name: string; raw: PolicyTemplate}) {
+    constructor(data: {name: string; raw: PolicyTemplate; index: number}) {
         super('policy', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
+    }
+
+    get toscaId() {
+        if (validator.isDefined(this.index)) return this.index
+        return this.name
+    }
+
+    get condition() {
+        return {get_policy_presence: this.toscaId}
     }
 }
 
@@ -232,6 +276,14 @@ export class Group extends ConditionalElement {
             TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
             TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
         ].includes(this.raw.type)
+    }
+
+    get toscaId() {
+        return this.name
+    }
+
+    get condition() {
+        return {get_group_presence: this.toscaId}
     }
 }
 
@@ -253,6 +305,15 @@ export class Artifact extends ConditionalElement {
             : utils.toList(data.raw.conditions)
         this.default = (validator.isString(data.raw) ? false : data.raw.default_alternative) || false
     }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isDefined(this.index)) return [this.container.name, this.index]
+        return [this.container.name, this.name]
+    }
+
+    get condition(): VariabilityExpression {
+        return {get_artifact_presence: this.toscaId}
+    }
 }
 
 export class Graph {
@@ -267,6 +328,7 @@ export class Graph {
     properties: Property[] = []
 
     policies: Policy[] = []
+    policiesMap = new Map<string, Policy[]>()
 
     groups: Group[] = []
     groupsMap = new Map<string, Group>()
@@ -558,9 +620,13 @@ export class Graph {
             !validator.isArray(this.serviceTemplate.topology_template?.policies)
         )
             throw new Error(`Policies must be an array`)
-        this.serviceTemplate.topology_template?.policies?.forEach(map => {
+
+        for (const [index, map] of this.serviceTemplate.topology_template?.policies?.entries() || []) {
             const [name, template] = utils.firstEntry(map)
-            const policy = new Policy({name, raw: template})
+            const policy = new Policy({name, raw: template, index})
+
+            if (!this.policiesMap.has(name)) this.policiesMap.set(name, [])
+            this.policiesMap.get(name)!.push(policy)
             this.policies.push(policy)
 
             template.targets?.forEach(target => {
@@ -578,7 +644,7 @@ export class Graph {
             })
 
             this.populateProperties(policy, template)
-        })
+        }
     }
 
     getNode(member: string) {
@@ -587,13 +653,13 @@ export class Graph {
         return node
     }
 
-    getRelation(member: [string, string] | [string, number]) {
+    getRelation(member: [string, string | number]) {
         let relation
         const node = this.getNode(member[0])
 
         // Element is [node name, relation name]
         if (validator.isString(member[1])) {
-            const relations = node.outgoing.filter(relation => relation.name === member[1])
+            const relations = node.outgoingMap.get(member[1]) || []
             if (relations.length > 1) throw new Error(`Relation "${utils.prettyJSON(member)}" is ambiguous`)
             relation = relations[0]
         }
@@ -615,7 +681,7 @@ export class Graph {
         let policy
 
         if (validator.isString(element)) {
-            const policies = this.policies.filter(policy => policy.name === element)
+            const policies = this.policiesMap.get(element) || []
             if (policies.length > 1) throw new Error(`Policy "${element}" is ambiguous`)
             policy = policies[0]
         }
@@ -626,6 +692,44 @@ export class Graph {
 
         if (validator.isUndefined(policy)) throw new Error(`Policy "${element}" not found`)
         return policy
+    }
+
+    getArtifact(member: [string, string | number]) {
+        let artifact
+        const node = this.getNode(member[0])
+
+        if (validator.isString(member[1])) {
+            const artifacts = node.artifactsMap.get(member[1]) || []
+            if (artifacts.length > 1) throw new Error(`Artifact "${utils.prettyJSON(member)}" is ambiguous`)
+            artifact = artifacts[0]
+        }
+
+        if (validator.isNumber(member[1])) artifact = node.artifacts[member[1]]
+
+        validator.ensureDefined(artifact, `Artifact "${utils.prettyJSON(member)}" not found`)
+        return artifact
+    }
+
+    getProperty(member: [string, string | number]) {
+        let property
+        const node = this.getNode(member[0])
+
+        if (validator.isString(member[1])) {
+            const properties = node.propertiesMap.get(member[1]) || []
+            if (properties.length > 1) throw new Error(`Property "${utils.prettyJSON(member)}" is ambiguous`)
+            property = properties[0]
+        }
+
+        if (validator.isNumber(member[1])) property = node.properties[member[1]]
+
+        validator.ensureDefined(property, `Property "${utils.prettyJSON(member)}" not found`)
+        return property
+    }
+
+    getInput(name: string) {
+        const input = this.inputsMap.get(name)
+        validator.ensureDefined(input, `Input "${name}" not found`)
+        return input
     }
 }
 

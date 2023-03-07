@@ -1,4 +1,4 @@
-import {Artifact, ConditionalElement, Graph, Group, Node, Policy, Property, Relation} from '#/resolver/graph'
+import {ConditionalElement, Graph, Property} from '#/resolver/graph'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
@@ -32,13 +32,21 @@ export default class Solver {
         for (const policy of this.graph.policies) this.checkPresence(policy)
         for (const artifact of this.graph.artifacts) this.checkPresence(artifact)
         for (const property of this.graph.properties) this.checkPresence(property)
-        for (const property of this.graph.properties.filter(it => it.present)) {
-            if (validator.isDefined(property.expression))
-                property.value = this.evaluateExpression(property.expression, {
-                    element: property,
-                })
-        }
+        for (const property of this.graph.properties.filter(it => it.present)) this.evaluateProperty(property)
         return this
+    }
+
+    evaluateProperty(property: Property) {
+        // TODO: input should be actually only name, name since it the value of the final present property?
+        // TODO: first evaluate presence?!
+        // TODO: might return undefined?!
+        if (validator.isDefined(property.expression))
+            property.value = this.evaluateExpression(property.expression, {
+                element: property,
+            })
+
+        if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+        return property.value
     }
 
     checkPresence(element: ConditionalElement) {
@@ -58,20 +66,26 @@ export default class Solver {
         // If artifact is default, then check if no other artifact having the same name is present
         if (element.isArtifact() && element.default) {
             const bratans = element.container.artifactsMap.get(element.name)!.filter(it => it !== element)
-            conditions = [!bratans.some(it => this.checkPresence(it))]
+            conditions = [
+                {
+                    not: {
+                        or: bratans.map(it => it.condition),
+                    },
+                },
+            ]
         }
 
         // If relation is default, then check if no other relation having the same name is present
         if (element.isRelation() && element.default) {
             const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
-            conditions = [!bratans.some(it => this.checkPresence(it))]
+            conditions = [{not: {or: bratans.map(it => it.condition)}}]
         }
 
         // If property is default, then check if no other property having the same name is present
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
-            conditions = [!bratans.some(it => this.checkPresence(it))]
+            conditions = [{not: {or: bratans.map(it => it.condition)}}]
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
@@ -80,13 +94,13 @@ export default class Solver {
             this.getResolvingOptions().enable_relation_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{and: [{get_node_presence: element.source.name}, {get_node_presence: element.target.name}]}]
+            conditions = [{and: [element.source.condition, element.target.condition]}]
         }
 
         // Prune Relations: Additionally check that source and target are present
         if (element.isRelation() && this.getResolvingOptions().enable_relation_pruning) {
             conditions.unshift({
-                and: [{get_node_presence: element.source.name}, {get_node_presence: element.target.name}],
+                and: [element.source.condition, element.target.condition],
             })
         }
 
@@ -96,12 +110,12 @@ export default class Solver {
             this.getResolvingOptions().enable_policy_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_targets: element.name}]
+            conditions = [{has_present_targets: element.toscaId}]
         }
 
         // Prune Policy: Additionally check if any target is present
         if (element.isPolicy() && this.getResolvingOptions().enable_policy_pruning) {
-            conditions.unshift({has_present_targets: element.name})
+            conditions.unshift({has_present_targets: element.toscaId})
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -110,12 +124,12 @@ export default class Solver {
             this.getResolvingOptions().enable_group_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_members: element.name}]
+            conditions = [{has_present_members: element.toscaId}]
         }
 
         // Prune Group: Additionally check if any member is present
         if (element.isGroup() && this.getResolvingOptions().enable_group_pruning) {
-            conditions.unshift({has_present_members: element.name})
+            conditions.unshift({has_present_members: element.toscaId})
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
@@ -124,12 +138,12 @@ export default class Solver {
             this.getResolvingOptions().enable_artifact_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{get_node_presence: element.container.name}]
+            conditions = [element.container.condition]
         }
 
         // Prune Artifact: Additionally check if node is present
         if (element.isArtifact() && this.getResolvingOptions().enable_artifact_pruning) {
-            conditions.unshift({get_node_presence: element.container.name})
+            conditions.unshift(element.container.condition)
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -138,16 +152,12 @@ export default class Solver {
             this.getResolvingOptions().enable_property_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            if (element.container.isNode()) conditions = [{get_node_presence: element.container.name}]
-            if (element.container.isRelation())
-                conditions = [{get_relation_presence: [element.container.source.name, element.container.name]}]
+            conditions = [element.container.condition]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.isProperty() && this.getResolvingOptions().enable_property_pruning) {
-            if (element.container.isNode()) conditions.unshift({get_node_presence: element.container.name})
-            if (element.container.isRelation())
-                conditions.unshift({get_relation_presence: [element.container.source.name, element.container.name]})
+            conditions.unshift(element.container.condition)
         }
 
         // Evaluate assigned conditions
@@ -363,57 +373,109 @@ export default class Solver {
         }
 
         if (validator.isDefined(condition.get_node_presence)) {
-            const name = this.evaluateExpression(condition.get_node_presence, context)
-            validator.ensureString(name)
-            return this.checkPresence(this.graph.getNode(name))
+            const node = condition.get_node_presence
+            validator.ensureString(node)
+            return this.checkPresence(this.graph.getNode(node))
         }
 
         if (validator.isDefined(condition.get_relation_presence)) {
-            const node = this.evaluateExpression(condition.get_relation_presence[0], context)
+            const node = condition.get_relation_presence[0]
             validator.ensureString(node)
 
-            const relation = this.evaluateExpression(condition.get_relation_presence[1], context)
+            const relation = condition.get_relation_presence[1]
             validator.ensureStringOrNumber(relation)
 
             return this.checkPresence(this.graph.getRelation([node, relation]))
         }
 
         if (validator.isDefined(condition.get_source_presence)) {
-            const element = this.evaluateExpression(condition.get_source_presence, context)
+            const element = condition.get_source_presence
+            validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_source_presence" is only valid inside a relation`)
-            return this.checkPresence(context.element.source)
+            return this.evaluateExpression(context.element.source.condition, {})
         }
 
         if (validator.isDefined(condition.get_target_presence)) {
-            const element = this.evaluateExpression(condition.get_target_presence, context)
+            const element = condition.get_target_presence
+            validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
             if (!context?.element?.isRelation())
                 throw new Error(`"get_target_presence" is only valid inside a relation`)
-            return this.checkPresence(context.element.target)
+            return this.evaluateExpression(context.element.target.condition, {})
+        }
+
+        if (validator.isDefined(condition.get_policy_presence)) {
+            const name = condition.get_policy_presence
+            validator.ensureStringOrNumber(name)
+
+            const group = this.graph.getPolicy(name)
+            return this.checkPresence(group)
         }
 
         if (validator.isDefined(condition.has_present_targets)) {
-            const element = this.evaluateExpression(condition.has_present_targets, context)
-            validator.ensureString(element)
-            return this.graph.getPolicy(element).targets.some(target => {
-                if (target.isNode()) {
-                    return this.checkPresence(target)
-                }
+            const element = condition.has_present_targets
+            validator.ensureStringOrNumber(element)
 
-                if (target.isGroup()) {
-                    return target.members.some(member => this.checkPresence(member))
-                }
-            })
+            const policy = this.graph.getPolicy(element)
+            return this.evaluateExpression(
+                {
+                    or: policy.targets.map(it => {
+                        // Node
+                        if (it.isNode()) return it.condition
+
+                        // Group
+                        return {
+                            or: it.members.map(it => it.condition),
+                        }
+                    }),
+                },
+                {}
+            )
+        }
+
+        if (validator.isDefined(condition.get_group_presence)) {
+            const name = condition.get_group_presence
+            validator.ensureString(name)
+
+            const group = this.graph.getGroup(name)
+            return this.checkPresence(group)
         }
 
         if (validator.isDefined(condition.has_present_members)) {
-            const element = this.evaluateExpression(condition.has_present_members, context)
+            const element = condition.has_present_members
             validator.ensureString(element)
-            return this.graph.getGroup(element).members.some(member => this.checkPresence(member))
+
+            const group = this.graph.getGroup(element)
+            return this.evaluateExpression(
+                {
+                    or: group.members.map(it => it.condition),
+                },
+                {}
+            )
+        }
+
+        if (validator.isDefined(condition.get_artifact_presence)) {
+            validator.ensureString(condition.get_artifact_presence[0])
+            validator.ensureStringOrNumber(condition.get_artifact_presence[1])
+            const artifact = this.graph.getArtifact(condition.get_artifact_presence)
+            return this.checkPresence(artifact)
+        }
+
+        if (validator.isDefined(condition.get_property_presence)) {
+            validator.ensureString(condition.get_property_presence[0])
+            validator.ensureStringOrNumber(condition.get_property_presence[1])
+            const artifact = this.graph.getProperty(condition.get_property_presence)
+            return this.checkPresence(artifact)
+        }
+
+        if (validator.isDefined(condition.get_input_presence)) {
+            validator.ensureString(condition.get_input_presence)
+            const input = this.graph.getInput(condition.get_input_presence)
+            return this.checkPresence(input)
         }
 
         if (validator.isDefined(condition.concat)) {
@@ -614,7 +676,7 @@ export default class Solver {
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
 
-        if (validator.isDefined(condition.get_current_weekday)) {
+        if (validator.isDefined(condition.weekday)) {
             return this.weekday
         }
 

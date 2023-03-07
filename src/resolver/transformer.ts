@@ -1,14 +1,13 @@
-import {NodeTemplate, NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
-import {RelationshipTemplate} from '#spec/relationship-template'
-import {GroupTemplate, GroupTemplateMap} from '#spec/group-template'
-import {PolicyAssignmentMap, PolicyTemplate} from '#spec/policy-template'
-import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
+import {GroupTemplateMap} from '#spec/group-template'
+import {PolicyAssignmentMap} from '#spec/policy-template'
+import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import * as validator from '#validator'
-import {PropertyAssignmentMap} from '#spec/property-assignments'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import * as utils from '#utils'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {Artifact, Graph, Group, Node, Policy, Relation} from './graph'
+import {Graph, Node, Property, Relation} from './graph'
 import {ensureDefined} from '#validator'
 import {GroupMember} from '#spec/group-type'
 
@@ -209,8 +208,8 @@ export default class Transformer {
     }
 
     private transformProperties(
-        element: Node | Relation | Group | Policy | Artifact,
-        template: NodeTemplate | RelationshipTemplate | GroupTemplate | PolicyTemplate | ArtifactDefinition
+        element: {properties: Property[]},
+        template: {properties?: PropertyAssignmentMap | PropertyAssignmentList} | string
     ) {
         if (validator.isString(template)) return
 
