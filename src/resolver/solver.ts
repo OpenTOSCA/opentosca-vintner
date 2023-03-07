@@ -351,7 +351,7 @@ export default class Solver {
 
         if (validator.isDefined(condition.get_variability_input)) {
             validator.ensureString(condition.get_variability_input)
-            return this.getInput(condition.get_variability_input)
+            return this.evaluateExpression(this.getInput(condition.get_variability_input), context)
         }
 
         if (validator.isDefined(condition.get_variability_expression)) {
