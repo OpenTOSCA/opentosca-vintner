@@ -77,16 +77,49 @@ export type VariabilityExpression =
           div?: VariabilityExpression[]
           mod?: [VariabilityExpression, VariabilityExpression]
 
-          // Intrinsic functions
+          // Variability functions
           get_variability_expression?: string
           get_variability_input?: string
           get_variability_condition?: string
+
+          // Node functions
           get_node_presence?: string
+
+          // Relation functions
           get_relation_presence?: [string, string | number]
           get_source_presence?: 'SELF'
           get_target_presence?: 'SELF'
+
+          // Property functions
+          // TODO: document
+          // TODO: test
+          get_property_presence?: [string, string | number]
+          // TODO: implement
+          // TODO: document
+          // TODO: test
+          get_property_value?: [string, string | number]
+
+          // Artifact functions
+          // TODO: document
+          // TODO: test
+          get_artifact_presence?: [string, string | number]
+
+          // Policy functions
+          // TODO: document
+          // TODO: test
+          get_policy_presence?: string | number
           has_present_targets?: string
+
+          // Group functions
+          // TODO: document
+          // TODO: test
+          get_group_presence?: string
           has_present_members?: string
+
+          // Input functions
+          // TODO: document
+          // TODO: test
+          get_input_presence?: string
 
           // Intrinsic functions
           concat?: VariabilityExpression[]
