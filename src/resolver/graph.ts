@@ -187,6 +187,11 @@ export class Relation extends ConditionalElement {
             : utils.toList(data.raw.conditions)
         this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isDefined(this.index)) return [this.source.name, this.index]
+        return [this.source.name, this.name]
+    }
 }
 
 export class Relationship {

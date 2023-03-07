@@ -66,8 +66,7 @@ export default class Solver {
         if (element.isRelation() && element.default) {
             const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
-            // TODO: transform this to expression
-            conditions = [!bratans.some(it => this.checkPresence(it))]
+            conditions = [{not: {or: bratans.map(it => ({get_relation_presence: it.toscaId}))}}]
         }
 
         // If property is default, then check if no other property having the same name is present
