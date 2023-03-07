@@ -11,8 +11,6 @@ import * as utils from '#utils'
 import * as validator from '#validator'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {ensureDefined} from '#validator'
-import {mem} from 'systeminformation'
-import {UnexpectedError} from '#utils/error'
 
 /**
  * Not documented since preparation for future work
@@ -38,7 +36,7 @@ export abstract class ConditionalElement {
     present?: boolean
     conditions: VariabilityExpression[] = []
 
-    abstract toscaId: string | [string, string | number]
+    abstract toscaId: string | number | [string, string | number]
     abstract condition: VariabilityExpression
 
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
@@ -247,14 +245,14 @@ export class Policy extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
 
-    constructor(data: {name: string; raw: PolicyTemplate}) {
+    constructor(data: {name: string; raw: PolicyTemplate; index: number}) {
         super('policy', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
     }
 
-    // TODO: index?!
     get toscaId() {
+        if (validator.isDefined(this.index)) return this.index
         return this.name
     }
 
@@ -622,9 +620,10 @@ export class Graph {
             !validator.isArray(this.serviceTemplate.topology_template?.policies)
         )
             throw new Error(`Policies must be an array`)
-        this.serviceTemplate.topology_template?.policies?.forEach(map => {
+
+        for (const [index, map] of this.serviceTemplate.topology_template?.policies?.entries() || []) {
             const [name, template] = utils.firstEntry(map)
-            const policy = new Policy({name, raw: template})
+            const policy = new Policy({name, raw: template, index})
 
             if (!this.policiesMap.has(name)) this.policiesMap.set(name, [])
             this.policiesMap.get(name)!.push(policy)
@@ -645,7 +644,7 @@ export class Graph {
             })
 
             this.populateProperties(policy, template)
-        })
+        }
     }
 
     getNode(member: string) {

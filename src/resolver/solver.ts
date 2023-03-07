@@ -44,6 +44,9 @@ export default class Solver {
             property.value = this.evaluateExpression(property.expression, {
                 element: property,
             })
+
+        if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+        return property.value
     }
 
     checkPresence(element: ConditionalElement) {
@@ -415,7 +418,7 @@ export default class Solver {
 
         if (validator.isDefined(condition.has_present_targets)) {
             const element = condition.has_present_targets
-            validator.ensureString(element)
+            validator.ensureStringOrNumber(element)
 
             const policy = this.graph.getPolicy(element)
             return this.evaluateExpression(
