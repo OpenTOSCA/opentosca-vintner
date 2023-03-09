@@ -1,4 +1,4 @@
-import {ConditionalElement, Graph, Property} from '#/resolver/graph'
+import {Artifact, ConditionalElement, Graph, Group, Input, Node, Policy, Property, Relation} from '#/resolver/graph'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
@@ -7,6 +7,7 @@ import _ from 'lodash'
 import stats from 'stats-lite'
 import {ensureArray, ensureDefined} from '#validator'
 import regression from 'regression'
+import {UnexpectedError} from '#utils/error'
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -266,6 +267,9 @@ export default class Solver {
         if (validator.isNumber(condition)) return condition
         if (validator.isArray(condition)) return condition
 
+        /**
+         * and
+         */
         if (validator.isDefined(condition.and)) {
             return condition.and.every(element => {
                 const value = this.evaluateExpression(element, context)
@@ -274,6 +278,9 @@ export default class Solver {
             })
         }
 
+        /**
+         * or
+         */
         if (validator.isDefined(condition.or)) {
             return condition.or.some(element => {
                 const value = this.evaluateExpression(element, context)
@@ -282,12 +289,18 @@ export default class Solver {
             })
         }
 
+        /**
+         * not
+         */
         if (validator.isDefined(condition.not)) {
             const value = this.evaluateExpression(condition.not, context)
             validator.ensureBoolean(value)
             return !value
         }
 
+        /**
+         * xor
+         */
         if (validator.isDefined(condition.xor)) {
             return (
                 condition.xor.reduce((count: number, element) => {
@@ -299,6 +312,9 @@ export default class Solver {
             )
         }
 
+        /**
+         * implies
+         */
         if (validator.isDefined(condition.implies)) {
             const first = this.evaluateExpression(condition.implies[0], context)
             validator.ensureBoolean(first)
@@ -309,6 +325,9 @@ export default class Solver {
             return first ? second : true
         }
 
+        /**
+         * add
+         */
         if (validator.isDefined(condition.add)) {
             return condition.add.reduce<number>((sum, element) => {
                 const value = this.evaluateExpression(element, context)
@@ -317,6 +336,9 @@ export default class Solver {
             }, 0)
         }
 
+        /**
+         * sub
+         */
         if (validator.isDefined(condition.sub)) {
             const first = this.evaluateExpression(condition.sub[0], context)
             validator.ensureNumber(first)
@@ -328,6 +350,9 @@ export default class Solver {
             }, first)
         }
 
+        /**
+         * mul
+         */
         if (validator.isDefined(condition.mul)) {
             return condition.mul.reduce<number>((product, element) => {
                 const value = this.evaluateExpression(element, context)
@@ -336,6 +361,9 @@ export default class Solver {
             }, 1)
         }
 
+        /**
+         * div
+         */
         if (validator.isDefined(condition.div)) {
             const first = this.evaluateExpression(condition.div[0], context)
             validator.ensureNumber(first)
@@ -347,6 +375,9 @@ export default class Solver {
             }, first)
         }
 
+        /**
+         * mod
+         */
         if (validator.isDefined(condition.mod)) {
             const first = this.evaluateExpression(condition.mod[0], context)
             validator.ensureNumber(first)
@@ -357,70 +388,139 @@ export default class Solver {
             return first % second
         }
 
+        /**
+         * get_variability_input
+         */
         if (validator.isDefined(condition.get_variability_input)) {
             validator.ensureString(condition.get_variability_input)
             return this.evaluateExpression(this.getInput(condition.get_variability_input), context)
         }
 
+        /**
+         * get_variability_expression
+         */
         if (validator.isDefined(condition.get_variability_expression)) {
             validator.ensureString(condition.get_variability_expression)
             return this.evaluateExpression(this.getExpression(condition.get_variability_expression), context)
         }
 
+        /**
+         * get_variability_condition
+         */
         if (validator.isDefined(condition.get_variability_condition)) {
             validator.ensureString(condition.get_variability_condition)
             return this.evaluateCondition(this.getExpression(condition.get_variability_condition), context)
         }
 
+        /**
+         * get_node_presence
+         */
         if (validator.isDefined(condition.get_node_presence)) {
-            const node = condition.get_node_presence
-            validator.ensureString(node)
-            return this.checkPresence(this.graph.getNode(node))
+            let node: Node | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = condition.get_node_presence
+                validator.ensureStringOrNumber(name)
+                node = this.graph.getNode(name)
+            }
+
+            return this.checkPresence(node)
         }
 
+        /**
+         * get_relation_presence
+         */
         if (validator.isDefined(condition.get_relation_presence)) {
-            const node = condition.get_relation_presence[0]
-            validator.ensureString(node)
+            let relation: Relation | undefined
 
-            const relation = condition.get_relation_presence[1]
-            validator.ensureStringOrNumber(relation)
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isRelation()) throw new Error(`${element.Display} is not a relation`)
+                relation = element
+            }
 
-            return this.checkPresence(this.graph.getRelation([node, relation]))
+            if (validator.isUndefined(relation)) {
+                const node = condition.get_relation_presence[0]
+                validator.ensureString(node)
+
+                const id = condition.get_relation_presence[1]
+                validator.ensureStringOrNumber(id)
+
+                relation = this.graph.getRelation([node, id])
+            }
+
+            return this.checkPresence(relation)
         }
 
+        /**
+         * get_source_presence
+         */
         if (validator.isDefined(condition.get_source_presence)) {
             const element = condition.get_source_presence
             validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
-            if (!context?.element?.isRelation())
-                throw new Error(`"get_source_presence" is only valid inside a relation`)
+            if (validator.isUndefined(context.element))
+                throw new Error(`Context of condition ${utils.prettyJSON(condition)} does not hold an element`)
+            if (!context.element.isRelation()) throw new Error(`"get_source_presence" is only valid inside a relation`)
             return this.evaluateExpression(context.element.source.condition, {})
         }
 
+        /**
+         * get_target_presence
+         */
         if (validator.isDefined(condition.get_target_presence)) {
             const element = condition.get_target_presence
             validator.ensureString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
-            if (!context?.element?.isRelation())
-                throw new Error(`"get_target_presence" is only valid inside a relation`)
+            if (validator.isUndefined(context.element))
+                throw new Error(`Context of condition ${utils.prettyJSON(condition)} does not hold an element`)
+            if (!context.element.isRelation()) throw new Error(`"get_target_presence" is only valid inside a relation`)
             return this.evaluateExpression(context.element.target.condition, {})
         }
 
+        /**
+         * get_policy_presence
+         */
         if (validator.isDefined(condition.get_policy_presence)) {
-            const name = condition.get_policy_presence
-            validator.ensureStringOrNumber(name)
+            let policy: Policy | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
+                policy = element
+            }
 
-            const group = this.graph.getPolicy(name)
-            return this.checkPresence(group)
+            if (validator.isUndefined(policy)) {
+                const name = condition.get_policy_presence
+                validator.ensureStringOrNumber(name)
+                policy = this.graph.getPolicy(name)
+            }
+            return this.checkPresence(policy)
         }
 
+        /**
+         * has_present_targets
+         */
         if (validator.isDefined(condition.has_present_targets)) {
-            const element = condition.has_present_targets
-            validator.ensureStringOrNumber(element)
+            let policy: Policy | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
+                policy = element
+            }
 
-            const policy = this.graph.getPolicy(element)
+            if (validator.isUndefined(policy)) {
+                const name = condition.has_present_targets
+                validator.ensureStringOrNumber(name)
+                policy = this.graph.getPolicy(name)
+            }
+
             return this.evaluateExpression(
                 {
                     or: policy.targets.map(it => {
@@ -437,19 +537,43 @@ export default class Solver {
             )
         }
 
+        /**
+         * get_group_presence
+         */
         if (validator.isDefined(condition.get_group_presence)) {
-            const name = condition.get_group_presence
-            validator.ensureString(name)
+            let group: Group | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
+                group = element
+            }
 
-            const group = this.graph.getGroup(name)
+            if (validator.isUndefined(group)) {
+                const name = condition.get_group_presence
+                validator.ensureString(name)
+                group = this.graph.getGroup(name)
+            }
+
             return this.checkPresence(group)
         }
 
+        /**
+         * has_present_member
+         */
         if (validator.isDefined(condition.has_present_members)) {
-            const element = condition.has_present_members
-            validator.ensureString(element)
+            let group: Group | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
+                group = element
+            }
 
-            const group = this.graph.getGroup(element)
+            if (validator.isUndefined(group)) {
+                const name = condition.has_present_members
+                validator.ensureString(name)
+                group = this.graph.getGroup(name)
+            }
+
             return this.evaluateExpression(
                 {
                     or: group.members.map(it => it.condition),
@@ -458,34 +582,82 @@ export default class Solver {
             )
         }
 
+        /**
+         * get_artifact_presence
+         */
         if (validator.isDefined(condition.get_artifact_presence)) {
-            validator.ensureString(condition.get_artifact_presence[0])
-            validator.ensureStringOrNumber(condition.get_artifact_presence[1])
-            const artifact = this.graph.getArtifact(condition.get_artifact_presence)
+            let artifact: Artifact | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
+                artifact = element
+            }
+
+            if (validator.isUndefined(artifact)) {
+                validator.ensureString(condition.get_artifact_presence[0])
+                validator.ensureStringOrNumber(condition.get_artifact_presence[1])
+                artifact = this.graph.getArtifact(condition.get_artifact_presence)
+            }
+
             return this.checkPresence(artifact)
         }
 
+        /**
+         * get_property_presence
+         */
         if (validator.isDefined(condition.get_property_presence)) {
-            validator.ensureString(condition.get_property_presence[0])
-            validator.ensureStringOrNumber(condition.get_property_presence[1])
-            const artifact = this.graph.getProperty(condition.get_property_presence)
-            return this.checkPresence(artifact)
+            let property: Property | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+                property = element
+            }
+
+            if (validator.isUndefined(property)) {
+                validator.ensureString(condition.get_property_presence[0])
+                validator.ensureStringOrNumber(condition.get_property_presence[1])
+                property = this.graph.getProperty(condition.get_property_presence)
+            }
+
+            return this.checkPresence(property)
         }
 
+        /**
+         * get_input_presence
+         */
         if (validator.isDefined(condition.get_input_presence)) {
-            validator.ensureString(condition.get_input_presence)
-            const input = this.graph.getInput(condition.get_input_presence)
+            let input: Input | undefined
+            if (validator.isDefined(condition._cached_element)) {
+                const element = condition._cached_element
+                if (!element.isInput()) throw new Error(`${element.Display} is not an input`)
+                input = element
+            }
+
+            if (validator.isUndefined(input)) {
+                const name = condition.get_input_presence
+                validator.ensureString(name)
+                input = this.graph.getInput(name)
+            }
             return this.checkPresence(input)
         }
 
+        /**
+         * concat
+         */
         if (validator.isDefined(condition.concat)) {
             return condition.concat.map(c => this.evaluateExpression(c, context)).join('')
         }
 
+        /**
+         * join
+         */
         if (validator.isDefined(condition.join)) {
             return condition.join[0].map(c => this.evaluateExpression(c, context)).join(condition.join[1])
         }
 
+        /**
+         * token
+         */
         if (validator.isDefined(condition.token)) {
             const element = this.evaluateExpression(condition.token[0], context)
             validator.ensureString(element)
@@ -494,6 +666,9 @@ export default class Solver {
             return element.split(token)[index]
         }
 
+        /**
+         * equal
+         */
         if (validator.isDefined(condition.equal)) {
             const first = this.evaluateExpression(condition.equal[0], context)
             return condition.equal.every(element => {
@@ -502,6 +677,9 @@ export default class Solver {
             })
         }
 
+        /**
+         * greater_than
+         */
         if (validator.isDefined(condition.greater_than)) {
             return (
                 this.evaluateExpression(condition.greater_than[0], context) >
@@ -509,6 +687,9 @@ export default class Solver {
             )
         }
 
+        /**
+         * greater_or_equal
+         */
         if (validator.isDefined(condition.greater_or_equal)) {
             return (
                 this.evaluateExpression(condition.greater_or_equal[0], context) >=
@@ -516,6 +697,9 @@ export default class Solver {
             )
         }
 
+        /**
+         * less_than
+         */
         if (validator.isDefined(condition.less_than)) {
             return (
                 this.evaluateExpression(condition.less_than[0], context) <
@@ -523,6 +707,9 @@ export default class Solver {
             )
         }
 
+        /**
+         * less_or_equal
+         */
         if (validator.isDefined(condition.less_or_equal)) {
             return (
                 this.evaluateExpression(condition.less_or_equal[0], context) <=
@@ -530,6 +717,9 @@ export default class Solver {
             )
         }
 
+        /**
+         * in_range
+         */
         if (validator.isDefined(condition.in_range)) {
             const element = this.evaluateExpression(condition.in_range[0], context)
             const lower = condition.in_range[1][0]
@@ -537,12 +727,18 @@ export default class Solver {
             return lower <= element && element <= upper
         }
 
+        /**
+         * valid_values
+         */
         if (validator.isDefined(condition.valid_values)) {
             const element = this.evaluateExpression(condition.valid_values[0], context)
             const valid = condition.valid_values[1].map(c => this.evaluateExpression(c, context))
             return valid.includes(element)
         }
 
+        /**
+         * length
+         */
         if (validator.isDefined(condition.length)) {
             const element = this.evaluateExpression(condition.length[0], context)
             validator.ensureString(element)
@@ -553,6 +749,9 @@ export default class Solver {
             return element.length === length
         }
 
+        /**
+         * min_length
+         */
         if (validator.isDefined(condition.min_length)) {
             const element = this.evaluateExpression(condition.min_length[0], context)
             validator.ensureString(element)
@@ -563,6 +762,9 @@ export default class Solver {
             return element.length >= length
         }
 
+        /**
+         * max_length
+         */
         if (validator.isDefined(condition.max_length)) {
             const element = this.evaluateExpression(condition.max_length[0], context)
             validator.ensureString(element)
@@ -573,18 +775,27 @@ export default class Solver {
             return element.length <= length
         }
 
+        /**
+         * sum
+         */
         if (validator.isDefined(condition.sum)) {
             const elements = condition.sum
             validator.ensureNumbers(elements)
             return utils.toFixed(stats.sum(elements))
         }
 
+        /**
+         * count
+         */
         if (validator.isDefined(condition.count)) {
             const elements = condition.count
             validator.ensureNumbers(elements)
             return elements.length
         }
 
+        /**
+         * min
+         */
         if (validator.isDefined(condition.min)) {
             const elements = condition.min
             validator.ensureNumbers(elements)
@@ -593,6 +804,9 @@ export default class Solver {
             return min
         }
 
+        /**
+         * max
+         */
         if (validator.isDefined(condition.max)) {
             const elements = condition.max
             validator.ensureNumbers(elements)
@@ -601,30 +815,45 @@ export default class Solver {
             return max
         }
 
+        /**
+         * median
+         */
         if (validator.isDefined(condition.median)) {
             const elements = condition.median
             validator.ensureNumbers(elements)
             return stats.median(elements)
         }
 
+        /**
+         * mean
+         */
         if (validator.isDefined(condition.mean)) {
             const elements = condition.mean
             validator.ensureNumbers(elements)
             return utils.toFixed(stats.mean(elements))
         }
 
+        /**
+         * variance
+         */
         if (validator.isDefined(condition.variance)) {
             const elements = condition.variance
             validator.ensureNumbers(elements)
             return utils.toFixed(stats.variance(elements))
         }
 
+        /**
+         * standard_deviation
+         */
         if (validator.isDefined(condition.standard_deviation)) {
             const elements = condition.standard_deviation
             validator.ensureNumbers(elements)
             return utils.toFixed(stats.stdev(elements))
         }
 
+        /**
+         * linear_regression
+         */
         if (validator.isDefined(condition.linear_regression)) {
             ensureArray(condition.linear_regression)
             const elements = condition.linear_regression[0]
@@ -637,6 +866,9 @@ export default class Solver {
             return utils.toFixed(regression.linear(elements).predict(prediction)[1])
         }
 
+        /**
+         * polynomial_regression
+         */
         if (validator.isDefined(condition.polynomial_regression)) {
             ensureArray(condition.polynomial_regression)
             const elements = condition.polynomial_regression[0]
@@ -652,6 +884,9 @@ export default class Solver {
             return utils.toFixed(regression.polynomial(elements, {order}).predict(prediction)[1])
         }
 
+        /**
+         * logarithmic_regression
+         */
         if (validator.isDefined(condition.logarithmic_regression)) {
             ensureArray(condition.logarithmic_regression)
             const elements = condition.logarithmic_regression[0]
@@ -664,6 +899,9 @@ export default class Solver {
             return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
         }
 
+        /**
+         * exponential_regression
+         */
         if (validator.isDefined(condition.exponential_regression)) {
             ensureArray(condition.exponential_regression)
             const elements = condition.exponential_regression[0]
@@ -676,6 +914,9 @@ export default class Solver {
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
 
+        /**
+         * weekday
+         */
         if (validator.isDefined(condition.weekday)) {
             return this.weekday
         }

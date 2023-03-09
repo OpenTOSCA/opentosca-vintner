@@ -1,4 +1,5 @@
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
+import {ConditionalElement} from '#/resolver/graph'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
@@ -152,5 +153,7 @@ export type VariabilityExpression =
 
           // Cache
           _cached_result?: InputAssignmentValue
+          // TODO: set and use cached_element everywhere
+          _cached_element?: ConditionalElement
       }
     | InputAssignmentValue
