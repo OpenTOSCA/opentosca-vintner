@@ -112,9 +112,11 @@ export class Input extends ConditionalElement {
     get toscaId() {
         return this.name
     }
-
-    get condition() {
-        return {get_input_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_input_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -140,8 +142,11 @@ export class Node extends ConditionalElement {
         return this.name
     }
 
-    get condition() {
-        return {get_node_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_node_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -176,8 +181,11 @@ export class Property extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
-    get condition() {
-        return {get_property_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_property_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -219,8 +227,11 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
-    get condition() {
-        return {get_relation_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_relation_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -256,8 +267,11 @@ export class Policy extends ConditionalElement {
         return this.name
     }
 
-    get condition() {
-        return {get_policy_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_policy_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -282,8 +296,11 @@ export class Group extends ConditionalElement {
         return this.name
     }
 
-    get condition() {
-        return {get_group_presence: this.toscaId}
+    _condition?: VariabilityExpression
+    get condition(): VariabilityExpression {
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_group_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
@@ -311,8 +328,11 @@ export class Artifact extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
+    _condition?: VariabilityExpression
     get condition(): VariabilityExpression {
-        return {get_artifact_presence: this.toscaId}
+        if (validator.isUndefined(this._condition))
+            this._condition = {get_artifact_presence: this.toscaId, _cached_element: this}
+        return this._condition
     }
 }
 
