@@ -153,7 +153,6 @@ export type VariabilityExpression =
 
           // Cache
           _cached_result?: InputAssignmentValue
-          // TODO: set and use cached_element everywhere
           _cached_element?: ConditionalElement
       }
     | InputAssignmentValue

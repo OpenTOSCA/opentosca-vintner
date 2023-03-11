@@ -246,7 +246,7 @@ export class Relationship {
         this.name = data.name
         this.relation = data.relation
         this.raw = data.raw
-        this.id = this.type + ':' + this.name
+        this.id = this.type + '.' + this.name
     }
 }
 
