@@ -1,4 +1,5 @@
-import dayjs, {Dayjs} from 'dayjs'
+import day from '#utils/day'
+import {Dayjs} from 'dayjs'
 
 export function isUndefined(element: unknown): element is undefined {
     return typeof element === 'undefined'
@@ -72,7 +73,7 @@ export function ensureName(name: string) {
 }
 
 export function isDate(element: Dayjs): element is Dayjs {
-    return dayjs(element).isValid()
+    return day(element).isValid()
 }
 
 export function ensureDate(element: Dayjs) {

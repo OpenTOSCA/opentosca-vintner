@@ -7,8 +7,7 @@ import _ from 'lodash'
 import stats from 'stats-lite'
 import {ensureArray, ensureDefined} from '#validator'
 import regression from 'regression'
-import {UnexpectedError} from '#utils/error'
-import dayjs from 'dayjs'
+import day from '#utils/day'
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -928,10 +927,10 @@ export default class Solver {
         if (validator.isDefined(condition.same)) {
             validator.ensureArray(condition.same)
 
-            const first = dayjs(condition.same[0])
+            const first = day(condition.same[0])
             validator.ensureDate(first)
 
-            const second = dayjs(condition.same[1])
+            const second = day(condition.same[1])
             validator.ensureDate(second)
 
             return first.isSame(second)
@@ -943,10 +942,10 @@ export default class Solver {
         if (validator.isDefined(condition.before)) {
             validator.ensureArray(condition.before)
 
-            const first = dayjs(condition.before[0])
+            const first = day(condition.before[0])
             validator.ensureDate(first)
 
-            const second = dayjs(condition.before[1])
+            const second = day(condition.before[1])
             validator.ensureDate(second)
 
             return first.isBefore(second)
@@ -958,13 +957,13 @@ export default class Solver {
         if (validator.isDefined(condition.before_or_same)) {
             validator.ensureArray(condition.before_or_same)
 
-            const first = dayjs(condition.before_or_same[0])
+            const first = day(condition.before_or_same[0])
             validator.ensureDate(first)
 
-            const second = dayjs(condition.before_or_same[1])
+            const second = day(condition.before_or_same[1])
             validator.ensureDate(second)
 
-            return first.isBefore(second) || first.isSame(second)
+            return first.isSameOrBefore(second)
         }
 
         /**
@@ -973,10 +972,10 @@ export default class Solver {
         if (validator.isDefined(condition.after)) {
             validator.ensureArray(condition.after)
 
-            const first = dayjs(condition.after[0])
+            const first = day(condition.after[0])
             validator.ensureDate(first)
 
-            const second = dayjs(condition.after[1])
+            const second = day(condition.after[1])
             validator.ensureDate(second)
 
             return first.isAfter(second)
@@ -988,13 +987,13 @@ export default class Solver {
         if (validator.isDefined(condition.after_or_same)) {
             validator.ensureArray(condition.after_or_same)
 
-            const first = dayjs(condition.after_or_same[0])
+            const first = day(condition.after_or_same[0])
             validator.ensureDate(first)
 
-            const second = dayjs(condition.after_or_same[1])
+            const second = day(condition.after_or_same[1])
             validator.ensureDate(second)
 
-            return first.isAfter(second) || first.isSame(second)
+            return first.isSameOrAfter(second)
         }
 
         /**
@@ -1004,19 +1003,16 @@ export default class Solver {
             validator.ensureArray(condition.within)
             validator.ensureArray(condition.within[1])
 
-            const element = dayjs(condition.within[0])
+            const element = day(condition.within[0])
             validator.ensureDate(element)
 
-            const lower = dayjs(condition.within[1][0])
+            const lower = day(condition.within[1][0])
             validator.ensureDate(lower)
 
-            const upper = dayjs(condition.within[1][0])
+            const upper = day(condition.within[1][1])
             validator.ensureDate(upper)
 
-            return (
-                (lower.isBefore(element) || lower.isSame(element)) &&
-                (element.isBefore(upper) || element.isAfter(upper))
-            )
+            return element.isBetween(lower, upper)
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

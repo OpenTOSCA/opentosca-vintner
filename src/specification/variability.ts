@@ -145,7 +145,6 @@ export type VariabilityExpression =
 
           // Date operators
           weekday?: []
-          // TODO: test
           same?: [string | number, string | number]
           before?: [string | number, string | number]
           before_or_same?: [string | number, string | number]
