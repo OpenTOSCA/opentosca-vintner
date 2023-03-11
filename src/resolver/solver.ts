@@ -8,6 +8,7 @@ import stats from 'stats-lite'
 import {ensureArray, ensureDefined} from '#validator'
 import regression from 'regression'
 import {UnexpectedError} from '#utils/error'
+import dayjs from 'dayjs'
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -678,12 +679,12 @@ export default class Solver {
         }
 
         /**
-         * greater_than
+         * greater
          */
-        if (validator.isDefined(condition.greater_than)) {
+        if (validator.isDefined(condition.greater)) {
             return (
-                this.evaluateExpression(condition.greater_than[0], context) >
-                this.evaluateExpression(condition.greater_than[1], context)
+                this.evaluateExpression(condition.greater[0], context) >
+                this.evaluateExpression(condition.greater[1], context)
             )
         }
 
@@ -698,12 +699,12 @@ export default class Solver {
         }
 
         /**
-         * less_than
+         * less
          */
-        if (validator.isDefined(condition.less_than)) {
+        if (validator.isDefined(condition.less)) {
             return (
-                this.evaluateExpression(condition.less_than[0], context) <
-                this.evaluateExpression(condition.less_than[1], context)
+                this.evaluateExpression(condition.less[0], context) <
+                this.evaluateExpression(condition.less[1], context)
             )
         }
 
@@ -919,6 +920,103 @@ export default class Solver {
          */
         if (validator.isDefined(condition.weekday)) {
             return this.weekday
+        }
+
+        /**
+         * same
+         */
+        if (validator.isDefined(condition.same)) {
+            validator.ensureArray(condition.same)
+
+            const first = dayjs(condition.same[0])
+            validator.ensureDate(first)
+
+            const second = dayjs(condition.same[1])
+            validator.ensureDate(second)
+
+            return first.isSame(second)
+        }
+
+        /**
+         * before
+         */
+        if (validator.isDefined(condition.before)) {
+            validator.ensureArray(condition.before)
+
+            const first = dayjs(condition.before[0])
+            validator.ensureDate(first)
+
+            const second = dayjs(condition.before[1])
+            validator.ensureDate(second)
+
+            return first.isBefore(second)
+        }
+
+        /**
+         * before_or_same
+         */
+        if (validator.isDefined(condition.before_or_same)) {
+            validator.ensureArray(condition.before_or_same)
+
+            const first = dayjs(condition.before_or_same[0])
+            validator.ensureDate(first)
+
+            const second = dayjs(condition.before_or_same[1])
+            validator.ensureDate(second)
+
+            return first.isBefore(second) || first.isSame(second)
+        }
+
+        /**
+         * after
+         */
+        if (validator.isDefined(condition.after)) {
+            validator.ensureArray(condition.after)
+
+            const first = dayjs(condition.after[0])
+            validator.ensureDate(first)
+
+            const second = dayjs(condition.after[1])
+            validator.ensureDate(second)
+
+            return first.isAfter(second)
+        }
+
+        /**
+         * after_or_same
+         */
+        if (validator.isDefined(condition.after_or_same)) {
+            validator.ensureArray(condition.after_or_same)
+
+            const first = dayjs(condition.after_or_same[0])
+            validator.ensureDate(first)
+
+            const second = dayjs(condition.after_or_same[1])
+            validator.ensureDate(second)
+
+            return first.isAfter(second) || first.isSame(second)
+        }
+
+        /**
+         * within
+         */
+        if (validator.isDefined(condition.within)) {
+            validator.ensureArray(condition.within)
+            validator.ensureArray(condition.within[1])
+
+            const element = dayjs(condition.within[0])
+            validator.ensureDate(element)
+
+            const lower = dayjs(condition.within[1][0])
+            validator.ensureDate(lower)
+
+            const upper = dayjs(condition.within[1][0])
+            validator.ensureDate(upper)
+
+            return (
+                (lower.isBefore(element) || lower.isSame(element)) &&
+                (element.isBefore(upper) || element.isAfter(upper))
+            )
         }
 
         throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)

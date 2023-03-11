@@ -73,9 +73,9 @@ processing.
 | 56 | [Operator "greater_or_equal" Evaluates to "true" (Greater)](./test-constraint-operators-greater-or-equal-equal.md) |
 | 57 | [Operator "greater_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-greater-or-equal-greater.md) |
 | 58 | [Operator "greater_or_equal" Evaluates to "false" (Less)](./test-constraint-operators-greater-or-equal-less.md) |
-| 59 | [Operator "greater_than" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
-| 60 | [Operator "greater_than" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
-| 61 | [Operator "greater_than" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
+| 59 | [Operator "greater" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
+| 60 | [Operator "greater" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
+| 61 | [Operator "greater" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
 | 62 | [Operator "in_range" Evaluates to "false"](./test-constraint-operators-in_range_false.md) |
 | 63 | [Operator "in_range" Evaluates to "true"](./test-constraint-operators-in_range_true.md) |
 | 64 | [Operator "length" Evaluates to "false"](./test-constraint-operators-length_false.md) |
@@ -83,9 +83,9 @@ processing.
 | 66 | [Operator "less_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-less_or_equal_equal.md) |
 | 67 | [Operator "less_or_equal" Evaluates to "false" (Greater)](./test-constraint-operators-less_or_equal_greater.md) |
 | 68 | [Operator "less_or_equal" Evaluates to "true" (Less)](./test-constraint-operators-less_or_equal_less.md) |
-| 69 | [Operator "less_than" Evaluates to "false" (Equal)](./test-constraint-operators-less_than_equal.md) |
-| 70 | [Operator "less_than" Evaluates to "false" (Greater)](./test-constraint-operators-less_than_greater.md) |
-| 71 | [Operator "less_than" Evaluates to "true" (Less)](./test-constraint-operators-less_than_less.md) |
+| 69 | [Operator "less" Evaluates to "false" (Equal)](./test-constraint-operators-less_equal.md) |
+| 70 | [Operator "less" Evaluates to "false" (Greater)](./test-constraint-operators-less_greater.md) |
+| 71 | [Operator "less" Evaluates to "true" (Less)](./test-constraint-operators-less_less.md) |
 | 72 | [Operator "max_length" Evaluates to "true" (Equal)](./test-constraint-operators-max_length_equal.md) |
 | 73 | [Operator "max_length" Evaluates to "false" (Greater)](./test-constraint-operators-max_length_greater.md) |
 | 74 | [Operator "max_length" Evaluates to "true" (Less)](./test-constraint-operators-max_length_less.md) |

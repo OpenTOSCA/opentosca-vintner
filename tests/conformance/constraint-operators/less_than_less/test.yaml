@@ -1,2 +1,2 @@
-name: 'Operator "less_than" Evaluates to "true" (Less)'
+name: 'Operator "less" Evaluates to "true" (Less)'
 description: Assigns "true" to the property "value" of the node "container" since the first parameter is less than the second.

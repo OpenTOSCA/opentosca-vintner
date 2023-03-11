@@ -119,9 +119,9 @@ export type VariabilityExpression =
 
           // Comparison operators
           equal?: VariabilityExpression[]
-          greater_than?: [VariabilityExpression, VariabilityExpression]
+          greater?: [VariabilityExpression, VariabilityExpression]
           greater_or_equal?: [VariabilityExpression, VariabilityExpression]
-          less_than?: [VariabilityExpression, VariabilityExpression]
+          less?: [VariabilityExpression, VariabilityExpression]
           less_or_equal?: [VariabilityExpression, VariabilityExpression]
           in_range?: [VariabilityExpression, [VariabilityExpression, VariabilityExpression]]
           valid_values?: [VariabilityExpression, VariabilityExpression[]]
@@ -145,6 +145,13 @@ export type VariabilityExpression =
 
           // Date operators
           weekday?: []
+          // TODO: test
+          same?: [string | number, string | number]
+          before?: [string | number, string | number]
+          before_or_same?: [string | number, string | number]
+          after?: [string | number, string | number]
+          after_or_same?: [string | number, string | number]
+          within?: [string | number, [string | number, string | number]]
 
           // Cache
           _cached_result?: InputAssignmentValue
