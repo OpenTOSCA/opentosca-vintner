@@ -36,5 +36,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-Relation "two" of node "one" has multiple defaults
+Relation "two@0" of node "one" has multiple defaults
 ```
