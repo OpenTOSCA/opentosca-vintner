@@ -31,5 +31,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-Relation source "one" of relation "one.two" does not exist
+Relation source "one" of relation "two@0" of node "one" does not exist
 ```
