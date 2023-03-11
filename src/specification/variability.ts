@@ -92,7 +92,6 @@ export type VariabilityExpression =
           get_target_presence?: 'SELF'
 
           // Property functions
-          // TODO: write tests
           get_property_presence?: [string, string | number]
           // TODO: implement
           // TODO: document
@@ -100,21 +99,17 @@ export type VariabilityExpression =
           get_property_value?: [string, string | number]
 
           // Artifact functions
-          // TODO: write tests
           get_artifact_presence?: [string, string | number]
 
           // Policy functions
-          // TODO: write tests
           get_policy_presence?: string | number
           has_present_targets?: string | number
 
           // Group functions
-          // TODO: write tests
           get_group_presence?: string
           has_present_members?: string
 
           // Input functions
-          // TODO: write tests
           get_input_presence?: string
 
           // Intrinsic functions
