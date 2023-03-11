@@ -1,3 +1,6 @@
+import day from '#utils/day'
+import {Dayjs} from 'dayjs'
+
 export function isUndefined(element: unknown): element is undefined {
     return typeof element === 'undefined'
 }
@@ -67,4 +70,12 @@ export function ensureObject(element: unknown): asserts element is object {
 export function ensureName(name: string) {
     if (!name.match(/^[a-z-]+$/))
         throw new Error(`Name "${name}" not allowed. Only small characters and hyphens are allowed.`)
+}
+
+export function isDate(element: Dayjs): element is Dayjs {
+    return day(element).isValid()
+}
+
+export function ensureDate(element: Dayjs) {
+    if (!isDate(element)) throw new Error(`Element "${element}" is not a date`)
 }

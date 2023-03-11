@@ -1,2 +1,2 @@
-name: 'Operator "greater_than" Evaluates to "true" (Greater)'
+name: 'Operator "greater" Evaluates to "true" (Greater)'
 description: Assigns "true" to the property "value" of the node "container" since the second parameter is greater than the first parameter.

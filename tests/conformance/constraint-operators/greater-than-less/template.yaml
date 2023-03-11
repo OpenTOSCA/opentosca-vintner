@@ -6,4 +6,4 @@ topology_template:
             type: container
             properties:
                 - value:
-                      expression: {greater_than: [0, 1]}
+                      expression: {greater: [0, 1]}

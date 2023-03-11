@@ -450,9 +450,9 @@ The following constraint operators can be used inside a Variability Expression.
 | Keyname          | Input                                                                 | Output  | Description                                                           |
 |------------------|-----------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
 | equal            | List(ValueExpression)                                                 | Boolean | Evaluates if the given values are equal.                              |
-| greater_than     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
+| greater     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
 | greater_or_equal | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greater or equal to the second value. |
-| less_than        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
+| less        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
 | less_or_equal    | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less or equal to the second value.    |
 | in_range         | Tuple(NumericExpression, Tuple(NumericExpression, NumericExpression)) | Boolean | Evaluates if the value is in a given range.                           |
 | valid_values     | Tuple(ValueExpression, List(ValueExpression))                         | Boolean | Evaluates if the value is element of the list.                        |
@@ -484,9 +484,15 @@ The following analytical operators can be used inside a Variability Expression.
 
 The following date operators can be used inside a Variability Expression.
 
-| Keyname             | Input              | Output | Description                                     |
-|---------------------|--------------------|--------|-------------------------------------------------|
-| weekday | Empty List | String | Returns the current weekday. |
+| Keyname        | Input                                                                          | Output  | Description                                                                      |
+|----------------|--------------------------------------------------------------------------------|---------|----------------------------------------------------------------------------------|
+| weekday        | Empty List                                                                     | String  | Returns the current weekday.                                                     |
+| same           | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is the same date as the second.                            |
+| before         | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is before the second date.                                 |
+| before_or_same | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is before or same as the second date.                      |
+| after          | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after the second date.                                  |
+| after_or_same  | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after or same as the second date.                       |
+| within         | Tuple(String &#124; Number, Tuple(String &#124; Number, String &#124; Number)) | Boolean | Returns if given date is within the given dates. |
 
 ## Processing
 

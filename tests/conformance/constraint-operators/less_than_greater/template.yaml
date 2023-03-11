@@ -6,4 +6,4 @@ topology_template:
             type: container
             properties:
                 - value:
-                      expression: {less_than: [2, 1]}
+                      expression: {less: [2, 1]}
