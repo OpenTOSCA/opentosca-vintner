@@ -56,32 +56,15 @@ export type VariabilityAlternative = {
     default_alternative?: boolean
 }
 
-/**
- * Inspired by
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_WORKFLOW_COND_CLAUSE_DEFN
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_CONSTRAINTS_OPERATORS
- * - https://www.sciencedirect.com/topics/computer-science/arithmetic-operator
- */
-export type VariabilityExpression =
+// TODO: this stuff like has Variability Expression as inputs
+export type LogicExpression =
     | {
           // Boolean operators
-          and?: VariabilityExpression[]
-          or?: VariabilityExpression[]
-          not?: VariabilityExpression
-          xor?: VariabilityExpression[]
-          implies?: [VariabilityExpression, VariabilityExpression]
-
-          // Arithmetic operators
-          add?: VariabilityExpression[]
-          sub?: VariabilityExpression[]
-          mul?: VariabilityExpression[]
-          div?: VariabilityExpression[]
-          mod?: [VariabilityExpression, VariabilityExpression]
-
-          // Variability functions
-          get_variability_expression?: string
-          get_variability_input?: string
-          get_variability_condition?: string
+          and?: LogicExpression[]
+          or?: LogicExpression[]
+          not?: LogicExpression
+          xor?: LogicExpression[]
+          implies?: [LogicExpression, LogicExpression]
 
           // Node functions
           get_node_presence?: string
@@ -93,10 +76,6 @@ export type VariabilityExpression =
 
           // Property functions
           get_property_presence?: [string, string | number]
-          // TODO: implement
-          // TODO: document
-          // TODO: write tests
-          get_property_value?: [string, string | number]
 
           // Artifact functions
           get_artifact_presence?: [string, string | number]
@@ -112,22 +91,37 @@ export type VariabilityExpression =
           // Input functions
           get_input_presence?: string
 
+          // Cache
+          _cached_element?: ConditionalElement
+      }
+    | string
+    | boolean
+
+export type ValueExpression =
+    | {
+          // Arithmetic operators
+          add?: ValueExpression[]
+          sub?: ValueExpression[]
+          mul?: ValueExpression[]
+          div?: ValueExpression[]
+          mod?: [ValueExpression, ValueExpression]
+
           // Intrinsic functions
-          concat?: VariabilityExpression[]
-          join?: [VariabilityExpression[], string]
-          token?: [VariabilityExpression, string, number]
+          concat?: ValueExpression[]
+          join?: [ValueExpression[], string]
+          token?: [ValueExpression, string, number]
 
           // Comparison operators
-          equal?: VariabilityExpression[]
-          greater?: [VariabilityExpression, VariabilityExpression]
-          greater_or_equal?: [VariabilityExpression, VariabilityExpression]
-          less?: [VariabilityExpression, VariabilityExpression]
-          less_or_equal?: [VariabilityExpression, VariabilityExpression]
-          in_range?: [VariabilityExpression, [VariabilityExpression, VariabilityExpression]]
-          valid_values?: [VariabilityExpression, VariabilityExpression[]]
-          length?: [VariabilityExpression, VariabilityExpression]
-          min_length?: [VariabilityExpression, VariabilityExpression]
-          max_length?: [VariabilityExpression, VariabilityExpression]
+          equal?: ValueExpression[]
+          greater?: [ValueExpression, ValueExpression]
+          greater_or_equal?: [ValueExpression, ValueExpression]
+          less?: [ValueExpression, ValueExpression]
+          less_or_equal?: [ValueExpression, ValueExpression]
+          in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
+          valid_values?: [ValueExpression, ValueExpression[]]
+          length?: [ValueExpression, ValueExpression]
+          min_length?: [ValueExpression, ValueExpression]
+          max_length?: [ValueExpression, ValueExpression]
 
           // Analytical operators
           sum?: number[]
@@ -157,3 +151,14 @@ export type VariabilityExpression =
           _cached_element?: ConditionalElement
       }
     | InputAssignmentValue
+
+export type VariabilityExpression = LogicExpression
+/**
+    | {
+          // Variability functions
+          get_variability_expression?: string
+          get_variability_input?: string
+          get_variability_condition?: string
+      }
+
+     **/

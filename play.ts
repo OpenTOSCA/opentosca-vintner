@@ -18,11 +18,12 @@ function one() {
 
     solver.require(Logic.implies(Logic.or('Promtail', 'Telegraf', 'Application'), 'VM'))
 
+    console.log(solver)
     return solver
 }
 
 solve(one())
-optimize(one())
+//optimize(one())
 
 /**
  * Application is false, thus, two solutions are possible ...
@@ -42,8 +43,8 @@ function two() {
     return solver
 }
 
-solve(two())
-optimize(two())
+//solve(two())
+//optimize(two())
 
 /**
  * Optimize

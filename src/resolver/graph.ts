@@ -339,6 +339,8 @@ export class Artifact extends ConditionalElement {
 export class Graph {
     serviceTemplate: ServiceTemplate
 
+    elements: ConditionalElement[] = []
+
     nodes: Node[] = []
     nodesMap = new Map<string, Node>()
 
@@ -380,6 +382,16 @@ export class Graph {
 
         // Policies
         this.populatePolicies()
+
+        this.elements = [
+            ...this.nodes,
+            ...this.relations,
+            ...this.properties,
+            ...this.policies,
+            ...this.groups,
+            ...this.inputs,
+            ...this.artifacts,
+        ]
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
@@ -411,6 +423,7 @@ export class Graph {
             const node = new Node({name: nodeName, raw: nodeTemplate})
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
+            this.elements.push(node)
 
             // Properties
             this.populateProperties(node, nodeTemplate)

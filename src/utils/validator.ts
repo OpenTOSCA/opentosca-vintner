@@ -1,7 +1,7 @@
 import day from '#utils/day'
 import {Dayjs} from 'dayjs'
 
-export function isUndefined(element: unknown): element is undefined {
+export function isUndefined(element: unknown): element is undefined | null {
     return typeof element === 'undefined'
 }
 

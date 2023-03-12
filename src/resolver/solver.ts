@@ -2,12 +2,28 @@ import {Artifact, ConditionalElement, Graph, Group, Input, Node, Policy, Propert
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
-import {InputAssignmentPreset, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
+import {
+    InputAssignmentPreset,
+    LogicExpression,
+    ValueExpression,
+    VariabilityDefinition,
+    VariabilityExpression,
+} from '#spec/variability'
 import _ from 'lodash'
 import stats from 'stats-lite'
 import {ensureArray, ensureDefined} from '#validator'
 import regression from 'regression'
 import day from '#utils/day'
+import * as LS from 'logic-solver'
+import Logic from 'logic-solver'
+import console from 'console'
+
+/**
+ * TODO
+ * - value expressions in presence conditions
+ * - value expressions in property value
+ * - logic expression in value expressions
+ */
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -16,6 +32,9 @@ type ExpressionContext = {
 export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
+
+    private readonly solver = new LS.Solver()
+    private result?: Record<string, boolean>
 
     private inputs: InputAssignmentMap = {}
     private weekday = utils.weekday()
@@ -26,36 +45,52 @@ export default class Solver {
     }
 
     run() {
-        for (const node of this.graph.nodes) this.checkPresence(node)
-        for (const relation of this.graph.relations) this.checkPresence(relation)
-        for (const input of this.graph.inputs) this.checkPresence(input)
-        for (const group of this.graph.groups) this.checkPresence(group)
-        for (const policy of this.graph.policies) this.checkPresence(policy)
-        for (const artifact of this.graph.artifacts) this.checkPresence(artifact)
-        for (const property of this.graph.properties) this.checkPresence(property)
-        for (const property of this.graph.properties.filter(it => it.present)) this.evaluateProperty(property)
-        return this
+        /**
+         * Add logical conditions
+         */
+        for (const element of this.graph.elements) this.addConditions(element)
+
+        /**
+         * Get initial solution
+         */
+        const solution = this.solver.solve()
+        if (validator.isUndefined(solution)) throw new Error(`Could not solve`)
+
+        /**
+         * Get optimized solution by minimizing the numbers of nodes
+         */
+        const optimized = this.solver.minimizeWeightedSum(
+            solution,
+            this.graph.nodes.map(it => it.id),
+            1
+        )
+        if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
+
+        this.result = optimized.getMap()
+
+        /**
+         * Assign presence to elements
+         */
+        for (const element of this.graph.elements) this.assignPresence(element)
+
+        /**
+         * Return result
+         */
+        return this.result
     }
 
-    evaluateProperty(property: Property) {
-        // TODO: input should be actually only name, name since it the value of the final present property?
-        // TODO: first evaluate presence?!
-        // TODO: might return undefined?!
-        if (validator.isDefined(property.expression))
-            property.value = this.evaluateExpression(property.expression, {
-                element: property,
-            })
+    assignPresence(element: ConditionalElement) {
+        if (validator.isUndefined(this.result)) throw new Error(`Not solved yet`)
 
-        if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
-        return property.value
+        const present = this.result[element.id]
+        if (validator.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
+
+        element.present = present
     }
 
-    checkPresence(element: ConditionalElement) {
+    addConditions(element: ConditionalElement) {
         // Variability group are never present
-        if (element.isGroup() && element.variability) element.present = false
-
-        // Check if presence already has been evaluated
-        if (validator.isDefined(element.present)) return element.present
+        if (element.isGroup() && element.variability) return this.solver.require(Logic.not(element.id))
 
         // Collect assigned conditions
         let conditions = [...element.conditions]
@@ -161,7 +196,7 @@ export default class Solver {
             conditions.unshift(element.container.condition)
         }
 
-        // Evaluate assigned conditions
+        // Normalize conditions to one 'and' condition
         const condition = conditions.reduce<{and: VariabilityExpression[]}>(
             (acc, curr) => {
                 acc.and.push(curr)
@@ -169,10 +204,10 @@ export default class Solver {
             },
             {and: []}
         )
-        const present = this.evaluateCondition(condition, {element})
-        element.present = present
 
-        return present
+        const formula = this.translate(condition, {element})
+        // TODO: if (!LS.isFormula(formula)) throw new Error(`"${formula}" is not a formula`) ?!
+        this.solver.require(Logic.equiv(element.id, formula))
     }
 
     getResolvingOptions() {
@@ -217,7 +252,7 @@ export default class Solver {
             definition.default_expression,
             `Variability input "${name}" has no value nor default (expression) assigned`
         )
-        value = this.evaluateExpression(definition.default_expression, {})
+        value = 'TODO' // TODO: this.handleLogicExpression(definition.default_expression, {})
         validator.ensureDefined(value, `Did not find variability input "${name}"`)
         this.setInput(name, value)
         return value
@@ -239,177 +274,47 @@ export default class Solver {
         return condition
     }
 
-    evaluateCondition(condition: VariabilityExpression, context: ExpressionContext): boolean {
-        const result = this.evaluateExpression(condition, context)
-        validator.ensureBoolean(result)
-        return result
-    }
-
-    evaluateExpression(condition: VariabilityExpression, context: ExpressionContext): InputAssignmentValue {
-        if (validator.isObject(condition) && !validator.isArray(condition)) {
-            if (validator.isDefined(condition._cached_result)) return condition._cached_result
-            const result = this.evaluateExpressionRunner(condition, context)
-            condition._cached_result = result
-            return result
-        }
-
-        return this.evaluateExpressionRunner(condition, context)
-    }
-
-    private evaluateExpressionRunner(
-        condition: VariabilityExpression,
-        context: ExpressionContext
-    ): InputAssignmentValue {
-        validator.ensureDefined(condition, `Received undefined condition`)
-
+    private translate(condition: LogicExpression, context: ExpressionContext): LS.Operand {
         if (validator.isString(condition)) return condition
-        if (validator.isBoolean(condition)) return condition
-        if (validator.isNumber(condition)) return condition
-        if (validator.isArray(condition)) return condition
+        if (validator.isBoolean(condition)) return condition ? LS.TRUE : LS.FALSE
 
         /**
          * and
          */
         if (validator.isDefined(condition.and)) {
-            return condition.and.every(element => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureBoolean(value)
-                return value
-            })
+            return Logic.and(condition.and.map(it => this.translate(it, context)))
         }
 
         /**
          * or
          */
         if (validator.isDefined(condition.or)) {
-            return condition.or.some(element => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureBoolean(value)
-                return value
-            })
+            return Logic.or(condition.or.map(it => this.translate(it, context)))
         }
 
         /**
          * not
          */
         if (validator.isDefined(condition.not)) {
-            const value = this.evaluateExpression(condition.not, context)
-            validator.ensureBoolean(value)
-            return !value
+            return Logic.not(this.translate(condition.not, context))
         }
 
         /**
          * xor
          */
         if (validator.isDefined(condition.xor)) {
-            return (
-                condition.xor.reduce((count: number, element) => {
-                    const value = this.evaluateExpression(element, context)
-                    validator.ensureBoolean(value)
-                    if (value) count++
-                    return count
-                }, 0) === 1
-            )
+            // TODO: our definition is different than Logic.xor
+            return Logic.exactlyOne(condition.xor.map(it => this.translate(it, context)))
         }
 
         /**
          * implies
          */
         if (validator.isDefined(condition.implies)) {
-            const first = this.evaluateExpression(condition.implies[0], context)
-            validator.ensureBoolean(first)
-
-            const second = this.evaluateExpression(condition.implies[1], context)
-            validator.ensureBoolean(first)
-
-            return first ? second : true
-        }
-
-        /**
-         * add
-         */
-        if (validator.isDefined(condition.add)) {
-            return condition.add.reduce<number>((sum, element) => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureNumber(value)
-                return sum + value
-            }, 0)
-        }
-
-        /**
-         * sub
-         */
-        if (validator.isDefined(condition.sub)) {
-            const first = this.evaluateExpression(condition.sub[0], context)
-            validator.ensureNumber(first)
-
-            return condition.sub.slice(1).reduce<number>((difference, element) => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureNumber(value)
-                return difference - value
-            }, first)
-        }
-
-        /**
-         * mul
-         */
-        if (validator.isDefined(condition.mul)) {
-            return condition.mul.reduce<number>((product, element) => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureNumber(value)
-                return product * value
-            }, 1)
-        }
-
-        /**
-         * div
-         */
-        if (validator.isDefined(condition.div)) {
-            const first = this.evaluateExpression(condition.div[0], context)
-            validator.ensureNumber(first)
-
-            return condition.div.slice(1).reduce<number>((quotient, element) => {
-                const value = this.evaluateExpression(element, context)
-                validator.ensureNumber(value)
-                return quotient / value
-            }, first)
-        }
-
-        /**
-         * mod
-         */
-        if (validator.isDefined(condition.mod)) {
-            const first = this.evaluateExpression(condition.mod[0], context)
-            validator.ensureNumber(first)
-
-            const second = this.evaluateExpression(condition.mod[1], context)
-            validator.ensureNumber(second)
-
-            return first % second
-        }
-
-        /**
-         * get_variability_input
-         */
-        if (validator.isDefined(condition.get_variability_input)) {
-            validator.ensureString(condition.get_variability_input)
-            return this.evaluateExpression(this.getInput(condition.get_variability_input), context)
-        }
-
-        /**
-         * get_variability_expression
-         */
-        if (validator.isDefined(condition.get_variability_expression)) {
-            validator.ensureString(condition.get_variability_expression)
-            return this.evaluateExpression(this.getExpression(condition.get_variability_expression), context)
-        }
-
-        /**
-         * get_variability_condition
-         */
-        if (validator.isDefined(condition.get_variability_condition)) {
-            validator.ensureString(condition.get_variability_condition)
-            return this.evaluateCondition(this.getExpression(condition.get_variability_condition), context)
+            return Logic.implies(
+                this.translate(condition.implies[0], context),
+                this.translate(condition.implies[1], context)
+            )
         }
 
         /**
@@ -429,7 +334,7 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            return this.checkPresence(node)
+            return node.id
         }
 
         /**
@@ -454,7 +359,7 @@ export default class Solver {
                 relation = this.graph.getRelation([node, id])
             }
 
-            return this.checkPresence(relation)
+            return relation.id
         }
 
         /**
@@ -468,7 +373,8 @@ export default class Solver {
             if (validator.isUndefined(context.element))
                 throw new Error(`Context of condition ${utils.prettyJSON(condition)} does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"get_source_presence" is only valid inside a relation`)
-            return this.evaluateExpression(context.element.source.condition, {})
+
+            return context.element.source.id
         }
 
         /**
@@ -482,7 +388,8 @@ export default class Solver {
             if (validator.isUndefined(context.element))
                 throw new Error(`Context of condition ${utils.prettyJSON(condition)} does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"get_target_presence" is only valid inside a relation`)
-            return this.evaluateExpression(context.element.target.condition, {})
+
+            return context.element.target.id
         }
 
         /**
@@ -501,7 +408,8 @@ export default class Solver {
                 validator.ensureStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
-            return this.checkPresence(policy)
+
+            return policy.id
         }
 
         /**
@@ -521,19 +429,14 @@ export default class Solver {
                 policy = this.graph.getPolicy(name)
             }
 
-            return this.evaluateExpression(
-                {
-                    or: policy.targets.map(it => {
-                        // Node
-                        if (it.isNode()) return it.condition
+            return Logic.or(
+                policy.targets.map(it => {
+                    // Node
+                    if (it.isNode()) return it.id
 
-                        // Group
-                        return {
-                            or: it.members.map(it => it.condition),
-                        }
-                    }),
-                },
-                {}
+                    // Group
+                    return Logic.or(it.members.map(it => it.id))
+                })
             )
         }
 
@@ -554,7 +457,7 @@ export default class Solver {
                 group = this.graph.getGroup(name)
             }
 
-            return this.checkPresence(group)
+            return group.id
         }
 
         /**
@@ -574,12 +477,7 @@ export default class Solver {
                 group = this.graph.getGroup(name)
             }
 
-            return this.evaluateExpression(
-                {
-                    or: group.members.map(it => it.condition),
-                },
-                {}
-            )
+            return Logic.or(group.members.map(it => it.id))
         }
 
         /**
@@ -599,7 +497,7 @@ export default class Solver {
                 artifact = this.graph.getArtifact(condition.get_artifact_presence)
             }
 
-            return this.checkPresence(artifact)
+            return artifact.id
         }
 
         /**
@@ -619,7 +517,7 @@ export default class Solver {
                 property = this.graph.getProperty(condition.get_property_presence)
             }
 
-            return this.checkPresence(property)
+            return property.id
         }
 
         /**
@@ -638,383 +536,10 @@ export default class Solver {
                 validator.ensureString(name)
                 input = this.graph.getInput(name)
             }
-            return this.checkPresence(input)
+
+            return input.id
         }
 
-        /**
-         * concat
-         */
-        if (validator.isDefined(condition.concat)) {
-            return condition.concat.map(c => this.evaluateExpression(c, context)).join('')
-        }
-
-        /**
-         * join
-         */
-        if (validator.isDefined(condition.join)) {
-            return condition.join[0].map(c => this.evaluateExpression(c, context)).join(condition.join[1])
-        }
-
-        /**
-         * token
-         */
-        if (validator.isDefined(condition.token)) {
-            const element = this.evaluateExpression(condition.token[0], context)
-            validator.ensureString(element)
-            const token = condition.token[1]
-            const index = condition.token[2]
-            return element.split(token)[index]
-        }
-
-        /**
-         * equal
-         */
-        if (validator.isDefined(condition.equal)) {
-            const first = this.evaluateExpression(condition.equal[0], context)
-            return condition.equal.every(element => {
-                const value = this.evaluateExpression(element, context)
-                return value === first
-            })
-        }
-
-        /**
-         * greater
-         */
-        if (validator.isDefined(condition.greater)) {
-            return (
-                this.evaluateExpression(condition.greater[0], context) >
-                this.evaluateExpression(condition.greater[1], context)
-            )
-        }
-
-        /**
-         * greater_or_equal
-         */
-        if (validator.isDefined(condition.greater_or_equal)) {
-            return (
-                this.evaluateExpression(condition.greater_or_equal[0], context) >=
-                this.evaluateExpression(condition.greater_or_equal[1], context)
-            )
-        }
-
-        /**
-         * less
-         */
-        if (validator.isDefined(condition.less)) {
-            return (
-                this.evaluateExpression(condition.less[0], context) <
-                this.evaluateExpression(condition.less[1], context)
-            )
-        }
-
-        /**
-         * less_or_equal
-         */
-        if (validator.isDefined(condition.less_or_equal)) {
-            return (
-                this.evaluateExpression(condition.less_or_equal[0], context) <=
-                this.evaluateExpression(condition.less_or_equal[1], context)
-            )
-        }
-
-        /**
-         * in_range
-         */
-        if (validator.isDefined(condition.in_range)) {
-            const element = this.evaluateExpression(condition.in_range[0], context)
-            const lower = condition.in_range[1][0]
-            const upper = condition.in_range[1][1]
-            return lower <= element && element <= upper
-        }
-
-        /**
-         * valid_values
-         */
-        if (validator.isDefined(condition.valid_values)) {
-            const element = this.evaluateExpression(condition.valid_values[0], context)
-            const valid = condition.valid_values[1].map(c => this.evaluateExpression(c, context))
-            return valid.includes(element)
-        }
-
-        /**
-         * length
-         */
-        if (validator.isDefined(condition.length)) {
-            const element = this.evaluateExpression(condition.length[0], context)
-            validator.ensureString(element)
-
-            const length = this.evaluateExpression(condition.length[1], context)
-            validator.ensureNumber(length)
-
-            return element.length === length
-        }
-
-        /**
-         * min_length
-         */
-        if (validator.isDefined(condition.min_length)) {
-            const element = this.evaluateExpression(condition.min_length[0], context)
-            validator.ensureString(element)
-
-            const length = this.evaluateExpression(condition.min_length[1], context)
-            validator.ensureNumber(length)
-
-            return element.length >= length
-        }
-
-        /**
-         * max_length
-         */
-        if (validator.isDefined(condition.max_length)) {
-            const element = this.evaluateExpression(condition.max_length[0], context)
-            validator.ensureString(element)
-
-            const length = this.evaluateExpression(condition.max_length[1], context)
-            validator.ensureNumber(length)
-
-            return element.length <= length
-        }
-
-        /**
-         * sum
-         */
-        if (validator.isDefined(condition.sum)) {
-            const elements = condition.sum
-            validator.ensureNumbers(elements)
-            return utils.toFixed(stats.sum(elements))
-        }
-
-        /**
-         * count
-         */
-        if (validator.isDefined(condition.count)) {
-            const elements = condition.count
-            validator.ensureNumbers(elements)
-            return elements.length
-        }
-
-        /**
-         * min
-         */
-        if (validator.isDefined(condition.min)) {
-            const elements = condition.min
-            validator.ensureNumbers(elements)
-            const min = _.min(elements)
-            ensureDefined(min, `Minimum of "${JSON.stringify(elements)}" does not exist`)
-            return min
-        }
-
-        /**
-         * max
-         */
-        if (validator.isDefined(condition.max)) {
-            const elements = condition.max
-            validator.ensureNumbers(elements)
-            const max = _.max(elements)
-            ensureDefined(max, `Maximum of "${JSON.stringify(elements)}" does not exist`)
-            return max
-        }
-
-        /**
-         * median
-         */
-        if (validator.isDefined(condition.median)) {
-            const elements = condition.median
-            validator.ensureNumbers(elements)
-            return stats.median(elements)
-        }
-
-        /**
-         * mean
-         */
-        if (validator.isDefined(condition.mean)) {
-            const elements = condition.mean
-            validator.ensureNumbers(elements)
-            return utils.toFixed(stats.mean(elements))
-        }
-
-        /**
-         * variance
-         */
-        if (validator.isDefined(condition.variance)) {
-            const elements = condition.variance
-            validator.ensureNumbers(elements)
-            return utils.toFixed(stats.variance(elements))
-        }
-
-        /**
-         * standard_deviation
-         */
-        if (validator.isDefined(condition.standard_deviation)) {
-            const elements = condition.standard_deviation
-            validator.ensureNumbers(elements)
-            return utils.toFixed(stats.stdev(elements))
-        }
-
-        /**
-         * linear_regression
-         */
-        if (validator.isDefined(condition.linear_regression)) {
-            ensureArray(condition.linear_regression)
-            const elements = condition.linear_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
-
-            const prediction = condition.linear_regression[1]
-            validator.ensureNumber(prediction)
-
-            return utils.toFixed(regression.linear(elements).predict(prediction)[1])
-        }
-
-        /**
-         * polynomial_regression
-         */
-        if (validator.isDefined(condition.polynomial_regression)) {
-            ensureArray(condition.polynomial_regression)
-            const elements = condition.polynomial_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
-
-            const order = condition.polynomial_regression[1]
-            validator.ensureNumber(order)
-
-            const prediction = condition.polynomial_regression[2]
-            validator.ensureNumber(prediction)
-
-            return utils.toFixed(regression.polynomial(elements, {order}).predict(prediction)[1])
-        }
-
-        /**
-         * logarithmic_regression
-         */
-        if (validator.isDefined(condition.logarithmic_regression)) {
-            ensureArray(condition.logarithmic_regression)
-            const elements = condition.logarithmic_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
-
-            const prediction = condition.logarithmic_regression[1]
-            validator.ensureNumber(prediction)
-
-            return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
-        }
-
-        /**
-         * exponential_regression
-         */
-        if (validator.isDefined(condition.exponential_regression)) {
-            ensureArray(condition.exponential_regression)
-            const elements = condition.exponential_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
-
-            const prediction = condition.exponential_regression[1]
-            validator.ensureNumber(prediction)
-
-            return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
-        }
-
-        /**
-         * weekday
-         */
-        if (validator.isDefined(condition.weekday)) {
-            return this.weekday
-        }
-
-        /**
-         * same
-         */
-        if (validator.isDefined(condition.same)) {
-            validator.ensureArray(condition.same)
-
-            const first = day(condition.same[0])
-            validator.ensureDate(first)
-
-            const second = day(condition.same[1])
-            validator.ensureDate(second)
-
-            return first.isSame(second)
-        }
-
-        /**
-         * before
-         */
-        if (validator.isDefined(condition.before)) {
-            validator.ensureArray(condition.before)
-
-            const first = day(condition.before[0])
-            validator.ensureDate(first)
-
-            const second = day(condition.before[1])
-            validator.ensureDate(second)
-
-            return first.isBefore(second)
-        }
-
-        /**
-         * before_or_same
-         */
-        if (validator.isDefined(condition.before_or_same)) {
-            validator.ensureArray(condition.before_or_same)
-
-            const first = day(condition.before_or_same[0])
-            validator.ensureDate(first)
-
-            const second = day(condition.before_or_same[1])
-            validator.ensureDate(second)
-
-            return first.isSameOrBefore(second)
-        }
-
-        /**
-         * after
-         */
-        if (validator.isDefined(condition.after)) {
-            validator.ensureArray(condition.after)
-
-            const first = day(condition.after[0])
-            validator.ensureDate(first)
-
-            const second = day(condition.after[1])
-            validator.ensureDate(second)
-
-            return first.isAfter(second)
-        }
-
-        /**
-         * after_or_same
-         */
-        if (validator.isDefined(condition.after_or_same)) {
-            validator.ensureArray(condition.after_or_same)
-
-            const first = day(condition.after_or_same[0])
-            validator.ensureDate(first)
-
-            const second = day(condition.after_or_same[1])
-            validator.ensureDate(second)
-
-            return first.isSameOrAfter(second)
-        }
-
-        /**
-         * within
-         */
-        if (validator.isDefined(condition.within)) {
-            validator.ensureArray(condition.within)
-            validator.ensureArray(condition.within[1])
-
-            const element = day(condition.within[0])
-            validator.ensureDate(element)
-
-            const lower = day(condition.within[1][0])
-            validator.ensureDate(lower)
-
-            const upper = day(condition.within[1][1])
-            validator.ensureDate(upper)
-
-            return element.isBetween(lower, upper)
-        }
-
-        throw new Error(`Unknown variability condition "${utils.prettyJSON(condition)}"`)
+        throw new Error(`Unknown logic expression "${utils.prettyJSON(condition)}"`)
     }
 }

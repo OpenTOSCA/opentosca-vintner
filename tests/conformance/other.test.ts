@@ -12,13 +12,13 @@ describe('cache', () => {
     it('cache: caching', () => {
         const solver = getDefaultSolver()
         const condition: VariabilityExpression = {max_length: ['hallo', 4]}
-        solver.evaluateExpression(condition, {})
+        solver.handleLogicExpression(condition, {})
         expect(condition._cached_result).to.equal(false)
     })
 
     it('cache: cached', () => {
         const solver = getDefaultSolver()
-        const result = solver.evaluateExpression({max_length: ['hallo', 4], _cached_result: 'cached'}, {})
+        const result = solver.handleLogicExpression({max_length: ['hallo', 4], _cached_result: 'cached'}, {})
         expect(result).to.equal('cached')
     })
 })
