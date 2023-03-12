@@ -1,5 +1,7 @@
 import Logic, {Solver} from 'logic-solver'
 
+// TODO: delete this
+
 /**
  * Application is true, thus, only one solution is possible ...
  */
@@ -55,7 +57,6 @@ function optimize(solver: Solver) {
     console.log('initial')
     console.log(solution.getMap())
 
-    // TODO: get node names
     const optimized = solver.minimizeWeightedSum(solution, ['VM', 'Promtail', 'Telegraf', 'Application'], 1)
     console.log('optimized')
     if (!optimized) return console.log('No solution found')

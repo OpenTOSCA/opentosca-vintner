@@ -18,6 +18,7 @@ import * as LS from 'logic-solver'
 import Logic from 'logic-solver'
 
 // TODO: logic expression in value expressions
+// TODO: fix package minisat ... see https://github.com/vercel/pkg/issues/641#issuecomment-1372237761 and https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/4399164240/jobs/7703509851
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -40,11 +41,6 @@ export default class Solver {
 
     run() {
         /**
-         * Disable assertions for performance
-         */
-        // TODO: Logic.disablingAssertions(() => true)
-
-        /**
          * Add logical conditions
          */
         for (const element of this.graph.elements) this.addConditions(element)
@@ -64,7 +60,6 @@ export default class Solver {
             1
         )
         if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
-
         this.result = optimized.getMap()
 
         /**

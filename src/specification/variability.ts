@@ -160,6 +160,4 @@ export type ComplexValueExpression = {
 
 export type VariabilityExpression = LogicExpression | ValueExpression
 
-// TODO: split up get_variability_expression into get_logic_expression and get_value_expression?
-// TODO: get_variability_condition does not exist anymore?
-// TODO: update benchmark
+// TODO: update benchmark docs
