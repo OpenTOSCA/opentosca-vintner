@@ -12,7 +12,7 @@ declare module 'logic-solver' {
 
     type Operand = Term | Formula
     type Operands = Operand | ArrayOfOperands
-    interface ArrayOfOperands extends Array<Operands> {}
+    type ArrayOfOperands = Array<Operands>
 
     class Solver {
         constructor()
@@ -27,7 +27,7 @@ declare module 'logic-solver' {
         maximizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution | null
     }
 
-    interface Formula {}
+    type Formula = {}
     function isFormula(value: any): value is Formula
     function not(operand: Operand): Formula
     function or(...operands: Operands[]): Formula
