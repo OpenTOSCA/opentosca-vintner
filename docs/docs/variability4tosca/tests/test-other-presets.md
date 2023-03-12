@@ -34,11 +34,11 @@ topology_template:
     one:
       type: one
       conditions:
-        get_variability_condition: is_one
+        get_logic_expression: is_one
     two:
       type: two
       conditions:
-        get_variability_condition: is_two
+        get_logic_expression: is_two
       requirements:
         - three: three
     three:

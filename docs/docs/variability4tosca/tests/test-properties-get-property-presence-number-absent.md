@@ -17,11 +17,10 @@ topology_template:
         - property_one:
             conditions: false
             value: 69
-        - value:
-            expression:
-              get_property_presence:
-                - container
-                - 0
+      conditions:
+        get_property_presence:
+          - container
+          - 0
 ```
 
 
@@ -32,11 +31,5 @@ The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: false
 ```
 

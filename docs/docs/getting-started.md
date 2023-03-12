@@ -45,23 +45,23 @@ The imported template contains the following conditional node templates.
 ```yaml linenums="1"
 first:
     type: textfile
-    conditions: {get_variability_expression: is_first}
+    conditions: {get_logic_expression: is_first}
     properties:
         content: 'First Textfile has been selected!'
     requirements:
         - host: 
             node: localhost
-            conditions: {get_variability_expression: is_first}
+            conditions: {get_logic_expression: is_first}
 
 second:
     type: textfile
-    conditions: {get_variability_expression: is_second}
+    conditions: {get_logic_expression: is_second}
     properties:
         content: 'Second Textfile has been selected!'
     requirements:
         - host: 
             node: localhost
-            conditions: {get_variability_expression: is_second}
+            conditions: {get_logic_expression: is_second}
 ```
 
 We decide that the first textfile should be deployed.

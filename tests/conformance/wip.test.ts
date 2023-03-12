@@ -5,6 +5,8 @@ import Graph from '../../src/resolver/graph'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 import * as yaml from 'js-yaml'
 
+// TODO: delete this test file
+
 function run(template: string) {
     const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate))
     const result = solver.run()

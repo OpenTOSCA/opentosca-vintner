@@ -106,19 +106,19 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_present`] = {
             type: `component_type_${i}_present`,
-            conditions: {get_variability_condition: `condition_${i}_present`},
+            conditions: {get_logic_expression: `condition_${i}_present`},
             requirements: [
                 {
                     relation_present: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_present`,
-                        conditions: {get_variability_condition: `condition_${i}_present`},
+                        conditions: {get_logic_expression: `condition_${i}_present`},
                         relationship: `relationship_${i}_present`,
                     },
                 },
                 {
                     relation_removed: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_removed`,
-                        conditions: {get_variability_condition: `condition_${i}_removed`},
+                        conditions: {get_logic_expression: `condition_${i}_removed`},
                         relationship: `relationship_${i}_removed`,
                     },
                 },
@@ -139,7 +139,7 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_removed`] = {
             type: `component_type_${i}_removed`,
-            conditions: {get_variability_condition: `condition_${i}_removed`},
+            conditions: {get_logic_expression: `condition_${i}_removed`},
         }
     }
 

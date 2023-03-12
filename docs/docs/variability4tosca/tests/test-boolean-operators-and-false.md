@@ -16,14 +16,12 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              and:
-                - true
-                - false
-                - true
-                - true
+      conditions:
+        and:
+          - true
+          - false
+          - true
+          - true
 ```
 
 
@@ -34,11 +32,5 @@ The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: false
 ```
 

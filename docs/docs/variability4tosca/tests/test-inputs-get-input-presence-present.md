@@ -17,10 +17,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_input_presence: input
+      conditions:
+        get_input_presence: input
 ```
 
 
@@ -38,7 +36,5 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
 ```
 

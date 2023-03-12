@@ -13,12 +13,10 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_relation_presence:
-                - node_one
-                - relation_one
+      conditions:
+        get_relation_presence:
+          - node_one
+          - relation_one
     node_one:
       type: node_one
       conditions: true
@@ -43,8 +41,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
     node_one:
       type: node_one
       requirements:

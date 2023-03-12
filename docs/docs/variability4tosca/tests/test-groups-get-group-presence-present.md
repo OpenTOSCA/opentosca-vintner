@@ -13,10 +13,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_group_presence: group_one
+      conditions:
+        get_group_presence: group_one
   groups:
     group_one:
       conditions: true
@@ -35,8 +33,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
   groups:
     group_one:
       members: []

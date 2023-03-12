@@ -56,7 +56,6 @@ export type VariabilityAlternative = {
     default_alternative?: boolean
 }
 
-// TODO: this stuff like has Variability Expression as inputs
 export type LogicExpression =
     | {
           // Boolean operators
@@ -92,70 +91,75 @@ export type LogicExpression =
           get_input_presence?: string
 
           // Intrinsic functions
-          get_variability_expression?: string
+          get_logic_expression?: string
           get_variability_input?: string
-          get_variability_condition?: string
 
           // Cache
           _cached_element?: ConditionalElement
+          _visited?: boolean
+          _id?: string
       }
     | string
     | boolean
 
-export type ValueExpression =
-    | {
-          // Arithmetic operators
-          add?: ValueExpression[]
-          sub?: ValueExpression[]
-          mul?: ValueExpression[]
-          div?: ValueExpression[]
-          mod?: [ValueExpression, ValueExpression]
+export type ValueExpression = ComplexValueExpression | InputAssignmentValue
 
-          // Intrinsic functions
-          get_variability_expression?: string
-          get_variability_input?: string
-          concat?: ValueExpression[]
-          join?: [ValueExpression[], string]
-          token?: [ValueExpression, string, number]
+export type ComplexValueExpression = {
+    // Arithmetic operators
+    add?: ValueExpression[]
+    sub?: ValueExpression[]
+    mul?: ValueExpression[]
+    div?: ValueExpression[]
+    mod?: [ValueExpression, ValueExpression]
 
-          // Comparison operators
-          equal?: ValueExpression[]
-          greater?: [ValueExpression, ValueExpression]
-          greater_or_equal?: [ValueExpression, ValueExpression]
-          less?: [ValueExpression, ValueExpression]
-          less_or_equal?: [ValueExpression, ValueExpression]
-          in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
-          valid_values?: [ValueExpression, ValueExpression[]]
-          length?: [ValueExpression, ValueExpression]
-          min_length?: [ValueExpression, ValueExpression]
-          max_length?: [ValueExpression, ValueExpression]
+    // Intrinsic functions
+    get_value_expression?: string
+    get_variability_input?: string
+    concat?: ValueExpression[]
+    join?: [ValueExpression[], string]
+    token?: [ValueExpression, string, number]
 
-          // Analytical operators
-          sum?: number[]
-          count?: number[]
-          min?: number[]
-          max?: number[]
-          mean?: number[]
-          median?: number[]
-          variance?: number[]
-          standard_deviation?: number[]
-          linear_regression?: [[number, number][], number]
-          polynomial_regression?: [[number, number][], number, number]
-          logarithmic_regression?: [[number, number][], number]
-          exponential_regression?: [[number, number][], number]
+    // Comparison operators
+    equal?: ValueExpression[]
+    greater?: [ValueExpression, ValueExpression]
+    greater_or_equal?: [ValueExpression, ValueExpression]
+    less?: [ValueExpression, ValueExpression]
+    less_or_equal?: [ValueExpression, ValueExpression]
+    in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
+    valid_values?: [ValueExpression, ValueExpression[]]
+    length?: [ValueExpression, ValueExpression]
+    min_length?: [ValueExpression, ValueExpression]
+    max_length?: [ValueExpression, ValueExpression]
 
-          // Date operators
-          weekday?: []
-          same?: [string | number, string | number]
-          before?: [string | number, string | number]
-          before_or_same?: [string | number, string | number]
-          after?: [string | number, string | number]
-          after_or_same?: [string | number, string | number]
-          within?: [string | number, [string | number, string | number]]
+    // Analytical operators
+    sum?: number[]
+    count?: number[]
+    min?: number[]
+    max?: number[]
+    mean?: number[]
+    median?: number[]
+    variance?: number[]
+    standard_deviation?: number[]
+    linear_regression?: [[number, number][], number]
+    polynomial_regression?: [[number, number][], number, number]
+    logarithmic_regression?: [[number, number][], number]
+    exponential_regression?: [[number, number][], number]
 
-          // Cache
-          _cached_result?: InputAssignmentValue
-      }
-    | InputAssignmentValue
+    // Date operators
+    weekday?: []
+    same?: [string | number, string | number]
+    before?: [string | number, string | number]
+    before_or_same?: [string | number, string | number]
+    after?: [string | number, string | number]
+    after_or_same?: [string | number, string | number]
+    within?: [string | number, [string | number, string | number]]
+
+    // Cache
+    _cached_result?: InputAssignmentValue
+}
 
 export type VariabilityExpression = LogicExpression | ValueExpression
+
+// TODO: split up get_variability_expression into get_logic_expression and get_value_expression?
+// TODO: get_variability_condition does not exist anymore?
+// TODO: update benchmark

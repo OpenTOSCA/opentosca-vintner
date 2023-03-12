@@ -13,12 +13,10 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_artifact_presence:
-                - container
-                - artifact_one
+      conditions:
+        get_artifact_presence:
+          - container
+          - artifact_one
       artifacts:
         artifact_one:
           conditions: true
@@ -37,8 +35,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
       artifacts:
         artifact_one:
           file: path

@@ -21,11 +21,11 @@ topology_template:
     node_templates:
         one:
             type: one
-            conditions: {get_variability_condition: is_one}
+            conditions: {get_logic_expression: is_one}
 
         two:
             type: two
-            conditions: {get_variability_condition: is_two}
+            conditions: {get_logic_expression: is_two}
             requirements:
                 - three: three
 

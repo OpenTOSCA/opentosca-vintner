@@ -16,10 +16,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              has_present_targets: policy_one
+      conditions:
+        has_present_targets: policy_one
     node_one:
       type: node_one
       conditions: false
@@ -43,11 +41,6 @@ The following variability-resolved service templated is expected.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: false
   policies:
     - policy_one:
         type: policy_one

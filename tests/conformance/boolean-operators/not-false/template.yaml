@@ -4,6 +4,4 @@ topology_template:
     node_templates:
         container:
             type: container
-            properties:
-                - value:
-                      expression: {not: true}
+            conditions: {not: true}

@@ -16,10 +16,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              has_present_targets: policy_one
+      conditions:
+        has_present_targets: policy_one
     node_one:
       type: node_one
     node_two:
@@ -44,8 +42,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
     node_one:
       type: node_one
     node_two:

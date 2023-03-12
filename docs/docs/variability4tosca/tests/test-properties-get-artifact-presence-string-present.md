@@ -17,11 +17,10 @@ topology_template:
         - property_one:
             conditions: true
             value: 69
-        - value:
-            expression:
-              get_property_presence:
-                - container
-                - property_one
+      conditions:
+        get_property_presence:
+          - container
+          - property_one
 ```
 
 
@@ -38,6 +37,5 @@ topology_template:
       type: container
       properties:
         property_one: 69
-        value: true
 ```
 

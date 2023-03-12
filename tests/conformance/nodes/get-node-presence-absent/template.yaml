@@ -4,9 +4,8 @@ topology_template:
     node_templates:
         container:
             type: container
-            properties:
-                - value:
-                      expression: {get_node_presence: node}
+            conditions: {get_node_presence: node}
+
         node:
             type: node
             conditions: false
