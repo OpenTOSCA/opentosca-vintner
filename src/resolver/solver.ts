@@ -17,9 +17,6 @@ import day from '#utils/day'
 import * as LS from 'logic-solver'
 import Logic from 'logic-solver'
 
-// TODO: logic expression in value expressions
-// TODO: fix package minisat ... see https://github.com/vercel/pkg/issues/641#issuecomment-1372237761 and https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/4399164240/jobs/7703509851
-
 type ExpressionContext = {
     element?: ConditionalElement
 }
