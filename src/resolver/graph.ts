@@ -1,4 +1,4 @@
-import {VariabilityExpression, VariabilityPointMap} from '#spec/variability'
+import {LogicExpression, ValueExpression, VariabilityPointMap} from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
 import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -34,10 +34,10 @@ export abstract class ConditionalElement {
     }
 
     present?: boolean
-    conditions: VariabilityExpression[] = []
+    conditions: LogicExpression[] = []
 
     abstract toscaId: string | number | [string, string | number]
-    abstract condition: VariabilityExpression
+    abstract condition: LogicExpression
 
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
@@ -112,8 +112,8 @@ export class Input extends ConditionalElement {
     get toscaId() {
         return this.name
     }
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_input_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -142,8 +142,8 @@ export class Node extends ConditionalElement {
         return this.name
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_node_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -155,7 +155,7 @@ export class Property extends ConditionalElement {
     container: Node | Relation | Policy | Group | Artifact
     default: boolean
     value?: PropertyAssignmentValue
-    expression?: VariabilityExpression
+    expression?: ValueExpression
 
     constructor(data: {
         name: string
@@ -163,9 +163,9 @@ export class Property extends ConditionalElement {
         container: Node | Relation | Policy | Group | Artifact
         index?: number
         value?: PropertyAssignmentValue
-        expression?: VariabilityExpression
+        expression?: ValueExpression
         default: boolean
-        conditions?: VariabilityExpression[]
+        conditions?: LogicExpression[]
     }) {
         super('property', data)
         this.raw = data.raw
@@ -181,8 +181,8 @@ export class Property extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_property_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -227,8 +227,8 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_relation_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -267,8 +267,8 @@ export class Policy extends ConditionalElement {
         return this.name
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_policy_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -296,8 +296,8 @@ export class Group extends ConditionalElement {
         return this.name
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_group_presence: this.toscaId, _cached_element: this}
         return this._condition
@@ -328,8 +328,8 @@ export class Artifact extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
-    _condition?: VariabilityExpression
-    get condition(): VariabilityExpression {
+    _condition?: LogicExpression
+    get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
             this._condition = {get_artifact_presence: this.toscaId, _cached_element: this}
         return this._condition

@@ -52,7 +52,7 @@ export type VariabilityPointMap<T> =
 export type VariabilityPointList<T> = {[name: string]: T}[]
 
 export type VariabilityAlternative = {
-    conditions?: VariabilityExpression | VariabilityExpression[]
+    conditions?: LogicExpression | LogicExpression[]
     default_alternative?: boolean
 }
 
@@ -91,6 +91,11 @@ export type LogicExpression =
           // Input functions
           get_input_presence?: string
 
+          // Intrinsic functions
+          get_variability_expression?: string
+          get_variability_input?: string
+          get_variability_condition?: string
+
           // Cache
           _cached_element?: ConditionalElement
       }
@@ -107,6 +112,8 @@ export type ValueExpression =
           mod?: [ValueExpression, ValueExpression]
 
           // Intrinsic functions
+          get_variability_expression?: string
+          get_variability_input?: string
           concat?: ValueExpression[]
           join?: [ValueExpression[], string]
           token?: [ValueExpression, string, number]
@@ -148,17 +155,7 @@ export type ValueExpression =
 
           // Cache
           _cached_result?: InputAssignmentValue
-          _cached_element?: ConditionalElement
       }
     | InputAssignmentValue
 
-export type VariabilityExpression = LogicExpression
-/**
-    | {
-          // Variability functions
-          get_variability_expression?: string
-          get_variability_input?: string
-          get_variability_condition?: string
-      }
-
-     **/
+export type VariabilityExpression = LogicExpression | ValueExpression
