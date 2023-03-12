@@ -23,6 +23,7 @@
         "js-yaml": "^4.1.0",
         "json-diff": "^1.0.0",
         "lodash": "^4.17.21",
+        "logic-solver": "^2.0.1",
         "node-cron": "^3.0.2",
         "ohm-js": "^16.4.0",
         "papaparse": "^5.3.2",
