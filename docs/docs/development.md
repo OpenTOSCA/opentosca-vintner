@@ -5,7 +5,8 @@ But please follow the following guidelines and our [Code of Conduct](code-of-con
 
 ## Repository
 
-The repository is a monorepo consisting of the CLI, server, docs and tests using
+The repository is a monorepo consisting of the CLI, server, docs and tests using the following commands. 
+We are using  [`yarn` (v1)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner
@@ -279,6 +280,17 @@ yarn docs:generate:licenses
 The list includes information such as package name, version, license, etc. and is written to a CSV file.
 At the same time, the [Dependencies](dependencies.md){target=_blank} page is generated.
 This command is also executed during the `release` workflow and, therefore, overwrites respective files.
+
+## Patch Packages 
+
+We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} to fixing third party libraries.
+This includes, e.g., the `logic-solver.d.ts` for [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
+Therefore, make changes to the package inside `node_modules`, then run the following command.
+
+```
+yarn patch-package ${package-name}
+```
+
 
 ## Build
 

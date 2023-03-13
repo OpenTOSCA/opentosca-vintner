@@ -211,8 +211,7 @@ export default class Solver {
             {and: []}
         )
 
-        const operand = this.transform(condition, {element})
-        this.solver.require(Logic.equiv(element.id, operand))
+        this.solver.require(Logic.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
     getResolvingOptions() {
@@ -285,7 +284,7 @@ export default class Solver {
         return condition as ValueExpression
     }
 
-    private transform(expression: LogicExpression, context: ExpressionContext): LS.Operand {
+    private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): LS.Operand {
         if (validator.isString(expression)) return expression
         if (validator.isBoolean(expression)) return expression ? LS.TRUE : LS.FALSE
 
@@ -300,13 +299,12 @@ export default class Solver {
             if (validator.isString(found))
                 throw new Error(`Logic expression "${utils.prettyJSON(expression)}" must not be a string`)
 
-            if (validator.isBoolean(found)) return this.transform(found, context)
+            if (validator.isBoolean(found)) return this.transformLogicExpression(found, context)
 
             if (validator.isUndefined(found._id)) found._id = 'expression.' + name
 
             if (validator.isUndefined(found._visited)) {
-                const operand = this.transform(found, context)
-                this.solver.require(Logic.equiv(found._id, operand))
+                this.solver.require(Logic.equiv(found._id, this.transformLogicExpression(found, context)))
                 found._visited = true
             }
 
@@ -317,21 +315,21 @@ export default class Solver {
          * and
          */
         if (validator.isDefined(expression.and)) {
-            return Logic.and(expression.and.map(it => this.transform(it, context)))
+            return Logic.and(expression.and.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * or
          */
         if (validator.isDefined(expression.or)) {
-            return Logic.or(expression.or.map(it => this.transform(it, context)))
+            return Logic.or(expression.or.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * not
          */
         if (validator.isDefined(expression.not)) {
-            return Logic.not(this.transform(expression.not, context))
+            return Logic.not(this.transformLogicExpression(expression.not, context))
         }
 
         /**
@@ -339,7 +337,7 @@ export default class Solver {
          */
         if (validator.isDefined(expression.xor)) {
             // TODO: our definition is different than Logic.xor
-            return Logic.exactlyOne(expression.xor.map(it => this.transform(it, context)))
+            return Logic.exactlyOne(expression.xor.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
@@ -347,8 +345,8 @@ export default class Solver {
          */
         if (validator.isDefined(expression.implies)) {
             return Logic.implies(
-                this.transform(expression.implies[0], context),
-                this.transform(expression.implies[1], context)
+                this.transformLogicExpression(expression.implies[0], context),
+                this.transformLogicExpression(expression.implies[1], context)
             )
         }
 
@@ -580,7 +578,7 @@ export default class Solver {
          */
         const result = this.evaluateValueExpression(expression, context)
         validator.ensureBoolean(result)
-        return this.transform(result, context)
+        return this.transformLogicExpression(result, context)
     }
 
     evaluateValueExpression(expression: ValueExpression, context: ExpressionContext): InputAssignmentValue {
