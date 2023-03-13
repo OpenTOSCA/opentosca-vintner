@@ -23,8 +23,8 @@ topology_template:
                 type: string
 
         expressions:
-            is_first: {equal: [{get_variability_input: mode}, first]}
-            is_second: {equal: [{get_variability_input: mode}, second]}
+            is_first: {equal: [{variability_input: mode}, first]}
+            is_second: {equal: [{variability_input: mode}, second]}
 
         options:
             enable_property_default_condition: true
@@ -38,20 +38,20 @@ topology_template:
 
         first:
             type: textfile
-            conditions: {get_logic_expression: is_first}
+            conditions: {logic_expression: is_first}
             properties:
                 content: 'First Textfile has been selected!'
             requirements:
                 - host:
                       node: localhost
-                      conditions: {get_logic_expression: is_first}
+                      conditions: {logic_expression: is_first}
 
         second:
             type: textfile
-            conditions: {get_logic_expression: is_second}
+            conditions: {logic_expression: is_second}
             properties:
                 content: 'Second Textfile has been selected!'
             requirements:
                 - host:
                       node: localhost
-                      conditions: {get_logic_expression: is_second}
+                      conditions: {logic_expression: is_second}

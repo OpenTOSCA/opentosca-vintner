@@ -317,10 +317,10 @@ export default class Solver {
         if (validator.isBoolean(expression)) return expression ? LS.TRUE : LS.FALSE
 
         /**
-         * get_logic_expression
+         * logic_expression
          */
-        if (validator.isDefined(expression.get_logic_expression)) {
-            const name = expression.get_logic_expression
+        if (validator.isDefined(expression.logic_expression)) {
+            const name = expression.logic_expression
             validator.ensureString(name)
             const found = this.getLogicExpression(name)
 
@@ -379,9 +379,9 @@ export default class Solver {
         }
 
         /**
-         * get_node_presence
+         * node_presence
          */
-        if (validator.isDefined(expression.get_node_presence)) {
+        if (validator.isDefined(expression.node_presence)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -390,7 +390,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(node)) {
-                const name = expression.get_node_presence
+                const name = expression.node_presence
                 validator.ensureStringOrNumber(name)
                 node = this.graph.getNode(name)
             }
@@ -399,9 +399,9 @@ export default class Solver {
         }
 
         /**
-         * get_relation_presence
+         * relation_presence
          */
-        if (validator.isDefined(expression.get_relation_presence)) {
+        if (validator.isDefined(expression.relation_presence)) {
             let relation: Relation | undefined
 
             if (validator.isDefined(expression._cached_element)) {
@@ -411,10 +411,10 @@ export default class Solver {
             }
 
             if (validator.isUndefined(relation)) {
-                const node = expression.get_relation_presence[0]
+                const node = expression.relation_presence[0]
                 validator.ensureString(node)
 
-                const id = expression.get_relation_presence[1]
+                const id = expression.relation_presence[1]
                 validator.ensureStringOrNumber(id)
 
                 relation = this.graph.getRelation([node, id])
@@ -424,39 +424,39 @@ export default class Solver {
         }
 
         /**
-         * get_source_presence
+         * source_presence
          */
-        if (validator.isDefined(expression.get_source_presence)) {
-            const element = expression.get_source_presence
+        if (validator.isDefined(expression.source_presence)) {
+            const element = expression.source_presence
             validator.ensureString(element)
             if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "get_source_presence" but received "${element}"`)
+                throw new Error(`"SELF" is the only valid value for "source_presence" but received "${element}"`)
             if (validator.isUndefined(context.element))
                 throw new Error(`Context of condition ${utils.prettyJSON(expression)} does not hold an element`)
-            if (!context.element.isRelation()) throw new Error(`"get_source_presence" is only valid inside a relation`)
+            if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
 
             return context.element.source.id
         }
 
         /**
-         * get_target_presence
+         * target_presence
          */
-        if (validator.isDefined(expression.get_target_presence)) {
-            const element = expression.get_target_presence
+        if (validator.isDefined(expression.target_presence)) {
+            const element = expression.target_presence
             validator.ensureString(element)
             if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "get_target_presence" but received "${element}"`)
+                throw new Error(`"SELF" is the only valid value for "target_presence" but received "${element}"`)
             if (validator.isUndefined(context.element))
                 throw new Error(`Context of condition ${utils.prettyJSON(expression)} does not hold an element`)
-            if (!context.element.isRelation()) throw new Error(`"get_target_presence" is only valid inside a relation`)
+            if (!context.element.isRelation()) throw new Error(`"target_presence" is only valid inside a relation`)
 
             return context.element.target.id
         }
 
         /**
-         * get_policy_presence
+         * policy_presence
          */
-        if (validator.isDefined(expression.get_policy_presence)) {
+        if (validator.isDefined(expression.policy_presence)) {
             let policy: Policy | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -465,7 +465,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(policy)) {
-                const name = expression.get_policy_presence
+                const name = expression.policy_presence
                 validator.ensureStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
@@ -502,9 +502,9 @@ export default class Solver {
         }
 
         /**
-         * get_group_presence
+         * group_presence
          */
-        if (validator.isDefined(expression.get_group_presence)) {
+        if (validator.isDefined(expression.group_presence)) {
             let group: Group | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -513,7 +513,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(group)) {
-                const name = expression.get_group_presence
+                const name = expression.group_presence
                 validator.ensureString(name)
                 group = this.graph.getGroup(name)
             }
@@ -542,9 +542,9 @@ export default class Solver {
         }
 
         /**
-         * get_artifact_presence
+         * artifact_presence
          */
-        if (validator.isDefined(expression.get_artifact_presence)) {
+        if (validator.isDefined(expression.artifact_presence)) {
             let artifact: Artifact | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -553,18 +553,18 @@ export default class Solver {
             }
 
             if (validator.isUndefined(artifact)) {
-                validator.ensureString(expression.get_artifact_presence[0])
-                validator.ensureStringOrNumber(expression.get_artifact_presence[1])
-                artifact = this.graph.getArtifact(expression.get_artifact_presence)
+                validator.ensureString(expression.artifact_presence[0])
+                validator.ensureStringOrNumber(expression.artifact_presence[1])
+                artifact = this.graph.getArtifact(expression.artifact_presence)
             }
 
             return artifact.id
         }
 
         /**
-         * get_property_presence
+         * property_presence
          */
-        if (validator.isDefined(expression.get_property_presence)) {
+        if (validator.isDefined(expression.property_presence)) {
             let property: Property | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -573,18 +573,18 @@ export default class Solver {
             }
 
             if (validator.isUndefined(property)) {
-                validator.ensureString(expression.get_property_presence[0])
-                validator.ensureStringOrNumber(expression.get_property_presence[1])
-                property = this.graph.getProperty(expression.get_property_presence)
+                validator.ensureString(expression.property_presence[0])
+                validator.ensureStringOrNumber(expression.property_presence[1])
+                property = this.graph.getProperty(expression.property_presence)
             }
 
             return property.id
         }
 
         /**
-         * get_input_presence
+         * input_presence
          */
-        if (validator.isDefined(expression.get_input_presence)) {
+        if (validator.isDefined(expression.input_presence)) {
             let input: Input | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -593,7 +593,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(input)) {
-                const name = expression.get_input_presence
+                const name = expression.input_presence
                 validator.ensureString(name)
                 input = this.graph.getInput(name)
             }
@@ -695,19 +695,19 @@ export default class Solver {
         }
 
         /**
-         * get_variability_input
+         * variability_input
          */
-        if (validator.isDefined(expression.get_variability_input)) {
-            validator.ensureString(expression.get_variability_input)
-            return this.evaluateValueExpression(this.getInput(expression.get_variability_input), context)
+        if (validator.isDefined(expression.variability_input)) {
+            validator.ensureString(expression.variability_input)
+            return this.evaluateValueExpression(this.getInput(expression.variability_input), context)
         }
 
         /**
-         * get_value_expression
+         * value_expression
          */
-        if (validator.isDefined(expression.get_value_expression)) {
-            validator.ensureString(expression.get_value_expression)
-            return this.evaluateValueExpression(this.getValueExpression(expression.get_value_expression), context)
+        if (validator.isDefined(expression.value_expression)) {
+            validator.ensureString(expression.value_expression)
+            return this.evaluateValueExpression(this.getValueExpression(expression.value_expression), context)
         }
 
         /**

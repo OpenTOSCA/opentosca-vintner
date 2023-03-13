@@ -14,7 +14,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_policy_presence: policy_one
+        policy_presence: policy_one
   policies:
     - policy_one:
         conditions: false

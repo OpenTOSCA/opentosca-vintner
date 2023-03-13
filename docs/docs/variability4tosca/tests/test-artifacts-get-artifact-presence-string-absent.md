@@ -14,7 +14,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_artifact_presence:
+        artifact_presence:
           - container
           - artifact_one
       artifacts:

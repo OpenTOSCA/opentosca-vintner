@@ -18,7 +18,7 @@ topology_template:
             conditions: false
             value: 69
       conditions:
-        get_property_presence:
+        property_presence:
           - container
           - property_one
 ```

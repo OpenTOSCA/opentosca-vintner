@@ -13,12 +13,12 @@ topology_template:
   variability:
     expressions:
       name:
-        get_node_presence: node_one
+        node_presence: node_one
   node_templates:
     container:
       type: container
       conditions:
-        get_logic_expression: name
+        logic_expression: name
     node_one:
       type: node_one
       conditions: true

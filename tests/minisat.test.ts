@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template: 
     node_templates: 
         node_one: 
-            conditions: {get_node_presence: node_two}
+            conditions: {node_presence: node_two}
             
         node_two: 
             conditions: true

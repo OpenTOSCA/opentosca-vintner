@@ -22,7 +22,7 @@ topology_template:
       properties:
         - value:
             expression:
-              get_value_expression: name
+              value_expression: name
 ```
 
 

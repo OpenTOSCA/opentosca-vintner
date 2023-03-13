@@ -74,8 +74,8 @@ topology_template:
                     mode: prod
 
         expressions:
-            is_dev: {equal: [{get_variability_input: mode}, dev]}
-            is_prod: {equal: [{get_variability_input: mode}, prod]}
+            is_dev: {equal: [{variability_input: mode}, dev]}
+            is_prod: {equal: [{variability_input: mode}, prod]}
 
         options:
             enable_property_default_condition: true
@@ -97,30 +97,30 @@ topology_template:
             requirements:
                 - host:
                       node: dev_runtime
-                      conditions: {get_logic_expression: is_dev}
+                      conditions: {logic_expression: is_dev}
                 - host:
                       node: prod_runtime
-                      conditions: {get_logic_expression: is_prod}
+                      conditions: {logic_expression: is_prod}
                 - database:
                       node: dev_database
-                      conditions: {get_logic_expression: is_dev}
+                      conditions: {logic_expression: is_dev}
                 - database:
                       node: prod_database
-                      conditions: {get_logic_expression: is_prod}
+                      conditions: {logic_expression: is_prod}
             artifacts:
                 artifact_file: files/application.tar.gz
 
         prod_runtime:
             type: gcp.appengine.engine
-            conditions: {get_logic_expression: is_prod}
+            conditions: {logic_expression: is_prod}
             requirements:
                 - host:
                       node: gcp
-                      conditions: {get_logic_expression: is_prod}
+                      conditions: {logic_expression: is_prod}
 
         prod_database:
             type: gcp.sql.db
-            conditions: {get_logic_expression: is_prod}
+            conditions: {logic_expression: is_prod}
             properties:
                 database_name: db
                 instance_name: {get_property: [SELF, host, instance_name]}
@@ -128,11 +128,11 @@ topology_template:
             requirements:
                 - host:
                       node: gcp_dbms
-                      conditions: {get_logic_expression: is_prod}
+                      conditions: {logic_expression: is_prod}
 
         gcp_dbms:
             type: gcp.sql.dbms
-            conditions: {get_logic_expression: is_prod}
+            conditions: {logic_expression: is_prod}
             properties:
                 instance_name: {concat: [{get_input: release}, '-', dbms]}
                 root_password: {get_input: root_password}
@@ -140,7 +140,7 @@ topology_template:
             requirements:
                 - host:
                       node: gcp
-                      conditions: {get_logic_expression: is_prod}
+                      conditions: {logic_expression: is_prod}
 
         gcp:
             type: gcp.provider
@@ -150,25 +150,25 @@ topology_template:
 
         dev_runtime:
             type: node.runtime
-            conditions: {get_logic_expression: is_dev}
+            conditions: {logic_expression: is_dev}
             requirements:
                 - host:
                       node: private_vm
-                      conditions: {get_logic_expression: is_dev}
+                      conditions: {logic_expression: is_dev}
 
         dev_database:
             type: sqlite.db
-            conditions: {get_logic_expression: is_dev}
+            conditions: {logic_expression: is_dev}
             properties:
                 database_name: {concat: [{get_input: release}, '-', db]}
             requirements:
                 - host:
                       node: private_vm
-                      conditions: {get_logic_expression: is_dev}
+                      conditions: {logic_expression: is_dev}
 
         private_vm:
             type: openstack.vm
-            conditions: {get_logic_expression: is_dev}
+            conditions: {logic_expression: is_dev}
             properties:
                 ports: [80]
                 name: {concat: [{get_input: release}, '-', private-vm]}
@@ -182,11 +182,11 @@ topology_template:
             requirements:
                 - host:
                       node: openstack
-                      conditions: {get_logic_expression: is_dev}
+                      conditions: {logic_expression: is_dev}
 
         openstack:
             type: openstack.provider
-            conditions: {get_logic_expression: is_dev}
+            conditions: {logic_expression: is_dev}
             properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}

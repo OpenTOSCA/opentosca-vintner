@@ -14,7 +14,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_group_presence: group_one
+        group_presence: group_one
   groups:
     group_one:
       conditions: false

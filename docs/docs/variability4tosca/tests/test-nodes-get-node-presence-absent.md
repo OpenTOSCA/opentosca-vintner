@@ -14,7 +14,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_node_presence: node
+        node_presence: node
     node:
       type: node
       conditions: false

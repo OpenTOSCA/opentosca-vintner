@@ -288,7 +288,7 @@ This command is also executed during the `release` workflow and, therefore, over
 ## Patch Packages 
 
 We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} to fixing third party libraries.
-This includes, e.g., the `logic-solver.d.ts` for [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
+For example, adding `logic-solver.d.ts` to [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
 Therefore, make changes to the package inside `node_modules`, then run the following command.
 
 ```
@@ -317,7 +317,7 @@ generate binaries inside the `/dist` directory.
 yarn package
 ```
 
-Note, the issue considering MiniSat and bytecode generation is known but can be ignored in our case.
+The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.
 
 ## Release
 

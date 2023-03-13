@@ -21,7 +21,7 @@ topology_template:
                   - ' '
                   - 1
               - world
-          - get_node_presence: node_one
+          - node_presence: node_one
     node_one:
       type: node_one
       conditions: true

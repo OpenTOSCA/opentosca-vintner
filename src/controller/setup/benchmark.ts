@@ -101,24 +101,24 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
 
     for (let i = 0; i < seed; i++) {
         serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_present`] = {
-            equal: [{get_variability_input: 'mode'}, 'present'],
+            equal: [{variability_input: 'mode'}, 'present'],
         }
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_present`] = {
             type: `component_type_${i}_present`,
-            conditions: {get_logic_expression: `condition_${i}_present`},
+            conditions: {logic_expression: `condition_${i}_present`},
             requirements: [
                 {
                     relation_present: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_present`,
-                        conditions: {get_logic_expression: `condition_${i}_present`},
+                        conditions: {logic_expression: `condition_${i}_present`},
                         relationship: `relationship_${i}_present`,
                     },
                 },
                 {
                     relation_removed: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_removed`,
-                        conditions: {get_logic_expression: `condition_${i}_removed`},
+                        conditions: {logic_expression: `condition_${i}_removed`},
                         relationship: `relationship_${i}_removed`,
                     },
                 },
@@ -134,12 +134,12 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
         }
 
         serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_removed`] = {
-            equal: [{get_variability_input: 'mode'}, `absent`],
+            equal: [{variability_input: 'mode'}, `absent`],
         }
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_removed`] = {
             type: `component_type_${i}_removed`,
-            conditions: {get_logic_expression: `condition_${i}_removed`},
+            conditions: {logic_expression: `condition_${i}_removed`},
         }
     }
 

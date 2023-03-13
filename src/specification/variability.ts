@@ -66,33 +66,33 @@ export type LogicExpression =
           implies?: [LogicExpression, LogicExpression]
 
           // Node functions
-          get_node_presence?: string
+          node_presence?: string
 
           // Relation functions
-          get_relation_presence?: [string, string | number]
-          get_source_presence?: 'SELF'
-          get_target_presence?: 'SELF'
+          relation_presence?: [string, string | number]
+          source_presence?: 'SELF'
+          target_presence?: 'SELF'
 
           // Property functions
-          get_property_presence?: [string, string | number]
+          property_presence?: [string, string | number]
 
           // Artifact functions
-          get_artifact_presence?: [string, string | number]
+          artifact_presence?: [string, string | number]
 
           // Policy functions
-          get_policy_presence?: string | number
+          policy_presence?: string | number
           has_present_targets?: string | number
 
           // Group functions
-          get_group_presence?: string
+          group_presence?: string
           has_present_members?: string
 
           // Input functions
-          get_input_presence?: string
+          input_presence?: string
 
           // Intrinsic functions
-          get_logic_expression?: string
-          get_variability_input?: string
+          logic_expression?: string
+          variability_input?: string
 
           // Cache
           _cached_element?: ConditionalElement
@@ -113,8 +113,8 @@ export type ComplexValueExpression = {
     mod?: [ValueExpression, ValueExpression]
 
     // Intrinsic functions
-    get_value_expression?: string
-    get_variability_input?: string
+    value_expression?: string
+    variability_input?: string
     concat?: ValueExpression[]
     join?: [ValueExpression[], string]
     token?: [ValueExpression, string, number]

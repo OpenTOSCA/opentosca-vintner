@@ -14,7 +14,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_relation_presence:
+        relation_presence:
           - node_one
           - relation_one
     node_one:

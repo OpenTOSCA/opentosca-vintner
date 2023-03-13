@@ -4,7 +4,7 @@ topology_template:
     node_templates:
         container:
             type: container
-            conditions: {get_relation_presence: [node_one, relation_one]}
+            conditions: {relation_presence: [node_one, relation_one]}
 
         node_one:
             type: node_one
@@ -12,7 +12,7 @@ topology_template:
             requirements:
                 - relation_one:
                       node: node_two
-                      conditions: {get_source_presence: SELF}
+                      conditions: {source_presence: SELF}
 
         node_two:
             type: node_two

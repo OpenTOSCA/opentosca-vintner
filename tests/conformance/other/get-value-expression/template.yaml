@@ -9,4 +9,4 @@ topology_template:
             type: container
             properties:
                 - value:
-                      expression: {get_value_expression: name}
+                      expression: {value_expression: name}

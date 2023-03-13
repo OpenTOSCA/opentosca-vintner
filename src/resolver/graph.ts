@@ -115,7 +115,7 @@ export class Input extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_input_presence: this.toscaId, _cached_element: this}
+            this._condition = {input_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -145,7 +145,7 @@ export class Node extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_node_presence: this.toscaId, _cached_element: this}
+            this._condition = {node_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -184,7 +184,7 @@ export class Property extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_property_presence: this.toscaId, _cached_element: this}
+            this._condition = {property_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -230,7 +230,7 @@ export class Relation extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_relation_presence: this.toscaId, _cached_element: this}
+            this._condition = {relation_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -270,7 +270,7 @@ export class Policy extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_policy_presence: this.toscaId, _cached_element: this}
+            this._condition = {policy_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -299,7 +299,7 @@ export class Group extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_group_presence: this.toscaId, _cached_element: this}
+            this._condition = {group_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }
@@ -331,7 +331,7 @@ export class Artifact extends ConditionalElement {
     _condition?: LogicExpression
     get condition(): LogicExpression {
         if (validator.isUndefined(this._condition))
-            this._condition = {get_artifact_presence: this.toscaId, _cached_element: this}
+            this._condition = {artifact_presence: this.toscaId, _cached_element: this}
         return this._condition
     }
 }

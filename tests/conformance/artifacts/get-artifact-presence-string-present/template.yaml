@@ -4,7 +4,7 @@ topology_template:
     node_templates:
         container:
             type: container
-            conditions: {get_artifact_presence: [container, artifact_one]}
+            conditions: {artifact_presence: [container, artifact_one]}
             artifacts:
                 artifact_one:
                     conditions: true

@@ -18,7 +18,7 @@ topology_template:
     container:
       type: container
       conditions:
-        get_input_presence: input
+        input_presence: input
 ```
 
 
