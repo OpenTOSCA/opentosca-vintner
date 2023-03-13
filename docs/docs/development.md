@@ -6,7 +6,7 @@ But please follow the following guidelines and our [Code of Conduct](code-of-con
 ## Repository
 
 The repository is a monorepo consisting of the CLI, server, docs and tests using the following commands. 
-We are using  [`yarn` (v1)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
+We are using  [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner
