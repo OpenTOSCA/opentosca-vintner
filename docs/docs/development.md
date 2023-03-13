@@ -54,6 +54,10 @@ git config commit.gpgsign true
 
 ## JetBrains
 
+!!! Warning
+    WebStorm Version 2022.3.3 seems to have problems with breakpoints when `src/resolver/graph.ts` is involved.
+    However, WebStorm Version 2022.3.2 works fine.
+
 We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank}
 or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed
 using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
@@ -295,7 +299,7 @@ yarn patch-package ${package-name}
 ## Build
 
 To locally build the project, run the following command.
-This will generate Javascript inside the `/build` directory.
+This will transpile Javascript inside the `/build` directory.
 
 ```shell linenums="1"
 yarn build
@@ -306,12 +310,14 @@ yarn build
 {{ linux_only_notice() }}
 
 To locally package the project, run the following command.
-This will package the previously build Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
+This will package the previously transpiled Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
 generate binaries inside the `/dist` directory.
 
 ```shell linenums="1"
 yarn package
 ```
+
+Note, the issue considering MiniSat and bytecode generation is known but can be ignored in our case.
 
 ## Release
 

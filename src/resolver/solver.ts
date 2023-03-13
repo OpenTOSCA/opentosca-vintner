@@ -25,7 +25,7 @@ export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
-    private readonly solver = new LS.Solver()
+    readonly minisat = new LS.Solver()
     private result?: Record<string, boolean>
 
     private inputs: InputAssignmentMap = {}
@@ -36,22 +36,26 @@ export default class Solver {
         this.options = graph.serviceTemplate.topology_template?.variability
     }
 
-    run() {
+    transform() {
         /**
          * Add logical conditions
          */
         for (const element of this.graph.elements) this.addConditions(element)
+    }
+
+    run() {
+        this.transform()
 
         /**
          * Get initial solution
          */
-        const solution = this.solver.solve()
+        const solution = this.minisat.solve()
         if (validator.isUndefined(solution)) throw new Error(`Could not solve`)
 
         /**
          * Get optimized solution by minimizing the numbers of nodes
          */
-        const optimized = this.solver.minimizeWeightedSum(
+        const optimized = this.minisat.minimizeWeightedSum(
             solution,
             this.graph.nodes.map(it => it.id),
             1
@@ -75,6 +79,30 @@ export default class Solver {
         return this.result
     }
 
+    /**
+     * See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+     */
+    plotClauses() {
+        const and: string[] = []
+        for (const clause of this.minisat.clauses) {
+            const or: string[] = []
+
+            for (const term of clause.terms) {
+                let name = this.minisat.getVarName(Math.abs(term))
+                if (name === '$F') name = 'false'
+                if (name === '$T') name = 'true'
+
+                if (term < 0) {
+                    or.push('not(' + name + ')')
+                } else {
+                    or.push(name)
+                }
+            }
+            and.push('(' + or.join(' or ') + ')')
+        }
+        return and.join(' and ')
+    }
+
     evaluateProperty(property: Property) {
         if (validator.isDefined(property.expression))
             property.value = this.evaluateValueExpression(property.expression, {
@@ -96,7 +124,7 @@ export default class Solver {
 
     addConditions(element: ConditionalElement) {
         // Variability group are never present
-        if (element.isGroup() && element.variability) return this.solver.require(Logic.not(element.id))
+        if (element.isGroup() && element.variability) return this.minisat.require(Logic.not(element.id))
 
         // Collect assigned conditions
         let conditions = [...element.conditions]
@@ -211,7 +239,7 @@ export default class Solver {
             {and: []}
         )
 
-        this.solver.require(Logic.equiv(element.id, this.transformLogicExpression(condition, {element})))
+        this.minisat.require(Logic.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
     getResolvingOptions() {
@@ -304,7 +332,7 @@ export default class Solver {
             if (validator.isUndefined(found._id)) found._id = 'expression.' + name
 
             if (validator.isUndefined(found._visited)) {
-                this.solver.require(Logic.equiv(found._id, this.transformLogicExpression(found, context)))
+                this.minisat.require(Logic.equiv(found._id, this.transformLogicExpression(found, context)))
                 found._visited = true
             }
 

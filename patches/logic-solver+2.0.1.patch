@@ -1,12 +1,12 @@
 diff --git a/node_modules/logic-solver/logic-solver.d.ts b/node_modules/logic-solver/logic-solver.d.ts
 new file mode 100644
-index 0000000..676b49e
+index 0000000..4484d0f
 --- /dev/null
 +++ b/node_modules/logic-solver/logic-solver.d.ts
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,72 @@
 +/**
-+ * Credits to Dan Rosén
-+ * see https://github.com/meteor/logic-solver/pull/6
++ * Based on Dan Rosén
++ * See https://github.com/meteor/logic-solver/pull/6
 + */
 +declare module 'logic-solver' {
 +    type Term = number | string
@@ -20,9 +20,14 @@ index 0000000..676b49e
 +    type Operands = Operand | ArrayOfOperands
 +    type ArrayOfOperands = Array<Operands>
 +
++    type Clause = {
++        terms: number[]
++    }
++
 +    class Solver {
 +        constructor()
 +        getVarNum(string: name, noCreate?: boolean): number
++        getVarName(number: vnum): string
 +        toNameTerm(term: Term): string
 +        toNumTerm(term: Term, noCreate?: boolean): number
 +        require(...args: Operands[]): void
@@ -31,6 +36,7 @@ index 0000000..676b49e
 +        solveAssuming(assumption: Operand): Solution | null
 +        minimizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution | null
 +        maximizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution | null
++        clauses: Clause[]
 +    }
 +
 +    type Formula = {}

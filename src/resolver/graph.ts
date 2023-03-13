@@ -423,7 +423,6 @@ export class Graph {
             const node = new Node({name: nodeName, raw: nodeTemplate})
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
-            this.elements.push(node)
 
             // Properties
             this.populateProperties(node, nodeTemplate)
