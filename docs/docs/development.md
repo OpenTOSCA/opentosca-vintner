@@ -291,7 +291,7 @@ We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} 
 For example, adding `logic-solver.d.ts` to [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
 Therefore, make changes to the package inside `node_modules`, then run the following command.
 
-```
+```shell linenums="1"
 yarn patch-package ${package-name}
 ```
 
