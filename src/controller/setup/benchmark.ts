@@ -146,27 +146,54 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
     return serviceTemplate
 }
 
-export function benchmark2markdown(results: BenchmarkResults) {
+export function benchmark2markdown(results: BenchmarkResults, options: BenchmarkOptions) {
     const data = []
-    data.push('| Test | Seed |  Templates | Median | Median per Template | I/O | File Size | File Lines | ')
-    data.push('| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
 
-    results.forEach((result, index) => {
-        data.push(
-            '|' +
-                [
-                    index + 1,
-                    result.seed,
-                    result.templates,
-                    result.median,
-                    result.median_per_template,
-                    result.IO,
-                    result.file_size || '',
-                    result.file_lines || '',
-                ].join(' | ') +
-                '|'
-        )
-    })
+    data.push('Tests In-Memory')
+    data.push('| Test | Seed |  Templates | Median | Median per Template |')
+    data.push('| --- | --- | --- | --- | --- |')
+
+    results
+        .filter(it => !it.IO)
+        .forEach((result, index) => {
+            data.push(
+                '| ' +
+                    [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(' | ') +
+                    ' |'
+            )
+        })
+
+    if (options.io) {
+        data.push('')
+        data.push('Tests with Filesystem')
+        data.push('| Test | Seed |  Templates | Median | Median per Template | ')
+        data.push('| --- | --- | --- | --- | --- |')
+
+        results
+            .filter(it => it.IO)
+            .forEach((result, index) => {
+                data.push(
+                    '| ' +
+                        [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(
+                            ' | '
+                        ) +
+                        ' |'
+                )
+            })
+
+        data.push('')
+        data.push('File Measurements')
+        data.push('| Seed |  File Size | File Lines | ')
+        data.push('| --- | --- | --- |')
+
+        results
+            .filter(it => it.IO)
+            .forEach((result, index) => {
+                data.push(
+                    '| ' + [index + 1, result.seed, result.file_size || '', result.file_lines || ''].join(' | ') + ' |'
+                )
+            })
+    }
 
     return data.join(`\n`)
 }
