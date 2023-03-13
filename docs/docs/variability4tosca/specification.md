@@ -520,6 +520,9 @@ To resolve the variability in a Variable Service Template, conduct the following
 1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
 
+There might be multiple valid variability-resolved service templates.
+Considering optimization, the service template having the least amount of node templates shall be chosen.
+
 ### Retrieve Variability Inputs Assignments
 
 Variability Inputs can be assigned either directly or indirectly using possibly multiple variability presets.
