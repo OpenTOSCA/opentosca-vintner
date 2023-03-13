@@ -137,6 +137,7 @@ A Variability Expression is an expression which consists of operators and functi
 For example, the following expression returns the total amount of costs.
 This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific
 budget.
+There are value expressions which return any kind of value and logic expressions which return Booleans.
 
 ```yaml linenums="1"
 expression: {add: [{variability_input: costs_offering_a}, {variability_input: costs_offering_b}]}
@@ -399,13 +400,13 @@ tosca.interfaces.relationship.management.Variability:
 
 The following logical operators can be used inside a Variability Expression.
 
-| Keyname | Input                                      | Output  | Description                                        |
-|---------|--------------------------------------------|---------|----------------------------------------------------|
-| and     | List(BooleanExpression)                    | Boolean | Evaluates if all values are `true`.                |
-| or      | List(BooleanExpression)                    | Boolean | Evaluates if at least one value is `true`.         |
-| not     | BooleanExpression                          | Boolean | Negates the given value.                           |
-| xor     | List(BooleanExpression)                    | Boolean | Evaluates if exactly one value is `true`.          |
-| implies | Tuple(BooleanExpression, BoolenExpression) | Boolean | Evaluates if first value implies the second value. |
+| Keyname | Input                                       | Output  | Description                                        |
+|---------|---------------------------------------------|---------|----------------------------------------------------|
+| and     | List(BooleanExpression)                     | Boolean | Evaluates if all values are `true`.                |
+| or      | List(BooleanExpression)                     | Boolean | Evaluates if at least one value is `true`.         |
+| not     | BooleanExpression                           | Boolean | Negates the given value.                           |
+| xor     | List(BooleanExpression)                     | Boolean | Evaluates if exactly one value is `true`.          |
+| implies | Tuple(BooleanExpression, BooleanExpression) | Boolean | Evaluates if first value implies the second value. |
 
 ## Arithmetic Operators
 
@@ -496,13 +497,11 @@ The following date operators can be used inside a Variability Expression.
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a
-Variable
-Service Template.
+In the following, we describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
 ### Resolve Variability
 
-To resolve the variability in a Variable Service Template, conduct the following steps:
+To resolve the variability in a variable service template, conduct the following steps:
 
 1. Retrieve Variability Inputs Assignments.
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`

@@ -24,7 +24,7 @@ export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
-    readonly minisat = new MiniSat.Solver()
+    private readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
 
     private inputs: InputAssignmentMap = {}
