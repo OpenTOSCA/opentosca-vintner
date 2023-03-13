@@ -102,61 +102,61 @@ export type LogicExpression =
     | string
     | boolean
 
-export type ValueExpression = ComplexValueExpression | InputAssignmentValue
+export type ValueExpression =
+    | InputAssignmentValue
+    | {
+          // Arithmetic operators
+          add?: ValueExpression[]
+          sub?: ValueExpression[]
+          mul?: ValueExpression[]
+          div?: ValueExpression[]
+          mod?: [ValueExpression, ValueExpression]
 
-export type ComplexValueExpression = {
-    // Arithmetic operators
-    add?: ValueExpression[]
-    sub?: ValueExpression[]
-    mul?: ValueExpression[]
-    div?: ValueExpression[]
-    mod?: [ValueExpression, ValueExpression]
+          // Intrinsic functions
+          value_expression?: string
+          variability_input?: string
+          concat?: ValueExpression[]
+          join?: [ValueExpression[], string]
+          token?: [ValueExpression, string, number]
 
-    // Intrinsic functions
-    value_expression?: string
-    variability_input?: string
-    concat?: ValueExpression[]
-    join?: [ValueExpression[], string]
-    token?: [ValueExpression, string, number]
+          // Comparison operators
+          equal?: ValueExpression[]
+          greater?: [ValueExpression, ValueExpression]
+          greater_or_equal?: [ValueExpression, ValueExpression]
+          less?: [ValueExpression, ValueExpression]
+          less_or_equal?: [ValueExpression, ValueExpression]
+          in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
+          valid_values?: [ValueExpression, ValueExpression[]]
+          length?: [ValueExpression, ValueExpression]
+          min_length?: [ValueExpression, ValueExpression]
+          max_length?: [ValueExpression, ValueExpression]
 
-    // Comparison operators
-    equal?: ValueExpression[]
-    greater?: [ValueExpression, ValueExpression]
-    greater_or_equal?: [ValueExpression, ValueExpression]
-    less?: [ValueExpression, ValueExpression]
-    less_or_equal?: [ValueExpression, ValueExpression]
-    in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
-    valid_values?: [ValueExpression, ValueExpression[]]
-    length?: [ValueExpression, ValueExpression]
-    min_length?: [ValueExpression, ValueExpression]
-    max_length?: [ValueExpression, ValueExpression]
+          // Analytical operators
+          sum?: number[]
+          count?: number[]
+          min?: number[]
+          max?: number[]
+          mean?: number[]
+          median?: number[]
+          variance?: number[]
+          standard_deviation?: number[]
+          linear_regression?: [[number, number][], number]
+          polynomial_regression?: [[number, number][], number, number]
+          logarithmic_regression?: [[number, number][], number]
+          exponential_regression?: [[number, number][], number]
 
-    // Analytical operators
-    sum?: number[]
-    count?: number[]
-    min?: number[]
-    max?: number[]
-    mean?: number[]
-    median?: number[]
-    variance?: number[]
-    standard_deviation?: number[]
-    linear_regression?: [[number, number][], number]
-    polynomial_regression?: [[number, number][], number, number]
-    logarithmic_regression?: [[number, number][], number]
-    exponential_regression?: [[number, number][], number]
+          // Date operators
+          weekday?: []
+          same?: [string | number, string | number]
+          before?: [string | number, string | number]
+          before_or_same?: [string | number, string | number]
+          after?: [string | number, string | number]
+          after_or_same?: [string | number, string | number]
+          within?: [string | number, [string | number, string | number]]
 
-    // Date operators
-    weekday?: []
-    same?: [string | number, string | number]
-    before?: [string | number, string | number]
-    before_or_same?: [string | number, string | number]
-    after?: [string | number, string | number]
-    after_or_same?: [string | number, string | number]
-    within?: [string | number, [string | number, string | number]]
-
-    // Cache
-    _cached_result?: InputAssignmentValue
-}
+          // Cache
+          _cached_result?: InputAssignmentValue
+      }
 
 export type VariabilityExpression = LogicExpression | ValueExpression
 

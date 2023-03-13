@@ -14,8 +14,7 @@ import stats from 'stats-lite'
 import {ensureArray, ensureDefined} from '#validator'
 import regression from 'regression'
 import day from '#utils/day'
-import * as LS from 'logic-solver'
-import Logic from 'logic-solver'
+import MiniSat from 'logic-solver'
 
 type ExpressionContext = {
     element?: ConditionalElement
@@ -25,7 +24,7 @@ export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
-    readonly minisat = new LS.Solver()
+    readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
 
     private inputs: InputAssignmentMap = {}
@@ -38,9 +37,10 @@ export default class Solver {
 
     transform() {
         /**
-         * Add logical conditions
+         * Transform assigned conditions to MiniSat clauses
+         * Note, this also evaluates value expressions if they are part of logic expressions
          */
-        for (const element of this.graph.elements) this.addConditions(element)
+        for (const element of this.graph.elements) this.transformConditions(element)
     }
 
     run() {
@@ -66,7 +66,11 @@ export default class Solver {
         /**
          * Assign presence to elements
          */
-        for (const element of this.graph.elements) this.assignPresence(element)
+        for (const element of this.graph.elements) {
+            const present = this.result[element.id]
+            if (validator.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
+            element.present = present
+        }
 
         /**
          * Evaluate value expressions
@@ -74,23 +78,25 @@ export default class Solver {
         for (const property of this.graph.properties.filter(it => it.present)) this.evaluateProperty(property)
 
         /**
+         * Note, input default expressions are evaluated on-demand in {@link getInput}
+         */
+
+        /**
          * Return result
          */
         return this.result
     }
 
-    /**
-     * See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
-     */
-    plotClauses() {
+    toCNF() {
+        // See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
         const and: string[] = []
         for (const clause of this.minisat.clauses) {
             const or: string[] = []
 
             for (const term of clause.terms) {
                 let name = this.minisat.getVarName(Math.abs(term))
-                if (name === '$F') name = 'false'
-                if (name === '$T') name = 'true'
+                if (name === MiniSat.FALSE) name = 'false'
+                if (name === MiniSat.TRUE) name = 'true'
 
                 if (term < 0) {
                     or.push('not(' + name + ')')
@@ -113,18 +119,9 @@ export default class Solver {
         return property.value
     }
 
-    assignPresence(element: ConditionalElement) {
-        if (validator.isUndefined(this.result)) throw new Error(`Not solved yet`)
-
-        const present = this.result[element.id]
-        if (validator.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
-
-        element.present = present
-    }
-
-    addConditions(element: ConditionalElement) {
+    transformConditions(element: ConditionalElement) {
         // Variability group are never present
-        if (element.isGroup() && element.variability) return this.minisat.require(Logic.not(element.id))
+        if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 
         // Collect assigned conditions
         let conditions = [...element.conditions]
@@ -239,7 +236,7 @@ export default class Solver {
             {and: []}
         )
 
-        this.minisat.require(Logic.equiv(element.id, this.transformLogicExpression(condition, {element})))
+        this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
     getResolvingOptions() {
@@ -312,30 +309,37 @@ export default class Solver {
         return condition as ValueExpression
     }
 
-    private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): LS.Operand {
+    private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): MiniSat.Operand {
         if (validator.isString(expression)) return expression
-        if (validator.isBoolean(expression)) return expression ? LS.TRUE : LS.FALSE
+        if (validator.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
 
         /**
          * logic_expression
+         * The expression first transformed and then added as a separate clause, thus, can be referenced by its name
          */
         if (validator.isDefined(expression.logic_expression)) {
+            // Find referenced expression
             const name = expression.logic_expression
             validator.ensureString(name)
             const found = this.getLogicExpression(name)
 
+            // Found expression is in this case actually a value expression
             if (validator.isString(found))
                 throw new Error(`Logic expression "${utils.prettyJSON(expression)}" must not be a string`)
 
+            // If the found expression is a boolean then just return the boolean (which requires transformation first)
             if (validator.isBoolean(found)) return this.transformLogicExpression(found, context)
 
+            // Assign id to expression which can be reused by other logic expressions
             if (validator.isUndefined(found._id)) found._id = 'expression.' + name
 
+            // Transform found expression and add it to MiniSat
             if (validator.isUndefined(found._visited)) {
-                this.minisat.require(Logic.equiv(found._id, this.transformLogicExpression(found, context)))
+                this.minisat.require(MiniSat.equiv(found._id, this.transformLogicExpression(found, context)))
                 found._visited = true
             }
 
+            // Return id
             return found._id
         }
 
@@ -343,36 +347,35 @@ export default class Solver {
          * and
          */
         if (validator.isDefined(expression.and)) {
-            return Logic.and(expression.and.map(it => this.transformLogicExpression(it, context)))
+            return MiniSat.and(expression.and.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * or
          */
         if (validator.isDefined(expression.or)) {
-            return Logic.or(expression.or.map(it => this.transformLogicExpression(it, context)))
+            return MiniSat.or(expression.or.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * not
          */
         if (validator.isDefined(expression.not)) {
-            return Logic.not(this.transformLogicExpression(expression.not, context))
+            return MiniSat.not(this.transformLogicExpression(expression.not, context))
         }
 
         /**
          * xor
          */
         if (validator.isDefined(expression.xor)) {
-            // TODO: our definition is different than Logic.xor
-            return Logic.exactlyOne(expression.xor.map(it => this.transformLogicExpression(it, context)))
+            return MiniSat.exactlyOne(expression.xor.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * implies
          */
         if (validator.isDefined(expression.implies)) {
-            return Logic.implies(
+            return MiniSat.implies(
                 this.transformLogicExpression(expression.implies[0], context),
                 this.transformLogicExpression(expression.implies[1], context)
             )
@@ -490,13 +493,13 @@ export default class Solver {
                 policy = this.graph.getPolicy(name)
             }
 
-            return Logic.or(
+            return MiniSat.or(
                 policy.targets.map(it => {
                     // Node
                     if (it.isNode()) return it.id
 
                     // Group
-                    return Logic.or(it.members.map(it => it.id))
+                    return MiniSat.or(it.members.map(it => it.id))
                 })
             )
         }
@@ -538,7 +541,7 @@ export default class Solver {
                 group = this.graph.getGroup(name)
             }
 
-            return Logic.or(group.members.map(it => it.id))
+            return MiniSat.or(group.members.map(it => it.id))
         }
 
         /**
@@ -603,6 +606,7 @@ export default class Solver {
 
         /**
          * Assume that expression is a value expression that returns a boolean
+         * Thus, {@param expression} can be in realty also be {@link ValueExpression}
          */
         const result = this.evaluateValueExpression(expression, context)
         validator.ensureBoolean(result)

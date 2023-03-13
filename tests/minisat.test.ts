@@ -5,7 +5,7 @@ import * as yaml from 'js-yaml'
 import {expect} from 'chai'
 
 describe('minisat', () => {
-    it('001', () => {
+    it('alpha', () => {
         run(
             `
 tosca_definitions_version: tosca_variability_1_0
@@ -25,5 +25,5 @@ topology_template:
 function run(template: string, expected: string) {
     const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate))
     solver.transform()
-    expect(solver.plotClauses()).to.equal(expected)
+    expect(solver.toCNF()).to.equal(expected)
 }
