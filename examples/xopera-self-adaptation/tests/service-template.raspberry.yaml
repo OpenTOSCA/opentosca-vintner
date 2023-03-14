@@ -1,0 +1,118 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/scenario/types.yaml
+    - lib/compute/types.yaml
+    - lib/sensor/types.yaml
+    - lib/queue/types.yaml
+
+topology_template:
+    inputs:
+        vintner_version:
+            type: string
+            default: latest
+
+        vintner:
+            type: string
+            default: http://localhost:3000
+
+        instance:
+            type: string
+
+        compute_vm_network:
+            type: string
+
+        compute_vm_security_groups:
+            type: string
+
+        compute_vm_key_name:
+            type: string
+
+        compute_vm_ssh_user:
+            type: string
+
+        compute_vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+        compute_raspberry_address:
+            type: string
+            default: raspberrypi
+
+        compute_raspberry_user_name:
+            type: string
+
+        compute_raspberry_ssh_key_file:
+            type: string
+
+    node_templates:
+        application:
+            type: scenario.application
+            properties:
+                scale: 1
+            requirements:
+                - input: queue_input
+                - output: queue_output
+                - host:
+                      node: compute_raspberry
+            artifacts:
+                binary:
+                    type: tosca.artifacts.File
+                    file: files/application-linux-arm64.xz
+
+        queue_input:
+            type: queue.queue
+
+        queue_output:
+            type: queue.queue
+
+        compute_raspberry:
+            type: compute.raspberry
+            properties:
+                ssh_user: {get_input: compute_raspberry_user_name}
+                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
+            attributes:
+                private_address: {get_input: compute_raspberry_address}
+                public_address: {get_input: compute_raspberry_address}
+
+        sensor_compute_raspberry:
+            type: sensor.compute
+            properties:
+                vintner: {get_input: vintner}
+                instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                template: compute_raspberry
+                disable_submission: true
+            requirements:
+                - host: compute_raspberry
+
+        sensor_weekday:
+            type: sensor.weekday
+            properties:
+                vintner: {get_input: vintner}
+                instance: {get_input: instance}
+                version: {get_input: vintner_version}
+                disable_submission: true
+            requirements:
+                - host:
+                      node: compute_raspberry
