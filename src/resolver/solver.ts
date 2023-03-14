@@ -24,8 +24,12 @@ export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
-    private readonly minisat = new MiniSat.Solver()
+    readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
+
+    // Some operations on MiniSat cannot be undone
+    private processed = false
+    private transformed = false
 
     private inputs: InputAssignmentMap = {}
     private weekday = utils.weekday()
@@ -40,10 +44,16 @@ export default class Solver {
          * Transform assigned conditions to MiniSat clauses
          * Note, this also evaluates value expressions if they are part of logic expressions
          */
+        if (this.transformed) throw new Error(`Has been already transformed`)
+        this.transformed = true
+
         for (const element of this.graph.elements) this.transformConditions(element)
     }
 
     run() {
+        if (this.processed) throw new Error(`Has been already solved`)
+        this.processed = true
+
         this.transform()
 
         /**
@@ -85,6 +95,22 @@ export default class Solver {
          * Return result
          */
         return this.result
+    }
+
+    solveAll() {
+        if (this.processed) throw new Error(`Has been already solved`)
+        this.processed = true
+
+        this.transform()
+
+        const results = []
+        let result
+        while ((result = this.minisat.solve())) {
+            results.push(result.getMap())
+            this.minisat.forbid(result.getFormula())
+        }
+
+        return results
     }
 
     toCNF() {
@@ -153,6 +179,16 @@ export default class Solver {
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
             conditions = [{not: {or: bratans.map(it => it.condition)}}]
+        }
+
+        // Node Default Condition: Assign default condition to relation that checks if no incoming relation is present and that there is at least one potential incoming relation
+        if (element.isNode() && this.getResolvingOptions().enable_node_default_condition && utils.isEmpty(conditions)) {
+            conditions = [{or: [{is_present_target: element.name}, {not: {is_target: element.name}}]}]
+        }
+
+        // Prune Nodes: Additionally check that no incoming relation is present and that there is at least one potential incoming relations.
+        if (element.isNode() && this.getResolvingOptions().enable_node_pruning) {
+            conditions.unshift({or: [{is_present_target: element.name}, {not: {is_target: element.name}}]})
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
@@ -394,11 +430,51 @@ export default class Solver {
 
             if (validator.isUndefined(node)) {
                 const name = expression.node_presence
-                validator.ensureStringOrNumber(name)
+                validator.ensureString(name)
                 node = this.graph.getNode(name)
             }
 
             return node.id
+        }
+
+        /**
+         * is_present_target
+         */
+        if (validator.isDefined(expression.is_present_target)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.is_present_target
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.ingoing.map(it => it.id))
+        }
+
+        /**
+         * is_target
+         */
+        if (validator.isDefined(expression.is_target)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.is_target
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return this.transformLogicExpression(!utils.isEmpty(node.ingoing), context)
         }
 
         /**

@@ -9,12 +9,14 @@ export type VariabilityDefinition = {
 }
 
 export type VariabilityResolvingOptions = {
+    enable_node_default_condition?: boolean
     enable_relation_default_condition?: boolean
     enable_policy_default_condition?: boolean
     enable_group_default_condition?: boolean
     enable_artifact_default_condition?: boolean
     enable_property_default_condition?: boolean
 } & {
+    enable_node_pruning?: boolean
     enable_relation_pruning?: boolean
     enable_policy_pruning?: boolean
     enable_group_pruning?: boolean
@@ -67,6 +69,12 @@ export type LogicExpression =
 
           // Node functions
           node_presence?: string
+          // TODO: Doc (also default conditions table)
+          // TODO: test
+          is_present_target?: string
+          // TODO: Doc (also default conditions table)
+          // TODO: test
+          is_target?: string
 
           // Relation functions
           relation_presence?: [string, string | number]

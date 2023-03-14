@@ -1,0 +1,7 @@
+description: |
+    - node pruning is enabled
+    - relation defaults (NOT pruning) is enabled
+
+    - since node_three is present, relation_three_one is present (condition is not overridden by pruning since relation pruning is not enabled)
+    - since relation_three_one is present, node_one is present
+    - since node_one is present, node_two is present, thus, relation_two_one is present
