@@ -65,8 +65,8 @@ variability:
                 mode: prod
 
     expressions:
-        is_dev: {equal: [{get_variability_input: mode}, dev]}
-        is_prod: {equal: [{get_variability_input: mode}, prod]}
+        is_dev: {equal: [{variability_input: mode}, dev]}
+        is_prod: {equal: [{variability_input: mode}, prod]}
 ```
 
 
@@ -137,9 +137,10 @@ A Variability Expression is an expression which consists of operators and functi
 For example, the following expression returns the total amount of costs.
 This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific
 budget.
+There are value expressions which return any kind of value and logic expressions which return Booleans.
 
 ```yaml linenums="1"
-expression: {add: [{get_variability_input: costs_offering_a}, {get_variability_input: costs_offering_b}]}
+expression: {add: [{variability_input: costs_offering_a}, {variability_input: costs_offering_b}]}
 ```
 
 ## Variability Condition Definition
@@ -149,7 +150,7 @@ Allowed operators and functions are listed below.
 For example, the following condition evaluates to true if the Variability Input `mode` equals `prod`.
 
 ```yaml linenums="1"
-is_prod: {equal: [{get_variability_input: mode}, prod]}
+is_prod: {equal: [{variability_input: mode}, prod]}
 ```
 
 ## Node Template Definition
@@ -172,7 +173,7 @@ The following non-normative and incomplete example contains a Node Template that
 ```yaml linenums="1"
 prod_database:
     type: gcp.sql.db
-    conditions: {get_variability_expression: is_prod}
+    conditions: {logic_expression: is_prod}
 ```
 
 Furthermore, artifacts must be transformed to an Artifact Definitions Map.
@@ -194,7 +195,7 @@ assigned.
 requirements:
     - host:
           node: dev_runtime
-          conditions: {get_variability_expression: is_dev}
+          conditions: {logic_expression: is_dev}
 ```
 
 ## Relationship Templates 
@@ -258,7 +259,7 @@ conditions are satisfied.
 conditional_group:
     type: tosca.groups.Root
     members: [prod_database, [application, prod_connects_to]]
-    conditions: {get_variability_expression: is_prod}
+    conditions: {logic_expression: is_prod}
 ```
 
 The following non-normative and incomplete example contains the group `example_group` whose elements are the Node
@@ -269,7 +270,7 @@ In contrast to the previous example this group is not derived from `variability.
 variability_group:
     type: variability.groups.ConditionalMembers
     members: [prod_database, [application, prod_connects_to]]
-    conditions: {get_variability_expression: is_prod}
+    conditions: {logic_expression: is_prod}
 ```
 
 ## Policy Template Definition
@@ -318,7 +319,7 @@ policies:
     - anticollocation:
           type: tosca.policies.AntiCollocation
           targets: [wordpress_server, mysql]
-          conditions: {get_variability_expression: is_prod}
+          conditions: {logic_expression: is_prod}
 ```
 
 
@@ -349,7 +350,7 @@ assigned.
 ```yaml linenums="1"
 ssh_key_file:
     type: string
-    conditions: {get_variability_expression: is_dev}
+    conditions: {logic_expression: is_dev}
 ```
 
 
@@ -399,13 +400,13 @@ tosca.interfaces.relationship.management.Variability:
 
 The following logical operators can be used inside a Variability Expression.
 
-| Keyname | Input                                      | Output  | Description                                        |
-|---------|--------------------------------------------|---------|----------------------------------------------------|
-| and     | List(BooleanExpression)                    | Boolean | Evaluates if all values are `true`.                |
-| or      | List(BooleanExpression)                    | Boolean | Evaluates if at least one value is `true`.         |
-| not     | BooleanExpression                          | Boolean | Negates the given value.                           |
-| xor     | List(BooleanExpression)                    | Boolean | Evaluates if exactly one value is `true`.          |
-| implies | Tuple(BooleanExpression, BoolenExpression) | Boolean | Evaluates if first value implies the second value. |
+| Keyname | Input                                       | Output  | Description                                        |
+|---------|---------------------------------------------|---------|----------------------------------------------------|
+| and     | List(BooleanExpression)                     | Boolean | Evaluates if all values are `true`.                |
+| or      | List(BooleanExpression)                     | Boolean | Evaluates if at least one value is `true`.         |
+| not     | BooleanExpression                           | Boolean | Negates the given value.                           |
+| xor     | List(BooleanExpression)                     | Boolean | Evaluates if exactly one value is `true`.          |
+| implies | Tuple(BooleanExpression, BooleanExpression) | Boolean | Evaluates if first value implies the second value. |
 
 ## Arithmetic Operators
 
@@ -423,20 +424,25 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 The following intrinsic functions can be used inside a Variability Expression.
 
-| Keyname                    | Input                                                      | Output  | Description                                                                                                              |
-|----------------------------|------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| get_variability_input      | String                                                     | Any     | Returns the value of a Variability Input.                                                                                |
-| get_variability_expression | String                                                     | Any     | Returns the value of the Variability Expression.                                                                         |
-| get_variability_condition  | String                                                     | Boolean | Returns the value of the Variability Condition.                                                                          |
-| get_node_presence          | String                                                     | Boolean | Returns if node is present.                                                                                              |
-| get_relation_presence      | Tuple(String, String) &#124; Tuple(String, Number)         | Boolean | Returns if relation is present.                                                                                          |
-| get_source_presence        | SELF                                                       | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| get_target_presence        | SELF                                                       | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| has_present_targets        | String                                                     | Boolean | Returns if any target of the given policy is present.                                                                    |
-| has_present_members        | String                                                     | Boolean | Returns if any member of the given group is present.                                                                     |
-| concat                     | List(ValueExpression)                                      | String  | Concatenates the given values.                                                                                           |
-| join                       | Tuple(List(ValueExpression), String)                       | String  | Joins the given values using the provided delimiter.                                                                     |
-| token                      | Tuple(ValueExpression, String, Number)                     | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+| Keyname               | Input                                              | Output  | Description                                                                                                              |
+|-----------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| variability_input | String                                             | Any     | Returns the value of a Variability Input.                                                                                |
+| logic_expression  | String                                             | Boolean | Returns the value of the Logic Expression.                                                                               |
+| value_expression  | String                                             | Any     | Returns the value of the Value Expression.                                                                               |
+| node_presence     | String                                             | Boolean | Returns if node is present.                                                                                              |
+| relation_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                          |
+| property_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                          |
+| artifact_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                          |
+| policy_presence   | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                            |
+| group_presence    | String                                             | Boolean | Returns if group is present.                                                                                             |
+| input_presence    | String                                             | Boolean | Returns if input is present.                                                                                             |
+| source_presence   | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| target_presence   | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
+| has_present_target   | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                    |
+| has_present_member   | String                                             | Boolean | Returns if any member of the given group is present.                                                                     |
+| concat                | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                           |
+| join                  | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                     |
+| token                 | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
 
 ## Constraint Operators
 
@@ -445,9 +451,9 @@ The following constraint operators can be used inside a Variability Expression.
 | Keyname          | Input                                                                 | Output  | Description                                                           |
 |------------------|-----------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
 | equal            | List(ValueExpression)                                                 | Boolean | Evaluates if the given values are equal.                              |
-| greater_than     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
+| greater     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
 | greater_or_equal | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greater or equal to the second value. |
-| less_than        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
+| less        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
 | less_or_equal    | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less or equal to the second value.    |
 | in_range         | Tuple(NumericExpression, Tuple(NumericExpression, NumericExpression)) | Boolean | Evaluates if the value is in a given range.                           |
 | valid_values     | Tuple(ValueExpression, List(ValueExpression))                         | Boolean | Evaluates if the value is element of the list.                        |
@@ -479,19 +485,23 @@ The following analytical operators can be used inside a Variability Expression.
 
 The following date operators can be used inside a Variability Expression.
 
-| Keyname             | Input              | Output | Description                                     |
-|---------------------|--------------------|--------|-------------------------------------------------|
-| get_current_weekday | Empty List | String | Returns the current weekday. |
+| Keyname        | Input                                                                          | Output  | Description                                                                      |
+|----------------|--------------------------------------------------------------------------------|---------|----------------------------------------------------------------------------------|
+| weekday        | Empty List                                                                     | String  | Returns the current weekday.                                                     |
+| same           | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is the same date as the second.                            |
+| before         | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is before the second date.                                 |
+| before_or_same | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is before or same as the second date.                      |
+| after          | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after the second date.                                  |
+| after_or_same  | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after or same as the second date.                       |
+| within         | Tuple(String &#124; Number, Tuple(String &#124; Number, String &#124; Number)) | Boolean | Returns if given date is within the given dates. |
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a Variability-Resolved Service Template from a
-Variable
-Service Template.
+In the following, we describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
 ### Resolve Variability
 
-To resolve the variability in a Variable Service Template, conduct the following steps:
+To resolve the variability in a variable service template, conduct the following steps:
 
 1. Retrieve Variability Inputs Assignments.
 1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
@@ -508,6 +518,9 @@ To resolve the variability in a Variable Service Template, conduct the following
 1. Remove all Policy Targets which are not present from Policy Template.
 1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
 1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
+
+There might be multiple valid variability-resolved service templates.
+In such a case, the service template having the least amount of node templates shall be chosen.
 
 ### Retrieve Variability Inputs Assignments
 

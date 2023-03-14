@@ -1,7 +1,7 @@
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {countLines, getSize, loadYAML, storeYAML, temporaryFile} from '#files'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '#utils'
-import {VariabilityResolver} from '#/resolver'
+import Resolver from '#resolver'
 
 type BenchmarkOptions = {
     io?: boolean
@@ -45,11 +45,10 @@ export default async function (options: BenchmarkOptions) {
 
                 if (io) storeYAML(input, serviceTemplate)
 
-                const result = new VariabilityResolver(io ? loadYAML<ServiceTemplate>(input) : serviceTemplate)
-                    .setVariabilityInputs({mode: 'present'})
-                    .resolve()
-                    .checkConsistency()
-                    .transform()
+                const result = await Resolver.resolve({
+                    template: io ? loadYAML<ServiceTemplate>(input) : serviceTemplate,
+                    inputs: {mode: 'present'},
+                })
 
                 if (io) storeYAML(output, result)
 
@@ -102,24 +101,24 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
 
     for (let i = 0; i < seed; i++) {
         serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_present`] = {
-            equal: [{get_variability_input: 'mode'}, 'present'],
+            equal: [{variability_input: 'mode'}, 'present'],
         }
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_present`] = {
             type: `component_type_${i}_present`,
-            conditions: {get_variability_condition: `condition_${i}_present`},
+            conditions: {logic_expression: `condition_${i}_present`},
             requirements: [
                 {
                     relation_present: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_present`,
-                        conditions: {get_variability_condition: `condition_${i}_present`},
+                        conditions: {logic_expression: `condition_${i}_present`},
                         relationship: `relationship_${i}_present`,
                     },
                 },
                 {
                     relation_removed: {
                         node: `component_${i + 1 == seed ? 0 : i + 1}_removed`,
-                        conditions: {get_variability_condition: `condition_${i}_removed`},
+                        conditions: {logic_expression: `condition_${i}_removed`},
                         relationship: `relationship_${i}_removed`,
                     },
                 },
@@ -135,39 +134,66 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
         }
 
         serviceTemplate.topology_template!.variability!.expressions![`condition_${i}_removed`] = {
-            equal: [{get_variability_input: 'mode'}, `absent`],
+            equal: [{variability_input: 'mode'}, `absent`],
         }
 
         serviceTemplate.topology_template!.node_templates![`component_${i}_removed`] = {
             type: `component_type_${i}_removed`,
-            conditions: {get_variability_condition: `condition_${i}_removed`},
+            conditions: {logic_expression: `condition_${i}_removed`},
         }
     }
 
     return serviceTemplate
 }
 
-export function benchmark2markdown(results: BenchmarkResults) {
+export function benchmark2markdown(results: BenchmarkResults, options: BenchmarkOptions) {
     const data = []
-    data.push('| Test | Seed |  Templates | Median | Median per Template | I/O | File Size | File Lines | ')
-    data.push('| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
 
-    results.forEach((result, index) => {
-        data.push(
-            '|' +
-                [
-                    index + 1,
-                    result.seed,
-                    result.templates,
-                    result.median,
-                    result.median_per_template,
-                    result.IO,
-                    result.file_size || '',
-                    result.file_lines || '',
-                ].join(' | ') +
-                '|'
-        )
-    })
+    data.push('Tests In-Memory')
+    data.push('| Test | Seed |  Templates | Median | Median per Template |')
+    data.push('| --- | --- | --- | --- | --- |')
+
+    results
+        .filter(it => !it.IO)
+        .forEach((result, index) => {
+            data.push(
+                '| ' +
+                    [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(' | ') +
+                    ' |'
+            )
+        })
+
+    if (options.io) {
+        data.push('')
+        data.push('Tests with Filesystem')
+        data.push('| Test | Seed |  Templates | Median | Median per Template | ')
+        data.push('| --- | --- | --- | --- | --- |')
+
+        results
+            .filter(it => it.IO)
+            .forEach((result, index) => {
+                data.push(
+                    '| ' +
+                        [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(
+                            ' | '
+                        ) +
+                        ' |'
+                )
+            })
+
+        data.push('')
+        data.push('File Measurements')
+        data.push('| Seed |  File Size | File Lines | ')
+        data.push('| --- | --- | --- |')
+
+        results
+            .filter(it => it.IO)
+            .forEach((result, index) => {
+                data.push(
+                    '| ' + [index + 1, result.seed, result.file_size || '', result.file_lines || ''].join(' | ') + ' |'
+                )
+            })
+    }
 
     return data.join(`\n`)
 }

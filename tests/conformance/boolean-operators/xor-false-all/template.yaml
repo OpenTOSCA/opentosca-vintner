@@ -4,6 +4,4 @@ topology_template:
     node_templates:
         container:
             type: container
-            properties:
-                - value:
-                      expression: {xor: [false, false, false, false]}
+            conditions: {xor: [false, false, false, false]}

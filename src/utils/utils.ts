@@ -1,6 +1,6 @@
 import {v4 as uuid4} from 'uuid'
 import * as validator from './validator'
-import dayjs from 'dayjs'
+import day from '#utils/day'
 
 export function generateNonce() {
     return uuid4()
@@ -114,7 +114,11 @@ export function normalizeString(value: string) {
 }
 
 export function now() {
-    return dayjs().millisecond()
+    return day().millisecond()
+}
+
+export function weekday() {
+    return day().format('dddd').toLowerCase()
 }
 
 export async function sleep(ms = 1000) {
@@ -123,4 +127,8 @@ export async function sleep(ms = 1000) {
 
 export function toFixed(value: number) {
     return Number(value.toFixed(2))
+}
+
+export function toFirstUpperCase(value: string) {
+    return value.charAt(0).toUpperCase() + value.slice(1)
 }

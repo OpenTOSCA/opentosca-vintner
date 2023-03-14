@@ -73,7 +73,7 @@ setup
         hae.exit(async options => {
             const results = await Controller.setup.benchmark(options)
             console.table(results)
-            if (options.markdown) console.log('\n', benchmark2markdown(results))
+            if (options.markdown) console.log('\n', benchmark2markdown(results, options))
             if (options.latex) console.log('\n', benchmark2latex(results, options))
         })
     )

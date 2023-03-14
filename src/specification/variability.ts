@@ -1,4 +1,5 @@
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
+import {ConditionalElement} from '#/resolver/graph'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
@@ -19,7 +20,9 @@ export type VariabilityResolvingOptions = {
     enable_group_pruning?: boolean
     enable_artifact_pruning?: boolean
     enable_property_pruning?: boolean
-} & {
+} & ConsistencyOptions
+
+export type ConsistencyOptions = {
     disable_consistency_checks?: boolean
     disable_relation_source_consistency_check?: boolean
     disable_relation_target_consistency_check?: boolean
@@ -49,57 +52,84 @@ export type VariabilityPointMap<T> =
 export type VariabilityPointList<T> = {[name: string]: T}[]
 
 export type VariabilityAlternative = {
-    conditions?: VariabilityExpression | VariabilityExpression[]
+    conditions?: LogicExpression | LogicExpression[]
     default_alternative?: boolean
 }
 
-/**
- * Inspired by
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_WORKFLOW_COND_CLAUSE_DEFN
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_CONSTRAINTS_OPERATORS
- * - https://www.sciencedirect.com/topics/computer-science/arithmetic-operator
- */
-export type VariabilityExpression =
+export type LogicExpression =
     | {
           // Boolean operators
-          and?: VariabilityExpression[]
-          or?: VariabilityExpression[]
-          not?: VariabilityExpression
-          xor?: VariabilityExpression[]
-          implies?: [VariabilityExpression, VariabilityExpression]
+          and?: LogicExpression[]
+          or?: LogicExpression[]
+          not?: LogicExpression
+          xor?: LogicExpression[]
+          implies?: [LogicExpression, LogicExpression]
 
-          // Arithmetic operators
-          add?: VariabilityExpression[]
-          sub?: VariabilityExpression[]
-          mul?: VariabilityExpression[]
-          div?: VariabilityExpression[]
-          mod?: [VariabilityExpression, VariabilityExpression]
+          // Node functions
+          node_presence?: string
+
+          // Relation functions
+          relation_presence?: [string, string | number]
+          source_presence?: 'SELF'
+          target_presence?: 'SELF'
+
+          // Property functions
+          property_presence?: [string, string | number]
+
+          // Artifact functions
+          artifact_presence?: [string, string | number]
+
+          // Policy functions
+          policy_presence?: string | number
+          has_present_target?: string | number
+
+          // Group functions
+          group_presence?: string
+          has_present_member?: string
+
+          // Input functions
+          input_presence?: string
 
           // Intrinsic functions
-          get_variability_expression?: VariabilityExpression
-          get_variability_input?: VariabilityExpression
-          get_variability_condition?: VariabilityExpression
-          get_node_presence?: VariabilityExpression
-          get_relation_presence?: [VariabilityExpression, VariabilityExpression]
-          get_source_presence?: 'SELF'
-          get_target_presence?: 'SELF'
-          has_present_targets?: VariabilityExpression
-          has_present_members?: VariabilityExpression
-          concat?: VariabilityExpression[]
-          join?: [VariabilityExpression[], string]
-          token?: [VariabilityExpression, string, number]
+          logic_expression?: string
+          variability_input?: string
+
+          // Cache
+          _cached_element?: ConditionalElement
+          _visited?: boolean
+          _id?: string
+      }
+    | string
+    | boolean
+
+export type ValueExpression =
+    | InputAssignmentValue
+    | {
+          // Arithmetic operators
+          add?: ValueExpression[]
+          sub?: ValueExpression[]
+          mul?: ValueExpression[]
+          div?: ValueExpression[]
+          mod?: [ValueExpression, ValueExpression]
+
+          // Intrinsic functions
+          value_expression?: string
+          variability_input?: string
+          concat?: ValueExpression[]
+          join?: [ValueExpression[], string]
+          token?: [ValueExpression, string, number]
 
           // Comparison operators
-          equal?: VariabilityExpression[]
-          greater_than?: [VariabilityExpression, VariabilityExpression]
-          greater_or_equal?: [VariabilityExpression, VariabilityExpression]
-          less_than?: [VariabilityExpression, VariabilityExpression]
-          less_or_equal?: [VariabilityExpression, VariabilityExpression]
-          in_range?: [VariabilityExpression, [VariabilityExpression, VariabilityExpression]]
-          valid_values?: [VariabilityExpression, VariabilityExpression[]]
-          length?: [VariabilityExpression, VariabilityExpression]
-          min_length?: [VariabilityExpression, VariabilityExpression]
-          max_length?: [VariabilityExpression, VariabilityExpression]
+          equal?: ValueExpression[]
+          greater?: [ValueExpression, ValueExpression]
+          greater_or_equal?: [ValueExpression, ValueExpression]
+          less?: [ValueExpression, ValueExpression]
+          less_or_equal?: [ValueExpression, ValueExpression]
+          in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
+          valid_values?: [ValueExpression, ValueExpression[]]
+          length?: [ValueExpression, ValueExpression]
+          min_length?: [ValueExpression, ValueExpression]
+          max_length?: [ValueExpression, ValueExpression]
 
           // Analytical operators
           sum?: number[]
@@ -116,9 +146,16 @@ export type VariabilityExpression =
           exponential_regression?: [[number, number][], number]
 
           // Date operators
-          get_current_weekday?: []
+          weekday?: []
+          same?: [string | number, string | number]
+          before?: [string | number, string | number]
+          before_or_same?: [string | number, string | number]
+          after?: [string | number, string | number]
+          after_or_same?: [string | number, string | number]
+          within?: [string | number, [string | number, string | number]]
 
           // Cache
-          cached_result?: InputAssignmentValue
+          _cached_result?: InputAssignmentValue
       }
-    | InputAssignmentValue
+
+export type VariabilityExpression = LogicExpression | ValueExpression

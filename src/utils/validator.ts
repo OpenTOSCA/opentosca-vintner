@@ -1,4 +1,7 @@
-export function isUndefined(element: unknown): element is undefined {
+import day from '#utils/day'
+import {Dayjs} from 'dayjs'
+
+export function isUndefined(element: unknown): element is undefined | null {
     return typeof element === 'undefined'
 }
 
@@ -18,7 +21,7 @@ export function ensureString(element: unknown): asserts element is string {
     if (!isString(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a string`)
 }
 
-export function ensureStringOrNumber(element: unknown): asserts element is string {
+export function ensureStringOrNumber(element: unknown): asserts element is string | number {
     if (!isString(element) && !isNumber(element))
         throw new Error(`Element "${JSON.stringify(element)}" is neither a string nor a number`)
 }
@@ -67,4 +70,12 @@ export function ensureObject(element: unknown): asserts element is object {
 export function ensureName(name: string) {
     if (!name.match(/^[a-z-]+$/))
         throw new Error(`Name "${name}" not allowed. Only small characters and hyphens are allowed.`)
+}
+
+export function isDate(element: Dayjs): element is Dayjs {
+    return day(element).isValid()
+}
+
+export function ensureDate(element: Dayjs) {
+    if (!isDate(element)) throw new Error(`Element "${element}" is not a date`)
 }

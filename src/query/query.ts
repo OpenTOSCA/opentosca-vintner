@@ -12,11 +12,11 @@ import {
     VariableExpression,
 } from '#spec/query-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {Graph} from './graph'
 import * as files from '#files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {getTemplates} from '#/query/utils'
 import * as validator from '#validator'
+import {BfsGraph} from '#/query/bfs-graph'
 
 export type QueryResults = {[name: string]: QueryResult}
 export type QueryResult = Object
@@ -26,7 +26,7 @@ export type QueryResult = Object
  */
 export class Query {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
-    private nodeGraph: Graph | undefined
+    private graph: BfsGraph | undefined
     private currentTemplate: ServiceTemplate | undefined
     private source = ''
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
@@ -168,7 +168,7 @@ export class Query {
      * @private
      */
     private evaluateMatch(data: ServiceTemplate, expression: MatchExpression): {[name: string]: NodeTemplateMap} {
-        this.nodeGraph = new Graph(data)
+        this.graph = new BfsGraph(data)
         this.currentKeys = Object.keys(data.topology_template?.node_templates || [])
         let paths = new Set<string[]>()
         // initialize our starting nodes by checking the condition
@@ -211,7 +211,7 @@ export class Query {
         const newPaths = new Set<string[]>()
         for (const p of paths) {
             // do a breadth first search to find all nodes reachable within n steps
-            const targets = this.nodeGraph?.limitedBFS(
+            const targets = this.graph?.limitedBFS(
                 p[p.length - 1],
                 relationship?.cardinality?.min || 1,
                 relationship?.cardinality?.max || 1,
@@ -222,8 +222,8 @@ export class Query {
             for (const n of targets || []) {
                 if (
                     !nodePredicate ||
-                    (this.nodeGraph?.getNode(n)?.data &&
-                        this.evaluatePredicate(n, this.nodeGraph?.getNode(n)?.data || {}, nodePredicate))
+                    (this.graph?.getNode(n)?.raw &&
+                        this.evaluatePredicate(n, this.graph?.getNode(n)?.raw || {}, nodePredicate))
                 ) {
                     newPaths.add(p.concat(n))
                 }

@@ -1,1 +1,1 @@
-error: Relation "two" of node "one" has multiple defaults
+error: Relation "two@0" of node "one" has multiple defaults

@@ -26,5 +26,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-Node "node_one" of property "key_one" does not exist
+Container of property "key_one" of node "node_one" does not exist
 ```

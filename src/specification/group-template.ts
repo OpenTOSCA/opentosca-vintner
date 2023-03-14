@@ -1,4 +1,4 @@
-import {VariabilityAlternative, VariabilityExpression} from './variability'
+import {VariabilityAlternative} from './variability'
 import {GroupMember, TOSCA_GROUP_TYPES} from './group-type'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 

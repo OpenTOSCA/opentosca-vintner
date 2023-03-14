@@ -4,6 +4,4 @@ topology_template:
     node_templates:
         container:
             type: container
-            properties:
-                - value:
-                      expression: {and: [true, true, true, true]}
+            conditions: {and: [true, true, true, true]}

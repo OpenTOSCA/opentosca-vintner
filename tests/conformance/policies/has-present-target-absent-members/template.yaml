@@ -1,0 +1,33 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        container:
+            type: container
+            conditions: {has_present_target: policy_one}
+
+        node_one:
+            type: node_one
+            conditions: false
+
+        node_two:
+            type: node_two
+            conditions: false
+
+        node_three:
+            type: node_three
+            conditions: false
+
+        node_four:
+            type: node_four
+            conditions: false
+
+    groups:
+        group_one:
+            type: group_one
+            members: [node_three, node_four]
+
+    policies:
+        - policy_one:
+              type: policy_one
+              targets: [node_one, node_two, group_one]
