@@ -1,0 +1,9 @@
+description: |
+    - node and relation defaults are enabled
+
+    - node_one is present
+    - relation_one checks if node_one and node_two are present (first circle)
+    - node_two checks if node_one is NOT present (second circle)
+
+    - since node_one is present, node_two is absent
+    - thus, also relation_one is absent

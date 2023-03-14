@@ -146,7 +146,17 @@ export class Node extends ConditionalElement {
         return this.name
     }
 
-    defaultCondition = true
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultCondition))
+            this._defaultCondition = {
+                or: [
+                    {is_present_target: this.toscaId, _cached_element: this},
+                    {not: {is_target: this.toscaId, _cached_element: this}},
+                ],
+            }
+        return this._defaultCondition
+    }
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {

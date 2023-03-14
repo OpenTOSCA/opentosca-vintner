@@ -83,27 +83,29 @@ A variability input definition is an input parameter definition which additional
 
 There are the following variability resolving options. 
 
-| Keyname     | Mandatory | Type                                  | Description                                         |
-|-------------|-----------|---------------------------------------|-----------------------------------------------------|
-| enable_relation_default_condition |  false  | boolean | enable default condition for relations that checks is the source is present |
-| enable_policy_default_condition |  false  | boolean | enable default condition for policies that checks if no target is present |
-| enable_group_default_condition |  false  | boolean | enable default condition for groups that checks if no member is present |
-| enable_artifact_default_condition |  false  | boolean | enable default condition for artifacts that checks if corresponding node is present |
-| enable_property_default_condition |  false  | boolean | enable default condition for properties that checks if corresponding node or relation is present |
-| enable_relation_pruning |  false  | boolean | enable relation pruning and additionally check for each relation if is source is present |
-| enable_policy_pruning |  false  | boolean | enable policy pruning and additionally check for each policy if no target is present |
-| enable_group_pruning |  false  | boolean | enable group pruning and additionally check for each group if no member is present |
-| enable_artifact_pruning |  false  | boolean | enable artifact pruning and additionally check for each artifact if source is present |
-| enable_property_pruning |  false  | boolean | enable property pruning and additionally check for each property if corresponding node or relation is present |
-| disable_consistency_checks |  false  | boolean | disable all consistency checks |
-| disable_relation_source_consistency_check |  false  | boolean | disable consistency check regarding relation sources |
-| disable_relation_target_consistency_check |  false  | boolean | disable consistency check regarding relation targets |
-| disable_ambiguous_hosting_consistency_check |  false  | boolean | disable consistency check regarding maximum one hosting relation |
-| disable_expected_hosting_consistency_check |  false  | boolean | disable consistency check regarding expected hosting relation |
-| disable_missing_artifact_parent_consistency_check |  false  | boolean | disable consistency check regarding node of artifact |
-| disable_ambiguous_artifact_consistency_check |  false  | boolean | disable consistency check regarding ambiguous artifacts |
-| disable_missing_property_parent_consistency_check |  false  | boolean | disable consistency check regarding node of a property |
-| disable_ambiguous_property_consistency_check |  false  | boolean | disable consistency check regarding ambiguous properties |
+| Keyname                                           | Mandatory | Type                                  | Description                                                      |
+|---------------------------------------------------|-----------|---------------------------------------|------------------------------------------------------------------|
+| enable_node_default_condition                     |  false  | boolean | enable default condition for nodes                               |
+| enable_relation_default_condition                 |  false  | boolean | enable default condition for relations                           |
+| enable_policy_default_condition                   |  false  | boolean | enable default condition for policies                            |
+| enable_group_default_condition                    |  false  | boolean | enable default condition for groups                              |
+| enable_artifact_default_condition                 |  false  | boolean | enable default condition for artifacts                           |
+| enable_property_default_condition                 |  false  | boolean | enable default condition for properties                          |
+| enable_node_pruning                               |  false  | boolean | enable pruning of nodes                                          |
+| enable_relation_pruning                           |  false  | boolean | enable pruning of relations                                      |
+| enable_policy_pruning                             |  false  | boolean | enable pruning of policies                                       |
+| enable_group_pruning                              |  false  | boolean | enable pruning of groups                                         |
+| enable_artifact_pruning                           |  false  | boolean | enable pruning of artifacts                                      |
+| enable_property_pruning                           |  false  | boolean | enable pruning of properties                                     |
+| disable_consistency_checks                        |  false  | boolean | disable all consistency checks                                   |
+| disable_relation_source_consistency_check         |  false  | boolean | disable consistency check regarding relation sources             |
+| disable_relation_target_consistency_check         |  false  | boolean | disable consistency check regarding relation targets             |
+| disable_ambiguous_hosting_consistency_check       |  false  | boolean | disable consistency check regarding maximum one hosting relation |
+| disable_expected_hosting_consistency_check        |  false  | boolean | disable consistency check regarding expected hosting relation    |
+| disable_missing_artifact_parent_consistency_check |  false  | boolean | disable consistency check regarding node of artifact             |
+| disable_ambiguous_artifact_consistency_check      |  false  | boolean | disable consistency check regarding ambiguous artifacts          |
+| disable_missing_property_parent_consistency_check |  false  | boolean | disable consistency check regarding node of a property           |
+| disable_ambiguous_property_consistency_check      |  false  | boolean | disable consistency check regarding ambiguous properties         |
 
 
 ## Variability Default Conditions
@@ -111,15 +113,14 @@ There are the following variability resolving options.
 To further support modeling, the following default conditions can be assigned:
 
 
-| Element                        | Default Conditions                                                       |
-|--------------------------------|--------------------------------------------------------------------------|
-| Node Template Property         | Check if the node template of the property is present.                   |
-| Relationship Template Property | Check if the relationship template of the property is present.           |
-| Requirement Assignment         | Check if the source and target of the requirement assignment is present. |
-| Policy                         | Check if the policy has any targets which are present.                   |
-| Group                          | Check if the group has any members which are present.                    |
-| Artifact                       | Check if the node template of the artifact is present.                   |
-
+| Element                | Default Conditions                                                                                                                                      |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Node Template          | Check if the node template is target of at least one present relation or if the node template is not target of at least one present or absent relation. |
+| Property               | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present.                                    |
+| Requirement Assignment | Check if the source and target of the requirement assignment is present.                                                                                |
+| Policy                 | Check if the policy has any targets which are present.                                                                                                  |
+| Group                  | Check if the group has any members which are present.                                                                                                   |
+| Artifact               | Check if the node template of the artifact is present.                                                                                                  |
 
 ## Variability Preset Definition
 
@@ -430,6 +431,8 @@ The following intrinsic functions can be used inside a Variability Expression.
 | logic_expression  | String                                             | Boolean | Returns the value of the Logic Expression.                                                                               |
 | value_expression  | String                                             | Any     | Returns the value of the Value Expression.                                                                               |
 | node_presence     | String                                             | Boolean | Returns if node is present.                                                                                              |
+| is_present_target          | String                                                     | Boolean | Returns if the node template is target of at least one present incoming relationship.                                    |
+| is_target                  | String                                                     | Boolean | Returns if the node template is target of at least one present or absent incoming relationship.                          |
 | relation_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                          |
 | property_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                          |
 | artifact_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                          |
