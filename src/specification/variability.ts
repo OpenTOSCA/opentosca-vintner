@@ -159,5 +159,3 @@ export type ValueExpression =
       }
 
 export type VariabilityExpression = LogicExpression | ValueExpression
-
-// TODO: update benchmark docs
