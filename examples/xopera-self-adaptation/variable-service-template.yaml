@@ -69,7 +69,7 @@ topology_template:
         inputs:
             weekday:
                 type: string
-                default: {get_current_weekday: []}
+                default: {weekday: []}
             compute_raspberry_cpu:
                 type: number
                 default: 0
@@ -101,33 +101,20 @@ topology_template:
                     compute_vm_cpu: 0
 
         expressions:
-            is_raspberry_present:
-                {and: [{get_variability_condition: is_weekend}, {get_variability_condition: not_is_cloud_burst}]}
-            is_weekend: {valid_values: [get_variability_input: weekday, ['saturday', 'sunday']]}
+            is_raspberry_present: {and: [{logic_expression: is_weekend}, {logic_expression: not_is_cloud_burst}]}
+            is_weekend: {valid_values: [variability_input: weekday, ['saturday', 'sunday']]}
             not_is_cloud_burst:
-                {
-                    or:
-                        [
-                            {
-                                and:
-                                    [
-                                        {get_variability_condition: not_is_raspberry_under_load},
-                                        {get_variability_condition: not_is_vm_up},
-                                    ],
-                            },
-                            {
-                                and:
-                                    [
-                                        {get_variability_condition: not_is_vm_under_load},
-                                        {get_variability_condition: is_vm_up_enough},
-                                    ],
-                            },
-                        ],
-                }
-            not_is_raspberry_under_load: {less_than: [{get_variability_input: compute_raspberry_cpu}, 80]}
-            not_is_vm_under_load: {less_than: [{get_variability_input: compute_vm_cpu}, 40]}
-            not_is_vm_up: {not: {get_variability_input: compute_vm_up}}
-            is_vm_up_enough: {greater_than: [{get_variability_input: compute_vm_uptime}, 600]}
+              {
+                  or:
+                    [
+                        {and: [{logic_expression: not_is_raspberry_under_load}, {logic_expression: not_is_vm_up}]},
+                        {and: [{logic_expression: not_is_vm_under_load}, {logic_expression: is_vm_up_enough}]},
+                    ],
+              }
+            not_is_raspberry_under_load: {less: [{variability_input: compute_raspberry_cpu}, 80]}
+            not_is_vm_under_load: {less: [{variability_input: compute_vm_cpu}, 40]}
+            not_is_vm_up: {not: {variability_input: compute_vm_up}}
+            is_vm_up_enough: {greater: [{variability_input: compute_vm_uptime}, 600]}
 
         options:
             enable_relation_pruning: true
@@ -142,28 +129,28 @@ topology_template:
             properties:
                 - scale:
                       value: 1
-                      conditions: {get_node_presence: compute_raspberry}
+                      conditions: {node_presence: compute_raspberry}
                 - scale:
                       value: 4
-                      conditions: {get_node_presence: compute_vm}
+                      conditions: {node_presence: compute_vm}
             requirements:
                 - input: queue_input
                 - output: queue_output
                 - host:
                       node: compute_raspberry
-                      conditions: {get_node_presence: compute_raspberry}
+                      conditions: {node_presence: compute_raspberry}
                 - host:
                       node: compute_vm
-                      conditions: {get_node_presence: compute_vm}
+                      conditions: {node_presence: compute_vm}
             artifacts:
                 - binary:
                       type: tosca.artifacts.File
                       file: files/application-linux-arm64.xz
-                      conditions: {get_node_presence: compute_raspberry}
+                      conditions: {node_presence: compute_raspberry}
                 - binary:
                       type: tosca.artifacts.File
                       file: files/application-linux-x64.xz
-                      conditions: {get_node_presence: compute_vm}
+                      conditions: {node_presence: compute_vm}
 
         queue_input:
             type: queue.queue
@@ -173,7 +160,7 @@ topology_template:
 
         compute_raspberry:
             type: compute.raspberry
-            conditions: {get_variability_condition: is_raspberry_present}
+            conditions: {logic_expression: is_raspberry_present}
             properties:
                 ssh_user: {get_input: compute_raspberry_user_name}
                 ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
@@ -183,7 +170,7 @@ topology_template:
 
         compute_vm:
             type: compute.vm
-            conditions: {not: {get_node_presence: compute_raspberry}}
+            conditions: {not: {node_presence: compute_raspberry}}
             properties:
                 ports: [80, 3000, 3001, 3002, 3003, 3004]
                 name: {concat: ['compute-vm-', {get_input: instance}]}
@@ -199,7 +186,7 @@ topology_template:
 
         compute_hypervisor:
             type: compute.hypervisor
-            conditions: {get_node_presence: compute_vm}
+            conditions: {node_presence: compute_vm}
             properties:
                 region_name: {get_input: os_region_name}
                 auth_type: {get_input: os_auth_type}
@@ -211,7 +198,7 @@ topology_template:
 
         sensor_compute_vm:
             type: sensor.compute
-            conditions: {get_node_presence: compute_vm}
+            conditions: {node_presence: compute_vm}
             properties:
                 vintner: {get_input: vintner}
                 instance: {get_input: instance}
@@ -223,7 +210,7 @@ topology_template:
 
         sensor_compute_raspberry:
             type: sensor.compute
-            conditions: {get_node_presence: compute_raspberry}
+            conditions: {node_presence: compute_raspberry}
             properties:
                 vintner: {get_input: vintner}
                 instance: {get_input: instance}
@@ -243,7 +230,7 @@ topology_template:
             requirements:
                 - host:
                       node: compute_raspberry
-                      conditions: {get_node_presence: compute_raspberry}
+                      conditions: {node_presence: compute_raspberry}
                 - host:
                       node: compute_vm
-                      conditions: {get_node_presence: compute_vm}
+                      conditions: {node_presence: compute_vm}
