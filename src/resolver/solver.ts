@@ -177,12 +177,12 @@ export default class Solver {
             this.getResolvingOptions().enable_policy_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_targets: element.toscaId}]
+            conditions = [{has_present_target: element.toscaId}]
         }
 
         // Prune Policy: Additionally check if any target is present
         if (element.isPolicy() && this.getResolvingOptions().enable_policy_pruning) {
-            conditions.unshift({has_present_targets: element.toscaId})
+            conditions.unshift({has_present_target: element.toscaId})
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -191,12 +191,12 @@ export default class Solver {
             this.getResolvingOptions().enable_group_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_members: element.toscaId}]
+            conditions = [{has_present_member: element.toscaId}]
         }
 
         // Prune Group: Additionally check if any member is present
         if (element.isGroup() && this.getResolvingOptions().enable_group_pruning) {
-            conditions.unshift({has_present_members: element.toscaId})
+            conditions.unshift({has_present_member: element.toscaId})
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
@@ -227,7 +227,7 @@ export default class Solver {
             conditions.unshift(element.container.condition)
         }
 
-        // Normalize conditions to one 'and' condition
+        // Normalize conditions to a single 'and' condition
         const condition = conditions.reduce<{and: LogicExpression[]}>(
             (acc, curr) => {
                 acc.and.push(curr)
@@ -299,13 +299,13 @@ export default class Solver {
 
     getLogicExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
+        validator.ensureDefined(condition, `Did not find logic expression "${name}"`)
         return condition as LogicExpression
     }
 
     getValueExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
+        validator.ensureDefined(condition, `Did not find value expression "${name}"`)
         return condition as ValueExpression
     }
 
@@ -315,7 +315,7 @@ export default class Solver {
 
         /**
          * logic_expression
-         * The expression first transformed and then added as a separate clause, thus, can be referenced by its name
+         * The expression is first transformed and then added as a separate clause, thus, can be referenced by its name
          */
         if (validator.isDefined(expression.logic_expression)) {
             // Find referenced expression
@@ -477,9 +477,9 @@ export default class Solver {
         }
 
         /**
-         * has_present_targets
+         * has_present_target
          */
-        if (validator.isDefined(expression.has_present_targets)) {
+        if (validator.isDefined(expression.has_present_target)) {
             let policy: Policy | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -488,7 +488,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(policy)) {
-                const name = expression.has_present_targets
+                const name = expression.has_present_target
                 validator.ensureStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
@@ -527,7 +527,7 @@ export default class Solver {
         /**
          * has_present_member
          */
-        if (validator.isDefined(expression.has_present_members)) {
+        if (validator.isDefined(expression.has_present_member)) {
             let group: Group | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -536,7 +536,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(group)) {
-                const name = expression.has_present_members
+                const name = expression.has_present_member
                 validator.ensureString(name)
                 group = this.graph.getGroup(name)
             }
@@ -606,7 +606,7 @@ export default class Solver {
 
         /**
          * Assume that expression is a value expression that returns a boolean
-         * Thus, {@param expression} can be in realty also be {@link ValueExpression}
+         * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */
         const result = this.evaluateValueExpression(expression, context)
         validator.ensureBoolean(result)

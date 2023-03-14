@@ -138,12 +138,12 @@ processing.
 | 121 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
 | 122 | [policies-get-policy-presence-absent](./test-policies-get-policy-presence-absent.md) |
 | 123 | [policies-get-policy-presence-present](./test-policies-get-policy-presence-present.md) |
-| 124 | [Policy Targets Absent Members](./test-policies-has-present-targets-absent-members.md) |
-| 125 | [Policy Targets Absent Nodes](./test-policies-has-present-targets-absent-nodes.md) |
-| 126 | [Policy Has No Targets](./test-policies-has-present-targets-no-targets.md) |
-| 127 | [Policy Targets Present Member](./test-policies-has-present-targets-present-member.md) |
-| 128 | [Policy Targets One Present Node](./test-policies-has-present-targets-present-node.md) |
-| 129 | [Policy Targets Present Nodes](./test-policies-has-present-targets-present-nodes.md) |
+| 124 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
+| 125 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
+| 126 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
+| 127 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
+| 128 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
+| 129 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
 | 130 | [Policy Pruning](./test-policies-prune.md) |
 | 131 | [properties-conditional](./test-properties-conditional.md) |
 | 132 | [properties-default-alternative](./test-properties-default-alternative.md) |

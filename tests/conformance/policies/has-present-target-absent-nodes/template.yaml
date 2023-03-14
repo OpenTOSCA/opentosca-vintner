@@ -4,13 +4,15 @@ topology_template:
     node_templates:
         container:
             type: container
-            conditions: {has_present_targets: policy_one}
+            conditions: {has_present_target: policy_one}
 
         node_one:
             type: node_one
+            conditions: false
 
         node_two:
             type: node_two
+            conditions: false
 
     policies:
         - policy_one:

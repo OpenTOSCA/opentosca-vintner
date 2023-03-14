@@ -5,4 +5,4 @@ topology_template:
         - policy_one:
               type: policy_one
               targets: []
-              conditions: {has_present_targets: policy_one}
+              conditions: {has_present_target: policy_one}

@@ -17,7 +17,7 @@ topology_template:
     container:
       type: container
       conditions:
-        has_present_targets: policy_one
+        has_present_target: policy_one
     node_one:
       type: node_one
     node_two:
