@@ -1,0 +1,10 @@
+description: |
+    - node and relation pruning is enabled
+
+    - node_one checks if relation_two_one or relation_three_one is present 
+    - relation_two_one checks if node_one and node_two are present (first circle)
+    - node_two checks if node_one is present (second circle)
+    - relation_three_one checks if node_one and node_three is present (third circle)
+    - node_three is absent
+
+    - expected template is empty wrt optimization

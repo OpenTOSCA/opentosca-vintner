@@ -1,0 +1,4 @@
+description: |
+    - node and relation pruning is enabled
+
+    - only node_three is present since pruning does not hold since node_three has no incoming relation in the first place

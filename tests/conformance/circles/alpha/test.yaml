@@ -1,0 +1,9 @@
+description: |
+    - node and relation defaults are enabled
+
+    - node_one checks if relation_one is present 
+    - relation_one checks if node_one and node_two are present (first circle)
+    - node_two checks if node_one is present (second circle)
+
+    - if node_one is absent, then also node_two and relation_one are absent
+    - since the solution is optimized towards minimal numbers of nodes, the expected template is empty
