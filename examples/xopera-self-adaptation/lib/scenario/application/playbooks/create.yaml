@@ -1,0 +1,63 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+      ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+      ansible_ssh_user: '{{ ssh_user }}'
+  tasks:
+      - name: Check if target is supported
+        when: (ansible_system != 'Linux') and (ansible_architecture != 'x86_64' or ansible_architecture != 'aarch64')
+        fail:
+            msg: Target not linux-x64 or linux-arm64
+
+      - name: Create working directory
+        file:
+            path: '/var/lib/{{ service_name }}'
+            state: directory
+
+      - name: Copy binary
+        unarchive:
+            src: '{{ artifact }}'
+            dest: '/var/lib/{{ service_name}}'
+            mode: a+x
+
+      - name: Create symlink
+        file:
+            state: link
+            src: '/var/lib/{{ service_name}}/application-linux-x64'
+            dest: '/var/lib/{{ service_name}}/application'
+        when: ansible_architecture == 'x86_64'
+
+      - name: Create symlink
+        file:
+            state: link
+            src: '/var/lib/{{ service_name}}/application-linux-arm64'
+            dest: '/var/lib/{{ service_name}}/application'
+        when: ansible_architecture == 'aarch64'
+
+      - name: Create systemd service
+        copy:
+            dest: '/etc/systemd/system/{{ service_name }}@.service'
+            content: |
+                [Unit]
+                Description=Scenario Application Instance %i
+                After=multi-user.target
+
+                [Service]
+                Type=simple
+                Restart=always
+                WorkingDirectory=/var/lib/{{ service_name }}
+                ExecStart=/var/lib/{{ service_name }}/application
+                Environment="PORT=300%i"
+
+                [Install]
+                WantedBy=multi-user.target
+
+      - name: Enable systemd service
+        systemd:
+            name: '{{service_name}}@{{ item }}'
+            state: stopped
+            enabled: true
+            daemon_reload: true
+        with_sequence: count='{{ scale }}'

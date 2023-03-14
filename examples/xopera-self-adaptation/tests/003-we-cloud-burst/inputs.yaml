@@ -1,0 +1,5 @@
+weekday: saturday
+compute_raspberry_cpu: 90
+compute_vm_up: false
+compute_vm_uptime: 0
+compute_vm_cpu: 0

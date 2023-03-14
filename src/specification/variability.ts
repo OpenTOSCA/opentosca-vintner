@@ -69,8 +69,6 @@ export type LogicExpression =
 
           // Node functions
           node_presence?: string
-          is_present_target?: string
-          is_target?: string
 
           // Relation functions
           relation_presence?: [string, string | number]
@@ -85,11 +83,11 @@ export type LogicExpression =
 
           // Policy functions
           policy_presence?: string | number
-          has_present_targets?: string | number
+          has_present_target?: string | number
 
           // Group functions
           group_presence?: string
-          has_present_members?: string
+          has_present_member?: string
 
           // Input functions
           input_presence?: string
@@ -163,5 +161,3 @@ export type ValueExpression =
       }
 
 export type VariabilityExpression = LogicExpression | ValueExpression
-
-// TODO: update benchmark docs

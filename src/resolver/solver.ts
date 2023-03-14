@@ -24,12 +24,8 @@ export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
 
-    readonly minisat = new MiniSat.Solver()
+    private readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
-
-    // Some operations on MiniSat cannot be undone
-    private processed = false
-    private transformed = false
 
     private inputs: InputAssignmentMap = {}
     private weekday = utils.weekday()
@@ -44,16 +40,10 @@ export default class Solver {
          * Transform assigned conditions to MiniSat clauses
          * Note, this also evaluates value expressions if they are part of logic expressions
          */
-        if (this.transformed) throw new Error(`Has been already transformed`)
-        this.transformed = true
-
         for (const element of this.graph.elements) this.transformConditions(element)
     }
 
     run() {
-        if (this.processed) throw new Error(`Has been already solved`)
-        this.processed = true
-
         this.transform()
 
         /**
@@ -95,22 +85,6 @@ export default class Solver {
          * Return result
          */
         return this.result
-    }
-
-    solveAll() {
-        if (this.processed) throw new Error(`Has been already solved`)
-        this.processed = true
-
-        this.transform()
-
-        const results = []
-        let result
-        while ((result = this.minisat.solve())) {
-            results.push(result.getMap())
-            this.minisat.forbid(result.getFormula())
-        }
-
-        return results
     }
 
     toCNF() {
@@ -162,7 +136,7 @@ export default class Solver {
             conditions = [
                 {
                     not: {
-                        or: bratans.map(it => it.condition),
+                        or: bratans.map(it => it.presenceCondition),
                     },
                 },
             ]
@@ -172,13 +146,13 @@ export default class Solver {
         if (element.isRelation() && element.default) {
             const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.condition)}}]
+            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
         }
 
         // If property is default, then check if no other property having the same name is present
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.condition)}}]
+            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
         }
 
         // Node Default Condition: Assign default condition to relation that checks if no incoming relation is present and that there is at least one potential incoming relation
@@ -197,14 +171,12 @@ export default class Solver {
             this.getResolvingOptions().enable_relation_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{and: [element.source.condition, element.target.condition]}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Relations: Additionally check that source and target are present
         if (element.isRelation() && this.getResolvingOptions().enable_relation_pruning) {
-            conditions.unshift({
-                and: [element.source.condition, element.target.condition],
-            })
+            conditions.unshift(element.defaultCondition)
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
@@ -213,12 +185,12 @@ export default class Solver {
             this.getResolvingOptions().enable_policy_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_targets: element.toscaId}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Policy: Additionally check if any target is present
         if (element.isPolicy() && this.getResolvingOptions().enable_policy_pruning) {
-            conditions.unshift({has_present_targets: element.toscaId})
+            conditions.unshift(element.defaultCondition)
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -227,12 +199,12 @@ export default class Solver {
             this.getResolvingOptions().enable_group_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_members: element.toscaId}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Group: Additionally check if any member is present
         if (element.isGroup() && this.getResolvingOptions().enable_group_pruning) {
-            conditions.unshift({has_present_members: element.toscaId})
+            conditions.unshift(element.defaultCondition)
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
@@ -241,12 +213,12 @@ export default class Solver {
             this.getResolvingOptions().enable_artifact_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [element.container.condition]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if node is present
         if (element.isArtifact() && this.getResolvingOptions().enable_artifact_pruning) {
-            conditions.unshift(element.container.condition)
+            conditions.unshift(element.defaultCondition)
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -255,15 +227,15 @@ export default class Solver {
             this.getResolvingOptions().enable_property_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [element.container.condition]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.isProperty() && this.getResolvingOptions().enable_property_pruning) {
-            conditions.unshift(element.container.condition)
+            conditions.unshift(element.defaultCondition)
         }
 
-        // Normalize conditions to one 'and' condition
+        // Normalize conditions to a single 'and' condition
         const condition = conditions.reduce<{and: LogicExpression[]}>(
             (acc, curr) => {
                 acc.and.push(curr)
@@ -335,13 +307,13 @@ export default class Solver {
 
     getLogicExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
+        validator.ensureDefined(condition, `Did not find logic expression "${name}"`)
         return condition as LogicExpression
     }
 
     getValueExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find variability expression "${name}"`)
+        validator.ensureDefined(condition, `Did not find value expression "${name}"`)
         return condition as ValueExpression
     }
 
@@ -351,7 +323,7 @@ export default class Solver {
 
         /**
          * logic_expression
-         * The expression first transformed and then added as a separate clause, thus, can be referenced by its name
+         * The expression is first transformed and then added as a separate clause, thus, can be referenced by its name
          */
         if (validator.isDefined(expression.logic_expression)) {
             // Find referenced expression
@@ -430,51 +402,11 @@ export default class Solver {
 
             if (validator.isUndefined(node)) {
                 const name = expression.node_presence
-                validator.ensureString(name)
+                validator.ensureStringOrNumber(name)
                 node = this.graph.getNode(name)
             }
 
             return node.id
-        }
-
-        /**
-         * is_present_target
-         */
-        if (validator.isDefined(expression.is_present_target)) {
-            let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (validator.isUndefined(node)) {
-                const name = expression.is_present_target
-                validator.ensureString(name)
-                node = this.graph.getNode(name)
-            }
-
-            return MiniSat.or(node.ingoing.map(it => it.id))
-        }
-
-        /**
-         * is_target
-         */
-        if (validator.isDefined(expression.is_target)) {
-            let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (validator.isUndefined(node)) {
-                const name = expression.is_target
-                validator.ensureString(name)
-                node = this.graph.getNode(name)
-            }
-
-            return this.transformLogicExpression(!utils.isEmpty(node.ingoing), context)
         }
 
         /**
@@ -553,9 +485,9 @@ export default class Solver {
         }
 
         /**
-         * has_present_targets
+         * has_present_target
          */
-        if (validator.isDefined(expression.has_present_targets)) {
+        if (validator.isDefined(expression.has_present_target)) {
             let policy: Policy | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -564,7 +496,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(policy)) {
-                const name = expression.has_present_targets
+                const name = expression.has_present_target
                 validator.ensureStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
@@ -603,7 +535,7 @@ export default class Solver {
         /**
          * has_present_member
          */
-        if (validator.isDefined(expression.has_present_members)) {
+        if (validator.isDefined(expression.has_present_member)) {
             let group: Group | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -612,7 +544,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(group)) {
-                const name = expression.has_present_members
+                const name = expression.has_present_member
                 validator.ensureString(name)
                 group = this.graph.getGroup(name)
             }
@@ -682,7 +614,7 @@ export default class Solver {
 
         /**
          * Assume that expression is a value expression that returns a boolean
-         * Thus, {@param expression} can be in realty also be {@link ValueExpression}
+         * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */
         const result = this.evaluateValueExpression(expression, context)
         validator.ensureBoolean(result)
