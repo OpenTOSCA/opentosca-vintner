@@ -69,11 +69,7 @@ export type LogicExpression =
 
           // Node functions
           node_presence?: string
-          // TODO: Doc (also default conditions table)
-          // TODO: test
           is_present_target?: string
-          // TODO: Doc (also default conditions table)
-          // TODO: test
           is_target?: string
 
           // Relation functions
