@@ -104,13 +104,13 @@ topology_template:
             is_raspberry_present: {and: [{logic_expression: is_weekend}, {logic_expression: not_is_cloud_burst}]}
             is_weekend: {valid_values: [variability_input: weekday, ['saturday', 'sunday']]}
             not_is_cloud_burst:
-              {
-                  or:
-                    [
-                        {and: [{logic_expression: not_is_raspberry_under_load}, {logic_expression: not_is_vm_up}]},
-                        {and: [{logic_expression: not_is_vm_under_load}, {logic_expression: is_vm_up_enough}]},
-                    ],
-              }
+                {
+                    or:
+                        [
+                            {and: [{logic_expression: not_is_raspberry_under_load}, {logic_expression: not_is_vm_up}]},
+                            {and: [{logic_expression: not_is_vm_under_load}, {logic_expression: is_vm_up_enough}]},
+                        ],
+                }
             not_is_raspberry_under_load: {less: [{variability_input: compute_raspberry_cpu}, 80]}
             not_is_vm_under_load: {less: [{variability_input: compute_vm_cpu}, 40]}
             not_is_vm_up: {not: {variability_input: compute_vm_up}}
