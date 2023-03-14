@@ -13,10 +13,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_policy_presence: policy_one
+      conditions:
+        policy_presence: policy_one
   policies:
     - policy_one:
         conditions: true
@@ -35,8 +33,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
   policies:
     - policy_one:
         targets: []

@@ -10,4 +10,4 @@ topology_template:
             type: node_one
             properties:
                 - key_one:
-                      expression: {get_variability_input: some_input}
+                      expression: {variability_input: some_input}

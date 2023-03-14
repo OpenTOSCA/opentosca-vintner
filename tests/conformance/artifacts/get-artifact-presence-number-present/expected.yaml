@@ -4,8 +4,6 @@ topology_template:
     node_templates:
         container:
             type: container
-            properties:
-                value: true
             artifacts:
                 artifact_one:
                     file: path

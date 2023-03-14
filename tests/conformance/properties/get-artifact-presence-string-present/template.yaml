@@ -8,5 +8,4 @@ topology_template:
                 - property_one:
                       conditions: true
                       value: 69
-                - value:
-                      expression: {get_property_presence: [container, property_one]}
+            conditions: {property_presence: [container, property_one]}

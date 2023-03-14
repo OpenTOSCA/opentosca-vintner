@@ -24,21 +24,21 @@ topology_template:
     expressions:
       is_one:
         equal:
-          - get_variability_input: mode
+          - variability_input: mode
           - one
       is_two:
         equal:
-          - get_variability_input: mode
+          - variability_input: mode
           - two
   node_templates:
     one:
       type: one
       conditions:
-        get_variability_condition: is_one
+        logic_expression: is_one
     two:
       type: two
       conditions:
-        get_variability_condition: is_two
+        logic_expression: is_two
       requirements:
         - three: three
     three:

@@ -11,30 +11,32 @@ When variability is resolved, n node templates and n relationship templates are 
 The first test suite runs the tests in-memory.
 Thus, generated and resolved service templates are not read or stored to the filesystem.
 
-| Test | Seed   | Templates | Median    | Median per Template |
-|------|--------|-----------|-----------|---------------------|
-| 1    | 10     | 40        | 0.146 ms  | 0.004 ms            |
-| 2    | 250    | 1,000     | 1.724 ms  | 0.002 ms            |
-| 3    | 500    | 2,000     | 1.825 ms  | 0.001 ms            |
-| 4    | 1,000  | 4,000     | 4.242 ms  | 0.001 ms            |
-| 5    | 2,500  | 10,000    | 14.466 ms | 0.001 ms            |
-| 6    | 5,000  | 20,000    | 30.502 ms | 0.002 ms            |
-| 7    | 10,000 | 40,000    | 69.865 ms | 0.002 ms            |
+| Test | Seed |  Templates | Median | Median per Template |
+| --- | --- | --- | --- | --- |
+| 1 | 10 | 40 | 6.204 ms | 0.155 ms |
+| 2 | 250 | 1,000 | 50.665 ms | 0.051 ms |
+| 3 | 500 | 2,000 | 84.782 ms | 0.042 ms |
+| 4 | 1,000 | 4,000 | 155.105 ms | 0.039 ms |
+| 5 | 2,500 | 10,000 | 363.789 ms | 0.036 ms |
+| 6 | 5,000 | 20,000 | 714.899 ms | 0.036 ms |
+| 7 | 10,000 | 40,000 | 1.478 s | 0.037 ms |
+
 
 ## Tests with Filesystem
 
 The second test suite runs the tests with filesystem interaction.
 Thus, generated and resolved service templates are also read and stored to the filesystem.
 
-| Test | Seed   | Templates | Median     | Median per Template |
-|------|--------|-----------|------------|---------------------|
-| 8    | 10     | 40        | 1.772 ms   | 0.044 ms            |
-| 9    | 250    | 1,000     | 18.962 ms  | 0.019 ms            |
-| 10   | 500    | 2,000     | 42.382 ms  | 0.021 ms            |
-| 11   | 1,000  | 4,000     | 105.329 ms | 0.026 ms            |
-| 12   | 2,500  | 10,000    | 415.814 ms | 0.042 ms            |
-| 13   | 5,000  | 20,000    | 1.360 s    | 0.068 ms            |
-| 14   | 10,000 | 40,000    | 4.751 s    | 0.119 ms            |
+| Test | Seed |  Templates | Median | Median per Template |
+| --- | --- | --- | --- | --- |
+| 1 | 10 | 40 | 7.531 ms | 0.188 ms |
+| 2 | 250 | 1,000 | 66.812 ms | 0.067 ms |
+| 3 | 500 | 2,000 | 122.216 ms | 0.061 ms |
+| 4 | 1,000 | 4,000 | 250.058 ms | 0.063 ms |
+| 5 | 2,500 | 10,000 | 748.248 ms | 0.075 ms |
+| 6 | 5,000 | 20,000 | 2.058 s | 0.103 ms |
+| 7 | 10,000 | 40,000 | 6.481 s | 0.162 ms |
+
 
 ## File Measurements
 
@@ -56,7 +58,7 @@ The following computing resources have been used for the benchmark.
 
 | Resource          | Value                                       |
 |-------------------|---------------------------------------------|
-| OpenTOSCA Vintner | d7c51fa0ecc4b4bb2cf9515c85f8512dc749a05c    |
+| OpenTOSCA Vintner | fa9bdbbbc6255ff8329ece49ea19295622aff938    |
 | Operating System  | Windows 11                                  |
 | Processor         | Intel Core i7-12700KF                       |
 | Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |

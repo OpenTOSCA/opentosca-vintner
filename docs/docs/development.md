@@ -5,7 +5,8 @@ But please follow the following guidelines and our [Code of Conduct](code-of-con
 
 ## Repository
 
-The repository is a monorepo consisting of the CLI, server, docs and tests using
+The repository is a monorepo consisting of the CLI, server, docs and tests using the following commands. 
+We are using  [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner
@@ -18,7 +19,7 @@ yarn --frozen-lockfile
 ## Large Files
 
 Larges files, such as binaries or archives used in examples, are added using [git lfs](https://git-lfs.com){target=_blank}.
-This includes the following file extensions `.bin`, `.gz`, `.tar`, `xz`, and `.zip`.
+This includes the following file extensions `.bin`, `.gz`, `.tar`, `.xz`, and `.zip`.
 
 ## Branch Naming Convention
 
@@ -52,6 +53,10 @@ git config commit.gpgsign true
 ```
 
 ## JetBrains
+
+!!! Warning
+    WebStorm Version 2022.3.3 seems to have problems with breakpoints when `src/resolver/graph.ts` is involved.
+    However, WebStorm Version 2022.3.2 works fine.
 
 We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank}
 or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed
@@ -280,10 +285,21 @@ The list includes information such as package name, version, license, etc. and i
 At the same time, the [Dependencies](dependencies.md){target=_blank} page is generated.
 This command is also executed during the `release` workflow and, therefore, overwrites respective files.
 
+## Patch Packages 
+
+We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} to fixing third party libraries.
+For example, adding `logic-solver.d.ts` to [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
+Therefore, make changes to the package inside `node_modules`, then run the following command.
+
+```shell linenums="1"
+yarn patch-package ${package-name}
+```
+
+
 ## Build
 
 To locally build the project, run the following command.
-This will generate Javascript inside the `/build` directory.
+This will transpile Javascript inside the `/build` directory.
 
 ```shell linenums="1"
 yarn build
@@ -294,12 +310,14 @@ yarn build
 {{ linux_only_notice() }}
 
 To locally package the project, run the following command.
-This will package the previously build Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
+This will package the previously transpiled Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
 generate binaries inside the `/dist` directory.
 
 ```shell linenums="1"
 yarn package
 ```
+
+The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.
 
 ## Release
 

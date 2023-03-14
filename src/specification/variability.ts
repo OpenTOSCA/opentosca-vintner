@@ -52,82 +52,84 @@ export type VariabilityPointMap<T> =
 export type VariabilityPointList<T> = {[name: string]: T}[]
 
 export type VariabilityAlternative = {
-    conditions?: VariabilityExpression | VariabilityExpression[]
+    conditions?: LogicExpression | LogicExpression[]
     default_alternative?: boolean
 }
 
-/**
- * Inspired by
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_WORKFLOW_COND_CLAUSE_DEFN
- * - https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_CONSTRAINTS_OPERATORS
- * - https://www.sciencedirect.com/topics/computer-science/arithmetic-operator
- */
-export type VariabilityExpression =
+export type LogicExpression =
     | {
           // Boolean operators
-          and?: VariabilityExpression[]
-          or?: VariabilityExpression[]
-          not?: VariabilityExpression
-          xor?: VariabilityExpression[]
-          implies?: [VariabilityExpression, VariabilityExpression]
-
-          // Arithmetic operators
-          add?: VariabilityExpression[]
-          sub?: VariabilityExpression[]
-          mul?: VariabilityExpression[]
-          div?: VariabilityExpression[]
-          mod?: [VariabilityExpression, VariabilityExpression]
-
-          // Variability functions
-          get_variability_expression?: string
-          get_variability_input?: string
-          get_variability_condition?: string
+          and?: LogicExpression[]
+          or?: LogicExpression[]
+          not?: LogicExpression
+          xor?: LogicExpression[]
+          implies?: [LogicExpression, LogicExpression]
 
           // Node functions
-          get_node_presence?: string
+          node_presence?: string
 
           // Relation functions
-          get_relation_presence?: [string, string | number]
-          get_source_presence?: 'SELF'
-          get_target_presence?: 'SELF'
+          relation_presence?: [string, string | number]
+          source_presence?: 'SELF'
+          target_presence?: 'SELF'
 
           // Property functions
-          get_property_presence?: [string, string | number]
-          // TODO: implement
-          // TODO: document
-          // TODO: write tests
-          get_property_value?: [string, string | number]
+          property_presence?: [string, string | number]
 
           // Artifact functions
-          get_artifact_presence?: [string, string | number]
+          artifact_presence?: [string, string | number]
 
           // Policy functions
-          get_policy_presence?: string | number
-          has_present_targets?: string | number
+          policy_presence?: string | number
+          has_present_target?: string | number
 
           // Group functions
-          get_group_presence?: string
-          has_present_members?: string
+          group_presence?: string
+          has_present_member?: string
 
           // Input functions
-          get_input_presence?: string
+          input_presence?: string
 
           // Intrinsic functions
-          concat?: VariabilityExpression[]
-          join?: [VariabilityExpression[], string]
-          token?: [VariabilityExpression, string, number]
+          logic_expression?: string
+          variability_input?: string
+
+          // Cache
+          _cached_element?: ConditionalElement
+          _visited?: boolean
+          _id?: string
+      }
+    | string
+    | boolean
+
+export type ValueExpression =
+    | InputAssignmentValue
+    | {
+          // Arithmetic operators
+          add?: ValueExpression[]
+          sub?: ValueExpression[]
+          mul?: ValueExpression[]
+          div?: ValueExpression[]
+          mod?: [ValueExpression, ValueExpression]
+
+          // Intrinsic functions
+          value_expression?: string
+          variability_input?: string
+          concat?: ValueExpression[]
+          join?: [ValueExpression[], string]
+          token?: [ValueExpression, string, number]
 
           // Comparison operators
-          equal?: VariabilityExpression[]
-          greater?: [VariabilityExpression, VariabilityExpression]
-          greater_or_equal?: [VariabilityExpression, VariabilityExpression]
-          less?: [VariabilityExpression, VariabilityExpression]
-          less_or_equal?: [VariabilityExpression, VariabilityExpression]
-          in_range?: [VariabilityExpression, [VariabilityExpression, VariabilityExpression]]
-          valid_values?: [VariabilityExpression, VariabilityExpression[]]
-          length?: [VariabilityExpression, VariabilityExpression]
-          min_length?: [VariabilityExpression, VariabilityExpression]
-          max_length?: [VariabilityExpression, VariabilityExpression]
+          equal?: ValueExpression[]
+          greater?: [ValueExpression, ValueExpression]
+          greater_or_equal?: [ValueExpression, ValueExpression]
+          less?: [ValueExpression, ValueExpression]
+          less_or_equal?: [ValueExpression, ValueExpression]
+          in_range?: [ValueExpression, [ValueExpression, ValueExpression]]
+          valid_values?: [ValueExpression, ValueExpression[]]
+          length?: [ValueExpression, ValueExpression]
+          min_length?: [ValueExpression, ValueExpression]
+          max_length?: [ValueExpression, ValueExpression]
 
           // Analytical operators
           sum?: number[]
@@ -154,6 +156,6 @@ export type VariabilityExpression =
 
           // Cache
           _cached_result?: InputAssignmentValue
-          _cached_element?: ConditionalElement
       }
-    | InputAssignmentValue
+
+export type VariabilityExpression = LogicExpression | ValueExpression

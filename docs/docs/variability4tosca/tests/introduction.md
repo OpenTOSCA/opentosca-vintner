@@ -122,62 +122,64 @@ processing.
 | 105 | [Benchmark](./test-other-benchmark.md) |
 | 106 | [Operator "concat"](./test-other-concat.md) |
 | 107 | [Get Variability Expression](./test-other-default-variability-input.md) |
-| 108 | [Get Variability Condition](./test-other-get-variability-condition.md) |
-| 109 | [Get Variability Expression](./test-other-get-variability-expression.md) |
-| 110 | [Get Variability Input](./test-other-get-variability-input.md) |
-| 111 | [Operator "concat"](./test-other-join.md) |
-| 112 | [other-nothing](./test-other-nothing.md) |
-| 113 | [other-preset](./test-other-preset.md) |
-| 114 | [other-presets](./test-other-presets.md) |
-| 115 | [Operator "concat"](./test-other-token.md) |
-| 116 | [other-version](./test-other-version.md) |
-| 117 | [policies-conditional](./test-policies-conditional.md) |
-| 118 | [policies-default-condition](./test-policies-default-condition.md) |
-| 119 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
-| 120 | [policies-get-policy-presence-absent](./test-policies-get-policy-presence-absent.md) |
-| 121 | [policies-get-policy-presence-present](./test-policies-get-policy-presence-present.md) |
-| 122 | [Policy Targets Absent Members](./test-policies-has-present-targets-absent-members.md) |
-| 123 | [Policy Targets Absent Nodes](./test-policies-has-present-targets-absent-nodes.md) |
-| 124 | [Policy Has No Targets](./test-policies-has-present-targets-no-targets.md) |
-| 125 | [Policy Targets Present Member](./test-policies-has-present-targets-present-member.md) |
-| 126 | [Policy Targets One Present Node](./test-policies-has-present-targets-present-node.md) |
-| 127 | [Policy Targets Present Nodes](./test-policies-has-present-targets-present-nodes.md) |
-| 128 | [Policy Pruning](./test-policies-prune.md) |
-| 129 | [properties-conditional](./test-properties-conditional.md) |
-| 130 | [properties-default-alternative](./test-properties-default-alternative.md) |
-| 131 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
-| 132 | [properties-default-condition](./test-properties-default-condition.md) |
-| 133 | [properties-expression](./test-properties-expression.md) |
-| 134 | [properties-get-artifact-presence-number-present](./test-properties-get-artifact-presence-number-present.md) |
-| 135 | [properties-get-artifact-presence-string-present](./test-properties-get-artifact-presence-string-present.md) |
-| 136 | [properties-get-property-presence-number-absent](./test-properties-get-property-presence-number-absent.md) |
-| 137 | [properties-get-property-presence-string-absent](./test-properties-get-property-presence-string-absent.md) |
-| 138 | [properties-get-property-value---disabled](./test-properties-get-property-value---disabled.md) |
-| 139 | [properties-list](./test-properties-list.md) |
-| 140 | [properties-list-another](./test-properties-list-another.md) |
-| 141 | [properties-map](./test-properties-map.md) |
-| 142 | [properties-map-another](./test-properties-map-another.md) |
-| 143 | [properties-prune](./test-properties-prune.md) |
-| 144 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
-| 145 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
-| 146 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
-| 147 | [relationships-conditional](./test-relationships-conditional.md) |
-| 148 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 149 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 150 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 151 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 152 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 153 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 154 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 155 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
-| 156 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
-| 157 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
-| 158 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
-| 159 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
-| 160 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
-| 161 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
-| 162 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
-| 163 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 164 | [Relation Pruning](./test-requirement-assignment-prune.md) |
-| 165 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 108 | [other-get-logic-expression-false](./test-other-get-logic-expression-false.md) |
+| 109 | [other-get-logic-expression-true](./test-other-get-logic-expression-true.md) |
+| 110 | [Get Variability Expression](./test-other-get-value-expression.md) |
+| 111 | [Get Variability Input](./test-other-get-variability-input.md) |
+| 112 | [Operator "concat"](./test-other-join.md) |
+| 113 | [other-logic-value-expression](./test-other-logic-value-expression.md) |
+| 114 | [other-nothing](./test-other-nothing.md) |
+| 115 | [other-preset](./test-other-preset.md) |
+| 116 | [other-presets](./test-other-presets.md) |
+| 117 | [Operator "concat"](./test-other-token.md) |
+| 118 | [other-version](./test-other-version.md) |
+| 119 | [policies-conditional](./test-policies-conditional.md) |
+| 120 | [policies-default-condition](./test-policies-default-condition.md) |
+| 121 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
+| 122 | [policies-get-policy-presence-absent](./test-policies-get-policy-presence-absent.md) |
+| 123 | [policies-get-policy-presence-present](./test-policies-get-policy-presence-present.md) |
+| 124 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
+| 125 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
+| 126 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
+| 127 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
+| 128 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
+| 129 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
+| 130 | [Policy Pruning](./test-policies-prune.md) |
+| 131 | [properties-conditional](./test-properties-conditional.md) |
+| 132 | [properties-default-alternative](./test-properties-default-alternative.md) |
+| 133 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
+| 134 | [properties-default-condition](./test-properties-default-condition.md) |
+| 135 | [properties-expression](./test-properties-expression.md) |
+| 136 | [properties-get-artifact-presence-number-present](./test-properties-get-artifact-presence-number-present.md) |
+| 137 | [properties-get-artifact-presence-string-present](./test-properties-get-artifact-presence-string-present.md) |
+| 138 | [properties-get-property-presence-number-absent](./test-properties-get-property-presence-number-absent.md) |
+| 139 | [properties-get-property-presence-string-absent](./test-properties-get-property-presence-string-absent.md) |
+| 140 | [properties-get-property-value---disabled](./test-properties-get-property-value---disabled.md) |
+| 141 | [properties-list](./test-properties-list.md) |
+| 142 | [properties-list-another](./test-properties-list-another.md) |
+| 143 | [properties-map](./test-properties-map.md) |
+| 144 | [properties-map-another](./test-properties-map-another.md) |
+| 145 | [properties-prune](./test-properties-prune.md) |
+| 146 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
+| 147 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
+| 148 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
+| 149 | [relationships-conditional](./test-relationships-conditional.md) |
+| 150 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 151 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 152 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 153 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 154 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 155 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 156 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 157 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 158 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 159 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
+| 160 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
+| 161 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
+| 162 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
+| 163 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
+| 164 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
+| 165 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 166 | [Relation Pruning](./test-requirement-assignment-prune.md) |
+| 167 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
 

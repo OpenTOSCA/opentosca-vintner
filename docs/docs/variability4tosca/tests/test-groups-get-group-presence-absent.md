@@ -13,10 +13,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_group_presence: group_one
+      conditions:
+        group_presence: group_one
   groups:
     group_one:
       conditions: false
@@ -31,11 +29,5 @@ The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: false
 ```
 

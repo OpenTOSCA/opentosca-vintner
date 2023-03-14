@@ -13,12 +13,10 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_artifact_presence:
-                - container
-                - artifact_one
+      conditions:
+        artifact_presence:
+          - container
+          - artifact_one
       artifacts:
         artifact_one:
           conditions: false
@@ -33,11 +31,5 @@ The following variability-resolved service templated is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: false
 ```
 

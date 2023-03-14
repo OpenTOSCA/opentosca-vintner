@@ -16,14 +16,12 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              or:
-                - false
-                - true
-                - false
-                - false
+      conditions:
+        or:
+          - false
+          - true
+          - false
+          - false
 ```
 
 
@@ -38,7 +36,5 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
 ```
 

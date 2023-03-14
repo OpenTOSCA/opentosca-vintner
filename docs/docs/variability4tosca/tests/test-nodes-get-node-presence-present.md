@@ -13,10 +13,8 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_node_presence: node
+      conditions:
+        node_presence: node
     node:
       type: node
       conditions: true
@@ -34,8 +32,6 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        value: true
     node:
       type: node
 ```

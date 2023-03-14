@@ -23,7 +23,7 @@ topology_template:
       properties:
         - value:
             expression:
-              get_variability_input: name
+              variability_input: name
 ```
 
 ## Variability Inputs

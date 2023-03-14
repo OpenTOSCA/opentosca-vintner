@@ -13,12 +13,10 @@ topology_template:
   node_templates:
     container:
       type: container
-      properties:
-        - value:
-            expression:
-              get_relation_presence:
-                - node_one
-                - 0
+      conditions:
+        relation_presence:
+          - node_one
+          - 0
     node_one:
       type: node_one
       requirements:
@@ -42,10 +40,6 @@ The following variability-resolved service templated is expected.
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
   node_templates:
-    container:
-      type: container
-      properties:
-        value: false
     node_one:
       type: node_one
       requirements:

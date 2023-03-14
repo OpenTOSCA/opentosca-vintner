@@ -6,4 +6,3 @@ topology_template:
             type: container
             properties:
                 property_one: 69
-                value: true

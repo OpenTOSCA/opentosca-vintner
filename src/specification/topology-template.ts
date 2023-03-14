@@ -4,9 +4,9 @@
  */
 import {NodeTemplate} from './node-template'
 import {
+    ValueExpression,
     VariabilityAlternative,
     VariabilityDefinition,
-    VariabilityExpression,
     VariabilityPointList,
     VariabilityPointMap,
 } from './variability'
@@ -29,7 +29,7 @@ export type InputDefinition = {
     type: string
     description?: string
     default?: InputAssignmentValue
-    default_expression?: VariabilityExpression
+    default_expression?: ValueExpression
 } & VariabilityAlternative
 
 export type InputAssignmentMap = {[key: string]: InputAssignmentValue}
