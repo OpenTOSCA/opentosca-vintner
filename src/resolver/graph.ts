@@ -37,7 +37,8 @@ export abstract class ConditionalElement {
     conditions: LogicExpression[] = []
 
     abstract toscaId: string | number | [string, string | number]
-    abstract condition: LogicExpression
+    abstract presenceCondition: LogicExpression
+    abstract defaultCondition: LogicExpression
 
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
@@ -112,11 +113,14 @@ export class Input extends ConditionalElement {
     get toscaId() {
         return this.name
     }
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {input_presence: this.toscaId, _cached_element: this}
-        return this._condition
+
+    defaultCondition = true
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -142,11 +146,13 @@ export class Node extends ConditionalElement {
         return this.name
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {node_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    defaultCondition = true
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -181,11 +187,15 @@ export class Property extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {property_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    get defaultCondition() {
+        return this.container.presenceCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {property_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -227,11 +237,20 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {relation_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultCondition))
+            this._defaultCondition = {
+                and: [this.source.presenceCondition, this.target.presenceCondition],
+            }
+        return this._defaultCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -267,11 +286,18 @@ export class Policy extends ConditionalElement {
         return this.name
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {policy_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultCondition))
+            this._defaultCondition = {has_present_target: this.toscaId, _cached_element: this}
+        return this._defaultCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -296,11 +322,18 @@ export class Group extends ConditionalElement {
         return this.name
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {group_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultCondition))
+            this._defaultCondition = {has_present_member: this.toscaId, _cached_element: this}
+        return this._defaultCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 
@@ -328,11 +361,15 @@ export class Artifact extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
-    _condition?: LogicExpression
-    get condition(): LogicExpression {
-        if (validator.isUndefined(this._condition))
-            this._condition = {artifact_presence: this.toscaId, _cached_element: this}
-        return this._condition
+    get defaultCondition() {
+        return this.container.presenceCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {artifact_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
     }
 }
 

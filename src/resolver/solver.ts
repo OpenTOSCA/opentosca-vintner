@@ -136,7 +136,7 @@ export default class Solver {
             conditions = [
                 {
                     not: {
-                        or: bratans.map(it => it.condition),
+                        or: bratans.map(it => it.presenceCondition),
                     },
                 },
             ]
@@ -146,13 +146,13 @@ export default class Solver {
         if (element.isRelation() && element.default) {
             const node = element.source
             const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.condition)}}]
+            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
         }
 
         // If property is default, then check if no other property having the same name is present
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.condition)}}]
+            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
@@ -161,14 +161,12 @@ export default class Solver {
             this.getResolvingOptions().enable_relation_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{and: [element.source.condition, element.target.condition]}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Relations: Additionally check that source and target are present
         if (element.isRelation() && this.getResolvingOptions().enable_relation_pruning) {
-            conditions.unshift({
-                and: [element.source.condition, element.target.condition],
-            })
+            conditions.unshift(element.defaultCondition)
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
@@ -177,12 +175,12 @@ export default class Solver {
             this.getResolvingOptions().enable_policy_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_target: element.toscaId}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Policy: Additionally check if any target is present
         if (element.isPolicy() && this.getResolvingOptions().enable_policy_pruning) {
-            conditions.unshift({has_present_target: element.toscaId})
+            conditions.unshift(element.defaultCondition)
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
@@ -191,12 +189,12 @@ export default class Solver {
             this.getResolvingOptions().enable_group_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [{has_present_member: element.toscaId}]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Group: Additionally check if any member is present
         if (element.isGroup() && this.getResolvingOptions().enable_group_pruning) {
-            conditions.unshift({has_present_member: element.toscaId})
+            conditions.unshift(element.defaultCondition)
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
@@ -205,12 +203,12 @@ export default class Solver {
             this.getResolvingOptions().enable_artifact_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [element.container.condition]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if node is present
         if (element.isArtifact() && this.getResolvingOptions().enable_artifact_pruning) {
-            conditions.unshift(element.container.condition)
+            conditions.unshift(element.defaultCondition)
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
@@ -219,12 +217,12 @@ export default class Solver {
             this.getResolvingOptions().enable_property_default_condition &&
             utils.isEmpty(conditions)
         ) {
-            conditions = [element.container.condition]
+            conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
         if (element.isProperty() && this.getResolvingOptions().enable_property_pruning) {
-            conditions.unshift(element.container.condition)
+            conditions.unshift(element.defaultCondition)
         }
 
         // Normalize conditions to a single 'and' condition
