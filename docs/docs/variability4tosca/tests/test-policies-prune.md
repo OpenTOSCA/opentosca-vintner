@@ -15,7 +15,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      enable_policy_pruning: true
+      policy_pruning: true
   node_templates:
     node_one:
       type: node_one

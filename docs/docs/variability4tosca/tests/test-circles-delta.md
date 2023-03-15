@@ -23,8 +23,8 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      enable_node_default_condition: true
-      enable_relation_default_condition: true
+      node_default_condition: true
+      relation_default_condition: true
   node_templates:
     node_one:
       type: node_one

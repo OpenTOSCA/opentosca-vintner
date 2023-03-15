@@ -9,31 +9,41 @@ export type VariabilityDefinition = {
 }
 
 export type VariabilityResolvingOptions = {
-    enable_node_default_condition?: boolean
-    enable_relation_default_condition?: boolean
-    enable_policy_default_condition?: boolean
-    enable_group_default_condition?: boolean
-    enable_artifact_default_condition?: boolean
-    enable_property_default_condition?: boolean
-} & {
-    enable_node_pruning?: boolean
-    enable_relation_pruning?: boolean
-    enable_policy_pruning?: boolean
-    enable_group_pruning?: boolean
-    enable_artifact_pruning?: boolean
-    enable_property_pruning?: boolean
-} & ConsistencyOptions
+    strict?: boolean
+} & DefaultOptions &
+    PruningOptions &
+    ConsistencyOptions
+
+export type DefaultOptions = {
+    default_condition?: boolean
+    node_default_condition?: boolean
+    relation_default_condition?: boolean
+    policy_default_condition?: boolean
+    group_default_condition?: boolean
+    artifact_default_condition?: boolean
+    property_default_condition?: boolean
+}
+
+export type PruningOptions = {
+    pruning?: boolean
+    node_pruning?: boolean
+    relation_pruning?: boolean
+    policy_pruning?: boolean
+    group_pruning?: boolean
+    artifact_pruning?: boolean
+    property_pruning?: boolean
+}
 
 export type ConsistencyOptions = {
-    disable_consistency_checks?: boolean
-    disable_relation_source_consistency_check?: boolean
-    disable_relation_target_consistency_check?: boolean
-    disable_ambiguous_hosting_consistency_check?: boolean
-    disable_expected_hosting_consistency_check?: boolean
-    disable_missing_artifact_parent_consistency_check?: boolean
-    disable_ambiguous_artifact_consistency_check?: boolean
-    disable_missing_property_parent_consistency_check?: boolean
-    disable_ambiguous_property_consistency_check?: boolean
+    consistency_checks?: boolean
+    relation_source_consistency_check?: boolean
+    relation_target_consistency_check?: boolean
+    ambiguous_hosting_consistency_check?: boolean
+    expected_hosting_consistency_check?: boolean
+    missing_artifact_parent_consistency_check?: boolean
+    ambiguous_artifact_consistency_check?: boolean
+    missing_property_parent_consistency_check?: boolean
+    ambiguous_property_consistency_check?: boolean
 }
 
 export type InputAssignmentPresetMap = {[key: string]: InputAssignmentPreset}

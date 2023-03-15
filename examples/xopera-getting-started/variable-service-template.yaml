@@ -27,7 +27,7 @@ topology_template:
             is_second: {equal: [{variability_input: mode}, second]}
 
         options:
-            enable_property_default_condition: true
+            property_default_condition: true
 
     node_templates:
         localhost:

@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      enable_property_default_condition: true
+      property_default_condition: true
   node_templates:
     node_one:
       type: node_one

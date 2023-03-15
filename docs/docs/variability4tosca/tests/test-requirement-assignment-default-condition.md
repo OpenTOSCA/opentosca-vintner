@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      enable_relation_default_condition: true
+      relation_default_condition: true
   node_templates:
     one:
       type: one

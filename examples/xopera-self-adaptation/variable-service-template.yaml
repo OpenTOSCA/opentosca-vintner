@@ -117,11 +117,11 @@ topology_template:
             is_vm_up_enough: {greater: [{variability_input: compute_vm_uptime}, 600]}
 
         options:
-            enable_relation_pruning: true
-            enable_policy_pruning: true
-            enable_group_pruning: true
-            enable_property_pruning: true
-            enable_artifact_pruning: true
+            relation_pruning: true
+            policy_pruning: true
+            group_pruning: true
+            property_pruning: true
+            artifact_pruning: true
 
     node_templates:
         application:
