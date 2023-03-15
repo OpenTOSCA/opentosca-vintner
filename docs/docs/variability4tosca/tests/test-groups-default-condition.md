@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      enable_group_default_condition: true
+      group_default_condition: true
   groups:
     group_one:
       type: variability.groups.ConditionalMembers

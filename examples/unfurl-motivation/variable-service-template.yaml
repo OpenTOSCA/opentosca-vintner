@@ -77,7 +77,7 @@ topology_template:
             is_prod: {equal: [{variability_input: mode}, prod]}
 
         options:
-            enable_property_default_condition: true
+            property_default_condition: true
 
     node_templates:
         web_component:

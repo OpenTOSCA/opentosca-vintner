@@ -1,6 +1,7 @@
 import {v4 as uuid4} from 'uuid'
 import * as validator from './validator'
 import day from '#utils/day'
+import _ from 'lodash'
 
 export function generateNonce() {
     return uuid4()
@@ -131,4 +132,11 @@ export function toFixed(value: number) {
 
 export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
+export function propagateOptions<T>(condition: boolean, base: T, propagate: T, override?: T) {
+    let result = _.clone(base)
+    if (condition) result = _.clone(propagate)
+    if (validator.isDefined(override)) result = _.merge(result, _.clone(override))
+    return result
 }

@@ -3,8 +3,10 @@ import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {
+    DefaultOptions,
     InputAssignmentPreset,
     LogicExpression,
+    PruningOptions,
     ValueExpression,
     VariabilityDefinition,
     VariabilityExpression,
@@ -23,6 +25,8 @@ type ExpressionContext = {
 export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
+    private readonly defaultOptions: DefaultOptions
+    private readonly pruningOptions: PruningOptions
 
     readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
@@ -37,6 +41,69 @@ export default class Solver {
     constructor(graph: Graph) {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
+
+        const strict = validator.isDefined(this.options?.options?.strict) ? this.options?.options?.strict : true
+        validator.ensureBoolean(strict)
+
+        const defaultCondition = strict
+            ? false
+            : validator.isDefined(this.options?.options?.default_condition)
+            ? this.options?.options?.default_condition
+            : false
+        validator.ensureBoolean(defaultCondition)
+
+        this.defaultOptions = utils.propagateOptions<DefaultOptions>(
+            defaultCondition,
+            {
+                default_condition: false,
+                node_default_condition: false,
+                relation_default_condition: false,
+                policy_default_condition: false,
+                group_default_condition: false,
+                artifact_default_condition: false,
+                property_default_condition: false,
+            },
+            {
+                default_condition: true,
+                node_default_condition: true,
+                relation_default_condition: true,
+                policy_default_condition: true,
+                group_default_condition: true,
+                artifact_default_condition: true,
+                property_default_condition: true,
+            },
+            this.options?.options
+        )
+
+        const pruning = strict
+            ? false
+            : validator.isDefined(this.options?.options?.pruning)
+            ? this.options?.options?.pruning
+            : false
+        validator.ensureBoolean(pruning)
+
+        this.pruningOptions = utils.propagateOptions<PruningOptions>(
+            pruning,
+            {
+                pruning: false,
+                node_pruning: false,
+                relation_pruning: false,
+                policy_pruning: false,
+                group_pruning: false,
+                artifact_pruning: false,
+                property_pruning: false,
+            },
+            {
+                pruning: true,
+                node_pruning: true,
+                relation_pruning: true,
+                policy_pruning: true,
+                group_pruning: true,
+                artifact_pruning: true,
+                property_pruning: true,
+            },
+            this.options?.options
+        )
     }
 
     transform() {
@@ -182,82 +249,62 @@ export default class Solver {
         }
 
         // Node Default Condition: Assign default condition to relation that checks if no incoming relation is present and that there is at least one potential incoming relation
-        if (element.isNode() && this.getResolvingOptions().enable_node_default_condition && utils.isEmpty(conditions)) {
+        if (element.isNode() && this.defaultOptions.node_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Nodes: Additionally check that no incoming relation is present and that there is at least one potential incoming relations.
-        if (element.isNode() && this.getResolvingOptions().enable_node_pruning) {
+        if (element.isNode() && this.pruningOptions.node_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
-        if (
-            element.isRelation() &&
-            this.getResolvingOptions().enable_relation_default_condition &&
-            utils.isEmpty(conditions)
-        ) {
+        if (element.isRelation() && this.defaultOptions.relation_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Relations: Additionally check that source and target are present
-        if (element.isRelation() && this.getResolvingOptions().enable_relation_pruning) {
+        if (element.isRelation() && this.pruningOptions.relation_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
-        if (
-            element.isPolicy() &&
-            this.getResolvingOptions().enable_policy_default_condition &&
-            utils.isEmpty(conditions)
-        ) {
+        if (element.isPolicy() && this.defaultOptions.policy_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Policy: Additionally check if any target is present
-        if (element.isPolicy() && this.getResolvingOptions().enable_policy_pruning) {
+        if (element.isPolicy() && this.pruningOptions.policy_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
-        if (
-            element.isGroup() &&
-            this.getResolvingOptions().enable_group_default_condition &&
-            utils.isEmpty(conditions)
-        ) {
+        if (element.isGroup() && this.defaultOptions.group_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Group: Additionally check if any member is present
-        if (element.isGroup() && this.getResolvingOptions().enable_group_pruning) {
+        if (element.isGroup() && this.pruningOptions.group_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
-        if (
-            element.isArtifact() &&
-            this.getResolvingOptions().enable_artifact_default_condition &&
-            utils.isEmpty(conditions)
-        ) {
+        if (element.isArtifact() && this.defaultOptions.artifact_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if node is present
-        if (element.isArtifact() && this.getResolvingOptions().enable_artifact_pruning) {
+        if (element.isArtifact() && this.pruningOptions.artifact_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
-        if (
-            element.isProperty() &&
-            this.getResolvingOptions().enable_property_default_condition &&
-            utils.isEmpty(conditions)
-        ) {
+        if (element.isProperty() && this.defaultOptions.property_default_condition && utils.isEmpty(conditions)) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if corresponding parent is present
-        if (element.isProperty() && this.getResolvingOptions().enable_property_pruning) {
+        if (element.isProperty() && this.pruningOptions.property_pruning) {
             conditions.unshift(element.defaultCondition)
         }
 
@@ -271,10 +318,6 @@ export default class Solver {
         )
 
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
-    }
-
-    getResolvingOptions() {
-        return this.options?.options || {}
     }
 
     setPreset(name?: string) {
