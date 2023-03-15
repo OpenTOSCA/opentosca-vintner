@@ -12,7 +12,7 @@ export default class Checker {
 
         const options = graph.serviceTemplate.topology_template?.variability?.options || {}
         this.options = utils.propagateOptions<ConsistencyOptions>(
-            validator.isDefined(options.consistency_checks) ? options.consistency_checks : true,
+            validator.isDefined(options.consistency_checks) ? !options.consistency_checks : false,
             {
                 consistency_checks: true,
                 relation_source_consistency_check: true,
