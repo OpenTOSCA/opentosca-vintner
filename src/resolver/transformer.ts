@@ -48,6 +48,13 @@ export default class Transformer {
         }
     }
 
+    private clean(raw: any) {
+        delete raw.conditions
+        delete raw.default_alternative
+        delete raw.pruning
+        delete raw.default_condition
+    }
+
     private transformNodes() {
         // Delete node templates which are not present
         if (validator.isDefined(this.topology.node_templates)) {
@@ -64,10 +71,7 @@ export default class Transformer {
                         .filter(it => it.present)
                         .map(relation => {
                             const assignment = relation.raw
-                            if (!validator.isString(assignment)) {
-                                delete assignment.conditions
-                                delete assignment.default_alternative
-                            }
+                            if (!validator.isString(assignment)) this.clean(assignment)
 
                             const map: RequirementAssignmentMap = {}
                             map[relation.name] = assignment
@@ -79,10 +83,7 @@ export default class Transformer {
                     template.artifacts = node.artifacts
                         .filter(it => it.present)
                         .reduce<ArtifactDefinitionMap>((map, artifact) => {
-                            if (!validator.isString(artifact.raw)) {
-                                delete artifact.raw.conditions
-                                delete artifact.raw.default_alternative
-                            }
+                            if (!validator.isString(artifact.raw)) this.clean(artifact.raw)
 
                             this.transformProperties(artifact, artifact.raw)
 
@@ -91,8 +92,7 @@ export default class Transformer {
                         }, {})
                     if (utils.isEmpty(template.artifacts)) delete template.artifacts
 
-                    delete template.conditions
-                    delete template.default_alternative
+                    this.clean(template)
                     map[node.name] = template
                     return map
                 }, {})
@@ -141,8 +141,7 @@ export default class Transformer {
 
                     this.transformProperties(group, template)
 
-                    delete template.conditions
-                    delete template.default_alternative
+                    this.clean(template)
                     map[group.name] = template
                     return map
                 }, {})
@@ -160,8 +159,7 @@ export default class Transformer {
                 .filter(policy => policy.present)
                 .map(policy => {
                     const template = policy.raw
-                    delete template.conditions
-                    delete template.default_alternative
+                    this.clean(template)
 
                     this.transformProperties(policy, template)
 
@@ -195,8 +193,7 @@ export default class Transformer {
                 .filter(input => input.present)
                 .reduce<InputDefinitionMap>((map, input) => {
                     const template = input.raw
-                    delete template.conditions
-                    delete template.default_alternative
+                    this.clean(template)
                     map[input.name] = template
                     return map
                 }, {})

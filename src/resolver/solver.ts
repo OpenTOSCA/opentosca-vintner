@@ -42,16 +42,9 @@ export default class Solver {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
 
-        const strict = validator.isDefined(this.options?.options?.strict) ? this.options?.options?.strict : true
-        validator.ensureBoolean(strict)
+        const strict = this.options?.options?.strict ?? true
 
-        const defaultCondition = strict
-            ? false
-            : validator.isDefined(this.options?.options?.default_condition)
-            ? this.options?.options?.default_condition
-            : false
-        validator.ensureBoolean(defaultCondition)
-
+        const defaultCondition = strict ? false : this.options?.options?.default_condition ?? false
         this.defaultOptions = utils.propagateOptions<DefaultOptions>(
             defaultCondition,
             {
@@ -75,13 +68,7 @@ export default class Solver {
             this.options?.options
         )
 
-        const pruning = strict
-            ? false
-            : validator.isDefined(this.options?.options?.pruning)
-            ? this.options?.options?.pruning
-            : false
-        validator.ensureBoolean(pruning)
-
+        const pruning = strict ? false : this.options?.options?.pruning ?? false
         this.pruningOptions = utils.propagateOptions<PruningOptions>(
             pruning,
             {
@@ -249,62 +236,107 @@ export default class Solver {
         }
 
         // Node Default Condition: Assign default condition to relation that checks if no incoming relation is present and that there is at least one potential incoming relation
-        if (element.isNode() && this.defaultOptions.node_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isNode() &&
+            (element.raw.default_condition ?? this.defaultOptions.node_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Nodes: Additionally check that no incoming relation is present and that there is at least one potential incoming relations.
-        if (element.isNode() && this.pruningOptions.node_pruning) {
+        if (element.isNode() && (element.raw.pruning ?? this.pruningOptions.node_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Relation Default Condition: Assign default condition to relation that checks if source and target are present
-        if (element.isRelation() && this.defaultOptions.relation_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isRelation() &&
+            (validator.isString(element.raw)
+                ? this.defaultOptions.relation_default_condition
+                : element.raw.default_condition ?? this.defaultOptions.relation_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Relations: Additionally check that source and target are present
-        if (element.isRelation() && this.pruningOptions.relation_pruning) {
+        if (
+            element.isRelation() &&
+            (validator.isString(element.raw)
+                ? this.pruningOptions.relation_pruning
+                : element.raw.pruning ?? this.pruningOptions.relation_pruning)
+        ) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Policy Default Condition: Assign default condition to node that checks if any target is present
-        if (element.isPolicy() && this.defaultOptions.policy_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isPolicy() &&
+            (element.raw.default_condition ?? this.defaultOptions.policy_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Policy: Additionally check if any target is present
-        if (element.isPolicy() && this.pruningOptions.policy_pruning) {
+        if (element.isPolicy() && (element.raw.pruning ?? this.pruningOptions.policy_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
-        if (element.isGroup() && this.defaultOptions.group_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isGroup() &&
+            (element.raw.default_condition ?? this.defaultOptions.group_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Group: Additionally check if any member is present
-        if (element.isGroup() && this.pruningOptions.group_pruning) {
+        if (element.isGroup() && (element.raw.pruning ?? this.pruningOptions.group_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Artifact Default Condition: Assign default condition to artifact that checks if corresponding node is present
-        if (element.isArtifact() && this.defaultOptions.artifact_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isArtifact() &&
+            (validator.isString(element.raw)
+                ? this.defaultOptions.artifact_default_condition
+                : element.raw.default_condition ?? this.defaultOptions.artifact_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Artifact: Additionally check if node is present
-        if (element.isArtifact() && this.pruningOptions.artifact_pruning) {
+        if (
+            element.isArtifact() &&
+            (validator.isString(element.raw)
+                ? this.pruningOptions.artifact_pruning
+                : element.raw.pruning ?? this.pruningOptions.artifact_pruning)
+        ) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Property Default Condition: Assign default condition to property that checks if corresponding parent is present
-        if (element.isProperty() && this.defaultOptions.property_default_condition && utils.isEmpty(conditions)) {
+        if (
+            element.isProperty() &&
+            (!validator.isObject(element.raw) || validator.isArray(element.raw)
+                ? this.defaultOptions.property_default_condition
+                : element.raw.default_condition ?? this.defaultOptions.property_default_condition) &&
+            utils.isEmpty(conditions)
+        ) {
             conditions = [element.defaultCondition]
         }
 
-        // Prune Artifact: Additionally check if corresponding parent is present
-        if (element.isProperty() && this.pruningOptions.property_pruning) {
+        // Prune Property: Additionally check if corresponding parent is present
+        if (
+            element.isProperty() &&
+            (!validator.isObject(element.raw) || validator.isArray(element.raw)
+                ? this.pruningOptions.property_pruning
+                : element.raw.pruning ?? this.pruningOptions.property_pruning)
+        ) {
             conditions.unshift(element.defaultCondition)
         }
 
