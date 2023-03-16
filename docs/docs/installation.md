@@ -23,7 +23,7 @@ curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} ba
 
 To manually install `vintner`, download the binary for your system.
 There are no other dependencies required. 
-You might add the binary to your $PATH.
+You might add the binary to your `$PATH`.
 The following example shows the installation on Linux.
 See [below](#signature) for verifying the signature of the binary.
 

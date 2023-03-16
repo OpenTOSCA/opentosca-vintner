@@ -167,11 +167,13 @@ These conditions must be satisfied otherwise the respective Node Template is not
 Furthermore, assigned Artifact Definitions can be a list of Artifact Definitions Maps which contains only one Artifact
 Definition in order to allow Artifact Definition names to be used multiple times.
 
-| Keyname    | Mandatory | Type                                                                         | Description                                                                                                        |
-|------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)   | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| artifacts  | no        | Map(String, ArtifactDefinition) &#124; List(Map(String, ArtifactDefinition)) | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
-| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
+|-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions        | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)   | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| artifacts         | no        | Map(String, ArtifactDefinition) &#124; List(Map(String, ArtifactDefinition)) | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
+| properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
@@ -193,6 +195,8 @@ These conditions must be satisfied otherwise the respective relationship is not 
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition
 assigned.
@@ -223,6 +227,8 @@ A Property Assignment at Node Templates and Relationship Templates can additiona
 | expression         | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as value.                                                   |
 | conditions         | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)    | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative | no        | Boolean                                                                       | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 
 Note, if the value is not wrapped and assigned to a property being part of a property assignment list, then the keyname `value` is a keyword, that is used to detect if the value is wrapped or not.
@@ -257,6 +263,8 @@ Such a group is also called Variability Group.
 | members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
 conditions are satisfied.
@@ -288,6 +296,8 @@ These conditions must be satisfied otherwise the respective policy is not presen
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the
 Variability Condition `is_prod` assigned.
@@ -339,6 +349,8 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
 | properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 
 ## Topology Template Input Definition
@@ -349,6 +361,8 @@ These conditions must be satisfied otherwise the respective input is not present
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition
 assigned.
