@@ -14,6 +14,7 @@ export type NodeTemplate = {
     requirements?: VariabilityPointList<RequirementAssignment>
     capabilities?: CapabilityAssignmentMap
     artifacts?: VariabilityPointMap<ArtifactDefinition>
+    weight?: number | boolean
 } & VariabilityAlternative
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}

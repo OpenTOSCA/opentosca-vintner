@@ -98,7 +98,7 @@ export default class Solver {
          * Transform assigned conditions to MiniSat clauses
          * Note, this also evaluates value expressions if they are part of logic expressions
          */
-        if (this.transformed) throw new Error(`Has been already transformed`)
+        if (this.transformed) return
         this.transformed = true
 
         for (const element of this.graph.elements) this.transformConditions(element)
@@ -122,7 +122,7 @@ export default class Solver {
         const optimized = this.minisat.minimizeWeightedSum(
             solution,
             this.graph.nodes.map(it => it.id),
-            1
+            this.graph.nodes.map(it => it.weight)
         )
         if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
         this.result = optimized.getMap()

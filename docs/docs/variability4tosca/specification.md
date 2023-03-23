@@ -174,6 +174,7 @@ Definition in order to allow Artifact Definition names to be used multiple times
 | properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
+| weight            | no        | Boolean &#124; Number                                                        | the weight used during optimization (default is 1)                                                                 |
 
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
@@ -586,6 +587,13 @@ This basically enables to disable consistency checks since consistency checks ev
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
 
+### Optimization
+
+The variability-resolved service template shall be optimized regarding minimal weight of node templates. 
+The default weight of a node template is 1.
+Thus, per default, the service template is optimized regarding minimal number of node templates.
+The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
+The weight of a node template can be configured in its definition.
 
 ### Processing Errors
 
