@@ -12,7 +12,14 @@ export type VariabilityResolvingOptions = {
     strict?: boolean
 } & DefaultOptions &
     PruningOptions &
-    ConsistencyOptions
+    ConsistencyOptions &
+    SolverOptions
+
+// TODO: doc this
+// TODO: implement this
+export type SolverOptions = {
+    optimization?: true | false | 'min' | 'max'
+}
 
 export type DefaultOptions = {
     default_condition?: boolean

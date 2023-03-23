@@ -146,6 +146,8 @@ export class Node extends ConditionalElement {
             }
 
             if (validator.isNumber(data.raw.weight)) {
+                if (data.raw.weight < 0)
+                    throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
                 this.weight = data.raw.weight
             }
 

@@ -85,32 +85,33 @@ There are the following variability resolving options.
 More specific options override wider set options. 
 For example, if "strict" is enabled and "node_pruning" is enabled, then nodes are pruned.
 
-| Keyname                                   | Mandatory | Type      | Default | Description                                                     |
-|-------------------------------------------|-----------|-----------|---------|-----------------------------------------------------------------|
-| strict                                    | false     | boolean   | true    | disable all default conditions and pruning                      |
-| default_condition                         | false     | boolean   | false   | enable all default conditions                                   |
-| node_default_condition                    | false     | boolean   | false   | enable default condition for nodes                              |
-| relation_default_condition                | false     | boolean   | false   | enable default condition for relations                          |
-| policy_default_condition                  | false     | boolean   | false   | enable default condition for policies                           |
-| group_default_condition                   | false     | boolean   | false   | enable default condition for groups                             |
-| artifact_default_condition                | false     | boolean   | false   | enable default condition for artifacts                          |
-| property_default_condition                | false     | boolean   | false   | enable default condition for properties                         |
-| pruning                                   | false     | boolean   | false   | enable pruning of all elements                                  |
-| node_pruning                              | false     | boolean   | false   | enable pruning of nodes                                         |
-| relation_pruning                          | false     | boolean   | false   | enable pruning of relations                                     |
-| policy_pruning                            | false     | boolean   | false   | enable pruning of policies                                      |
-| group_pruning                             | false     | boolean   | false   | enable pruning of groups                                        |
-| artifact_pruning                          | false     | boolean   | false   | enable pruning of artifacts                                     |
-| property_pruning                          | false     | boolean   | false   | enable pruning of properties                                    |
-| consistency_checks                        | false     | boolean   | true    | enable all consistency checks                                   |
-| relation_source_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation sources             |
-| relation_target_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation targets             |
-| ambiguous_hosting_consistency_check       | false     | boolean   | true    | enable consistency check regarding maximum one hosting relation |
-| expected_hosting_consistency_check        | false     | boolean   | true    | enable consistency check regarding expected hosting relation    |
-| missing_artifact_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of artifact             |
-| ambiguous_artifact_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous artifacts          |
-| missing_property_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of a property           |
-| ambiguous_property_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous properties         |
+| Keyname                                   | Mandatory | Type      | Default | Description                                                          |
+|-------------------------------------------|-----------|-----------|---------|----------------------------------------------------------------------|
+| strict                                    | false     | boolean   | true    | disable all default conditions and pruning                           |
+| default_condition                         | false     | boolean   | false   | enable all default conditions                                        |
+| node_default_condition                    | false     | boolean   | false   | enable default condition for nodes                                   |
+| relation_default_condition                | false     | boolean   | false   | enable default condition for relations                               |
+| policy_default_condition                  | false     | boolean   | false   | enable default condition for policies                                |
+| group_default_condition                   | false     | boolean   | false   | enable default condition for groups                                  |
+| artifact_default_condition                | false     | boolean   | false   | enable default condition for artifacts                               |
+| property_default_condition                | false     | boolean   | false   | enable default condition for properties                              |
+| pruning                                   | false     | boolean   | false   | enable pruning of all elements                                       |
+| node_pruning                              | false     | boolean   | false   | enable pruning of nodes                                              |
+| relation_pruning                          | false     | boolean   | false   | enable pruning of relations                                          |
+| policy_pruning                            | false     | boolean   | false   | enable pruning of policies                                           |
+| group_pruning                             | false     | boolean   | false   | enable pruning of groups                                             |
+| artifact_pruning                          | false     | boolean   | false   | enable pruning of artifacts                                          |
+| property_pruning                          | false     | boolean   | false   | enable pruning of properties                                         |
+| consistency_checks                        | false     | boolean   | true    | enable all consistency checks                                        |
+| relation_source_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation sources                  |
+| relation_target_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation targets                  |
+| ambiguous_hosting_consistency_check       | false     | boolean   | true    | enable consistency check regarding maximum one hosting relation      |
+| expected_hosting_consistency_check        | false     | boolean   | true    | enable consistency check regarding expected hosting relation         |
+| missing_artifact_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of artifact                  |
+| ambiguous_artifact_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous artifacts               |
+| missing_property_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of a property                |
+| ambiguous_property_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous properties              |
+| optimization                              | false     | boolean   | min     | configure optimization (allowed values are: [true, false, min, max]) | 
 
 
 ## Variability Default Conditions
@@ -174,7 +175,7 @@ Definition in order to allow Artifact Definition names to be used multiple times
 | properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
-| weight            | no        | Boolean &#124; Number                                                        | the weight used during optimization (default is 1)                                                                 |
+| weight            | no        | Boolean &#124; (Non-Negative)Number                                          | the weight used during optimization (default is 1)                                                                 |
 
 
 The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
