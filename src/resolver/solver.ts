@@ -7,6 +7,7 @@ import {
     InputAssignmentPreset,
     LogicExpression,
     PruningOptions,
+    SolverOptions,
     ValueExpression,
     VariabilityDefinition,
     VariabilityExpression,
@@ -27,6 +28,7 @@ export default class Solver {
     private readonly options?: VariabilityDefinition
     private readonly defaultOptions: DefaultOptions
     private readonly pruningOptions: PruningOptions
+    private readonly solverOptions: SolverOptions
 
     readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
@@ -91,6 +93,16 @@ export default class Solver {
             },
             this.options?.options
         )
+
+        const optimization = this.options?.options?.optimization
+        if (
+            validator.isDefined(optimization) &&
+            !validator.isBoolean(optimization) &&
+            !['min', 'max'].includes(optimization)
+        ) {
+            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
+        }
+        this.solverOptions = {optimization: optimization ?? 'min'}
     }
 
     transform() {
@@ -98,7 +110,7 @@ export default class Solver {
          * Transform assigned conditions to MiniSat clauses
          * Note, this also evaluates value expressions if they are part of logic expressions
          */
-        if (this.transformed) throw new Error(`Has been already transformed`)
+        if (this.transformed) return
         this.transformed = true
 
         for (const element of this.graph.elements) this.transformConditions(element)
@@ -117,15 +129,32 @@ export default class Solver {
         if (validator.isUndefined(solution)) throw new Error(`Could not solve`)
 
         /**
-         * Get optimized solution by minimizing the numbers of nodes
+         * Get optimized solution
          */
-        const optimized = this.minisat.minimizeWeightedSum(
-            solution,
-            this.graph.nodes.map(it => it.id),
-            1
-        )
-        if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
-        this.result = optimized.getMap()
+        if (this.solverOptions.optimization === true || validator.isString(this.solverOptions.optimization)) {
+            const nodes = this.graph.nodes.map(it => it.id)
+            const weights = this.graph.nodes.map(it => it.weight)
+            let optimized
+
+            /**
+             * Minimize weight of node templates
+             */
+            if (this.solverOptions.optimization === true || this.solverOptions.optimization === 'min') {
+                optimized = this.minisat.minimizeWeightedSum(solution, nodes, weights)
+            }
+
+            /**
+             * Maximize weight of node templates
+             */
+            if (this.solverOptions.optimization === 'max') {
+                optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
+            }
+
+            if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
+            this.result = optimized.getMap()
+        } else {
+            this.result = solution.getMap()
+        }
 
         /**
          * Assign presence to elements

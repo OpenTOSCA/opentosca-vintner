@@ -49,27 +49,25 @@ export abstract class ConditionalElement {
         /**
          * Construct display name
          */
-        let _display = this.type + ' "' + data.name
+        this.display = this.type + ' "' + data.name
         if (validator.isDefined(data.index)) {
-            _display += '@' + data.index.toString()
+            this.display += '@' + data.index.toString()
         }
-        _display += '"'
+        this.display += '"'
         if (validator.isDefined(this.container)) {
-            _display += ' of ' + this.container.display
+            this.display += ' of ' + this.container.display
         }
-        this.display = _display
 
         /**
          * Construct id
          */
-        let _id = this.type + '.' + this.name
+        this.id = this.type + '.' + this.name
         if (validator.isDefined(this.index)) {
-            _id += '@' + this.index.toString()
+            this.id += '@' + this.index.toString()
         }
         if (validator.isDefined(this.container)) {
-            _id += '.' + this.container.id
+            this.id += '.' + this.container.id
         }
-        this.id = _id
     }
 
     isInput(): this is Input {
@@ -136,9 +134,26 @@ export class Node extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
 
+    readonly weight: number = 1
+
     constructor(data: {name: string; raw: NodeTemplate}) {
         super('node', data)
         this.raw = data.raw
+
+        if (validator.isDefined(data.raw.weight)) {
+            if (validator.isBoolean(data.raw.weight)) {
+                this.weight = data.raw.weight ? 1 : 0
+            }
+
+            if (validator.isNumber(data.raw.weight)) {
+                if (data.raw.weight < 0)
+                    throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
+                this.weight = data.raw.weight
+            }
+
+            throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
+        }
+
         this.conditions = utils.toList(data.raw.conditions)
     }
 

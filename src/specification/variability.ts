@@ -12,7 +12,12 @@ export type VariabilityResolvingOptions = {
     strict?: boolean
 } & DefaultOptions &
     PruningOptions &
-    ConsistencyOptions
+    ConsistencyOptions &
+    SolverOptions
+
+export type SolverOptions = {
+    optimization?: true | false | 'min' | 'max'
+}
 
 export type DefaultOptions = {
     default_condition?: boolean
