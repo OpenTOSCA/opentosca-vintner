@@ -15,8 +15,6 @@ export type VariabilityResolvingOptions = {
     ConsistencyOptions &
     SolverOptions
 
-// TODO: doc this
-// TODO: implement this
 export type SolverOptions = {
     optimization?: true | false | 'min' | 'max'
 }
