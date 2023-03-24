@@ -9,7 +9,6 @@ import initSetup from './setup/init'
 import openSetup from './setup/open'
 import pathSetup from './setup/path'
 import codeSetup from './setup/code'
-import resolveTemplate from './template/resolve'
 import listTemplates from './templates/list'
 import importTemplate from './templates/import'
 import inspectTemplate from './templates/inspect'
@@ -33,8 +32,11 @@ import adaptInstance from './instances/adapt'
 import unadaptInstance from './instances/unadapt'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
+import resolveTemplate from './template/resolve'
 import queryTemplate from './template/query'
 import testTemplate from './template/test'
+import packageTemplate from './template/package'
+import unpackageTemplate from './template/unpackage'
 import computeSensor from '#controller/sensors/compute'
 import locationSensor from '#controller/sensors/location'
 import weekdaySensor from '#controller/sensors/weekday'
@@ -79,6 +81,8 @@ const Controller = {
         code: codeSetup,
     },
     template: {
+        package: packageTemplate,
+        unpackage: unpackageTemplate,
         resolve: resolveTemplate,
         query: queryTemplate,
         test: testTemplate,

@@ -154,6 +154,28 @@ program
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
+    .command('package')
+    .description('packages a directory to a CSAR')
+    .requiredOption('--template <string>', 'path to variable service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.package(options)
+        })
+    )
+
+template
+    .command('unpackage')
+    .description('unpackages a CSAR')
+    .requiredOption('--template <string>', 'path to variable service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unpackage(options)
+        })
+    )
+
+template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
@@ -203,7 +225,7 @@ templates
     .command('import')
     .description('imports a new template')
     .requiredOption('--template <string>', 'template name')
-    .requiredOption('--path <string>', 'path or link to the csar')
+    .requiredOption('--path <string>', 'path or link to the CSAR')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
