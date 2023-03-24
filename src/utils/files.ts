@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import {copySync} from 'fs-extra'
+import {copySync, ensureDir} from 'fs-extra'
 import * as yaml from 'js-yaml'
 import extract from 'extract-zip'
 import os from 'os'
@@ -8,6 +8,7 @@ import * as utils from './utils'
 import axios from 'axios'
 import * as validator from './validator'
 import xml2js from 'xml2js'
+import archiver from 'archiver'
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -17,8 +18,12 @@ export function assertFile(file: string) {
     if (!isFile(file)) throw new Error(`File "${file}" does not exist`)
 }
 
-export function assertDirectory(dir: string) {
-    if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
+export function assertDirectory(dir: string, file = false) {
+    if (file) {
+        assertDirectory(path.dirname(dir))
+    } else {
+        if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
+    }
 }
 
 export function isFile(path: string) {
@@ -123,6 +128,23 @@ export function removeDirectory(directory: string) {
 
 export async function extractArchive(source: string, target: string) {
     await extract(source, {dir: target})
+}
+
+export async function createArchive(source: string, target: string) {
+    assertDirectory(source)
+    assertDirectory(target, true)
+    return new Promise<void>((resolve, reject) => {
+        const archive = archiver('zip', {zlib: {level: 9}})
+        const stream = fs.createWriteStream(target)
+
+        archive
+            .directory(source, false)
+            .on('error', err => reject(err))
+            .pipe(stream)
+
+        stream.on('close', () => resolve())
+        archive.finalize()
+    })
 }
 
 export async function download(source: string, target: string = temporaryFile()): Promise<string> {
