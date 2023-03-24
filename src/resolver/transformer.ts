@@ -53,6 +53,7 @@ export default class Transformer {
         delete raw.default_alternative
         delete raw.pruning
         delete raw.default_condition
+        delete raw.weight
     }
 
     private transformNodes() {
