@@ -856,6 +856,47 @@ returns the path to the home directory
     ```
 
 
+## vintner template package
+
+packages a directory to a CSAR
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template package --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/package
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/package", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/package", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to variable service template |
+| output |  true  | string | path of the output |
+
 ## vintner template query
 
 resolves all queries in a given service template
@@ -978,6 +1019,47 @@ runs tests defined in the CSAR
 | --- | --- | --- | --- |
 | path |  true  | string | path or link to the extracted CSAR |
 
+## vintner template unpackage
+
+unpackages a CSAR
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template unpackage --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/unpackage
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/unpackage", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/unpackage", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to variable service template |
+| output |  true  | string | path of the output |
+
 ## vintner templates code
 
 opens the template directory in visual studio code
@@ -1070,7 +1152,7 @@ imports a new template
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
-| path |  true  | string | path or link to the csar |
+| path |  true  | string | path or link to the CSAR |
 
 ## vintner templates inspect
 
