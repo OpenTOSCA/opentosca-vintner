@@ -87,31 +87,31 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 
 | Keyname                                   | Mandatory | Type                          | Default | Description                                                     |
 |-------------------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------|
-| strict                                    | false     | boolean                       | true    | disable all default conditions and pruning                      |
-| default_condition                         | false     | boolean                       | false   | enable all default conditions                                   |
-| node_default_condition                    | false     | boolean                       | false   | enable default condition for nodes                              |
-| relation_default_condition                | false     | boolean                       | false   | enable default condition for relations                          |
-| policy_default_condition                  | false     | boolean                       | false   | enable default condition for policies                           |
-| group_default_condition                   | false     | boolean                       | false   | enable default condition for groups                             |
-| artifact_default_condition                | false     | boolean                       | false   | enable default condition for artifacts                          |
-| property_default_condition                | false     | boolean                       | false   | enable default condition for properties                         |
-| pruning                                   | false     | boolean                       | false   | enable pruning of all elements                                  |
-| node_pruning                              | false     | boolean                       | false   | enable pruning of nodes                                         |
-| relation_pruning                          | false     | boolean                       | false   | enable pruning of relations                                     |
-| policy_pruning                            | false     | boolean                       | false   | enable pruning of policies                                      |
-| group_pruning                             | false     | boolean                       | false   | enable pruning of groups                                        |
-| artifact_pruning                          | false     | boolean                       | false   | enable pruning of artifacts                                     |
-| property_pruning                          | false     | boolean                       | false   | enable pruning of properties                                    |
-| consistency_checks                        | false     | boolean                       | true    | enable all consistency checks                                   |
-| relation_source_consistency_check         | false     | boolean                       | true    | enable consistency check regarding relation sources             |
-| relation_target_consistency_check         | false     | boolean                       | true    | enable consistency check regarding relation targets             |
-| ambiguous_hosting_consistency_check       | false     | boolean                       | true    | enable consistency check regarding maximum one hosting relation |
-| expected_hosting_consistency_check        | false     | boolean                       | true    | enable consistency check regarding expected hosting relation    |
-| missing_artifact_parent_consistency_check | false     | boolean                       | true    | enable consistency check regarding node of artifact             |
-| ambiguous_artifact_consistency_check      | false     | boolean                       | true    | enable consistency check regarding ambiguous artifacts          |
-| missing_property_parent_consistency_check | false     | boolean                       | true    | enable consistency check regarding node of a property           |
-| ambiguous_property_consistency_check      | false     | boolean                       | true    | enable consistency check regarding ambiguous properties         |
-| optimization                              | false     | boolean &#124; min &#124; max | min     | configure optimization                                          | 
+| strict                                    | false     | Boolean                       | true    | disable all default conditions and pruning                      |
+| default_condition                         | false     | Boolean                       | false   | enable all default conditions                                   |
+| node_default_condition                    | false     | Boolean                       | false   | enable default condition for nodes                              |
+| relation_default_condition                | false     | Boolean                       | false   | enable default condition for relations                          |
+| policy_default_condition                  | false     | Boolean                       | false   | enable default condition for policies                           |
+| group_default_condition                   | false     | Boolean                       | false   | enable default condition for groups                             |
+| artifact_default_condition                | false     | Boolean                       | false   | enable default condition for artifacts                          |
+| property_default_condition                | false     | Boolean                       | false   | enable default condition for properties                         |
+| pruning                                   | false     | Boolean                       | false   | enable pruning of all elements                                  |
+| node_pruning                              | false     | Boolean                       | false   | enable pruning of nodes                                         |
+| relation_pruning                          | false     | Boolean                       | false   | enable pruning of relations                                     |
+| policy_pruning                            | false     | Boolean                       | false   | enable pruning of policies                                      |
+| group_pruning                             | false     | Boolean                       | false   | enable pruning of groups                                        |
+| artifact_pruning                          | false     | Boolean                       | false   | enable pruning of artifacts                                     |
+| property_pruning                          | false     | Boolean                       | false   | enable pruning of properties                                    |
+| consistency_checks                        | false     | Boolean                       | true    | enable all consistency checks                                   |
+| relation_source_consistency_check         | false     | Boolean                       | true    | enable consistency check regarding relation sources             |
+| relation_target_consistency_check         | false     | Boolean                       | true    | enable consistency check regarding relation targets             |
+| ambiguous_hosting_consistency_check       | false     | Boolean                       | true    | enable consistency check regarding maximum one hosting relation |
+| expected_hosting_consistency_check        | false     | Boolean                       | true    | enable consistency check regarding expected hosting relation    |
+| missing_artifact_parent_consistency_check | false     | Boolean                       | true    | enable consistency check regarding node of artifact             |
+| ambiguous_artifact_consistency_check      | false     | Boolean                       | true    | enable consistency check regarding ambiguous artifacts          |
+| missing_property_parent_consistency_check | false     | Boolean                       | true    | enable consistency check regarding node of a property           |
+| ambiguous_property_consistency_check      | false     | Boolean                       | true    | enable consistency check regarding ambiguous properties         |
+| optimization                              | false     | Boolean &#124; min &#124; max | min     | configure optimization                                          | 
 
 
 ## Variability Default Conditions
@@ -152,7 +152,7 @@ expression: {add: [{variability_input: costs_offering_a}, {variability_input: co
 
 ## Variability Condition
 
-A variability condition is a variability expression that returns a boolean.
+A variability condition is a variability expression that returns a Boolean.
 Allowed operators and functions are listed below.
 For example, the following condition evaluates to true if the variability input `mode` equals `prod`.
 
@@ -341,7 +341,7 @@ policies:
 ```
 
 
-## Artifact
+## Artifact Template
 
 An artifact, that is used in node templates, can additionally contain variability conditions.
 These conditions must be satisfied otherwise the respective artifact is not present.
@@ -650,8 +650,3 @@ The `test.yaml` file describes and configures the test and has the following str
 | presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                      | 
 | error       | false     | String                     | The expected error that is thrown.                                                          | 
 | expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
-
-## Conformance Test Suite
-
-Part of this specification is conformance test suite to evaluate Variability4TOSCA implementations.
-The test suite can be found [here](tests/introduction.md).

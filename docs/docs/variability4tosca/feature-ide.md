@@ -1,11 +1,19 @@
-# Feature Modeling
+--- 
+title: Feature IDE
+---
 
-In order to generate only valid service templates, _feature models_ can be used to model dependencies between variability inputs.
-Therefore, we implemented an integration to support the _Extended XML Configuration_ of [FeatureIDE](https://featureide.github.io){target=_blank} as variability inputs.
+# Feature IDE Integration 1.0 Release Candidate
+
+This document specifies the integration of [FeatureIDE](https://featureide.github.io){target=_blank} into the Variability4TOSCA specification.
+The specification is under active development and is not backwards compatible with any previous versions.
+
+In order to generate only valid service templates, feature models can be used to model dependencies between variability inputs. 
+A feature model of Feature IDE is supposed to be packaged as `feature-model.xml` at the root of the CSAR.
+In the following, we describe the mapping between the Extended XML Configuration to variability inputs.
 
 ## Features
 
-Each feature is mapped to a boolean variability input.
+Each feature is mapped to a Boolean variability input.
 The value is `true` if either `automatic` or `manual` is `selected`.
 Otherwise, the value is `false`.
 Thereby, the feature name is transformed to lowercase and all whitespaces are replaced with an underscore.

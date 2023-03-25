@@ -113,6 +113,7 @@
         "docs:generate:interface": "yarn build && yarn ts-node -r tsconfig-paths/register docs/cmds/interface/generate",
         "docs:generate:licenses": "yarn ts-node -r tsconfig-paths/register docs/cmds/licenses/generate",
         "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/tests/generate",
+        "docs:record": "yarn docs:record:home && yarn docs:record:getting-started",
         "docs:record:home": "cd docs/cmds/casts && ./record.sh home",
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
         "examples:xopera": "./examples/xopera-motivation/demo.sh",

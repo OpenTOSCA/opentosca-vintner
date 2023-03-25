@@ -4,9 +4,9 @@ title: Dynamic Deployment Artifacts
 
 # Dynamic Deployment Artifacts 1.0 Release Candidate
 
-This document specifies _dynamic deployment artifacts_ which are supposed to be build on-demand based on information in the topology.
+This document specifies dynamic deployment artifacts which are supposed to be build on-demand based on information in the topology.
 The intention is to build variants of deployment artifacts which are specific for the application.
-The specification is under active development.
+The specification is under active development and is not backwards compatible with any previous versions.
 
 To build dynamic deployment artifacts a `build` management operation is defined for the `tosca.interfaces.node.lifecycle.Variability` interface.
 This management operation can be used in several stages.
