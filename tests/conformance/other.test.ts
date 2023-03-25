@@ -1,11 +1,13 @@
 import {expect} from 'chai'
 import {VariabilityExpression} from '#spec/variability'
 import Solver from '../../src/resolver/solver'
-import Graph from '../../src/resolver/graph'
-import {TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
+import Graph, {Relation, Node} from '../../src/resolver/graph'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
-function getDefaultSolver() {
-    return new Solver(new Graph({tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0}))
+function getDefaultSolver(template?: ServiceTemplate) {
+    return new Solver(
+        new Graph(template || {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0})
+    )
 }
 
 describe('cache', () => {
@@ -20,5 +22,55 @@ describe('cache', () => {
         const solver = getDefaultSolver()
         const result = solver.evaluateValueExpression({max_length: ['hallo', 4], _cached_result: 'cached'}, {})
         expect(result).to.equal('cached')
+    })
+})
+
+describe('host', () => {
+    it('connects_to', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'connects_to', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(false)
+    })
+
+    it('not-host', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'not-host', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(false)
+    })
+
+    it('host', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'host', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
+    })
+
+    it('_host', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: '_host', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
+    })
+
+    it('dev_host', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'dev_host', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
+    })
+
+    it('host_', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'host_', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
+    })
+
+    it('host_dev', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'host_dev', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
+    })
+
+    it('dev_host_dev', () => {
+        const node = new Node({name: 'node', raw: {}} as any)
+        const relation = new Relation({name: 'dev_host_dev', container: node, raw: {}} as any)
+        expect(relation.isHostedOn()).to.equal(true)
     })
 })

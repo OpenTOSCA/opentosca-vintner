@@ -65,7 +65,7 @@ export default class Checker {
         if (this.options.ambiguous_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source.name === node.name && relation.name === 'host' && relation.present
+                    relation => relation.source.name === node.name && relation.isHostedOn() && relation.present
                 )
                 if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
@@ -75,7 +75,7 @@ export default class Checker {
         if (this.options.expected_hosting_consistency_check) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source.name === node.name && relation.name === 'host'
+                    relation => relation.source.name === node.name && relation.isHostedOn()
                 )
 
                 if (relations.length !== 0 && !relations.some(relation => relation.present))

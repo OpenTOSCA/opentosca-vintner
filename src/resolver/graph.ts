@@ -277,6 +277,10 @@ export class Relation extends ConditionalElement {
             this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    isHostedOn() {
+        return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
+    }
 }
 
 export class Relationship {
