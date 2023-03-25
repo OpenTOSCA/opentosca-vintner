@@ -48,8 +48,8 @@ The orchestrators provide more features than we integrated, thus, checkout [TOSS
 
 
 ## Known Limitations 
-- xOpera version 0.6.9 should be used instead of 0.7.0 which does not parse the templates as expected.
-  See [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
+- xOpera version 0.6.9 should be used instead of 0.7.0 which does not parse the templates as expected, see issues
+  [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
   [#258](https://github.com/xlab-si/xopera-opera/issues/258){target=_blank}, and
   [#261](https://github.com/xlab-si/xopera-opera/issues/261){target=_blank}.
-- xOpera deletes attribute assignments during updates, see [#262](https://github.com/xlab-si/xopera-opera/issues/262){target=_blank}
+- xOpera deletes attribute assignments during updates, see [issue #262](https://github.com/xlab-si/xopera-opera/issues/262){target=_blank}.
