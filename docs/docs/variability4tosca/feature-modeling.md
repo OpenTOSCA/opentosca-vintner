@@ -1,11 +1,11 @@
 # Feature Modeling
 
-In order to generate only valid Service Templates, _Feature Models_ can be used to model dependencies between Variability Inputs.
-Therefore, we implemented an integration to support the _Extended XML Configuration_ of [FeatureIDE](https://featureide.github.io){target=_blank} as Variability Inputs.
+In order to generate only valid service templates, _feature models_ can be used to model dependencies between variability inputs.
+Therefore, we implemented an integration to support the _Extended XML Configuration_ of [FeatureIDE](https://featureide.github.io){target=_blank} as variability inputs.
 
 ## Features
 
-Each feature is mapped to a boolean Variability Input.
+Each feature is mapped to a boolean variability input.
 The value is `true` if either `automatic` or `manual` is `selected`.
 Otherwise, the value is `false`.
 Thereby, the feature name is transformed to lowercase and all whitespaces are replaced with an underscore.
@@ -36,7 +36,7 @@ Feature names can be overridden by the value of the attribute `__name`.
 
 ## Attributes
 
-Each attribute is mapped to a Variability Input.
+Each attribute is mapped to a variability input.
 The values are parsed by a JSON parser. 
 If parsing throws an error, then the value is treated as a string.
 

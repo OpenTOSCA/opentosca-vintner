@@ -14,7 +14,7 @@ vintner query --query "\
     SELECT ."
 ```
 
-You can return specific elements by specifying their path. Note that "topology_template" can be omitted at the start.
+You can return specific elements by specifying their path. Note that `topology_template` can be omitted at the start.
 The following command returns the contents of the `localhost` node.
 
 ```shell linenums="1"

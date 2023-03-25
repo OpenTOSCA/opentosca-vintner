@@ -1,5 +1,5 @@
 /**
- * Topology Template Definition
+ * Topology Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969450}
  */
 import {NodeTemplate} from './node-template'

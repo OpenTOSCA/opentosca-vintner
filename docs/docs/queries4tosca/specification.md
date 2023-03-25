@@ -145,7 +145,7 @@ to evaluate to a string. Instead of a key-value pair, it is also possible to onl
 a value, in which case it will automatically be used as the name for the key. 
 
 The expression in the first line returns a list of objects
-comprised of the keys Node Name and Node Type mapped to the names and types of individual nodes.
+comprised of the keys Node Name and node type mapped to the names and types of individual nodes.
 The second expression also returns a list of objects, but their keys are named directly after the values,
 namely name and type. The expression in the last line returns a list of objects consisting of only a
 single key-value pair, with the name of each individual node as the key, and the corresponding type
