@@ -281,6 +281,10 @@ export class Relation extends ConditionalElement {
     isHostedOn() {
         return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
     }
+
+    isConnectsTo() {
+        return new RegExp(/^(.*_)?connection(_.*)?$/).test(this.name)
+    }
 }
 
 export class Relationship {
