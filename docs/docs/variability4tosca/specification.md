@@ -246,9 +246,9 @@ properties:
 # - key_one: { value: the_value }
 ```
 
-## Group Template
+## Group
 
-A group template can additionally contain variability conditions.
+A group can additionally contain variability conditions.
 Depending on the group type the conditions are either assigned to the group itself or to the group members.
 In general, the conditions are assigned to the group itself.
 These conditions must be satisfied otherwise the respective group is not present.
@@ -531,7 +531,7 @@ To resolve the variability in a variable service template, conduct the following
 1. Ensure that TOSCA definitions version is `tosca_variability_1_0`
 1. Remove all node templates which are not present.
 1. Remove all node template Properties which are not present.
-1. Remove all artifacts which are not present.
+1. Remove all artifact templates which are not present.
 1. Remove all requirement assignments which are not present.
 1. Remove all relationship templates which are not used by any requirement assignment.
 1. Remove all relationship template Properties which are not present.

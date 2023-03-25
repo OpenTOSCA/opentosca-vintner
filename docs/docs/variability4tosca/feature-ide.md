@@ -2,7 +2,7 @@
 title: Feature IDE
 ---
 
-# Feature IDE Integration 1.0 Release Candidate
+# Variability4TOSCA Feature IDE Integration 1.0 Release Candidate
 
 This document specifies the integration of [FeatureIDE](https://featureide.github.io){target=_blank} into the Variability4TOSCA specification.
 The specification is under active development and is not backwards compatible with any previous versions.
