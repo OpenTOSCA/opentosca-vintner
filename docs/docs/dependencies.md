@@ -185,5 +185,6 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 175  | [zip-stream](https://github.com/archiverjs/node-zip-stream){target=_blank} | 4.1.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 
 
-Note, the release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
-However, the project is according to the author licensed under MIT.
+The release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
+However, the project is according to the author licensed under MIT, see [issue #2](https://github.com/andreyvit/dreamopt.js/issues/2){target=_blank}.
+We have requested to add the license also to the published package, see [issue #5](https://github.com/andreyvit/dreamopt.js/issues/5){target=_blank}.

@@ -49,7 +49,7 @@ export function isEmpty(obj: any) {
     if (validator.isUndefined(obj)) return true
     if (validator.isArray(obj)) return obj.length === 0
     if (validator.isObject(obj)) return Object.keys(obj).length === 0
-    throw new Error(`Can not check if obj ${prettyJSON(obj)} is empty`)
+    throw new Error(`Can not check if obj ${pretty(obj)} is empty`)
 }
 
 export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {
@@ -62,12 +62,16 @@ export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {
     }
 }
 
-export function deepCopy<T>(obj: T): T {
+export function copy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj)) as T
 }
 
-export function prettyJSON(obj: any) {
+export function pretty(obj: any) {
     return JSON.stringify(obj, null, 4)
+}
+
+export function stringify(obj: any) {
+    return JSON.stringify(obj)
 }
 
 export function joinNotNull(array: (string | undefined)[], separator: string) {

@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import {copySync, ensureDir} from 'fs-extra'
+import {copySync} from 'fs-extra'
 import * as yaml from 'js-yaml'
 import extract from 'extract-zip'
 import os from 'os'
@@ -93,7 +93,7 @@ export function toYAML(obj: any) {
 }
 
 export function toJSON(obj: any) {
-    return JSON.stringify(obj, null, 4)
+    return utils.pretty(obj)
 }
 
 export function copy(source: string, target: string) {

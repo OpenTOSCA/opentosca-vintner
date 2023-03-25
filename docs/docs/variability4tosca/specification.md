@@ -650,3 +650,5 @@ The `test.yaml` file describes and configures the test and has the following str
 | presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                      | 
 | error       | false     | String                     | The expected error that is thrown.                                                          | 
 | expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
+
+[//]: # (Comment for correct rendering of references)

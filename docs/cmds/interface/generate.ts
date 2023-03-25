@@ -62,11 +62,11 @@ async function main() {
             let description = option.description
 
             const defaultDescription = validator.isDefined(option.defaultValue)
-                ? `default: ${JSON.stringify(option.defaultValue)}`
+                ? `default: ${utils.stringify(option.defaultValue)}`
                 : undefined
 
             const choicesDescription = validator.isDefined(option.argChoices)
-                ? `choices: ${JSON.stringify(option.argChoices)}`
+                ? `choices: ${utils.stringify(option.argChoices)}`
                 : undefined
 
             const additionalDescription = utils.joinNotNull([choicesDescription, defaultDescription], ', ')
