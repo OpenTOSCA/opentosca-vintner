@@ -463,7 +463,7 @@ export default class Solver {
 
             // Found expression is in this case actually a value expression
             if (validator.isString(found))
-                throw new Error(`Logic expression "${utils.prettyJSON(expression)}" must not be a string`)
+                throw new Error(`Logic expression "${utils.pretty(expression)}" must not be a string`)
 
             // If the found expression is a boolean then just return the boolean (which requires transformation first)
             if (validator.isBoolean(found)) return this.transformLogicExpression(found, context)
@@ -613,7 +613,7 @@ export default class Solver {
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "source_presence" but received "${element}"`)
             if (validator.isUndefined(context.element))
-                throw new Error(`Context of condition ${utils.prettyJSON(expression)} does not hold an element`)
+                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
 
             return context.element.source.id
@@ -628,7 +628,7 @@ export default class Solver {
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "target_presence" but received "${element}"`)
             if (validator.isUndefined(context.element))
-                throw new Error(`Context of condition ${utils.prettyJSON(expression)} does not hold an element`)
+                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"target_presence" is only valid inside a relation`)
 
             return context.element.target.id
@@ -1051,7 +1051,7 @@ export default class Solver {
             const elements = expression.min
             validator.ensureNumbers(elements)
             const min = _.min(elements)
-            ensureDefined(min, `Minimum of "${JSON.stringify(elements)}" does not exist`)
+            ensureDefined(min, `Minimum of "${utils.stringify(elements)}" does not exist`)
             return min
         }
 
@@ -1062,7 +1062,7 @@ export default class Solver {
             const elements = expression.max
             validator.ensureNumbers(elements)
             const max = _.max(elements)
-            ensureDefined(max, `Maximum of "${JSON.stringify(elements)}" does not exist`)
+            ensureDefined(max, `Maximum of "${utils.stringify(elements)}" does not exist`)
             return max
         }
 
@@ -1266,6 +1266,6 @@ export default class Solver {
             return element.isBetween(lower, upper)
         }
 
-        throw new Error(`Unknown value expression "${utils.prettyJSON(expression)}"`)
+        throw new Error(`Unknown value expression "${utils.pretty(expression)}"`)
     }
 }

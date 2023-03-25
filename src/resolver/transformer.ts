@@ -134,7 +134,7 @@ export default class Transformer {
 
                         if (validator.isString(it)) element = this.graph.getNode(it)
                         if (validator.isArray(it)) element = this.graph.getRelation(it)
-                        ensureDefined(element, `Member "${utils.prettyJSON(it)}" has bad format`)
+                        ensureDefined(element, `Member "${utils.pretty(it)}" has bad format`)
 
                         if (element.present) acc.push(it)
                         return acc

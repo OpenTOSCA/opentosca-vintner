@@ -1,5 +1,6 @@
 import day from '#utils/day'
 import {Dayjs} from 'dayjs'
+import * as utils from './utils'
 
 export function isUndefined(element: unknown): element is undefined | null {
     return typeof element === 'undefined'
@@ -18,12 +19,12 @@ export function ensureDefined<T>(element: T | undefined | null, msg: string): as
 }
 
 export function ensureString(element: unknown): asserts element is string {
-    if (!isString(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a string`)
+    if (!isString(element)) throw new Error(`Element "${utils.stringify(element)}" is not a string`)
 }
 
 export function ensureStringOrNumber(element: unknown): asserts element is string | number {
     if (!isString(element) && !isNumber(element))
-        throw new Error(`Element "${JSON.stringify(element)}" is neither a string nor a number`)
+        throw new Error(`Element "${utils.stringify(element)}" is neither a string nor a number`)
 }
 
 export function isBoolean(element: unknown): element is boolean {
@@ -31,7 +32,7 @@ export function isBoolean(element: unknown): element is boolean {
 }
 
 export function ensureBoolean(element: unknown): asserts element is boolean {
-    if (!isBoolean(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a boolean`)
+    if (!isBoolean(element)) throw new Error(`Element "${utils.stringify(element)}" is not a boolean`)
 }
 
 export function ensureStatement(boolean: boolean, msg: string) {
@@ -43,7 +44,7 @@ export function isNumber(element: unknown): element is number {
 }
 
 export function ensureNumber(element: unknown): asserts element is number {
-    if (!isNumber(element)) throw new Error(`Element "${JSON.stringify(element)}" is not a number`)
+    if (!isNumber(element)) throw new Error(`Element "${utils.stringify(element)}" is not a number`)
 }
 
 export function ensureNumbers(element: unknown[]): asserts element is number[] {
@@ -56,7 +57,7 @@ export function isArray(element: unknown): element is Array<unknown> {
 }
 
 export function ensureArray(element: unknown[]): asserts element is Array<unknown> {
-    if (!isArray(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an array`)
+    if (!isArray(element)) throw new Error(`Element "${utils.stringify(element)}" is not an array`)
 }
 
 export function isObject(element: unknown): element is object {
@@ -64,7 +65,7 @@ export function isObject(element: unknown): element is object {
 }
 
 export function ensureObject(element: unknown): asserts element is object {
-    if (!isObject(element)) throw new Error(`Element "${JSON.stringify(element)}" is not an object`)
+    if (!isObject(element)) throw new Error(`Element "${utils.stringify(element)}" is not an object`)
 }
 
 export function ensureName(name: string) {

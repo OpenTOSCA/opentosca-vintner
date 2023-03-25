@@ -698,7 +698,7 @@ export class Graph {
 
                 if (validator.isString(member)) element = this.getNode(member)
                 if (validator.isArray(member)) element = this.getRelation(member)
-                ensureDefined(element, `Member "${utils.prettyJSON(member)}" has bad format`)
+                ensureDefined(element, `Member "${utils.pretty(member)}" has bad format`)
 
                 element.groups.push(group)
                 group.members.push(element)
@@ -741,9 +741,9 @@ export class Graph {
         }
     }
 
-    getNode(member: string) {
-        const node = this.nodesMap.get(member)
-        validator.ensureDefined(node, `Node "${utils.prettyJSON(member)}" not found`)
+    getNode(name: string) {
+        const node = this.nodesMap.get(name)
+        validator.ensureDefined(node, `Node "${name}" not found`)
         return node
     }
 
@@ -754,14 +754,14 @@ export class Graph {
         // Element is [node name, relation name]
         if (validator.isString(member[1])) {
             const relations = node.outgoingMap.get(member[1]) || []
-            if (relations.length > 1) throw new Error(`Relation "${utils.prettyJSON(member)}" is ambiguous`)
+            if (relations.length > 1) throw new Error(`Relation "${utils.pretty(member)}" is ambiguous`)
             relation = relations[0]
         }
 
         // Element is [node name, relation index]
         if (validator.isNumber(member[1])) relation = node.outgoing[member[1]]
 
-        validator.ensureDefined(relation, `Relation "${utils.prettyJSON(member)}" not found`)
+        validator.ensureDefined(relation, `Relation "${utils.pretty(member)}" not found`)
         return relation
     }
 
@@ -794,13 +794,13 @@ export class Graph {
 
         if (validator.isString(member[1])) {
             const artifacts = node.artifactsMap.get(member[1]) || []
-            if (artifacts.length > 1) throw new Error(`Artifact "${utils.prettyJSON(member)}" is ambiguous`)
+            if (artifacts.length > 1) throw new Error(`Artifact "${utils.pretty(member)}" is ambiguous`)
             artifact = artifacts[0]
         }
 
         if (validator.isNumber(member[1])) artifact = node.artifacts[member[1]]
 
-        validator.ensureDefined(artifact, `Artifact "${utils.prettyJSON(member)}" not found`)
+        validator.ensureDefined(artifact, `Artifact "${utils.pretty(member)}" not found`)
         return artifact
     }
 
@@ -810,13 +810,13 @@ export class Graph {
 
         if (validator.isString(member[1])) {
             const properties = node.propertiesMap.get(member[1]) || []
-            if (properties.length > 1) throw new Error(`Property "${utils.prettyJSON(member)}" is ambiguous`)
+            if (properties.length > 1) throw new Error(`Property "${utils.pretty(member)}" is ambiguous`)
             property = properties[0]
         }
 
         if (validator.isNumber(member[1])) property = node.properties[member[1]]
 
-        validator.ensureDefined(property, `Property "${utils.prettyJSON(member)}" not found`)
+        validator.ensureDefined(property, `Property "${utils.pretty(member)}" not found`)
         return property
     }
 
