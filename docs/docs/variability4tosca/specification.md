@@ -11,40 +11,40 @@ This includes conditional node templates, relationship templates, properties, ar
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
 
-## Service Template Definition
+## Service Template
 
 A service template must have the TOSCA definitions version `tosca_variability_1_0`.
-Such a service template is also called _variable service template_.
+Such a service template is also called variable service template.
 
 | Keyname                   | Mandatory | Type   | Description                                                              |
 |---------------------------|-----------|--------|--------------------------------------------------------------------------|
-| tosca_definitions_version | yes       | String | The required TOSCA Definitions Version. Must be `tosca_variability_1_0`. |
+| tosca_definitions_version | yes       | String | The required TOSCA definitions version. Must be `tosca_variability_1_0`. |
 
 
-## Topology Template Definition
+## Topology Template
 
-A Topology Template additionally contains a Variability Definition.
-Such a Topology Template is also called Variable Topology Template.
+A topology template additionally contains a variability definition.
+Such a topology template is also called variable topology template.
 
 | Keyname     | Mandatory | Type                  | Description                                                                                 |
 |-------------|-----------|-----------------------|---------------------------------------------------------------------------------------------|
-| variability | yes       | VariabilityDefinition | A required object for Variability Inputs, Variability Presets, and Variability Expressions. |
+| variability | yes       | VariabilityDefinition | A required object for variability inputs, variability presets, and variability expressions. |
 
 ## Variability Definition
 
-A Variability Definition defines Variability Inputs, Variability Presets, and Variability Conditions.
+A variability definition defines variability inputs, variability presets, and variability conditions.
 
-| Keyname     | Mandatory | Type                                         | Description                                                                       |
-|-------------|-----------|----------------------------------------------|-----------------------------------------------------------------------------------|
-| inputs      | yes       | Map(String, VariabilityInputDefinition)      | A required map of Input Parameter Definitions used inside Variability Conditions. |
-| presets     | no        | Map(String, VariabilityPresetDefinition)     | An optional map of Variability Preset Definitions.                                |
-| expressions | no        | Map(String, VariabilityExpressionDefinition) | An optional map of Variability Expression Definitions.                            |
-| options | no | Map(String, Boolean)                         | An optional map of Variability Resolving options.                                |
+| Keyname     | Mandatory | Type                                | Description                                                            |
+|-------------|-----------|-------------------------------------|------------------------------------------------------------------------|
+| inputs      | yes       | Map(String, VariabilityInput)       | A required map of input parameters used inside variability conditions. |
+| presets     | no        | Map(String, VariabilityPreset)      | An optional map of variability preset definitions.                     |
+| expressions | no        | Map(String, VariabilityExpression)  | An optional map of variability expression definitions.                 |
+| options     | no        | Map(String, Boolean)                | An optional map of variability resolving options.                      |
 
 
-The following non-normative and incomplete example contains a Variability Definition which declares the Variability
-Input `mode` and two Variability Conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
-Furthermore, two Variability Presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
+The following non-normative and incomplete example contains a variability definition which declares the Variability
+Input `mode` and two variability conditions `is_dev` and `is_prod` which evaluates if `mode` equals `dev` resp. `prod`.
+Furthermore, two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
 ```yaml linenums="1"
 variability:
@@ -70,13 +70,13 @@ variability:
 ```
 
 
-## Variability Input Definition
+## Variability Input
 
-A variability input definition is an input parameter definition which additionally has the following keywords.
+A variability input is an input parameter which additionally has the following keywords.
 
 | Keyname            | Mandatory | Type                                                                          | Description                                                        |
 |--------------------|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| default_expression | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as default. |
+| default_expression | no        | VariabilityExpression | An variability expressions which is evaluated and used as default. |
 
 
 ## Variability Resolving Options
@@ -85,33 +85,33 @@ There are the following variability resolving options.
 More specific options override wider set options. 
 For example, if "strict" is enabled and "node_pruning" is enabled, then nodes are pruned.
 
-| Keyname                                   | Mandatory | Type      | Default | Description                                                          |
-|-------------------------------------------|-----------|-----------|---------|----------------------------------------------------------------------|
-| strict                                    | false     | boolean   | true    | disable all default conditions and pruning                           |
-| default_condition                         | false     | boolean   | false   | enable all default conditions                                        |
-| node_default_condition                    | false     | boolean   | false   | enable default condition for nodes                                   |
-| relation_default_condition                | false     | boolean   | false   | enable default condition for relations                               |
-| policy_default_condition                  | false     | boolean   | false   | enable default condition for policies                                |
-| group_default_condition                   | false     | boolean   | false   | enable default condition for groups                                  |
-| artifact_default_condition                | false     | boolean   | false   | enable default condition for artifacts                               |
-| property_default_condition                | false     | boolean   | false   | enable default condition for properties                              |
-| pruning                                   | false     | boolean   | false   | enable pruning of all elements                                       |
-| node_pruning                              | false     | boolean   | false   | enable pruning of nodes                                              |
-| relation_pruning                          | false     | boolean   | false   | enable pruning of relations                                          |
-| policy_pruning                            | false     | boolean   | false   | enable pruning of policies                                           |
-| group_pruning                             | false     | boolean   | false   | enable pruning of groups                                             |
-| artifact_pruning                          | false     | boolean   | false   | enable pruning of artifacts                                          |
-| property_pruning                          | false     | boolean   | false   | enable pruning of properties                                         |
-| consistency_checks                        | false     | boolean   | true    | enable all consistency checks                                        |
-| relation_source_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation sources                  |
-| relation_target_consistency_check         | false     | boolean   | true    | enable consistency check regarding relation targets                  |
-| ambiguous_hosting_consistency_check       | false     | boolean   | true    | enable consistency check regarding maximum one hosting relation      |
-| expected_hosting_consistency_check        | false     | boolean   | true    | enable consistency check regarding expected hosting relation         |
-| missing_artifact_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of artifact                  |
-| ambiguous_artifact_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous artifacts               |
-| missing_property_parent_consistency_check | false     | boolean   | true    | enable consistency check regarding node of a property                |
-| ambiguous_property_consistency_check      | false     | boolean   | true    | enable consistency check regarding ambiguous properties              |
-| optimization                              | false     | boolean   | min     | configure optimization (allowed values are: [true, false, min, max]) | 
+| Keyname                                   | Mandatory | Type                          | Default | Description                                                     |
+|-------------------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------|
+| strict                                    | false     | Boolean                       | true    | disable all default conditions and pruning                      |
+| default_condition                         | false     | Boolean                       | false   | enable all default conditions                                   |
+| node_default_condition                    | false     | Boolean                       | false   | enable default condition for nodes                              |
+| relation_default_condition                | false     | Boolean                       | false   | enable default condition for relations                          |
+| policy_default_condition                  | false     | Boolean                       | false   | enable default condition for policies                           |
+| group_default_condition                   | false     | Boolean                       | false   | enable default condition for groups                             |
+| artifact_default_condition                | false     | Boolean                       | false   | enable default condition for artifacts                          |
+| property_default_condition                | false     | Boolean                       | false   | enable default condition for properties                         |
+| pruning                                   | false     | Boolean                       | false   | enable pruning of all elements                                  |
+| node_pruning                              | false     | Boolean                       | false   | enable pruning of nodes                                         |
+| relation_pruning                          | false     | Boolean                       | false   | enable pruning of relations                                     |
+| policy_pruning                            | false     | Boolean                       | false   | enable pruning of policies                                      |
+| group_pruning                             | false     | Boolean                       | false   | enable pruning of groups                                        |
+| artifact_pruning                          | false     | Boolean                       | false   | enable pruning of artifacts                                     |
+| property_pruning                          | false     | Boolean                       | false   | enable pruning of properties                                    |
+| consistency_checks                        | false     | Boolean                       | true    | enable all consistency checks                                   |
+| relation_source_consistency_check         | false     | Boolean                       | true    | enable consistency check regarding relation sources             |
+| relation_target_consistency_check         | false     | Boolean                       | true    | enable consistency check regarding relation targets             |
+| ambiguous_hosting_consistency_check       | false     | Boolean                       | true    | enable consistency check regarding maximum one hosting relation |
+| expected_hosting_consistency_check        | false     | Boolean                       | true    | enable consistency check regarding expected hosting relation    |
+| missing_artifact_parent_consistency_check | false     | Boolean                       | true    | enable consistency check regarding node of artifact             |
+| ambiguous_artifact_consistency_check      | false     | Boolean                       | true    | enable consistency check regarding ambiguous artifacts          |
+| missing_property_parent_consistency_check | false     | Boolean                       | true    | enable consistency check regarding node of a property           |
+| ambiguous_property_consistency_check      | false     | Boolean                       | true    | enable consistency check regarding ambiguous properties         |
+| optimization                              | false     | Boolean &#124; min &#124; max | min     | configure optimization                                          | 
 
 
 ## Variability Default Conditions
@@ -128,21 +128,21 @@ To further support modeling, the following default conditions can be assigned:
 | Group                  | Check if the group has any members which are present.                                                                                                   |
 | Artifact               | Check if the node template of the artifact is present.                                                                                                  |
 
-## Variability Preset Definition
+## Variability Preset
 
-A Variability Preset predefines values for Variability Inputs that might be used when resolving variability.
+A variability preset predefines values for variability inputs that might be used when resolving variability.
 
 | Keyname     | Mandatory | Type                                  | Description                                         |
 |-------------|-----------|---------------------------------------|-----------------------------------------------------|
-| name        | no        | String                                | An optional name of the Variability Preset.         |
-| description | no        | String                                | An optional description for the Variability Preset. |
-| inputs      | yes       | Map(String, InputParameterAssignment) | A required map of Input Parameter Assignments.      |
+| name        | no        | String                                | An optional name of the variability preset.         |
+| description | no        | String                                | An optional description for the variability preset. |
+| inputs      | yes       | Map(String, InputParameterAssignment) | A required map of input parameter assignments.      |
 
-## Variability Expression Definition
+## Variability Expression
 
-A Variability Expression is an expression which consists of operators and functions which are listed below.
+A variability expression is an expression which consists of operators and functions which are listed below.
 For example, the following expression returns the total amount of costs.
-This result might be used inside a Variability Condition to ensure that the deployment costs are within a specific
+This result might be used inside a variability condition to ensure that the deployment costs are within a specific
 budget.
 There are value expressions which return any kind of value and logic expressions which return Booleans.
 
@@ -150,35 +150,35 @@ There are value expressions which return any kind of value and logic expressions
 expression: {add: [{variability_input: costs_offering_a}, {variability_input: costs_offering_b}]}
 ```
 
-## Variability Condition Definition
+## Variability Condition
 
-A Variability Condition is a Variability Expression that returns a boolean.
+A variability condition is a variability expression that returns a Boolean.
 Allowed operators and functions are listed below.
-For example, the following condition evaluates to true if the Variability Input `mode` equals `prod`.
+For example, the following condition evaluates to true if the variability input `mode` equals `prod`.
 
 ```yaml linenums="1"
 is_prod: {equal: [{variability_input: mode}, prod]}
 ```
 
-## Node Template Definition
+## Node Template
 
-A Node Template can additionally contain Variability Conditions.
-These conditions must be satisfied otherwise the respective Node Template is not present.
+A node template can additionally contain variability conditions.
+These conditions must be satisfied otherwise the respective node template is not present.
 
-Furthermore, assigned Artifact Definitions can be a list of Artifact Definitions Maps which contains only one Artifact
-Definition in order to allow Artifact Definition names to be used multiple times.
+Furthermore, assigned artifact can be a list of artifact maps which contains only one Artifact
+Definition in order to allow artifact names to be used multiple times.
 
 | Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
 |-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions        | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)   | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| artifacts         | no        | Map(String, ArtifactDefinition) &#124; List(Map(String, ArtifactDefinition)) | An optional map of Artifact Definitions or a list of Artifact Definitions Maps.                                    | 
-| properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| conditions        | no        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| artifacts         | no        | Map(String, Artifact) &#124; List(Map(String, Artifact))                     | An optional map of artifact or a list of artifact maps.                                                            | 
+| properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
-| weight            | no        | Boolean &#124; (Non-Negative)Number                                          | the weight used during optimization (default is 1)                                                                 |
+| weight            | no        | Boolean &#124; (Non-Negative) Number                                         | the weight used during optimization (default is 1)                                                                 |
 
 
-The following non-normative and incomplete example contains a Node Template that has a Variability Condition assigned.
+The following non-normative and incomplete example contains a node template that has a variability condition assigned.
 
 ```yaml linenums="1"
 prod_database:
@@ -186,21 +186,21 @@ prod_database:
     conditions: {logic_expression: is_prod}
 ```
 
-Furthermore, artifacts must be transformed to an Artifact Definitions Map.
+Furthermore, artifacts must be transformed to an artifact map.
 
-## Requirement Assignment Definition
+## Requirement Assignment
 
-A Requirement Assignment can additionally contain Variability Conditions.
+A requirement assignment can additionally contain variability conditions.
 These conditions must be satisfied otherwise the respective relationship is not present.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| conditions | no        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
-The following non-normative and incomplete example contains a Requirement Assignment that has a Variability Condition
+The following non-normative and incomplete example contains a requirement assignment that has a variability condition
 assigned.
 
 ```yaml linenums="1"
@@ -212,22 +212,22 @@ requirements:
 
 ## Relationship Templates 
 
-A Relationship Template can contain conditional Property Assignments.
+A relationship template can contain conditional property assignments.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    |
 
 
 ## Property Assignment
 
-A Property Assignment at Node Templates and Relationship Templates can additionally contain Variability Conditions if wrapped as the following object and if they are used in a list.
+A property assignment at node templates and relationship templates can additionally contain variability conditions if wrapped as the following object and if they are used in a list.
 
 | Keyname            | Mandatory | Type                                                                          | Description                                                                                                        |
 |--------------------|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| value              | no        | Property Assignment                                                           | The value of the Property.                                                                                         |
-| expression         | no        | VariabilityExpressionDefinition | An variability expressions which is evaluated and used as value.                                                   |
-| conditions         | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition)    | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| value              | no        | Property Assignment                                                           | The value of the property.                                                                                         |
+| expression         | no        | VariabilityExpression | An variability expressions which is evaluated and used as value.                                                   |
+| conditions         | no        | VariabilityCondition &#124; List(VariabilityCondition)    | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_alternative | no        | Boolean                                                                       | Declare the value as default. Overwrites assigned `conditions`. There must be only one default assignment.         |                                                                                                       |
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
@@ -246,10 +246,10 @@ properties:
 # - key_one: { value: the_value }
 ```
 
-## Group Template Definition
+## Group
 
-A Group Template can additionally contain Variability Conditions.
-Depending on the Group Type the conditions are either assigned to the group itself or to the group members.
+A group can additionally contain variability conditions.
+Depending on the group type the conditions are either assigned to the group itself or to the group members.
 In general, the conditions are assigned to the group itself.
 These conditions must be satisfied otherwise the respective group is not present.
 Such a group is also called Conditional Group.
@@ -257,14 +257,14 @@ Such a group is also called Conditional Group.
 However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the
 group members.
 These conditions must be satisfied otherwise the respective group members are not present.
-Furthermore, group elements can be Node Templates and Requirement Assignments.
-Such a group is also called Variability Group.
+Furthermore, group elements can be node templates and requirement assignments.
+Such a group is also called variability group.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of Node Templates names or Requirement Assignment Names/ Index of a Node Template.                |
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| members    | no        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                |
+| conditions | no        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
@@ -279,7 +279,7 @@ conditional_group:
 ```
 
 The following non-normative and incomplete example contains the group `example_group` whose elements are the Node
-Template `prod_database` and the Requirement Assignment `prod_connects_to` of the Node Template `application`.
+Template `prod_database` and the requirement assignment `prod_connects_to` of the node template `application`.
 In contrast to the previous example this group is not derived from `variability.groups.ConditionalMembers`.
 
 ```yaml linenums="1"
@@ -289,22 +289,22 @@ variability_group:
     conditions: {logic_expression: is_prod}
 ```
 
-## Policy Template Definition
+## Policy Template
 
-A Policy Template can additionally contain Variability Conditions.
+A policy template can additionally contain variability conditions.
 These conditions must be satisfied otherwise the respective policy is not present.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
-|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
+| Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
+|-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions        | no        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| properties        | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
-The following non-normative and incomplete example contains the Policy Template `anticollocation` that has the
-Variability Condition `is_prod` assigned.
+The following non-normative and incomplete example contains the policy template `anticollocation` that has the
+variability condition `is_prod` assigned.
 If the condition evaluates to true, then the policy is present.
-As a result, the Node Templates `wordpress` and `mysql` _must not_ be hosted on the same server.
+As a result, the node templates `wordpress` and `mysql` _must not_ be hosted on the same server.
 For more information about this example, take a look in
 the [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc16506587){target=_blank}.
 
@@ -341,32 +341,32 @@ policies:
 ```
 
 
-## Artifact Definition
+## Artifact Template
 
-An Artifact Definition, that is used in Node Templates, can additionally contain Variability Conditions.
+An artifact, that is used in node templates, can additionally contain variability conditions.
 These conditions must be satisfied otherwise the respective artifact is not present.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
-|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| default_alternative    | no        | Boolean                                                                    | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
-| properties | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of Property Assignments or a list of Property Assignments Maps.                                    | 
-| default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
-| pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
+| Keyname             | Mandatory | Type                                                                         | Description                                                                                                        |
+|---------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| conditions          | no        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| default_alternative | no        | Boolean                                                                      | Declare the value as default. Overwrites assigned `conditions`. There must be only one default artifact.           |                                                                                                       |
+| properties          | no        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
+| default_condition   | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| pruning             | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 
-## Topology Template Input Definition
+## Topology Template Input
 
-A Topology Template Input can additionally contain Variability Conditions.
+A topology template input can additionally contain variability conditions.
 These conditions must be satisfied otherwise the respective input is not present.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions | no        | VariabilityConditionDefinition &#124; List(VariabilityConditionDefinition) | An optional Variability Condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| conditions | no        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | default_condition | no        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
-The following non-normative and incomplete example contains a Topology Template Input that has a Variability Condition
+The following non-normative and incomplete example contains a topology template input that has a variability condition
 assigned.
 
 ```yaml linenums="1"
@@ -378,9 +378,9 @@ ssh_key_file:
 
 ## Normative Group Types
 
-There are two normative Group Types for informational purposes: `variability.groups.Root`
+There are two normative group types for informational purposes: `variability.groups.Root`
 and `variability.groups.ConditionalMembers`.
-The first Group Type is the root group every other variability-related group, such
+The first group type is the root group every other variability-related group, such
 as `variability.groups.ConditionalMembers` should derive from.
 
 ```yaml linenums="1"
@@ -388,12 +388,12 @@ variability.groups.Root:
     derived_from: tosca.groups.Root
 ```
 
-The second Group Type should be used when a group has variability definitions assigned.
+The second group type should be used when a group has variability definitions assigned.
 
 ```yaml linenums="1"
 variability.groups.ConditionalMembers:
     derived_from: variability.groups.Root
-    conditions: VariabilityConditionDefinition | List(VariabilityConditionDefinition)    
+    conditions: VariabilityCondition | List(VariabilityCondition)    
 ```
 
 These groups are always expected to be removed when variability is resolved.
@@ -420,7 +420,7 @@ tosca.interfaces.relationship.management.Variability:
 
 ## Logical Operators
 
-The following logical operators can be used inside a Variability Expression.
+The following logical operators can be used inside a variability expression.
 
 | Keyname | Input                                       | Output  | Description                                        |
 |---------|---------------------------------------------|---------|----------------------------------------------------|
@@ -432,7 +432,7 @@ The following logical operators can be used inside a Variability Expression.
 
 ## Arithmetic Operators
 
-The following arithmetic operators can be used inside a Variability Expression.
+The following arithmetic operators can be used inside a variability expression.
 
 | Keyname | Input                                       | Output  | Description                               |
 |---------|---------------------------------------------|---------|-------------------------------------------|
@@ -444,11 +444,11 @@ The following arithmetic operators can be used inside a Variability Expression.
 
 ## Intrinsic Functions
 
-The following intrinsic functions can be used inside a Variability Expression.
+The following intrinsic functions can be used inside a variability expression.
 
 | Keyname               | Input                                              | Output  | Description                                                                                                              |
 |-----------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| variability_input | String                                             | Any     | Returns the value of a Variability Input.                                                                                |
+| variability_input | String                                             | Any     | Returns the value of a variability input.                                                                                |
 | logic_expression  | String                                             | Boolean | Returns the value of the Logic Expression.                                                                               |
 | value_expression  | String                                             | Any     | Returns the value of the Value Expression.                                                                               |
 | node_presence     | String                                             | Boolean | Returns if node is present.                                                                                              |
@@ -470,12 +470,12 @@ The following intrinsic functions can be used inside a Variability Expression.
 
 ## Constraint Operators
 
-The following constraint operators can be used inside a Variability Expression.
+The following constraint operators can be used inside a variability expression.
 
 | Keyname          | Input                                                                 | Output  | Description                                                           |
 |------------------|-----------------------------------------------------------------------|---------|-----------------------------------------------------------------------|
 | equal            | List(ValueExpression)                                                 | Boolean | Evaluates if the given values are equal.                              |
-| greater     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greate than the second value.         |
+| greater     | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greater than the second value.        |
 | greater_or_equal | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is greater or equal to the second value. |
 | less        | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less than the second value.           |
 | less_or_equal    | Tuple(NumericExpression, NumericExpression)                           | Boolean | Evaluates if the first value is less or equal to the second value.    |
@@ -487,7 +487,7 @@ The following constraint operators can be used inside a Variability Expression.
 
 ## Analytical Operators
 
-The following analytical operators can be used inside a Variability Expression.
+The following analytical operators can be used inside a variability expression.
 
 | Keyname                | Input                                             | Output  | Description                                          |
 |------------------------|---------------------------------------------------|---------|------------------------------------------------------|
@@ -507,7 +507,7 @@ The following analytical operators can be used inside a Variability Expression.
 
 ## Date Operators
 
-The following date operators can be used inside a Variability Expression.
+The following date operators can be used inside a variability expression.
 
 | Keyname        | Input                                                                          | Output  | Description                                                                      |
 |----------------|--------------------------------------------------------------------------------|---------|----------------------------------------------------------------------------------|
@@ -527,28 +527,26 @@ In the following, we describe on a high-level the steps to derive a variability-
 
 To resolve the variability in a variable service template, conduct the following steps:
 
-1. Retrieve Variability Inputs Assignments.
-1. Ensure that TOSCA Definitions Version is `tosca_variability_1_0`
-1. Remove all Node Templates which are not present.
-1. Remove all Node Template Properties which are not present.
-1. Remove all Artifacts which are not present.
-1. Remove all Requirement Assignments which are not present.
-1. Remove all Relationship Templates which are not used by any Requirement Assignment.
-1. Remove all Relationship Template Properties which are not present.
-1. Remove all Topology Template Inputs which are not present.
-1. Remove all Group Templates which are not present.
-1. Remove all Group Members which are not present from Group Template.
-1. Remove all Policy Templates which are not present.
-1. Remove all Policy Targets which are not present from Policy Template.
-1. Remove all non-standard elements, e.g., Variability Definition, Variability Groups, or `conditions` at Node Templates.
-1. Set the TOSCA Definitions Version to `tosca_simple_yaml_1_3`.
+1. Retrieve variability inputs assignments.
+1. Ensure that TOSCA definitions version is `tosca_variability_1_0`
+1. Remove all node templates which are not present.
+1. Remove all node template Properties which are not present.
+1. Remove all artifact templates which are not present.
+1. Remove all requirement assignments which are not present.
+1. Remove all relationship templates which are not used by any requirement assignment.
+1. Remove all relationship template Properties which are not present.
+1. Remove all topology template inputs which are not present.
+1. Remove all group templates which are not present.
+1. Remove all group members which are not present from group template.
+1. Remove all policy templates which are not present.
+1. Remove all policy targets which are not present from policy template.
+1. Remove all non-standard elements, e.g., variability definition, variability groups, or `conditions` at node templates.
+1. Set the TOSCA definitions version to `tosca_simple_yaml_1_3`.
 
-There might be multiple valid variability-resolved service templates.
-In such a case, the service template having the least amount of node templates shall be chosen.
 
 ### Retrieve Variability Inputs Assignments
 
-Variability Inputs can be assigned either directly or indirectly using possibly multiple variability presets.
+Variability inputs can be assigned either directly or indirectly using possibly multiple variability presets.
 Thereby, first the variability presets are applied in the order they are specified, and then directly assigned inputs.
 Thus, directly assigned variability inputs have the highest priority.
 
@@ -569,14 +567,14 @@ To check the consistency, conduct the following steps:
 1. Ensure that each relation source exists. Otherwise, throw Missing Relation Source Error.
 1. Ensure that each relation target exists. Otherwise, throw Missing Relation Target Error.
 1. Ensure that every node has at maximum one hosting relation. Otherwise, throw Ambiguous Hosting Error.
-1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the Variable
-   Service Template. Otherwise, throw Missing Hosting Error.
+1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the variable
+   service template. Otherwise, throw Missing Hosting Error.
 1. Ensure that the node of each artifact exists. Otherwise, throw Missing Artifact Parent Error.
 1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
 1. Ensure that the node of each property exists. Otherwise, throw Missing Property Parent error.
 1. Ensure that present properties have unique names within their node. Otherwise, throw Ambiguous Property error.
 
-Since the derived Service Template might be further processed, e.g. by
+Since the derived service template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
 some or all of these consistency steps might be omitted.
 
@@ -620,7 +618,7 @@ When variability is resolved, the following errors might be thrown:
 
 ## Variability Tests
 
-A CSAR might contain Variability Tests to continuously test that the variability is resolved as expected, e.g., during
+A CSAR might contain variability tests to continuously test that the variability is resolved as expected, e.g., during
 continuous integration pipelines.
 Therefore, add the directory `/tests` in the root of the CSAR.
 Each test is defined inside its own directory of `/tests` and might contain the following files.
@@ -628,10 +626,10 @@ Each test is defined inside its own directory of `/tests` and might contain the 
 | File            | Description                                                |
 |-----------------|------------------------------------------------------------|
 | `expected.yaml` | The expected service template after resolving variability. |
-| `inputs.yaml`   | The Variability Inputs used for resolving variability.     |
+| `inputs.yaml`   | The variability inputs used for resolving variability.     |
 | `test.yaml`     | A description of the test including configuration.         |
 
-Here is exemplary structure of a CSAR that has one Variability Test.
+Here is exemplary structure of a CSAR that has one variability test.
 
 ```text linenums="1"
 my-csar/
@@ -652,15 +650,3 @@ The `test.yaml` file describes and configures the test and has the following str
 | presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                      | 
 | error       | false     | String                     | The expected error that is thrown.                                                          | 
 | expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
-
-## Conformance Test Suite
-
-Part of this specification is conformance test suite to evaluate Variability4TOSCA implementations.
-The test suite can be found [here](tests/introduction.md).
-
-## Limitations
-
-We have the following limitations
-
-1. We expect that each Relationship Templates is used exactly once
-1. We expect that `relationships` at requirement assignments is a string

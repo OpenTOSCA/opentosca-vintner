@@ -127,7 +127,7 @@ function getPropertyOrAttribute(
  */
 function getRelationship(template: ServiceTemplate, node: Object, relName: string): Object | null {
     if (validator.isArray(template.topology_template?.node_templates))
-        throw new Error(`Node Templates must not be a list`)
+        throw new Error(`Node templates must not be a list`)
 
     const reqs: [] = resolvePath(node, 'requirements') || []
     const caps: [] = resolvePath(node, 'capabilities') || []

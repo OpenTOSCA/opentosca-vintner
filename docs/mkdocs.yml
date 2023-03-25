@@ -80,8 +80,9 @@ nav:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
           - Conformance Tests: variability4tosca/tests
-          - variability4tosca/feature-modeling.md
+          - variability4tosca/feature-ide.md
           - variability4tosca/benchmark.md
+          - variability4tosca/limitations.md
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md

@@ -116,7 +116,7 @@ export class Query {
                     result = Object.values(result)
                 } else if (i.path == 'SELF') {
                     if (validator.isArray(this.currentTemplate?.topology_template?.node_templates))
-                        throw new Error(`Node Templates must not be a list`)
+                        throw new Error(`Node templates must not be a list`)
                     result = this.currentTemplate?.topology_template?.node_templates?.[this.startingContext] || {}
                 } else {
                     result = this.evaluateStep(result, i.path || '')
@@ -419,7 +419,7 @@ export class Query {
      */
     private static getNodesByName(template: ServiceTemplate, names: string[]): {[name: string]: NodeTemplate} {
         if (validator.isArray(template.topology_template?.node_templates))
-            throw new Error(`Node Templates must not be a list`)
+            throw new Error(`Node templates must not be a list`)
 
         const result: {[name: string]: NodeTemplate} = {}
         for (const node of names) {
