@@ -28,13 +28,6 @@ import {ensureDefined} from '#validator'
  * - groups might be a list (consider variability groups ...)
  */
 
-function setAndEnabled(value?: boolean | string) {
-    if (validator.isUndefined(value)) return null
-    if (validator.isString(value)) return true
-    if (validator.isBoolean(value)) return value
-    throw new Error(`Value "${value}" is malformed`)
-}
-
 export abstract class ConditionalElement {
     readonly type: string
     readonly id: string
@@ -43,7 +36,6 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
-
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -321,16 +313,18 @@ export class Relation extends ConditionalElement {
     }
 
     private getDefaultMode() {
-        return validator.isString(this.raw)
-            ? this.graph.options.default.relation_default_condition_mode
-            : this.raw.default_condition_mode
+        return (
+            (validator.isString(this.raw)
+                ? this.graph.options.default.relation_default_condition_mode
+                : this.raw.default_condition_mode) || 'source-target'
+        )
     }
 
     get defaultEnabled() {
         return Boolean(
             validator.isString(this.raw)
                 ? this.graph.options.default.relation_default_condition
-                : this.raw.default_condition
+                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
         )
     }
 
