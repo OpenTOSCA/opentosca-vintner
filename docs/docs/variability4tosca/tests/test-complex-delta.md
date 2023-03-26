@@ -26,7 +26,7 @@ topology_template:
       requirements:
         - host:
             node: virtual_machine
-            default_condition: source
+            default_condition_mode: source
     virtual_machine:
       type: virtual_machine
 ```

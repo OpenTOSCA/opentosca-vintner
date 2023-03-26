@@ -327,7 +327,11 @@ export class Relation extends ConditionalElement {
     }
 
     get defaultEnabled() {
-        return Boolean(setAndEnabled(this.getDefaultMode()))
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.relation_default_condition
+                : this.raw.default_condition
+        )
     }
 
     get pruningEnabled() {
