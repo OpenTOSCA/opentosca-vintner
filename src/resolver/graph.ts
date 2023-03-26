@@ -1,4 +1,12 @@
-import {LogicExpression, ValueExpression, VariabilityPointMap} from '#spec/variability'
+import {
+    ConsistencyOptions,
+    DefaultOptions,
+    LogicExpression,
+    PruningOptions,
+    SolverOptions,
+    ValueExpression,
+    VariabilityPointMap,
+} from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
 import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -70,6 +78,17 @@ export abstract class ConditionalElement {
         }
     }
 
+    private _graph?: Graph
+
+    set graph(graph) {
+        this._graph = graph
+    }
+
+    get graph() {
+        if (validator.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
+        return this._graph
+    }
+
     isInput(): this is Input {
         return this instanceof Input
     }
@@ -139,7 +158,11 @@ export class Node extends ConditionalElement {
     constructor(data: {name: string; raw: NodeTemplate}) {
         super('node', data)
         this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
 
+        /**
+         * Get weight
+         */
         if (validator.isDefined(data.raw.weight)) {
             if (validator.isBoolean(data.raw.weight)) {
                 this.weight = data.raw.weight ? 1 : 0
@@ -153,8 +176,6 @@ export class Node extends ConditionalElement {
 
             throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
         }
-
-        this.conditions = utils.toList(data.raw.conditions)
     }
 
     get toscaId() {
@@ -408,6 +429,12 @@ export class Artifact extends ConditionalElement {
 
 export class Graph {
     serviceTemplate: ServiceTemplate
+    options: {
+        default: DefaultOptions
+        pruning: PruningOptions
+        solver: SolverOptions
+        consistency: ConsistencyOptions
+    } = {default: {}, pruning: {}, solver: {}, consistency: {}}
 
     elements: ConditionalElement[] = []
 
@@ -441,6 +468,9 @@ export class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
+        // Options
+        this.populateOptions()
+
         // Inputs
         this.populateInputs()
 
@@ -464,6 +494,94 @@ export class Graph {
         ]
     }
 
+    private populateOptions() {
+        const options = this.serviceTemplate.topology_template?.variability?.options || {}
+        const strict = options.strict ?? true
+
+        this.options.default = utils.propagateOptions<DefaultOptions>(
+            strict ? false : options.default_condition ?? false,
+            {
+                default_condition: false,
+                node_default_condition: false,
+                relation_default_condition: false,
+                policy_default_condition: false,
+                group_default_condition: false,
+                artifact_default_condition: false,
+                property_default_condition: false,
+            },
+            {
+                default_condition: true,
+                node_default_condition: true,
+                relation_default_condition: true,
+                policy_default_condition: true,
+                group_default_condition: true,
+                artifact_default_condition: true,
+                property_default_condition: true,
+            },
+            options
+        )
+
+        this.options.pruning = utils.propagateOptions<PruningOptions>(
+            strict ? false : options.pruning ?? false,
+            {
+                pruning: false,
+                node_pruning: false,
+                relation_pruning: false,
+                policy_pruning: false,
+                group_pruning: false,
+                artifact_pruning: false,
+                property_pruning: false,
+            },
+            {
+                pruning: true,
+                node_pruning: true,
+                relation_pruning: true,
+                policy_pruning: true,
+                group_pruning: true,
+                artifact_pruning: true,
+                property_pruning: true,
+            },
+            options
+        )
+
+        const optimization = options.optimization
+        if (
+            validator.isDefined(optimization) &&
+            !validator.isBoolean(optimization) &&
+            !['min', 'max'].includes(optimization)
+        ) {
+            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
+        }
+        this.options.solver = {optimization: optimization ?? 'min'}
+
+        this.options.consistency = utils.propagateOptions<ConsistencyOptions>(
+            validator.isDefined(options.consistency_checks) ? !options.consistency_checks : false,
+            {
+                consistency_checks: true,
+                relation_source_consistency_check: true,
+                relation_target_consistency_check: true,
+                ambiguous_hosting_consistency_check: true,
+                expected_hosting_consistency_check: true,
+                missing_artifact_parent_consistency_check: true,
+                ambiguous_artifact_consistency_check: true,
+                missing_property_parent_consistency_check: true,
+                ambiguous_property_consistency_check: true,
+            },
+            {
+                consistency_checks: false,
+                relation_source_consistency_check: false,
+                relation_target_consistency_check: false,
+                ambiguous_hosting_consistency_check: false,
+                expected_hosting_consistency_check: false,
+                missing_artifact_parent_consistency_check: false,
+                ambiguous_artifact_consistency_check: false,
+                missing_property_parent_consistency_check: false,
+                ambiguous_property_consistency_check: false,
+            },
+            options
+        )
+    }
+
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (validator.isUndefined(data)) return []
         if (validator.isArray(data)) return data
@@ -480,6 +598,8 @@ export class Graph {
             if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
             const input = new Input({name, raw: definition})
+            input.graph = this
+
             this.inputs.push(input)
             this.inputsMap.set(name, input)
         })
@@ -491,6 +611,8 @@ export class Graph {
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
 
             const node = new Node({name: nodeName, raw: nodeTemplate})
+            node.graph = this
+
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
@@ -507,6 +629,7 @@ export class Graph {
                     raw: assignment,
                     index,
                 })
+                relation.graph = this
 
                 if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
                 node.outgoingMap.get(relation.name)!.push(relation)
@@ -598,6 +721,8 @@ export class Graph {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
         const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
+        artifact.graph = this
+
         this.populateProperties(artifact, artifactDefinition)
 
         if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
@@ -654,6 +779,7 @@ export class Graph {
                         })
                     }
 
+                    property.graph = this
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
                     element.propertiesMap.get(propertyName)!.push(property)
                     element.properties.push(property)
@@ -669,6 +795,7 @@ export class Graph {
                         default: false,
                         raw: propertyAssignment,
                     })
+                    property.graph = this
 
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
                     element.propertiesMap.get(propertyName)!.push(property)
@@ -698,6 +825,8 @@ export class Graph {
             if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
 
             const group = new Group({name, raw: template})
+            group.graph = this
+
             this.groups.push(group)
             this.groupsMap.set(name, group)
 
@@ -726,6 +855,7 @@ export class Graph {
         for (const [index, map] of this.serviceTemplate.topology_template?.policies?.entries() || []) {
             const [name, template] = utils.firstEntry(map)
             const policy = new Policy({name, raw: template, index})
+            policy.graph = this
 
             if (!this.policiesMap.has(name)) this.policiesMap.set(name, [])
             this.policiesMap.get(name)!.push(policy)

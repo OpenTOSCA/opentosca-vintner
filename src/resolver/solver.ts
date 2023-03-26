@@ -3,11 +3,8 @@ import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {
-    DefaultOptions,
     InputAssignmentPreset,
     LogicExpression,
-    PruningOptions,
-    SolverOptions,
     ValueExpression,
     VariabilityDefinition,
     VariabilityExpression,
@@ -26,9 +23,6 @@ type ExpressionContext = {
 export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
-    private readonly defaultOptions: DefaultOptions
-    private readonly pruningOptions: PruningOptions
-    private readonly solverOptions: SolverOptions
 
     readonly minisat = new MiniSat.Solver()
     private result?: Record<string, boolean>
@@ -43,66 +37,6 @@ export default class Solver {
     constructor(graph: Graph) {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
-
-        const strict = this.options?.options?.strict ?? true
-
-        const defaultCondition = strict ? false : this.options?.options?.default_condition ?? false
-        this.defaultOptions = utils.propagateOptions<DefaultOptions>(
-            defaultCondition,
-            {
-                default_condition: false,
-                node_default_condition: false,
-                relation_default_condition: false,
-                policy_default_condition: false,
-                group_default_condition: false,
-                artifact_default_condition: false,
-                property_default_condition: false,
-            },
-            {
-                default_condition: true,
-                node_default_condition: true,
-                relation_default_condition: true,
-                policy_default_condition: true,
-                group_default_condition: true,
-                artifact_default_condition: true,
-                property_default_condition: true,
-            },
-            this.options?.options
-        )
-
-        const pruning = strict ? false : this.options?.options?.pruning ?? false
-        this.pruningOptions = utils.propagateOptions<PruningOptions>(
-            pruning,
-            {
-                pruning: false,
-                node_pruning: false,
-                relation_pruning: false,
-                policy_pruning: false,
-                group_pruning: false,
-                artifact_pruning: false,
-                property_pruning: false,
-            },
-            {
-                pruning: true,
-                node_pruning: true,
-                relation_pruning: true,
-                policy_pruning: true,
-                group_pruning: true,
-                artifact_pruning: true,
-                property_pruning: true,
-            },
-            this.options?.options
-        )
-
-        const optimization = this.options?.options?.optimization
-        if (
-            validator.isDefined(optimization) &&
-            !validator.isBoolean(optimization) &&
-            !['min', 'max'].includes(optimization)
-        ) {
-            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
-        }
-        this.solverOptions = {optimization: optimization ?? 'min'}
     }
 
     transform() {
@@ -131,7 +65,10 @@ export default class Solver {
         /**
          * Get optimized solution
          */
-        if (this.solverOptions.optimization === true || validator.isString(this.solverOptions.optimization)) {
+        if (
+            this.graph.options.solver.optimization === true ||
+            validator.isString(this.graph.options.solver.optimization)
+        ) {
             const nodes = this.graph.nodes.map(it => it.id)
             const weights = this.graph.nodes.map(it => it.weight)
             let optimized
@@ -139,14 +76,14 @@ export default class Solver {
             /**
              * Minimize weight of node templates
              */
-            if (this.solverOptions.optimization === true || this.solverOptions.optimization === 'min') {
+            if (this.graph.options.solver.optimization === true || this.graph.options.solver.optimization === 'min') {
                 optimized = this.minisat.minimizeWeightedSum(solution, nodes, weights)
             }
 
             /**
              * Maximize weight of node templates
              */
-            if (this.solverOptions.optimization === 'max') {
+            if (this.graph.options.solver.optimization === 'max') {
                 optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
             }
 
@@ -267,14 +204,14 @@ export default class Solver {
         // Node Default Condition: Assign default condition to relation that checks if no incoming relation is present and that there is at least one potential incoming relation
         if (
             element.isNode() &&
-            (element.raw.default_condition ?? this.defaultOptions.node_default_condition) &&
+            (element.raw.default_condition ?? this.graph.options.default.node_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Nodes: Additionally check that no incoming relation is present and that there is at least one potential incoming relations.
-        if (element.isNode() && (element.raw.pruning ?? this.pruningOptions.node_pruning)) {
+        if (element.isNode() && (element.raw.pruning ?? this.graph.options.pruning.node_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
@@ -282,8 +219,8 @@ export default class Solver {
         if (
             element.isRelation() &&
             (validator.isString(element.raw)
-                ? this.defaultOptions.relation_default_condition
-                : element.raw.default_condition ?? this.defaultOptions.relation_default_condition) &&
+                ? this.graph.options.default.relation_default_condition
+                : element.raw.default_condition ?? this.graph.options.default.relation_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
@@ -293,8 +230,8 @@ export default class Solver {
         if (
             element.isRelation() &&
             (validator.isString(element.raw)
-                ? this.pruningOptions.relation_pruning
-                : element.raw.pruning ?? this.pruningOptions.relation_pruning)
+                ? this.graph.options.pruning.relation_pruning
+                : element.raw.pruning ?? this.graph.options.pruning.relation_pruning)
         ) {
             conditions.unshift(element.defaultCondition)
         }
@@ -302,28 +239,28 @@ export default class Solver {
         // Policy Default Condition: Assign default condition to node that checks if any target is present
         if (
             element.isPolicy() &&
-            (element.raw.default_condition ?? this.defaultOptions.policy_default_condition) &&
+            (element.raw.default_condition ?? this.graph.options.default.policy_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Policy: Additionally check if any target is present
-        if (element.isPolicy() && (element.raw.pruning ?? this.pruningOptions.policy_pruning)) {
+        if (element.isPolicy() && (element.raw.pruning ?? this.graph.options.pruning.policy_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
         // Group Default Condition: Assign default condition to node that checks if any member is present
         if (
             element.isGroup() &&
-            (element.raw.default_condition ?? this.defaultOptions.group_default_condition) &&
+            (element.raw.default_condition ?? this.graph.options.default.group_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
         }
 
         // Prune Group: Additionally check if any member is present
-        if (element.isGroup() && (element.raw.pruning ?? this.pruningOptions.group_pruning)) {
+        if (element.isGroup() && (element.raw.pruning ?? this.graph.options.pruning.group_pruning)) {
             conditions.unshift(element.defaultCondition)
         }
 
@@ -331,8 +268,8 @@ export default class Solver {
         if (
             element.isArtifact() &&
             (validator.isString(element.raw)
-                ? this.defaultOptions.artifact_default_condition
-                : element.raw.default_condition ?? this.defaultOptions.artifact_default_condition) &&
+                ? this.graph.options.default.artifact_default_condition
+                : element.raw.default_condition ?? this.graph.options.default.artifact_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
@@ -342,8 +279,8 @@ export default class Solver {
         if (
             element.isArtifact() &&
             (validator.isString(element.raw)
-                ? this.pruningOptions.artifact_pruning
-                : element.raw.pruning ?? this.pruningOptions.artifact_pruning)
+                ? this.graph.options.pruning.artifact_pruning
+                : element.raw.pruning ?? this.graph.options.pruning.artifact_pruning)
         ) {
             conditions.unshift(element.defaultCondition)
         }
@@ -352,8 +289,8 @@ export default class Solver {
         if (
             element.isProperty() &&
             (!validator.isObject(element.raw) || validator.isArray(element.raw)
-                ? this.defaultOptions.property_default_condition
-                : element.raw.default_condition ?? this.defaultOptions.property_default_condition) &&
+                ? this.graph.options.default.property_default_condition
+                : element.raw.default_condition ?? this.graph.options.default.property_default_condition) &&
             utils.isEmpty(conditions)
         ) {
             conditions = [element.defaultCondition]
@@ -363,8 +300,8 @@ export default class Solver {
         if (
             element.isProperty() &&
             (!validator.isObject(element.raw) || validator.isArray(element.raw)
-                ? this.pruningOptions.property_pruning
-                : element.raw.pruning ?? this.pruningOptions.property_pruning)
+                ? this.graph.options.pruning.property_pruning
+                : element.raw.pruning ?? this.graph.options.pruning.property_pruning)
         ) {
             conditions.unshift(element.defaultCondition)
         }
