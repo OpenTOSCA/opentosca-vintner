@@ -48,6 +48,9 @@ export abstract class ConditionalElement {
     abstract presenceCondition: LogicExpression
     abstract defaultCondition: LogicExpression
 
+    abstract defaultEnabled: boolean
+    abstract pruningEnabled: boolean
+
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
         this.name = data.name
@@ -131,6 +134,8 @@ export class Input extends ConditionalElement {
         return this.name
     }
 
+    defaultEnabled = true
+    pruningEnabled = true
     defaultCondition = true
 
     private _presenceCondition?: LogicExpression
@@ -180,6 +185,14 @@ export class Node extends ConditionalElement {
 
     get toscaId() {
         return this.name
+    }
+
+    get defaultEnabled() {
+        return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
+    }
+
+    get pruningEnabled() {
+        return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
     }
 
     private _defaultCondition?: LogicExpression
@@ -233,6 +246,22 @@ export class Property extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
+    get defaultEnabled() {
+        return Boolean(
+            !validator.isObject(this.raw) || validator.isArray(this.raw)
+                ? this.graph.options.default.property_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.property_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            !validator.isObject(this.raw) || validator.isArray(this.raw)
+                ? this.graph.options.pruning.property_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.property_pruning
+        )
+    }
+
     get defaultCondition() {
         return this.container.presenceCondition
     }
@@ -281,6 +310,22 @@ export class Relation extends ConditionalElement {
     get toscaId(): [string, string | number] {
         if (validator.isDefined(this.index)) return [this.source.name, this.index]
         return [this.source.name, this.name]
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.relation_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.relation_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
+        )
     }
 
     private _defaultCondition?: LogicExpression
@@ -340,6 +385,14 @@ export class Policy extends ConditionalElement {
         return this.name
     }
 
+    get defaultEnabled() {
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.policy_default_condition)
+    }
+
+    get pruningEnabled() {
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.policy_pruning)
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition))
@@ -374,6 +427,14 @@ export class Group extends ConditionalElement {
 
     get toscaId() {
         return this.name
+    }
+
+    get defaultEnabled() {
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.group_default_condition)
+    }
+
+    get pruningEnabled() {
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.group_pruning)
     }
 
     private _defaultCondition?: LogicExpression
@@ -413,6 +474,22 @@ export class Artifact extends ConditionalElement {
     get toscaId(): [string, string | number] {
         if (validator.isDefined(this.index)) return [this.container.name, this.index]
         return [this.container.name, this.name]
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.artifact_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.artifact_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.artifact_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.artifact_pruning
+        )
     }
 
     get defaultCondition() {
