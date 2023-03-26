@@ -1,5 +1,7 @@
 # Notes
 
+This document contains a collection of arbitrary notes.
+
 ## Filesystem
 
 ### Home Directory
@@ -110,3 +112,13 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 | Policies | List | :material-close: | :material-check: | :material-close: | :material-close: |
 | Groups | Map | :material-check: | :material-check: | :material-check: | :material-check: |
 | Artifacts | Map | :material-check: | :material-check: | :material-close: | :material-check: |
+
+
+## Limitations
+
+In the following, we briefly discuss limitations of our prototypical implementation.
+
+1. We expect that each relationship templates is used exactly once
+1. We expect that `relationship` at requirement assignments is a string
+1. We expect that names of hosting relations match `/^(.*_)?host(_.*)?$/` since we do not implement the TOSCA type system.
+1. We expect that names of connection relations match `/^(.*_)?connection(_.*)?$/` since we do not implement the TOSCA type system.

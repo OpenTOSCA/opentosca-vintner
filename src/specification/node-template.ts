@@ -29,6 +29,6 @@ export type RequirementAssignment =
     | ({
           node: string
           relationship?: string
-      } & VariabilityAlternative)
+      } & VariabilityAlternative & {default_condition_mode?: 'source-target' | 'source' | 'target'})
 
 export type CapabilityAssignmentMap = {[key: string]: string}

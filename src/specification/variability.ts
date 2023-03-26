@@ -23,6 +23,7 @@ export type DefaultOptions = {
     default_condition?: boolean
     node_default_condition?: boolean
     relation_default_condition?: boolean
+    relation_default_condition_mode?: 'source-target' | 'source' | 'target'
     policy_default_condition?: boolean
     group_default_condition?: boolean
     artifact_default_condition?: boolean
@@ -86,7 +87,7 @@ export type LogicExpression =
 
           // Node functions
           node_presence?: string
-          is_present_target?: string
+          host_presence?: string
           is_target?: string
 
           // Relation functions

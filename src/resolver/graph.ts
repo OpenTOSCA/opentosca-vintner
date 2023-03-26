@@ -1,4 +1,12 @@
-import {LogicExpression, ValueExpression, VariabilityPointMap} from '#spec/variability'
+import {
+    ConsistencyOptions,
+    DefaultOptions,
+    LogicExpression,
+    PruningOptions,
+    SolverOptions,
+    ValueExpression,
+    VariabilityPointMap,
+} from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
 import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -28,7 +36,6 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
-
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -39,6 +46,9 @@ export abstract class ConditionalElement {
     abstract toscaId: string | number | [string, string | number]
     abstract presenceCondition: LogicExpression
     abstract defaultCondition: LogicExpression
+
+    abstract defaultEnabled: boolean
+    abstract pruningEnabled: boolean
 
     protected constructor(type: string, data: {name: string; container?: ConditionalElement; index?: number}) {
         this.type = type
@@ -68,6 +78,17 @@ export abstract class ConditionalElement {
         if (validator.isDefined(this.container)) {
             this.id += '.' + this.container.id
         }
+    }
+
+    private _graph?: Graph
+
+    set graph(graph) {
+        this._graph = graph
+    }
+
+    get graph() {
+        if (validator.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
+        return this._graph
     }
 
     isInput(): this is Input {
@@ -112,6 +133,8 @@ export class Input extends ConditionalElement {
         return this.name
     }
 
+    defaultEnabled = true
+    pruningEnabled = true
     defaultCondition = true
 
     private _presenceCondition?: LogicExpression
@@ -139,7 +162,11 @@ export class Node extends ConditionalElement {
     constructor(data: {name: string; raw: NodeTemplate}) {
         super('node', data)
         this.raw = data.raw
+        this.conditions = utils.toList(data.raw.conditions)
 
+        /**
+         * Get weight
+         */
         if (validator.isDefined(data.raw.weight)) {
             if (validator.isBoolean(data.raw.weight)) {
                 this.weight = data.raw.weight ? 1 : 0
@@ -153,23 +180,30 @@ export class Node extends ConditionalElement {
 
             throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
         }
-
-        this.conditions = utils.toList(data.raw.conditions)
     }
 
     get toscaId() {
         return this.name
     }
 
+    get defaultEnabled() {
+        return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
+    }
+
+    get pruningEnabled() {
+        return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition))
-            this._defaultCondition = {
-                or: [
-                    {is_present_target: this.toscaId, _cached_element: this},
-                    {not: {is_target: this.toscaId, _cached_element: this}},
-                ],
+        if (validator.isUndefined(this._defaultCondition)) {
+            if (utils.isEmpty(this.ingoing)) {
+                this._defaultCondition = true
+            } else {
+                this._defaultCondition = {is_target: this.toscaId, _cached_element: this}
             }
+        }
+
         return this._defaultCondition
     }
 
@@ -210,6 +244,22 @@ export class Property extends ConditionalElement {
     get toscaId(): [string, string | number] {
         if (validator.isDefined(this.index)) return [this.container.name, this.index]
         return [this.container.name, this.name]
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            !validator.isObject(this.raw) || validator.isArray(this.raw)
+                ? this.graph.options.default.property_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.property_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            !validator.isObject(this.raw) || validator.isArray(this.raw)
+                ? this.graph.options.pruning.property_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.property_pruning
+        )
     }
 
     get defaultCondition() {
@@ -262,12 +312,49 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
+    private getDefaultMode() {
+        return (
+            (validator.isString(this.raw)
+                ? this.graph.options.default.relation_default_condition_mode
+                : this.raw.default_condition_mode) || 'source-target'
+        )
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.relation_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.relation_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
+        )
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition))
-            this._defaultCondition = {
-                and: [this.source.presenceCondition, this.target.presenceCondition],
+        if (validator.isUndefined(this._defaultCondition)) {
+            const mode = this.getDefaultMode()
+            switch (mode) {
+                case 'source':
+                    this._defaultCondition = this.source.presenceCondition
+                    break
+
+                case 'target':
+                    this._defaultCondition = this.target.presenceCondition
+                    break
+
+                default:
+                    this._defaultCondition = {
+                        and: [this.source.presenceCondition, this.target.presenceCondition],
+                    }
             }
+        }
         return this._defaultCondition
     }
 
@@ -276,6 +363,14 @@ export class Relation extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    isHostedOn() {
+        return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
+    }
+
+    isConnectsTo() {
+        return new RegExp(/^(.*_)?connection(_.*)?$/).test(this.name)
     }
 }
 
@@ -309,6 +404,14 @@ export class Policy extends ConditionalElement {
     get toscaId() {
         if (validator.isDefined(this.index)) return this.index
         return this.name
+    }
+
+    get defaultEnabled() {
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.policy_default_condition)
+    }
+
+    get pruningEnabled() {
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.policy_pruning)
     }
 
     private _defaultCondition?: LogicExpression
@@ -345,6 +448,14 @@ export class Group extends ConditionalElement {
 
     get toscaId() {
         return this.name
+    }
+
+    get defaultEnabled() {
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.group_default_condition)
+    }
+
+    get pruningEnabled() {
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.group_pruning)
     }
 
     private _defaultCondition?: LogicExpression
@@ -386,6 +497,22 @@ export class Artifact extends ConditionalElement {
         return [this.container.name, this.name]
     }
 
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.artifact_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.artifact_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.artifact_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.artifact_pruning
+        )
+    }
+
     get defaultCondition() {
         return this.container.presenceCondition
     }
@@ -400,6 +527,12 @@ export class Artifact extends ConditionalElement {
 
 export class Graph {
     serviceTemplate: ServiceTemplate
+    options: {
+        default: DefaultOptions
+        pruning: PruningOptions
+        solver: SolverOptions
+        consistency: ConsistencyOptions
+    } = {default: {}, pruning: {}, solver: {}, consistency: {}}
 
     elements: ConditionalElement[] = []
 
@@ -433,17 +566,20 @@ export class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
+        // Options
+        this.buildOptions()
+
         // Inputs
-        this.populateInputs()
+        this.buildInputs()
 
         // Nodes and relations
-        this.populateNodesAndRelations()
+        this.buildNodesAndRelations()
 
         // Groups
-        this.populateGroups()
+        this.buildGroups()
 
         // Policies
-        this.populatePolicies()
+        this.buildPolicies()
 
         this.elements = [
             ...this.nodes,
@@ -456,6 +592,94 @@ export class Graph {
         ]
     }
 
+    private buildOptions() {
+        const options = this.serviceTemplate.topology_template?.variability?.options || {}
+        const strict = options.strict ?? true
+
+        this.options.default = utils.propagateOptions<DefaultOptions>(
+            options.default_condition ?? !strict,
+            {
+                default_condition: false,
+                node_default_condition: false,
+                relation_default_condition: false,
+                policy_default_condition: false,
+                group_default_condition: false,
+                artifact_default_condition: false,
+                property_default_condition: false,
+            },
+            {
+                default_condition: true,
+                node_default_condition: true,
+                relation_default_condition: true,
+                policy_default_condition: true,
+                group_default_condition: true,
+                artifact_default_condition: true,
+                property_default_condition: true,
+            },
+            options
+        )
+
+        this.options.pruning = utils.propagateOptions<PruningOptions>(
+            options.pruning ?? !strict,
+            {
+                pruning: false,
+                node_pruning: false,
+                relation_pruning: false,
+                policy_pruning: false,
+                group_pruning: false,
+                artifact_pruning: false,
+                property_pruning: false,
+            },
+            {
+                pruning: true,
+                node_pruning: true,
+                relation_pruning: true,
+                policy_pruning: true,
+                group_pruning: true,
+                artifact_pruning: true,
+                property_pruning: true,
+            },
+            options
+        )
+
+        const optimization = options.optimization
+        if (
+            validator.isDefined(optimization) &&
+            !validator.isBoolean(optimization) &&
+            !['min', 'max'].includes(optimization)
+        ) {
+            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
+        }
+        this.options.solver = {optimization: optimization ?? 'min'}
+
+        this.options.consistency = utils.propagateOptions<ConsistencyOptions>(
+            validator.isDefined(options.consistency_checks) ? !options.consistency_checks : false,
+            {
+                consistency_checks: true,
+                relation_source_consistency_check: true,
+                relation_target_consistency_check: true,
+                ambiguous_hosting_consistency_check: true,
+                expected_hosting_consistency_check: true,
+                missing_artifact_parent_consistency_check: true,
+                ambiguous_artifact_consistency_check: true,
+                missing_property_parent_consistency_check: true,
+                ambiguous_property_consistency_check: true,
+            },
+            {
+                consistency_checks: false,
+                relation_source_consistency_check: false,
+                relation_target_consistency_check: false,
+                ambiguous_hosting_consistency_check: false,
+                expected_hosting_consistency_check: false,
+                missing_artifact_parent_consistency_check: false,
+                ambiguous_artifact_consistency_check: false,
+                missing_property_parent_consistency_check: false,
+                ambiguous_property_consistency_check: false,
+            },
+            options
+        )
+    }
+
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (validator.isUndefined(data)) return []
         if (validator.isArray(data)) return data
@@ -466,28 +690,32 @@ export class Graph {
         })
     }
 
-    private populateInputs() {
+    private buildInputs() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.inputs).forEach(map => {
             const [name, definition] = utils.firstEntry(map)
             if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
             const input = new Input({name, raw: definition})
+            input.graph = this
+
             this.inputs.push(input)
             this.inputsMap.set(name, input)
         })
     }
 
-    private populateNodesAndRelations() {
+    private buildNodesAndRelations() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
 
             const node = new Node({name: nodeName, raw: nodeTemplate})
+            node.graph = this
+
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
             // Properties
-            this.populateProperties(node, nodeTemplate)
+            this.buildProperties(node, nodeTemplate)
 
             // Relations
             for (const [index, map] of nodeTemplate.requirements?.entries() || []) {
@@ -499,6 +727,7 @@ export class Graph {
                     raw: assignment,
                     index,
                 })
+                relation.graph = this
 
                 if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
                 node.outgoingMap.get(relation.name)!.push(relation)
@@ -528,7 +757,7 @@ export class Graph {
                         relation.relationship = relationship
 
                         // Properties
-                        this.populateProperties(relation, relationshipTemplate)
+                        this.buildProperties(relation, relationshipTemplate)
                     }
 
                     if (validator.isObject(assignment.relationship)) {
@@ -549,13 +778,13 @@ export class Graph {
             if (validator.isDefined(nodeTemplate.artifacts)) {
                 if (validator.isArray(nodeTemplate.artifacts)) {
                     for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        this.populateArtifact(node, artifactMap, artifactIndex)
+                        this.buildArtifact(node, artifactMap, artifactIndex)
                     }
                 } else {
                     for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
                         const map: ArtifactDefinitionMap = {}
                         map[artifactName] = artifactDefinition
-                        this.populateArtifact(node, map)
+                        this.buildArtifact(node, map)
                     }
                 }
                 // Ensure that there is only one default artifact
@@ -586,11 +815,13 @@ export class Graph {
         })
     }
 
-    private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
+    private buildArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
         const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
-        this.populateProperties(artifact, artifactDefinition)
+        artifact.graph = this
+
+        this.buildProperties(artifact, artifactDefinition)
 
         if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
         node.artifactsMap.get(artifact.name)!.push(artifact)
@@ -598,7 +829,7 @@ export class Graph {
         this.artifacts.push(artifact)
     }
 
-    private populateProperties(
+    private buildProperties(
         element: Node | Relation | Policy | Group | Artifact,
         template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate | ArtifactDefinition
     ) {
@@ -646,6 +877,7 @@ export class Graph {
                         })
                     }
 
+                    property.graph = this
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
                     element.propertiesMap.get(propertyName)!.push(property)
                     element.properties.push(property)
@@ -661,6 +893,7 @@ export class Graph {
                         default: false,
                         raw: propertyAssignment,
                     })
+                    property.graph = this
 
                     if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
                     element.propertiesMap.get(propertyName)!.push(property)
@@ -684,12 +917,14 @@ export class Graph {
         })
     }
 
-    private populateGroups() {
+    private buildGroups() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.groups).forEach(map => {
             const [name, template] = utils.firstEntry(map)
             if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
 
             const group = new Group({name, raw: template})
+            group.graph = this
+
             this.groups.push(group)
             this.groupsMap.set(name, group)
 
@@ -704,11 +939,11 @@ export class Graph {
                 group.members.push(element)
             })
 
-            this.populateProperties(group, template)
+            this.buildProperties(group, template)
         })
     }
 
-    private populatePolicies() {
+    private buildPolicies() {
         if (
             validator.isDefined(this.serviceTemplate.topology_template?.policies) &&
             !validator.isArray(this.serviceTemplate.topology_template?.policies)
@@ -718,6 +953,7 @@ export class Graph {
         for (const [index, map] of this.serviceTemplate.topology_template?.policies?.entries() || []) {
             const [name, template] = utils.firstEntry(map)
             const policy = new Policy({name, raw: template, index})
+            policy.graph = this
 
             if (!this.policiesMap.has(name)) this.policiesMap.set(name, [])
             this.policiesMap.get(name)!.push(policy)
@@ -737,7 +973,7 @@ export class Graph {
                 throw new Error(`Policy target "${target}" of ${policy.display} does not exist`)
             })
 
-            this.populateProperties(policy, template)
+            this.buildProperties(policy, template)
         }
     }
 

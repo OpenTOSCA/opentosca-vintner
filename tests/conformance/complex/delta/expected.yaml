@@ -1,0 +1,17 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    node_templates:
+        monitoring_agent:
+            type: monitoring_agent
+            requirements:
+                - host: virtual_machine
+
+        worker:
+            type: worker
+            requirements:
+                - host:
+                      node: virtual_machine
+
+        virtual_machine:
+            type: virtual_machine

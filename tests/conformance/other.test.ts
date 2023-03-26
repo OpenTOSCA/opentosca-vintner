@@ -2,10 +2,12 @@ import {expect} from 'chai'
 import {VariabilityExpression} from '#spec/variability'
 import Solver from '../../src/resolver/solver'
 import Graph from '../../src/resolver/graph'
-import {TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
-function getDefaultSolver() {
-    return new Solver(new Graph({tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0}))
+function getDefaultSolver(template?: ServiceTemplate) {
+    return new Solver(
+        new Graph(template || {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0})
+    )
 }
 
 describe('cache', () => {
