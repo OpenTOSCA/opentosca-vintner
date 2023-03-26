@@ -546,19 +546,19 @@ export class Graph {
             throw new Error('Unsupported TOSCA definitions version')
 
         // Options
-        this.populateOptions()
+        this.buildOptions()
 
         // Inputs
-        this.populateInputs()
+        this.buildInputs()
 
         // Nodes and relations
-        this.populateNodesAndRelations()
+        this.buildNodesAndRelations()
 
         // Groups
-        this.populateGroups()
+        this.buildGroups()
 
         // Policies
-        this.populatePolicies()
+        this.buildPolicies()
 
         this.elements = [
             ...this.nodes,
@@ -571,7 +571,7 @@ export class Graph {
         ]
     }
 
-    private populateOptions() {
+    private buildOptions() {
         const options = this.serviceTemplate.topology_template?.variability?.options || {}
         const strict = options.strict ?? true
 
@@ -669,7 +669,7 @@ export class Graph {
         })
     }
 
-    private populateInputs() {
+    private buildInputs() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.inputs).forEach(map => {
             const [name, definition] = utils.firstEntry(map)
             if (this.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
@@ -682,7 +682,7 @@ export class Graph {
         })
     }
 
-    private populateNodesAndRelations() {
+    private buildNodesAndRelations() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
@@ -694,7 +694,7 @@ export class Graph {
             this.nodesMap.set(nodeName, node)
 
             // Properties
-            this.populateProperties(node, nodeTemplate)
+            this.buildProperties(node, nodeTemplate)
 
             // Relations
             for (const [index, map] of nodeTemplate.requirements?.entries() || []) {
@@ -736,7 +736,7 @@ export class Graph {
                         relation.relationship = relationship
 
                         // Properties
-                        this.populateProperties(relation, relationshipTemplate)
+                        this.buildProperties(relation, relationshipTemplate)
                     }
 
                     if (validator.isObject(assignment.relationship)) {
@@ -757,13 +757,13 @@ export class Graph {
             if (validator.isDefined(nodeTemplate.artifacts)) {
                 if (validator.isArray(nodeTemplate.artifacts)) {
                     for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        this.populateArtifact(node, artifactMap, artifactIndex)
+                        this.buildArtifact(node, artifactMap, artifactIndex)
                     }
                 } else {
                     for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
                         const map: ArtifactDefinitionMap = {}
                         map[artifactName] = artifactDefinition
-                        this.populateArtifact(node, map)
+                        this.buildArtifact(node, map)
                     }
                 }
                 // Ensure that there is only one default artifact
@@ -794,13 +794,13 @@ export class Graph {
         })
     }
 
-    private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
+    private buildArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
         const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
         artifact.graph = this
 
-        this.populateProperties(artifact, artifactDefinition)
+        this.buildProperties(artifact, artifactDefinition)
 
         if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
         node.artifactsMap.get(artifact.name)!.push(artifact)
@@ -808,7 +808,7 @@ export class Graph {
         this.artifacts.push(artifact)
     }
 
-    private populateProperties(
+    private buildProperties(
         element: Node | Relation | Policy | Group | Artifact,
         template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate | ArtifactDefinition
     ) {
@@ -896,7 +896,7 @@ export class Graph {
         })
     }
 
-    private populateGroups() {
+    private buildGroups() {
         this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.groups).forEach(map => {
             const [name, template] = utils.firstEntry(map)
             if (this.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
@@ -918,11 +918,11 @@ export class Graph {
                 group.members.push(element)
             })
 
-            this.populateProperties(group, template)
+            this.buildProperties(group, template)
         })
     }
 
-    private populatePolicies() {
+    private buildPolicies() {
         if (
             validator.isDefined(this.serviceTemplate.topology_template?.policies) &&
             !validator.isArray(this.serviceTemplate.topology_template?.policies)
@@ -952,7 +952,7 @@ export class Graph {
                 throw new Error(`Policy target "${target}" of ${policy.display} does not exist`)
             })
 
-            this.populateProperties(policy, template)
+            this.buildProperties(policy, template)
         }
     }
 
