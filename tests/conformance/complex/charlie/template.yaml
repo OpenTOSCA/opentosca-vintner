@@ -1,0 +1,25 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            strict: false
+
+    node_templates:
+        monitoring_agent:
+            type: monitoring_agent
+            conditions: {host_presence: SELF}
+            requirements:
+                - host: virtual_machine
+
+        worker:
+            type: worker
+            conditions: false
+            requirements:
+                - host:
+                      node: virtual_machine
+                      conditions: {source_presence: SELF}
+                      pruning: false
+
+        virtual_machine:
+            type: virtual_machine

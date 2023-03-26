@@ -377,7 +377,38 @@ export default class Solver {
         }
 
         /**
-         * is_present_target
+         * host_presence
+         */
+        if (validator.isDefined(expression.host_presence)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.host_presence
+                validator.ensureString(name)
+
+                if (name === 'SELF') {
+                    if (validator.isUndefined(context.element))
+                        throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
+
+                    if (!context.element.isNode())
+                        throw new Error(`Using "SELF" with "host_presence" is only valid inside a node`)
+
+                    node = context.element
+                } else {
+                    node = this.graph.getNode(name)
+                }
+            }
+
+            return MiniSat.or(node.outgoing.filter(it => it.isHostedOn()).map(it => it.target.id))
+        }
+
+        /**
+         * is_target
          */
         if (validator.isDefined(expression.is_target)) {
             let node: Node | undefined
@@ -432,6 +463,8 @@ export default class Solver {
             if (validator.isUndefined(context.element))
                 throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
+
+            console.log(context.element.source.id)
 
             return context.element.source.id
         }
