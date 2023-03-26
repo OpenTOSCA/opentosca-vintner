@@ -379,26 +379,6 @@ export default class Solver {
         /**
          * is_present_target
          */
-        if (validator.isDefined(expression.is_present_target)) {
-            let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (validator.isUndefined(node)) {
-                const name = expression.is_present_target
-                validator.ensureString(name)
-                node = this.graph.getNode(name)
-            }
-
-            return MiniSat.or(node.ingoing.map(it => it.id))
-        }
-
-        /**
-         * is_target
-         */
         if (validator.isDefined(expression.is_target)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
@@ -413,7 +393,7 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            return this.transformLogicExpression(!utils.isEmpty(node.ingoing), context)
+            return MiniSat.or(node.ingoing.map(it => it.id))
         }
 
         /**

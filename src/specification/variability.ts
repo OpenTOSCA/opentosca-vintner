@@ -86,7 +86,6 @@ export type LogicExpression =
 
           // Node functions
           node_presence?: string
-          is_present_target?: string
           is_target?: string
 
           // Relation functions

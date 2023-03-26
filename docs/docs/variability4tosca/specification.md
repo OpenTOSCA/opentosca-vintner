@@ -118,15 +118,16 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 
 To further support modeling, the following default conditions can be assigned:
 
-
-| Element                | Default Conditions                                                                                                                                      |
-|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Node Template          | Check if the node template is target of at least one present relation or if the node template is not target of at least one present or absent relation. |
-| Property               | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present.                                    |
-| Requirement Assignment | Check if the source and target of the requirement assignment is present.                                                                                |
-| Policy                 | Check if the policy has any targets which are present.                                                                                                  |
-| Group                  | Check if the group has any members which are present.                                                                                                   |
-| Artifact               | Check if the node template of the artifact is present.                                                                                                  |
+| Element                                  | Default Conditions                                                                                                   |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Node Template without Incoming Relations | True.                                                                                                                |
+| Node Template with Incoming Relations    | Check if the node template is target of at least one present relation.                                               |
+| Property                                 | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present. |
+| Requirement Assignment                   | Check if the source and target of the requirement assignment is present.                                             |
+| Policy                                   | Check if the policy has any targets which are present.                                                               |
+| Group                                    | Check if the group has any members which are present.                                                                |
+| Artifact                                 | Check if the node template of the artifact is present.                                                               |
+| Topology Template Input                  | True.                                                                                                                |
 
 ## Variability Preset
 
@@ -418,7 +419,11 @@ tosca.interfaces.relationship.management.Variability:
     derived_from: tosca.interfaces.Root
 ```
 
-## Logical Operators
+## Intrinsic Functions
+
+The following intrinsic functions can be used inside a variability expression.
+
+### Logical Operators
 
 The following logical operators can be used inside a variability expression.
 
@@ -430,7 +435,7 @@ The following logical operators can be used inside a variability expression.
 | xor     | List(BooleanExpression)                     | Boolean | Evaluates if exactly one value is `true`.          |
 | implies | Tuple(BooleanExpression, BooleanExpression) | Boolean | Evaluates if first value implies the second value. |
 
-## Arithmetic Operators
+### Arithmetic Operators
 
 The following arithmetic operators can be used inside a variability expression.
 
@@ -442,33 +447,32 @@ The following arithmetic operators can be used inside a variability expression.
 | div     | List(NumericExpression)                     | Numeric | Divides values from the first one.        |
 | mod     | Tuple(NumericExpression, NumericExpression) | Numeric | Divides values and returns the remainder. |
 
-## Intrinsic Functions
+### Intrinsic Functions
 
 The following intrinsic functions can be used inside a variability expression.
 
-| Keyname               | Input                                              | Output  | Description                                                                                                              |
-|-----------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| variability_input | String                                             | Any     | Returns the value of a variability input.                                                                                |
-| logic_expression  | String                                             | Boolean | Returns the value of the Logic Expression.                                                                               |
-| value_expression  | String                                             | Any     | Returns the value of the Value Expression.                                                                               |
-| node_presence     | String                                             | Boolean | Returns if node is present.                                                                                              |
-| is_present_target          | String                                                     | Boolean | Returns if the node template is target of at least one present incoming relationship.                                    |
-| is_target                  | String                                                     | Boolean | Returns if the node template is target of at least one present or absent incoming relationship.                          |
-| relation_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                          |
-| property_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                          |
-| artifact_presence | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                          |
-| policy_presence   | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                            |
-| group_presence    | String                                             | Boolean | Returns if group is present.                                                                                             |
-| input_presence    | String                                             | Boolean | Returns if input is present.                                                                                             |
-| source_presence   | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| target_presence   | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `get_element_presence`. |
-| has_present_target   | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                    |
-| has_present_member   | String                                             | Boolean | Returns if any member of the given group is present.                                                                     |
-| concat                | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                           |
-| join                  | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                     |
-| token                 | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                  |
+| Keyname            | Input                                              | Output  | Description                                                                                                       |
+|--------------------|----------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------|
+| variability_input  | String                                             | Any     | Returns the value of a variability input.                                                                         |
+| logic_expression   | String                                             | Boolean | Returns the value of the Logic Expression.                                                                        |
+| value_expression   | String                                             | Any     | Returns the value of the Value Expression.                                                                        |
+| node_presence      | String                                             | Boolean | Returns if node is present.                                                                                       |
+| is_target          | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                             |
+| relation_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                   |
+| property_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                   |
+| artifact_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                   |
+| policy_presence    | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                     |
+| group_presence     | String                                             | Boolean | Returns if group is present.                                                                                      |
+| input_presence     | String                                             | Boolean | Returns if input is present.                                                                                      |
+| source_presence    | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`. |
+| target_presence    | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`. |
+| has_present_target | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                             |
+| has_present_member | String                                             | Boolean | Returns if any member of the given group is present.                                                              |
+| concat             | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                    |
+| join               | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                              |
+| token              | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.           |
 
-## Constraint Operators
+### Constraint Operators
 
 The following constraint operators can be used inside a variability expression.
 
@@ -485,7 +489,7 @@ The following constraint operators can be used inside a variability expression.
 | min_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a minimum length.                          |
 | max_length       | Tuple(ValueExpression, NumericExpression)                             | Boolean | Evaluates if the value has a maximum length.                          |
 
-## Analytical Operators
+### Analytical Operators
 
 The following analytical operators can be used inside a variability expression.
 
@@ -505,7 +509,7 @@ The following analytical operators can be used inside a variability expression.
 | exponential_regression | List(List(Tuple(Number, Number)), Number)         | Number | Returns the prediction using exponential regression. |
 
 
-## Date Operators
+### Date Operators
 
 The following date operators can be used inside a variability expression.
 
