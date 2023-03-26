@@ -577,7 +577,7 @@ export class Graph {
         const strict = options.strict ?? true
 
         this.options.default = utils.propagateOptions<DefaultOptions>(
-            strict ? false : options.default_condition ?? true,
+            options.default_condition ?? !strict,
             {
                 default_condition: false,
                 node_default_condition: false,
@@ -600,7 +600,7 @@ export class Graph {
         )
 
         this.options.pruning = utils.propagateOptions<PruningOptions>(
-            strict ? false : options.pruning ?? true,
+            options.pruning ?? !strict,
             {
                 pruning: false,
                 node_pruning: false,

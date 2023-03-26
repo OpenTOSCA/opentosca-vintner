@@ -1,5 +1,7 @@
 # Notes
 
+This document contains a collection of arbitrary notes.
+
 ## Filesystem
 
 ### Home Directory
