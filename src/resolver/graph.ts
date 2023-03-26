@@ -28,6 +28,13 @@ import {ensureDefined} from '#validator'
  * - groups might be a list (consider variability groups ...)
  */
 
+function setAndEnabled(value?: boolean | string) {
+    if (validator.isUndefined(value)) return null
+    if (validator.isString(value)) return true
+    if (validator.isBoolean(value)) return value
+    throw new Error(`Value "${value}" is malformed`)
+}
+
 export abstract class ConditionalElement {
     readonly type: string
     readonly id: string
@@ -313,12 +320,14 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
+    private getDefaultMode() {
+        return validator.isString(this.raw)
+            ? this.graph.options.default.relation_default_condition_mode
+            : this.raw.default_condition_mode
+    }
+
     get defaultEnabled() {
-        return Boolean(
-            validator.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
-        )
+        return Boolean(setAndEnabled(this.getDefaultMode()))
     }
 
     get pruningEnabled() {
@@ -331,10 +340,23 @@ export class Relation extends ConditionalElement {
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition))
-            this._defaultCondition = {
-                and: [this.source.presenceCondition, this.target.presenceCondition],
+        if (validator.isUndefined(this._defaultCondition)) {
+            const mode = this.getDefaultMode()
+            switch (mode) {
+                case 'source':
+                    this._defaultCondition = this.source.presenceCondition
+                    break
+
+                case 'target':
+                    this._defaultCondition = this.target.presenceCondition
+                    break
+
+                default:
+                    this._defaultCondition = {
+                        and: [this.source.presenceCondition, this.target.presenceCondition],
+                    }
             }
+        }
         return this._defaultCondition
     }
 

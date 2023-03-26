@@ -23,6 +23,7 @@ export type DefaultOptions = {
     default_condition?: boolean
     node_default_condition?: boolean
     relation_default_condition?: boolean
+    relation_default_condition_mode?: 'source-target' | 'source' | 'target'
     policy_default_condition?: boolean
     group_default_condition?: boolean
     artifact_default_condition?: boolean

@@ -464,8 +464,6 @@ export default class Solver {
                 throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
 
-            console.log(context.element.source.id)
-
             return context.element.source.id
         }
 
