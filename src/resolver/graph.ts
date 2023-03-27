@@ -316,7 +316,9 @@ export class Relation extends ConditionalElement {
         return (
             (validator.isString(this.raw)
                 ? this.graph.options.default.relation_default_condition_mode
-                : this.raw.default_condition_mode) || 'source-target'
+                : this.raw.default_condition_mode) ??
+            this.graph.options.default.relation_default_condition_mode ??
+            'source-target'
         )
     }
 
