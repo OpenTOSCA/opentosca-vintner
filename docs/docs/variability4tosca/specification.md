@@ -549,7 +549,7 @@ To resolve the variability in a variable service template, conduct the following
 1. Remove all artifact templates which are not present.
 1. Remove all requirement assignments which are not present.
 1. Remove all relationship templates which are not used by any requirement assignment.
-1. Remove all relationship template Properties which are not present.
+1. Remove all relationship template properties which are not present.
 1. Remove all topology template inputs which are not present.
 1. Remove all group templates which are not present.
 1. Remove all group members which are not present from group template.
