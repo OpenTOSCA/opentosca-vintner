@@ -2,7 +2,13 @@
  * Node Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TEMPLATE}
  */
-import {VariabilityAlternative, VariabilityPointList, VariabilityPointMap} from './variability'
+import {
+    NodeDefaultConditionMode,
+    RelationDefaultConditionMode,
+    VariabilityAlternative,
+    VariabilityPointList,
+    VariabilityPointMap,
+} from './variability'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
@@ -15,7 +21,9 @@ export type NodeTemplate = {
     capabilities?: CapabilityAssignmentMap
     artifacts?: VariabilityPointMap<ArtifactDefinition>
     weight?: number | boolean
-} & VariabilityAlternative
+} & VariabilityAlternative & {
+        default_condition_mode?: NodeDefaultConditionMode
+    }
 
 export type NodeTemplateMap = {[key: string]: NodeTemplate}
 
@@ -29,6 +37,6 @@ export type RequirementAssignment =
     | ({
           node: string
           relationship?: string
-      } & VariabilityAlternative & {default_condition_mode?: 'source-target' | 'source' | 'target'})
+      } & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode})
 
 export type CapabilityAssignmentMap = {[key: string]: string}
