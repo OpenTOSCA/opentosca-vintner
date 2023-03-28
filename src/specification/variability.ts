@@ -16,14 +16,18 @@ export type VariabilityResolvingOptions = {
     SolverOptions
 
 export type SolverOptions = {
-    optimization?: true | false | 'min' | 'max'
+    optimization?: boolean | 'min' | 'max'
 }
+
+export type NodeDefaultConditionMode = 'target' | 'host' | 'target-host'
+export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
     default_condition?: boolean
     node_default_condition?: boolean
+    node_default_condition_mode?: NodeDefaultConditionMode
     relation_default_condition?: boolean
-    relation_default_condition_mode?: 'source-target' | 'source' | 'target'
+    relation_default_condition_mode?: RelationDefaultConditionMode
     policy_default_condition?: boolean
     group_default_condition?: boolean
     artifact_default_condition?: boolean

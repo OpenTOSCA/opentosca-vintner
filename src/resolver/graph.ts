@@ -2,7 +2,9 @@ import {
     ConsistencyOptions,
     DefaultOptions,
     LogicExpression,
+    NodeDefaultConditionMode,
     PruningOptions,
+    RelationDefaultConditionMode,
     SolverOptions,
     ValueExpression,
     VariabilityPointMap,
@@ -36,6 +38,7 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
+
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -186,6 +189,16 @@ export class Node extends ConditionalElement {
         return this.name
     }
 
+    get getDefaultMode(): NodeDefaultConditionMode {
+        return (
+            (validator.isString(this.raw)
+                ? this.graph.options.default.node_default_condition_mode
+                : this.raw.default_condition_mode) ??
+            this.graph.options.default.node_default_condition_mode ??
+            'target'
+        )
+    }
+
     get defaultEnabled() {
         return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
     }
@@ -194,13 +207,38 @@ export class Node extends ConditionalElement {
         return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
     }
 
+    get hasHost() {
+        return this.outgoing.find(it => it.isHostedOn())
+    }
+
+    get isTarget() {
+        return !utils.isEmpty(this.ingoing)
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition)) {
-            if (utils.isEmpty(this.ingoing)) {
-                this._defaultCondition = true
-            } else {
-                this._defaultCondition = {is_target: this.toscaId, _cached_element: this}
+            const host = this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true
+            const target = this.isTarget ? {is_target: this.toscaId, _cached_element: this} : true
+
+            const mode = this.getDefaultMode
+            switch (mode) {
+                case 'host':
+                    this._defaultCondition = host
+                    break
+
+                case 'target':
+                    this._defaultCondition = target
+                    break
+
+                case 'target-host':
+                    this._defaultCondition = {
+                        and: [target, host],
+                    }
+                    break
+
+                default:
+                    throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
             }
         }
 
@@ -312,7 +350,7 @@ export class Relation extends ConditionalElement {
         return [this.source.name, this.name]
     }
 
-    private getDefaultMode() {
+    get getDefaultMode(): RelationDefaultConditionMode {
         return (
             (validator.isString(this.raw)
                 ? this.graph.options.default.relation_default_condition_mode
@@ -341,7 +379,7 @@ export class Relation extends ConditionalElement {
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition)) {
-            const mode = this.getDefaultMode()
+            const mode = this.getDefaultMode
             switch (mode) {
                 case 'source':
                     this._defaultCondition = this.source.presenceCondition
@@ -351,10 +389,14 @@ export class Relation extends ConditionalElement {
                     this._defaultCondition = this.target.presenceCondition
                     break
 
-                default:
+                case 'source-target':
                     this._defaultCondition = {
                         and: [this.source.presenceCondition, this.target.presenceCondition],
                     }
+                    break
+
+                default:
+                    throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
             }
         }
         return this._defaultCondition
