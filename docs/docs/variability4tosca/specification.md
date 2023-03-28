@@ -173,7 +173,7 @@ is_prod: {equal: [{variability_input: mode}, prod]}
 ## Node Template
 
 A node template can additionally contain variability conditions.
-These conditions must be satisfied otherwise the respective node template is not present.
+These conditions must hold otherwise the respective node template is not present.
 
 Furthermore, assigned artifact can be a list of artifact maps which contains only one Artifact
 Definition in order to allow artifact names to be used multiple times.
@@ -201,7 +201,7 @@ Furthermore, artifacts must be transformed to an artifact map.
 ## Requirement Assignment
 
 A requirement assignment can additionally contain variability conditions.
-These conditions must be satisfied otherwise the respective relationship is not present.
+These conditions must hold otherwise the respective relationship is not present.
 
 | Keyname                | Mandatory | Type                                                   | Description                                                                                                                 |
 |------------------------|-----------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -262,12 +262,12 @@ properties:
 A group can additionally contain variability conditions.
 Depending on the group type the conditions are either assigned to the group itself or to the group members.
 In general, the conditions are assigned to the group itself.
-These conditions must be satisfied otherwise the respective group is not present.
+These conditions must hold otherwise the respective group is not present.
 Such a group is also called Conditional Group.
 
 However, if the group is derived from `variability.groups.ConditionalMembers` then the conditions are assigned to the
 group members.
-These conditions must be satisfied otherwise the respective group members are not present.
+These conditions must hold otherwise the respective group members are not present.
 Furthermore, group elements can be node templates and requirement assignments.
 Such a group is also called variability group.
 
@@ -280,7 +280,7 @@ Such a group is also called variability group.
 | pruning           | no        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
 
 The following non-normative and incomplete example contains the group `example_group` which is only present if the
-conditions are satisfied.
+conditions hold.
 
 ```yaml linenums="1"
 conditional_group:
@@ -303,7 +303,7 @@ variability_group:
 ## Policy Template
 
 A policy template can additionally contain variability conditions.
-These conditions must be satisfied otherwise the respective policy is not present.
+These conditions must hold otherwise the respective policy is not present.
 
 | Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
 |-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -355,7 +355,7 @@ policies:
 ## Artifact Template
 
 An artifact, that is used in node templates, can additionally contain variability conditions.
-These conditions must be satisfied otherwise the respective artifact is not present.
+These conditions must hold otherwise the respective artifact is not present.
 
 | Keyname             | Mandatory | Type                                                                         | Description                                                                                                        |
 |---------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -369,7 +369,7 @@ These conditions must be satisfied otherwise the respective artifact is not pres
 ## Topology Template Input
 
 A topology template input can additionally contain variability conditions.
-These conditions must be satisfied otherwise the respective input is not present.
+These conditions must hold otherwise the respective input is not present.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -567,13 +567,13 @@ Thus, directly assigned variability inputs have the highest priority.
 
 ### Check Element Presence
 
-To check if an element is present, check that all assigned conditions are satisfied:
+To check if an element is present, check that all assigned conditions hold:
 
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to groups via `conditions` which the element is member of.
 1. (Optional) Assign default conditions if no conditions have been collected yet.
 1. (Optional) Assign pruning conditions.
-1. The element is present only if all conditions are satisfied.
+1. The element is present only if all conditions hold.
 
 ### Check Consistency
 
