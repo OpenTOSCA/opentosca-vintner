@@ -85,9 +85,21 @@ There are the following variability resolving options.
 More specific options override wider set options. 
 For example, if "strict" is enabled and "node_pruning" is enabled, then nodes are pruned.
 
+### General Options
+
+The following options are general options.
+
 | Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
 |-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
 | strict                                    | false     | Boolean                                   | true          | Disable all default conditions and pruning.                                                       |
+
+### Default Condition Options
+
+
+The following options are used to configure default conditions.
+
+| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
+|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
 | default_condition                         | false     | Boolean                                   | false         | Enable all default conditions.                                                                    |
 | node_default_condition                    | false     | Boolean                                   | false         | Enable default condition for nodes.                                                               |
 | relation_default_condition                | false     | Boolean                                   | false         | Enable default condition for relations. It is possible to configure different default conditions. |
@@ -96,6 +108,13 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 | group_default_condition                   | false     | Boolean                                   | false         | Enable default condition for groups.                                                              |
 | artifact_default_condition                | false     | Boolean                                   | false         | Enable default condition for artifacts.                                                           |
 | property_default_condition                | false     | Boolean                                   | false         | Enable default condition for properties.                                                          |
+
+### Pruning Options
+
+The following options are used to configure pruning.
+
+| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
+|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
 | pruning                                   | false     | Boolean                                   | false         | Enable pruning of all elements.                                                                   |
 | node_pruning                              | false     | Boolean                                   | false         | Enable pruning of nodes.                                                                          |
 | relation_pruning                          | false     | Boolean                                   | false         | Enable pruning of relations.                                                                      |
@@ -103,6 +122,13 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 | group_pruning                             | false     | Boolean                                   | false         | Enable pruning of groups.                                                                         |
 | artifact_pruning                          | false     | Boolean                                   | false         | Enable pruning of artifacts.                                                                      |
 | property_pruning                          | false     | Boolean                                   | false         | Enable pruning of properties.                                                                     |
+
+### Consistency Check Options
+
+The following options are used to configure consistency checks.
+
+| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
+|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
 | consistency_checks                        | false     | Boolean                                   | true          | Enable all consistency checks.                                                                    |
 | relation_source_consistency_check         | false     | Boolean                                   | true          | Enable consistency check regarding relation sources.                                              |
 | relation_target_consistency_check         | false     | Boolean                                   | true          | Enable consistency check regarding relation targets.                                              |
@@ -112,6 +138,13 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 | ambiguous_artifact_consistency_check      | false     | Boolean                                   | true          | Enable consistency check regarding ambiguous artifacts.                                           |
 | missing_property_parent_consistency_check | false     | Boolean                                   | true          | Enable consistency check regarding node of a property.                                            |
 | ambiguous_property_consistency_check      | false     | Boolean                                   | true          | Enable consistency check regarding ambiguous properties.                                          |
+
+### Optimization Options
+
+The following options are used to configure the optimization.
+
+| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
+|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
 | optimization                              | false     | Boolean &#124; min &#124; max             | min           | Configure optimization.                                                                           | 
 
 
@@ -132,10 +165,11 @@ To further support modeling, the following default conditions can be assigned:
 
 Depending on the configuration, other default conditions might be used.
 
-| Element                                  | Default Conditions                                                                                                  |
-|------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| Requirement Assignment (Source)          | Check if the source of the requirement assignment is present.                                                       |
-| Requirement Assignment (Target)          | Check if the target of the requirement assignment is present.                                                       |
+| Element                         | Default Conditions                                                                                                                 |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| Node Templates (Host)           | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
+| Requirement Assignment (Source) | Check if the source of the requirement assignment is present.                                                                      |
+| Requirement Assignment (Target) | Check if the target of the requirement assignment is present.                                                                      |
 
 
 ## Variability Preset
@@ -461,27 +495,27 @@ The following arithmetic operators can be used inside a variability expression.
 
 The following intrinsic functions can be used inside a variability expression.
 
-| Keyname            | Input                                              | Output  | Description                                                                                                                                            |
-|--------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| variability_input  | String                                             | Any     | Returns the value of a variability input.                                                                                                              |
-| logic_expression   | String                                             | Boolean | Returns the value of the Logic Expression.                                                                                                             |
-| value_expression   | String                                             | Any     | Returns the value of the Value Expression.                                                                                                             |
-| node_presence      | String                                             | Boolean | Returns if node is present.                                                                                                                            |
-| host_presence      | String &#124; SELF                                 | Boolean | Returns if any host of the node is present. Note, an error will be thrown when consistency is checked if there are multiple hosting relations present. |
-| is_target          | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                  |
-| relation_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                                                        |
-| property_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                                                        |
-| artifact_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                                                        |
-| policy_presence    | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                                                          |
-| group_presence     | String                                             | Boolean | Returns if group is present.                                                                                                                           |
-| input_presence     | String                                             | Boolean | Returns if input is present.                                                                                                                           |
-| source_presence    | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                      |
-| target_presence    | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                      |
-| has_present_target | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                                                  |
-| has_present_member | String                                             | Boolean | Returns if any member of the given group is present.                                                                                                   |
-| concat             | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                                                         |
-| join               | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                                                   |
-| token              | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                |
+| Keyname            | Input                                              | Output  | Description                                                                                                                                                  |
+|--------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| variability_input  | String                                             | Any     | Returns the value of a variability input.                                                                                                                    |
+| logic_expression   | String                                             | Boolean | Returns the value of the Logic Expression.                                                                                                                   |
+| value_expression   | String                                             | Any     | Returns the value of the Value Expression.                                                                                                                   |
+| node_presence      | String                                             | Boolean | Returns if node is present.                                                                                                                                  |
+| host_presence      | String &#124; SELF                                 | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present. |
+| is_target          | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                        |
+| relation_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                                                              |
+| property_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                                                              |
+| artifact_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                                                              |
+| policy_presence    | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                                                                |
+| group_presence     | String                                             | Boolean | Returns if group is present.                                                                                                                                 |
+| input_presence     | String                                             | Boolean | Returns if input is present.                                                                                                                                 |
+| source_presence    | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| target_presence    | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| has_present_target | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                                                        |
+| has_present_member | String                                             | Boolean | Returns if any member of the given group is present.                                                                                                         |
+| concat             | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                                                               |
+| join               | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                                                         |
+| token              | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
 
 ### Constraint Operators
 
@@ -597,7 +631,6 @@ some or all of these consistency steps might be omitted.
 
 To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
 For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
-This basically enables to disable consistency checks since consistency checks evaluate, e.g., that a property can not exist without its parent.
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
 
