@@ -18,5 +18,6 @@ topology_template:
 
         node_three:
             type: node_three
+            conditions: false
             requirements:
                 - relation_three_one: node_one

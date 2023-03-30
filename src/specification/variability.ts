@@ -19,7 +19,7 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-export type NodeDefaultConditionMode = 'target' | 'host' | 'target-host'
+export type NodeDefaultConditionMode = 'source' | 'relation' | 'host' | 'source-host' | 'relation-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
@@ -92,7 +92,8 @@ export type LogicExpression =
           // Node functions
           node_presence?: string
           host_presence?: string
-          is_target?: string
+          has_sources?: string
+          has_incoming_relations?: string
 
           // Relation functions
           relation_presence?: [string, string | number]

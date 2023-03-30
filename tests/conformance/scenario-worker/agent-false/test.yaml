@@ -1,0 +1,6 @@
+description: |
+    - agent and worker hosted on a virtual machine
+    - virtual machine is only present if either agent or worker is present
+    - worker is absent
+
+    - agent is absent, thus, also the virtual machine is absent

@@ -7,6 +7,7 @@ import {
     RelationDefaultConditionMode,
     SolverOptions,
     ValueExpression,
+    VariabilityExpression,
     VariabilityPointMap,
 } from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
@@ -195,7 +196,7 @@ export class Node extends ConditionalElement {
                 ? this.graph.options.default.node_default_condition_mode
                 : this.raw.default_condition_mode) ??
             this.graph.options.default.node_default_condition_mode ??
-            'target'
+            'source'
         )
     }
 
@@ -218,27 +219,33 @@ export class Node extends ConditionalElement {
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition)) {
-            const host = this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true
-            const target = this.isTarget ? {is_target: this.toscaId, _cached_element: this} : true
+            const conditions: LogicExpression[] = []
 
             const mode = this.getDefaultMode
-            switch (mode) {
-                case 'host':
-                    this._defaultCondition = host
-                    break
+            mode.split('-').forEach(it => {
+                if (it === 'host') {
+                    return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
+                }
 
-                case 'target':
-                    this._defaultCondition = target
-                    break
+                if (it === 'source') {
+                    return conditions.push(this.isTarget ? {has_sources: this.toscaId, _cached_element: this} : true)
+                }
 
-                case 'target-host':
-                    this._defaultCondition = {
-                        and: [target, host],
-                    }
-                    break
+                if (it === 'relation') {
+                    return conditions.push(
+                        this.isTarget ? {has_incoming_relations: this.toscaId, _cached_element: this} : true
+                    )
+                }
 
-                default:
-                    throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+            })
+
+            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
+
+            if (conditions.length === 1) {
+                this._defaultCondition = conditions[0]
+            } else {
+                this._defaultCondition = {and: conditions}
             }
         }
 
@@ -379,24 +386,26 @@ export class Relation extends ConditionalElement {
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition)) {
+            const conditions: LogicExpression[] = []
+
             const mode = this.getDefaultMode
-            switch (mode) {
-                case 'source':
-                    this._defaultCondition = this.source.presenceCondition
-                    break
+            mode.split('-').forEach(it => {
+                if (it === 'source') {
+                    return conditions.push(this.source.presenceCondition)
+                }
+                if (it === 'target') {
+                    return conditions.push(this.target.presenceCondition)
+                }
 
-                case 'target':
-                    this._defaultCondition = this.target.presenceCondition
-                    break
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+            })
 
-                case 'source-target':
-                    this._defaultCondition = {
-                        and: [this.source.presenceCondition, this.target.presenceCondition],
-                    }
-                    break
+            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
 
-                default:
-                    throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+            if (conditions.length === 1) {
+                this._defaultCondition = conditions[0]
+            } else {
+                this._defaultCondition = {and: conditions}
             }
         }
         return this._defaultCondition

@@ -53,7 +53,11 @@ topology_template:
   node_templates:
     node_four:
       type: node_four
+    node_five:
+      type: node_five
     node_six:
       type: node_six
+      requirements:
+        - relation_six_one: node_five
 ```
 

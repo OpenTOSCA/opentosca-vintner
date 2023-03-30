@@ -11,6 +11,15 @@ This includes conditional node templates, relationship templates, properties, ar
 In the following, we discuss the differences.
 The specification is under active development and is not backwards compatible with any previous versions.
 
+## Terminology 
+
+In the following, we quickly introduce some terminologies.
+
+- a condition _holds_ if the conditions evaluates to _true_
+- an element is _present_ if all assigned conditions hold 
+- an element is _absent_ if not all assigned conditions hold
+- a _variability resolver_ is a TOSCA processor that resolves the variability of a service template
+
 ## Service Template
 
 A service template must have the TOSCA definitions version `tosca_variability_1_0`.
@@ -36,10 +45,10 @@ A variability definition defines variability inputs, variability presets, and va
 
 | Keyname     | Mandatory | Type                                | Description                                                            |
 |-------------|-----------|-------------------------------------|------------------------------------------------------------------------|
-| inputs      | true       | Map(String, VariabilityInput)       | A required map of input parameters used inside variability conditions. |
-| presets     | false        | Map(String, VariabilityPreset)      | An optional map of variability preset definitions.                     |
-| expressions | false        | Map(String, VariabilityExpression)  | An optional map of variability expression definitions.                 |
-| options     | false        | Map(String, Boolean)                | An optional map of variability resolving options.                      |
+| inputs      | true      | Map(String, VariabilityInput)       | A required map of input parameters used inside variability conditions. |
+| presets     | false     | Map(String, VariabilityPreset)      | An optional map of variability preset definitions.                     |
+| expressions | false     | Map(String, VariabilityExpression)  | An optional map of variability expression definitions.                 |
+| options     | false     | Map(String, Boolean)                | An optional map of variability resolving options.                      |
 
 
 The following non-normative and incomplete example contains a variability definition which declares the Variability
@@ -98,17 +107,17 @@ The following options are general options.
 
 The following options are used to configure default conditions.
 
-| Keyname                         | Mandatory | Type                                      | Default       | Description                                                                                       |
-|---------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| default_condition               | false     | Boolean                                   | false         | Enable all default conditions.                                                                    |
-| node_default_condition          | false     | Boolean                                   | false         | Enable default condition for nodes.                                                               |
-| node_default_condition_mode     | false     | target &#124; host &#124; target-host     | target        | Configure the default condition for nodes.                                                        |
-| relation_default_condition      | false     | Boolean                                   | false         | Enable default condition for relations. It is possible to configure different default conditions. |
-| relation_default_condition_mode | false     | source-target &#124; source &#124; target | source-target | Configure the default condition for relations.                                                    |
-| policy_default_condition        | false     | Boolean                                   | false         | Enable default condition for policies.                                                            |
-| group_default_condition         | false     | Boolean                                   | false         | Enable default condition for groups.                                                              |
-| artifact_default_condition      | false     | Boolean                                   | false         | Enable default condition for artifacts.                                                           |
-| property_default_condition      | false     | Boolean                                   | false         | Enable default condition for properties.                                                          |
+| Keyname                         | Mandatory | Type                                                                       | Default       | Description                                                                                       |
+|---------------------------------|-----------|----------------------------------------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
+| default_condition               | false     | Boolean                                                                    | false         | Enable all default conditions.                                                                    |
+| node_default_condition          | false     | Boolean                                                                    | false         | Enable default condition for nodes.                                                               |
+| node_default_condition_mode     | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host | source        | Configure the default condition for nodes.                                                        |
+| relation_default_condition      | false     | Boolean                                                                    | false         | Enable default condition for relations. It is possible to configure different default conditions. |
+| relation_default_condition_mode | false     | source-target &#124; source &#124; target                                  | source-target | Configure the default condition for relations.                                                    |
+| policy_default_condition        | false     | Boolean                                                                    | false         | Enable default condition for policies.                                                            |
+| group_default_condition         | false     | Boolean                                                                    | false         | Enable default condition for groups.                                                              |
+| artifact_default_condition      | false     | Boolean                                                                    | false         | Enable default condition for artifacts.                                                           |
+| property_default_condition      | false     | Boolean                                                                    | false         | Enable default condition for properties.                                                          |
 
 ### Pruning Options
 
@@ -149,29 +158,30 @@ The following options are used to configure the optimization.
 | optimization                              | false     | Boolean &#124; min &#124; max             | min           | Configure optimization.                                                                           | 
 
 
-## Variability Default Conditions
+## Default Conditions
 
 To further support modeling, the following default conditions can be assigned:
 
-| Element                                        | Default Conditions                                                                                                  |
-|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (Target) | Check if the node template is target of at least one present relation.                                              |
+| Element                                        | Default Conditions                                                                                                   |
+|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (Source) | Check if any source of incoming relations is present.                                                                |
 | Property                                       | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present. |
-| Requirement Assignment                         | Check if the source and target of the requirement assignment is present.      |
-| Policy                                         | Check if the policy has any targets which are present.                                                              |
-| Group                                          | Check if the group has any members which are present.                                                               |
-| Artifact                                       | Check if the node template of the artifact is present.                                                              |
+| Requirement Assignment                         | Check if the source and target of the requirement assignment is present.                                             |
+| Policy                                         | Check if the policy has any targets which are present.                                                               |
+| Group                                          | Check if the group has any members which are present.                                                                |
+| Artifact                                       | Check if the node template of the artifact is present.                                                               |
 
 The default condition of elements not mentioned above always holds. 
 This includes, e.g., node templates without incoming relations and topology template inputs.
 
 Depending on the configuration, other default conditions might be used.
 
-| Element                         | Default Conditions                                                                                                                 |
-|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| Node Template with Host         | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
-| Requirement Assignment (Source) | Check if the source of the requirement assignment is present.                                                                      |
-| Requirement Assignment (Target) | Check if the target of the requirement assignment is present.                                                                      |
+| Element                                          | Default Conditions                                                                                                                 |
+|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (Relation) | Check if any incoming relation is present.                                                                                         |
+| Node Template with Host                          | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
+| Requirement Assignment (Source)                  | Check if the source of the requirement assignment is present.                                                                      |
+| Requirement Assignment (Target)                  | Check if the target of the requirement assignment is present.                                                                      |
 
 
 ## Variability Preset
@@ -180,9 +190,9 @@ A variability preset predefines values for variability inputs that might be used
 
 | Keyname     | Mandatory | Type                                  | Description                                         |
 |-------------|-----------|---------------------------------------|-----------------------------------------------------|
-| name        | false        | String                                | An optional name of the variability preset.         |
-| description | false        | String                                | An optional description for the variability preset. |
-| inputs      | true       | Map(String, InputParameterAssignment) | A required map of input parameter assignments.      |
+| name        | false     | String                                | An optional name of the variability preset.         |
+| description | false     | String                                | An optional description for the variability preset. |
+| inputs      | true      | Map(String, InputParameterAssignment) | A required map of input parameter assignments.      |
 
 ## Variability Expression
 
@@ -216,13 +226,13 @@ Definition in order to allow artifact names to be used multiple times.
 
 | Keyname                     | Mandatory | Type                                                                         | Description                                                                                                        |
 |-----------------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| conditions                  | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| artifacts                   | false        | Map(String, Artifact) &#124; List(Map(String, Artifact))                     | An optional map of artifact or a list of artifact maps.                                                            | 
-| properties                  | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
-| default_condition           | false        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
-| node_default_condition_mode | false     | target &#124; host &#124; target-host                                        | Configure the default condition for this node.                                                                     |
-| pruning                     | false        | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
-| weight                      | false        | Boolean &#124; (Non-Negative) Number                                         | the weight used during optimization (default is 1)                                                                 |
+| conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| artifacts                   | false     | Map(String, Artifact) &#124; List(Map(String, Artifact))                     | An optional map of artifact or a list of artifact maps.                                                            | 
+| properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
+| default_condition           | false     | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
+| node_default_condition_mode | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host   | Configure the default condition for this node.                                                                     |
+| pruning                     | false     | Boolean                                                                      | enable pruning for this element (overrides variability resolving options)                                          |
+| weight                      | false     | Boolean &#124; (Non-Negative) Number                                         | the weight used during optimization (default is 1)                                                                 |
 
 
 The following non-normative and incomplete example contains a node template that has a variability condition assigned.
@@ -498,27 +508,28 @@ The following arithmetic operators can be used inside a variability expression.
 
 The following intrinsic functions can be used inside a variability expression.
 
-| Keyname            | Input                                              | Output  | Description                                                                                                                                                  |
-|--------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| variability_input  | String                                             | Any     | Returns the value of a variability input.                                                                                                                    |
-| logic_expression   | String                                             | Boolean | Returns the value of the Logic Expression.                                                                                                                   |
-| value_expression   | String                                             | Any     | Returns the value of the Value Expression.                                                                                                                   |
-| node_presence      | String                                             | Boolean | Returns if node is present.                                                                                                                                  |
-| host_presence      | String &#124; SELF                                 | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present. |
-| is_target          | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                        |
-| relation_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                                                              |
-| property_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                                                              |
-| artifact_presence  | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                                                              |
-| policy_presence    | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                                                                |
-| group_presence     | String                                             | Boolean | Returns if group is present.                                                                                                                                 |
-| input_presence     | String                                             | Boolean | Returns if input is present.                                                                                                                                 |
-| source_presence    | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
-| target_presence    | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
-| has_present_target | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                                                        |
-| has_present_member | String                                             | Boolean | Returns if any member of the given group is present.                                                                                                         |
-| concat             | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                                                               |
-| join               | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                                                         |
-| token              | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
+| Keyname                 | Input                                              | Output  | Description                                                                                                                                                  |
+|-------------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| variability_input       | String                                             | Any     | Returns the value of a variability input.                                                                                                                    |
+| logic_expression        | String                                             | Boolean | Returns the value of the Logic Expression.                                                                                                                   |
+| value_expression        | String                                             | Any     | Returns the value of the Value Expression.                                                                                                                   |
+| node_presence           | String                                             | Boolean | Returns if node is present.                                                                                                                                  |
+| host_presence           | String &#124; SELF                                 | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present. |
+| has_sources             | String                                             | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                              |
+| has_incoming_relations  | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                        |
+| relation_presence       | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                                                              |
+| property_presence       | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                                                              |
+| artifact_presence       | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                                                              |
+| policy_presence         | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                                                                |
+| group_presence          | String                                             | Boolean | Returns if group is present.                                                                                                                                 |
+| input_presence          | String                                             | Boolean | Returns if input is present.                                                                                                                                 |
+| source_presence         | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| target_presence         | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| has_present_target      | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                                                        |
+| has_present_member      | String                                             | Boolean | Returns if any member of the given group is present.                                                                                                         |
+| concat                  | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                                                               |
+| join                    | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                                                         |
+| token                   | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
 
 ### Constraint Operators
 

@@ -39,11 +39,11 @@ export default class Solver {
         this.options = graph.serviceTemplate.topology_template?.variability
     }
 
+    /**
+     * Transform assigned conditions to MiniSat clauses
+     * Note, this also evaluates value expressions if they are part of logic expressions
+     */
     transform() {
-        /**
-         * Transform assigned conditions to MiniSat clauses
-         * Note, this also evaluates value expressions if they are part of logic expressions
-         */
         if (this.transformed) return
         this.transformed = true
 
@@ -133,8 +133,13 @@ export default class Solver {
         return results
     }
 
+    /**
+     * Export clauses to readable string
+     * See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+     */
     toCNF() {
-        // See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+        this.transform()
+
         const and: string[] = []
         for (const clause of this.minisat.clauses) {
             const or: string[] = []
@@ -408,9 +413,9 @@ export default class Solver {
         }
 
         /**
-         * is_target
+         * has_sources
          */
-        if (validator.isDefined(expression.is_target)) {
+        if (validator.isDefined(expression.has_sources)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -419,7 +424,27 @@ export default class Solver {
             }
 
             if (validator.isUndefined(node)) {
-                const name = expression.is_target
+                const name = expression.has_sources
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.ingoing.map(it => it.source.id))
+        }
+
+        /**
+         * has_incoming_relations
+         */
+        if (validator.isDefined(expression.has_incoming_relations)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.has_incoming_relations
                 validator.ensureString(name)
                 node = this.graph.getNode(name)
             }

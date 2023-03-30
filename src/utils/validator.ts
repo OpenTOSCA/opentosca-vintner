@@ -3,7 +3,7 @@ import {Dayjs} from 'dayjs'
 import * as utils from './utils'
 
 export function isUndefined(element: unknown): element is undefined | null {
-    return typeof element === 'undefined'
+    return typeof element === 'undefined' || element === null || element == null
 }
 
 export function isDefined<T>(element: T | undefined | null): element is T {

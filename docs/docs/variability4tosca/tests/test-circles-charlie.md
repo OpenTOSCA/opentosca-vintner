@@ -4,17 +4,7 @@
 
 ## Description
 
-- node and relation defaults are enabled
-
-- node_one checks if relation_one is present 
-- relation_one checks if node_one and node_two are present (first circle)
-- node_two checks if node_one is NOT present (second circle)
-
-- either node_one or node_two can be present
-- thus, relation_one is absent
-- thus, node_one is absent
-- thus, node_two is present
-
+(node_one <=> node_two && node_two <=> !node_one) is contradiction
 
 ## Variable Service Template
 
@@ -41,15 +31,11 @@ topology_template:
 
 
 
-## Variability-Resolved Service Template
 
-The following variability-resolved service templated is expected.
+## Expected Error
 
-```yaml linenums="1"
-tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
-    node_two:
-      type: node_two
+The following error is expected to be thrown, when resolving variability.
+
+```text linenums="1"
+Could not solve
 ```
-
