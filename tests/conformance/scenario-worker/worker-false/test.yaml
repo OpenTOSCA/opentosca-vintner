@@ -1,0 +1,7 @@
+description: |
+    - agent and worker hosted on a virtual machine
+    - virtual machine is only present if either agent or worker is present
+    - agent is only present if the virtual machine is present, thus, circle
+
+    - worker is absent
+    - since pruning is enabled, all components are absent

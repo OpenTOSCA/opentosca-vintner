@@ -71,7 +71,7 @@ topology_template:
                     workload: high
 
         options:
-            property_pruning: true
+            strict: false
 
     node_templates:
         application:

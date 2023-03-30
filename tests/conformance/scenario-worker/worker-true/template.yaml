@@ -6,19 +6,17 @@ topology_template:
             strict: false
 
     node_templates:
-        monitoring_agent:
-            type: monitoring_agent
+        agent:
+            type: agent
             conditions: {host_presence: SELF}
             requirements:
-                - host: virtual_machine
+                - host: vm
 
         worker:
             type: worker
             conditions: true
             requirements:
-                - host:
-                      node: virtual_machine
-                      default_condition_mode: source
+                - host: vm
 
-        virtual_machine:
-            type: virtual_machine
+        vm:
+            type: vm

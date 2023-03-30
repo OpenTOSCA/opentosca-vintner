@@ -153,14 +153,14 @@ The following options are used to configure the optimization.
 
 To further support modeling, the following default conditions can be assigned:
 
-| Element                                        | Default Conditions                                                                                                  |
-|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (Target) | Check if the node template is target of at least one present relation.                                              |
+| Element                                        | Default Conditions                                                                                                   |
+|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (Target) | Check if any source of incoming relations is present.                                                                |
 | Property                                       | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present. |
-| Requirement Assignment                         | Check if the source and target of the requirement assignment is present.      |
-| Policy                                         | Check if the policy has any targets which are present.                                                              |
-| Group                                          | Check if the group has any members which are present.                                                               |
-| Artifact                                       | Check if the node template of the artifact is present.                                                              |
+| Requirement Assignment                         | Check if the source and target of the requirement assignment is present.                                             |
+| Policy                                         | Check if the policy has any targets which are present.                                                               |
+| Group                                          | Check if the group has any members which are present.                                                                |
+| Artifact                                       | Check if the node template of the artifact is present.                                                               |
 
 The default condition of elements not mentioned above always holds. 
 This includes, e.g., node templates without incoming relations and topology template inputs.

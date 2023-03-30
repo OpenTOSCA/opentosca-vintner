@@ -39,11 +39,11 @@ export default class Solver {
         this.options = graph.serviceTemplate.topology_template?.variability
     }
 
+    /**
+     * Transform assigned conditions to MiniSat clauses
+     * Note, this also evaluates value expressions if they are part of logic expressions
+     */
     transform() {
-        /**
-         * Transform assigned conditions to MiniSat clauses
-         * Note, this also evaluates value expressions if they are part of logic expressions
-         */
         if (this.transformed) return
         this.transformed = true
 
@@ -133,8 +133,13 @@ export default class Solver {
         return results
     }
 
+    /**
+     * Export clauses to readable string
+     * See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+     */
     toCNF() {
-        // See https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+        this.transform()
+
         const and: string[] = []
         for (const clause of this.minisat.clauses) {
             const or: string[] = []
@@ -424,7 +429,7 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            return MiniSat.or(node.ingoing.map(it => it.id))
+            return MiniSat.or(node.ingoing.map(it => it.source.id))
         }
 
         /**
