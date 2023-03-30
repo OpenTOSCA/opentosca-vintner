@@ -33,7 +33,6 @@ topology_template:
             properties:
                 num_cpus: 2
                 mem_size: 4 GB
-                ip_address: # currently unknown
             requirements:
                 - host: openstack
         vm_2:
@@ -41,13 +40,10 @@ topology_template:
             properties:
                 num_cpus: 2
                 mem_size: 4 GB
-                ip_address: # currently unknown
             requirements:
                 - host: openstack
         openstack:
             type: OpenStack
-            properties:
-                ip_address: # currently unknown
     groups:
         database_group:
             type: tosca.groups.Root
