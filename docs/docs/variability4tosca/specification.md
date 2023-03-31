@@ -304,7 +304,7 @@ properties:
 # - key_one: { value: the_value }
 ```
 
-## Group
+## Group Template
 
 A group can additionally contain variability conditions.
 Depending on the group type the conditions are either assigned to the group itself or to the group members.

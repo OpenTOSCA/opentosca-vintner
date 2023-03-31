@@ -33,9 +33,7 @@ export async function loadConfiguration(file: string): Promise<InputAssignmentMa
         const originalFeatureName = utils.normalizeString(feature.$.name)
         const overrideFeatureName = feature.attribute?.find(attribute => attribute.$.name === '__name')?.$.value
 
-        const effectiveFeatureName = validator.isDefined(overrideFeatureName)
-            ? utils.normalizeString(overrideFeatureName)
-            : originalFeatureName
+        const effectiveFeatureName = overrideFeatureName ?? originalFeatureName
         result[effectiveFeatureName] = feature.$.automatic === 'selected' || feature.$.manual === 'selected'
 
         feature.attribute
@@ -52,8 +50,8 @@ export async function loadConfiguration(file: string): Promise<InputAssignmentMa
                 )?.$.value
 
                 const effectiveAttributeName = utils.normalizeString(
-                    fullOverrideAttributeName ||
-                        `${effectiveFeatureName}_${overrideAttributeName || originalAttributeName}`
+                    fullOverrideAttributeName ??
+                        `${effectiveFeatureName}_${overrideAttributeName ?? originalAttributeName}`
                 )
 
                 let value = attribute.$.value
