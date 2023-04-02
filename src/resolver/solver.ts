@@ -362,6 +362,13 @@ export default class Solver {
         }
 
         /**
+         * amo
+         */
+        if (validator.isDefined(expression.amo)) {
+            return MiniSat.atMostOne(expression.amo.map(it => this.transformLogicExpression(it, context)))
+        }
+
+        /**
          * node_presence
          */
         if (validator.isDefined(expression.node_presence)) {

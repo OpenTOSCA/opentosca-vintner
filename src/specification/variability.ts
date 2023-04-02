@@ -88,6 +88,7 @@ export type LogicExpression =
           not?: LogicExpression
           xor?: LogicExpression[]
           implies?: [LogicExpression, LogicExpression]
+          amo?: LogicExpression[]
 
           // Node functions
           node_presence?: string
