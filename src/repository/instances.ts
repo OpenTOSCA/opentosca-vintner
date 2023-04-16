@@ -66,7 +66,7 @@ export class Instance {
         return this
     }
 
-    setTemplate(name: string, time: number, info = true) {
+    setTemplate(name: string, time: number) {
         files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory(time))
         this.setInfo({...this.loadInfo(), template_timestamp: time})
         return this

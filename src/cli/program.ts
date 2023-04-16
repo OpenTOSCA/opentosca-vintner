@@ -383,6 +383,18 @@ instances
     )
 
 instances
+    .command('update')
+    .description('update instance')
+    .requiredOption('--instance <string>', 'instance name')
+    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--verbose [boolean]', 'verbose')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.updateTemplate(options)
+        })
+    )
+
+instances
     .command('update-template')
     .description('update instance template')
     .requiredOption('--instance <string>', 'instance name')

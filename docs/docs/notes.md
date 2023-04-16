@@ -57,7 +57,7 @@ ${vintner_home}/
 
 !!! note "vintner instances deploy"
 
-1. Deployment inputs are copied to the instance directory.
+1. Deployment inputs are copied to the service inputs directory.
 1. Deployment command is sent to orchestrator. Variability-resolved service template is used.
 
 ### Redeploy an Instance
@@ -74,6 +74,15 @@ ${vintner_home}/
 1. New template is copied into (new) instance template directory
 1. Instance info is updated
 
+### Update an Instance 
+
+1. Deployment inputs are copied to the service inputs directory.
+1. Instance info is updated.
+1. Update command is sent to orchestrator. Variability-resolved service template is used.
+
+Note, requires to resolve variability first.
+In contrast to deploying an instance, deployment inputs can be changed and the update instead of the deploy command is sent to the orchestrator.
+
 ### Adapt an Instance
 
 !!! note "vintner instances adapt"
@@ -81,9 +90,10 @@ ${vintner_home}/
 1. Sensor data is collected and stored as variability inputs.
 2. Variability is resolved based on the new variability inputs.
 3. Instance is updated based on the new variability-resolved topology template.
-1. Instance info is updated
+1. Instance info is updated.
 
 In contrast to updating an instance template, adapting an instance regenerates the variability-resolve topology template and does not swap the variable topology template.
+In contrast to updating an instance, variability is resolved due to new variability inputs.
 
 ### Undeploy an Instance
 
