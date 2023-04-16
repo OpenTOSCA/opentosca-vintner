@@ -6,12 +6,7 @@ import {Instance} from '../../src/repository/instances'
 import {expect} from 'chai'
 import {sleep} from '#utils'
 import {before} from 'mocha'
-import {Shell} from '#shell'
-
-const insideWorkflow = process.env.CI === 'true'
-const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION_TESTS === 'true'
-
-const examplesDir = path.join(__dirname, '..', '..', 'examples')
+import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
     console.log()
@@ -19,35 +14,11 @@ if (!integrationTestsEnabled) {
 } else {
     describe('adaptation', () => {
         before(async () => {
-            // Check that xOpera is installed
-            if (insideWorkflow) {
-                await new Shell().execute(['which opera &>/dev/null'])
-            } else {
-                await new Shell(true).execute([
-                    'cd ~/opera',
-                    '&&',
-                    '. .venv/bin/activate',
-                    '&&',
-                    'which opera &>/dev/null',
-                ])
-            }
+            await checkSetup()
         })
 
         beforeEach(async () => {
-            // TODO: set vintner home to not nuke local setups
-
-            // Setup filesystem
-            await Controller.setup.clean()
-            await Controller.setup.init()
-
-            // Setup xOpera
-            if (insideWorkflow) {
-                await Controller.orchestrators.initxOpera({venv: false, dir: 'none'})
-                await Controller.orchestrators.enable({orchestrator: 'xopera'})
-            } else {
-                await Controller.orchestrators.initxOperaWSL({venv: true, dir: '~/opera'})
-                await Controller.orchestrators.enable({orchestrator: 'xopera-wsl'})
-            }
+            await initSetup()
         })
 
         it('xopera-getting-started', async () => {
@@ -122,8 +93,7 @@ if (!integrationTestsEnabled) {
         }).timeout(60 * 1000)
 
         afterEach(async () => {
-            // Cleanup filesystem
-            await Controller.setup.clean()
+            await cleanSetup()
         })
     })
 }

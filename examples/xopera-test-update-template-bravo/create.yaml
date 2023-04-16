@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+      - name: Create file
+        copy:
+            dest: /tmp/vintner-getting-started.txt
+            content: '{{ content }}'
