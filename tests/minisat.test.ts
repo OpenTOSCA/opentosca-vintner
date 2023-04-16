@@ -11,10 +11,12 @@ describe('minisat', () => {
 tosca_definitions_version: tosca_variability_1_0
 topology_template: 
     node_templates: 
-        node_one: 
+        node_one:
+            type: type_one
             conditions: {node_presence: node_two}
             
         node_two: 
+            type: type_two
             conditions: true
         `,
             '(not(false)) and (true) and (node.node_one or not(node.node_two)) and (not(node.node_one) or node.node_two) and (node.node_two or not(true)) and (not(node.node_two) or true)'
