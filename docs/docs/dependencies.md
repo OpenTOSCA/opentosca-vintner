@@ -9,7 +9,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | ID | Dependency | Version | License |
 | --- | --- | --- | --- |
 | 1  | [@ewoudenberg/difflib](https://github.com/ewoudenberg/difflib.js){target=_blank} | 0.1.0 |  [PSF](http://docs.python.org/license.html){target=_blank} |
-| 2  | [@types/node](https://github.com/DefinitelyTyped/DefinitelyTyped){target=_blank} | 18.0.6 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 2  | [@types/node](https://github.com/DefinitelyTyped/DefinitelyTyped){target=_blank} | 18.15.11 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 3  | [@types/yauzl](https://github.com/DefinitelyTyped/DefinitelyTyped){target=_blank} | 2.10.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 4  | [accepts](https://github.com/jshttp/accepts){target=_blank} | 1.3.8 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 5  | [ansi-styles](https://github.com/chalk/ansi-styles){target=_blank} | 4.3.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -42,7 +42,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 32  | [compress-commons](https://github.com/archiverjs/node-compress-commons){target=_blank} | 4.1.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 33  | [concat-map](https://github.com/substack/node-concat-map){target=_blank} | 0.0.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 34  | [content-disposition](https://github.com/jshttp/content-disposition){target=_blank} | 0.5.4 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 35  | [content-type](https://github.com/jshttp/content-type){target=_blank} | 1.0.4 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 35  | [content-type](https://github.com/jshttp/content-type){target=_blank} | 1.0.5 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 36  | [cookie](https://github.com/jshttp/cookie){target=_blank} | 0.5.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 37  | [cookie-signature](https://github.com/visionmedia/node-cookie-signature){target=_blank} | 1.0.6 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 38  | [core-util-is](https://github.com/isaacs/core-util-is){target=_blank} | 1.0.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -77,10 +77,10 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 67  | [fs.realpath](https://github.com/isaacs/fs.realpath){target=_blank} | 1.0.0 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 68  | [function-bind](https://github.com/Raynos/function-bind){target=_blank} | 1.1.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 69  | [get-func-name](https://github.com/chaijs/get-func-name){target=_blank} | 2.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 70  | [get-intrinsic](https://github.com/ljharb/get-intrinsic){target=_blank} | 1.1.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 70  | [get-intrinsic](https://github.com/ljharb/get-intrinsic){target=_blank} | 1.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 71  | [get-stream](https://github.com/sindresorhus/get-stream){target=_blank} | 5.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 72  | [glob](https://github.com/isaacs/node-glob){target=_blank} | 10.1.0 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
-| 73  | [graceful-fs](https://github.com/isaacs/node-graceful-fs){target=_blank} | 4.2.10 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
+| 73  | [graceful-fs](https://github.com/isaacs/node-graceful-fs){target=_blank} | 4.2.11 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 74  | [has](https://github.com/tarruda/has){target=_blank} | 1.0.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 75  | [has-flag](https://github.com/sindresorhus/has-flag){target=_blank} | 4.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 76  | [has-symbols](https://github.com/inspect-js/has-symbols){target=_blank} | 1.0.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -107,7 +107,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 97  | [lodash.isplainobject](https://github.com/lodash/lodash){target=_blank} | 4.0.6 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 98  | [lodash.union](https://github.com/lodash/lodash){target=_blank} | 4.6.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 99  | [logic-solver](https://github.com/meteor/logic-solver){target=_blank} | 2.0.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 100  | [loupe](https://github.com/chaijs/loupe){target=_blank} | 2.3.4 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 100  | [loupe](https://github.com/chaijs/loupe){target=_blank} | 2.3.6 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 101  | [lru-cache](https://github.com/isaacs/node-lru-cache){target=_blank} | 9.0.3 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 102  | [media-typer](https://github.com/jshttp/media-typer){target=_blank} | 0.3.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 103  | [merge-descriptors](https://github.com/component/merge-descriptors){target=_blank} | 1.0.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -122,7 +122,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 112  | [node-cron](https://github.com/merencia/node-cron){target=_blank} | 3.0.2 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 113  | [normalize-path](https://github.com/jonschlinkert/normalize-path){target=_blank} | 3.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 114  | [object-assign](https://github.com/sindresorhus/object-assign){target=_blank} | 4.1.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 115  | [object-inspect](https://github.com/inspect-js/object-inspect){target=_blank} | 1.12.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 115  | [object-inspect](https://github.com/inspect-js/object-inspect){target=_blank} | 1.12.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 116  | [ohm-js](https://github.com/harc/ohm){target=_blank} | 16.4.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 117  | [on-finished](https://github.com/jshttp/on-finished){target=_blank} | 2.4.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 118  | [once](https://github.com/isaacs/once){target=_blank} | 1.4.0 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
@@ -141,8 +141,8 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 131  | [qs](https://github.com/ljharb/qs){target=_blank} | 6.11.0 |  [BSD-3-Clause](https://choosealicense.com/licenses/bsd-3-clause){target=_blank} |
 | 132  | [range-parser](https://github.com/jshttp/range-parser){target=_blank} | 1.2.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 133  | [raw-body](https://github.com/stream-utils/raw-body){target=_blank} | 2.5.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 134  | [readable-stream](https://github.com/nodejs/readable-stream){target=_blank} | 3.6.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 135  | [readdir-glob](https://github.com/Yqnn/node-readdir-glob){target=_blank} | 1.1.2 |  [Apache-2.0](https://choosealicense.com/licenses/apache-2.0){target=_blank} |
+| 134  | [readable-stream](https://github.com/nodejs/readable-stream){target=_blank} | 3.6.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 135  | [readdir-glob](https://github.com/Yqnn/node-readdir-glob){target=_blank} | 1.1.3 |  [Apache-2.0](https://choosealicense.com/licenses/apache-2.0){target=_blank} |
 | 136  | [regression](https://github.com/Tom-Alexander/regression-js){target=_blank} | 2.0.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 137  | [safe-buffer](https://github.com/feross/safe-buffer){target=_blank} | 5.2.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 138  | [safer-buffer](https://github.com/ChALkeR/safer-buffer){target=_blank} | 2.1.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
