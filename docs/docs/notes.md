@@ -20,14 +20,15 @@ ${vintner_home}/
 ├─ instances/
 │  ├─ ${instance-name}/
 │  │  ├─ data/
+│  │  ├─ service-inputs/
+│  │  │  ├─ ${timestamp}.yaml
 │  │  ├─ templates/
-│  │  │  ├─ ${template-name}/
+│  │  │  ├─ ${timestamp}/
 │  │  │  │  ├─ service-template.${timestamp}.yaml
 │  │  │  │  ├─ variability-inputs.${timestamp}.yaml
 │  │  │  │  ├─ variable-service-template.yaml
 │  │  │  │  ├─ ...
 │  │  ├─ info.yaml
-│  │  ├─ service-inputs.yaml
 │  │  ├─ ...
 │  ├─ ...
 ├─ ...

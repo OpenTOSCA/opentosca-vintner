@@ -28,6 +28,6 @@ export default async function (options: InstanceResolveOptions) {
 
         // Store variability resolved service template
         await instance.setServiceTemplate(result.template, time)
-        await instance.setTime(time)
+        await instance.setResolvedTimestamp(time)
     })
 }

@@ -1,6 +1,7 @@
 import {Instance} from '#repository/instances'
 import lock from '#utils/lock'
 import {Template} from '#repository/templates'
+import * as utils from '#utils'
 
 export type InstancesTemplateUpdateOptions = {instance: string; template: string}
 
@@ -12,7 +13,7 @@ export default async function (options: InstancesTemplateUpdateOptions) {
         await lock.try(template.getLockKey(), async () => {
             if (!instance.exists()) throw new Error(`Instance ${options.instance} does not exists`)
             if (!template.exists()) throw new Error(`Template ${options.instance} does not exist`)
-            instance.setTemplate(options.template)
+            instance.setTemplate(options.template, utils.now())
         })
     })
 }

@@ -8,8 +8,7 @@ import {sleep} from '#utils'
 import {before} from 'mocha'
 import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
-// TODO: negate this
-if (integrationTestsEnabled) {
+if (!integrationTestsEnabled) {
     console.log()
     console.warn('Skipping integration tests')
 } else {
