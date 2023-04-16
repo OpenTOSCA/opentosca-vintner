@@ -52,6 +52,9 @@ export class Instance {
         files.createDirectory(this.getServiceInputsDirectory())
         files.createDirectory(this.getTemplatesDirectory())
 
+        // Create info
+        this.setInfo({name: this.getName(), template_timestamp: time})
+
         // Set template
         this.setTemplate(template.getName(), time)
 
