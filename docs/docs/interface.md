@@ -172,6 +172,44 @@ deploys instance
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
 
+## vintner instances info
+
+display instance info
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances info --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/info
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/info", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/info", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+
 ## vintner instances inspect
 
 inspects variability-resolved service template

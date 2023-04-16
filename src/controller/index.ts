@@ -23,6 +23,7 @@ import listInstances from './instances/list'
 import openInstance from './instances/open'
 import pathInstance from './instances/path'
 import codeInstance from './instances/code'
+import infoInstance from './instances/info'
 import undeployInstance from './instances/undeploy'
 import redeployInstance from './instances/redeploy'
 import updateInstance from './instances/update'
@@ -60,6 +61,7 @@ const Controller = {
         adapt: adaptInstance,
         unadapt: unadaptInstance,
         updateTemplate: updateInstanceTemplate,
+        info: infoInstance,
     },
     query: {
         run: runQuery,

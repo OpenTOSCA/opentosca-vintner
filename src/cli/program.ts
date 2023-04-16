@@ -307,6 +307,17 @@ instances
     )
 
 instances
+    .command('info')
+    .description('display instance info')
+    .requiredOption('--instance <string>', 'instance name')
+    .action(
+        hae.exit(async options => {
+            const info = await Controller.instances.info(options)
+            console.log(files.toYAML(info))
+        })
+    )
+
+instances
     .command('open')
     .description('opens template directory in a file browser')
     .requiredOption('--instance <string>', 'instance name')
