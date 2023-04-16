@@ -13,6 +13,8 @@ describe('examples', async () => {
         for (const example of examples) {
             const exampleDir = path.join(examplesDir, example)
             const testsPath = path.join(exampleDir, 'tests')
+            if (!files.exists(testsPath)) continue
+
             groups.push({
                 name: `example-${example}`,
                 tests: files
