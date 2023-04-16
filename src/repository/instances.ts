@@ -11,6 +11,7 @@ import * as validator from '#validator'
 
 type InstanceInfo = {
     name: string
+    creation_timestamp: number
     resolved_timestamp?: number
     template_timestamp: number
     service_inputs_timestamp?: number
@@ -53,7 +54,7 @@ export class Instance {
         files.createDirectory(this.getTemplatesDirectory())
 
         // Create info
-        this.setInfo({name: this.getName(), template_timestamp: time})
+        this.setInfo({name: this.getName(), creation_timestamp: time, template_timestamp: time})
 
         // Set template
         this.setTemplate(template.getName(), time)
@@ -83,8 +84,12 @@ export class Instance {
 
     loadInfo() {
         const info = files.loadYAML<InstanceInfo>(this.getInfo())
+
         if (validator.isUndefined(info.name)) throw new Error(`${this.getName()} has no name`)
-        if (validator.isUndefined(info.template_timestamp)) throw new Error(`${this.getName()} has no template`)
+        if (validator.isUndefined(info.creation_timestamp))
+            throw new Error(`${this.getName()} has no creation timestamp`)
+        if (validator.isUndefined(info.template_timestamp))
+            throw new Error(`${this.getName()} has no template timestamp`)
 
         return info
     }

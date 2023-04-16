@@ -390,7 +390,7 @@ instances
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
-            await Controller.instances.updateTemplate(options)
+            await Controller.instances.update(options)
         })
     )
 

@@ -34,7 +34,6 @@ ${vintner_home}/
 ├─ ...
 ```
 
-
 ## Workflows
 
 ### Create a new Instance
@@ -76,12 +75,14 @@ ${vintner_home}/
 
 ### Update an Instance 
 
+!!! note "vintner instances update"
+
 1. Deployment inputs are copied to the service inputs directory.
 1. Instance info is updated.
 1. Update command is sent to orchestrator. Variability-resolved service template is used.
 
 Note, requires to resolve variability first.
-In contrast to deploying an instance, deployment inputs can be changed and the update instead of the deploy command is sent to the orchestrator.
+In contrast to deploying an instance, deployment inputs can be changed and the update command instead of the deploy command is sent to the orchestrator.
 
 ### Adapt an Instance
 
@@ -93,7 +94,7 @@ In contrast to deploying an instance, deployment inputs can be changed and the u
 1. Instance info is updated.
 
 In contrast to updating an instance template, adapting an instance regenerates the variability-resolve topology template and does not swap the variable topology template.
-In contrast to updating an instance, variability is resolved due to new variability inputs.
+In contrast to updating an instance, variability inputs change and variability is resolved.
 
 ### Undeploy an Instance
 

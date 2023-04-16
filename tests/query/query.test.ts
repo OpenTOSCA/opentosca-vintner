@@ -153,7 +153,7 @@ function getDefaultTemplateTest(template: string) {
 }
 
 async function resolveTemplate(templatePath: string) {
-    const output = files.temporaryFile()
+    const output = files.temporary()
     await resolveQueries({
         output,
         template: path.join(__dirname, templatePath),
