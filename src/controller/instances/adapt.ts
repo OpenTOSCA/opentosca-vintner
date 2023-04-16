@@ -90,10 +90,9 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
              */
             await instance.setServiceTemplate(result.template, time)
             await instance.setVariabilityInputs(result.inputs, time)
-            instance.setTime(time)
+            instance.setResolvedTimestamp(time)
             await Controller.instances.update({
                 instance: instance.getName(),
-                inputs: instance.hasServiceInputs() ? instance.getServiceInputs() : undefined,
                 time,
             })
         })

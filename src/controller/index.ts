@@ -29,6 +29,7 @@ import updateInstance from './instances/update'
 import deleteInstance from './instances/delete'
 import resolveInstance from './instances/resolve'
 import adaptInstance from './instances/adapt'
+import updateInstanceTemplate from './instances/update-template'
 import unadaptInstance from './instances/unadapt'
 import runQuery from './query/run'
 import benchmarkSetup from './setup/benchmark'
@@ -58,6 +59,7 @@ const Controller = {
         resolve: resolveInstance,
         adapt: adaptInstance,
         unadapt: unadaptInstance,
+        updateTemplate: updateInstanceTemplate,
     },
     query: {
         run: runQuery,

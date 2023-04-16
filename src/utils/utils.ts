@@ -119,7 +119,7 @@ export function normalizeString(value: string) {
 }
 
 export function now() {
-    return day().millisecond()
+    return day().valueOf()
 }
 
 export function weekday() {

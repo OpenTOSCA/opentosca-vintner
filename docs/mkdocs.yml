@@ -89,7 +89,6 @@ nav:
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
-    - dynamic-deployment-artifacts.md
     - interface.md
     - dependencies.md
     - development.md

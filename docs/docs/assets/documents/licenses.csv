@@ -1,6 +1,6 @@
 name,version,license,url
 @ewoudenberg/difflib,0.1.0,PSF,https://github.com/ewoudenberg/difflib.js
-@types/node,18.0.6,MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
+@types/node,18.15.11,MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
 @types/yauzl,2.10.0,MIT,https://github.com/DefinitelyTyped/DefinitelyTyped
 accepts,1.3.8,MIT,https://github.com/jshttp/accepts
 ansi-styles,4.3.0,MIT,https://github.com/chalk/ansi-styles
@@ -33,7 +33,7 @@ commander,10.0.1,MIT,https://github.com/tj/commander.js
 compress-commons,4.1.1,MIT,https://github.com/archiverjs/node-compress-commons
 concat-map,0.0.1,MIT,https://github.com/substack/node-concat-map
 content-disposition,0.5.4,MIT,https://github.com/jshttp/content-disposition
-content-type,1.0.4,MIT,https://github.com/jshttp/content-type
+content-type,1.0.5,MIT,https://github.com/jshttp/content-type
 cookie,0.5.0,MIT,https://github.com/jshttp/cookie
 cookie-signature,1.0.6,MIT,https://github.com/visionmedia/node-cookie-signature
 core-util-is,1.0.3,MIT,https://github.com/isaacs/core-util-is
@@ -68,10 +68,10 @@ fs-extra,11.1.1,MIT,https://github.com/jprichardson/node-fs-extra
 fs.realpath,1.0.0,ISC,https://github.com/isaacs/fs.realpath
 function-bind,1.1.1,MIT,https://github.com/Raynos/function-bind
 get-func-name,2.0.0,MIT,https://github.com/chaijs/get-func-name
-get-intrinsic,1.1.2,MIT,https://github.com/ljharb/get-intrinsic
+get-intrinsic,1.2.0,MIT,https://github.com/ljharb/get-intrinsic
 get-stream,5.2.0,MIT,https://github.com/sindresorhus/get-stream
 glob,10.1.0,ISC,https://github.com/isaacs/node-glob
-graceful-fs,4.2.10,ISC,https://github.com/isaacs/node-graceful-fs
+graceful-fs,4.2.11,ISC,https://github.com/isaacs/node-graceful-fs
 has,1.0.3,MIT,https://github.com/tarruda/has
 has-flag,4.0.0,MIT,https://github.com/sindresorhus/has-flag
 has-symbols,1.0.3,MIT,https://github.com/inspect-js/has-symbols
@@ -98,7 +98,7 @@ lodash.flatten,4.4.0,MIT,https://github.com/lodash/lodash
 lodash.isplainobject,4.0.6,MIT,https://github.com/lodash/lodash
 lodash.union,4.6.0,MIT,https://github.com/lodash/lodash
 logic-solver,2.0.1,MIT,https://github.com/meteor/logic-solver
-loupe,2.3.4,MIT,https://github.com/chaijs/loupe
+loupe,2.3.6,MIT,https://github.com/chaijs/loupe
 lru-cache,9.0.3,ISC,https://github.com/isaacs/node-lru-cache
 media-typer,0.3.0,MIT,https://github.com/jshttp/media-typer
 merge-descriptors,1.0.1,MIT,https://github.com/component/merge-descriptors
@@ -113,7 +113,7 @@ negotiator,0.6.3,MIT,https://github.com/jshttp/negotiator
 node-cron,3.0.2,ISC,https://github.com/merencia/node-cron
 normalize-path,3.0.0,MIT,https://github.com/jonschlinkert/normalize-path
 object-assign,4.1.1,MIT,https://github.com/sindresorhus/object-assign
-object-inspect,1.12.2,MIT,https://github.com/inspect-js/object-inspect
+object-inspect,1.12.3,MIT,https://github.com/inspect-js/object-inspect
 ohm-js,16.4.0,MIT,https://github.com/harc/ohm
 on-finished,2.4.1,MIT,https://github.com/jshttp/on-finished
 once,1.4.0,ISC,https://github.com/isaacs/once
@@ -132,8 +132,8 @@ pump,3.0.0,MIT,https://github.com/mafintosh/pump
 qs,6.11.0,BSD-3-Clause,https://github.com/ljharb/qs
 range-parser,1.2.1,MIT,https://github.com/jshttp/range-parser
 raw-body,2.5.1,MIT,https://github.com/stream-utils/raw-body
-readable-stream,3.6.0,MIT,https://github.com/nodejs/readable-stream
-readdir-glob,1.1.2,Apache-2.0,https://github.com/Yqnn/node-readdir-glob
+readable-stream,3.6.2,MIT,https://github.com/nodejs/readable-stream
+readdir-glob,1.1.3,Apache-2.0,https://github.com/Yqnn/node-readdir-glob
 regression,2.0.1,MIT,https://github.com/Tom-Alexander/regression-js
 safe-buffer,5.2.1,MIT,https://github.com/feross/safe-buffer
 safer-buffer,2.1.2,MIT,https://github.com/ChALkeR/safer-buffer

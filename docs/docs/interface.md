@@ -170,7 +170,7 @@ deploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
-| verbose |  false  | Boolean | verbose |
+| verbose |  false  | boolean | verbose |
 
 ## vintner instances inspect
 
@@ -306,7 +306,7 @@ redeploy instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| verbose |  false  | Boolean | verbose |
+| verbose |  false  | boolean | verbose |
 
 ## vintner instances resolve
 
@@ -418,7 +418,88 @@ undeploys instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| verbose |  false  | Boolean | verbose |
+| verbose |  false  | boolean | verbose |
+
+## vintner instances update
+
+update instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances update --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/update
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/update", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/update", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| inputs |  false  | string | path to the deployment inputs |
+| verbose |  false  | boolean | verbose |
+
+## vintner instances update-template
+
+update instance template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances update-template --instance ${INSTANCE} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/instances/update-template
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/update-template", {
+		instance: INSTANCE,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/update-template", json={
+		"instance": INSTANCE,
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| template |  true  | string | template name |
 
 ## vintner orchestrators enable
 
@@ -489,7 +570,7 @@ initializes unfurl plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| venv |  false  | Boolean | enable the use of a virtual environment (default: true) |
+| venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
 ## vintner orchestrators init unfurl-wsl
@@ -523,7 +604,7 @@ initializes unfurl-wsl plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| venv |  false  | Boolean | enable the use of a virtual environment (default: true) |
+| venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
 ## vintner orchestrators init xopera
@@ -557,7 +638,7 @@ initializes xopera plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| venv |  false  | Boolean | enable the use of a virtual environment (default: true) |
+| venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of xopera (default: "~/opera") |
 
 ## vintner orchestrators init xopera-wsl
@@ -591,7 +672,7 @@ initializes xopera-wsl plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| venv |  false  | Boolean | enable the use of a virtual environment (default: true) |
+| venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | dir |  false  | string | directory of opera (default: "~/opera") |
 
 ## vintner query
@@ -652,7 +733,7 @@ starts a sensor for compute utilization such as cpu and memory
 | template |  true  | string | node template name |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
-| disable-submission |  false  | Boolean | disable submission of data (default: false) |
+| disable-submission |  false  | boolean | disable submission of data (default: false) |
 
 ## vintner sensors file
 
@@ -671,8 +752,8 @@ starts a sensor for data stored in a file
 | file |  true  | string | path to file |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
-| disable-watch |  false  | Boolean | do not watch file but send data once (default: false) |
-| disable-submission |  false  | Boolean | disable submission of data (default: false) |
+| disable-watch |  false  | boolean | do not watch file but send data once (default: false) |
+| disable-submission |  false  | boolean | disable submission of data (default: false) |
 
 ## vintner sensors location
 
@@ -691,7 +772,7 @@ starts a sensor for the current location
 | template |  true  | string | node template name |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every minute") |
-| disable-submission |  false  | Boolean | disable submission of data (default: false) |
+| disable-submission |  false  | boolean | disable submission of data (default: false) |
 
 ## vintner sensors weekday
 
@@ -710,7 +791,7 @@ starts a sensor for the weekday
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every day") |
 | start |  false  | string | set day to start from |
-| disable-submission |  false  | Boolean | disable submission of data (default: false) |
+| disable-submission |  false  | boolean | disable submission of data (default: false) |
 
 ## vintner server start
 
@@ -759,11 +840,11 @@ benchmarks the variability resolver
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| no-io |  false  | Boolean | disable read and writes to the filesystem |
+| no-io |  false  | boolean | disable read and writes to the filesystem |
 | seeds |  false  | numbers... | seed for generating service templates (default: [10,250,500,1000,2500,5000,10000]) |
 | runs |  false  | number | number of measurements for each test (default: 10) |
-| latex |  false  | Boolean | plot results as latex (default: false) |
-| markdown |  false  | Boolean | plot results as markdown (default: false) |
+| latex |  false  | boolean | plot results as latex (default: false) |
+| markdown |  false  | boolean | plot results as markdown (default: false) |
 
 ## vintner setup clean
 

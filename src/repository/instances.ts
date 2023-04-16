@@ -11,7 +11,10 @@ import * as validator from '#validator'
 
 type InstanceInfo = {
     name: string
-    time?: number
+    creation_timestamp: number
+    resolved_timestamp?: number
+    template_timestamp: number
+    service_inputs_timestamp?: number
 }
 
 export class Instances {
@@ -43,10 +46,19 @@ export class Instance {
         return files.exists(this.getInstanceDirectory())
     }
 
-    create() {
+    create(template: Template, time: number) {
+        // Setup directories
         files.createDirectory(this.getInstanceDirectory())
         files.createDirectory(this.getDataDirectory())
-        this.setInfo({name: this.getName()})
+        files.createDirectory(this.getServiceInputsDirectory())
+        files.createDirectory(this.getTemplatesDirectory())
+
+        // Create info
+        this.setInfo({name: this.getName(), creation_timestamp: time, template_timestamp: time})
+
+        // Set template
+        this.setTemplate(template.getName(), time)
+
         return this
     }
 
@@ -55,8 +67,9 @@ export class Instance {
         return this
     }
 
-    setTemplate(name: string) {
-        files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory())
+    setTemplate(name: string, time: number) {
+        files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory(time))
+        this.setInfo({...this.loadInfo(), template_timestamp: time})
         return this
     }
 
@@ -70,25 +83,44 @@ export class Instance {
     }
 
     loadInfo() {
-        return files.loadYAML<InstanceInfo>(this.getInfo())
+        const info = files.loadYAML<InstanceInfo>(this.getInfo())
+
+        if (validator.isUndefined(info.name)) throw new Error(`${this.getName()} has no name`)
+        if (validator.isUndefined(info.creation_timestamp))
+            throw new Error(`${this.getName()} has no creation timestamp`)
+        if (validator.isUndefined(info.template_timestamp))
+            throw new Error(`${this.getName()} has no template timestamp`)
+
+        return info
     }
 
-    setTime(time: number) {
-        this.setInfo({...this.loadInfo(), time})
+    setResolvedTimestamp(time: number) {
+        this.setInfo({...this.loadInfo(), resolved_timestamp: time})
         return this
     }
 
-    setServiceInputs(path: string) {
-        files.copy(path, this.getServiceInputs())
-        return this
+    loadResolvedTimestamp() {
+        const info = this.loadInfo()
+        if (validator.isUndefined(info.resolved_timestamp))
+            throw new Error(`Instance "${this.getName()}" does not have a service template`)
+        return info.resolved_timestamp
+    }
+
+    loadServiceInputsTimestamp() {
+        return this.loadInfo().service_inputs_timestamp
     }
 
     getInstanceDirectory() {
-        return path.join(Instances.getInstancesDirectory(), this._name)
+        return path.join(Instances.getInstancesDirectory(), this.getName())
     }
 
-    getTemplateDirectory() {
-        return path.join(this.getInstanceDirectory(), 'template')
+    getTemplateDirectory(time?: number) {
+        if (validator.isUndefined(time)) time = this.loadInfo().template_timestamp
+        return path.join(this.getTemplatesDirectory(), time.toString())
+    }
+
+    getTemplatesDirectory() {
+        return path.join(this.getInstanceDirectory(), 'templates')
     }
 
     getDataDirectory() {
@@ -110,27 +142,33 @@ export class Instance {
         return template
     }
 
-    hasServiceInputs() {
-        return files.exists(this.getServiceInputs())
+    setServiceInputs(path: string, time: number) {
+        files.copy(path, this.getServiceInputs(time))
+        this.setInfo({...this.loadInfo(), service_inputs_timestamp: time})
+        return this
     }
 
-    getServiceInputs() {
-        return path.join(this.getInstanceDirectory(), 'service-inputs.yaml')
+    hasServiceInputs() {
+        const time = this.loadServiceInputsTimestamp()
+        if (validator.isDefined(time)) files.assertFile(this.getServiceInputs(time))
+        return validator.isDefined(time)
+    }
+
+    getServiceInputs(time?: number) {
+        if (validator.isUndefined(time)) time = this.loadInfo().service_inputs_timestamp
+        return path.join(this.getServiceInputsDirectory(), `${time}.yaml`)
+    }
+
+    getServiceInputsDirectory() {
+        return path.join(this.getInstanceDirectory(), 'service-inputs')
     }
 
     loadServiceInputs() {
         return files.loadYAML<InputAssignmentMap>(this.getServiceInputs())
     }
 
-    loadTime() {
-        const info = this.loadInfo()
-        if (validator.isUndefined(info.time))
-            throw new Error(`Instance "${this.getName()}" does not a service template`)
-        return info.time
-    }
-
     getServiceTemplateFile(time?: number) {
-        return `service-template.${time || this.loadTime()}.yaml`
+        return `service-template.${time || this.loadResolvedTimestamp()}.yaml`
     }
 
     getServiceTemplate(time?: number) {
@@ -158,7 +196,7 @@ export class Instance {
     }
 
     getVariabilityInputs(time?: number) {
-        return path.join(this.getTemplateDirectory(), `variability-inputs.${time || this.loadTime()}.yaml`)
+        return path.join(this.getTemplateDirectory(), `variability-inputs.${time || this.loadResolvedTimestamp()}.yaml`)
     }
 
     loadVariabilityInputs() {

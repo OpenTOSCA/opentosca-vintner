@@ -50,7 +50,7 @@ export default async function (options: TemplateTestOptions) {
 async function runTest(dir: string, vstdir: string) {
     files.assertDirectory(dir)
     const config = loadConfig(dir)
-    const output = files.temporaryFile()
+    const output = files.temporary()
 
     async function fn() {
         await Controller.template.resolve({
