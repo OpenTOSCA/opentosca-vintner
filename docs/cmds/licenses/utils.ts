@@ -17,6 +17,7 @@ export const LICENSES: {[key: string]: string} = {
     'CC0-1.0': 'https://choosealicense.com/licenses/cc0-1.0',
     'CC-BY-3.0': 'https://creativecommons.org/licenses/by/3.0/',
     PSF: 'http://docs.python.org/license.html',
+    'BlueOak-1.0.0': 'https://blueoakcouncil.org/license/1.0.0',
 }
 
 /**
