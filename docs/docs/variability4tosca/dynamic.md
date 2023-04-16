@@ -2,7 +2,7 @@
 title: Dynamic Deployment Artifacts
 ---
 
-# Dynamic Deployment Artifacts 1.0 Release Candidate
+# Variability4TOSCA Dynamic Deployment Artifacts 1.0 Release Candidate
 
 This document specifies dynamic deployment artifacts which are supposed to be build on-demand based on information in the topology.
 The intention is to build variants of deployment artifacts which are specific for the application.
