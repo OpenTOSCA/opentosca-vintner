@@ -34,6 +34,17 @@ ${vintner_home}/
 ├─ ...
 ```
 
+## Instance Info
+
+| Keyname                   | Mandatory | Type   | Description                                                                            |
+|---------------------------|-----------|--------|----------------------------------------------------------------------------------------|
+| name                      | true      | String | Instance name                                                                          |
+| creation_timestamp        | true      | Number | ISO milliseconds of creation date                                                      |
+| resolved_timestamp        | false     | Number | ISO milliseconds of latest variablity inputs and variability-resolved service template |
+| template_timestamp        | true      | Number | ISO milliseconds of latest variable service template                                   |
+| service_inputs_timestamp  | false     | Number | ISO milliseconds of latest service inputs                                              |
+
+
 ## Workflows
 
 ### Create a new Instance

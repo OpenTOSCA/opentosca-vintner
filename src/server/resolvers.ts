@@ -188,4 +188,28 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/instances/update',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.update(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/update-template',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.updateTemplate(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/info',
+    hae.express(async (req, res, next) => {
+        const info = await Controller.instances.info(req.body)
+        res.json(info)
+    })
+)
+
 export default resolvers
