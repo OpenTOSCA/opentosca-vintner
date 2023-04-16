@@ -12,6 +12,7 @@ import * as validator from '#validator'
 type InstanceInfo = {
     name: string
     time?: number
+    template: string
 }
 
 export class Instances {
@@ -43,10 +44,11 @@ export class Instance {
         return files.exists(this.getInstanceDirectory())
     }
 
-    create() {
+    create(template: Template) {
         files.createDirectory(this.getInstanceDirectory())
         files.createDirectory(this.getDataDirectory())
-        this.setInfo({name: this.getName()})
+        this.setInfo({name: this.getName(), template: template.getName()})
+        this.setTemplate(template.getName(), false)
         return this
     }
 
@@ -55,8 +57,9 @@ export class Instance {
         return this
     }
 
-    setTemplate(name: string) {
-        files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory())
+    setTemplate(name: string, info = true) {
+        files.copy(new Template(name).getTemplateDirectory(), this.getTemplateDirectory(name))
+        if (info) this.setInfo({...this.loadInfo(), template: name})
         return this
     }
 
@@ -87,8 +90,18 @@ export class Instance {
         return path.join(Instances.getInstancesDirectory(), this._name)
     }
 
-    getTemplateDirectory() {
-        return path.join(this.getInstanceDirectory(), 'template')
+    getTemplateDirectory(template?: string) {
+        let name
+
+        if (validator.isDefined(template)) name = template
+        if (validator.isUndefined(name)) name = this.loadInfo().template
+        if (validator.isUndefined(name)) throw new Error(`${this._name} has no template`)
+
+        return path.join(this.getTemplatesDirectory(), name)
+    }
+
+    getTemplatesDirectory() {
+        return path.join(this.getInstanceDirectory(), 'templates')
     }
 
     getDataDirectory() {
