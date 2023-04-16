@@ -1,4 +1,4 @@
-import {NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
+import {NodeTemplate, NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
 import {GroupTemplateMap} from '#spec/group-template'
 import {PolicyAssignmentMap} from '#spec/policy-template'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
@@ -10,6 +10,7 @@ import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {Graph, Node, Property, Relation} from './graph'
 import {ensureDefined} from '#validator'
 import {GroupMember} from '#spec/group-type'
+import {UnexpectedError} from '#utils/error'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -57,6 +58,12 @@ export default class Transformer {
         delete raw.weight
     }
 
+    private transformType(element: Node, template: NodeTemplate) {
+        const type = element.types.find(it => it.present)
+        if (validator.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
+        template.type = type.name
+    }
+
     private transformNodes() {
         // Delete node templates which are not present
         if (validator.isDefined(this.topology.node_templates)) {
@@ -64,6 +71,9 @@ export default class Transformer {
                 .filter(node => node.present)
                 .reduce<NodeTemplateMap>((map, node) => {
                     const template = node.raw
+
+                    // Select present type
+                    this.transformType(node, template)
 
                     // Select present properties
                     this.transformProperties(node, template)

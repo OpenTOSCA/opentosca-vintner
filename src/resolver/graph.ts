@@ -7,11 +7,10 @@ import {
     RelationDefaultConditionMode,
     SolverOptions,
     ValueExpression,
-    VariabilityExpression,
     VariabilityPointMap,
 } from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
-import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
+import {NodeTemplate, RequirementAssignment, TemplateType} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {PolicyTemplate} from '#spec/policy-template'
@@ -22,6 +21,7 @@ import * as utils from '#utils'
 import * as validator from '#validator'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {ensureDefined} from '#validator'
+import {UnexpectedError} from '#utils/error'
 
 /**
  * Not documented since preparation for future work
@@ -122,6 +122,10 @@ export abstract class ConditionalElement {
     isArtifact(): this is Artifact {
         return this instanceof Artifact
     }
+
+    isType(): this is Type {
+        return this instanceof Type
+    }
 }
 
 export class Input extends ConditionalElement {
@@ -149,8 +153,61 @@ export class Input extends ConditionalElement {
     }
 }
 
+export class Type extends ConditionalElement {
+    raw: TemplateType | string
+    container: Node
+    default: boolean
+
+    constructor(data: {name: string; container: Node; index: number; raw: TemplateType | string}) {
+        super('type', data)
+
+        this.raw = data.raw
+        this.container = data.container
+        this.conditions = validator.isString(data.raw)
+            ? []
+            : validator.isDefined(data.raw.default_alternative)
+            ? [false]
+            : utils.toList(data.raw.conditions)
+        this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+    }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isUndefined(this.index)) throw new UnexpectedError()
+        return [this.container.name, this.index]
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.type_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.type_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.type_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.type_pruning
+        )
+    }
+
+    get defaultCondition() {
+        return this.container.presenceCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
+    }
+}
+
 export class Node extends ConditionalElement {
     raw: NodeTemplate
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
     relations: Relation[] = []
     ingoing: Relation[] = []
     outgoing: Relation[] = []
@@ -589,6 +646,8 @@ export class Graph {
 
     elements: ConditionalElement[] = []
 
+    types: Type[] = []
+
     nodes: Node[] = []
     nodesMap = new Map<string, Node>()
 
@@ -635,6 +694,7 @@ export class Graph {
         this.buildPolicies()
 
         this.elements = [
+            ...this.types,
             ...this.nodes,
             ...this.relations,
             ...this.properties,
@@ -659,6 +719,7 @@ export class Graph {
                 group_default_condition: false,
                 artifact_default_condition: false,
                 property_default_condition: false,
+                type_default_condition: false,
             },
             {
                 default_condition: true,
@@ -668,6 +729,7 @@ export class Graph {
                 group_default_condition: true,
                 artifact_default_condition: true,
                 property_default_condition: true,
+                type_default_condition: true,
             },
             options
         )
@@ -682,6 +744,7 @@ export class Graph {
                 group_pruning: false,
                 artifact_pruning: false,
                 property_pruning: false,
+                type_pruning: false,
             },
             {
                 pruning: true,
@@ -691,6 +754,7 @@ export class Graph {
                 group_pruning: true,
                 artifact_pruning: true,
                 property_pruning: true,
+                type_pruning: true,
             },
             options
         )
@@ -766,6 +830,9 @@ export class Graph {
 
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
+
+            // Type
+            this.buildTypes(node, nodeTemplate)
 
             // Properties
             this.buildProperties(node, nodeTemplate)
@@ -868,6 +935,31 @@ export class Graph {
         })
     }
 
+    private buildTypes(element: Node, template: NodeTemplate) {
+        if (validator.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
+
+        // TODO: default handling is wrong
+        // TODO: check that there is only one default
+
+        const types: TemplateType[] = validator.isString(template.type) ? [{type: template.type}] : template.type
+        for (const [typeIndex, typeTemplate] of types.entries()) {
+            if (!validator.isObject(typeTemplate)) throw new UnexpectedError()
+
+            const type = new Type({
+                name: typeTemplate.type,
+                container: element,
+                index: typeIndex,
+                raw: typeTemplate,
+            })
+            type.graph = this
+            this.types.push(type)
+
+            element.types.push(type)
+            if (!element.typesMap.has(typeTemplate.type)) element.typesMap.set(typeTemplate.type, [])
+            element.typesMap.get(typeTemplate.type)!.push(type)
+        }
+    }
+
     private buildArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
@@ -921,7 +1013,7 @@ export class Graph {
                             conditions: validator.isDefined(propertyAssignment.default_alternative)
                                 ? [false]
                                 : utils.toList(propertyAssignment.conditions),
-                            default: propertyAssignment.default_alternative || false,
+                            default: propertyAssignment.default_alternative ?? false,
                             container: element,
                             value: propertyAssignment.value,
                             expression: propertyAssignment.expression,
@@ -1036,6 +1128,25 @@ export class Graph {
         return node
     }
 
+    // TODO: this does only work nodes
+    getType(member: [string, string | number]) {
+        let type
+        const node = this.getNode(member[0])
+
+        // Element is [node name, type name]
+        if (validator.isString(member[1])) {
+            const types = node.typesMap.get(member[1]) || []
+            if (types.length > 1) throw new Error(`Type "${utils.pretty(member)}" is ambiguous`)
+            type = types[0]
+        }
+
+        // Element is [node name, type index]
+        if (validator.isNumber(member[1])) type = node.types[member[1]]
+
+        validator.ensureDefined(type, `Type "${utils.pretty(member)}" not found`)
+        return type
+    }
+
     getRelation(member: [string, string | number]) {
         let relation
         const node = this.getNode(member[0])
@@ -1093,6 +1204,7 @@ export class Graph {
         return artifact
     }
 
+    // TODO: this does only work nodes
     getProperty(member: [string, string | number]) {
         let property
         const node = this.getNode(member[0])
