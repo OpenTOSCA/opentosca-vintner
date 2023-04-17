@@ -17,6 +17,7 @@ topology_template:
         policy_presence: policy_one
   policies:
     - policy_one:
+        type: policy_one
         conditions: false
         targets: []
 ```

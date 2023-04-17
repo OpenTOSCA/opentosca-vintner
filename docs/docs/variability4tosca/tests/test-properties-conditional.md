@@ -55,6 +55,7 @@ topology_template:
             conditions: true
   groups:
     group_one:
+      type: group_one
       members:
         - node_one
       properties:
@@ -66,6 +67,7 @@ topology_template:
             conditions: true
   policies:
     - policy_one:
+        type: policy_one
         targets:
           - node_one
         properties:
@@ -114,12 +116,14 @@ topology_template:
         key_four: value_four
   groups:
     group_one:
+      type: group_one
       members:
         - node_one
       properties:
         property_group_one_one: value_group_one_two
   policies:
     - policy_one:
+        type: policy_one
         targets:
           - node_one
         properties:
