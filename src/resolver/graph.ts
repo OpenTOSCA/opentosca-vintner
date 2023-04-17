@@ -50,7 +50,11 @@ export abstract class ConditionalElement {
 
     abstract toscaId: string | number | [string, string | number]
     abstract presenceCondition: LogicExpression
+
     abstract defaultCondition: LogicExpression
+
+    abstract default?: boolean
+    abstract bratansCondition?: LogicExpression
 
     abstract defaultEnabled: boolean
     abstract pruningEnabled: boolean
@@ -152,6 +156,9 @@ export class Input extends ConditionalElement {
             this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    default = undefined
+    bratansCondition = undefined
 }
 
 export class Type extends ConditionalElement {
@@ -207,6 +214,14 @@ export class Type extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    // Check if no other type is present
+    private _bratansCondition?: LogicExpression
+    get bratansCondition(): LogicExpression {
+        if (validator.isUndefined(this._bratansCondition))
+            this._bratansCondition = bratanize(this.container.types.filter(it => it !== this))
+        return this._bratansCondition
     }
 }
 
@@ -321,6 +336,9 @@ export class Node extends ConditionalElement {
             this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    default = undefined
+    bratansCondition = undefined
 }
 
 export class Property extends ConditionalElement {
@@ -379,6 +397,14 @@ export class Property extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {property_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    // Check if no other property having the same name is present
+    private _bratansCondition?: LogicExpression
+    get bratansCondition(): LogicExpression {
+        if (validator.isUndefined(this._bratansCondition))
+            this._bratansCondition = bratanize(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+        return this._bratansCondition
     }
 }
 
@@ -484,6 +510,14 @@ export class Relation extends ConditionalElement {
         return this._presenceCondition
     }
 
+    // Check if no other relation having the same name is present
+    private _bratansCondition?: LogicExpression
+    get bratansCondition(): LogicExpression {
+        if (validator.isUndefined(this._bratansCondition))
+            this._bratansCondition = bratanize(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
+        return this._bratansCondition
+    }
+
     isHostedOn() {
         return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
     }
@@ -548,6 +582,9 @@ export class Policy extends ConditionalElement {
             this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    default = undefined
+    bratansCondition = undefined
 }
 
 export class Group extends ConditionalElement {
@@ -594,6 +631,9 @@ export class Group extends ConditionalElement {
             this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    default = undefined
+    bratansCondition = undefined
 }
 
 export class Artifact extends ConditionalElement {
@@ -645,6 +685,22 @@ export class Artifact extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {artifact_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    // Check if no other artifact having the same name is present
+    private _bratansCondition?: LogicExpression
+    get bratansCondition(): LogicExpression {
+        if (validator.isUndefined(this._bratansCondition))
+            this._bratansCondition = bratanize(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
+        return this._bratansCondition
+    }
+}
+
+function bratanize(bratans: ConditionalElement[]) {
+    return {
+        not: {
+            or: bratans.map(it => it.presenceCondition),
+        },
     }
 }
 

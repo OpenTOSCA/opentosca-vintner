@@ -192,35 +192,11 @@ export default class Solver {
         }
         conditions = utils.filterNotNull<LogicExpression>(conditions)
 
-        // If artifact is default, then check if no other artifact having the same name is present
-        if (element.isArtifact() && element.default) {
-            const bratans = element.container.artifactsMap.get(element.name)!.filter(it => it !== element)
-            conditions = [
-                {
-                    not: {
-                        or: bratans.map(it => it.presenceCondition),
-                    },
-                },
-            ]
-        }
-
-        // If relation is default, then check if no other relation having the same name is present
-        if (element.isRelation() && element.default) {
-            const node = element.source
-            const bratans = node.outgoingMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
-        }
-
-        // If property is default, then check if no other property having the same name is present
-        if (element.isProperty() && element.default) {
-            const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
-        }
-
-        // If type is default, then check if no other type is present
-        if (element.isType() && element.default) {
-            const bratans = element.container.types.filter(it => it !== element)
-            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
+        // Add condition that checks if no other bratan is present
+        if (element.default) {
+            if (validator.isUndefined(element.bratansCondition))
+                throw new Error(`${element.Display} has no bratans condition`)
+            conditions = [element.bratansCondition]
         }
 
         // Add default condition if requested
