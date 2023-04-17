@@ -1169,7 +1169,7 @@ export class Graph {
         return node
     }
 
-    // TODO: this does only work nodes
+    // TODO: this does only work for nodes
     getType(member: [string, string | number]) {
         let type
         const node = this.getNode(member[0])
@@ -1245,7 +1245,7 @@ export class Graph {
         return artifact
     }
 
-    // TODO: this does only work nodes
+    // TODO: this does only work for nodes
     getProperty(member: [string, string | number]) {
         let property
         const node = this.getNode(member[0])

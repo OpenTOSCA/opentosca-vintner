@@ -32,8 +32,6 @@ export type DefaultOptions = {
     group_default_condition?: boolean
     artifact_default_condition?: boolean
     property_default_condition?: boolean
-    // TODO: test this
-    // TODO: doc this
     type_default_condition?: boolean
 }
 
@@ -45,8 +43,6 @@ export type PruningOptions = {
     group_pruning?: boolean
     artifact_pruning?: boolean
     property_pruning?: boolean
-    // TODO: test this
-    // TODO: doc this
     type_pruning?: boolean
 }
 
@@ -60,11 +56,7 @@ export type ConsistencyOptions = {
     ambiguous_artifact_consistency_check?: boolean
     missing_property_parent_consistency_check?: boolean
     ambiguous_property_consistency_check?: boolean
-    // TODO: test this
-    // TODO: doc this
     missing_type_container_consistency_check?: boolean
-    // TODO: test this
-    // TODO: doc this
     ambiguous_type_consistency_check?: boolean
 }
 
@@ -103,8 +95,6 @@ export type LogicExpression =
           amo?: LogicExpression[]
 
           // Type functions
-          // TODO: test this
-          // TODO: doc this
           type_presence?: [string, string | number]
 
           // Node functions
