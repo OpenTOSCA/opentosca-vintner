@@ -286,6 +286,7 @@ A relationship template can contain conditional property assignments.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | string &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | properties | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    |
 
 
@@ -332,6 +333,7 @@ Such a group is also called variability group.
 
 | Keyname           | Mandatory | Type                                                                       | Description                                                                                                        |
 |-------------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | string &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | members           | false        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                |
 | conditions        | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties        | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
@@ -366,6 +368,7 @@ These conditions must hold otherwise the respective policy is not present.
 
 | Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
 |-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | string &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | conditions        | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties        | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
 | default_condition | false        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
