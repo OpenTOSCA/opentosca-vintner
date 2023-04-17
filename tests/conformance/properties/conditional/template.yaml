@@ -54,6 +54,7 @@ topology_template:
 
     groups:
         group_one:
+            type: group_one
             members: [node_one]
             properties:
                 - property_group_one_one:
@@ -66,6 +67,7 @@ topology_template:
 
     policies:
         - policy_one:
+              type: policy_one
               targets: [node_one]
               properties:
                   - property_policy_one_one:

@@ -11,7 +11,7 @@ import {
     SelectExpression,
     StepExpression,
     VariableExpression,
-} from '#spec/query-type'
+} from './types'
 import {parseInt} from 'lodash'
 import path from 'path'
 import * as files from '#files'

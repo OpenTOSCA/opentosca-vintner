@@ -1,4 +1,15 @@
-import {Artifact, ConditionalElement, Graph, Group, Input, Node, Policy, Property, Relation} from '#/resolver/graph'
+import {
+    Artifact,
+    ConditionalElement,
+    Graph,
+    Group,
+    Input,
+    Node,
+    Policy,
+    Property,
+    Relation,
+    Type,
+} from '#/resolver/graph'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
@@ -203,6 +214,12 @@ export default class Solver {
         // If property is default, then check if no other property having the same name is present
         if (element.isProperty() && element.default) {
             const bratans = element.container.propertiesMap.get(element.name)!.filter(it => it !== element)
+            conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
+        }
+
+        // If type is default, then check if no other type is present
+        if (element.isType() && element.default) {
+            const bratans = element.container.types.filter(it => it !== element)
             conditions = [{not: {or: bratans.map(it => it.presenceCondition)}}]
         }
 
@@ -660,6 +677,26 @@ export default class Solver {
             }
 
             return input.id
+        }
+
+        /**
+         * type_presence
+         */
+        if (validator.isDefined(expression.type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.type_presence[0])
+                validator.ensureStringOrNumber(expression.type_presence[1])
+                type = this.graph.getType(expression.type_presence)
+            }
+
+            return type.id
         }
 
         /**

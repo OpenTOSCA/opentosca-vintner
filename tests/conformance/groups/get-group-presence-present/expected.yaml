@@ -7,4 +7,5 @@ topology_template:
 
     groups:
         group_one:
+            type: group_one
             members: []

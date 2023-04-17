@@ -1,4 +1,4 @@
-import {PredicateExpression} from '#spec/query-type'
+import {PredicateExpression} from './types'
 import {Query} from '#/query/query'
 import Graph from '#/resolver/graph'
 import {isUndefined} from '#validator'

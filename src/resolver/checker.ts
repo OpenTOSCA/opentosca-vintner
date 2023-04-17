@@ -1,4 +1,5 @@
 import {Graph} from '#/resolver/graph'
+import * as utils from '#utils'
 
 export default class Checker {
     private readonly graph: Graph
@@ -86,6 +87,26 @@ export default class Checker {
                 for (const property of node.properties.filter(property => property.present)) {
                     if (names.has(property.name)) throw new Error(`${property.Display} is ambiguous`)
                     names.add(property.name)
+                }
+            }
+        }
+
+        // Ensure that container of each type exists
+        if (this.graph.options.consistency.missing_type_container_consistency_check) {
+            for (const type of this.graph.types.filter(it => it.present)) {
+                if (!type.container.present) throw new Error(`Container of ${type.Display} does not exist`)
+            }
+        }
+
+        // Ensure that each node has exactly one type
+        if (this.graph.options.consistency.ambiguous_type_consistency_check) {
+            for (const node of this.graph.nodes) {
+                const names = new Set()
+                const types = node.types.filter(property => property.present)
+                if (utils.isEmpty(types)) throw new Error(`${node.Display} has no type`)
+                for (const type of types) {
+                    if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
+                    names.add(type.name)
                 }
             }
         }

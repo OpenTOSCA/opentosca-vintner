@@ -7,8 +7,8 @@ function express(fn: Express.RequestHandler): Express.RequestHandler {
     }
 }
 
-function exit(action: (options: any) => Promise<void>): (options: any) => Promise<void> {
-    return async (options: any) => {
+function exit<T>(action: (options: T) => Promise<void>): (options: T) => Promise<void> {
+    return async (options: T) => {
         try {
             await action(options)
         } catch (e) {

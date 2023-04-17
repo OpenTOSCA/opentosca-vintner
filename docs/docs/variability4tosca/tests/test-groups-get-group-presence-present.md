@@ -17,6 +17,7 @@ topology_template:
         group_presence: group_one
   groups:
     group_one:
+      type: group_one
       conditions: true
       members: []
 ```
@@ -35,6 +36,7 @@ topology_template:
       type: container
   groups:
     group_one:
+      type: group_one
       members: []
 ```
 

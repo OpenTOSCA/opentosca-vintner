@@ -8,5 +8,6 @@ topology_template:
 
     policies:
         - policy_one:
+              type: policy_one
               conditions: false
               targets: []

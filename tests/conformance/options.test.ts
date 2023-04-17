@@ -18,6 +18,7 @@ describe('options', () => {
             group_default_condition: false,
             artifact_default_condition: false,
             property_default_condition: false,
+            type_default_condition: false,
         })
 
         expect(graph.options.pruning).to.deep.equal({
@@ -29,6 +30,7 @@ describe('options', () => {
             group_pruning: false,
             artifact_pruning: false,
             property_pruning: false,
+            type_pruning: false,
         })
     })
 
@@ -47,6 +49,7 @@ describe('options', () => {
             group_default_condition: true,
             artifact_default_condition: true,
             property_default_condition: true,
+            type_default_condition: true,
         })
 
         expect(graph.options.pruning).to.deep.equal({
@@ -58,6 +61,7 @@ describe('options', () => {
             group_pruning: true,
             artifact_pruning: true,
             property_pruning: true,
+            type_pruning: true,
         })
     })
 
@@ -75,6 +79,7 @@ describe('options', () => {
             group_default_condition: false,
             artifact_default_condition: false,
             property_default_condition: false,
+            type_default_condition: false,
         })
     })
 
@@ -92,6 +97,7 @@ describe('options', () => {
             group_default_condition: true,
             artifact_default_condition: true,
             property_default_condition: true,
+            type_default_condition: true,
         })
     })
 
@@ -109,6 +115,7 @@ describe('options', () => {
             group_pruning: true,
             artifact_pruning: true,
             property_pruning: true,
+            type_pruning: true,
         })
     })
 
@@ -126,6 +133,7 @@ describe('options', () => {
             group_pruning: false,
             artifact_pruning: false,
             property_pruning: false,
+            type_pruning: false,
         })
     })
 
@@ -144,6 +152,7 @@ describe('options', () => {
             group_default_condition: true,
             artifact_default_condition: true,
             property_default_condition: true,
+            type_default_condition: true,
         })
     })
 
@@ -162,6 +171,7 @@ describe('options', () => {
             group_default_condition: false,
             artifact_default_condition: false,
             property_default_condition: false,
+            type_default_condition: false,
         })
     })
 
@@ -180,6 +190,7 @@ describe('options', () => {
             group_pruning: true,
             artifact_pruning: true,
             property_pruning: true,
+            type_pruning: true,
         })
     })
 
@@ -198,6 +209,7 @@ describe('options', () => {
             group_pruning: false,
             artifact_pruning: false,
             property_pruning: false,
+            type_pruning: false,
         })
     })
 
@@ -217,6 +229,7 @@ describe('options', () => {
             group_default_condition: true,
             artifact_default_condition: true,
             property_default_condition: true,
+            type_default_condition: true,
         })
     })
 
@@ -236,6 +249,7 @@ describe('options', () => {
             group_default_condition: false,
             artifact_default_condition: false,
             property_default_condition: false,
+            type_default_condition: false,
         })
     })
 })

@@ -7,7 +7,7 @@ import {
     RelationDefaultConditionMode,
     SolverOptions,
     ValueExpression,
-    VariabilityExpression,
+    VariabilityPointList,
     VariabilityPointMap,
 } from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
@@ -22,6 +22,8 @@ import * as utils from '#utils'
 import * as validator from '#validator'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {ensureDefined} from '#validator'
+import {UnexpectedError} from '#utils/error'
+import {TypeAssignment} from '#spec/type-assignment'
 
 /**
  * Not documented since preparation for future work
@@ -39,7 +41,6 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
-
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -122,6 +123,10 @@ export abstract class ConditionalElement {
     isArtifact(): this is Artifact {
         return this instanceof Artifact
     }
+
+    isType(): this is Type {
+        return this instanceof Type
+    }
 }
 
 export class Input extends ConditionalElement {
@@ -149,8 +154,66 @@ export class Input extends ConditionalElement {
     }
 }
 
+export class Type extends ConditionalElement {
+    raw: TypeAssignment | string
+    container: Node | Relation | Policy | Group
+    default: boolean
+
+    constructor(data: {
+        name: string
+        container: Node | Relation | Policy | Group
+        index: number
+        raw: TypeAssignment | string
+    }) {
+        super('type', data)
+
+        this.raw = data.raw
+        this.container = data.container
+        this.conditions = validator.isString(data.raw)
+            ? []
+            : validator.isDefined(data.raw.default_alternative)
+            ? [false]
+            : utils.toList(data.raw.conditions)
+        this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+    }
+
+    get toscaId(): [string, string | number] {
+        if (validator.isUndefined(this.index)) throw new UnexpectedError()
+        return [this.container.name, this.index]
+    }
+
+    get defaultEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.default.type_default_condition
+                : this.raw.default_condition ?? this.graph.options.default.type_default_condition
+        )
+    }
+
+    get pruningEnabled() {
+        return Boolean(
+            validator.isString(this.raw)
+                ? this.graph.options.pruning.type_pruning
+                : this.raw.pruning ?? this.graph.options.pruning.type_pruning
+        )
+    }
+
+    get defaultCondition() {
+        return this.container.presenceCondition
+    }
+
+    private _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
+        return this._presenceCondition
+    }
+}
+
 export class Node extends ConditionalElement {
     raw: NodeTemplate
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
     relations: Relation[] = []
     ingoing: Relation[] = []
     outgoing: Relation[] = []
@@ -340,6 +403,9 @@ export class Relation extends ConditionalElement {
     relationship?: Relationship
     default: boolean
 
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
+
     constructor(data: {name: string; raw: RequirementAssignment; container: Node; index: number}) {
         super('relation', data)
         this.source = data.container
@@ -434,7 +500,7 @@ export class Relationship {
     name: string
     relation: Relation
 
-    constructor(data: {name: string; raw: InputDefinition; relation: Relation}) {
+    constructor(data: {name: string; raw: RelationshipTemplate; relation: Relation}) {
         this.name = data.name
         this.relation = data.relation
         this.raw = data.raw
@@ -447,6 +513,8 @@ export class Policy extends ConditionalElement {
     targets: (Node | Group)[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
 
     constructor(data: {name: string; raw: PolicyTemplate; index: number}) {
         super('policy', data)
@@ -488,15 +556,17 @@ export class Group extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
     variability: boolean
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
 
     constructor(data: {name: string; raw: GroupTemplate}) {
         super('group', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-        this.variability = [
-            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
-            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
-        ].includes(this.raw.type)
+        this.variability =
+            validator.isString(this.raw.type) &&
+            (this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
+                this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS)
     }
 
     get toscaId() {
@@ -589,6 +659,8 @@ export class Graph {
 
     elements: ConditionalElement[] = []
 
+    types: Type[] = []
+
     nodes: Node[] = []
     nodesMap = new Map<string, Node>()
 
@@ -635,6 +707,7 @@ export class Graph {
         this.buildPolicies()
 
         this.elements = [
+            ...this.types,
             ...this.nodes,
             ...this.relations,
             ...this.properties,
@@ -659,6 +732,7 @@ export class Graph {
                 group_default_condition: false,
                 artifact_default_condition: false,
                 property_default_condition: false,
+                type_default_condition: false,
             },
             {
                 default_condition: true,
@@ -668,6 +742,7 @@ export class Graph {
                 group_default_condition: true,
                 artifact_default_condition: true,
                 property_default_condition: true,
+                type_default_condition: true,
             },
             options
         )
@@ -682,6 +757,7 @@ export class Graph {
                 group_pruning: false,
                 artifact_pruning: false,
                 property_pruning: false,
+                type_pruning: false,
             },
             {
                 pruning: true,
@@ -691,6 +767,7 @@ export class Graph {
                 group_pruning: true,
                 artifact_pruning: true,
                 property_pruning: true,
+                type_pruning: true,
             },
             options
         )
@@ -767,6 +844,9 @@ export class Graph {
             this.nodes.push(node)
             this.nodesMap.set(nodeName, node)
 
+            // Type
+            this.buildTypes(node, nodeTemplate)
+
             // Properties
             this.buildProperties(node, nodeTemplate)
 
@@ -805,9 +885,11 @@ export class Graph {
                             relation,
                             raw: relationshipTemplate,
                         })
-
                         this.relationshipsMap.set(assignment.relationship, relationship)
                         relation.relationship = relationship
+
+                        // Type
+                        this.buildTypes(relation, relationshipTemplate)
 
                         // Properties
                         this.buildProperties(relation, relationshipTemplate)
@@ -840,7 +922,7 @@ export class Graph {
                         this.buildArtifact(node, map)
                     }
                 }
-                // Ensure that there is only one default artifact
+                // Ensure that there is only one default artifact per artifact name
                 node.artifactsMap.forEach(artifacts => {
                     const candidates = artifacts.filter(it => it.default)
                     if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
@@ -866,6 +948,47 @@ export class Graph {
             target.ingoing.push(relation)
             target.relations.push(relation)
         })
+    }
+
+    private buildTypes(
+        element: Node | Relation | Policy | Group,
+        template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate
+    ) {
+        if (validator.isString(template)) return
+        if (validator.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
+
+        // Collect types
+        const types: VariabilityPointList<TypeAssignment> = validator.isString(template.type)
+            ? [
+                  (() => {
+                      const map: {[name: string]: TypeAssignment} = {}
+                      map[template.type] = {}
+                      return map
+                  })(),
+              ]
+            : template.type
+
+        // Create types
+        for (const [index, map] of types.entries()) {
+            const [name, assignment] = utils.firstEntry(map)
+
+            const type = new Type({
+                name,
+                container: element,
+                index: index,
+                raw: assignment,
+            })
+            type.graph = this
+            this.types.push(type)
+
+            element.types.push(type)
+            if (!element.typesMap.has(name)) element.typesMap.set(name, [])
+            element.typesMap.get(name)!.push(type)
+        }
+
+        // Ensure that there is only one default type
+        if (element.types.filter(it => it.default).length > 1)
+            throw new Error(`${element.Display} has multiple default types`)
     }
 
     private buildArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
@@ -921,7 +1044,7 @@ export class Graph {
                             conditions: validator.isDefined(propertyAssignment.default_alternative)
                                 ? [false]
                                 : utils.toList(propertyAssignment.conditions),
-                            default: propertyAssignment.default_alternative || false,
+                            default: propertyAssignment.default_alternative ?? false,
                             container: element,
                             value: propertyAssignment.value,
                             expression: propertyAssignment.expression,
@@ -956,6 +1079,7 @@ export class Graph {
             }
         }
 
+        // Ensure that there is only one default property per property name
         element.propertiesMap.forEach(properties => {
             const candidates = properties.filter(it => it.default)
             if (candidates.length > 1) {
@@ -963,6 +1087,7 @@ export class Graph {
             }
         })
 
+        // Ensure that every property has at least a value or a value expression assigned
         element.properties.forEach(property => {
             if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
                 throw new Error(`${property.Display} has no value or expression defined`)
@@ -992,6 +1117,10 @@ export class Graph {
                 group.members.push(element)
             })
 
+            // Type
+            this.buildTypes(group, template)
+
+            // Properties
             this.buildProperties(group, template)
         })
     }
@@ -1026,6 +1155,10 @@ export class Graph {
                 throw new Error(`Policy target "${target}" of ${policy.display} does not exist`)
             })
 
+            // Type
+            this.buildTypes(policy, template)
+
+            // Properties
             this.buildProperties(policy, template)
         }
     }
@@ -1034,6 +1167,25 @@ export class Graph {
         const node = this.nodesMap.get(name)
         validator.ensureDefined(node, `Node "${name}" not found`)
         return node
+    }
+
+    // TODO: this does only work for nodes
+    getType(member: [string, string | number]) {
+        let type
+        const node = this.getNode(member[0])
+
+        // Element is [node name, type name]
+        if (validator.isString(member[1])) {
+            const types = node.typesMap.get(member[1]) || []
+            if (types.length > 1) throw new Error(`Type "${utils.pretty(member)}" is ambiguous`)
+            type = types[0]
+        }
+
+        // Element is [node name, type index]
+        if (validator.isNumber(member[1])) type = node.types[member[1]]
+
+        validator.ensureDefined(type, `Type "${utils.pretty(member)}" not found`)
+        return type
     }
 
     getRelation(member: [string, string | number]) {
@@ -1093,6 +1245,7 @@ export class Graph {
         return artifact
     }
 
+    // TODO: this does only work for nodes
     getProperty(member: [string, string | number]) {
         let property
         const node = this.getNode(member[0])

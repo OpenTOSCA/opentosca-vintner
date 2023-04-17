@@ -10,7 +10,7 @@ import {
     ReturnExpression,
     SelectExpression,
     VariableExpression,
-} from '#spec/query-type'
+} from './types'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as files from '#files'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'

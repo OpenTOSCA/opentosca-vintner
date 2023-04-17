@@ -137,17 +137,19 @@ The following options are used to configure pruning.
 
 The following options are used to configure consistency checks.
 
-| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
-|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| consistency_checks                        | false     | Boolean                                   | true          | Enable all consistency checks.                                                                    |
-| relation_source_consistency_check         | false     | Boolean                                   | true          | Enable consistency check regarding relation sources.                                              |
-| relation_target_consistency_check         | false     | Boolean                                   | true          | Enable consistency check regarding relation targets.                                              |
-| ambiguous_hosting_consistency_check       | false     | Boolean                                   | true          | Enable consistency check regarding maximum one hosting relation.                                  |
-| expected_hosting_consistency_check        | false     | Boolean                                   | true          | Enable consistency check regarding expected hosting relation.                                     |
-| missing_artifact_parent_consistency_check | false     | Boolean                                   | true          | Enable consistency check regarding node of artifact.                                              |
-| ambiguous_artifact_consistency_check      | false     | Boolean                                   | true          | Enable consistency check regarding ambiguous artifacts.                                           |
-| missing_property_parent_consistency_check | false     | Boolean                                   | true          | Enable consistency check regarding node of a property.                                            |
-| ambiguous_property_consistency_check      | false     | Boolean                                   | true          | Enable consistency check regarding ambiguous properties.                                          |
+| Keyname                                   | Mandatory | Type      | Default | Description                                                        |
+|-------------------------------------------|-----------|-----------|---------|--------------------------------------------------------------------|
+| consistency_checks                        | false     | Boolean   | true    | Enable all consistency checks.                                     |
+| relation_source_consistency_check         | false     | Boolean   | true    | Enable consistency check regarding relation sources.               |
+| relation_target_consistency_check         | false     | Boolean   | true    | Enable consistency check regarding relation targets.               |
+| ambiguous_hosting_consistency_check       | false     | Boolean   | true    | Enable consistency check regarding maximum one hosting relation.   |
+| expected_hosting_consistency_check        | false     | Boolean   | true    | Enable consistency check regarding expected hosting relation.      |
+| missing_artifact_parent_consistency_check | false     | Boolean   | true    | Enable consistency check regarding node of artifact.               |
+| ambiguous_artifact_consistency_check      | false     | Boolean   | true    | Enable consistency check regarding ambiguous artifacts.            |
+| missing_property_parent_consistency_check | false     | Boolean   | true    | Enable consistency check regarding node of a property.             |
+| ambiguous_property_consistency_check      | false     | Boolean   | true    | Enable consistency check regarding ambiguous properties.           |
+| missing_type_container_consistency_check  | false     | Boolean   | true    | Enable consistency check regarding container of type.              |
+| ambiguous_type_consistency_check          | false     | Boolean   | ture    | Enable consistency check regarding exactly one type per container. |
 
 ### Optimization Options
 
@@ -226,6 +228,7 @@ Definition in order to allow artifact names to be used multiple times.
 
 | Keyname                     | Mandatory | Type                                                                         | Description                                                                                                        |
 |-----------------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | artifacts                   | false     | Map(String, Artifact) &#124; List(Map(String, Artifact))                     | An optional map of artifact or a list of artifact maps.                                                            | 
 | properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
@@ -245,6 +248,17 @@ prod_database:
 
 Furthermore, artifacts must be transformed to an artifact map.
 
+## Type Assignment
+
+A type assignment can additionally contain variability conditions.
+
+| Keyname             | Mandatory | Type                                                   | Description                                                                                                                |
+|---------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| conditions          | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
+| default_alternative | false     | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned conditions. There must be only one default assignment.  |                                                                                                       |
+| default_condition   | false     | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
+| pruning             | false     | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
+
 ## Requirement Assignment
 
 A requirement assignment can additionally contain variability conditions.
@@ -252,11 +266,11 @@ These conditions must hold otherwise the respective relationship is not present.
 
 | Keyname                | Mandatory | Type                                                   | Description                                                                                                                |
 |------------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| conditions             | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
-| default_alternative    | false        | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned `conditions`. There must be only one default assignment. |                                                                                                       |
-| default_condition      | false        | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
+| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
+| default_alternative    | false     | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned conditions. There must be only one default assignment.  |                                                                                                       |
+| default_condition      | false     | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
 | default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this relation.                                                                         |
-| pruning                | false        | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
+| pruning                | false     | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
 
 The following non-normative and incomplete example contains a requirement assignment that has a variability condition
 assigned.
@@ -274,6 +288,7 @@ A relationship template can contain conditional property assignments.
 
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                        |
 |------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | properties | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    |
 
 
@@ -320,6 +335,7 @@ Such a group is also called variability group.
 
 | Keyname           | Mandatory | Type                                                                       | Description                                                                                                        |
 |-------------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | members           | false        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                |
 | conditions        | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties        | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
@@ -354,6 +370,7 @@ These conditions must hold otherwise the respective policy is not present.
 
 | Keyname           | Mandatory | Type                                                                         | Description                                                                                                        |
 |-------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | conditions        | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | properties        | false        | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
 | default_condition | false        | Boolean                                                                      | enable default condition for this element (overrides variability resolving options)                                |
