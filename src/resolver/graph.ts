@@ -50,7 +50,11 @@ export abstract class ConditionalElement {
 
     abstract toscaId: string | number | [string, string | number]
     abstract presenceCondition: LogicExpression
+
     abstract defaultCondition: LogicExpression
+
+    defaultAlternative = false
+    abstract defaultAlternativeCondition?: LogicExpression
 
     abstract defaultEnabled: boolean
     abstract pruningEnabled: boolean
@@ -152,12 +156,13 @@ export class Input extends ConditionalElement {
             this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    defaultAlternativeCondition: undefined
 }
 
 export class Type extends ConditionalElement {
     raw: TypeAssignment | string
     container: Node | Relation | Policy | Group
-    default: boolean
 
     constructor(data: {
         name: string
@@ -174,7 +179,7 @@ export class Type extends ConditionalElement {
             : validator.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+        this.defaultAlternative = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 
     get toscaId(): [string, string | number] {
@@ -207,6 +212,14 @@ export class Type extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    // Check if no other type is present
+    private _defaultAlternativeCondition?: LogicExpression
+    get defaultAlternativeCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = bratanize(this.container.types.filter(it => it !== this))
+        return this._defaultAlternativeCondition
     }
 }
 
@@ -321,12 +334,13 @@ export class Node extends ConditionalElement {
             this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    defaultAlternativeCondition: undefined
 }
 
 export class Property extends ConditionalElement {
     raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
     container: Node | Relation | Policy | Group | Artifact
-    default: boolean
     value?: PropertyAssignmentValue
     expression?: ValueExpression
 
@@ -345,7 +359,7 @@ export class Property extends ConditionalElement {
         this.value = data.value
         this.expression = data.expression
         this.container = data.container
-        this.default = data.default
+        this.defaultAlternative = data.default
         this.conditions = data.conditions || []
     }
 
@@ -380,6 +394,16 @@ export class Property extends ConditionalElement {
             this._presenceCondition = {property_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    // Check if no other property having the same name is present
+    private _defaultAlternativeCondition?: LogicExpression
+    get defaultAlternativeCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = bratanize(
+                this.container.propertiesMap.get(this.name)!.filter(it => it !== this)
+            )
+        return this._defaultAlternativeCondition
+    }
 }
 
 export class Relation extends ConditionalElement {
@@ -401,7 +425,6 @@ export class Relation extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
     relationship?: Relationship
-    default: boolean
 
     types: Type[] = []
     typesMap: Map<String, Type[]> = new Map()
@@ -415,7 +438,7 @@ export class Relation extends ConditionalElement {
             : validator.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this.default = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+        this.defaultAlternative = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 
     get toscaId(): [string, string | number] {
@@ -484,6 +507,16 @@ export class Relation extends ConditionalElement {
         return this._presenceCondition
     }
 
+    // Check if no other relation having the same name is present
+    private _defaultAlternativeCondition?: LogicExpression
+    get defaultAlternativeCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = bratanize(
+                this.source.outgoingMap.get(this.name)!.filter(it => it !== this)
+            )
+        return this._defaultAlternativeCondition
+    }
+
     isHostedOn() {
         return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
     }
@@ -548,6 +581,8 @@ export class Policy extends ConditionalElement {
             this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    defaultAlternativeCondition: undefined
 }
 
 export class Group extends ConditionalElement {
@@ -594,14 +629,15 @@ export class Group extends ConditionalElement {
             this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
+
+    defaultAlternativeCondition: undefined
 }
 
 export class Artifact extends ConditionalElement {
-    readonly raw: ArtifactDefinition
-    readonly container: Node
-    readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
-    readonly default: boolean
+    raw: ArtifactDefinition
+    container: Node
+    properties: Property[] = []
+    propertiesMap: Map<String, Property[]> = new Map()
 
     constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
         super('artifact', data)
@@ -612,7 +648,7 @@ export class Artifact extends ConditionalElement {
             : validator.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this.default = (validator.isString(data.raw) ? false : data.raw.default_alternative) || false
+        this.defaultAlternative = (validator.isString(data.raw) ? false : data.raw.default_alternative) || false
     }
 
     get toscaId(): [string, string | number] {
@@ -645,6 +681,24 @@ export class Artifact extends ConditionalElement {
         if (validator.isUndefined(this._presenceCondition))
             this._presenceCondition = {artifact_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
+    }
+
+    // Check if no other artifact having the same name is present
+    private _defaultAlternativeCondition?: LogicExpression
+    get defaultAlternativeCondition(): LogicExpression {
+        if (validator.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = bratanize(
+                this.container.artifactsMap.get(this.name)!.filter(it => it !== this)
+            )
+        return this._defaultAlternativeCondition
+    }
+}
+
+function bratanize(bratans: ConditionalElement[]) {
+    return {
+        not: {
+            or: bratans.map(it => it.presenceCondition),
+        },
     }
 }
 
@@ -905,7 +959,7 @@ export class Graph {
 
             // Ensure that there are no multiple outgoing defaults
             node.outgoingMap.forEach(relations => {
-                const candidates = relations.filter(it => it.default)
+                const candidates = relations.filter(it => it.defaultAlternative)
                 if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
             })
 
@@ -924,7 +978,7 @@ export class Graph {
                 }
                 // Ensure that there is only one default artifact per artifact name
                 node.artifactsMap.forEach(artifacts => {
-                    const candidates = artifacts.filter(it => it.default)
+                    const candidates = artifacts.filter(it => it.defaultAlternative)
                     if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
                 })
             }
@@ -987,7 +1041,7 @@ export class Graph {
         }
 
         // Ensure that there is only one default type
-        if (element.types.filter(it => it.default).length > 1)
+        if (element.types.filter(it => it.defaultAlternative).length > 1)
             throw new Error(`${element.Display} has multiple default types`)
     }
 
@@ -1081,7 +1135,7 @@ export class Graph {
 
         // Ensure that there is only one default property per property name
         element.propertiesMap.forEach(properties => {
-            const candidates = properties.filter(it => it.default)
+            const candidates = properties.filter(it => it.defaultAlternative)
             if (candidates.length > 1) {
                 throw new Error(`${properties[0].Display} has multiple defaults`)
             }
