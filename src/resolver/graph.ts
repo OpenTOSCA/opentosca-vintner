@@ -11,7 +11,7 @@ import {
     VariabilityPointMap,
 } from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
-import {NodeTemplate, RequirementAssignment, TypeAssignment} from '#spec/node-template'
+import {NodeTemplate, RequirementAssignment} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {PolicyTemplate} from '#spec/policy-template'
@@ -23,6 +23,7 @@ import * as validator from '#validator'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {ensureDefined} from '#validator'
 import {UnexpectedError} from '#utils/error'
+import {TypeAssignment} from '#spec/type-assignment'
 
 /**
  * Not documented since preparation for future work
@@ -40,7 +41,6 @@ export abstract class ConditionalElement {
     readonly index?: number
 
     readonly display: string
-
     get Display() {
         return utils.toFirstUpperCase(this.display)
     }
@@ -156,10 +156,15 @@ export class Input extends ConditionalElement {
 
 export class Type extends ConditionalElement {
     raw: TypeAssignment | string
-    container: Node
+    container: Node | Relation | Policy | Group
     default: boolean
 
-    constructor(data: {name: string; container: Node; index: number; raw: TypeAssignment | string}) {
+    constructor(data: {
+        name: string
+        container: Node | Relation | Policy | Group
+        index: number
+        raw: TypeAssignment | string
+    }) {
         super('type', data)
 
         this.raw = data.raw
@@ -398,6 +403,9 @@ export class Relation extends ConditionalElement {
     relationship?: Relationship
     default: boolean
 
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
+
     constructor(data: {name: string; raw: RequirementAssignment; container: Node; index: number}) {
         super('relation', data)
         this.source = data.container
@@ -492,7 +500,7 @@ export class Relationship {
     name: string
     relation: Relation
 
-    constructor(data: {name: string; raw: InputDefinition; relation: Relation}) {
+    constructor(data: {name: string; raw: RelationshipTemplate; relation: Relation}) {
         this.name = data.name
         this.relation = data.relation
         this.raw = data.raw
@@ -505,6 +513,8 @@ export class Policy extends ConditionalElement {
     targets: (Node | Group)[] = []
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
 
     constructor(data: {name: string; raw: PolicyTemplate; index: number}) {
         super('policy', data)
@@ -546,15 +556,17 @@ export class Group extends ConditionalElement {
     properties: Property[] = []
     propertiesMap: Map<String, Property[]> = new Map()
     variability: boolean
+    types: Type[] = []
+    typesMap: Map<String, Type[]> = new Map()
 
     constructor(data: {name: string; raw: GroupTemplate}) {
         super('group', data)
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-        this.variability = [
-            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT,
-            TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS,
-        ].includes(this.raw.type)
+        this.variability =
+            validator.isString(this.raw.type) &&
+            (this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
+                this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS)
     }
 
     get toscaId() {
@@ -873,9 +885,11 @@ export class Graph {
                             relation,
                             raw: relationshipTemplate,
                         })
-
                         this.relationshipsMap.set(assignment.relationship, relationship)
                         relation.relationship = relationship
+
+                        // Type
+                        this.buildTypes(relation, relationshipTemplate)
 
                         // Properties
                         this.buildProperties(relation, relationshipTemplate)
@@ -936,7 +950,11 @@ export class Graph {
         })
     }
 
-    private buildTypes(element: Node, template: NodeTemplate) {
+    private buildTypes(
+        element: Node | Relation | Policy | Group,
+        template: NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate
+    ) {
+        if (validator.isString(template)) return
         if (validator.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
 
         // Collect types
@@ -1099,6 +1117,10 @@ export class Graph {
                 group.members.push(element)
             })
 
+            // Type
+            this.buildTypes(group, template)
+
+            // Properties
             this.buildProperties(group, template)
         })
     }
@@ -1133,6 +1155,10 @@ export class Graph {
                 throw new Error(`Policy target "${target}" of ${policy.display} does not exist`)
             })
 
+            // Type
+            this.buildTypes(policy, template)
+
+            // Properties
             this.buildProperties(policy, template)
         }
     }

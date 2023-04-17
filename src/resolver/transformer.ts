@@ -7,10 +7,11 @@ import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assi
 import * as utils from '#utils'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {Graph, Node, Property, Relation} from './graph'
+import {Graph, Node, Property, Relation, Type} from './graph'
 import {ensureDefined} from '#validator'
 import {GroupMember} from '#spec/group-type'
 import {UnexpectedError} from '#utils/error'
+import {ElementType, TypeAssignment} from '#spec/type-assignment'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -56,12 +57,6 @@ export default class Transformer {
         delete raw.default_condition
         delete raw.default_condition_mode
         delete raw.weight
-    }
-
-    private transformType(element: Node, template: NodeTemplate) {
-        const type = element.types.find(it => it.present)
-        if (validator.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
-        template.type = type.name
     }
 
     private transformNodes() {
@@ -120,8 +115,10 @@ export default class Transformer {
         if (validator.isDefined(this.topology.relationship_templates)) {
             this.graph.relations.forEach(relation => {
                 if (validator.isDefined(relation.relationship)) {
-                    if (!relation.present) delete this.topology.relationship_templates![relation.relationship.name]
+                    if (!relation.present)
+                        return delete this.topology.relationship_templates![relation.relationship.name]
 
+                    this.transformType(relation, relation.relationship.raw)
                     this.transformProperties(relation, relation.relationship.raw)
                 }
             })
@@ -151,6 +148,8 @@ export default class Transformer {
                         return acc
                     }, [])
 
+                    this.transformType(group, template)
+
                     this.transformProperties(group, template)
 
                     this.clean(template)
@@ -172,7 +171,7 @@ export default class Transformer {
                 .map(policy => {
                     const template = policy.raw
                     this.clean(template)
-
+                    this.transformType(policy, template)
                     this.transformProperties(policy, template)
 
                     template.targets = template.targets?.filter(target => {
@@ -214,6 +213,12 @@ export default class Transformer {
                 delete this.topology.inputs
             }
         }
+    }
+
+    private transformType(element: {types: Type[]; Display: string}, template: {type: ElementType}) {
+        const type = element.types.find(it => it.present)
+        if (validator.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
+        template.type = type.name
     }
 
     private transformProperties(
