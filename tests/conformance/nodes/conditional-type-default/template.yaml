@@ -4,7 +4,7 @@ topology_template:
     node_templates:
         node_one:
             type:
-                - type: type_one
-                  conditions: false
-                - type: type_two
-                  default_alternative: false
+                - type_one:
+                      conditions: false
+                - type_two:
+                      default_alternative: true

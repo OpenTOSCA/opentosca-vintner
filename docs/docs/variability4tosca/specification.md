@@ -226,6 +226,7 @@ Definition in order to allow artifact names to be used multiple times.
 
 | Keyname                     | Mandatory | Type                                                                         | Description                                                                                                        |
 |-----------------------------|-----------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | string &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                |
 | conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
 | artifacts                   | false     | Map(String, Artifact) &#124; List(Map(String, Artifact))                     | An optional map of artifact or a list of artifact maps.                                                            | 
 | properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment)) | An optional map of property assignments or a list of property assignments maps.                                    | 
@@ -245,6 +246,17 @@ prod_database:
 
 Furthermore, artifacts must be transformed to an artifact map.
 
+## Type Assignment
+
+A type assignment can additionally contain variability conditions.
+
+| Keyname             | Mandatory | Type                                                   | Description                                                                                                                |
+|---------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| conditions          | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
+| default_alternative | false     | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned conditions. There must be only one default assignment.  |                                                                                                       |
+| default_condition   | false     | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
+| pruning             | false     | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
+
 ## Requirement Assignment
 
 A requirement assignment can additionally contain variability conditions.
@@ -252,11 +264,11 @@ These conditions must hold otherwise the respective relationship is not present.
 
 | Keyname                | Mandatory | Type                                                   | Description                                                                                                                |
 |------------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| conditions             | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
-| default_alternative    | false        | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned `conditions`. There must be only one default assignment. |                                                                                                       |
-| default_condition      | false        | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
+| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.         |
+| default_alternative    | false     | Boolean                                                | Declare the requirement assignment as default. Overwrites assigned conditions. There must be only one default assignment.  |                                                                                                       |
+| default_condition      | false     | Boolean                                                | Enable default condition for this element (overrides variability resolving options).                                       |
 | default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this relation.                                                                         |
-| pruning                | false        | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
+| pruning                | false     | Boolean                                                | Enable pruning for this element (overrides variability resolving options).                                                 |
 
 The following non-normative and incomplete example contains a requirement assignment that has a variability condition
 assigned.

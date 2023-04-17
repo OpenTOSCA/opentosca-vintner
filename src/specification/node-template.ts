@@ -13,12 +13,10 @@ import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 
 // TODO: wrap as variability point oder so
-export type TemplateType = {
-    type: string
-} & VariabilityAlternative
+export type TypeAssignment = VariabilityAlternative
 
 export type NodeTemplate = {
-    type: string | TemplateType[]
+    type: string | VariabilityPointList<TypeAssignment>
     // TODO: wrap properties as variability point
     properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap

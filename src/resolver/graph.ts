@@ -7,10 +7,11 @@ import {
     RelationDefaultConditionMode,
     SolverOptions,
     ValueExpression,
+    VariabilityPointList,
     VariabilityPointMap,
 } from '#spec/variability'
 import {InputDefinition} from '#spec/topology-template'
-import {NodeTemplate, RequirementAssignment, TemplateType} from '#spec/node-template'
+import {NodeTemplate, RequirementAssignment, TypeAssignment} from '#spec/node-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {PolicyTemplate} from '#spec/policy-template'
@@ -154,11 +155,11 @@ export class Input extends ConditionalElement {
 }
 
 export class Type extends ConditionalElement {
-    raw: TemplateType | string
+    raw: TypeAssignment | string
     container: Node
     default: boolean
 
-    constructor(data: {name: string; container: Node; index: number; raw: TemplateType | string}) {
+    constructor(data: {name: string; container: Node; index: number; raw: TypeAssignment | string}) {
         super('type', data)
 
         this.raw = data.raw
@@ -907,7 +908,7 @@ export class Graph {
                         this.buildArtifact(node, map)
                     }
                 }
-                // Ensure that there is only one default artifact
+                // Ensure that there is only one default artifact per artifact name
                 node.artifactsMap.forEach(artifacts => {
                     const candidates = artifacts.filter(it => it.default)
                     if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
@@ -938,26 +939,38 @@ export class Graph {
     private buildTypes(element: Node, template: NodeTemplate) {
         if (validator.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
 
-        // TODO: default handling is wrong
-        // TODO: check that there is only one default
+        // Collect types
+        const types: VariabilityPointList<TypeAssignment> = validator.isString(template.type)
+            ? [
+                  (() => {
+                      const map: {[name: string]: TypeAssignment} = {}
+                      map[template.type] = {}
+                      return map
+                  })(),
+              ]
+            : template.type
 
-        const types: TemplateType[] = validator.isString(template.type) ? [{type: template.type}] : template.type
-        for (const [typeIndex, typeTemplate] of types.entries()) {
-            if (!validator.isObject(typeTemplate)) throw new UnexpectedError()
+        // Create types
+        for (const [index, map] of types.entries()) {
+            const [name, assignment] = utils.firstEntry(map)
 
             const type = new Type({
-                name: typeTemplate.type,
+                name,
                 container: element,
-                index: typeIndex,
-                raw: typeTemplate,
+                index: index,
+                raw: assignment,
             })
             type.graph = this
             this.types.push(type)
 
             element.types.push(type)
-            if (!element.typesMap.has(typeTemplate.type)) element.typesMap.set(typeTemplate.type, [])
-            element.typesMap.get(typeTemplate.type)!.push(type)
+            if (!element.typesMap.has(name)) element.typesMap.set(name, [])
+            element.typesMap.get(name)!.push(type)
         }
+
+        // Ensure that there is only one default type
+        if (element.types.filter(it => it.default).length > 1)
+            throw new Error(`${element.Display} has multiple default types`)
     }
 
     private buildArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
@@ -1048,6 +1061,7 @@ export class Graph {
             }
         }
 
+        // Ensure that there is only one default property per property name
         element.propertiesMap.forEach(properties => {
             const candidates = properties.filter(it => it.default)
             if (candidates.length > 1) {
@@ -1055,6 +1069,7 @@ export class Graph {
             }
         })
 
+        // Ensure that every property has at least a value or a value expression assigned
         element.properties.forEach(property => {
             if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
                 throw new Error(`${property.Display} has no value or expression defined`)
