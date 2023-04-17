@@ -193,10 +193,10 @@ export default class Solver {
         conditions = utils.filterNotNull<LogicExpression>(conditions)
 
         // Add condition that checks if no other bratan is present
-        if (element.default) {
-            if (validator.isUndefined(element.bratansCondition))
-                throw new Error(`${element.Display} has no bratans condition`)
-            conditions = [element.bratansCondition]
+        if (element.defaultAlternative) {
+            if (validator.isUndefined(element.defaultAlternativeCondition))
+                throw new Error(`${element.Display} has no default alternative condition`)
+            conditions = [element.defaultAlternativeCondition]
         }
 
         // Add default condition if requested
