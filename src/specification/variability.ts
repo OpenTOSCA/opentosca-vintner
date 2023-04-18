@@ -84,6 +84,11 @@ export type VariabilityAlternative = {
     pruning?: boolean
 }
 
+export type NodeTypePresenceArguments = [node: string, type: string | number]
+export type RelationTypePresenceArguments = [node: string, relation: string | number, type: string | number]
+export type GroupTypePresenceArguments = [group: string, type: string | number]
+export type PolicyTypePresenceArguments = [policy: string | number, type: string | number]
+
 export type LogicExpression =
     | {
           // Boolean operators
@@ -95,16 +100,10 @@ export type LogicExpression =
           amo?: LogicExpression[]
 
           // Type functions
-          // TODO: remove this
-          type_presence?: [string, string | number]
-          // TODO
-          node_type_presence?: [node: string, type: string | number]
-          // TODO
-          relation_type_presence?: [node: string, relation: string | number, type: string | number]
-          // TODO
-          group_type_presence?: [group: string, type: string | number]
-          // TODO
-          policy_type_presence?: [policy: string | number, type: string | number]
+          node_type_presence?: NodeTypePresenceArguments
+          relation_type_presence?: RelationTypePresenceArguments
+          group_type_presence?: GroupTypePresenceArguments
+          policy_type_presence?: PolicyTypePresenceArguments
 
           // Node functions
           node_presence?: string

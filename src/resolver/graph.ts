@@ -1,10 +1,14 @@
 import {
     ConsistencyOptions,
     DefaultOptions,
+    GroupTypePresenceArguments,
     LogicExpression,
     NodeDefaultConditionMode,
+    NodeTypePresenceArguments,
+    PolicyTypePresenceArguments,
     PruningOptions,
     RelationDefaultConditionMode,
+    RelationTypePresenceArguments,
     SolverOptions,
     ValueExpression,
     VariabilityPointList,
@@ -182,9 +186,11 @@ export class Type extends ConditionalElement {
         this.defaultAlternative = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 
-    get toscaId(): [string, string | number] {
+    get toscaId() {
         if (validator.isUndefined(this.index)) throw new UnexpectedError()
-        return [this.container.name, this.index]
+        if (validator.isString(this.container.toscaId)) return [this.container.toscaId, this.index]
+        if (validator.isNumber(this.container.toscaId)) return [this.container.toscaId, this.index]
+        return [...this.container.toscaId, this.index]
     }
 
     get defaultEnabled() {
@@ -209,8 +215,22 @@ export class Type extends ConditionalElement {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
-            this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
+        if (validator.isUndefined(this._presenceCondition)) {
+            if (this.container.isNode())
+                this._presenceCondition = {node_type_presence: this.toscaId, _cached_element: this}
+
+            if (this.container.isRelation())
+                this._presenceCondition = {relation_type_presence: this.toscaId, _cached_element: this}
+
+            if (this.container.isPolicy())
+                this._presenceCondition = {policy_type_presence: this.toscaId, _cached_element: this}
+
+            if (this.container.isGroup())
+                this._presenceCondition = {group_type_presence: this.toscaId, _cached_element: this}
+        }
+
+        if (validator.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
+
         return this._presenceCondition
     }
 
@@ -1223,22 +1243,39 @@ export class Graph {
         return node
     }
 
-    // TODO: this does only work for nodes
-    getNodeType(member: [string, string | number]) {
-        let type
-        const node = this.getNode(member[0])
+    getNodeType(data: NodeTypePresenceArguments) {
+        const node = this.getNode(data[0])
+        return this.getType(node, data, 1)
+    }
 
-        // Element is [node name, type name]
-        if (validator.isString(member[1])) {
-            const types = node.typesMap.get(member[1]) || []
-            if (types.length > 1) throw new Error(`Type "${utils.pretty(member)}" is ambiguous`)
+    getRelationType(data: RelationTypePresenceArguments) {
+        const relation = this.getRelation([data[0], data[1]])
+        return this.getType(relation, data, 2)
+    }
+
+    getGroupType(data: GroupTypePresenceArguments) {
+        const group = this.getGroup(data[0])
+        return this.getType(group, data, 1)
+    }
+
+    getPolicyType(data: PolicyTypePresenceArguments) {
+        const policy = this.getPolicy(data[0])
+        return this.getType(policy, data, 1)
+    }
+
+    private getType(container: Node | Relation | Group | Policy, data: (string | number)[], split: number) {
+        let type
+        const date = data[split]
+
+        if (validator.isString(date)) {
+            const types = container.typesMap.get(date) || []
+            if (types.length > 1) throw new Error(`Type "${utils.pretty(data)}" is ambiguous`)
             type = types[0]
         }
 
-        // Element is [node name, type index]
-        if (validator.isNumber(member[1])) type = node.types[member[1]]
+        if (validator.isNumber(date)) type = container.types[date]
 
-        validator.ensureDefined(type, `Type "${utils.pretty(member)}" not found`)
+        validator.ensureDefined(type, `Type "${utils.pretty(data)}" not found`)
         return type
     }
 

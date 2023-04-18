@@ -676,6 +676,86 @@ export default class Solver {
         }
 
         /**
+         * node_type_presence
+         */
+        if (validator.isDefined(expression.node_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.node_type_presence[0])
+                validator.ensureStringOrNumber(expression.node_type_presence[1])
+                type = this.graph.getNodeType(expression.node_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * relation_type_presence
+         */
+        if (validator.isDefined(expression.relation_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.relation_type_presence[0])
+                validator.ensureStringOrNumber(expression.relation_type_presence[1])
+                type = this.graph.getRelationType(expression.relation_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * group_type_presence
+         */
+        if (validator.isDefined(expression.group_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.group_type_presence[0])
+                validator.ensureStringOrNumber(expression.group_type_presence[1])
+                type = this.graph.getGroupType(expression.group_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * policy_type_presence
+         */
+        if (validator.isDefined(expression.policy_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.policy_type_presence[0])
+                validator.ensureStringOrNumber(expression.policy_type_presence[1])
+                type = this.graph.getPolicyType(expression.policy_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
          * Assume that expression is a value expression that returns a boolean
          * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */
