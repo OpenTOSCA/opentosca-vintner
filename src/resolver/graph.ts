@@ -1224,7 +1224,7 @@ export class Graph {
     }
 
     // TODO: this does only work for nodes
-    getType(member: [string, string | number]) {
+    getNodeType(member: [string, string | number]) {
         let type
         const node = this.getNode(member[0])
 

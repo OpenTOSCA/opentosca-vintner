@@ -669,7 +669,7 @@ export default class Solver {
             if (validator.isUndefined(type)) {
                 validator.ensureString(expression.type_presence[0])
                 validator.ensureStringOrNumber(expression.type_presence[1])
-                type = this.graph.getType(expression.type_presence)
+                type = this.graph.getNodeType(expression.type_presence)
             }
 
             return type.id
