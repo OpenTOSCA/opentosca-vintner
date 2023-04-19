@@ -19,7 +19,7 @@ topology_template:
             type: type_two
             conditions: true
         `,
-            '(not(false)) and (true) and (type.type_one@0.node.node_one or not(true)) and (not(type.type_one@0.node.node_one) or true) and (type.type_two@0.node.node_two or not(true)) and (not(type.type_two@0.node.node_two) or true) and (node.node_one or not(node.node_two)) and (not(node.node_one) or node.node_two) and (node.node_two or not(true)) and (not(node.node_two) or true)'
+            '(not(false)) and (true) and (type.type_one@0.node.node_one) and (type.type_two@0.node.node_two) and (node.node_one or not(node.node_two)) and (not(node.node_one) or node.node_two) and (node.node_two)'
         )
     })
 })
