@@ -6,6 +6,6 @@ topology_template:
             type: container
             properties:
                 - property_one:
-                      conditions: false
+                      conditions: true
                       value: 69
-            conditions: {property_presence: [container, property_one]}
+            conditions: {node_property_presence: [container, property_one]}

@@ -89,6 +89,12 @@ export type RelationTypePresenceArguments = [node: string, relation: string | nu
 export type GroupTypePresenceArguments = [group: string, type: string | number]
 export type PolicyTypePresenceArguments = [policy: string | number, type: string | number]
 
+export type NodePropertyPresenceArguments = [node: string, property: string | number]
+export type RelationPropertyPresenceArguments = [node: string, relation: string | number, property: string | number]
+export type GroupPropertyPresenceArguments = [group: string, property: string | number]
+export type PolicyPropertyPresenceArguments = [policy: string | number, property: string | number]
+export type ArtifactPropertyPresenceArguments = [node: string, artifact: string | number, property: string | number]
+
 export type LogicExpression =
     | {
           // Boolean operators
@@ -117,18 +123,12 @@ export type LogicExpression =
           target_presence?: 'SELF'
 
           // Property functions
-          // TODO: remove this
-          property_presence?: [node: string, property: string | number]
-          // TODO
-          node_property_presence?: [node: string, property: string | number]
-          // TODO
-          relation_property_presence?: [node: string, relation: string | number, property: string | number]
-          // TODO
-          group_property_presence?: [group: string, property: string | number]
-          // TODO
-          policy_property_presence?: [policy: string, property: string | number]
-          // TODO
-          artifact_property_presence?: [node: string, artifact: string | number, property: string | number]
+          // TODO: document all of these
+          node_property_presence?: NodePropertyPresenceArguments
+          relation_property_presence?: RelationPropertyPresenceArguments
+          group_property_presence?: GroupPropertyPresenceArguments
+          policy_property_presence?: PolicyPropertyPresenceArguments
+          artifact_property_presence?: ArtifactPropertyPresenceArguments
 
           // Artifact functions
           artifact_presence?: [node: string, artifact: string | number]
