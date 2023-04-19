@@ -123,7 +123,6 @@ export type LogicExpression =
           target_presence?: 'SELF'
 
           // Property functions
-          // TODO: document all of these
           node_property_presence?: NodePropertyPresenceArguments
           relation_property_presence?: RelationPropertyPresenceArguments
           group_property_presence?: GroupPropertyPresenceArguments
