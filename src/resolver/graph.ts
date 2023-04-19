@@ -1,10 +1,19 @@
 import {
+    ArtifactPropertyPresenceArguments,
     ConsistencyOptions,
     DefaultOptions,
+    GroupPropertyPresenceArguments,
+    GroupTypePresenceArguments,
     LogicExpression,
     NodeDefaultConditionMode,
+    NodePropertyPresenceArguments,
+    NodeTypePresenceArguments,
+    PolicyPropertyPresenceArguments,
+    PolicyTypePresenceArguments,
     PruningOptions,
     RelationDefaultConditionMode,
+    RelationPropertyPresenceArguments,
+    RelationTypePresenceArguments,
     SolverOptions,
     ValueExpression,
     VariabilityPointList,
@@ -48,7 +57,6 @@ export abstract class ConditionalElement {
     present?: boolean
     conditions: LogicExpression[] = []
 
-    abstract toscaId: string | number | [string, string | number]
     abstract presenceCondition: LogicExpression
 
     abstract defaultCondition: LogicExpression
@@ -163,6 +171,7 @@ export class Input extends ConditionalElement {
 export class Type extends ConditionalElement {
     raw: TypeAssignment | string
     container: Node | Relation | Policy | Group
+    index: number
 
     constructor(data: {
         name: string
@@ -173,6 +182,7 @@ export class Type extends ConditionalElement {
         super('type', data)
 
         this.raw = data.raw
+        this.index = data.index
         this.container = data.container
         this.conditions = validator.isString(data.raw)
             ? []
@@ -182,9 +192,11 @@ export class Type extends ConditionalElement {
         this.defaultAlternative = validator.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 
-    get toscaId(): [string, string | number] {
+    get toscaId() {
         if (validator.isUndefined(this.index)) throw new UnexpectedError()
-        return [this.container.name, this.index]
+        if (validator.isString(this.container.toscaId)) return [this.container.toscaId, this.index]
+        if (validator.isNumber(this.container.toscaId)) return [this.container.toscaId, this.index]
+        return [...this.container.toscaId, this.index]
     }
 
     get defaultEnabled() {
@@ -210,7 +222,10 @@ export class Type extends ConditionalElement {
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (validator.isUndefined(this._presenceCondition))
-            this._presenceCondition = {type_presence: this.toscaId, _cached_element: this}
+            this._presenceCondition = this.container.getTypeCondition(this)
+
+        if (validator.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
+
         return this._presenceCondition
     }
 
@@ -336,6 +351,14 @@ export class Node extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {node_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {node_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
+    }
 }
 
 export class Property extends ConditionalElement {
@@ -391,7 +414,7 @@ export class Property extends ConditionalElement {
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (validator.isUndefined(this._presenceCondition))
-            this._presenceCondition = {property_presence: this.toscaId, _cached_element: this}
+            this._presenceCondition = this.container.getPropertyCondition(this)
         return this._presenceCondition
     }
 
@@ -517,6 +540,17 @@ export class Relation extends ConditionalElement {
         return this._defaultAlternativeCondition
     }
 
+    getTypeCondition(type: Type): LogicExpression {
+        return {relation_type_presence: [...this.toscaId, type.index], _cached_element: type}
+    }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {
+            relation_property_presence: [...this.toscaId, property.index ?? property.name],
+            _cached_element: property,
+        }
+    }
+
     isHostedOn() {
         return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
     }
@@ -583,6 +617,14 @@ export class Policy extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {policy_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {policy_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
+    }
 }
 
 export class Group extends ConditionalElement {
@@ -631,6 +673,14 @@ export class Group extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {group_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {group_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
+    }
 }
 
 export class Artifact extends ConditionalElement {
@@ -691,6 +741,13 @@ export class Artifact extends ConditionalElement {
                 this.container.artifactsMap.get(this.name)!.filter(it => it !== this)
             )
         return this._defaultAlternativeCondition
+    }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {
+            artifact_property_presence: [...this.toscaId, property.index ?? property.name],
+            _cached_element: property,
+        }
     }
 }
 
@@ -1223,22 +1280,35 @@ export class Graph {
         return node
     }
 
-    // TODO: this does only work for nodes
-    getType(member: [string, string | number]) {
-        let type
-        const node = this.getNode(member[0])
+    getNodeType(data: NodeTypePresenceArguments) {
+        return this.getType(this.getNode(data[0]), data)
+    }
 
-        // Element is [node name, type name]
-        if (validator.isString(member[1])) {
-            const types = node.typesMap.get(member[1]) || []
-            if (types.length > 1) throw new Error(`Type "${utils.pretty(member)}" is ambiguous`)
+    getRelationType(data: RelationTypePresenceArguments) {
+        return this.getType(this.getRelation([data[0], data[1]]), data)
+    }
+
+    getGroupType(data: GroupTypePresenceArguments) {
+        return this.getType(this.getGroup(data[0]), data)
+    }
+
+    getPolicyType(data: PolicyTypePresenceArguments) {
+        return this.getType(this.getPolicy(data[0]), data)
+    }
+
+    private getType(container: Node | Relation | Group | Policy, data: (string | number)[]) {
+        let type
+        const toscaId = utils.last(data)
+
+        if (validator.isString(toscaId)) {
+            const types = container.typesMap.get(toscaId) || []
+            if (types.length > 1) throw new Error(`Type "${utils.pretty(data)}" is ambiguous`)
             type = types[0]
         }
 
-        // Element is [node name, type index]
-        if (validator.isNumber(member[1])) type = node.types[member[1]]
+        if (validator.isNumber(toscaId)) type = container.types[toscaId]
 
-        validator.ensureDefined(type, `Type "${utils.pretty(member)}" not found`)
+        validator.ensureDefined(type, `Type "${utils.pretty(data)}" not found`)
         return type
     }
 
@@ -1299,20 +1369,39 @@ export class Graph {
         return artifact
     }
 
-    // TODO: this does only work for nodes
-    getProperty(member: [string, string | number]) {
-        let property
-        const node = this.getNode(member[0])
+    getNodeProperty(data: NodePropertyPresenceArguments) {
+        return this.getProperty(this.getNode(data[0]), data)
+    }
 
-        if (validator.isString(member[1])) {
-            const properties = node.propertiesMap.get(member[1]) || []
-            if (properties.length > 1) throw new Error(`Property "${utils.pretty(member)}" is ambiguous`)
+    getRelationProperty(data: RelationPropertyPresenceArguments) {
+        return this.getProperty(this.getRelation([data[0], data[1]]), data)
+    }
+
+    getGroupProperty(data: GroupPropertyPresenceArguments) {
+        return this.getProperty(this.getGroup(data[0]), data)
+    }
+
+    getPolicyProperty(data: PolicyPropertyPresenceArguments) {
+        return this.getProperty(this.getPolicy(data[0]), data)
+    }
+
+    getArtifactProperty(data: ArtifactPropertyPresenceArguments) {
+        return this.getProperty(this.getArtifact([data[0], data[1]]), data)
+    }
+
+    private getProperty(container: Node | Relation | Group | Policy | Artifact, data: (string | number)[]) {
+        let property
+        const toscaId = utils.last(data)
+
+        if (validator.isString(toscaId)) {
+            const properties = container.propertiesMap.get(toscaId) || []
+            if (properties.length > 1) throw new Error(`Property "${utils.pretty(data)}" is ambiguous`)
             property = properties[0]
         }
 
-        if (validator.isNumber(member[1])) property = node.properties[member[1]]
+        if (validator.isNumber(toscaId)) property = container.properties[toscaId]
 
-        validator.ensureDefined(property, `Property "${utils.pretty(member)}" not found`)
+        validator.ensureDefined(property, `Property "${utils.pretty(data)}" not found`)
         return property
     }
 

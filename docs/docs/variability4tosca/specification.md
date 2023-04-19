@@ -522,33 +522,48 @@ The following arithmetic operators can be used inside a variability expression.
 | div     | List(NumericExpression)                     | Numeric | Divides values from the first one.        |
 | mod     | Tuple(NumericExpression, NumericExpression) | Numeric | Divides values and returns the remainder. |
 
-### Intrinsic Functions
+### Presence Operators
 
-The following intrinsic functions can be used inside a variability expression.
+The following presence operators can be used inside a variability expression.
 
-| Keyname                | Input                                              | Output  | Description                                                                                                                                                  |
-|------------------------|----------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| variability_input      | String                                             | Any     | Returns the value of a variability input.                                                                                                                    |
-| logic_expression       | String                                             | Boolean | Returns the value of the Logic Expression.                                                                                                                   |
-| value_expression       | String                                             | Any     | Returns the value of the Value Expression.                                                                                                                   |
-| node_presence          | String                                             | Boolean | Returns if node is present.                                                                                                                                  |
-| host_presence          | String &#124; SELF                                 | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present. |
-| has_sources            | String                                             | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                              |
-| has_incoming_relations | String                                             | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                        |
-| relation_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if relation is present.                                                                                                                              |
-| property_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if property is present.                                                                                                                              |
-| artifact_presence      | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if artifact is present.                                                                                                                              |
-| policy_presence        | String &#124; Number                               | Boolean | Returns if policy is present.                                                                                                                                |
-| group_presence         | String                                             | Boolean | Returns if group is present.                                                                                                                                 |
-| input_presence         | String                                             | Boolean | Returns if input is present.                                                                                                                                 |
-| source_presence        | SELF                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
-| target_presence        | SELF                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
-| has_present_target     | String &#124; Number                               | Boolean | Returns if any target of the given policy is present.                                                                                                        |
-| has_present_member     | String                                             | Boolean | Returns if any member of the given group is present.                                                                                                         |
-| type_presence          | Tuple(String, String) &#124; Tuple(String, Number) | Boolean | Returns if type is present.                                                                                                                                  |
-| concat                 | List(ValueExpression)                              | String  | Concatenates the given values.                                                                                                                               |
-| join                   | Tuple(List(ValueExpression), String)               | String  | Joins the given values using the provided delimiter.                                                                                                         |
-| token                  | Tuple(ValueExpression, String, Number)             | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
+| Keyname                    | Input                                                                               | Output  | Description                                                                                                                                                  |
+|----------------------------|-------------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| variability_input          | String                                                                              | Any     | Returns the value of a variability input.                                                                                                                    |
+| logic_expression           | String                                                                              | Boolean | Returns the value of the Logic Expression.                                                                                                                   |
+| value_expression           | String                                                                              | Any     | Returns the value of the Value Expression.                                                                                                                   |
+| node_presence              | String                                                                              | Boolean | Returns if node is present.                                                                                                                                  |
+| host_presence              | String &#124; SELF                                                                  | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present. |
+| has_sources                | String                                                                              | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                              |
+| has_incoming_relations     | String                                                                              | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                        |
+| relation_presence          | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if relation is present.                                                                                                                              |
+| artifact_presence          | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if artifact is present.                                                                                                                              |
+| policy_presence            | String &#124; Number                                                                | Boolean | Returns if policy is present.                                                                                                                                |
+| group_presence             | String                                                                              | Boolean | Returns if group is present.                                                                                                                                 |
+| input_presence             | String                                                                              | Boolean | Returns if input is present.                                                                                                                                 |
+| source_presence            | SELF                                                                                | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| target_presence            | SELF                                                                                | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                            |
+| has_present_target         | String &#124; Number                                                                | Boolean | Returns if any target of the given policy is present.                                                                                                        |
+| has_present_member         | String                                                                              | Boolean | Returns if any member of the given group is present.                                                                                                         |
+| node_type_presence         | Tuple(Node: String, Type: String &#124; Number)                                     | Boolean | Returns if type of node is present.                                                                                                                          |
+| relation_type_presence     | Triple(Node: String, Relation: String &#124; Number, Type: String &#124; Number)    | Boolean | Returns if type of relation is present.                                                                                                                      |
+| group_type_presence        | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if type of group is present.                                                                                                                         |
+| policy_type_presence       | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if type of policy is present.                                                                                                                        |
+| node_property_presence     | Tuple(Node: String, Property: String &#124; Number)                                 | Boolean | Returns if property of node is present.                                                                                                                      |
+| relation_property_presence | Tuple(Node: String, Relation: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of relation is present.                                                                                                                  |
+| group_property_presence    | Tuple(Group: String, Property: String &#124; Number)                                | Boolean | Returns if property of group is present.                                                                                                                     |
+| policy_property_presence   | Tuple(Policy: String &#124; Number, Property: String &#124; Number)                 | Boolean | Returns if property of policy is present.                                                                                                                    |
+| artifact_property_presence | Tuple(Node: String, Artifact: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of artifact is present.                                                                                                                  |
+
+
+### String Operators 
+
+The following string operators can be used inside a variability expression.
+
+| Keyname                | Input                                                                            | Output  | Description                                                                                                                                                  |
+|------------------------|----------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| concat                 | List(ValueExpression)                                                            | String  | Concatenates the given values.                                                                                                                               |
+| join                   | Tuple(List(ValueExpression), String)                                             | String  | Joins the given values using the provided delimiter.                                                                                                         |
+| token                  | Tuple(ValueExpression, String, Number)                                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
 
 ### Constraint Operators
 
@@ -623,6 +638,7 @@ To resolve the variability in a variable service template, conduct the following
 1. Remove all policy templates which are not present.
 1. Remove all policy targets which are not present from policy template.
 1. Remove all non-standard elements, e.g., variability definition, variability groups, or `conditions` at node templates.
+1. Remove all types which are not present.
 1. Set the TOSCA definitions version to `tosca_simple_yaml_1_3`.
 
 
@@ -655,6 +671,8 @@ To check the consistency, conduct the following steps:
 1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
 1. Ensure that the node of each property exists. Otherwise, throw Missing Property Parent error.
 1. Ensure that present properties have unique names within their node. Otherwise, throw Ambiguous Property error.
+1. Ensure that the container of each present type is also present. 
+1. Ensure that each present container has exactly one present type.
 
 Since the derived service template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],

@@ -84,6 +84,17 @@ export type VariabilityAlternative = {
     pruning?: boolean
 }
 
+export type NodeTypePresenceArguments = [node: string, type: string | number]
+export type RelationTypePresenceArguments = [node: string, relation: string | number, type: string | number]
+export type GroupTypePresenceArguments = [group: string, type: string | number]
+export type PolicyTypePresenceArguments = [policy: string | number, type: string | number]
+
+export type NodePropertyPresenceArguments = [node: string, property: string | number]
+export type RelationPropertyPresenceArguments = [node: string, relation: string | number, property: string | number]
+export type GroupPropertyPresenceArguments = [group: string, property: string | number]
+export type PolicyPropertyPresenceArguments = [policy: string | number, property: string | number]
+export type ArtifactPropertyPresenceArguments = [node: string, artifact: string | number, property: string | number]
+
 export type LogicExpression =
     | {
           // Boolean operators
@@ -95,7 +106,10 @@ export type LogicExpression =
           amo?: LogicExpression[]
 
           // Type functions
-          type_presence?: [string, string | number]
+          node_type_presence?: NodeTypePresenceArguments
+          relation_type_presence?: RelationTypePresenceArguments
+          group_type_presence?: GroupTypePresenceArguments
+          policy_type_presence?: PolicyTypePresenceArguments
 
           // Node functions
           node_presence?: string
@@ -104,15 +118,19 @@ export type LogicExpression =
           has_incoming_relations?: string
 
           // Relation functions
-          relation_presence?: [string, string | number]
+          relation_presence?: [node: string, relation: string | number]
           source_presence?: 'SELF'
           target_presence?: 'SELF'
 
           // Property functions
-          property_presence?: [string, string | number]
+          node_property_presence?: NodePropertyPresenceArguments
+          relation_property_presence?: RelationPropertyPresenceArguments
+          group_property_presence?: GroupPropertyPresenceArguments
+          policy_property_presence?: PolicyPropertyPresenceArguments
+          artifact_property_presence?: ArtifactPropertyPresenceArguments
 
           // Artifact functions
-          artifact_presence?: [string, string | number]
+          artifact_presence?: [node: string, artifact: string | number]
 
           // Policy functions
           policy_presence?: string | number
@@ -151,8 +169,8 @@ export type ValueExpression =
           value_expression?: string
           variability_input?: string
           concat?: ValueExpression[]
-          join?: [ValueExpression[], string]
-          token?: [ValueExpression, string, number]
+          join?: [expression: ValueExpression[], delimiter: string]
+          token?: [expression: ValueExpression, token: string, index: number]
 
           // Comparison operators
           equal?: ValueExpression[]
@@ -182,12 +200,12 @@ export type ValueExpression =
 
           // Date operators
           weekday?: []
-          same?: [string | number, string | number]
-          before?: [string | number, string | number]
-          before_or_same?: [string | number, string | number]
-          after?: [string | number, string | number]
-          after_or_same?: [string | number, string | number]
-          within?: [string | number, [string | number, string | number]]
+          same?: [date: string | number, date: string | number]
+          before?: [date: string | number, date: string | number]
+          before_or_same?: [date: string | number, date: string | number]
+          after?: [date: string | number, date: string | number]
+          after_or_same?: [date: string | number, date: string | number]
+          within?: [date: string | number, interval: [date: string | number, date: string | number]]
 
           // Cache
           _cached_result?: InputAssignmentValue

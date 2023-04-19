@@ -52,6 +52,10 @@ export function isEmpty(obj: any) {
     throw new Error(`Can not check if obj ${pretty(obj)} is empty`)
 }
 
+export function last<T>(array: T[]) {
+    return array[array.length - 1]
+}
+
 export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {
     if (validator.isUndefined(list) || validator.isUndefined(indexes)) return
     indexes.sort()

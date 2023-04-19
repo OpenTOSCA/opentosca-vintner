@@ -634,9 +634,9 @@ export default class Solver {
         }
 
         /**
-         * property_presence
+         * node_property_presence
          */
-        if (validator.isDefined(expression.property_presence)) {
+        if (validator.isDefined(expression.node_property_presence)) {
             let property: Property | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -645,9 +645,91 @@ export default class Solver {
             }
 
             if (validator.isUndefined(property)) {
-                validator.ensureString(expression.property_presence[0])
-                validator.ensureStringOrNumber(expression.property_presence[1])
-                property = this.graph.getProperty(expression.property_presence)
+                validator.ensureString(expression.node_property_presence[0])
+                validator.ensureStringOrNumber(expression.node_property_presence[1])
+                property = this.graph.getNodeProperty(expression.node_property_presence)
+            }
+
+            return property.id
+        }
+
+        /**
+         * relation_property_presence
+         */
+        if (validator.isDefined(expression.relation_property_presence)) {
+            let property: Property | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+                property = element
+            }
+
+            if (validator.isUndefined(property)) {
+                validator.ensureString(expression.relation_property_presence[0])
+                validator.ensureStringOrNumber(expression.relation_property_presence[1])
+                validator.ensureStringOrNumber(expression.relation_property_presence[2])
+                property = this.graph.getRelationProperty(expression.relation_property_presence)
+            }
+
+            return property.id
+        }
+
+        /**
+         * group_property_presence
+         */
+        if (validator.isDefined(expression.group_property_presence)) {
+            let property: Property | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+                property = element
+            }
+
+            if (validator.isUndefined(property)) {
+                validator.ensureString(expression.group_property_presence[0])
+                validator.ensureStringOrNumber(expression.group_property_presence[1])
+                property = this.graph.getGroupProperty(expression.group_property_presence)
+            }
+
+            return property.id
+        }
+
+        /**
+         * policy_property_presence
+         */
+        if (validator.isDefined(expression.policy_property_presence)) {
+            let property: Property | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+                property = element
+            }
+
+            if (validator.isUndefined(property)) {
+                validator.ensureStringOrNumber(expression.policy_property_presence[0])
+                validator.ensureStringOrNumber(expression.policy_property_presence[1])
+                property = this.graph.getPolicyProperty(expression.policy_property_presence)
+            }
+
+            return property.id
+        }
+
+        /**
+         * artifact_property_presence
+         */
+        if (validator.isDefined(expression.artifact_property_presence)) {
+            let property: Property | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+                property = element
+            }
+
+            if (validator.isUndefined(property)) {
+                validator.ensureString(expression.artifact_property_presence[0])
+                validator.ensureStringOrNumber(expression.artifact_property_presence[1])
+                validator.ensureStringOrNumber(expression.artifact_property_presence[2])
+                property = this.graph.getArtifactProperty(expression.artifact_property_presence)
             }
 
             return property.id
@@ -674,9 +756,9 @@ export default class Solver {
         }
 
         /**
-         * type_presence
+         * node_type_presence
          */
-        if (validator.isDefined(expression.type_presence)) {
+        if (validator.isDefined(expression.node_type_presence)) {
             let type: Type | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -685,9 +767,69 @@ export default class Solver {
             }
 
             if (validator.isUndefined(type)) {
-                validator.ensureString(expression.type_presence[0])
-                validator.ensureStringOrNumber(expression.type_presence[1])
-                type = this.graph.getType(expression.type_presence)
+                validator.ensureString(expression.node_type_presence[0])
+                validator.ensureStringOrNumber(expression.node_type_presence[1])
+                type = this.graph.getNodeType(expression.node_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * relation_type_presence
+         */
+        if (validator.isDefined(expression.relation_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.relation_type_presence[0])
+                validator.ensureStringOrNumber(expression.relation_type_presence[1])
+                type = this.graph.getRelationType(expression.relation_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * group_type_presence
+         */
+        if (validator.isDefined(expression.group_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.group_type_presence[0])
+                validator.ensureStringOrNumber(expression.group_type_presence[1])
+                type = this.graph.getGroupType(expression.group_type_presence)
+            }
+
+            return type.id
+        }
+
+        /**
+         * policy_type_presence
+         */
+        if (validator.isDefined(expression.policy_type_presence)) {
+            let type: Type | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+                type = element
+            }
+
+            if (validator.isUndefined(type)) {
+                validator.ensureString(expression.policy_type_presence[0])
+                validator.ensureStringOrNumber(expression.policy_type_presence[1])
+                type = this.graph.getPolicyType(expression.policy_type_presence)
             }
 
             return type.id
