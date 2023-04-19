@@ -522,9 +522,9 @@ The following arithmetic operators can be used inside a variability expression.
 | div     | List(NumericExpression)                     | Numeric | Divides values from the first one.        |
 | mod     | Tuple(NumericExpression, NumericExpression) | Numeric | Divides values and returns the remainder. |
 
-### Intrinsic Functions
+### Presence Operators
 
-The following intrinsic functions can be used inside a variability expression.
+The following presence operators can be used inside a variability expression.
 
 | Keyname                | Input                                                                            | Output  | Description                                                                                                                                                  |
 |------------------------|----------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -549,6 +549,14 @@ The following intrinsic functions can be used inside a variability expression.
 | relation_type_presence | Triple(Node: String, Relation: String &#124; Number, Type: String &#124; Number) | Boolean | Returns if type of relation is present.                                                                                                                      |
 | group_type_presence    | Tuple(String, String &#124; Number)                                              | Boolean | Returns if type of group is present.                                                                                                                         |
 | policy_type_presence   | Tuple(String, String &#124; Number)                                              | Boolean | Returns if type of policy is present.                                                                                                                        |
+
+
+### String Operators 
+
+The following string operators can be used inside a variability expression.
+
+| Keyname                | Input                                                                            | Output  | Description                                                                                                                                                  |
+|------------------------|----------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | concat                 | List(ValueExpression)                                                            | String  | Concatenates the given values.                                                                                                                               |
 | join                   | Tuple(List(ValueExpression), String)                                             | String  | Joins the given values using the provided delimiter.                                                                                                         |
 | token                  | Tuple(ValueExpression, String, Number)                                           | String  | Splits a given value by the provided delimiter and returns the element specified by the provided index.                                                      |
@@ -626,6 +634,7 @@ To resolve the variability in a variable service template, conduct the following
 1. Remove all policy templates which are not present.
 1. Remove all policy targets which are not present from policy template.
 1. Remove all non-standard elements, e.g., variability definition, variability groups, or `conditions` at node templates.
+1. Remove all types which are not present.
 1. Set the TOSCA definitions version to `tosca_simple_yaml_1_3`.
 
 
@@ -658,6 +667,8 @@ To check the consistency, conduct the following steps:
 1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
 1. Ensure that the node of each property exists. Otherwise, throw Missing Property Parent error.
 1. Ensure that present properties have unique names within their node. Otherwise, throw Ambiguous Property error.
+1. Ensure that the container of each present type is also present. 
+1. Ensure that each present container has exactly one present type.
 
 Since the derived service template might be further processed, e.g. by
 [Topology Completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank}[@hirmer2014automatic],
