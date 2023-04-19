@@ -657,6 +657,10 @@ export class Group extends ConditionalElement {
     getTypeCondition(type: Type): LogicExpression {
         return {group_type_presence: [this.toscaId, type.index], _cached_element: type}
     }
+
+    getPropertyCondition(property: Property): LogicExpression {
+        return {group_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
+    }
 }
 
 export class Artifact extends ConditionalElement {
