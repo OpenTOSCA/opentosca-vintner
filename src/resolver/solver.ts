@@ -204,6 +204,23 @@ export default class Solver {
             conditions.unshift(element.defaultCondition)
         }
 
+        // If there are no conditions assigned, then the element is present
+        if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
+
+        // Optimization if there is only one condition assigned
+        if (conditions.length === 1) {
+            // If the only assigned condition is "true", then the element is present
+            if (conditions[0] === true) return this.minisat.require(element.id)
+
+            // If the only assigned condition is "false", then the element is absent
+            if (conditions[0] === false) return this.minisat.forbid(element.id)
+
+            // Add the only assigned condition without "and"
+            return this.minisat.require(
+                MiniSat.equiv(element.id, this.transformLogicExpression(conditions[0], {element}))
+            )
+        }
+
         // Normalize conditions to a single 'and' condition
         const condition = conditions.reduce<{and: LogicExpression[]}>(
             (acc, curr) => {
@@ -213,6 +230,7 @@ export default class Solver {
             {and: []}
         )
 
+        // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
