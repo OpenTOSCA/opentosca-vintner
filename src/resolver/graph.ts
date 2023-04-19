@@ -52,7 +52,6 @@ export abstract class ConditionalElement {
     present?: boolean
     conditions: LogicExpression[] = []
 
-    abstract toscaId: string | number | [string, string | number]
     abstract presenceCondition: LogicExpression
 
     abstract defaultCondition: LogicExpression
@@ -167,6 +166,7 @@ export class Input extends ConditionalElement {
 export class Type extends ConditionalElement {
     raw: TypeAssignment | string
     container: Node | Relation | Policy | Group
+    index: number
 
     constructor(data: {
         name: string
@@ -177,6 +177,7 @@ export class Type extends ConditionalElement {
         super('type', data)
 
         this.raw = data.raw
+        this.index = data.index
         this.container = data.container
         this.conditions = validator.isString(data.raw)
             ? []
@@ -215,19 +216,8 @@ export class Type extends ConditionalElement {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition)) {
-            if (this.container.isNode())
-                this._presenceCondition = {node_type_presence: this.toscaId, _cached_element: this}
-
-            if (this.container.isRelation())
-                this._presenceCondition = {relation_type_presence: this.toscaId, _cached_element: this}
-
-            if (this.container.isPolicy())
-                this._presenceCondition = {policy_type_presence: this.toscaId, _cached_element: this}
-
-            if (this.container.isGroup())
-                this._presenceCondition = {group_type_presence: this.toscaId, _cached_element: this}
-        }
+        if (validator.isUndefined(this._presenceCondition))
+            this._presenceCondition = this.container.getTypeCondition(this)
 
         if (validator.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
 
@@ -356,6 +346,10 @@ export class Node extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {node_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
 }
 
 export class Property extends ConditionalElement {
@@ -537,6 +531,10 @@ export class Relation extends ConditionalElement {
         return this._defaultAlternativeCondition
     }
 
+    getTypeCondition(type: Type): LogicExpression {
+        return {relation_type_presence: [...this.toscaId, type.index], _cached_element: type}
+    }
+
     isHostedOn() {
         return new RegExp(/^(.*_)?host(_.*)?$/).test(this.name)
     }
@@ -603,6 +601,10 @@ export class Policy extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {policy_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
 }
 
 export class Group extends ConditionalElement {
@@ -651,6 +653,10 @@ export class Group extends ConditionalElement {
     }
 
     defaultAlternativeCondition: undefined
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {group_type_presence: [this.toscaId, type.index], _cached_element: type}
+    }
 }
 
 export class Artifact extends ConditionalElement {

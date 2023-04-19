@@ -656,26 +656,6 @@ export default class Solver {
         }
 
         /**
-         * type_presence
-         */
-        if (validator.isDefined(expression.type_presence)) {
-            let type: Type | undefined
-            if (validator.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
-                type = element
-            }
-
-            if (validator.isUndefined(type)) {
-                validator.ensureString(expression.type_presence[0])
-                validator.ensureStringOrNumber(expression.type_presence[1])
-                type = this.graph.getNodeType(expression.type_presence)
-            }
-
-            return type.id
-        }
-
-        /**
          * node_type_presence
          */
         if (validator.isDefined(expression.node_type_presence)) {
