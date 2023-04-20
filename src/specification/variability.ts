@@ -147,6 +147,9 @@ export type LogicExpression =
           logic_expression?: string
           variability_input?: string
 
+          // Some more functions
+          container_presence?: 'SELF'
+
           // Cache
           _cached_element?: ConditionalElement
           _visited?: boolean

@@ -34,182 +34,190 @@ processing.
 | 16 | [Operator "add" (Odd)](./test-arithmetic-operators-mod-odd.md) |
 | 17 | [Operator "mul"](./test-arithmetic-operators-mul.md) |
 | 18 | [Operator "sub"](./test-arithmetic-operators-sub.md) |
-| 19 | [artifacts-conditional](./test-artifacts-conditional.md) |
-| 20 | [artifacts-default-alternative](./test-artifacts-default-alternative.md) |
-| 21 | [artifacts-default-alternative-false](./test-artifacts-default-alternative-false.md) |
-| 22 | [artifacts-default-condition](./test-artifacts-default-condition.md) |
-| 23 | [artifacts-get-artifact-presence-number-absent](./test-artifacts-get-artifact-presence-number-absent.md) |
-| 24 | [artifacts-get-artifact-presence-number-present](./test-artifacts-get-artifact-presence-number-present.md) |
-| 25 | [artifacts-get-artifact-presence-string-absent](./test-artifacts-get-artifact-presence-string-absent.md) |
-| 26 | [artifacts-get-artifact-presence-string-present](./test-artifacts-get-artifact-presence-string-present.md) |
-| 27 | [Artifact Pruning](./test-artifacts-prune.md) |
-| 28 | [artifacts-throw-ambiguous-artifact](./test-artifacts-throw-ambiguous-artifact.md) |
-| 29 | [artifacts-throw-ambiguous-default](./test-artifacts-throw-ambiguous-default.md) |
-| 30 | [artifacts-throw-missing-artifact-parent](./test-artifacts-throw-missing-artifact-parent.md) |
-| 31 | [Operator "and" Evaluates to "True" (Empty)](./test-boolean-operators-and-empty.md) |
-| 32 | [Operator "and" Evaluates to "false"](./test-boolean-operators-and-false.md) |
-| 33 | [Operator "and" Evaluates to "false" (Nested)](./test-boolean-operators-and-nested-false.md) |
-| 34 | [Operator "and" Evaluates to "true"](./test-boolean-operators-and-nested-true.md) |
-| 35 | [Operator "and"  Evaluates to "true" (Nested)](./test-boolean-operators-and-true.md) |
-| 36 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
-| 37 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
-| 38 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
-| 39 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
-| 40 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
-| 41 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
-| 42 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
-| 43 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
-| 44 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
-| 45 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
-| 46 | [Operator "xor": all false -> false](./test-boolean-operators-xor-false-all.md) |
-| 47 | [Operator "xor": One ture -> true](./test-boolean-operators-xor-true.md) |
-| 48 | [Operator "xor": all true -> false](./test-boolean-operators-xor-true-all.md) |
-| 49 | [circles-alpha](./test-circles-alpha.md) |
-| 50 | [circles-bravo](./test-circles-bravo.md) |
-| 51 | [circles-charlie](./test-circles-charlie.md) |
-| 52 | [circles-delta](./test-circles-delta.md) |
-| 53 | [circles-echo](./test-circles-echo.md) |
-| 54 | [circles-golf](./test-circles-golf.md) |
-| 55 | [circles-hotel](./test-circles-hotel.md) |
-| 56 | [circles-india](./test-circles-india.md) |
-| 57 | [consistency-throw-hosting-relation-missing](./test-consistency-throw-hosting-relation-missing.md) |
-| 58 | [consistency-throw-multiple-hosting-relations](./test-consistency-throw-multiple-hosting-relations.md) |
-| 59 | [consistency-throw-relation-source-missing](./test-consistency-throw-relation-source-missing.md) |
-| 60 | [consistency-throw-relation-target-missing](./test-consistency-throw-relation-target-missing.md) |
-| 61 | [Operator "equal" Evaluates to "false"](./test-constraint-operators-equal-false.md) |
-| 62 | [Operator "equal" Evaluates to "true"](./test-constraint-operators-equal-true.md) |
-| 63 | [Operator "greater_or_equal" Evaluates to "true" (Greater)](./test-constraint-operators-greater-or-equal-equal.md) |
-| 64 | [Operator "greater_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-greater-or-equal-greater.md) |
-| 65 | [Operator "greater_or_equal" Evaluates to "false" (Less)](./test-constraint-operators-greater-or-equal-less.md) |
-| 66 | [Operator "greater" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
-| 67 | [Operator "greater" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
-| 68 | [Operator "greater" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
-| 69 | [Operator "in_range" Evaluates to "false"](./test-constraint-operators-in_range_false.md) |
-| 70 | [Operator "in_range" Evaluates to "true"](./test-constraint-operators-in_range_true.md) |
-| 71 | [Operator "length" Evaluates to "false"](./test-constraint-operators-length_false.md) |
-| 72 | [Operator "length" Evaluates to "true"](./test-constraint-operators-length_true.md) |
-| 73 | [Operator "less_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-less_or_equal_equal.md) |
-| 74 | [Operator "less_or_equal" Evaluates to "false" (Greater)](./test-constraint-operators-less_or_equal_greater.md) |
-| 75 | [Operator "less_or_equal" Evaluates to "true" (Less)](./test-constraint-operators-less_or_equal_less.md) |
-| 76 | [Operator "less" Evaluates to "false" (Equal)](./test-constraint-operators-less_than_equal.md) |
-| 77 | [Operator "less" Evaluates to "false" (Greater)](./test-constraint-operators-less_than_greater.md) |
-| 78 | [Operator "less" Evaluates to "true" (Less)](./test-constraint-operators-less_than_less.md) |
-| 79 | [Operator "max_length" Evaluates to "true" (Equal)](./test-constraint-operators-max_length_equal.md) |
-| 80 | [Operator "max_length" Evaluates to "false" (Greater)](./test-constraint-operators-max_length_greater.md) |
-| 81 | [Operator "max_length" Evaluates to "true" (Less)](./test-constraint-operators-max_length_less.md) |
-| 82 | [Operator "min_length" Evaluates to "true" (Equal)](./test-constraint-operators-min_length_equal.md) |
-| 83 | [Operator "min_length" Evaluates to "true" (Greater)](./test-constraint-operators-min_length_greater.md) |
-| 84 | [Operator "min_length" Evaluates to "false" (Less)](./test-constraint-operators-min_length_less.md) |
-| 85 | [Operator "valid_values" Evaluates to "false"](./test-constraint-operators-valid_values_false.md) |
-| 86 | [Operator "valid_values" Evaluates to "true"](./test-constraint-operators-valid_values_true.md) |
-| 87 | [date-operators-after-false](./test-date-operators-after-false.md) |
-| 88 | [date-operators-after-or-same-false](./test-date-operators-after-or-same-false.md) |
-| 89 | [date-operators-after-or-same-true](./test-date-operators-after-or-same-true.md) |
-| 90 | [date-operators-after-true](./test-date-operators-after-true.md) |
-| 91 | [date-operators-before-false](./test-date-operators-before-false.md) |
-| 92 | [date-operators-before-or-same-false](./test-date-operators-before-or-same-false.md) |
-| 93 | [date-operators-before-or-same-true](./test-date-operators-before-or-same-true.md) |
-| 94 | [date-operators-before-true](./test-date-operators-before-true.md) |
-| 95 | [date-operators-same-false](./test-date-operators-same-false.md) |
-| 96 | [date-operators-same-true](./test-date-operators-same-true.md) |
-| 97 | [date-operators-within-false](./test-date-operators-within-false.md) |
-| 98 | [date-operators-within-true](./test-date-operators-within-true.md) |
-| 99 | [Conditional Group](./test-groups-conditional.md) |
-| 100 | [groups-default-condition](./test-groups-default-condition.md) |
-| 101 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
-| 102 | [groups-get-group-presence-absent](./test-groups-get-group-presence-absent.md) |
-| 103 | [groups-get-group-presence-present](./test-groups-get-group-presence-present.md) |
-| 104 | [groups-prune](./test-groups-prune.md) |
-| 105 | [inputs-conditional](./test-inputs-conditional.md) |
-| 106 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
-| 107 | [inputs-get-input-presence-absent](./test-inputs-get-input-presence-absent.md) |
-| 108 | [inputs-get-input-presence-present](./test-inputs-get-input-presence-present.md) |
-| 109 | [nodes-conditional](./test-nodes-conditional.md) |
-| 110 | [nodes-conditional-type](./test-nodes-conditional-type.md) |
-| 111 | [nodes-conditional-type-default](./test-nodes-conditional-type-default.md) |
-| 112 | [nodes-default-false-false](./test-nodes-default-false-false.md) |
-| 113 | [nodes-default-false-true](./test-nodes-default-false-true.md) |
-| 114 | [nodes-default-host-absent](./test-nodes-default-host-absent.md) |
-| 115 | [nodes-default-host-present](./test-nodes-default-host-present.md) |
-| 116 | [nodes-default-true-false](./test-nodes-default-true-false.md) |
-| 117 | [nodes-default-true-true](./test-nodes-default-true-true.md) |
-| 118 | [nodes-get-node-presence-absent](./test-nodes-get-node-presence-absent.md) |
-| 119 | [nodes-get-node-presence-present](./test-nodes-get-node-presence-present.md) |
-| 120 | [nodes-host-presence-absent](./test-nodes-host-presence-absent.md) |
-| 121 | [nodes-host-presence-false-false](./test-nodes-host-presence-false-false.md) |
-| 122 | [nodes-host-presence-present](./test-nodes-host-presence-present.md) |
-| 123 | [nodes-host-presence-true-false](./test-nodes-host-presence-true-false.md) |
-| 124 | [nodes-host-presence-true-true](./test-nodes-host-presence-true-true.md) |
-| 125 | [nodes-pruning](./test-nodes-pruning.md) |
-| 126 | [nodes-pruning-false-false](./test-nodes-pruning-false-false.md) |
-| 127 | [nodes-pruning-false-true](./test-nodes-pruning-false-true.md) |
-| 128 | [nodes-pruning-true-false](./test-nodes-pruning-true-false.md) |
-| 129 | [nodes-pruning-true-true](./test-nodes-pruning-true-true.md) |
-| 130 | [Benchmark](./test-other-benchmark.md) |
-| 131 | [Operator "concat"](./test-other-concat.md) |
-| 132 | [Get Variability Expression](./test-other-default-variability-input.md) |
-| 133 | [other-get-logic-expression-false](./test-other-get-logic-expression-false.md) |
-| 134 | [other-get-logic-expression-true](./test-other-get-logic-expression-true.md) |
-| 135 | [Get Variability Expression](./test-other-get-value-expression.md) |
-| 136 | [Get Variability Input](./test-other-get-variability-input.md) |
-| 137 | [Operator "concat"](./test-other-join.md) |
-| 138 | [other-logic-value-expression](./test-other-logic-value-expression.md) |
-| 139 | [other-nothing](./test-other-nothing.md) |
-| 140 | [other-preset](./test-other-preset.md) |
-| 141 | [other-presets](./test-other-presets.md) |
-| 142 | [Operator "concat"](./test-other-token.md) |
-| 143 | [other-version](./test-other-version.md) |
-| 144 | [policies-conditional](./test-policies-conditional.md) |
-| 145 | [policies-default-condition](./test-policies-default-condition.md) |
-| 146 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
-| 147 | [policies-get-policy-presence-absent](./test-policies-get-policy-presence-absent.md) |
-| 148 | [policies-get-policy-presence-present](./test-policies-get-policy-presence-present.md) |
-| 149 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
-| 150 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
-| 151 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
-| 152 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
-| 153 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
-| 154 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
-| 155 | [Policy Pruning](./test-policies-prune.md) |
-| 156 | [properties-conditional](./test-properties-conditional.md) |
-| 157 | [properties-default-alternative](./test-properties-default-alternative.md) |
-| 158 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
-| 159 | [properties-default-condition](./test-properties-default-condition.md) |
-| 160 | [properties-expression](./test-properties-expression.md) |
-| 161 | [properties-list](./test-properties-list.md) |
-| 162 | [properties-list-another](./test-properties-list-another.md) |
-| 163 | [properties-map](./test-properties-map.md) |
-| 164 | [properties-map-another](./test-properties-map-another.md) |
-| 165 | [properties-node-property-presence-number-absent](./test-properties-node-property-presence-number-absent.md) |
-| 166 | [properties-node-property-presence-number-present](./test-properties-node-property-presence-number-present.md) |
-| 167 | [properties-node-property-presence-string-absent](./test-properties-node-property-presence-string-absent.md) |
-| 168 | [properties-node-property-presence-string-present](./test-properties-node-property-presence-string-present.md) |
-| 169 | [properties-prune](./test-properties-prune.md) |
-| 170 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
-| 171 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
-| 172 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
-| 173 | [relationships-conditional](./test-relationships-conditional.md) |
-| 174 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 175 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 176 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 177 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 178 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 179 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 180 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 181 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
-| 182 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
-| 183 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
-| 184 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
-| 185 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
-| 186 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
-| 187 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
-| 188 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
-| 189 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 190 | [Relation Pruning](./test-requirement-assignment-prune.md) |
-| 191 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
-| 192 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
-| 193 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
-| 194 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
-| 195 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
-| 196 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
+| 19 | [artifacts-artifact-presence-number-absent](./test-artifacts-artifact-presence-number-absent.md) |
+| 20 | [artifacts-artifact-presence-number-present](./test-artifacts-artifact-presence-number-present.md) |
+| 21 | [artifacts-artifact-presence-string-absent](./test-artifacts-artifact-presence-string-absent.md) |
+| 22 | [artifacts-artifact-presence-string-present](./test-artifacts-artifact-presence-string-present.md) |
+| 23 | [artifacts-conditional](./test-artifacts-conditional.md) |
+| 24 | [artifacts-container-presence-absent](./test-artifacts-container-presence-absent.md) |
+| 25 | [artifacts-container-presence-present](./test-artifacts-container-presence-present.md) |
+| 26 | [artifacts-default-alternative](./test-artifacts-default-alternative.md) |
+| 27 | [artifacts-default-alternative-false](./test-artifacts-default-alternative-false.md) |
+| 28 | [artifacts-default-condition](./test-artifacts-default-condition.md) |
+| 29 | [Artifact Pruning](./test-artifacts-prune.md) |
+| 30 | [artifacts-throw-ambiguous-artifact](./test-artifacts-throw-ambiguous-artifact.md) |
+| 31 | [artifacts-throw-ambiguous-default](./test-artifacts-throw-ambiguous-default.md) |
+| 32 | [artifacts-throw-missing-artifact-parent](./test-artifacts-throw-missing-artifact-parent.md) |
+| 33 | [Operator "and" Evaluates to "True" (Empty)](./test-boolean-operators-and-empty.md) |
+| 34 | [Operator "and" Evaluates to "false"](./test-boolean-operators-and-false.md) |
+| 35 | [Operator "and" Evaluates to "false" (Nested)](./test-boolean-operators-and-nested-false.md) |
+| 36 | [Operator "and" Evaluates to "true"](./test-boolean-operators-and-nested-true.md) |
+| 37 | [Operator "and"  Evaluates to "true" (Nested)](./test-boolean-operators-and-true.md) |
+| 38 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
+| 39 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
+| 40 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
+| 41 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
+| 42 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
+| 43 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
+| 44 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
+| 45 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
+| 46 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
+| 47 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
+| 48 | [Operator "xor": all false -> false](./test-boolean-operators-xor-false-all.md) |
+| 49 | [Operator "xor": One ture -> true](./test-boolean-operators-xor-true.md) |
+| 50 | [Operator "xor": all true -> false](./test-boolean-operators-xor-true-all.md) |
+| 51 | [circles-alpha](./test-circles-alpha.md) |
+| 52 | [circles-bravo](./test-circles-bravo.md) |
+| 53 | [circles-charlie](./test-circles-charlie.md) |
+| 54 | [circles-delta](./test-circles-delta.md) |
+| 55 | [circles-echo](./test-circles-echo.md) |
+| 56 | [circles-golf](./test-circles-golf.md) |
+| 57 | [circles-hotel](./test-circles-hotel.md) |
+| 58 | [circles-india](./test-circles-india.md) |
+| 59 | [consistency-throw-hosting-relation-missing](./test-consistency-throw-hosting-relation-missing.md) |
+| 60 | [consistency-throw-multiple-hosting-relations](./test-consistency-throw-multiple-hosting-relations.md) |
+| 61 | [consistency-throw-relation-source-missing](./test-consistency-throw-relation-source-missing.md) |
+| 62 | [consistency-throw-relation-target-missing](./test-consistency-throw-relation-target-missing.md) |
+| 63 | [Operator "equal" Evaluates to "false"](./test-constraint-operators-equal-false.md) |
+| 64 | [Operator "equal" Evaluates to "true"](./test-constraint-operators-equal-true.md) |
+| 65 | [Operator "greater_or_equal" Evaluates to "true" (Greater)](./test-constraint-operators-greater-or-equal-equal.md) |
+| 66 | [Operator "greater_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-greater-or-equal-greater.md) |
+| 67 | [Operator "greater_or_equal" Evaluates to "false" (Less)](./test-constraint-operators-greater-or-equal-less.md) |
+| 68 | [Operator "greater" Evaluates to "false" (Equal)](./test-constraint-operators-greater-than-equal.md) |
+| 69 | [Operator "greater" Evaluates to "true" (Greater)](./test-constraint-operators-greater-than-greater.md) |
+| 70 | [Operator "greater" Evaluates to "false" (Less)](./test-constraint-operators-greater-than-less.md) |
+| 71 | [Operator "in_range" Evaluates to "false"](./test-constraint-operators-in_range_false.md) |
+| 72 | [Operator "in_range" Evaluates to "true"](./test-constraint-operators-in_range_true.md) |
+| 73 | [Operator "length" Evaluates to "false"](./test-constraint-operators-length_false.md) |
+| 74 | [Operator "length" Evaluates to "true"](./test-constraint-operators-length_true.md) |
+| 75 | [Operator "less_or_equal" Evaluates to "true" (Equal)](./test-constraint-operators-less_or_equal_equal.md) |
+| 76 | [Operator "less_or_equal" Evaluates to "false" (Greater)](./test-constraint-operators-less_or_equal_greater.md) |
+| 77 | [Operator "less_or_equal" Evaluates to "true" (Less)](./test-constraint-operators-less_or_equal_less.md) |
+| 78 | [Operator "less" Evaluates to "false" (Equal)](./test-constraint-operators-less_than_equal.md) |
+| 79 | [Operator "less" Evaluates to "false" (Greater)](./test-constraint-operators-less_than_greater.md) |
+| 80 | [Operator "less" Evaluates to "true" (Less)](./test-constraint-operators-less_than_less.md) |
+| 81 | [Operator "max_length" Evaluates to "true" (Equal)](./test-constraint-operators-max_length_equal.md) |
+| 82 | [Operator "max_length" Evaluates to "false" (Greater)](./test-constraint-operators-max_length_greater.md) |
+| 83 | [Operator "max_length" Evaluates to "true" (Less)](./test-constraint-operators-max_length_less.md) |
+| 84 | [Operator "min_length" Evaluates to "true" (Equal)](./test-constraint-operators-min_length_equal.md) |
+| 85 | [Operator "min_length" Evaluates to "true" (Greater)](./test-constraint-operators-min_length_greater.md) |
+| 86 | [Operator "min_length" Evaluates to "false" (Less)](./test-constraint-operators-min_length_less.md) |
+| 87 | [Operator "valid_values" Evaluates to "false"](./test-constraint-operators-valid_values_false.md) |
+| 88 | [Operator "valid_values" Evaluates to "true"](./test-constraint-operators-valid_values_true.md) |
+| 89 | [date-operators-after-false](./test-date-operators-after-false.md) |
+| 90 | [date-operators-after-or-same-false](./test-date-operators-after-or-same-false.md) |
+| 91 | [date-operators-after-or-same-true](./test-date-operators-after-or-same-true.md) |
+| 92 | [date-operators-after-true](./test-date-operators-after-true.md) |
+| 93 | [date-operators-before-false](./test-date-operators-before-false.md) |
+| 94 | [date-operators-before-or-same-false](./test-date-operators-before-or-same-false.md) |
+| 95 | [date-operators-before-or-same-true](./test-date-operators-before-or-same-true.md) |
+| 96 | [date-operators-before-true](./test-date-operators-before-true.md) |
+| 97 | [date-operators-same-false](./test-date-operators-same-false.md) |
+| 98 | [date-operators-same-true](./test-date-operators-same-true.md) |
+| 99 | [date-operators-within-false](./test-date-operators-within-false.md) |
+| 100 | [date-operators-within-true](./test-date-operators-within-true.md) |
+| 101 | [Conditional Group](./test-groups-conditional.md) |
+| 102 | [groups-default-condition](./test-groups-default-condition.md) |
+| 103 | [groups-default-condition-nothing](./test-groups-default-condition-nothing.md) |
+| 104 | [groups-get-group-presence-absent](./test-groups-get-group-presence-absent.md) |
+| 105 | [groups-get-group-presence-present](./test-groups-get-group-presence-present.md) |
+| 106 | [groups-prune](./test-groups-prune.md) |
+| 107 | [inputs-conditional](./test-inputs-conditional.md) |
+| 108 | [inputs-conditional-list](./test-inputs-conditional-list.md) |
+| 109 | [inputs-get-input-presence-absent](./test-inputs-get-input-presence-absent.md) |
+| 110 | [inputs-get-input-presence-present](./test-inputs-get-input-presence-present.md) |
+| 111 | [nodes-conditional](./test-nodes-conditional.md) |
+| 112 | [nodes-conditional-type](./test-nodes-conditional-type.md) |
+| 113 | [nodes-conditional-type-default](./test-nodes-conditional-type-default.md) |
+| 114 | [nodes-default-false-false](./test-nodes-default-false-false.md) |
+| 115 | [nodes-default-false-true](./test-nodes-default-false-true.md) |
+| 116 | [nodes-default-host-absent](./test-nodes-default-host-absent.md) |
+| 117 | [nodes-default-host-present](./test-nodes-default-host-present.md) |
+| 118 | [nodes-default-true-false](./test-nodes-default-true-false.md) |
+| 119 | [nodes-default-true-true](./test-nodes-default-true-true.md) |
+| 120 | [nodes-get-node-presence-absent](./test-nodes-get-node-presence-absent.md) |
+| 121 | [nodes-get-node-presence-present](./test-nodes-get-node-presence-present.md) |
+| 122 | [nodes-host-presence-absent](./test-nodes-host-presence-absent.md) |
+| 123 | [nodes-host-presence-false-false](./test-nodes-host-presence-false-false.md) |
+| 124 | [nodes-host-presence-present](./test-nodes-host-presence-present.md) |
+| 125 | [nodes-host-presence-true-false](./test-nodes-host-presence-true-false.md) |
+| 126 | [nodes-host-presence-true-true](./test-nodes-host-presence-true-true.md) |
+| 127 | [nodes-pruning](./test-nodes-pruning.md) |
+| 128 | [nodes-pruning-false-false](./test-nodes-pruning-false-false.md) |
+| 129 | [nodes-pruning-false-true](./test-nodes-pruning-false-true.md) |
+| 130 | [nodes-pruning-true-false](./test-nodes-pruning-true-false.md) |
+| 131 | [nodes-pruning-true-true](./test-nodes-pruning-true-true.md) |
+| 132 | [Benchmark](./test-other-benchmark.md) |
+| 133 | [Operator "concat"](./test-other-concat.md) |
+| 134 | [Get Variability Expression](./test-other-default-variability-input.md) |
+| 135 | [other-get-logic-expression-false](./test-other-get-logic-expression-false.md) |
+| 136 | [other-get-logic-expression-true](./test-other-get-logic-expression-true.md) |
+| 137 | [Get Variability Expression](./test-other-get-value-expression.md) |
+| 138 | [Get Variability Input](./test-other-get-variability-input.md) |
+| 139 | [Operator "concat"](./test-other-join.md) |
+| 140 | [other-logic-value-expression](./test-other-logic-value-expression.md) |
+| 141 | [other-nothing](./test-other-nothing.md) |
+| 142 | [other-preset](./test-other-preset.md) |
+| 143 | [other-presets](./test-other-presets.md) |
+| 144 | [Operator "concat"](./test-other-token.md) |
+| 145 | [other-version](./test-other-version.md) |
+| 146 | [policies-conditional](./test-policies-conditional.md) |
+| 147 | [policies-default-condition](./test-policies-default-condition.md) |
+| 148 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
+| 149 | [policies-get-policy-presence-absent](./test-policies-get-policy-presence-absent.md) |
+| 150 | [policies-get-policy-presence-present](./test-policies-get-policy-presence-present.md) |
+| 151 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
+| 152 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
+| 153 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
+| 154 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
+| 155 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
+| 156 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
+| 157 | [Policy Pruning](./test-policies-prune.md) |
+| 158 | [properties-artifact-container-presence-absent](./test-properties-artifact-container-presence-absent.md) |
+| 159 | [properties-artifact-container-presence-present](./test-properties-artifact-container-presence-present.md) |
+| 160 | [properties-conditional](./test-properties-conditional.md) |
+| 161 | [properties-default-alternative](./test-properties-default-alternative.md) |
+| 162 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
+| 163 | [properties-default-condition](./test-properties-default-condition.md) |
+| 164 | [properties-expression](./test-properties-expression.md) |
+| 165 | [properties-list](./test-properties-list.md) |
+| 166 | [properties-list-another](./test-properties-list-another.md) |
+| 167 | [properties-map](./test-properties-map.md) |
+| 168 | [properties-map-another](./test-properties-map-another.md) |
+| 169 | [properties-node-container-presence-absent](./test-properties-node-container-presence-absent.md) |
+| 170 | [properties-node-container-presence-present](./test-properties-node-container-presence-present.md) |
+| 171 | [properties-node-property-presence-number-absent](./test-properties-node-property-presence-number-absent.md) |
+| 172 | [properties-node-property-presence-number-present](./test-properties-node-property-presence-number-present.md) |
+| 173 | [properties-node-property-presence-string-absent](./test-properties-node-property-presence-string-absent.md) |
+| 174 | [properties-node-property-presence-string-present](./test-properties-node-property-presence-string-present.md) |
+| 175 | [properties-prune](./test-properties-prune.md) |
+| 176 | [properties-relation-container-presence-absent](./test-properties-relation-container-presence-absent.md) |
+| 177 | [properties-relation-container-presence-present](./test-properties-relation-container-presence-present.md) |
+| 178 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
+| 179 | [properties-throw-missing-property-parent](./test-properties-throw-missing-property-parent.md) |
+| 180 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
+| 181 | [relationships-conditional](./test-relationships-conditional.md) |
+| 182 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 183 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 184 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 185 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 186 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 187 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 188 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 189 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 190 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 191 | [requirement-assignment-get-relation-presence-index-absent](./test-requirement-assignment-get-relation-presence-index-absent.md) |
+| 192 | [requirement-assignment-get-relation-presence-name-absent](./test-requirement-assignment-get-relation-presence-name-absent.md) |
+| 193 | [requirement-assignment-get-source-presence-absent](./test-requirement-assignment-get-source-presence-absent.md) |
+| 194 | [requirement-assignment-get-source-presence-present](./test-requirement-assignment-get-source-presence-present.md) |
+| 195 | [requirement-assignment-get-target-presence-absent](./test-requirement-assignment-get-target-presence-absent.md) |
+| 196 | [requirement-assignment-get-target-presence-present](./test-requirement-assignment-get-target-presence-present.md) |
+| 197 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 198 | [Relation Pruning](./test-requirement-assignment-prune.md) |
+| 199 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 200 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
+| 201 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
+| 202 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
+| 203 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
+| 204 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
 
