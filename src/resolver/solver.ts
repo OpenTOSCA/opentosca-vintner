@@ -525,6 +525,23 @@ export default class Solver {
             return context.element.target.id
         }
 
+        // TODO: test
+        /**
+         * container_presence
+         */
+        if (validator.isDefined(expression.container_presence)) {
+            const element = expression.container_presence
+            validator.ensureString(element)
+            if (element !== 'SELF')
+                throw new Error(`"SELF" is the only valid value for "container_presence" but received "${element}"`)
+            if (validator.isUndefined(context.element))
+                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
+            if (!context.element.isProperty() && !context.element.isArtifact())
+                throw new Error(`"container_presence" is only valid inside a property or artifact`)
+
+            return context.element.container.id
+        }
+
         /**
          * policy_presence
          */

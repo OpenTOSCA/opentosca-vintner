@@ -553,6 +553,7 @@ The following presence operators can be used inside a variability expression.
 | group_property_presence    | Tuple(Group: String, Property: String &#124; Number)                                | Boolean | Returns if property of group is present.                                                                                                                     |
 | policy_property_presence   | Tuple(Policy: String &#124; Number, Property: String &#124; Number)                 | Boolean | Returns if property of policy is present.                                                                                                                    |
 | artifact_property_presence | Tuple(Node: String, Artifact: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of artifact is present.                                                                                                                  |
+| container_presence         | SELF                                                                                | Boolean | Returns if container is present. Can only be used inside a property or artifact.                                                                             |
 
 
 ### String Operators 
