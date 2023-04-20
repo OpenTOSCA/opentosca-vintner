@@ -86,6 +86,7 @@ nav:
           - variability4tosca/benchmark.md
           - Guides:
                 - variability4tosca/guides/pipes-and-filters.md
+                - variability4tosca/guides/pruning.md
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md

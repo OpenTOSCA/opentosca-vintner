@@ -1,0 +1,60 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/scenario/types.yaml
+    - lib/compute/types.yaml
+
+topology_template:
+    inputs:
+        instance:
+            type: string
+
+        compute_vm_network:
+            type: string
+
+        compute_vm_security_groups:
+            type: string
+
+        compute_vm_key_name:
+            type: string
+
+        compute_vm_ssh_user:
+            type: string
+
+        compute_vm_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        web_shop:
+            type: scenario.web_shop
+            properties:
+                storage: false
+            requirements:
+                - host: compute_localhost
+
+        compute_localhost:
+            type: compute.localhost
+            attributes:
+                private_address: localhost
+                public_address: localhost
