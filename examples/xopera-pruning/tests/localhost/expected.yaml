@@ -51,7 +51,8 @@ topology_template:
             properties:
                 storage: false
             requirements:
-                - host: compute_localhost
+                - host:
+                      node: compute_localhost
 
         compute_localhost:
             type: compute.localhost

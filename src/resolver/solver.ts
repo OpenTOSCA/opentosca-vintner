@@ -59,6 +59,20 @@ export default class Solver {
         this.transformed = true
 
         for (const element of this.graph.elements) this.transformConditions(element)
+
+        // TODO: these implications are helpful to enforce consistency, e.g., also while minimizing
+        /**
+         for (const relation of this.graph.relations) {
+            this.minisat.require(MiniSat.implies(relation.id, relation.target.id))
+            this.minisat.require(MiniSat.implies(relation.id, relation.source.id))
+        }
+
+         for (const artifact of this.graph.artifacts)
+         this.minisat.require(MiniSat.implies(artifact.id, artifact.container.id))
+
+         for (const property of this.graph.properties)
+         this.minisat.require(MiniSat.implies(property.id, property.container.id))
+         **/
     }
 
     run() {
@@ -166,9 +180,11 @@ export default class Solver {
                     or.push(name)
                 }
             }
-            and.push('(' + or.join(' or ') + ')')
+            //and.push('(' + or.join(' or ') + ')')
+            and.push(or.join(' or '))
         }
-        return and.join(' and ')
+        //return and.join(' and ')
+        return and.join('\n')
     }
 
     evaluateProperty(property: Property) {
@@ -229,6 +245,9 @@ export default class Solver {
             },
             {and: []}
         )
+
+        // Store effective conditions for transparency
+        element.effectiveConditions = conditions
 
         // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
@@ -467,7 +486,27 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            return MiniSat.or(node.ingoing.map(it => it.id))
+            // TODO: refactor this and already add explicitId to minisat in transformConditions
+            return MiniSat.or(
+                node.ingoing.map(it => {
+                    // TODO: this does not respect variability groups
+                    if (it.conditions.length === 0) return it.source.id
+
+                    // Normalize conditions to a single 'and' condition
+                    const condition = it.conditions.reduce<{and: LogicExpression[]}>(
+                        (acc, curr) => {
+                            acc.and.push(curr)
+                            return acc
+                        },
+                        {and: []}
+                    )
+
+                    this.minisat.require(
+                        MiniSat.equiv(it.explicitId, this.transformLogicExpression(condition, {element: it}))
+                    )
+                    return MiniSat.and(it.explicitId, it.source.id)
+                })
+            )
         }
 
         /**

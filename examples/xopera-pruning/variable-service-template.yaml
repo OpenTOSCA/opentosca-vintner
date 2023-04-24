@@ -65,10 +65,14 @@ topology_template:
 
         options:
             strict: false
+            # TODO: make "relation" default again
+            node_default_condition_mode: relation
 
     node_templates:
         web_shop:
             type: scenario.web_shop
+            # default_condition: false
+            # pruning: false
             properties:
                 - storage:
                       value: false
@@ -77,32 +81,45 @@ topology_template:
                       value: true
                       conditions: {logic_expression: is_cloud}
             requirements:
-                - host: compute_localhost
-                - host: compute_vm
-                - database: database
+                - host:
+                      node: compute_localhost
+                      conditions: {logic_expression: is_localhost}
+
+                - host:
+                      node: compute_vm
+                      conditions: {logic_expression: is_cloud}
+
+                - database:
+                      node: database
 
         database:
             type: scenario.database
+            conditions: {logic_expression: is_cloud}
             properties:
                 name: db
+            requirements:
+                - host: compute_vm
 
         monitor:
             type: scenario.monitor
+            conditions: {logic_expression: is_cloud}
+            properties:
+                interval: 15 sec
             artifacts:
                 binary:
                     type: tosca.artifacts.File
                     file: files/application-linux-arm64.xz
+            requirements:
+                - host: compute_vm
 
         compute_localhost:
             type: compute.localhost
-            conditions: {logic_expression: is_localhost}
             attributes:
                 private_address: localhost
                 public_address: localhost
 
         compute_vm:
             type: compute.vm
-            conditions: {logic_expression: is_cloud}
             properties:
                 ports: [80, 3000]
                 name: {concat: ['compute-vm-', {get_input: instance}]}

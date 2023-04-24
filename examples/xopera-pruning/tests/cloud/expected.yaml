@@ -51,20 +51,28 @@ topology_template:
             properties:
                 storage: true
             requirements:
-                - host: compute_vm
-                - database: database
+                - host:
+                      node: compute_vm
+                - database:
+                      node: database
 
         database:
             type: scenario.database
             properties:
                 name: db
+            requirements:
+                - host: compute_vm
 
         monitor:
             type: scenario.monitor
+            properties:
+                interval: 15 sec
             artifacts:
                 binary:
                     type: tosca.artifacts.File
                     file: files/application-linux-arm64.xz
+            requirements:
+                - host: compute_vm
 
         compute_vm:
             type: compute.vm
