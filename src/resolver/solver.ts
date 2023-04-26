@@ -59,6 +59,21 @@ export default class Solver {
         this.transformed = true
 
         for (const element of this.graph.elements) this.transformConditions(element)
+
+        // TODO: enable/ disable flag in variability.options
+        // TODO: remaining checks
+
+        for (const relation of this.graph.relations) {
+            this.minisat.require(MiniSat.implies(relation.id, relation.target.id))
+            this.minisat.require(MiniSat.implies(relation.id, relation.source.id))
+        }
+
+        for (const artifact of this.graph.artifacts)
+            this.minisat.require(MiniSat.implies(artifact.id, artifact.container.id))
+
+        for (const property of this.graph.properties)
+            this.minisat.require(MiniSat.implies(property.id, property.container.id))
+
     }
 
     run() {
@@ -222,7 +237,7 @@ export default class Solver {
         }
 
         // Normalize conditions to a single 'and' condition
-        const condition = conditions.reduce<{and: LogicExpression[]}>(
+        const condition = conditions.reduce<{ and: LogicExpression[] }>(
             (acc, curr) => {
                 acc.and.push(curr)
                 return acc
