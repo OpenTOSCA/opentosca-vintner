@@ -104,7 +104,6 @@ The following options are general options.
 
 ### Default Condition Options
 
-
 The following options are used to configure default conditions.
 
 | Keyname                         | Mandatory | Type                                                                       | Default       | Description                                                                                       |
@@ -164,27 +163,27 @@ The following options are used to configure the optimization.
 
 To further support modeling, the following default conditions can be assigned:
 
-| Element                                        | Default Conditions                                                                                                   |
-|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (Source) | Check if any source of incoming relations is present.                                                                |
-| Property                                       | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present. |
-| Requirement Assignment                         | Check if the source and target of the requirement assignment is present.                                             |
-| Policy                                         | Check if the policy has any targets which are present.                                                               |
-| Group                                          | Check if the group has any members which are present.                                                                |
-| Artifact                                       | Check if the node template of the artifact is present.                                                               |
+| Element                                          | Default Conditions                                                                                                   |
+|--------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (Incoming) | Check if any incoming relation is present.                                                                         |
+| Property                                         | Check if the container, i.e., node template, relationship template, artifact, or policy, of the property is present. |
+| Requirement Assignment                           | Check if the source and target of the requirement assignment is present.                                             |
+| Policy                                           | Check if the policy has any targets which are present.                                                               |
+| Group                                            | Check if the group has any members which are present.                                                                |
+| Artifact                                         | Check if the node template of the artifact is present.                                                               |
 
 The default condition of elements not mentioned above always holds. 
 This includes, e.g., node templates without incoming relations and topology template inputs.
 
 Depending on the configuration, other default conditions might be used.
 
-| Element                                          | Default Conditions                                                                                                                 |
-|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (Relation) | Check if any incoming relation is present.                                                                                         |
-| Node Template with Incoming Relations (Naive)    | Check if any incoming relation is present using `has_incoming_relations_naive`.                                                    |
-| Node Template with Host                          | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
-| Requirement Assignment (Source)                  | Check if the source of the requirement assignment is present.                                                                      |
-| Requirement Assignment (Target)                  | Check if the target of the requirement assignment is present.                                                                      |
+| Element                                         | Default Conditions                                                                                                                 |
+|-------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (Naive)   | Check if any incoming relation is present using `has_incoming_relations_naive`.                                                    |
+| Node Template with Incoming Relations (Source)  | Check if any source of incoming relations is present.                                                                              |
+| Node Template with Host                         | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
+| Requirement Assignment (Source)                 | Check if the source of the requirement assignment is present.                                                                      |
+| Requirement Assignment (Target)                 | Check if the target of the requirement assignment is present.                                                                      |
 
 
 ## Variability Preset

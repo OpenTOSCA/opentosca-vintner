@@ -19,7 +19,7 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-export type NodeDefaultConditionMode = 'source' | 'relation' | 'host' | 'source-host' | 'relation-host'
+export type NodeDefaultConditionMode = 'source' | 'incoming' | 'host' | 'source-host' | 'relation-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {

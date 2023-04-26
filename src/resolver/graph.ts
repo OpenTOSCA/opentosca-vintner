@@ -300,7 +300,7 @@ export class Node extends ConditionalElement {
                 ? this.graph.options.default.node_default_condition_mode
                 : this.raw.default_condition_mode) ??
             this.graph.options.default.node_default_condition_mode ??
-            'source'
+            'incoming'
         )
     }
 
@@ -335,7 +335,7 @@ export class Node extends ConditionalElement {
                     return conditions.push(this.isTarget ? {has_sources: this.toscaId, _cached_element: this} : true)
                 }
 
-                if (it === 'relation') {
+                if (it === 'incoming') {
                     return conditions.push(
                         this.isTarget ? {has_incoming_relations: this.toscaId, _cached_element: this} : true
                     )
