@@ -21,7 +21,7 @@ topology_template:
   variability:
     options:
       node_default_condition: true
-      node_default_condition_mode: relation
+      node_default_condition_mode: incoming
       node_pruning: true
       relation_default_condition: true
       relation_default_condition_mode: source-target

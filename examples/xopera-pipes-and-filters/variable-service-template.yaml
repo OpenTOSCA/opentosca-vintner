@@ -71,7 +71,7 @@ topology_template:
                     workload: high
 
         options:
-            strict: false
+            default_condition: true
 
     node_templates:
         application:

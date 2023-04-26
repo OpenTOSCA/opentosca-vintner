@@ -65,8 +65,6 @@ topology_template:
 
         options:
             strict: false
-            # TODO: make "relation" default again
-            node_default_condition_mode: relation
 
     node_templates:
         web_shop:
