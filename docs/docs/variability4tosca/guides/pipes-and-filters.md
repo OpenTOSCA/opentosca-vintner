@@ -50,7 +50,7 @@ An example for the deployment inputs is given in [`examples/xopera-pipes-and-fil
 
 ```shell linenums="1"
 # Add variable service template
-vintner templates import --template pipes-and-filters --path pipes-and-filters
+vintner templates import --template pipes-and-filters --path examples/xopera-pipes-and-filters
 
 # Add instance
 vintner instances create --instance pipes-and-filters --template pipes-and-filters
