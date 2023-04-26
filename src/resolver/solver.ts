@@ -496,6 +496,26 @@ export default class Solver {
         }
 
         /**
+         * has_incoming_relations_naive
+         */
+        if (validator.isDefined(expression.has_incoming_relations_naive)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.has_incoming_relations
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.ingoing.map(it => it.id))
+        }
+
+        /**
          * relation_presence
          */
         if (validator.isDefined(expression.relation_presence)) {

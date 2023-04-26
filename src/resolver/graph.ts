@@ -341,6 +341,12 @@ export class Node extends ConditionalElement {
                     )
                 }
 
+                if (it === 'naive') {
+                    return conditions.push(
+                        this.isTarget ? {has_incoming_relations_naive: this.toscaId, _cached_element: this} : true
+                    )
+                }
+
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
             })
 
