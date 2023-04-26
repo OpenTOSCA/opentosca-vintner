@@ -116,6 +116,7 @@ export type LogicExpression =
           host_presence?: string
           has_sources?: string
           has_incoming_relations?: string
+          has_incoming_relations_naive?: string
 
           // Relation functions
           relation_presence?: [node: string, relation: string | number]

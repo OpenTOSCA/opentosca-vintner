@@ -166,9 +166,11 @@ export default class Solver {
                     or.push(name)
                 }
             }
-            and.push('(' + or.join(' or ') + ')')
+            //and.push('(' + or.join(' or ') + ')')
+            and.push(or.join(' or '))
         }
-        return and.join(' and ')
+        //return and.join(' and ')
+        return and.join('\n')
     }
 
     evaluateProperty(property: Property) {
@@ -186,11 +188,27 @@ export default class Solver {
         if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 
         // Collect assigned conditions
-        let conditions = [...element.conditions]
+        let conditions: LogicExpression[] = [...element.conditions]
         if (element.isNode() || element.isRelation()) {
             element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
         }
-        conditions = utils.filterNotNull<LogicExpression>(conditions)
+        conditions = utils.filterNotNull(conditions)
+
+        // Add explicit conditions of a relation separately as own variable into the sat solver.
+        // Explicit conditions are referenced by has_incoming_relations.
+        if (element.isRelation()) {
+            if (utils.isEmpty(conditions)) {
+                this.minisat.require(MiniSat.equiv(element.explicitId, element.source.id))
+            } else {
+                this.minisat.require(
+                    MiniSat.equiv(
+                        element.explicitId,
+                        this.transformLogicExpression(this.reduceConditions(conditions), {element})
+                    )
+                )
+                conditions = [element.explicitId]
+            }
+        }
 
         // Add condition that checks if no other bratan is present
         if (element.defaultAlternative) {
@@ -208,6 +226,7 @@ export default class Solver {
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
 
         // Optimization if there is only one condition assigned
+        // TODO: optimize wrt relations having explicit conditions variable assigned
         if (conditions.length === 1) {
             // If the only assigned condition is "true", then the element is present
             if (conditions[0] === true) return this.minisat.require(element.id)
@@ -222,16 +241,23 @@ export default class Solver {
         }
 
         // Normalize conditions to a single 'and' condition
-        const condition = conditions.reduce<{and: LogicExpression[]}>(
+        const condition = this.reduceConditions(conditions)
+
+        // Store effective conditions for transparency
+        element.effectiveConditions = conditions
+
+        // Add conditions to MiniSat
+        this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
+    }
+
+    reduceConditions(conditions: LogicExpression[]) {
+        return conditions.reduce<{and: LogicExpression[]}>(
             (acc, curr) => {
                 acc.and.push(curr)
                 return acc
             },
             {and: []}
         )
-
-        // Add conditions to MiniSat
-        this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
     setPreset(name?: string) {
@@ -454,6 +480,26 @@ export default class Solver {
          * has_incoming_relations
          */
         if (validator.isDefined(expression.has_incoming_relations)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.has_incoming_relations
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.explicitId, it.source.id)))
+        }
+
+        /**
+         * has_incoming_relations_naive
+         */
+        if (validator.isDefined(expression.has_incoming_relations_naive)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element

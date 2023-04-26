@@ -3,6 +3,16 @@
 Contributions are very much welcome.
 But please follow the following guidelines and our [Code of Conduct](code-of-conduct.md){target=_blank}.
 
+## Node.js
+
+We are using [Node.js](https://nodejs.org){target=_blank} version `14.13.0`.
+To install node, use [nvm](https://github.com/nvm-sh/nvm){target=_blank} or [nvm-windows](https://github.com/coreybutler/nvm-windows){target=_blank}.
+
+```shell linenums="1"
+nvm install v16.14.0
+nvm use 16.14.0
+```
+
 ## Repository
 
 The repository is a monorepo consisting of the CLI, server, docs and tests using the following commands. 

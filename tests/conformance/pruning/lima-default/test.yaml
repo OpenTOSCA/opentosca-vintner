@@ -1,0 +1,13 @@
+description: |
+    - Node "source" has a relation "relation" to node "target"
+    - "source-target" default condition of relations is enabled
+    - "relation" default condition of nodes is enabled
+
+    - In addition, target has a relation "another" on another node "another"
+
+    - "false" is assigned to relation "relation"
+    - thus, relation "relation" is removed
+    - thus, node "target" is removed 
+    - thus, relation "another" is removed
+
+    - node "another" is preserved since "true" is assigned

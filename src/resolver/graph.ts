@@ -57,6 +57,19 @@ export abstract class ConditionalElement {
     present?: boolean
     conditions: LogicExpression[] = []
 
+    private _effectiveConditions?: LogicExpression[]
+    set effectiveConditions(conditions: LogicExpression[]) {
+        if (validator.isDefined(this._effectiveConditions))
+            throw new Error(`${this.Display} has already effective conditions assigned`)
+        this._effectiveConditions = conditions
+    }
+
+    get effectiveConditions() {
+        if (validator.isUndefined(this._effectiveConditions))
+            throw new Error(`${this.Display} has no effective conditions assigned`)
+        return this._effectiveConditions
+    }
+
     abstract presenceCondition: LogicExpression
 
     abstract defaultCondition: LogicExpression
@@ -328,6 +341,12 @@ export class Node extends ConditionalElement {
                     )
                 }
 
+                if (it === 'naive') {
+                    return conditions.push(
+                        this.isTarget ? {has_incoming_relations_naive: this.toscaId, _cached_element: this} : true
+                    )
+                }
+
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
             })
 
@@ -442,6 +461,10 @@ export class Relation extends ConditionalElement {
     get target() {
         if (validator.isUndefined(this._target)) throw new Error(`Target of ${this.display} is not set`)
         return this._target
+    }
+
+    get explicitId() {
+        return 'explicit.' + this.id
     }
 
     groups: Group[] = []
