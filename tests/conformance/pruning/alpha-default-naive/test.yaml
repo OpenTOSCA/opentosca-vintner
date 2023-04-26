@@ -1,0 +1,7 @@
+description: |
+    - Node "source" has a relation "relation" to node "target"
+    - "source-target" default condition of relations is enabled
+    - "naive" default condition of nodes is enabled
+
+    - "naive" allows that target is removed
+    - thus, also relation is removed
