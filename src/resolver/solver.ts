@@ -188,11 +188,27 @@ export default class Solver {
         if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 
         // Collect assigned conditions
-        let conditions = [...element.conditions]
+        let conditions: LogicExpression[] = [...element.conditions]
         if (element.isNode() || element.isRelation()) {
             element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
         }
-        conditions = utils.filterNotNull<LogicExpression>(conditions)
+        conditions = utils.filterNotNull(conditions)
+
+        // Add explicit conditions of a relation separately as own variable into the sat solver.
+        // Explicit conditions are referenced by has_incoming_relations.
+        if (element.isRelation()) {
+            if (utils.isEmpty(conditions)) {
+                this.minisat.require(MiniSat.equiv(element.explicitId, element.source.id))
+            } else {
+                this.minisat.require(
+                    MiniSat.equiv(
+                        element.explicitId,
+                        this.transformLogicExpression(this.reduceConditions(conditions), {element})
+                    )
+                )
+                conditions = [element.explicitId]
+            }
+        }
 
         // Add condition that checks if no other bratan is present
         if (element.defaultAlternative) {
@@ -210,6 +226,7 @@ export default class Solver {
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
 
         // Optimization if there is only one condition assigned
+        // TODO: optimize wrt relations having explicit conditions variable assigned
         if (conditions.length === 1) {
             // If the only assigned condition is "true", then the element is present
             if (conditions[0] === true) return this.minisat.require(element.id)
@@ -224,19 +241,23 @@ export default class Solver {
         }
 
         // Normalize conditions to a single 'and' condition
-        const condition = conditions.reduce<{and: LogicExpression[]}>(
-            (acc, curr) => {
-                acc.and.push(curr)
-                return acc
-            },
-            {and: []}
-        )
+        const condition = this.reduceConditions(conditions)
 
         // Store effective conditions for transparency
         element.effectiveConditions = conditions
 
         // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
+    }
+
+    reduceConditions(conditions: LogicExpression[]) {
+        return conditions.reduce<{and: LogicExpression[]}>(
+            (acc, curr) => {
+                acc.and.push(curr)
+                return acc
+            },
+            {and: []}
+        )
     }
 
     setPreset(name?: string) {
@@ -472,27 +493,7 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            // TODO: refactor this and already add explicitId to minisat in transformConditions
-            return MiniSat.or(
-                node.ingoing.map(it => {
-                    // TODO: this does not respect variability groups
-                    if (it.conditions.length === 0) return it.source.id
-
-                    // Normalize conditions to a single 'and' condition
-                    const condition = it.conditions.reduce<{and: LogicExpression[]}>(
-                        (acc, curr) => {
-                            acc.and.push(curr)
-                            return acc
-                        },
-                        {and: []}
-                    )
-
-                    this.minisat.require(
-                        MiniSat.equiv(it.explicitId, this.transformLogicExpression(condition, {element: it}))
-                    )
-                    return MiniSat.and(it.explicitId, it.source.id)
-                })
-            )
+            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.explicitId, it.source.id)))
         }
 
         /**
