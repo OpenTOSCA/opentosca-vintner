@@ -98,9 +98,9 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 
 The following options are general options.
 
-| Keyname | Mandatory | Type                                                                 | Default | Description               |
-|---------|-----------|----------------------------------------------------------------------|---------|---------------------------|
-| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; loose | strict  | Configure resolving mode. |
+| Keyname | Mandatory | Type                                                                                 | Default | Description               |
+|---------|-----------|--------------------------------------------------------------------------------------|---------|---------------------------|
+| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; default &#124; loose  | strict  | Configure resolving mode. |
 
 ### Default Condition Options
 
