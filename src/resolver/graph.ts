@@ -14,6 +14,7 @@ import {
     RelationDefaultConditionMode,
     RelationPropertyPresenceArguments,
     RelationTypePresenceArguments,
+    ResolverModes,
     SolverOptions,
     ValueExpression,
     VariabilityPointList,
@@ -853,59 +854,31 @@ export class Graph {
     }
 
     private buildOptions() {
+        // Get user-defined options
         const options = this.serviceTemplate.topology_template?.variability?.options || {}
-        const strict = options.strict ?? true
 
-        this.options.default = utils.propagateOptions<DefaultOptions>(
-            options.default_condition ?? !strict,
-            {
-                default_condition: false,
-                node_default_condition: false,
-                relation_default_condition: false,
-                policy_default_condition: false,
-                group_default_condition: false,
-                artifact_default_condition: false,
-                property_default_condition: false,
-                type_default_condition: false,
-            },
-            {
-                default_condition: true,
-                node_default_condition: true,
-                relation_default_condition: true,
-                policy_default_condition: true,
-                group_default_condition: true,
-                artifact_default_condition: true,
-                property_default_condition: true,
-                type_default_condition: true,
-            },
-            options
-        )
+        // Get resolver mode
+        const mode = options.mode ?? 'strict'
+        const map = ResolverModes[mode]
+        if (validator.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
 
-        this.options.pruning = utils.propagateOptions<PruningOptions>(
-            options.pruning ?? !strict,
-            {
-                pruning: false,
-                node_pruning: false,
-                relation_pruning: false,
-                policy_pruning: false,
-                group_pruning: false,
-                artifact_pruning: false,
-                property_pruning: false,
-                type_pruning: false,
-            },
-            {
-                pruning: true,
-                node_pruning: true,
-                relation_pruning: true,
-                policy_pruning: true,
-                group_pruning: true,
-                artifact_pruning: true,
-                property_pruning: true,
-                type_pruning: true,
-            },
-            options
-        )
+        // Build default options
+        this.options.default = utils.propagateOptions<DefaultOptions>({
+            base: ResolverModes.base.default,
+            mode: map.default,
+            flag: options.default_condition,
+            options,
+        })
 
+        // Build pruning options
+        this.options.pruning = utils.propagateOptions<PruningOptions>({
+            base: ResolverModes.base.pruning,
+            mode: map.pruning,
+            flag: options.pruning,
+            options,
+        })
+
+        // Build optimization options
         const optimization = options.optimization
         if (
             validator.isDefined(optimization) &&
@@ -916,10 +889,9 @@ export class Graph {
         }
         this.options.solver = {optimization: optimization ?? 'min'}
 
-        this.options.consistency = utils.propagateOptions<ConsistencyOptions>(
-            validator.isDefined(options.consistency_checks) ? !options.consistency_checks : false,
-            {
-                consistency_checks: true,
+        // Build consistency options
+        this.options.consistency = utils.propagateOptions<ConsistencyOptions>({
+            base: {
                 relation_source_consistency_check: true,
                 relation_target_consistency_check: true,
                 ambiguous_hosting_consistency_check: true,
@@ -929,19 +901,10 @@ export class Graph {
                 missing_property_parent_consistency_check: true,
                 ambiguous_property_consistency_check: true,
             },
-            {
-                consistency_checks: false,
-                relation_source_consistency_check: false,
-                relation_target_consistency_check: false,
-                ambiguous_hosting_consistency_check: false,
-                expected_hosting_consistency_check: false,
-                missing_artifact_parent_consistency_check: false,
-                ambiguous_artifact_consistency_check: false,
-                missing_property_parent_consistency_check: false,
-                ambiguous_property_consistency_check: false,
-            },
-            options
-        )
+            mode: {},
+            flag: options.consistency_checks,
+            options,
+        })
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {

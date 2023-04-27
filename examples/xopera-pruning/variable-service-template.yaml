@@ -64,7 +64,7 @@ topology_template:
             is_cloud: {equal: [{variability_input: mode}, cloud]}
 
         options:
-            strict: false
+            mode: loose
 
     node_templates:
         web_shop:
