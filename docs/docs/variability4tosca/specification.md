@@ -98,9 +98,9 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 
 The following options are general options.
 
-| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
-|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| strict                                    | false     | Boolean                                   | true          | Disable all default conditions and pruning.                                                       |
+| Keyname | Mandatory | Type                                                                                 | Default | Description               |
+|---------|-----------|--------------------------------------------------------------------------------------|---------|---------------------------|
+| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; default &#124; loose  | strict  | Configure resolving mode. |
 
 ### Default Condition Options
 
@@ -159,6 +159,22 @@ The following options are used to configure the optimization.
 | optimization                              | false     | Boolean &#124; min &#124; max             | min           | Configure optimization.                                                                           | 
 
 
+### Resolving Mode
+
+There are several predefined resolving modes which provide different useful default and pruning combination of elements that can be directly used, namely, _strict_, _consistent-strict_, _consistent-loose_, _default_, and _loose_.
+
+| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Loose     | 
+|----------|--------|-------------------|------------------|---------|-----------|
+| Node     | false  | false             | false            | default | pruning   |
+| Relation | false  | default           | pruning          | default | pruning   |
+| Property | false  | default           | pruning          | default | pruning   |
+| Artifact | false  | default           | pruning          | default | pruning   |
+| Type     | false  | default           | pruning          | default | pruning   |
+| Group    | false  | false             | false            | default | pruning   |
+| Policy   | false  | false             | false            | default | pruning   |
+
+
+
 ## Default Conditions
 
 To further support modeling, the following default conditions can be assigned:
@@ -184,7 +200,6 @@ Depending on the configuration, other default conditions might be used.
 | Node Template with Host                         | Check if any host is present. Note, an error will be thrown later when consistency is checked if there are multiple hosts present. |
 | Requirement Assignment (Source)                 | Check if the source of the requirement assignment is present.                                                                      |
 | Requirement Assignment (Target)                 | Check if the target of the requirement assignment is present.                                                                      |
-
 
 ## Variability Preset
 

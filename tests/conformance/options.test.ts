@@ -3,14 +3,14 @@ import Graph from '../../src/resolver/graph'
 import {TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
 describe('options', () => {
-    it('strict: true', () => {
+    it('mode: strict', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'strict'}, inputs: {}}},
         })
 
         expect(graph.options.default).to.deep.equal({
-            strict: true,
+            mode: 'strict',
             default_condition: false,
             node_default_condition: false,
             relation_default_condition: false,
@@ -22,7 +22,7 @@ describe('options', () => {
         })
 
         expect(graph.options.pruning).to.deep.equal({
-            strict: true,
+            mode: 'strict',
             pruning: false,
             node_pruning: false,
             relation_pruning: false,
@@ -34,14 +34,14 @@ describe('options', () => {
         })
     })
 
-    it('strict: false', () => {
+    it('mode: loose', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: false}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'loose'}, inputs: {}}},
         })
 
         expect(graph.options.default).to.deep.equal({
-            strict: false,
+            mode: 'loose',
             default_condition: true,
             node_default_condition: true,
             relation_default_condition: true,
@@ -53,7 +53,7 @@ describe('options', () => {
         })
 
         expect(graph.options.pruning).to.deep.equal({
-            strict: false,
+            mode: 'loose',
             pruning: true,
             node_pruning: true,
             relation_pruning: true,
@@ -140,11 +140,11 @@ describe('options', () => {
     it('strict override: default_condition true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: true, default_condition: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'strict', default_condition: true}, inputs: {}}},
         })
 
         expect(graph.options.default).to.deep.equal({
-            strict: true,
+            mode: 'strict',
             default_condition: true,
             node_default_condition: true,
             relation_default_condition: true,
@@ -159,11 +159,11 @@ describe('options', () => {
     it('strict override: default_condition false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: false, default_condition: false}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'loose', default_condition: false}, inputs: {}}},
         })
 
         expect(graph.options.default).to.deep.equal({
-            strict: false,
+            mode: 'loose',
             default_condition: false,
             node_default_condition: false,
             relation_default_condition: false,
@@ -178,11 +178,11 @@ describe('options', () => {
     it('strict override: pruning true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: true, pruning: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'strict', pruning: true}, inputs: {}}},
         })
 
         expect(graph.options.pruning).to.deep.equal({
-            strict: true,
+            mode: 'strict',
             pruning: true,
             node_pruning: true,
             relation_pruning: true,
@@ -197,11 +197,11 @@ describe('options', () => {
     it('strict override: pruning false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {strict: false, pruning: false}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'loose', pruning: false}, inputs: {}}},
         })
 
         expect(graph.options.pruning).to.deep.equal({
-            strict: false,
+            mode: 'loose',
             pruning: false,
             node_pruning: false,
             relation_pruning: false,

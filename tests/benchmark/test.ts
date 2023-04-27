@@ -5,8 +5,8 @@ import {ServiceTemplate} from '#spec/service-template'
 import * as path from 'path'
 
 describe('benchmark', () => {
-    it('run', () => {
-        benchmark({seeds: [2], runs: 1})
+    it('run', async () => {
+        await benchmark({seeds: [2], runs: 1})
     })
 
     it('generate service template', () => {

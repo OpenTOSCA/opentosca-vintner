@@ -2,6 +2,19 @@ import day from '#utils/day'
 import {Dayjs} from 'dayjs'
 import * as utils from './utils'
 
+export function toBoolean(element?: boolean, defaultValue = false) {
+    if (isDefined(element)) return element
+    return defaultValue
+}
+
+export function isTrue(element?: boolean) {
+    return isDefined(element) && element === true
+}
+
+export function isFalse(element?: boolean) {
+    return isDefined(element) && element === false
+}
+
 export function isUndefined(element: unknown): element is undefined | null {
     return typeof element === 'undefined' || element === null || element == null
 }

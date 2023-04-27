@@ -17,7 +17,8 @@ topology_template:
         expressions:
             is_one: {equal: [{variability_input: mode}, one]}
             is_two: {equal: [{variability_input: mode}, two]}
-
+        options:
+            type_default_condition: true
     node_templates:
         one:
             type: one

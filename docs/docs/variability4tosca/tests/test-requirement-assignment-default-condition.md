@@ -13,6 +13,7 @@ topology_template:
   variability:
     options:
       relation_default_condition: true
+      type_default_condition: true
   node_templates:
     one:
       type: one

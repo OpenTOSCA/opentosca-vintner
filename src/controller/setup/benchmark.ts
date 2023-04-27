@@ -93,6 +93,9 @@ export function generateBenchmarkServiceTemplate(seed: number): ServiceTemplate 
                     },
                 },
                 expressions: {},
+                options: {
+                    type_default_condition: true,
+                },
             },
             node_templates: {},
             relationship_templates: {},

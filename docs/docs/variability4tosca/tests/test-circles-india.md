@@ -22,7 +22,8 @@ topology_template:
   variability:
     options:
       node_pruning: true
-      relation_default: true
+      relation_default_condition: true
+      type_default_condition: true
   node_templates:
     node_one:
       type: node_one

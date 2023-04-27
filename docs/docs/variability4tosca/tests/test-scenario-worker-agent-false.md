@@ -20,7 +20,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      strict: false
+      mode: loose
   node_templates:
     agent:
       type: agent

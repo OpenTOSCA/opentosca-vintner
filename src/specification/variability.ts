@@ -9,11 +9,13 @@ export type VariabilityDefinition = {
 }
 
 export type VariabilityResolvingOptions = {
-    strict?: boolean
+    mode?: ResolvingMode
 } & DefaultOptions &
     PruningOptions &
     ConsistencyOptions &
     SolverOptions
+
+export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'loose'
 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
@@ -58,6 +60,133 @@ export type ConsistencyOptions = {
     ambiguous_property_consistency_check?: boolean
     missing_type_container_consistency_check?: boolean
     ambiguous_type_consistency_check?: boolean
+}
+
+export const ResolverModes = {
+    strict: {
+        default: {
+            node_default_condition: false,
+            relation_default_condition: false,
+            policy_default_condition: false,
+            group_default_condition: false,
+            artifact_default_condition: false,
+            property_default_condition: false,
+            type_default_condition: false,
+        },
+        pruning: {
+            node_pruning: false,
+            relation_pruning: false,
+            policy_pruning: false,
+            group_pruning: false,
+            artifact_pruning: false,
+            property_pruning: false,
+            type_pruning: false,
+        },
+    },
+    'consistent-strict': {
+        default: {
+            node_default_condition: false,
+            relation_default_condition: true,
+            policy_default_condition: false,
+            group_default_condition: false,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            node_pruning: false,
+            relation_pruning: false,
+            policy_pruning: false,
+            group_pruning: false,
+            artifact_pruning: false,
+            property_pruning: false,
+            type_pruning: false,
+        },
+    },
+    'consistent-loose': {
+        default: {
+            node_default_condition: false,
+            relation_default_condition: true,
+            policy_default_condition: false,
+            group_default_condition: false,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            node_pruning: false,
+            relation_pruning: true,
+            policy_pruning: false,
+            group_pruning: false,
+            artifact_pruning: true,
+            property_pruning: true,
+            type_pruning: false,
+        },
+    },
+    default: {
+        default: {
+            node_default_condition: true,
+            relation_default_condition: true,
+            policy_default_condition: true,
+            group_default_condition: true,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            node_pruning: false,
+            relation_pruning: false,
+            policy_pruning: false,
+            group_pruning: false,
+            artifact_pruning: false,
+            property_pruning: false,
+            type_pruning: false,
+        },
+    },
+    loose: {
+        default: {
+            default_condition: true,
+            node_default_condition: true,
+            relation_default_condition: true,
+            policy_default_condition: true,
+            group_default_condition: true,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            pruning: true,
+            node_pruning: true,
+            relation_pruning: true,
+            policy_pruning: true,
+            group_pruning: true,
+            artifact_pruning: true,
+            property_pruning: true,
+            type_pruning: true,
+        },
+    },
+    base: {
+        default: {
+            default_condition: false,
+            node_default_condition: false,
+            relation_default_condition: false,
+            policy_default_condition: false,
+            group_default_condition: false,
+            artifact_default_condition: false,
+            property_default_condition: false,
+            type_default_condition: false,
+        },
+        pruning: {
+            pruning: false,
+            node_pruning: false,
+            relation_pruning: false,
+            policy_pruning: false,
+            group_pruning: false,
+            artifact_pruning: false,
+            property_pruning: false,
+            type_pruning: false,
+        },
+    },
 }
 
 export type InputAssignmentPresetMap = {[key: string]: InputAssignmentPreset}

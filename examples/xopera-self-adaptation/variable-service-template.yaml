@@ -122,6 +122,7 @@ topology_template:
             group_pruning: true
             property_pruning: true
             artifact_pruning: true
+            type_pruning: true
 
     node_templates:
         application:
