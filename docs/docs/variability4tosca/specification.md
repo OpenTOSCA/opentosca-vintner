@@ -161,7 +161,7 @@ The following options are used to configure the optimization.
 
 ### Resolving Mode
 
-There are several predefined resolving modes which provide different useful default and pruning combination of elements that can be directly used, namely, _strict_, _consistent-strict_, _consistent-loose_, and _loose_.
+There are several predefined resolving modes which provide different useful default and pruning combination of elements that can be directly used, namely, _strict_, _consistent-strict_, _consistent-loose_, _default_, and _loose_.
 
 | Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Loose     | 
 |----------|--------|-------------------|------------------|---------|-----------|
