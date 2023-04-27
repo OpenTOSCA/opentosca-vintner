@@ -13,6 +13,7 @@ topology_template:
   variability:
     options:
       artifact_pruning: true
+      type_default_condition: true
   node_templates:
     node_one:
       type: node

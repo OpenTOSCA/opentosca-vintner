@@ -8,7 +8,8 @@ topology_template:
             condition_0_removed: {equal: [{variability_input: mode}, absent]}
             condition_1_present: {equal: [{variability_input: mode}, present]}
             condition_1_removed: {equal: [{variability_input: mode}, absent]}
-
+        options:
+            type_default_condition: true
     node_templates:
         component_0_present:
             type: component_type_0_present

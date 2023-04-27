@@ -142,9 +142,10 @@ export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
-export function propagateOptions<T>(data: {base: T; flag?: boolean; mode: T; options: T}) {
+export function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; options: T}) {
     let result = _.clone(data.base)
-    result = _.merge(result, _.clone(data.mode))
+
+    if (validator.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
 
     if (validator.isDefined(data.flag)) {
         // @ts-ignore

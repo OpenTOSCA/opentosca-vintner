@@ -34,6 +34,8 @@ topology_template:
         equal:
           - variability_input: mode
           - absent
+    options:
+      type_default_condition: true
   node_templates:
     component_0_present:
       type: component_type_0_present

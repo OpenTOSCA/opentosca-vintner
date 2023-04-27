@@ -16,6 +16,7 @@ topology_template:
   variability:
     options:
       policy_default_condition: true
+      type_default_condition: true
   node_templates:
     node_one:
       type: node_one

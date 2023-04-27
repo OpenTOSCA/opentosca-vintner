@@ -30,6 +30,8 @@ topology_template:
         equal:
           - variability_input: mode
           - two
+    options:
+      type_default_condition: true
   node_templates:
     one:
       type: one

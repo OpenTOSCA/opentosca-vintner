@@ -13,6 +13,7 @@ topology_template:
   variability:
     options:
       group_default_condition: true
+      type_default_condition: true
   groups:
     group_one:
       type: variability.groups.ConditionalMembers

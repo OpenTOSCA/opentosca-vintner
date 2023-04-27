@@ -892,6 +892,7 @@ export class Graph {
         // Build consistency options
         this.options.consistency = utils.propagateOptions<ConsistencyOptions>({
             base: {
+                consistency_checks: true,
                 relation_source_consistency_check: true,
                 relation_target_consistency_check: true,
                 ambiguous_hosting_consistency_check: true,
@@ -900,8 +901,9 @@ export class Graph {
                 ambiguous_artifact_consistency_check: true,
                 missing_property_parent_consistency_check: true,
                 ambiguous_property_consistency_check: true,
+                missing_type_container_consistency_check: true,
+                ambiguous_type_consistency_check: true,
             },
-            mode: {},
             flag: options.consistency_checks,
             options,
         })

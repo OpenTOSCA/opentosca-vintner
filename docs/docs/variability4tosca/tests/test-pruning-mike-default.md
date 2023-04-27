@@ -32,6 +32,7 @@ topology_template:
       node_default_condition_mode: incoming
       relation_default_condition: true
       relation_default_condition_mode: source-target
+      type_default_condition: true
   node_templates:
     source:
       type: source

@@ -9,10 +9,11 @@ export default class Checker {
     }
 
     run() {
-        if (!this.graph.options.consistency.consistency_checks) return
-
-        const relations = this.graph.relations.filter(relation => relation.present)
-        const nodes = this.graph.nodes.filter(node => node.present)
+        const relations = this.graph.relations.filter(it => it.present)
+        const nodes = this.graph.nodes.filter(it => it.present)
+        const artifacts = this.graph.artifacts.filter(it => it.present)
+        const properties = this.graph.properties.filter(it => it.present)
+        const types = this.graph.types.filter(it => it.present)
 
         // Ensure that each relation source exists
         if (this.graph.options.consistency.relation_source_consistency_check) {
@@ -54,7 +55,6 @@ export default class Checker {
 
         // Ensure that node of each artifact exists
         if (this.graph.options.consistency.missing_artifact_parent_consistency_check) {
-            const artifacts = this.graph.artifacts.filter(artifact => artifact.present)
             for (const artifact of artifacts) {
                 if (!artifact.container.present) throw new Error(`Container of ${artifact.display} does not exist`)
             }
@@ -62,9 +62,9 @@ export default class Checker {
 
         // Ensure that artifacts are unique within their node (also considering non-present nodes)
         if (this.graph.options.consistency.ambiguous_artifact_consistency_check) {
-            for (const node of this.graph.nodes) {
+            for (const node of nodes) {
                 const names = new Set()
-                for (const artifact of node.artifacts.filter(artifact => artifact.present)) {
+                for (const artifact of artifacts) {
                     if (names.has(artifact.name)) throw new Error(`${artifact.Display} is ambiguous`)
                     names.add(artifact.name)
                 }
@@ -73,7 +73,7 @@ export default class Checker {
 
         // Ensure that node of each present property exists
         if (this.graph.options.consistency.missing_property_parent_consistency_check) {
-            for (const property of this.graph.properties.filter(property => property.present)) {
+            for (const property of properties) {
                 if (!property.container.present) {
                     throw new Error(`Container of ${property.display} does not exist`)
                 }
@@ -82,9 +82,9 @@ export default class Checker {
 
         // Ensure that each property has maximum one value (also considering non-present nodes)
         if (this.graph.options.consistency.ambiguous_property_consistency_check) {
-            for (const node of this.graph.nodes) {
+            for (const node of nodes) {
                 const names = new Set()
-                for (const property of node.properties.filter(property => property.present)) {
+                for (const property of node.properties.filter(it => it.present)) {
                     if (names.has(property.name)) throw new Error(`${property.Display} is ambiguous`)
                     names.add(property.name)
                 }
@@ -93,14 +93,14 @@ export default class Checker {
 
         // Ensure that container of each type exists
         if (this.graph.options.consistency.missing_type_container_consistency_check) {
-            for (const type of this.graph.types.filter(it => it.present)) {
-                if (!type.container.present) throw new Error(`Container of ${type.Display} does not exist`)
+            for (const type of types) {
+                if (!type.container.present) throw new Error(`Container of ${type.display} does not exist`)
             }
         }
 
         // Ensure that each node has exactly one type
         if (this.graph.options.consistency.ambiguous_type_consistency_check) {
-            for (const node of this.graph.nodes) {
+            for (const node of nodes) {
                 const names = new Set()
                 const types = node.types.filter(property => property.present)
                 if (utils.isEmpty(types)) throw new Error(`${node.Display} has no type`)

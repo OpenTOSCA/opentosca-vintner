@@ -14,6 +14,8 @@ topology_template:
     expressions:
       name:
         node_presence: node_one
+    options:
+      type_default_condition: true
   node_templates:
     container:
       type: container
