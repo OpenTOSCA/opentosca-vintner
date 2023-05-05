@@ -98,9 +98,9 @@ For example, if "strict" is enabled and "node_pruning" is enabled, then nodes ar
 
 The following options are general options.
 
-| Keyname | Mandatory | Type                                                                                 | Default | Description               |
-|---------|-----------|--------------------------------------------------------------------------------------|---------|---------------------------|
-| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; default &#124; loose  | strict  | Configure resolving mode. |
+| Keyname | Mandatory | Type                                                                                                     | Default | Description               |
+|---------|-----------|----------------------------------------------------------------------------------------------------------|---------|---------------------------|
+| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; default &#124; default-loose &#124; loose | strict  | Configure resolving mode. |
 
 ### Default Condition Options
 
@@ -161,17 +161,17 @@ The following options are used to configure the optimization.
 
 ### Resolving Mode
 
-There are several predefined resolving modes which provide different useful default and pruning combination of elements that can be directly used, namely, _strict_, _consistent-strict_, _consistent-loose_, _default_, and _loose_.
+There are several predefined resolving modes which provide different useful default and pruning combination of elements that can be directly used.
 
-| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Loose     | 
-|----------|--------|-------------------|------------------|---------|-----------|
-| Node     | false  | false             | false            | default | pruning   |
-| Relation | false  | default           | pruning          | default | pruning   |
-| Property | false  | default           | pruning          | default | pruning   |
-| Artifact | false  | default           | pruning          | default | pruning   |
-| Type     | false  | default           | pruning          | default | pruning   |
-| Group    | false  | false             | false            | default | pruning   |
-| Policy   | false  | false             | false            | default | pruning   |
+| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
+|----------|--------|-------------------|------------------|---------|---------------|-----------|
+| Node     | false  | false             | false            | default | default       | pruning   |
+| Relation | false  | default           | pruning          | default | pruning       | pruning   |
+| Property | false  | default           | pruning          | default | pruning       | pruning   |
+| Artifact | false  | default           | pruning          | default | pruning       | pruning   |
+| Type     | false  | default           | pruning          | default | pruning       | pruning   |
+| Group    | false  | false             | false            | default | pruning       | pruning   |
+| Policy   | false  | false             | false            | default | pruning       | pruning   |
 
 
 

@@ -15,7 +15,7 @@ export type VariabilityResolvingOptions = {
     ConsistencyOptions &
     SolverOptions
 
-export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'loose'
+export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
@@ -141,6 +141,28 @@ export const ResolverModes = {
             artifact_pruning: false,
             property_pruning: false,
             type_pruning: false,
+        },
+    },
+    'default-loose': {
+        default: {
+            default_condition: true,
+            node_default_condition: true,
+            relation_default_condition: true,
+            policy_default_condition: true,
+            group_default_condition: true,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            pruning: true,
+            node_pruning: false,
+            relation_pruning: true,
+            policy_pruning: true,
+            group_pruning: true,
+            artifact_pruning: true,
+            property_pruning: true,
+            type_pruning: true,
         },
     },
     loose: {
