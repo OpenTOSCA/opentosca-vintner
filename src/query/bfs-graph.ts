@@ -1,7 +1,7 @@
-import {PredicateExpression} from './types'
-import {Query} from '#/query/query'
 import Graph from '#/graph/graph'
+import {Query} from '#/query/query'
 import {isUndefined} from '#validator'
+import {PredicateExpression} from './types'
 
 /**
  * Class that builds and searches a graph out of node templates and their relations

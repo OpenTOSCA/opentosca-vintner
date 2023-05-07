@@ -1,13 +1,13 @@
-import {FilePlugin} from '#plugins/file'
-import {VintnerPlugin} from '#plugins/vintner'
-import {WineryPlugin} from '#plugins/winery'
-import path from 'path'
 import config from '#config'
 import * as files from '#files'
-import {OrchestratorsConfig} from './types'
-import * as validator from '#validator'
-import {xOperaPlugin} from '#plugins/xopera'
+import {FilePlugin} from '#plugins/file'
 import {UnfurlPlugin} from '#plugins/unfurl'
+import {VintnerPlugin} from '#plugins/vintner'
+import {WineryPlugin} from '#plugins/winery'
+import {xOperaPlugin} from '#plugins/xopera'
+import * as validator from '#validator'
+import path from 'path'
+import {OrchestratorsConfig} from './types'
 
 const configPath = path.join(config.home, 'plugins.yaml')
 

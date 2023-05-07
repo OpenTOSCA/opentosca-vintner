@@ -1,7 +1,6 @@
 import {exec} from 'child_process'
-import wsl from './wsl'
 import path from 'path'
-import console from 'console'
+import wsl from './wsl'
 
 const executables: {[key: string]: string} = {
     darwin: 'open',

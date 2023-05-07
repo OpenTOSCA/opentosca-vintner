@@ -1,5 +1,4 @@
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as validator from './validator'
 import * as files from './files'
 import * as utils from './utils'
 

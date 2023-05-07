@@ -1,9 +1,9 @@
 import {human2cron, prefix, SensorBaseOptions, submit} from '#controller/sensors/utils'
-import cron from 'node-cron'
+import death from '#utils/death'
 import hae from '#utils/hae'
 import axios from 'axios'
 import console from 'console'
-import death from '#utils/death'
+import cron from 'node-cron'
 
 export type SensorLocationOptions = SensorBaseOptions & {template: string}
 

@@ -1,11 +1,11 @@
-import {ArtifactDefinition} from '#spec/artifact-definitions'
-import * as validator from '#validator'
-import * as utils from '#utils'
-import {LogicExpression} from '#spec/variability'
+import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
-import Element from '#graph/element'
 import {bratanize} from '#graph/utils'
+import {ArtifactDefinition} from '#spec/artifact-definitions'
+import {LogicExpression} from '#spec/variability'
+import * as utils from '#utils'
+import * as validator from '#validator'
 
 export default class Artifact extends Element {
     readonly type = 'artifact'

@@ -1,5 +1,5 @@
-import Express from 'express'
 import console from 'console'
+import Express from 'express'
 
 function express(fn: Express.RequestHandler): Express.RequestHandler {
     return (req, res, next) => {

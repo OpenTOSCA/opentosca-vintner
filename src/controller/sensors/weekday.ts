@@ -1,11 +1,11 @@
 import {human2cron, SensorBaseOptions, submit} from '#controller/sensors/utils'
-import cron from 'node-cron'
-import hae from '#utils/hae'
 import {InputAssignmentMap} from '#spec/topology-template'
-import console from 'console'
-import * as validator from '#validator'
-import death from '#utils/death'
 import day from '#utils/day'
+import death from '#utils/death'
+import hae from '#utils/hae'
+import * as validator from '#validator'
+import console from 'console'
+import cron from 'node-cron'
 
 export type SensorWeekdayOptions = SensorBaseOptions & {start?: string}
 

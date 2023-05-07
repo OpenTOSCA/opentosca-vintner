@@ -1,14 +1,14 @@
-import * as path from 'path'
+import archiver from 'archiver'
+import axios from 'axios'
+import extract from 'extract-zip'
 import * as fs from 'fs'
 import {copySync} from 'fs-extra'
 import * as yaml from 'js-yaml'
-import extract from 'extract-zip'
 import os from 'os'
-import * as utils from './utils'
-import axios from 'axios'
-import * as validator from './validator'
+import * as path from 'path'
 import xml2js from 'xml2js'
-import archiver from 'archiver'
+import * as utils from './utils'
+import * as validator from './validator'
 
 export function exists(file: string) {
     return fs.existsSync(file)

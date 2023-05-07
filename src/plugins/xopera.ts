@@ -1,11 +1,11 @@
-import {Instance} from '#repository/instances'
-import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
-import {joinNotNull} from '#utils'
-import {Shell} from '#shell'
 import * as files from '#files'
+import {Instance} from '#repository/instances'
+import {Shell} from '#shell'
+import {joinNotNull} from '#utils'
 import * as validator from '#validator'
-import _ from 'lodash'
 import console from 'console'
+import _ from 'lodash'
+import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
 
 export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWLSConfig & {wsl: true})
 

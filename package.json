@@ -28,6 +28,7 @@
         "node-cron": "^3.0.2",
         "ohm-js": "16.4.0",
         "papaparse": "^5.4.1",
+        "prettier-plugin-organize-imports": "^3.2.2",
         "regression": "^2.0.1",
         "stats-lite": "^2.2.0",
         "systeminformation": "^5.17.12",

@@ -1,11 +1,11 @@
-import si from 'systeminformation'
-import {SensorBaseOptions, human2cron, submit, prefix} from '#controller/sensors/utils'
-import cron from 'node-cron'
-import console from 'console'
+import {SensorBaseOptions, human2cron, prefix, submit} from '#controller/sensors/utils'
+import * as utils from '#utils'
+import death from '#utils/death'
 import hae from '#utils/hae'
 import * as validator from '#validator'
-import death from '#utils/death'
-import * as utils from '#utils'
+import console from 'console'
+import cron from 'node-cron'
+import si from 'systeminformation'
 
 export default async function (options: SensorComputeOptions) {
     const sensor = new SensorCompute(options)

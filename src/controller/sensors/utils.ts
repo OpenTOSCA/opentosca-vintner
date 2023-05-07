@@ -1,8 +1,8 @@
 // @ts-ignore
-import _human2cron from 'friendly-node-cron'
+import {InputAssignmentMap} from '#spec/topology-template'
 import * as validator from '#validator'
 import axios from 'axios'
-import {InputAssignmentMap} from '#spec/topology-template'
+import _human2cron from 'friendly-node-cron'
 
 export type SensorBaseOptions = {
     vintner: string

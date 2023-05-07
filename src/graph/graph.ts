@@ -1,3 +1,7 @@
+import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {PropertyAssignmentValue} from '#spec/property-assignments'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {TypeAssignment} from '#spec/type-assignment'
 import {
     ArtifactPropertyPresenceArguments,
     ConsistencyOptions,
@@ -16,26 +20,18 @@ import {
     VariabilityPointList,
     VariabilityPointMap,
 } from '#spec/variability'
-import {NodeTemplate} from '#spec/node-template'
-import {PropertyAssignmentValue} from '#spec/property-assignments'
-import {RelationshipTemplate} from '#spec/relationship-template'
-import {PolicyTemplate} from '#spec/policy-template'
-import {GroupTemplate} from '#spec/group-template'
-import {ArtifactDefinition, ArtifactDefinitionMap} from '#spec/artifact-definitions'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {ensureDefined} from '#validator'
-import {TypeAssignment} from '#spec/type-assignment'
+import Artifact from './artifact'
+import Element from './element'
+import Group from './group'
 import Input from './input'
 import Node from './node'
-import Relation, {Relationship} from './relation'
-import Property, {PropertyContainer, PropertyContainerTemplate} from './property'
 import Policy from './policy'
-import Group from './group'
-import Artifact from './artifact'
+import Property, {PropertyContainer, PropertyContainerTemplate} from './property'
+import Relation, {Relationship} from './relation'
 import Type, {TypeContainer, TypeContainerTemplate} from './type'
-import Element from './element'
 
 /**
  * Not documented since preparation for future work

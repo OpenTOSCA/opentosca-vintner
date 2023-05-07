@@ -1,7 +1,7 @@
 import {PolicyTemplate} from '#spec/policy-template'
+import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
-import {LogicExpression} from '#spec/variability'
 import Element from './element'
 import Group from './group'
 import Node from './node'

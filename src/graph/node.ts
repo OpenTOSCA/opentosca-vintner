@@ -1,13 +1,13 @@
 import {NodeTemplate} from '#spec/node-template'
+import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
-import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
-import Relation from './relation'
-import Property from './property'
-import Group from './group'
 import Artifact from './artifact'
-import Type from './type'
 import Element from './element'
+import Group from './group'
+import Property from './property'
+import Relation from './relation'
+import Type from './type'
 
 export default class Node extends Element {
     readonly type = 'node'

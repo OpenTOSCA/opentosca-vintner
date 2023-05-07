@@ -1,6 +1,5 @@
 import {Query, QueryResult, QueryResults} from '#/query/query'
 import * as files from '../../utils/files'
-import * as console from 'console'
 
 export type QueryTemplateOptions = {
     query: string

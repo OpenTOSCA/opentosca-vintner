@@ -1,5 +1,5 @@
-import {TemplatesRepositoryPlugin} from '#plugins/types'
 import * as files from '#files'
+import {TemplatesRepositoryPlugin} from '#plugins/types'
 import {ServiceTemplate} from '#spec/service-template'
 
 export class FilePlugin implements TemplatesRepositoryPlugin {

@@ -1,6 +1,14 @@
+import Artifact from '#graph/artifact'
+import Element from '#graph/element'
+import Graph from '#graph/graph'
+import Group from '#graph/group'
+import Input from '#graph/input'
+import Node from '#graph/node'
+import Policy from '#graph/policy'
+import Property from '#graph/property'
+import Relation from '#graph/relation'
+import Type from '#graph/type'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
-import * as utils from '#utils'
-import * as validator from '#validator'
 import {
     InputAssignmentPreset,
     LogicExpression,
@@ -8,22 +16,14 @@ import {
     VariabilityDefinition,
     VariabilityExpression,
 } from '#spec/variability'
-import _ from 'lodash'
-import stats from 'stats-lite'
-import {ensureArray, ensureDefined} from '#validator'
-import regression from 'regression'
+import * as utils from '#utils'
 import day from '#utils/day'
+import * as validator from '#validator'
+import {ensureArray, ensureDefined} from '#validator'
+import _ from 'lodash'
 import MiniSat from 'logic-solver'
-import Graph from '#graph/graph'
-import Element from '#graph/element'
-import Node from '#graph/node'
-import Group from '#graph/group'
-import Policy from '#graph/policy'
-import Property from '#graph/property'
-import Artifact from '#graph/artifact'
-import Input from '#graph/input'
-import Type from '#graph/type'
-import Relation from '#graph/relation'
+import regression from 'regression'
+import stats from 'stats-lite'
 
 type ExpressionContext = {
     element?: Element

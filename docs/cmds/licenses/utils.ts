@@ -1,10 +1,10 @@
-import Papa from 'papaparse'
-import * as fs from 'fs'
-import semver from 'semver'
-import {CheckerEntryList, DependencyList, Dependency, UNKNOWN} from './types'
 import {execSync} from 'child_process'
+import * as fs from 'fs'
 import * as licenseChecker from 'license-checker'
+import Papa from 'papaparse'
 import path from 'path'
+import semver from 'semver'
+import {CheckerEntryList, Dependency, DependencyList, UNKNOWN} from './types'
 
 export const LICENSES: {[key: string]: string} = {
     'Apache-2.0': 'https://choosealicense.com/licenses/apache-2.0',

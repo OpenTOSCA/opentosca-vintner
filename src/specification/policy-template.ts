@@ -1,6 +1,6 @@
-import {VariabilityAlternative} from './variability'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {ElementType} from '#spec/type-assignment'
+import {VariabilityAlternative} from './variability'
 
 /**
  * Policy Template

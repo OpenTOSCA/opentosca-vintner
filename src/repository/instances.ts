@@ -1,13 +1,12 @@
-import * as path from 'path'
 import config from '#config'
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
-import {Template} from './templates'
-import _ from 'lodash'
-import {InputAssignmentMap} from '#spec/topology-template'
 import Plugins from '#plugins'
-import * as utils from '#utils'
+import {ServiceTemplate} from '#spec/service-template'
+import {InputAssignmentMap} from '#spec/topology-template'
 import * as validator from '#validator'
+import _ from 'lodash'
+import * as path from 'path'
+import {Template} from './templates'
 
 type InstanceInfo = {
     name: string

@@ -1,9 +1,9 @@
-import {Instance} from '#repository/instances'
 import * as files from '#files'
-import path from 'path'
-import {joinNotNull} from '#utils'
-import {Shell} from '#shell'
 import {OrchestratorOperationOptions, OrchestratorPlugin} from '#plugins/types'
+import {Instance} from '#repository/instances'
+import {Shell} from '#shell'
+import {joinNotNull} from '#utils'
+import path from 'path'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 

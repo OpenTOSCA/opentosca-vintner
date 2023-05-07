@@ -2,6 +2,9 @@
  * Node Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TEMPLATE}
  */
+import {ArtifactDefinition} from '#spec/artifact-definitions'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
+import {ElementType} from '#spec/type-assignment'
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
@@ -9,9 +12,6 @@ import {
     VariabilityPointList,
     VariabilityPointMap,
 } from './variability'
-import {ArtifactDefinition} from '#spec/artifact-definitions'
-import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
-import {ElementType} from '#spec/type-assignment'
 
 export type NodeTemplate = {
     type: ElementType

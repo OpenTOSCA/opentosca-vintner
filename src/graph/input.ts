@@ -1,6 +1,6 @@
 import {InputDefinition} from '#spec/topology-template'
-import * as utils from '#utils'
 import {LogicExpression} from '#spec/variability'
+import * as utils from '#utils'
 import * as validator from '#validator'
 import Element from './element'
 

@@ -1,10 +1,10 @@
-import {Command, Option} from 'commander'
 import config from '#config'
 import Controller from '#controller'
+import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 import * as files from '#files'
-import benchmark, {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
-import console from 'console'
 import hae from '#utils/hae'
+import {Command, Option} from 'commander'
+import console from 'console'
 
 export const program = new Command()
 

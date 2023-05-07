@@ -1,5 +1,5 @@
-import {UnfurlNativeConfig} from '#plugins/unfurl'
 import Plugins from '#plugins'
+import {UnfurlNativeConfig} from '#plugins/unfurl'
 import lock from '#utils/lock'
 
 export default async function (option: UnfurlNativeConfig) {

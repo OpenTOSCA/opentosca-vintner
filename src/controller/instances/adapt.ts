@@ -1,14 +1,14 @@
-import {Instance} from '#repository/instances'
-import * as utils from '#utils'
-import * as validator from '#validator'
-import {emitter, events} from '#utils/emitter'
-import lock from '#utils/lock'
-import {InputAssignmentMap} from '#spec/topology-template'
-import _ from 'lodash'
-import jsonDiff from 'json-diff'
-import hae from '#utils/hae'
 import Controller from '#controller'
+import {Instance} from '#repository/instances'
 import Resolver from '#resolver'
+import {InputAssignmentMap} from '#spec/topology-template'
+import * as utils from '#utils'
+import {emitter, events} from '#utils/emitter'
+import hae from '#utils/hae'
+import lock from '#utils/lock'
+import * as validator from '#validator'
+import jsonDiff from 'json-diff'
+import _ from 'lodash'
 
 const cache: {[key: string]: InputAssignmentMap | undefined} = {}
 const queue: {[key: string]: InputAssignmentMap[] | undefined} = {}

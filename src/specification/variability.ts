@@ -1,5 +1,5 @@
-import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 import Element from '#/graph/element'
+import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
