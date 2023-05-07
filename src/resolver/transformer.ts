@@ -7,11 +7,14 @@ import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assi
 import * as utils from '#utils'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {Graph, Node, Property, Relation, Type} from './graph'
 import {ensureDefined} from '#validator'
 import {GroupMember} from '#spec/group-type'
-import {UnexpectedError} from '#utils/error'
-import {ElementType, TypeAssignment} from '#spec/type-assignment'
+import {ElementType} from '#spec/type-assignment'
+import Graph from '#graph/graph'
+import Relation from '#graph/relation'
+import Node from '#graph/node'
+import Type from '#graph/type'
+import Property from '#graph/property'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -114,7 +117,7 @@ export default class Transformer {
         // Delete all relationship templates which have no present relations
         if (validator.isDefined(this.topology.relationship_templates)) {
             this.graph.relations.forEach(relation => {
-                if (validator.isDefined(relation.relationship)) {
+                if (relation.hasRelationship()) {
                     if (!relation.present)
                         return delete this.topology.relationship_templates![relation.relationship.name]
 

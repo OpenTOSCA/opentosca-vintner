@@ -1,6 +1,6 @@
 import {PredicateExpression} from './types'
 import {Query} from '#/query/query'
-import Graph from '#/resolver/graph'
+import Graph from '#/graph/graph'
 import {isUndefined} from '#validator'
 
 /**
@@ -26,7 +26,11 @@ export class BfsGraph extends Graph {
         for (const relation of node.relations) {
             if (
                 isUndefined(predicate) ||
-                this.resolver.evaluatePredicate(relation.name, relation.relationship?.raw || {}, predicate)
+                this.resolver.evaluatePredicate(
+                    relation.name,
+                    relation.hasRelationship() ? relation.relationship.raw : {},
+                    predicate
+                )
             ) {
                 if ((direction == 'both' || direction == 'out') && relation.source.name == nodeName)
                     targets.push(relation.target.name)

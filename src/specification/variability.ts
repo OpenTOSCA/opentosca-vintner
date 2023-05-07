@@ -1,5 +1,5 @@
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
-import {ConditionalElement} from '#/resolver/graph'
+import Element from '#/graph/element'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
@@ -303,7 +303,7 @@ export type LogicExpression =
           container_presence?: 'SELF'
 
           // Cache
-          _cached_element?: ConditionalElement
+          _cached_element?: Element
           _visited?: boolean
           _id?: string
       }

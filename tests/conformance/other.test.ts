@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import {VariabilityExpression} from '#spec/variability'
 import Solver from '../../src/resolver/solver'
-import Graph from '../../src/resolver/graph'
+import Graph from '../../src/graph/graph'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
 function getDefaultSolver(template?: ServiceTemplate) {

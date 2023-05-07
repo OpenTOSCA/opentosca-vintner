@@ -1,5 +1,5 @@
 import Solver from '../src/resolver/solver'
-import Graph from '../src/resolver/graph'
+import Graph from '../src/graph/graph'
 import {ServiceTemplate} from '../src/specification/service-template'
 import * as yaml from 'js-yaml'
 import {expect} from 'chai'

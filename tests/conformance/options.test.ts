@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import Graph from '../../src/resolver/graph'
+import Graph from '../../src/graph/graph'
 import {TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
 
 describe('options', () => {
