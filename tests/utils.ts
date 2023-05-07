@@ -4,7 +4,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {expect} from 'chai'
 import path from 'path'
 import Controller from '../src/controller'
-import {loadDefaultExpect, VariabilityTestGroup} from '../src/controller/template/test'
+import {VariabilityTestGroup, loadDefaultExpect} from '../src/controller/template/test'
 import {toList} from '../src/utils/utils'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
