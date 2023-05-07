@@ -4,8 +4,8 @@
  * At the same time the documentation page is generated.
  */
 import * as path from 'path'
-import * as utils from './utils'
 import {renderFile} from '../utils'
+import * as utils from './utils'
 
 const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'licenses.csv')
 

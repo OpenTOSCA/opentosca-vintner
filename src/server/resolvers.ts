@@ -1,6 +1,6 @@
-import * as express from 'express'
 import Controller from '#controller'
 import hae from '#utils/hae'
+import * as express from 'express'
 
 const resolvers = express.Router()
 

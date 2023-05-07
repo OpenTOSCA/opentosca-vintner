@@ -1,7 +1,7 @@
 import * as files from '#files'
-import * as validator from '#validator'
 import Resolver from '#resolver'
 import {ServiceTemplate} from '#spec/service-template'
+import * as validator from '#validator'
 
 export type TemplateResolveOptions = {
     template: string

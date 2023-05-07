@@ -1,6 +1,6 @@
-import Controller from '../../src/controller'
 import {Shell} from '#shell'
 import path from 'path'
+import Controller from '../../src/controller'
 
 export const examplesDir = path.join(__dirname, '..', '..', 'examples')
 

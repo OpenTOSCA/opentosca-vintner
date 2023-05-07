@@ -1,3 +1,9 @@
+import {BfsGraph} from '#/query/bfs-graph'
+import {getTemplates} from '#/query/utils'
+import * as files from '#files'
+import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import * as validator from '#validator'
 import {parse} from './parser'
 import {
     ConditionExpression,
@@ -11,12 +17,6 @@ import {
     SelectExpression,
     VariableExpression,
 } from './types'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import * as files from '#files'
-import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
-import {getTemplates} from '#/query/utils'
-import * as validator from '#validator'
-import {BfsGraph} from '#/query/bfs-graph'
 
 export type QueryResults = {[name: string]: QueryResult}
 export type QueryResult = Object

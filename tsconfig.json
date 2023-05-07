@@ -8,6 +8,8 @@
             "#config": ["src/cli/config"],
             "#controller/*": ["src/controller/*"],
             "#controller": ["src/controller"],
+            "#graph/*": ["src/graph/*"],
+            "#graph": ["src/graph"],
             "#repository/*": ["src/repository/*"],
             "#resolver": ["src/resolver"],
             "#plugins/*": ["src/plugins/*"],

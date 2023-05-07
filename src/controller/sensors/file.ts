@@ -1,10 +1,10 @@
 import {human2cron, SensorBaseOptions, submit} from '#controller/sensors/utils'
-import cron from 'node-cron'
-import hae from '#utils/hae'
-import {InputAssignmentMap} from '#spec/topology-template'
-import console from 'console'
 import * as files from '#files'
+import {InputAssignmentMap} from '#spec/topology-template'
 import death from '#utils/death'
+import hae from '#utils/hae'
+import console from 'console'
+import cron from 'node-cron'
 
 export type SensorFileOptions = SensorBaseOptions & {file: string; disableWatch?: boolean}
 

@@ -1,6 +1,6 @@
-import path from 'path'
-import wsl from 'is-wsl'
 import {exec} from 'child_process'
+import wsl from 'is-wsl'
+import path from 'path'
 
 /**
  * Transforms windows path to WSL path.

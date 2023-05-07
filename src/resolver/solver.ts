@@ -1,18 +1,14 @@
-import {
-    Artifact,
-    ConditionalElement,
-    Graph,
-    Group,
-    Input,
-    Node,
-    Policy,
-    Property,
-    Relation,
-    Type,
-} from '#/resolver/graph'
+import Artifact from '#graph/artifact'
+import Element from '#graph/element'
+import Graph from '#graph/graph'
+import Group from '#graph/group'
+import Input from '#graph/input'
+import Node from '#graph/node'
+import Policy from '#graph/policy'
+import Property from '#graph/property'
+import Relation from '#graph/relation'
+import Type from '#graph/type'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
-import * as utils from '#utils'
-import * as validator from '#validator'
 import {
     InputAssignmentPreset,
     LogicExpression,
@@ -20,15 +16,17 @@ import {
     VariabilityDefinition,
     VariabilityExpression,
 } from '#spec/variability'
-import _ from 'lodash'
-import stats from 'stats-lite'
-import {ensureArray, ensureDefined} from '#validator'
-import regression from 'regression'
+import * as utils from '#utils'
 import day from '#utils/day'
+import * as validator from '#validator'
+import {ensureArray, ensureDefined} from '#validator'
+import _ from 'lodash'
 import MiniSat from 'logic-solver'
+import regression from 'regression'
+import stats from 'stats-lite'
 
 type ExpressionContext = {
-    element?: ConditionalElement
+    element?: Element
 }
 
 export default class Solver {
@@ -183,7 +181,7 @@ export default class Solver {
         return property.value
     }
 
-    transformConditions(element: ConditionalElement) {
+    transformConditions(element: Element) {
         // Variability group are never present
         if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 

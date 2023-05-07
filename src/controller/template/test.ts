@@ -1,11 +1,11 @@
-import * as files from '#files'
-import path from 'path'
 import Controller from '#controller'
+import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import {toList} from '#utils'
+import * as validator from '#validator'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
-import * as validator from '#validator'
-import {toList} from '#utils'
+import path from 'path'
 
 export type TemplateTestOptions = {path: string}
 

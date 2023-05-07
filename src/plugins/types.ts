@@ -1,8 +1,8 @@
-import {ServiceTemplate} from '#spec/service-template'
-import {AttributeAssignmentMap} from '#spec/node-template'
-import {Instance} from '#repository/instances'
-import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
 import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
+import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
+import {Instance} from '#repository/instances'
+import {AttributeAssignmentMap} from '#spec/node-template'
+import {ServiceTemplate} from '#spec/service-template'
 
 type NamedServiceTemplate = {name: string; template: ServiceTemplate}
 

@@ -1,7 +1,7 @@
-import {Instance} from '#repository/instances'
 import Plugins from '#plugins'
-import * as validator from '#validator'
+import {Instance} from '#repository/instances'
 import * as utils from '#utils'
+import * as validator from '#validator'
 
 export type InstancesUpdateOptions = {instance: string; inputs?: string; time?: number; verbose?: boolean}
 

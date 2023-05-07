@@ -1,8 +1,8 @@
 import {expect} from 'chai'
-import * as files from '../../src/utils/files'
 import path from 'path'
 import runQuery from '../../src/controller/query/run'
 import resolveQueries from '../../src/controller/template/query'
+import * as files from '../../src/utils/files'
 import {expectAsyncThrow} from '../utils'
 
 describe('queries', () => {

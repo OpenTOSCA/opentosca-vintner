@@ -1,9 +1,8 @@
-import * as files from '#files'
 import {Query} from '#/query/query'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import * as validator from '#validator'
-import {isString} from '#validator'
 import {getParentNode} from '#/query/utils'
+import * as files from '#files'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {isString} from '#validator'
 
 export type TemplateQueryOptions = {
     template: string

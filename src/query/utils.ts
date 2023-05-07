@@ -1,9 +1,9 @@
+import Plugins from '#plugins'
 import {Instance, Instances} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
-import {isString} from '#validator'
 import {firstKey, firstValue} from '#utils'
-import Plugins from '#plugins'
 import * as validator from '#validator'
+import {isString} from '#validator'
 
 /**
  * Tries to load all service template from a given source and path

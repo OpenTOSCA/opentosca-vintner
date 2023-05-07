@@ -1,17 +1,20 @@
-import {NodeTemplate, NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
-import {GroupTemplateMap} from '#spec/group-template'
-import {PolicyAssignmentMap} from '#spec/policy-template'
+import Graph from '#graph/graph'
+import Node from '#graph/node'
+import Property from '#graph/property'
+import Relation from '#graph/relation'
+import Type from '#graph/type'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
-import * as validator from '#validator'
-import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
-import * as utils from '#utils'
-import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
-import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {Graph, Node, Property, Relation, Type} from './graph'
-import {ensureDefined} from '#validator'
+import {GroupTemplateMap} from '#spec/group-template'
 import {GroupMember} from '#spec/group-type'
-import {UnexpectedError} from '#utils/error'
-import {ElementType, TypeAssignment} from '#spec/type-assignment'
+import {NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
+import {PolicyAssignmentMap} from '#spec/policy-template'
+import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
+import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
+import {ElementType} from '#spec/type-assignment'
+import * as utils from '#utils'
+import * as validator from '#validator'
+import {ensureDefined} from '#validator'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -114,7 +117,7 @@ export default class Transformer {
         // Delete all relationship templates which have no present relations
         if (validator.isDefined(this.topology.relationship_templates)) {
             this.graph.relations.forEach(relation => {
-                if (validator.isDefined(relation.relationship)) {
+                if (relation.hasRelationship()) {
                     if (!relation.present)
                         return delete this.topology.relationship_templates![relation.relationship.name]
 

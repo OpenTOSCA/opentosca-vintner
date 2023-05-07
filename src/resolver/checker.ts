@@ -1,4 +1,4 @@
-import {Graph} from '#/resolver/graph'
+import Graph from '#/graph/graph'
 import * as utils from '#utils'
 
 export default class Checker {

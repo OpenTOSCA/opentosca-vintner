@@ -1,5 +1,5 @@
-import {xOperaNativeConfig} from '#plugins/xopera'
 import Plugins from '#plugins'
+import {xOperaNativeConfig} from '#plugins/xopera'
 import lock from '#utils/lock'
 
 export default async function (option: xOperaNativeConfig) {

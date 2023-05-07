@@ -1,7 +1,7 @@
 import * as files from '#files'
 import path from 'path'
-import {runGroups} from '../utils'
 import {VariabilityTestGroup} from '../../src/controller/template/test'
+import {runGroups} from '../utils'
 
 describe('conformance', async () => {
     try {

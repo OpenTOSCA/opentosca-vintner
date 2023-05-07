@@ -1,9 +1,9 @@
-import * as path from 'path'
-import {renderFile} from '../utils'
-import {program} from '../../../src/cli/program'
-import {Command, Option} from 'commander'
 import * as utils from '#utils'
 import * as validator from '#validator'
+import {Command, Option} from 'commander'
+import * as path from 'path'
+import {program} from '../../../src/cli/program'
+import {renderFile} from '../utils'
 
 type CommandInformation = {
     commands: string[]

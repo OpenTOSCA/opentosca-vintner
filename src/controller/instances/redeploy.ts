@@ -1,7 +1,7 @@
-import {Instance} from '#repository/instances'
 import Plugins from '#plugins'
-import lock from '#utils/lock'
+import {Instance} from '#repository/instances'
 import * as utils from '#utils'
+import lock from '#utils/lock'
 
 export type InstancesDeployOptions = {instance: string; inputs?: string; verbose?: boolean}
 

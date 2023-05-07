@@ -1,8 +1,8 @@
-import * as files from '#files'
 import config from '#config'
-import {Templates} from '#repository/templates'
-import {Instances} from '#repository/instances'
+import * as files from '#files'
 import Plugins from '#plugins'
+import {Instances} from '#repository/instances'
+import {Templates} from '#repository/templates'
 
 export default async function () {
     files.createDirectory(config.home)
