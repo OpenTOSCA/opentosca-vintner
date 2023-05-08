@@ -269,13 +269,7 @@ export type LogicExpression =
           has_source?: string
           has_incoming_relation?: string
           has_incoming_relation_naive?: string
-          // TODO: implement
-          // TODO: doc
-          // TODO: test
           has_artifact?: string
-          // TODO: implement
-          // TODO: doc
-          // TODO: test
           has_artifact_naive?: string
 
           // Relation functions
