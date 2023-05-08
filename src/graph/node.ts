@@ -83,6 +83,14 @@ export default class Node extends Element {
         return !utils.isEmpty(this.ingoing)
     }
 
+    get isSource() {
+        return !utils.isEmpty(this.outgoing)
+    }
+
+    get hasArtifact() {
+        return !utils.isEmpty(this.artifacts)
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (validator.isUndefined(this._defaultCondition)) {
@@ -95,18 +103,30 @@ export default class Node extends Element {
                 }
 
                 if (it === 'source') {
-                    return conditions.push(this.isTarget ? {has_sources: this.toscaId, _cached_element: this} : true)
+                    return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
                 }
 
                 if (it === 'incoming') {
                     return conditions.push(
-                        this.isTarget ? {has_incoming_relations: this.toscaId, _cached_element: this} : true
+                        this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
                     )
                 }
 
-                if (it === 'naive') {
+                if (it === 'incomingnaive') {
                     return conditions.push(
-                        this.isTarget ? {has_incoming_relations_naive: this.toscaId, _cached_element: this} : true
+                        this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
+                    )
+                }
+
+                if (it === 'artifact') {
+                    return conditions.push(
+                        this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true
+                    )
+                }
+
+                if (it === 'artifactnaive') {
+                    return conditions.push(
+                        this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
                     )
                 }
 
