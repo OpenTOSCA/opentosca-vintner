@@ -196,7 +196,6 @@ export default class Solver {
         // Explicit conditions are referenced by has_incoming_relation and has_artifact.
         if (element.isRelation() || element.isArtifact()) {
             if (utils.isEmpty(conditions)) {
-                // TODO: is this correct
                 this.minisat.require(element.explicitId)
             } else {
                 this.minisat.require(
@@ -532,7 +531,6 @@ export default class Solver {
                 node = this.graph.getNode(name)
             }
 
-            // TODO: is this correct?
             return MiniSat.or(node.artifacts.map(it => it.explicitId))
         }
 
