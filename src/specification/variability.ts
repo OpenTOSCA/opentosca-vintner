@@ -21,7 +21,8 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-export type NodeDefaultConditionMode = 'source' | 'incoming' | 'host' | 'source-host' | 'relation-host'
+// In realty, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
+export type NodeDefaultConditionMode = 'source' | 'incoming' | 'incomingnaive' | 'host' | 'artifact' | 'artifactnaive'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
@@ -265,9 +266,11 @@ export type LogicExpression =
           // Node functions
           node_presence?: string
           host_presence?: string
-          has_sources?: string
-          has_incoming_relations?: string
-          has_incoming_relations_naive?: string
+          has_source?: string
+          has_incoming_relation?: string
+          has_incoming_relation_naive?: string
+          has_artifact?: string
+          has_artifact_naive?: string
 
           // Relation functions
           relation_presence?: [node: string, relation: string | number]
