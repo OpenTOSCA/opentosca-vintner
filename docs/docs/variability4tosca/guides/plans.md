@@ -5,7 +5,6 @@ In the following, we provide a detailed step-by-step tutorial to deploy the comm
 !!! Warning "TODO"
     - discuss each variant
     - figures for each variant
-    - correct example inputs and naming etc
 
 ## Environment
 
@@ -41,7 +40,7 @@ vintner orchestrators enable --orchestrator xopera
 
 ## Deployment
 
-Deploy the cloud variant of the application.
+Deploy the community variant of the application.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
 An example for the deployment inputs is given in [`examples/xopera-plans/inputs.example.yaml`]({{ get_repo_url('examples/xopera-plans/inputs.example.yaml') }}){target=_blank}.
 
@@ -53,13 +52,12 @@ vintner templates import --template plans --path examples/xopera-plans
 vintner instances create --instance plans --template plans
 
 # Resolve variability
-vintner instances resolve --instance plans --presets cloud
+vintner instances resolve --instance plans --inputs examples/xopera-plans/tests/community/inputs.yaml
 
 # (optional) Inspect service template
 vintner instances inspect --instance plans
 
 # Deploy instance
-# See examples/xopera-plans/variability-inputs.example.yaml as reference
 vintner instances deploy --instance plans --inputs ${INPUTS_PATH}
 ```
 
