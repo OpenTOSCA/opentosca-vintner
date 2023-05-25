@@ -1,0 +1,69 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/gcp/types.yaml
+
+topology_template:
+    inputs:
+        release:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        db_password:
+            type: string
+
+    node_templates:
+        shop:
+            type: gcp.appengine.application
+            properties:
+                application_name: application
+                language: DE
+                application_environment:
+                    DB_DIALECT: {get_property: [SELF, database, database_dialect]}
+                    DB_NAME: {get_property: [SELF, database, database_name]}
+                    DB_USERNAME: root
+                    DB_PASSWORD: {get_input: db_password}
+                    DB_ADDRESS: {get_property: [SELF, database, public_address]}
+                instance_class: F1
+                max_instances: 1
+            requirements:
+                - host: runtime
+                - database: database
+            artifacts:
+                artifact_file: files/application.tar.gz
+
+        runtime:
+            type: gcp.appengine.engine
+            requirements:
+                - host: cloud
+
+        database:
+            type: gcp.sql.db
+            properties:
+                database_name: db
+                instance_name: {get_property: [SELF, host, instance_name]}
+                public_address: {get_attribute: [SELF, host, public_address]}
+            requirements:
+                - host: dbms
+
+        dbms:
+            type: gcp.sql.dbms
+            properties:
+                instance_name: {concat: [{get_input: release}, '-', dbms]}
+                db_password: {get_input: db_password}
+                authorized_networks: '0.0.0.0/0'
+                storage_type: HDD
+                availability_type: zonal
+            requirements:
+                - host: cloud
+
+        cloud:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}

@@ -1,0 +1,10 @@
+runtime: nodejs14
+service: {{ application_name }}
+instance_class: {{ instance_class }}
+{% if max_instances is defined %}
+automatic_scaling:
+    max_instances: {{ max_instance }}
+{% endif %}
+env_variables:
+    APPLICATION_LANGUAGE: {{ language }}
+    {{ application_environment }}
