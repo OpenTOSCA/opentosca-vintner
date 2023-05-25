@@ -7,7 +7,7 @@ describe('examples', async () => {
     try {
         const groups: VariabilityTestGroup[] = []
 
-        const examplesDir = path.join(__dirname, '..', '..', 'examples')
+        const examplesDir = path.join(__dirname, '..', 'examples')
         const examples = files.listDirectories(examplesDir).filter(it => !it.startsWith('.'))
 
         for (const example of examples) {

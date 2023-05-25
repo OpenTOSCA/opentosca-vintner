@@ -23,7 +23,7 @@ We expect that the [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=
 ## Preparation
 
 First, install OpenTOSCA Vintner.
-For more information see [Installation](../installation.md){target=_blank}.
+For more information see [Installation](../../installation.md){target=_blank}.
 
 ```shell linenums="1"
 curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
@@ -35,7 +35,7 @@ vintner setup init
 We currently support xOpera and Unfurl.
 Since both can only be installed on Linux, we implemented a WSL integration for both.
 In our case, we run on a Linux machine and use xOpera.
-For more information see [Orchestrators](../orchestrators.md){target=_blank}.
+For more information see [Orchestrators](../../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"
 vintner orchestrators init xopera
