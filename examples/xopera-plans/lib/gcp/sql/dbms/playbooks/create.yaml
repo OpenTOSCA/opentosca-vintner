@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
       - name: active service account
-        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }}'
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
 
       # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
       - name: Enable Cloud SQL Admin API
@@ -12,12 +12,9 @@
 
       # https://cloud.google.com/sql/docs/mysql/create-instance
       # https://cloud.google.com/sdk/gcloud/reference/sql/instances/create
+      # https://cloud.google.com/sql/docs/mysql/configure-ha#gcloud
       - name: Create Instance
-        shell: 'gcloud sql instances create {{ instance_name }} --tier {{ instance_tier }} --region {{ region }} --database-version={{ database_version }} --authorized-networks {{ authorized_networks }} --storage-type {{ storage_type }} --availability-type {{ availability_type }} --async'
-        register: create_command
-
-      - name: Wait until instance is created
-        shell: 'gcloud beta sql operations wait {{ (create_command.stdout | from_yaml).name }}'
+        shell: 'gcloud sql instances create {{ instance_name }} --tier {{ instance_tier }} --region {{ region }} --database-version={{ database_version }} --authorized-networks {{ authorized_networks }} --storage-type {{ storage_type }} --availability-type {{ availability_type }} --enable-bin-log --timeout unlimited'
 
       # https://cloud.google.com/sql/docs/mysql/create-instance
       - name: Set Root Password

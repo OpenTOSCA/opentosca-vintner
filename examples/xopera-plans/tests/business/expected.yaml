@@ -26,7 +26,7 @@ topology_template:
             properties:
                 application_name: application
                 language: DE
-                analytical_reports: true
+                analytical_reports: false
                 application_environment:
                     DB_DIALECT: {get_property: [SELF, database, database_dialect]}
                     DB_NAME: {get_property: [SELF, database, database_name]}

@@ -8,6 +8,9 @@ topology_template:
         release:
             type: string
 
+        gcp_project_id:
+            type: string
+
         gcp_region:
             type: string
 
@@ -33,9 +36,9 @@ topology_template:
             is_enterprise: {equal: [{variability_input: plan}, ENTERPRISE]}
             is_business_or_enterprise: {or: [{logic_expression: is_business}, {logic_expression: is_enterprise}]}
 
-            is_EN: {equal: [{variability_input: plan}, EN]}
-            is_DE: {equal: [{variability_input: plan}, DE]}
-            is_ES: {equal: [{variability_input: plan}, ES]}
+            is_EN: {equal: [{variability_input: language}, EN]}
+            is_DE: {equal: [{variability_input: language}, DE]}
+            is_ES: {equal: [{variability_input: language}, ES]}
 
         options:
             type_default_condition: true
@@ -44,7 +47,7 @@ topology_template:
     node_templates:
         # TODO: instance_class and max_instances should belong in the host?!
         shop:
-            type: gcp.appengine.app
+            type: gcp.appengine.application
             properties:
                 - application_name: application
                 - language:
@@ -58,6 +61,14 @@ topology_template:
                 - language:
                       conditions: {logic_expression: is_ES}
                       value: ES
+
+                - analytical_reports:
+                      conditions: {not: {logic_expression: is_enterprise}}
+                      value: false
+
+                - analytical_reports:
+                      conditions: {logic_expression: is_enterprise}
+                      value: true
 
                 - application_environment:
                       # Database
@@ -106,7 +117,7 @@ topology_template:
             type: gcp.sql.dbms
             properties:
                 - instance_name: {concat: [{get_input: release}, '-', dbms]}
-                - db_password: {get_input: db_password}
+                - root_password: {get_input: db_password}
                 - authorized_networks: '0.0.0.0/0'
 
                 - storage_type:
@@ -131,5 +142,6 @@ topology_template:
         cloud:
             type: gcp.provider
             properties:
+                project_id: {get_input: gcp_project_id}
                 region: {get_input: gcp_region}
                 service_account_file: {get_input: gcp_service_account_file}

@@ -1,6 +1,6 @@
 import {expect} from 'chai'
-import Node from '../../src/graph/node'
-import Relation from '../../src/graph/relation'
+import Node from '../src/graph/node'
+import Relation from '../src/graph/relation'
 
 describe('host', () => {
     it('connects_to', () => {

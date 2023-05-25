@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
       - name: active service account
-        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }}'
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
 
       - name: Create working directory
         tempfile:
@@ -21,6 +21,11 @@
         template:
             src: app.yaml.j2
             dest: '{{ tempdir_info.path }}/app.yaml'
+
+      - name: Print app yaml
+        ansible.builtin.debug: var=item
+        with_file:
+            - '{{ tempdir_info.path }}/app.yaml'
 
       # https://cloud.google.com/sdk/gcloud/reference/app/deploy
       - name: Create App

@@ -1,14 +1,21 @@
-# Pruning Application
+# Shopping Applications
 
-In the following, we provide a detailed step-by-step tutorial to deploy the cloud variant of the pruning application to showcase default conditions and pruning of elements.
+In the following, we provide a detailed step-by-step tutorial to deploy the community variant of the shopping application to showcase conditional artifacts and configurations.
 
 !!! Warning "TODO"
     - discuss each variant
     - figures for each variant
+    - correct example inputs and naming etc
 
 ## Environment
 
-We expect that the [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=_blank} is installed on a Linux machine ant that access to an [OpenStack](https://www.openstack.org/){target=_blank} instance is available.
+We expect the following environment: 
+
+- Ubuntu22.04
+- [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=_blank}
+- [Google Cloud CLI](https://cloud.google.com/sdk/gcloud){target=_blank}
+- Service account for an GCP project
+- There must be already an app engine service called "default"
 
 ## Preparation
 
@@ -34,26 +41,26 @@ vintner orchestrators enable --orchestrator xopera
 
 ## Deployment
 
-Deploy the cloud variant of the pruning application.
+Deploy the cloud variant of the application.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
-An example for the deployment inputs is given in [`examples/xopera-pruning/inputs.example.yaml`]({{ get_repo_url('examples/xopera-pruning/inputs.example.yaml') }}){target=_blank}.
+An example for the deployment inputs is given in [`examples/xopera-plans/inputs.example.yaml`]({{ get_repo_url('examples/xopera-plans/inputs.example.yaml') }}){target=_blank}.
 
 ```shell linenums="1"
 # Add variable service template
-vintner templates import --template pruning --path examples/xopera-pruning
+vintner templates import --template plans --path examples/xopera-plans
 
 # Add instance
-vintner instances create --instance pruning --template pruning
+vintner instances create --instance plans --template plans
 
 # Resolve variability
-vintner instances resolve --instance pruning --presets cloud
+vintner instances resolve --instance plans --presets cloud
 
 # (optional) Inspect service template
-vintner instances inspect --instance pruning
+vintner instances inspect --instance plans
 
 # Deploy instance
-# See examples/xopera-pruning/variability-inputs.example.yaml as reference
-vintner instances deploy --instance pruning --inputs ${INPUTS_PATH}
+# See examples/xopera-plans/variability-inputs.example.yaml as reference
+vintner instances deploy --instance plans --inputs ${INPUTS_PATH}
 ```
 
 ## Undeployment
@@ -63,7 +70,7 @@ Therefore, undeploy the instance and cleanup the filesystem.
 
 ```shell linenums="1"
 # Undeploy instance
-vintner instances undeploy --instance pruning
+vintner instances undeploy --instance plans
 
 # Cleanup
 vintner setup clean

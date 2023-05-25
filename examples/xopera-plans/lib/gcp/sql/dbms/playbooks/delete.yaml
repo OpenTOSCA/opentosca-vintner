@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
       - name: active service account
-        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }}'
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
 
-      - name: Delete Instnace
+      - name: Delete Instance
         shell: 'gcloud sql instances delete {{ instance_name }} --quiet'

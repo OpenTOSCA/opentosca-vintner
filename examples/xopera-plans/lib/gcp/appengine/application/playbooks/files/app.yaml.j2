@@ -3,8 +3,9 @@ service: {{ application_name }}
 instance_class: {{ instance_class }}
 {% if max_instances is defined %}
 automatic_scaling:
-    max_instances: {{ max_instance }}
+    max_instances: {{ max_instances }}
 {% endif %}
 env_variables:
     APPLICATION_LANGUAGE: {{ language }}
-    {{ application_environment }}
+    APPLICATION_ANALYTICAL_REPORTS: {{ analytical_reports }}
+    {{ application_environment | to_nice_yaml(indent=4) | trim | indent(4) }}
