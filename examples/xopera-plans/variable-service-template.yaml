@@ -97,8 +97,14 @@ topology_template:
                 - host: runtime
                 - database: database
             artifacts:
-                artifact_file: files/application.tar.gz
-
+                - artifact_file:
+                      conditions: {logic_expression: is_community}
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+                - artifact_file:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      type: tosca.artifacts.File
+                      file: files/application.business.tar.gz
         runtime:
             type: gcp.appengine.engine
             requirements:
