@@ -104,7 +104,7 @@ topology_template:
                 - artifact_file:
                       conditions: {logic_expression: is_business_or_enterprise}
                       type: tosca.artifacts.File
-                      file: files/application.business.tar.gz
+                      file: files/application.enterprise.tar.gz
         runtime:
             type: gcp.appengine.engine
             requirements:

@@ -41,7 +41,7 @@ topology_template:
             artifacts:
                 artifact_file:
                     type: tosca.artifacts.File
-                    file: files/application.business.tar.gz
+                    file: files/application.enterprise.tar.gz
 
         runtime:
             type: gcp.appengine.engine
