@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extendedFeatureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendposition" value="1175,95"/>
+		<graphics key="legendautolayout" value="false"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and mandatory="true" name="Deployment">
+			<and mandatory="true" name="Shop">
+				<graphics key="collapsed" value="false"/>
+				<alt mandatory="true" name="Language">
+					<feature name="EN"/>
+					<feature name="DE"/>
+					<feature name="ES"/>
+				</alt>
+				<alt mandatory="true" name="Artifact">
+					<feature name="Community Artifact"/>
+					<feature name="Enterprise Artifact"/>
+				</alt>
+				<feature name="Analytical Reporting"/>
+				<and mandatory="true" name="Runtime">
+					<alt mandatory="true" name="Instance">
+						<feature name="Small"/>
+						<feature name="Large"/>
+					</alt>
+					<feature name="Auto Scaling"/>
+				</and>
+				<and mandatory="true" name="Database">
+					<alt mandatory="true" name="Storage">
+						<feature name="HDD"/>
+						<feature name="SSD"/>
+					</alt>
+					<feature name="Redundancy"/>
+				</and>
+			</and>
+			<alt mandatory="true" name="Plan">
+				<graphics key="collapsed" value="false"/>
+				<feature name="Community"/>
+				<feature name="Business"/>
+				<feature name="Enterprise"/>
+			</alt>
+			<feature name="Explode"/>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<eq>
+				<var>HDD</var>
+				<var>Community</var>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>SSD</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Redundancy</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Small</var>
+				<var>Community</var>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Large</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Auto Scaling</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Analytical Reporting</var>
+				<var>Enterprise</var>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Community Artifact</var>
+				<var>Community</var>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Enterprise Artifact</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+	</constraints>
+</extendedFeatureModel>
