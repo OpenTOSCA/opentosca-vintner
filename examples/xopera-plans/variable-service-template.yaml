@@ -45,9 +45,8 @@ topology_template:
             property_default_condition: true
 
     node_templates:
-        # TODO: instance_class and max_instances should belong in the host?!
         shop:
-            type: gcp.appengine.application
+            type: node.application
             properties:
                 - application_name: application
                 - language:
@@ -77,7 +76,21 @@ topology_template:
                       DB_USERNAME: root
                       DB_PASSWORD: {get_input: db_password}
                       DB_ADDRESS: {get_property: [SELF, database, public_address]}
-
+            requirements:
+                - host: runtime
+                - database: database
+            artifacts:
+                - artifact_file:
+                      conditions: {logic_expression: is_community}
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+                - artifact_file:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.tar.gz
+        runtime:
+            type: gcp.appengine.engine
+            properties:
                 - instance_class:
                       conditions: {logic_expression: is_community}
                       value: F1
@@ -93,20 +106,6 @@ topology_template:
                 - max_instances:
                       conditions: {logic_expression: is_business_or_enterprise}
                       value: 100
-            requirements:
-                - host: runtime
-                - database: database
-            artifacts:
-                - artifact_file:
-                      conditions: {logic_expression: is_community}
-                      type: tosca.artifacts.File
-                      file: files/application.community.tar.gz
-                - artifact_file:
-                      conditions: {logic_expression: is_business_or_enterprise}
-                      type: tosca.artifacts.File
-                      file: files/application.enterprise.tar.gz
-        runtime:
-            type: gcp.appengine.engine
             requirements:
                 - host: cloud
 

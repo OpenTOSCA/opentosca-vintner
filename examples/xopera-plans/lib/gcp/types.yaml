@@ -186,6 +186,13 @@ node_types:
                 type: string
                 default: {get_property: [SELF, host, region]}
 
+            instance_class:
+                type: string
+                default: F1
+
+            max_instances:
+                type: integer
+
             service_account_file:
                 type: string
                 default: {get_property: [SELF, host, service_account_file]}
@@ -221,7 +228,7 @@ node_types:
                 operations:
                     create: appengine/engine/playbooks/create.yaml
 
-    gcp.appengine.application:
+    node.application:
         derived_from: tosca.nodes.Root
         properties:
             application_name:
@@ -238,10 +245,11 @@ node_types:
 
             instance_class:
                 type: string
-                default: F1
+                default: {get_property: [SELF, host, instance_class]}
 
             max_instances:
                 type: integer
+                default: {get_property: [SELF, host, max_instances]}
 
             artifact_file:
                 type: string

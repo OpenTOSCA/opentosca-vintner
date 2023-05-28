@@ -22,7 +22,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: gcp.appengine.application
+            type: node.application
             properties:
                 application_name: application
                 language: DE
@@ -33,8 +33,6 @@ topology_template:
                     DB_USERNAME: root
                     DB_PASSWORD: {get_input: db_password}
                     DB_ADDRESS: {get_property: [SELF, database, public_address]}
-                instance_class: F4
-                max_instances: 100
             requirements:
                 - host: runtime
                 - database: database
@@ -45,6 +43,9 @@ topology_template:
 
         runtime:
             type: gcp.appengine.engine
+            properties:
+                instance_class: F4
+                max_instances: 100
             requirements:
                 - host: cloud
 
