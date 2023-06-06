@@ -1,8 +1,8 @@
 - os_vm
     - loop over ports
-    - wait for ssh
+    - wait for ssh in tf
 
-- os 
+- os
     - auth
 
 - gcp_app
