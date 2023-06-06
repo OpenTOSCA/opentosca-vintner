@@ -3,6 +3,16 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 node_types:
   node_exporter:
     derived_from: tosca.nodes.SoftwareComponent
+    
+    properties: 
+      ssh_user: 
+        type: string
+        default: {get_input: ssh_user}
+
+      ssh_key_file: 
+        type: string
+        default: {get_input: ssh_key_file}
+
     interfaces:
       Standard:
         create:
@@ -10,6 +20,7 @@ node_types:
             primary: Ansible
             operation_host: HOST
           inputs:
+            # See https://blog.devops4me.com/install-grafana-prometheus-node_exporter-using-ansible/
             playbook:
               q:
               - name: wait for ssh
@@ -21,7 +32,7 @@ node_types:
               - name: check if node exporter exist
                 stat:
                   path: /usr/local/bin/node_exporter
-                register: node_exporter_stat
+                register: node_exporter_bin
 
               - name: create node exporter config dir
                 file:
@@ -33,15 +44,15 @@ node_types:
                   src: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
                   dest: /tmp/
                   remote_src: yes
-                when: node_exporter_stat.stat.exists == false
+                when: node_exporter_bin.stat.exists == false
           
               - name: move the binary to the final destination
                 copy:
                   src: /tmp/node_exporter-1.6.0.linux-amd64/node_exporter
                   dest: /usr/local/bin/node_exporter
-                  owner: node-exporter
                   remote_src: yes
-                when: node_exporter_stat.stat.exists == false
+                  mode: 0755
+                when: node_exporter_bin.stat.exists == false
 
               - name: cleanup
                 file:
@@ -51,7 +62,7 @@ node_types:
               - name: create service
                 copy:
                   dest: /etc/systemd/system/node_exporter.service
-                  contnet: | 
+                  content: | 
                     [Unit]
                     Description=Node Exporter
                     After=network.target
@@ -69,15 +80,9 @@ node_types:
                   state: started
                   enabled: yes
                   daemon_reload: yes
-
+        
             playbookArgs:
-            - "--become"
-
-            environment:
-              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
-              ANSIBLE_SSH_USER: {get_input: ssh_user}
-              ANSIBLE_SSH_COMMON_ARGS: >
-                -o IdentitiesOnly=yes
-                -o BatchMode=yes
-                -o UserKnownHostsFile=/dev/null
-                -o StrictHostKeyChecking=no
+            - --become
+            - --key-file={{ SELF.ssh_key_file }}
+            - --user={{ SELF.ssh_user }}
+            - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

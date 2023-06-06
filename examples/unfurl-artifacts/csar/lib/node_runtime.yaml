@@ -4,13 +4,23 @@ node_types:
   node_runtime:
     derived_from: tosca.nodes.SoftwareComponent
 
+    properties: 
+      ssh_user: 
+        type: string
+        default: {get_input: ssh_user}
+
+      ssh_key_file: 
+        type: string
+        default: {get_input: ssh_key_file}
+
     attributes:
       public_address:
         type: string
-        default: {get_attribute: [SELF, host, public_address]}
+        default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+    
       public_ip:
         type: string
-        default: {get_attribute: [SELF, host, public_ip]}
+        default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
 
     capabilities:
       host:
@@ -45,22 +55,15 @@ node_types:
                 apt:
                   name: nodejs
 
-              - name: Create applications directory
+              - name: create applications directory
                 file:
                   path: /var/lib/node-applications/
                   state: directory
 
-              - name: Install pm2
-                shell: npm install pm2@latest -g
-
             playbookArgs:
-            - "--become"
+            - --become
+            - --key-file={{ SELF.ssh_key_file }}
+            - --user={{ SELF.ssh_user }}
+            - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
-            environment:
-              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
-              ANSIBLE_SSH_USER: {get_input: ssh_user}
-              ANSIBLE_SSH_COMMON_ARGS: >
-                -o IdentitiesOnly=yes
-                -o BatchMode=yes
-                -o UserKnownHostsFile=/dev/null
-                -o StrictHostKeyChecking=no
+            

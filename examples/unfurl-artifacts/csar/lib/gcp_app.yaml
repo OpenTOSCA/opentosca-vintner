@@ -6,9 +6,34 @@ node_types:
     properties:
       application_name:
           type: string
+      
+      DB_DIALECT:
+        type: string
+        default: {eval: '.::.requirements[.name=database]::.target::database_dialect'}
+      
+      DB_NAME: 
+        type: string
+        default: {eval: '.::.requirements[.name=database]::.target::database_name'}
+      
+      DB_USERNAME: 
+        type: string
+        default: root
+      
+      DB_PASSWORD: 
+        type: string
+        default: {get_input: db_password}
+      
+      DB_ADDRESS: 
+        type: string
+        default: 34.89.231.78 #{eval: '.::.requirements[.name=database]::.target::public_address'}
+      
+      APPLICATION_LANGUAGE: 
+        type: string
+        default: {get_input: language}
 
-      application_environment:
-        type: tosca.datatypes.json
+      APPLICATION_ANALYTICAL_REPORTS: 
+        type: boolean
+        default: {get_input: analytical}
 
       artifact:
         type: string
@@ -47,8 +72,16 @@ node_types:
             region = "{{ SELF.region }}"
             credentials = "{{ SELF.credentials }}"
 
-            artifact = "{{ 'src' | get_dir }}/{{ SELF.artifact.attributes.file }}"
-            application_environment = {{ SELF.application_environment }}
+            db_dialect="{{ SELF.DB_DIALECT}}"
+            db_name="{{ SELF.DB_NAME }}"
+            db_username="{{ SELF.DB_USERNAME }}"
+            db_password="{{ SELF.DB_PASSWORD }}"
+            db_address="{{ SELF.DB_ADDRESS }}"
+            application_language="{{ SELF.APPLICATION_LANGUAGE }}"
+            application_analytical_reports="{{ SELF.APPLICATION_ANALYTICAL_REPORTS }}"
+
+            application_name = "{{ SELF.application_name }}"
+            artifact = "{{ 'project' | get_dir }}/csar/{{ SELF.artifact.attributes.file }}"
           main: |
            terraform {
               required_providers {
@@ -77,18 +110,57 @@ node_types:
               type        = string
             }
 
+
             variable "artifact" {
               type        = string
             }
 
-            variable "application_environment" {
-              type        = map
+            variable "application_name" {
+              type        = string
+            }
+
+            #variable "application_environment" {
+            #  type        = map
+            #}
+
+            variable "db_dialect" {
+              type        = string
+            }
+            
+            variable "db_name" {
+              type        = string
+            }
+            
+            variable "db_username" {
+              type        = string
+            }
+            
+            variable "db_password" {
+              type        = string
+            }
+            
+            variable "db_address" {
+              type        = string
+            }
+            
+            variable "application_language" {
+              type        = string
+            }
+            
+            variable "application_analytical_reports" {
+              type        = string
+            }
+
+            
+            variable "try" {
+              type = string
+              default = "try-7"
             }
 
             resource "google_app_engine_standard_app_version" "app" {
               version_id      = "v2"
-              service         = var.appplication_name
-              runtime         = nodejs14
+              service         = var.application_name
+              runtime         = "nodejs14"
               app_engine_apis = true
 
               entrypoint {
@@ -101,23 +173,32 @@ node_types:
                 }
               }
 
-              env_variables = var.application_environment
+              env_variables = {
+                DB_DIALECT  = var.db_dialect
+                DB_NAME     = var.db_name
+                DB_USERNAME = var.db_username
+                DB_PASSWORD = var.db_password
+                DB_ADDRESS  = var.db_address
+                APPLICATION_LANGUAGE            = var.application_language
+                APPLICATION_ANALYTICAL_REPORTS  = var.application_analytical_reports
+              }
+
               service_account = google_service_account.custom_service_account.email
             }
 
             resource "google_storage_bucket" "bucket" {
-              name     = "appengine-static-content"
+              name     = "${var.project}-appengine-static-content-${var.try}"
               location = "EU"
             }
 
             resource "google_storage_bucket_object" "object" {
-              name   = "object"
+              name   = "object-${var.try}.zip"
               bucket = google_storage_bucket.bucket.name
               source = var.artifact
             }
 
             resource "google_service_account" "custom_service_account" {
-              account_id   = "my-account"
+              account_id   = "${var.application_name}-account-${var.try}"
               display_name = "Custom Service Account"
             }
 

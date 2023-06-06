@@ -8,22 +8,52 @@ node_types:
       application_name:
           type: string
 
+      DB_DIALECT:
+        type: string
+        default: {eval: '.::.requirements[.name=database]::.target::database_dialect'}
+      
+      DB_NAME: 
+        type: string
+        default: {eval: '.::.requirements[.name=database]::.target::database_name'}
+      
+      DB_USERNAME: 
+        type: string
+        default: root
+      
+      DB_PASSWORD: 
+        type: string
+        default: {get_input: db_password}
+      
+      DB_ADDRESS: 
+        type: string
+        default: {eval: '.::.requirements[.name=database]::.target::public_address[0]'}
+      
+      APPLICATION_LANGUAGE: 
+        type: string
+        default: {get_input: language}
+
       application_directory:
         type: string
         required: false
         default: {concat: ['/var/lib/node-applications/', {get_property: [SELF, application_name]}]}
 
-      application_environment:
-        type: tosca.datatypes.json
-
       artifact:
         type: string
         default: {eval: '.artifacts::artifact '}
+
+      ssh_user: 
+        type: string
+        default: {get_input: ssh_user}
+
+      ssh_key_file: 
+        type: string
+        default: {get_input: ssh_key_file}
 
     attributes:
       public_address:
         type: string
         default: {get_attribute: [SELF, host, public_address]}
+
       public_ip:
         type: string
         default: {get_attribute: [SELF, host, public_ip]}
@@ -55,7 +85,7 @@ node_types:
 
               - name: Extract deployment artifact in application directory
                 unarchive:
-                    src:  "{{ 'src' | get_dir }}/{{ SELF.artifact.attributes.file }}"
+                    src:  "{{ 'project' | get_dir }}/csar/{{ SELF.artifact.attributes.file }}"
                     dest: '{{ SELF.application_directory }}'
 
               - name: install
@@ -65,31 +95,41 @@ node_types:
 
               - name: create .env file
                 copy:
-                    dest: '{{ SELF.application_directory }}/env.sh'
-                    content: ''
+                    dest: '{{ SELF.application_directory }}/.env'
+                    content: |
+                      DB_DIALECT={{ SELF.DB_DIALECT}}
+                      DB_NAME={{ SELF.DB_NAME }}
+                      DB_USERNAME={{ SELF.DB_USERNAME }}
+                      DB_PASSWORD={{ SELF.DB_PASSWORD }}
+                      DB_ADDRESS={{ SELF.DB_ADDRESS }}
+                      APPLICATION_LANGUAGE={{ SELF.APPLICATION_LANGUAGE }}
                     mode: a+x
 
-              - name: configure env .env file
-                lineinfile:
-                    dest: '{{ SELF.application_directory }}/env.sh'
-                    state: present
-                    line: 'export {{ item.key }}={{ item.value }}'
-                loop: '{{ SELF.application_environment | dict2items  }}'
+              - name: create service
+                copy:
+                  dest: "/etc/systemd/system/{{ SELF.application_name }}.service"
+                  content: | 
+                    [Unit]
+                    After=network.target
+                    
+                    [Service]
+                    Type=simple
+                    ExecStart=/usr/bin/npm start
+                    WorkingDirectory={{ SELF.application_directory }}
+                    EnvironmentFile={{ SELF.application_directory }}/.env
+                    
+                    [Install]
+                    WantedBy=multi-user.target
 
-              - name: start node application
-                shell: 'source env.sh && pm2 start --name {{ SELF.application_name }} "npm start"'
-                args:
-                    chdir: '{{ SELF.application_directory }}'
-                    executable: /bin/bash
+              - name: start service
+                systemd:
+                  name: "{{ SELF.application_name }}"
+                  state: started
+                  enabled: yes
+                  daemon_reload: yes
 
             playbookArgs:
-            - "--become"
-
-            environment:
-              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
-              ANSIBLE_SSH_USER: {get_input: ssh_user}
-              ANSIBLE_SSH_COMMON_ARGS: >
-                -o IdentitiesOnly=yes
-                -o BatchMode=yes
-                -o UserKnownHostsFile=/dev/null
-                -o StrictHostKeyChecking=no
+            - --become
+            - --key-file={{ SELF.ssh_key_file }}
+            - --user={{ SELF.ssh_user }}
+            - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

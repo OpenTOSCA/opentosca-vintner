@@ -34,7 +34,7 @@ topology_template:
 
     ssh_key_file:
       type: string
-      default: /home/stoetzms/.ssh/bwcloud-default
+      default: /home/stoetzms/.ssh/bw-cloud--laptop-default
 
     gcp_credentials: 
       type: string
@@ -81,19 +81,10 @@ topology_template:
       type: gcp_app
       properties:
         application_name: shop
-        application_environment:
-          DB_DIALECT: {get_property: [SELF, database, database_dialect]}
-          DB_NAME: {get_property: [SELF, database, database_name]}
-          DB_USERNAME: root
-          DB_PASSWORD: {get_input: db_password}
-          DB_ADDRESS: {get_attribute: [SELF, database, public_address]}
-
-          APPLICATION_LANGUAGE: {get_input: language}
-          APPLICATION_ANALYTICAL_REPORTS: {get_input: analytical}
       requirements:
       - database: gcp_database
       artifacts:
-        artifact: files/application.enterprise.tar.gz
+        artifact: files/application.enterprise.zip
 
     gcp_database:
       type: gcp_database
@@ -112,14 +103,6 @@ topology_template:
       type: node_app
       properties:
         application_name: shop
-        application_environment:
-          DB_DIALECT: {get_property: [SELF, database, database_dialect]}
-          DB_NAME: {get_property: [SELF, database, database_name]}
-          DB_USERNAME: root
-          DB_PASSWORD: {get_input: db_password}
-          DB_ADDRESS: {get_attribute: [SELF, database, public_address]}
-
-          APPLICATION_LANGUAGE: {get_input: language}
       requirements:
       - host: runtime
       - database: sqlite

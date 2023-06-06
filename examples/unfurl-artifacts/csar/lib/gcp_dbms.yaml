@@ -83,7 +83,8 @@ node_types:
             variable "password" {
               type        = string
             }
-            
+
+            # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
             resource "google_sql_database_instance" "dbms" {
               name             = var.name
               database_version = "MYSQL_5_7"
@@ -102,6 +103,12 @@ node_types:
 
                 ip_configuration {
                   ipv4_enabled = true
+
+                  authorized_networks {
+                    name = "public"
+                    value = "0.0.0.0/0"
+                  }
+
                 }
               }
             }
