@@ -1,16 +1,13 @@
 - os_vm
-    - loop over ports
-    - wait for ssh in tf
+  - loop over ports
+  - wait for ssh
 
 - os
-    - auth
-
-- gcp_app
-    - zip vs tar.gz
-    - how to set environment?!
+  - mount every variable?
+  - extend vintner to source special variability input os_source.sh before executing command? mabye all with __vintner_source prefix
 
 - gcp
-    - enable iam.googleapis.com api
+  - enable iam.googleapis.com api
 
-- os_app
-    - configure by importing task from shop which creates env!?
+- app
+  . how to set environment of underlingy os_app/ gcp_app
