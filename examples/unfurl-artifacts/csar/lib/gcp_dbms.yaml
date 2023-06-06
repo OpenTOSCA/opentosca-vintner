@@ -1,0 +1,118 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  gcp_dbms:
+    derived_from: unfurl.nodes.Installer.Terraform
+    properties:
+      instance_name:
+        type: string
+
+      root_password:
+        type: string
+
+      credentials:
+        type: string
+        default: {get_input: gcp_credentials}
+
+      project: 
+        type: string
+        default: {get_input: gcp_project}
+
+      region: 
+        type: string
+        default: {get_input: gcp_region}
+
+    attributes:
+        public_address:
+            type: string
+
+    capabilities:
+        host:
+            type: tosca.capabilities.Compute
+            valid_source_types: [gcp_database]
+
+    interfaces:
+      Standard:
+        operations: 
+          configure:
+          delete:
+      defaults:
+        outputs:
+          public_ip: public_address
+          public_address: public_address
+        inputs:
+          tfvars: |
+            project = "{{ SELF.project }}"
+            region = "{{ SELF.region }}"
+            credentials = "{{ SELF.credentials }}"
+
+            name = "{{ SELF.instance_name}}"
+            password = "{{ SELF.root_password }}"
+          main: |
+           terraform {
+              required_providers {
+                google = {
+                  source = "hashicorp/google"
+                  version = "4.67.0"
+                }
+              }
+            }
+
+            provider "google" {
+              project = var.project
+              region = var.region
+              credentials = var.credentials
+            }
+
+            variable "credentials" {
+              type        = string
+            }
+
+            variable "project" {
+              type        = string
+            }
+            
+            variable "region" {
+              type        = string
+            }
+
+            variable "name" {
+              type        = string
+            }
+            
+            variable "password" {
+              type        = string
+            }
+            
+            resource "google_sql_database_instance" "dbms" {
+              name             = var.name
+              database_version = "MYSQL_5_7"
+              root_password = var.password
+              deletion_protection = false
+
+              settings {
+                tier = "db-f1-micro"
+
+                availability_type = "REGIONAL"
+
+                backup_configuration {
+                  enabled = true
+                  binary_log_enabled = true
+                }
+
+                ip_configuration {
+                  ipv4_enabled = true
+                }
+              }
+            }
+
+            resource "google_sql_user" "users" {
+              name     = "root"
+              instance = google_sql_database_instance.dbms.name
+              host     = "%"
+              password = var.password
+            }
+
+            output "public_address" {
+              value = google_sql_database_instance.dbms.public_ip_address
+            }

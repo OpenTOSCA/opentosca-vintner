@@ -1,0 +1,95 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  node_app:
+    derived_from: tosca.nodes.SoftwareComponent
+
+    properties:
+      application_name:
+          type: string
+
+      application_directory:
+        type: string
+        required: false
+        default: {concat: ['/var/lib/node-applications/', {get_property: [SELF, application_name]}]}
+
+      application_environment:
+        type: tosca.datatypes.json
+
+      artifact:
+        type: string
+        default: {eval: '.artifacts::artifact '}
+
+    attributes:
+      public_address:
+        type: string
+        default: {get_attribute: [SELF, host, public_address]}
+      public_ip:
+        type: string
+        default: {get_attribute: [SELF, host, public_ip]}
+      
+    requirements:
+    - database:
+          capability: tosca.capabilities.Endpoint.Database
+          relationship: tosca.relationships.ConnectsTo
+          
+    interfaces:
+      Standard:
+        create:
+          implementation:
+            primary: Ansible
+            operation_host: HOST
+          inputs:
+            playbook:
+              q:
+              - name: wait for ssh
+                wait_for_connection:
+                  delay: 10
+                  sleep: 5
+                  timeout: 300
+
+              - name: Create application directory
+                file:
+                    path: '{{ SELF.application_directory }}'
+                    state: directory
+
+              - name: Extract deployment artifact in application directory
+                unarchive:
+                    src:  "{{ 'src' | get_dir }}/{{ SELF.artifact.attributes.file }}"
+                    dest: '{{ SELF.application_directory }}'
+
+              - name: install
+                shell: 'sudo npm install'
+                args:
+                    chdir: '{{ SELF.application_directory }}'
+
+              - name: create .env file
+                copy:
+                    dest: '{{ SELF.application_directory }}/env.sh'
+                    content: ''
+                    mode: a+x
+
+              - name: configure env .env file
+                lineinfile:
+                    dest: '{{ SELF.application_directory }}/env.sh'
+                    state: present
+                    line: 'export {{ item.key }}={{ item.value }}'
+                loop: '{{ SELF.application_environment | dict2items  }}'
+
+              - name: start node application
+                shell: 'source env.sh && pm2 start --name {{ SELF.application_name }} "npm start"'
+                args:
+                    chdir: '{{ SELF.application_directory }}'
+                    executable: /bin/bash
+
+            playbookArgs:
+            - "--become"
+
+            environment:
+              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
+              ANSIBLE_SSH_USER: {get_input: ssh_user}
+              ANSIBLE_SSH_COMMON_ARGS: >
+                -o IdentitiesOnly=yes
+                -o BatchMode=yes
+                -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no

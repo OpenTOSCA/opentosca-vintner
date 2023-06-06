@@ -1,0 +1,132 @@
+apiVersion: unfurl/v1alpha1
+kind: Ensemble
+spec:
+  service_template:
+    +include: csar/service-template.yaml
+lock:
+  runtime:
+    unfurl:
+      version: 0.5.1
+      digest: fa46a91
+  repositories:
+  - url: file:///home/stoetzms/.unfurl_home/.venv/lib/python3.10/site-packages/unfurl
+    revision: ''
+    initial: ''
+    name: unfurl
+  - url: file:///home/stoetzms/unfurl/terraform/simple
+    revision: ''
+    initial: ''
+    name: self
+  - url: file:///home/stoetzms/unfurl/terraform/simple
+    revision: ''
+    initial: ''
+    name: self
+  ensembles:
+    localhost:
+      uri: git-local://0555e7e680c57b9d65332116223468e6a9ae5d16:/ensemble.yaml
+      changeId:
+      digest: cb192d5f39c3f9031ae7d2206b278e51b4aad17a
+      manifest:
+        file: ensemble/ensemble.yaml
+status:
+  inputs:
+    language: EN
+    analytical: true
+    db_password: password
+    ssh_user: ubuntu
+    ssh_key_file: /home/stoetzms/.ssh/bwcloud-default
+    gcp_project: stoetzms-387808
+    gcp_region: europe-west3
+    gcp_credentials: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+    os_region_name: Mannheim
+    os_auth_type: v3applicationcredential
+    os_auth_url: https://idm02.bw-cloud.org:5000/v3
+    os_identity_api_version: '3'
+    os_interface: public
+    os_application_credential_id: a2d06e16e24a4e739b101e1b8dc75dff
+    os_application_credential_secret: GUf5byNyo57yz7eSAx-aqFH1QmLRwi2mkEZRVanAXV0csPd__WMR9kf-Dy-SziWarf45llnRv-ud1cZE2WY-oA
+  outputs: {}
+  instances:
+    gcp_dbms:
+      template: gcp_dbms
+      properties:
+        instance_name: shop
+        root_password: password
+        project: stoetzms-387808
+        region: europe-west3
+        credentials: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+      readyState:
+        local: ok
+        state: configured
+      instances:
+        gcp_database:
+          template: gcp_database
+          properties:
+            database_name: shop
+            project: stoetzms-387808
+            region: europe-west3
+            credentials: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+          readyState:
+            local: ok
+            state: configured
+          lastConfigChange: A365DH8z0002
+          created: A365DH8z0002
+      lastConfigChange: A365Cw080001
+      attributes:
+        public_address: 34.89.231.78
+      created: A365Cw080001
+    gcp_app:
+      template: gcp_app
+      readyState:
+        local: pending
+    vm:
+      template: vm
+      attributes:
+        public_ip: 10.253.0.82
+      properties:
+        port_one: '3000'
+        port_two: '9100'
+        machine_name: shop
+        os_region_name: Mannheim
+        os_auth_type: v3applicationcredential
+        os_auth_url: https://idm02.bw-cloud.org:5000/v3
+        os_identity_api_version: '3'
+        os_interface: public
+        os_application_credential_id: a2d06e16e24a4e739b101e1b8dc75dff
+        os_application_credential_secret: GUf5byNyo57yz7eSAx-aqFH1QmLRwi2mkEZRVanAXV0csPd__WMR9kf-Dy-SziWarf45llnRv-ud1cZE2WY-oA
+      readyState:
+        local: ok
+        state: created
+      lastConfigChange: A365DTWn0001
+      instances:
+        runtime:
+          template: runtime
+          readyState:
+            local: pending
+          instances:
+            app:
+              template: app
+              readyState:
+                local: pending
+        sqlite:
+          template: sqlite
+          readyState:
+            local: pending
+        monitor:
+          template: monitor
+          readyState:
+            local: pending
+lastJob:
+  changeId: A365EH4A0000
+  startTime: 2023-06-05-14-17-04-162562
+  previousId: A365DTWn0000
+  workflow: deploy
+  options:
+    instance: gcp_app
+  summary: 1 tasks (0 changed, 0 ok, 1 failed, 0 unknown, 0 skipped)
+  specDigest: 2c8e65c41410f7b2f89dbedeadb13f3b35b61275
+  readyState:
+    effective: error
+    local: ok
+  changelog: jobs/job2023-06-05-14-17-04-162562.yaml
+jobsLog: jobs.tsv

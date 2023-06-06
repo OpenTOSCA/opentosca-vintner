@@ -1,0 +1,66 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  node_runtime:
+    derived_from: tosca.nodes.SoftwareComponent
+
+    attributes:
+      public_address:
+        type: string
+        default: {get_attribute: [SELF, host, public_address]}
+      public_ip:
+        type: string
+        default: {get_attribute: [SELF, host, public_ip]}
+
+    capabilities:
+      host:
+        type: tosca.capabilities.Compute
+        valid_source_types: [node_application]
+
+    interfaces:
+      Standard:
+        create:
+          implementation:
+            primary: Ansible
+            operation_host: HOST
+          inputs:
+            playbook:
+              q:
+              - name: wait for ssh
+                wait_for_connection:
+                  delay: 10
+                  sleep: 5
+                  timeout: 300
+
+              - name: download install script
+                get_url:
+                  url: https://deb.nodesource.com/setup_14.x
+                  dest: /tmp/nodesource_setup.sh
+                  mode: a+x
+
+              - name: setup source
+                shell: bash /tmp/nodesource_setup.sh
+
+              - name: install package
+                apt:
+                  name: nodejs
+
+              - name: Create applications directory
+                file:
+                  path: /var/lib/node-applications/
+                  state: directory
+
+              - name: Install pm2
+                shell: npm install pm2@latest -g
+
+            playbookArgs:
+            - "--become"
+
+            environment:
+              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
+              ANSIBLE_SSH_USER: {get_input: ssh_user}
+              ANSIBLE_SSH_COMMON_ARGS: >
+                -o IdentitiesOnly=yes
+                -o BatchMode=yes
+                -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no

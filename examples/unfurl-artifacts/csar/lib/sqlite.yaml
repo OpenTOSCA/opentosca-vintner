@@ -1,0 +1,71 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  sqlite:
+    derived_from: tosca.nodes.Root
+    properties:
+      database_name:
+        type: string
+
+      database_dialect:
+        type: string
+        default: sqlite
+
+      database_file:
+        type: string
+        default: {concat: ['/var/lib/sqlite-databases/', {get_property: [SELF, database_name]}, '.db']}
+
+      public_address:
+        type: string
+        default: {get_property: [SELF, database_file]}
+
+    capabilities:
+      database:
+          type: tosca.capabilities.Endpoint.Database
+
+    requirements:
+    - host:
+        capability: tosca.capabilities.Compute
+        relationship: tosca.relationships.HostedOn
+
+    interfaces:
+      Standard:
+        create:
+          implementation:
+            primary: Ansible
+            operation_host: HOST
+          inputs:
+            playbook:
+              q:
+              - name: wait for ssh
+                wait_for_connection:
+                  delay: 10
+                  sleep: 5
+                  timeout: 300
+              
+              - name: Install sqlite
+                package:
+                    name: sqlite3
+                    state: present
+                    update_cache: yes
+
+              - name: Create directory for databases
+                file:
+                    path: '{{ SELF.databases_directory }}'
+                    state: directory
+
+              - name: Create database
+                shell: 'sqlite3 {{ SELF.database_file }} "VACUUM";'
+
+
+            playbookArgs:
+            - "--become"
+
+            environment:
+              ANSIBLE_SSH_PRIVATE_KEY_FILE: {get_input: ssh_key_file}
+              ANSIBLE_SSH_USER: {get_input: ssh_user}
+              ANSIBLE_SSH_COMMON_ARGS: >
+                -o IdentitiesOnly=yes
+                -o BatchMode=yes
+                -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no

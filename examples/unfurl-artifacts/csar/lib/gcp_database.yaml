@@ -1,0 +1,96 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  gcp_database:
+    derived_from: unfurl.nodes.Installer.Terraform
+    properties:
+      database_name:
+        type: string
+
+      database_dialect:
+        type: string
+        default: mysql
+
+      credentials:
+        type: string
+        default: {get_input: gcp_credentials}
+
+      project: 
+        type: string
+        default: {get_input: gcp_project}
+
+      region: 
+        type: string
+        default: {get_input: gcp_region}
+
+    attributes:
+      public_address:
+        type: string
+        default: {get_attribute: [SELF, host, public_address]}
+
+    capabilities:
+      database:
+          type: tosca.capabilities.Endpoint.Database
+
+    requirements:
+        - host:
+              capability: tosca.capabilities.Compute
+              relationship: tosca.relationships.HostedOn
+    
+    interfaces:
+      Standard:
+        operations: 
+          configure:
+          delete:
+      defaults:
+        outputs:
+          public_ip: public_address
+          public_address: public_address
+        inputs:
+          tfvars: |
+            project = "{{ SELF.project }}"
+            region = "{{ SELF.region }}"
+            credentials = "{{ SELF.credentials }}"
+
+            name = "{{ SELF.database_name }}"
+            instance = "shop"
+          main: |
+           terraform {
+              required_providers {
+                google = {
+                  source = "hashicorp/google"
+                  version = "4.67.0"
+                }
+              }
+            }
+
+            provider "google" {
+              project = var.project
+              region = var.region
+              credentials = var.credentials
+            }
+
+            variable "credentials" {
+              type        = string
+            }
+
+            variable "project" {
+              type        = string
+            }
+            
+            variable "region" {
+              type        = string
+            }
+
+            variable "name" {
+              type        = string
+            }
+            
+            variable "instance" {
+              type        = string
+            }
+
+            resource "google_sql_database" "database" {
+              name     = var.name
+              instance = var.instance
+            }
