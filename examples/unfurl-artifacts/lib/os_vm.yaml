@@ -127,7 +127,7 @@ node_types:
                         resource "openstack_compute_instance_v2" "machine" {
                           name            = var.machine_name
                           image_name      = "Ubuntu 20.04"
-                          flavor_name     = "m1.medium"
+                          flavor_name     = "m1.small"
                           key_pair        = "default"
                           security_groups = ["default", openstack_compute_secgroup_v2.ports.name]
 

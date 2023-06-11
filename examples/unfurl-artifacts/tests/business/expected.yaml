@@ -70,3 +70,4 @@ topology_template:
             properties:
                 instance_name: shop
                 root_password: {get_input: db_password}
+                availability_type: ZONAL
