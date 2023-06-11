@@ -113,9 +113,9 @@ topology_template:
     node_templates:
         shop:
             type:
-                - node_app:
+                - node.app:
                       conditions: {logic_expression: is_community}
-                - gcp_app:
+                - gcp.app:
                       conditions: {logic_expression: is_business_or_enterprise}
 
             properties:
@@ -178,7 +178,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         gcp_database:
-            type: gcp_database
+            type: gcp.database
             conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 database_name: shop
@@ -186,14 +186,14 @@ topology_template:
                 - host: gcp_dbms
 
         gcp_dbms:
-            type: gcp_dbms
+            type: gcp.dbms
             conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 instance_name: shop
                 root_password: {get_input: db_password}
 
         os_runtime:
-            type: node_runtime
+            type: node.runtime
             conditions: {logic_expression: is_community}
             requirements:
                 - host: os_vm
@@ -207,13 +207,13 @@ topology_template:
                 - host: os_vm
 
         os_monitor:
-            type: node_exporter
+            type: node.exporter
             conditions: {logic_expression: is_community}
             requirements:
                 - host: os_vm
 
         os_vm:
-            type: os_vm
+            type: os.vm
             conditions: {logic_expression: is_community}
             properties:
                 port_one: 3000

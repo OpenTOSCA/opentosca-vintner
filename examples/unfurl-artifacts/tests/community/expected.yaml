@@ -62,7 +62,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: node_app
+            type: node.app
             properties:
                 application_name: shop
 
@@ -82,7 +82,7 @@ topology_template:
                     file: files/application.community.tar.gz
 
         os_runtime:
-            type: node_runtime
+            type: node.runtime
             requirements:
                 - host: os_vm
 
@@ -94,12 +94,12 @@ topology_template:
                 - host: os_vm
 
         os_monitor:
-            type: node_exporter
+            type: node.exporter
             requirements:
                 - host: os_vm
 
         os_vm:
-            type: os_vm
+            type: os.vm
             properties:
                 port_one: 3000
                 port_two: 9100

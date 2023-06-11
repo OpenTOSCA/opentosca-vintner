@@ -38,7 +38,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: gcp_app
+            type: gcp.app
             properties:
                 application_name: shop
 
@@ -59,14 +59,14 @@ topology_template:
                     file: files/application.enterprise.zip
 
         gcp_database:
-            type: gcp_database
+            type: gcp.database
             properties:
                 database_name: shop
             requirements:
                 - host: gcp_dbms
 
         gcp_dbms:
-            type: gcp_dbms
+            type: gcp.dbms
             properties:
                 instance_name: shop
                 root_password: {get_input: db_password}
