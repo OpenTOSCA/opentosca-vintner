@@ -1,0 +1,221 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+
+    - file: lib/node_app.yaml
+    - file: lib/node_runtime.yaml
+    - file: lib/sqlite.yaml
+    - file: lib/node_exporter.yaml
+    - file: lib/os_vm.yaml
+
+    - file: lib/gcp_app.yaml
+    - file: lib/gcp_database.yaml
+    - file: lib/gcp_dbms.yaml
+
+topology_template:
+    variability:
+        inputs:
+            plan:
+                type: string
+                default: COMMUNITY
+
+            language:
+                type: string
+                default: EN
+
+        expressions:
+            is_community: {equal: [{variability_input: plan}, COMMUNITY]}
+            is_business: {equal: [{variability_input: plan}, BUSINESS]}
+            is_enterprise: {equal: [{variability_input: plan}, ENTERPRISE]}
+            is_business_or_enterprise: {or: [{logic_expression: is_business}, {logic_expression: is_enterprise}]}
+
+            is_EN: {equal: [{variability_input: language}, EN]}
+            is_DE: {equal: [{variability_input: language}, DE]}
+            is_ES: {equal: [{variability_input: language}, ES]}
+
+        options:
+            type_default_condition: true
+            property_default_condition: true
+            relation_default_condition: ture
+            expected_hosting_consistency_check: false # TODO: enable this again
+
+    inputs:
+        language:
+            type: string
+            default: EN
+
+        db_password:
+            type: string
+            default: password
+
+        ssh_user:
+            type: string
+            default: ubuntu
+            conditions: {logic_expression: is_community}
+
+        ssh_key_file:
+            type: string
+            default: /home/stoetzms/.ssh/bw-cloud--laptop-default
+            conditions: {logic_expression: is_community}
+
+        os_region_name:
+            type: string
+            default: Mannheim
+            conditions: {logic_expression: is_community}
+
+        os_auth_type:
+            type: string
+            default: v3applicationcredential
+            conditions: {logic_expression: is_community}
+
+        os_auth_url:
+            type: string
+            default: https://idm02.bw-cloud.org:5000/v3
+            conditions: {logic_expression: is_community}
+
+        os_identity_api_version:
+            type: string
+            default: '3'
+            conditions: {logic_expression: is_community}
+
+        os_interface:
+            type: string
+            default: public
+            conditions: {logic_expression: is_community}
+
+        os_application_credential_id:
+            type: string
+            default: a2d06e16e24a4e739b101e1b8dc75dff
+            conditions: {logic_expression: is_community}
+
+        os_application_credential_secret:
+            type: string
+            default: GUf5byNyo57yz7eSAx-aqFH1QmLRwi2mkEZRVanAXV0csPd__WMR9kf-Dy-SziWarf45llnRv-ud1cZE2WY-oA
+            conditions: {logic_expression: is_community}
+
+        gcp_credentials:
+            type: string
+            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+            conditions: {logic_expression: is_business_or_enterprise}
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
+            conditions: {logic_expression: is_business_or_enterprise}
+
+        gcp_region:
+            type: string
+            default: europe-west3
+            conditions: {logic_expression: is_business_or_enterprise}
+
+    node_templates:
+        shop:
+            type:
+                - node_app:
+                      conditions: {logic_expression: is_community}
+                - gcp_app:
+                      conditions: {logic_expression: is_business_or_enterprise}
+
+            properties:
+                - application_name: shop
+
+                - DB_NAME: shop
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: db_password}
+
+                - DB_DIALECT:
+                      conditions: {node_presence: os_database}
+                      value: {get_property: [os_database, database_dialect]}
+
+                - DB_DIALECT:
+                      conditions: {node_presence: gcp_database}
+                      value: {get_property: [gcp_database, database_dialect]}
+
+                - DB_ADDRESS:
+                      conditions: {node_presence: os_database}
+                      value: {get_attribute: [os_database, public_address]}
+
+                - DB_ADDRESS:
+                      conditions: {node_presence: gcp_database}
+                      value: {get_attribute: [gcp_database, public_address]}
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_EN}
+                      value: 'EN'
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_DE}
+                      value: 'DE'
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_ES}
+                      value: 'ES'
+
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_business}
+                      value: false
+
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_enterprise}
+                      value: true
+
+            requirements:
+                - host: os_runtime
+                - database: os_database
+                - database: gcp_database
+
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_community}
+                      file: files/application.community.tar.gz
+
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      file: files/application.enterprise.zip
+
+        gcp_database:
+            type: gcp_database
+            conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                database_name: shop
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp_dbms
+            conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                instance_name: shop
+                root_password: {get_input: db_password}
+
+        os_runtime:
+            type: node_runtime
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host: os_vm
+
+        os_database:
+            type: sqlite
+            conditions: {logic_expression: is_community}
+            properties:
+                database_name: shop
+            requirements:
+                - host: os_vm
+
+        os_monitor:
+            type: node_exporter
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host: os_vm
+
+        os_vm:
+            type: os_vm
+            conditions: {logic_expression: is_community}
+            properties:
+                port_one: 3000
+                port_two: 9100
+                machine_name: shop

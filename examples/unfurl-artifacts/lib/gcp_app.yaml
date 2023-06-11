@@ -9,11 +9,9 @@ node_types:
 
             DB_DIALECT:
                 type: string
-                default: {eval: '.::.requirements[.name=database]::.target::database_dialect'}
 
             DB_NAME:
                 type: string
-                default: {eval: '.::.requirements[.name=database]::.target::database_name'}
 
             DB_USERNAME:
                 type: string
@@ -21,19 +19,15 @@ node_types:
 
             DB_PASSWORD:
                 type: string
-                default: {get_input: db_password}
 
             DB_ADDRESS:
                 type: string
-                default: 34.89.231.78 #{eval: '.::.requirements[.name=database]::.target::public_address'}
 
             APPLICATION_LANGUAGE:
                 type: string
-                default: {get_input: language}
 
             APPLICATION_ANALYTICAL_REPORTS:
                 type: boolean
-                default: {get_input: analytical}
 
             artifact:
                 type: string

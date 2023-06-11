@@ -1,0 +1,72 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+
+    - file: lib/node_app.yaml
+    - file: lib/node_runtime.yaml
+    - file: lib/sqlite.yaml
+    - file: lib/node_exporter.yaml
+    - file: lib/os_vm.yaml
+
+    - file: lib/gcp_app.yaml
+    - file: lib/gcp_database.yaml
+    - file: lib/gcp_dbms.yaml
+
+topology_template:
+    inputs:
+        language:
+            type: string
+            default: EN
+
+        db_password:
+            type: string
+            default: password
+
+        gcp_credentials:
+            type: string
+            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
+
+        gcp_region:
+            type: string
+            default: europe-west3
+
+    node_templates:
+        shop:
+            type: gcp_app
+            properties:
+                application_name: shop
+
+                DB_NAME: shop
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: db_password}
+                DB_DIALECT: {get_property: [gcp_database, database_dialect]}
+                DB_ADDRESS: {get_attribute: [gcp_database, public_address]}
+
+                APPLICATION_LANGUAGE: 'DE'
+                APPLICATION_ANALYTICAL_REPORTS: true
+            requirements:
+                - database: gcp_database
+
+            artifacts:
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/application.enterprise.zip
+
+        gcp_database:
+            type: gcp_database
+            properties:
+                database_name: shop
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp_dbms
+            properties:
+                instance_name: shop
+                root_password: {get_input: db_password}

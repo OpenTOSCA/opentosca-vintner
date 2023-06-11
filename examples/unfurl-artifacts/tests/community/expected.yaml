@@ -20,10 +20,6 @@ topology_template:
             type: string
             default: EN
 
-        analytical:
-            type: boolean
-            default: true
-
         db_password:
             type: string
             default: password
@@ -35,18 +31,6 @@ topology_template:
         ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--laptop-default
-
-        gcp_credentials:
-            type: string
-            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
-
-        gcp_project:
-            type: string
-            default: stoetzms-387808
-
-        gcp_region:
-            type: string
-            default: europe-west3
 
         os_region_name:
             type: string
@@ -77,42 +61,30 @@ topology_template:
             default: GUf5byNyo57yz7eSAx-aqFH1QmLRwi2mkEZRVanAXV0csPd__WMR9kf-Dy-SziWarf45llnRv-ud1cZE2WY-oA
 
     node_templates:
-        gcp_app:
-            type: gcp_app
-            properties:
-                application_name: shop
-            requirements:
-                - database: gcp_database
-            artifacts:
-                artifact: files/application.enterprise.zip
-
-        gcp_database:
-            type: gcp_database
-            properties:
-                database_name: shop
-            requirements:
-                - host: gcp_dbms
-
-        gcp_dbms:
-            type: gcp_dbms
-            properties:
-                instance_name: shop
-                root_password: {get_input: db_password}
-
-        os_app:
+        shop:
             type: node_app
             properties:
                 application_name: shop
+
+                DB_NAME: shop
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: db_password}
+                DB_DIALECT: {get_property: [os_database, database_dialect]}
+                DB_ADDRESS: {get_attribute: [os_database, public_address]}
+
+                APPLICATION_LANGUAGE: DE
             requirements:
                 - host: os_runtime
                 - database: os_database
             artifacts:
-                artifact: files/application.community.tar.gz
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/application.community.tar.gz
 
         os_runtime:
             type: node_runtime
             requirements:
-                - host: vm
+                - host: os_vm
 
         os_database:
             type: sqlite
