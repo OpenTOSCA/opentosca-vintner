@@ -7,7 +7,6 @@ imports:
     - file: lib/node_app.yaml
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
-    - file: lib/node_exporter.yaml
     - file: lib/os_vm.yaml
 
     - file: lib/gcp_app.yaml
@@ -87,14 +86,9 @@ topology_template:
                 - host: os_vm
 
         os_database:
-            type: sqlite
+            type: sqlite.database
             properties:
                 database_name: shop
-            requirements:
-                - host: os_vm
-
-        os_monitor:
-            type: node.exporter
             requirements:
                 - host: os_vm
 
