@@ -85,6 +85,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/inputs',
+    hae.express(async (req, res, next) => {
+        const result = await Controller.template.inputs(req.body)
+        res.json(result)
+    })
+)
+
+resolvers.post(
     '/templates/list',
     hae.express(async (req, res, next) => {
         const list = await Controller.templates.list()

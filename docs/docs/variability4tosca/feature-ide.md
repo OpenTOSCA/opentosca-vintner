@@ -92,7 +92,7 @@ The full attribute name (including the feature namespacing) can be overridden by
     fully_overridden: something else
     ```
 
-## Complete Example
+## Example
 
 The following example of a complete FeatureIDE Extended XML Configuration contains examples of the above introduced concepts.
 
@@ -150,3 +150,11 @@ The following example of a complete FeatureIDE Extended XML Configuration contai
     feature_another_overridden_attr_also_overridden: something
     fully_overridden: something else
     ```
+
+To run the transformation using our reference implementation, run the following command.
+
+```shell linenums="1"
+vintner template inputs --path path/to/my-inputs.xml
+```
+
+--8<-- "ack.md"
