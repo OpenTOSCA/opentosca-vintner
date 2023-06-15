@@ -1,6 +1,6 @@
 import * as files from '#files'
 import * as path from 'path'
-import {loadAllTests} from '../../../tests/query/query.test'
+import {loadAllTests} from '../../../tests/query/QueryTest'
 import {renderFile} from '../utils'
 
 async function main() {
@@ -20,7 +20,7 @@ async function main() {
         await renderFile(
             path.join(__dirname, 'test.template.ejs'),
             {test, utils: {toYAML: files.toYAML}},
-            path.join(documentationDirectory, 'test-' + test.id + '.md')
+            path.join(documentationDirectory, test.toDocFile())
         )
     }
 }

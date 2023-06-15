@@ -9,15 +9,25 @@
 <% } %>
 This test is of type `<%- test.config.type %>`.
 
-## Variable Service Template
+## Service Template
 
-The variability of the following variable service template shall be resolved.
+The following service template is used.
 
-```yaml linenums="1"
+```yaml linenums="1" title="<%- test.toFileTitle() -%>"
 <%- utils.toYAML(test.template) -%>
 ```
+<% if (test.config.query) { %>
 
-<% if (test.expected) { -%>
+## Query
+
+The following query is executed.
+
+```text linenums="1"
+<%- test.config.query %>
+```
+<% } -%>
+<% if (test.expected) { %>
+
 ## Query Result
 
 The following query result is expected.
@@ -26,8 +36,8 @@ The following query result is expected.
 <%- utils.toYAML(test.expected) -%>
 ```
 <% } -%>
+<% if (test.config?.error) { %>
 
-<% if (test.config?.error) { -%>
 ## Expected Error
 
 The following error is expected to be thrown.
