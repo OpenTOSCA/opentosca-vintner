@@ -92,6 +92,7 @@ nav:
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
+          - Conformance Tests: queries4tosca/tests
     - interface.md
     - dependencies.md
     - development.md

@@ -1,5 +1,6 @@
 import runQuery from '#controller/query/run'
 import resolveQueries from '#controller/template/query'
+import {ServiceTemplate} from '#spec/service-template'
 import * as files from '#utils/files'
 import * as validator from '#utils/validator'
 import {expect} from 'chai'
@@ -12,70 +13,114 @@ export type QueryTestConfig = {
     error?: string
     query?: string
     type: 'default' | 'template'
+    template: string
+}
+
+export class QueryTest {
+    id: string
+    dir: string
+
+    config: QueryTestConfig
+    template: ServiceTemplate
+    expected: any
+
+    constructor(name: string) {
+        validator.ensureName(name)
+
+        this.id = name
+        this.dir = path.join(__dirname, name)
+
+        // Load config
+        const config = files.loadYAML<QueryTestConfig>(path.join(this.dir, 'test.yaml'))
+
+        // Set default type
+        config.type = config.type ?? 'default'
+        this.config = config
+
+        // Set default name
+        this.config.name = this.config.name ?? this.id
+
+        // Validate type
+        if (config.type !== 'default' && config.type !== 'template')
+            throw new Error(`Test "${this.id}" has no template"`)
+
+        // Set default path to template
+        if (validator.isUndefined(config.template)) {
+            if (config.type === 'default') this.config.template = path.join(__dirname, 'template.yaml')
+            if (config.type === 'template') this.config.template = path.join(this.dir, 'template.yaml')
+        }
+        validator.ensureDefined(this.config.template, `Test "${this.id}" has no template path"`)
+
+        // Load template
+        this.template = files.loadYAML(this.config.template)
+
+        // Load result
+        this.expected = validator.isUndefined(config.error)
+            ? files.loadYAML(path.join(this.dir, 'expected.yaml'))
+            : undefined
+    }
+
+    toTest() {
+        if (this.config.type === 'default') return this.toDefaultTest()
+        if (this.config.type === 'template') return this.toTemplateTest()
+    }
+
+    toDefaultTest() {
+        const query = this.config.query
+        validator.ensureString(query)
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const test = this
+
+        return async function () {
+            //@ts-ignore
+            const title = this.test.title
+
+            const result = await runQuery({query, source: 'file'})
+            expect(result).to.deep.equal(test.expected)
+        }
+    }
+
+    toTemplateTest() {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const test = this
+
+        return async function () {
+            //@ts-ignore
+            const title = this.test.title
+
+            async function fn() {
+                const output = files.temporary()
+                await resolveQueries({
+                    output,
+                    template: test.config.template,
+                })
+                return output
+            }
+
+            if (validator.isDefined(test.config.error)) {
+                await expectAsyncThrow(fn, test.config.error)
+            } else {
+                const output = await fn()
+                expect(files.loadYAML(output)).to.deep.equal(test.expected)
+            }
+        }
+    }
+}
+
+export function loadAllTests() {
+    return files
+        .listDirectories(path.join(__dirname))
+        .filter(it => !it.startsWith('.'))
+        .map(it => new QueryTest(it))
 }
 
 describe('queries', async () => {
     try {
-        for (const test of files.listDirectories(path.join(__dirname)).filter(it => !it.startsWith('.'))) {
-            const dir = path.join(__dirname, test)
-
-            const config = files.loadYAML<QueryTestConfig>(path.join(dir, 'test.yaml'))
-
-            config.type = config.type || 'default'
-
-            if (config.type === 'default') {
-                const query = config.query
-                validator.isString(query)
-                it(test, getDefaultQueryTest(query!))
-                continue
-            }
-
-            if (config.type === 'template') {
-                it(test, getDefaultTemplateTest(test + '/template.yaml', config))
-                continue
-            }
-
-            throw new Error(`Test "${test}" has unknown type "${config.type}"`)
+        for (const test of loadAllTests()) {
+            it(test.id, test.toTest())
         }
     } catch (e) {
         console.log(e)
         process.exit(1)
     }
 })
-
-function getDefaultQueryTest(query: string) {
-    return async function () {
-        //@ts-ignore
-        const title = this.test.title
-
-        const result = await runQuery({query, source: 'file'})
-        expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, title, 'expected.yaml')))
-    }
-}
-
-function getDefaultTemplateTest(template: string, config?: QueryTestConfig) {
-    return async function () {
-        //@ts-ignore
-        const title = this.test.title
-
-        async function fn() {
-            return await resolveTemplate(template)
-        }
-
-        if (config?.error) {
-            await expectAsyncThrow(fn, config.error)
-        } else {
-            const output = await fn()
-            expect(files.loadYAML(output)).to.deep.equal(files.loadYAML(path.join(__dirname, title, 'expected.yaml')))
-        }
-    }
-}
-
-async function resolveTemplate(templatePath: string) {
-    const output = files.temporary()
-    await resolveQueries({
-        output,
-        template: path.join(__dirname, templatePath),
-    })
-    return output
-}
