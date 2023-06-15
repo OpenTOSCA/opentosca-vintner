@@ -4,6 +4,8 @@ title: Dynamic Deployment Artifacts
 
 # Variability4TOSCA Dynamic Deployment Artifacts 1.0 Release Candidate
 
+{{ experimental_notice() }}
+
 This document specifies dynamic deployment artifacts which are supposed to be build on-demand based on information in the topology.
 The intention is to build variants of deployment artifacts which are specific for the application.
 The specification is under active development and is not backwards compatible with any previous versions.
@@ -22,3 +24,6 @@ tosca.interfaces.node.lifecycle.Variability
 
 A rough idea has been also mentioned in
 [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969505){target=_blank}.
+
+--8<-- "ack.md"
+--8<-- "contact.md"

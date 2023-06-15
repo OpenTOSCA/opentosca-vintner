@@ -735,4 +735,7 @@ When variability is resolved, the following errors might be thrown:
 | Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
 | Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults                 | 
 
+
+--8<-- "vac.md"
+
 [//]: # (Comment for correct rendering of references)

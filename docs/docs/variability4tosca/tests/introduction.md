@@ -10,7 +10,7 @@ This document specifies the conformance test suite for the Variability4TOSCA spe
 The specification is under active development and is not backwards compatible with any previous versions.
 
 Each test is described on a separate page.
-The description includes a variable service template, variability inputs,
+The description includes typically a variable service template, variability inputs,
 expected errors, expected variability-resolved service template and so on along with an explanation about the expected
 processing.
 

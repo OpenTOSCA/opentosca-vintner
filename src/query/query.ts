@@ -65,14 +65,14 @@ export class Query {
         const results: QueryResults = {}
         const templates = await this.evaluateFrom(expression.from)
 
-        for (const {template} of templates) {
+        for (const {name, template} of templates) {
             let result: any = template
             this.currentTemplate = template
 
             if (expression.match != null) result = this.evaluateMatch(result, expression.match)
             result = this.evaluateSelect(result, expression.select)
             if (result && !(Array.isArray(result) && result.length == 0)) {
-                results[it.name] = result
+                results[name] = result
             }
         }
 

@@ -29,11 +29,12 @@ export type VariabilityTestConfig = {
 }
 
 export default async function (options: TemplateTestOptions) {
-    const testsPath = path.join(options.path, 'tests')
+    const testsDir = path.join(options.path, 'tests')
 
     const tests: VariabilityTest[] = files
-        .listDirectories(testsPath)
-        .map(test => ({name: test, dir: path.join(testsPath, test)}))
+        .listDirectories(testsDir)
+        .filter(it => !it.startsWith('.'))
+        .map(test => ({name: test, dir: path.join(testsDir, test)}))
 
     const onlyTests = tests.filter(test => test.name.endsWith('---only'))
     const nonDisabledTests = tests.filter(test => !test.name.endsWith('---disabled'))
