@@ -11,6 +11,7 @@
             "#graph/*": ["src/graph/*"],
             "#graph": ["src/graph"],
             "#repository/*": ["src/repository/*"],
+            "#resolver/*": ["src/resolver/*"],
             "#resolver": ["src/resolver"],
             "#plugins/*": ["src/plugins/*"],
             "#plugins": ["src/plugins"],
@@ -25,6 +26,6 @@
         "forceConsistentCasingInFileNames": false,
         "useUnknownInCatchVariables": false
     },
-    "include": ["src"],
+    "include": ["src", "tests", "docs/cmds"],
     "exclude": ["node_modules"]
 }

@@ -1,6 +1,6 @@
+import {VariabilityTestGroup} from '#controller/template/test'
 import * as files from '#files'
 import path from 'path'
-import {VariabilityTestGroup} from '../../src/controller/template/test'
 import {runGroups} from '../utils'
 
 describe('examples', async () => {

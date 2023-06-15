@@ -1,134 +1,46 @@
+import runQuery from '#controller/query/run'
+import resolveQueries from '#controller/template/query'
+import * as files from '#utils/files'
+import * as validator from '#utils/validator'
 import {expect} from 'chai'
 import path from 'path'
-import runQuery from '../../src/controller/query/run'
-import resolveQueries from '../../src/controller/template/query'
-import * as files from '../../src/utils/files'
 import {expectAsyncThrow} from '../utils'
 
-describe('queries', () => {
-    it('all', getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT .'))
+export type QueryTestConfig = {
+    name?: string
+    description?: string
+    error?: string
+    query?: string
+    type: 'default' | 'template'
+}
 
-    it(
-        'array-access',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.webapp.requirements[1]')
-    )
+describe('queries', async () => {
+    try {
+        for (const test of files.listDirectories(path.join(__dirname)).filter(it => !it.startsWith('.'))) {
+            const dir = path.join(__dirname, test)
 
-    it(
-        'boolean-and',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*[name="dbms" AND type="DBMS"]'
-        )
-    )
+            const config = files.loadYAML<QueryTestConfig>(path.join(dir, 'test.yaml'))
 
-    it(
-        'boolean-or',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*[type="Database" OR type="DBMS"]'
-        )
-    )
+            config.type = config.type || 'default'
 
-    it(
-        'filter-equals',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*[type="VirtualMachine"].name'
-        )
-    )
+            if (config.type === 'default') {
+                const query = config.query
+                validator.isString(query)
+                it(test, getDefaultQueryTest(query!))
+                continue
+            }
 
-    it(
-        'filter-existence',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*[properties.num_cpus].name'
-        )
-    )
+            if (config.type === 'template') {
+                it(test, getDefaultTemplateTest(test + '/template.yaml', config))
+                continue
+            }
 
-    it(
-        'filter-negation',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*[!type="VirtualMachine"].name'
-        )
-    )
-
-    it(
-        'filter-nested',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.*[properties.port=3306]')
-    )
-
-    it(
-        'filter-regex',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.*[name=~"vm_"]')
-    )
-
-    it('group', getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT GROUP(database_group)'))
-
-    it(
-        'match-next',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml MATCH ([type="Tomcat"])-->(node) SELECT node')
-    )
-
-    it(
-        'match-previous',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml MATCH (node)<--([type="Tomcat"]) SELECT node')
-    )
-
-    it(
-        'match-rel-filter',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml MATCH ()-{[type="ConnectsTo"]}->(node2) SELECT node2'
-        )
-    )
-
-    it(
-        'match-single',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml MATCH (node[type="WebApplication"]) SELECT node')
-    )
-
-    it(
-        'match-length-any',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml MATCH ([type="WebApplication"])-{*}->(node[type="OpenStack"]) SELECT node'
-        )
-    )
-
-    it(
-        'match-length-range',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml MATCH ([type="Tomcat"])-{*1..2}->(node) SELECT node.*.name'
-        )
-    )
-
-    it('node-template', getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.webapp'))
-
-    it('policy', getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT POLICY(placement_policy)'))
-
-    it(
-        'result-structure-simple',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.webapp{name, type}')
-    )
-
-    it(
-        'result-structure-complex',
-        getDefaultQueryTest(
-            'FROM templates/tests/query/template.yaml SELECT node_templates.*{"Node Name": name, "Node Type": type}'
-        )
-    )
-
-    it(
-        'shortcut-property',
-        getDefaultQueryTest('FROM templates/tests/query/template.yaml SELECT node_templates.webapp.#port')
-    )
-
-    it('resolve-chain', getDefaultTemplateTest('resolve-chain/template.yaml'))
-
-    it('resolve-loop', async () => {
-        await expectAsyncThrow(
-            () => resolveTemplate('resolve-loop/template.yaml'),
-            'Circular dependencies detected. Unable to resolve queries in your template.'
-        )
-    })
-
-    it('resolve-self', getDefaultTemplateTest('resolve-self/template.yaml'))
-
-    it('resolve-simple', getDefaultTemplateTest('resolve-simple/template.yaml'))
+            throw new Error(`Test "${test}" has unknown type "${config.type}"`)
+        }
+    } catch (e) {
+        console.log(e)
+        process.exit(1)
+    }
 })
 
 function getDefaultQueryTest(query: string) {
@@ -141,14 +53,21 @@ function getDefaultQueryTest(query: string) {
     }
 }
 
-function getDefaultTemplateTest(template: string) {
+function getDefaultTemplateTest(template: string, config?: QueryTestConfig) {
     return async function () {
         //@ts-ignore
         const title = this.test.title
 
-        expect(files.loadYAML(await resolveTemplate(template))).to.deep.equal(
-            files.loadYAML(path.join(__dirname, title, 'expected.yaml'))
-        )
+        async function fn() {
+            return await resolveTemplate(template)
+        }
+
+        if (config?.error) {
+            await expectAsyncThrow(fn, config.error)
+        } else {
+            const output = await fn()
+            expect(files.loadYAML(output)).to.deep.equal(files.loadYAML(path.join(__dirname, title, 'expected.yaml')))
+        }
     }
 }
 

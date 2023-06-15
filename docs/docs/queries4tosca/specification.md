@@ -4,8 +4,6 @@ title: Specification
 
 # Queries4TOSCA Specification 1.0 Release Candidate
 
-{{ experimental_notice() }}
-
 This document specifies a Query Language for TOSCA (Queries4TOSCA) inspired by [XPath](https://www.w3schools.com/xml/xpath_intro.asp){target=_blank} and [Cypher](https://opencypher.org){target=_blank}.
 The specification is under active development and is not backwards compatible with any previous versions.
 

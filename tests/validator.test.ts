@@ -1,6 +1,5 @@
-import {ensureStringOrNumber} from '#validator'
+import {ensureName, ensureStringOrNumber} from '#validator'
 import {expect} from 'chai'
-import {ensureName} from '../src/utils/validator'
 
 // TODO: add more tests
 

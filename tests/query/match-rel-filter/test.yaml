@@ -1,0 +1,1 @@
+query: FROM templates/tests/query/template.yaml MATCH ()-{[type="ConnectsTo"]}->(node2) SELECT node2

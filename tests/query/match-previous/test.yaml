@@ -1,0 +1,1 @@
+query: FROM templates/tests/query/template.yaml MATCH (node)<--([type="Tomcat"]) SELECT node

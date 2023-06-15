@@ -1,0 +1,2 @@
+query: >
+    FROM templates/tests/query/template.yaml SELECT node_templates.*{"Node Name": name, "Node Type": type}

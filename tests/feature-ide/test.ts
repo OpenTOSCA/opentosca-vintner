@@ -1,7 +1,7 @@
+import Controller from '#controller'
 import * as files from '#files'
 import {expect} from 'chai'
 import path from 'path'
-import Controller from '../../src/controller'
 
 describe('feature-id', () => {
     it('xml', async () => {
