@@ -157,4 +157,4 @@ To run the transformation using our reference implementation, run the following 
 vintner template inputs --path path/to/my-inputs.xml
 ```
 
---8<-- "ack.md"
+--8<-- "vac.md"
