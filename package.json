@@ -88,7 +88,7 @@
         "git:fix": "git add . && git commit -m fix && git push",
         "git:improve-docs": "git add . && git commit -m \"improve docs\" && git push",
         "git:open": "open-cli https://github.com/opentosca/opentosca-vintner",
-        "build": "tsc --build && tsc-alias -p tsconfig.json && syncdir src/assets build/assets --quiet",
+        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && syncdir src/assets build/assets --quiet",
         "package": "pkg --config .pkgrc.json build/cli/index.js",
         "deploy": "sudo cp ./dist/vintner-linux-x64 /usr/bin/vintner",
         "lint:check": "eslint .",
