@@ -51,7 +51,9 @@ markdown_extensions:
     - pymdownx.highlight:
           anchor_linenums: true
     - pymdownx.inlinehilite
-    - pymdownx.snippets
+    - pymdownx.snippets:
+          base_path:
+              - ./snippets
     - pymdownx.superfences
     - pymdownx.tabbed:
           alternate_style: true
@@ -80,7 +82,7 @@ nav:
           - variability4tosca/motivation.md
           - variability4tosca/specification.md
           - variability4tosca/testing.md
-          - Conformance Tests: variability4tosca/tests
+          # - Conformance Tests: variability4tosca/tests # TODO: enabled this
           - variability4tosca/dynamic.md
           - variability4tosca/feature-ide.md
           - variability4tosca/benchmark.md
