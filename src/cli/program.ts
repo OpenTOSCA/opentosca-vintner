@@ -213,10 +213,10 @@ template
     .command('inputs')
     .description('read and transforms inputs')
     .requiredOption('--path <string>', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
-            const inputs = await Controller.template.inputs(options)
-            console.log(files.toYAML(inputs))
+            await Controller.template.inputs(options)
         })
     )
 

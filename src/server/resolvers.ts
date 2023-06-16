@@ -87,8 +87,7 @@ resolvers.post(
 resolvers.post(
     '/template/inputs',
     hae.express(async (req, res, next) => {
-        const result = await Controller.template.inputs(req.body)
-        res.json(result)
+        await Controller.template.inputs(req.body)
     })
 )
 
