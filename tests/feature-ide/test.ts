@@ -5,7 +5,8 @@ import path from 'path'
 
 describe('feature-id', () => {
     it('xml', async () => {
-        const result = await Controller.template.inputs({path: path.join(__dirname, 'inputs.xml')})
-        expect(result).to.deep.equal(files.loadYAML(path.join(__dirname, 'inputs.yaml')))
+        const output = files.temporary()
+        await Controller.template.inputs({path: path.join(__dirname, 'inputs.xml'), output})
+        expect(files.loadYAML(output)).to.deep.equal(files.loadYAML(path.join(__dirname, 'inputs.yaml')))
     })
 })
