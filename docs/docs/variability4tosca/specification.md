@@ -748,6 +748,7 @@ To resolve the variability in a variable service template, conduct the following
 1. Remove all policy targets which are not present from policy template.
 1. Remove all variability groups.
 1. Remove all non-standard elements, e.g., variability definition, variability groups, or `conditions` at node templates.
+1. Transform all lists introduced in this document, such as property lists, to maps as defined in TOSCA.
 1. Set the TOSCA definitions version to `tosca_simple_yaml_1_3`.
 
 
@@ -846,12 +847,46 @@ Thus, per default, the service template is optimized regarding the minimal numbe
 The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
 The weight of a node template can be configured in its definition.
 
+## Element System
 
-## Element Identifier System
+When introducing conditional elements, we follow typically the approach of using a list whose entries are maps that contain a single element.
+Thus, elements can just be defined as usual but in a list (instead of a map) and can even share the same names. 
+This has some implication on managing elements which we are discussing in the following.
+
+### Element Collections
+
+As an overview, the following table shows the collections that are used in TOSCA and the ones which are used in Variability4TOSCA.
+
+| Element    | TOSCA  | Variability4TOSCA  |
+|------------|--------|--------------------|
+| Inputs     | Map    | Map, List          |
+| Nodes      | Map    | Map                |
+| Relations  | List   | List               |
+| Properties | Map    | Map, List          |
+| Policies   | List   | List               |
+| Groups     | Map    | Map, List          |
+| Artifacts  | Map    | Map, List          |
+
+### Element Uniqueness
+
+As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers such as the key in a mapy.
+This is directly related to the used collections.
+
+| Element    | TOSCA            | Variability4TOSCA   |
+|------------|------------------|---------------------|
+| Inputs     | :material-check: | :material-check:    |
+| Nodes      | :material-check: | :material-check:    |
+| Relations  | :material-close: | :material-close:    |
+| Properties | :material-check: | :material-close:    |
+| Policies   | :material-close: | :material-close:    |
+| Groups     | :material-check: | :material-check:    |
+| Artifacts  | :material-check: | :material-close:    |
+
+### Element Identifier System
 
 Each element has an identifier that is unique per service template.
 This identifier system is required since some conditional elements, such as artifacts, can have non-unique names.
-This identifier is constructed as follows:
+The identifier of an element is constructed as follows.
 
 ```text linenums="1"
 <Element Type>.<Element Name>[@<Element Index>][.<Element Container ID>]
@@ -889,14 +924,14 @@ Then, the following identifiers, among others, exist.
 - `artifact.my_artifact@1.node.my_node` for the second artifact `my_artifact` of the node template `my_node`.
 
 
-## Element Display System
+### Element Display System
 
 Each element has a display representation that is unique per service template.
 This display system is required since some conditional elements, such as artifacts, can have non-unique names.
-This display representation is constructed as follows:
+The display representation of an element is constructed as follows.
 
 ```text linenums="1"
-<Element Type> "<Element Name>[@<Element Index>]" [of <Element Container Display>]
+<Element Type> "<Element Name>[@<Element Index>]"[ of <Element Container Display>]
 ```
 
 Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, and `Type`.
