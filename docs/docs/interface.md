@@ -982,14 +982,14 @@ read and transforms inputs
 
 === "CLI"
     ```shell linenums="1"
-    vintner template inputs --path ${PATH}
+    vintner template inputs --path ${PATH} --output ${OUTPUT}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"path": "${PATH}"}' \
+            --data '{"path": "${PATH}", "output": "${OUTPUT}"}' \
             ${SERVER_ADDRESS}/template/inputs
     ```
 
@@ -997,7 +997,8 @@ read and transforms inputs
     ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/inputs", {
-		path: PATH
+		path: PATH,
+		output: OUTPUT
     })
     ```
 
@@ -1005,13 +1006,15 @@ read and transforms inputs
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/inputs", json={
-		"path": PATH
+		"path": PATH,
+		"output": OUTPUT
     })
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+| output |  true  | string | path of the output |
 
 ## vintner template package
 
