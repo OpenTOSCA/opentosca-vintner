@@ -75,8 +75,8 @@ variability:
                 mode: prod
 
     expressions:
-        is_dev: {equal: [{variability_input: mode}, dev]}
-        is_prod: {equal: [{variability_input: mode}, prod]}
+        is_dev: { equal: [ { variability_input: mode }, dev ] }
+        is_prod: { equal: [ { variability_input: mode }, prod ] }
 ```
 
 
@@ -91,10 +91,10 @@ A variability input is an input parameter which additionally has the following k
 For example, the following variability input has a value expression as default value assigned. 
 
 ````yaml linenums="1"
-inputs: 
+inputs:
     mode:
-       type: string
-       default_expression: <ValueExpression>
+        type: string
+        default_expression: <ValueExpression>
 ````
 
 ## Variability Options
@@ -813,17 +813,17 @@ The element is present if only if all conditions hold.
 
 To check the consistency, conduct the following steps:
 
-1. Ensure that each relation source exists. Otherwise, throw Missing Relation Source Error.
-1. Ensure that each relation target exists. Otherwise, throw Missing Relation Target Error.
-1. Ensure that every node has at maximum one hosting relation. Otherwise, throw Ambiguous Hosting Error.
-1. Ensure that every node has a hosting relation if the node had at least one conditional relation in the variable
-   service template. Otherwise, throw Missing Hosting Error.
-1. Ensure that the node of each artifact exists. Otherwise, throw Missing Artifact Parent Error.
-1. Ensure that present artifacts have unique names within their node. Otherwise, throw Ambiguous Artifact error.
-1. Ensure that the node of each property exists. Otherwise, throw Missing Property Parent error.
-1. Ensure that present properties have unique names within their node. Otherwise, throw Ambiguous Property error.
-1. Ensure that the container of each present type is also present. 
-1. Ensure that each present container has exactly one present type.
+1. Ensure that each relation source of a present relation is present.
+1. Ensure that each relation target of a present relation is present.
+1. Ensure that every present node has at maximum one present hosting relation.
+1. Ensure that every present node has a present hosting relation if the node had at least one conditional relation in the variable
+   service template.
+1. Ensure that the node of each present artifact is present.
+1. Ensure that present artifacts have unique names within their node.
+1. Ensure that the node of each present property is present.
+1. Ensure that present properties have unique names within their node.
+1. Ensure that the container of each present type is present.
+1. Ensure that each present type container has exactly one present type.
 
 Since the derived service template might be further processed, e.g. by
 [topology completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank},
@@ -840,32 +840,10 @@ For example, the properties of a relationship template used in a requirement ass
 
 _This is an experimental feature._
 
-The variability-resolved service template shall be optimized regarding minimal weight of node templates. 
+The variability-resolved service template can be optimized regarding minimal weight of node templates. 
 The default weight of a node template is 1.
-Thus, per default, the service template is optimized regarding minimal number of node templates.
+Thus, per default, the service template is optimized regarding the minimal number of node templates.
 The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
 The weight of a node template can be configured in its definition.
-
-### Processing Errors
-
-When variability is resolved, the following errors might be thrown:
-
-| Error                      | Message                                                                                     |
-|----------------------------|---------------------------------------------------------------------------------------------|
-| Unsupported TOSCA Version  | TOSCA definitions version "${template.tosca_definitions_version}" not supported             |
-| Missing Relation Source    | Relation source "${relation.source}" of relation "${relation.name}" does not exist          |
-| Missing Relation Target    | Relation target "${relation.target}" of relation "${relation.name}" does not exist          |
-| Ambiguous Hosting          | Node "${node.name}" has more than one hosting relations                                     |
-| Missing Hosting            | Node "${node.name}" requires a hosting relation                                             |
-| Missing Policy Target      | Policy target "${target.name}" of policy "${policy.name}" does not exist                    |
-| Missing Group Member       | Group member "${member.name}" of group "${group.name}" does not exist                       | 
-| Missing Artifact Parent    | Node "${node.name}" of artifact "${artifact.name}" does not exist                           | 
-| Ambiguous Artifact         | Artifact "${artifact.name}@${artifact.index}" of node "${node.name}" is ambiguous           | 
-| Missing Property Parent    | Node/ Relation "${node.name}" of property "${property.name}" does not exist                 | 
-| Ambiguous Property         | Property "${property.name}@${property.index}" of node/ relation "${node.name}" is ambiguous | 
-| Ambiguous Default Property | Property "${property.name}" of ${parent.type} "${parent.name}" has multiple defaults        | 
-| Ambiguous Default Artifact | Artifact "${artifact.name}" of node "${node.display}" has multiple defaults                 | 
-| Ambiguous Default Relation | Relation "${relation.name}" of node "${node.display}" has multiple defaults                 | 
-
 
 --8<-- "vacd.md"
