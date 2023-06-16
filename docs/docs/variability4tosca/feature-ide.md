@@ -154,7 +154,7 @@ The following example of a complete FeatureIDE Extended XML Configuration contai
 To run the transformation using our reference implementation, run the following command.
 
 ```shell linenums="1"
-vintner template inputs --path path/to/my-inputs.xml
+vintner template inputs --path path/to/my-inputs.xml --output result.yaml
 ```
 
 --8<-- "vacd.md"
