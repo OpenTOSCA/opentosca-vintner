@@ -19,7 +19,7 @@ The repository is a monorepo consisting of the CLI, server, docs and tests using
 We are using  [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
 
 ```shell linenums="1"
-git clone https://github.com/opentosca/opentosca-vintner
+git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull

@@ -111,4 +111,4 @@ To execute the test using our reference implementation, run the following comman
 vintner template test --path path/to/my-testing-csar/
 ```
 
---8<-- "vac.md"
+--8<-- "vacd.md"

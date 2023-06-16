@@ -15,7 +15,6 @@ def define_env(env):
     This specification is experimental.
 """
 
-
     @env.macro
     def get_repo_url(path):
         return "https://github.com/opentosca/opentosca-vintner/tree/main/" + path

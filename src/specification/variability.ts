@@ -5,10 +5,10 @@ export type VariabilityDefinition = {
     inputs: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
-    options?: VariabilityResolvingOptions
+    options?: VariabilityOptions
 }
 
-export type VariabilityResolvingOptions = {
+export type VariabilityOptions = {
     mode?: ResolvingMode
 } & DefaultOptions &
     PruningOptions &
