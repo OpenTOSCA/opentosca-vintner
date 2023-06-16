@@ -846,4 +846,88 @@ Thus, per default, the service template is optimized regarding the minimal numbe
 The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
 The weight of a node template can be configured in its definition.
 
+
+## Element Identifier System
+
+Each element has an identifier that is unique per service template.
+This identifier system is required since some conditional elements, such as artifacts, can have non-unique names.
+This identifier is constructed as follows:
+
+```text linenums="1"
+<Element Type>.<Element Name>[@<Element Index>][.<Element Container ID>]
+```
+
+Available element types are `node`, `relation`, `property`, `group`, `policy`, `artifact`, `input`, and `type`.
+
+For example, consider the given service template.
+
+```yaml linenums="1"
+node_templates:
+    my_node:
+        type: my.node
+        properties:
+           - my_property:
+                value: first
+                conditions: <VariabilityCondition>
+           - my_property:
+                value: second
+                conditions: <VariabilityCondition>
+        artifacts:
+           - my_artifact:
+                file: path/to/my_artifact_first
+                conditions: <VariabilityCondition>
+           - my_artifact:
+                file: path/to/my_artifact_second
+                conditions: <VariabilityCondition>
+```
+
+
+Then, the following identifiers, among others, exist.
+
+- `node.my_node` for the node template `my_node`.
+- `property.my_property@0.node.my_node` for the first property `my_property` of the node template `my_node`.
+- `artifact.my_artifact@1.node.my_node` for the second artifact `my_artifact` of the node template `my_node`.
+
+
+## Element Display System
+
+Each element has a display representation that is unique per service template.
+This display system is required since some conditional elements, such as artifacts, can have non-unique names.
+This display representation is constructed as follows:
+
+```text linenums="1"
+<Element Type> "<Element Name>[@<Element Index>]" [of <Element Container Display>]
+```
+
+Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, and `Type`.
+
+For example, consider the given service template.
+
+```yaml linenums="1"
+node_templates:
+    my_node:
+        type: my.node
+        properties:
+           - my_property:
+                value: first
+                conditions: <VariabilityCondition>
+           - my_property:
+                value: second
+                conditions: <VariabilityCondition>
+        artifacts:
+           - my_artifact:
+                file: path/to/my_artifact_first
+                conditions: <VariabilityCondition>
+           - my_artifact:
+                file: path/to/my_artifact_second
+                conditions: <VariabilityCondition>
+```
+
+
+Then, the following display representations, among others, exist.
+
+- `Node "my_node"` for the node template `my_node`.
+- `Property "my_property@0" of Node "my_node"` for the first property `my_property` of the node template `my_node`.
+- `Artifact "my_artifact@1" of Node "my_node"` for the second artifact `my_artifact` of the node template `my_node`.
+
 --8<-- "vacd.md"
