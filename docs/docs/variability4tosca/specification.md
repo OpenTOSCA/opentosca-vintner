@@ -286,8 +286,8 @@ topology_template:
             is_prod: {equal: [{variability_input: mode}, prod]}
 
     node_template:
-        my_production_node:
-            type: my.production.node
+        my_prod_node:
+            type: my.prod.node
             conditions: {logic_expression: is_prod}
 ```
 
@@ -312,7 +312,7 @@ For example, the following node template has a variability condition assigned.
 
 ```yaml linenums="1"
 prod_database:
-    type: gcp.sql.db
+    type: my.prod.db
     conditions: {logic_expression: is_prod}
 ```
 
@@ -334,9 +334,9 @@ For example, the following node template `database` has a conditional type switc
 ```yaml linenums="1"
 database:
     type:
-       - sqlite.db:
+       - my.dev.db:
             conditions: <VariabilityCondition>
-       - gcp.sql.db:
+       - my.prod.db:
             conditions: <VariabilityCondition>
 ```
 
@@ -532,13 +532,11 @@ For example, the following node template `my_node` has two artifacts `artifact_b
 
 ```yaml linenums="1"
 my_node:
-    type: node
+    type: my.node
     artifacts:
         - artifact_a:
-              type: artifact_a
               conditions: <VariabilityCondition>
         - artifact_b:
-              type: artifact_b
               conditions: <VariabilityCondition>
 ```
 
