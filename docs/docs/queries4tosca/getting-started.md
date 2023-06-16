@@ -3,11 +3,12 @@
 This section will give a quick introduction to Queries4TOSCA. To run the example queries, you need to have a resolved instance of the
 ["Getting Started" template](../getting-started.md){target=_blank}. If you don't have one, follow the steps: 
 
-```shell linenums="1"
-# Clone the repository
-git clone https://github.com/OpenTOSCA/opentosca-vintner.git
-cd opentosca-vintner
+First, clone the repository. 
+--8<-- "clone.md"
 
+Then import the template, create an instance, and resolve the variability.
+
+```shell linenums="1"
 # Import (and resolve) the template
 vintner templates import --template getting-started --path examples/xopera-getting-started
 vintner instances create --instance getting-started --template getting-started
