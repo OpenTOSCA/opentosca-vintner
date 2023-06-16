@@ -16,11 +16,6 @@ def define_env(env):
 """
 
     @env.macro
-    def experimental_flag():
-        return """> __This is an experimental feature."""
-
-
-    @env.macro
     def get_repo_url(path):
         return "https://github.com/opentosca/opentosca-vintner/tree/main/" + path
 
