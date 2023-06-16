@@ -15,6 +15,10 @@ def define_env(env):
     This specification is experimental.
 """
 
+    @env.macro
+    def experimental_flag():
+        return """> __This is an experimental feature."""
+
 
     @env.macro
     def get_repo_url(path):
