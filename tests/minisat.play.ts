@@ -1,7 +1,7 @@
+import Graph from '#graph/graph'
+import Solver from '#resolver/solver'
+import {ServiceTemplate} from '#spec/service-template'
 import * as yaml from 'js-yaml'
-import Graph from '../src/graph/graph'
-import Solver from '../src/resolver/solver'
-import {ServiceTemplate} from '../src/specification/service-template'
 
 describe('minisat', () => {
     it('play', () => {

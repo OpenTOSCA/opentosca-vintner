@@ -1,0 +1,6 @@
+name: My Test
+descriptions: |
+    This tests is a simple example.
+    We expect the following: 
+    - First node is preserved
+    - Second node is removed

@@ -32,11 +32,16 @@ vintner orchestrators init xopera
 vintner orchestrators enable --orchestrator xopera
 ```
 
-Next, we import the `getting-started` template from [`examples/xopera-getting-started`]({{ get_repo_url('
-examples/xopera-getting-started') }}){target=_blank} and create an application instance.
+Then, we clone the repository.
+--8<-- "clone.md"
+
+Next, we import the template and create an application instance.
 
 ```shell linenums="1"
+# Import the template
 vintner templates import --template getting-started --path examples/xopera-getting-started
+
+# Create an instance
 vintner instances create --instance getting-started --template getting-started
 ```
 
@@ -68,7 +73,10 @@ We decide that the first textfile should be deployed.
 Therefore, we resolve the variability and finally deploy the application.
 
 ```shell linenums="1"
+# Resolve variability
 vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml
+
+# Deploy instance
 vintner instances deploy --instance getting-started
 ```
 

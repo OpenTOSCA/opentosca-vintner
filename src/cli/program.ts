@@ -209,6 +209,17 @@ template
         })
     )
 
+template
+    .command('inputs')
+    .description('read and transforms inputs')
+    .requiredOption('--path <string>', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.inputs(options)
+        })
+    )
+
 const templates = program.command('templates').description('handles templates repository')
 
 templates

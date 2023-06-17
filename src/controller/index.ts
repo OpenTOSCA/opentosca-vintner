@@ -31,6 +31,7 @@ import codeSetup from './setup/code'
 import initSetup from './setup/init'
 import openSetup from './setup/open'
 import pathSetup from './setup/path'
+import inputsTemplate from './template/inputs'
 import packageTemplate from './template/package'
 import queryTemplate from './template/query'
 import resolveTemplate from './template/resolve'
@@ -90,6 +91,7 @@ const Controller = {
         resolve: resolveTemplate,
         query: queryTemplate,
         test: testTemplate,
+        inputs: inputsTemplate,
     },
     templates: {
         delete: deleteTemplate,

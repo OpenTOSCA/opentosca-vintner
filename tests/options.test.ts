@@ -1,6 +1,6 @@
+import Graph from '#graph/graph'
+import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {expect} from 'chai'
-import Graph from '../src/graph/graph'
-import {TOSCA_DEFINITIONS_VERSION} from '../src/specification/service-template'
 
 describe('options', () => {
     it('mode: strict', () => {

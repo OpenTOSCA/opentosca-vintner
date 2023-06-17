@@ -1,11 +1,16 @@
-import {getDefaultInputs, getDefaultVariableServiceTemplate, loadConfig} from '#controller/template/test'
+import Controller from '#controller'
+import {
+    VariabilityTestGroup,
+    getDefaultInputs,
+    getDefaultVariableServiceTemplate,
+    loadConfig,
+    loadDefaultExpect,
+} from '#controller/template/test'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import {toList} from '#utils/utils'
 import {expect} from 'chai'
 import path from 'path'
-import Controller from '../src/controller'
-import {VariabilityTestGroup, loadDefaultExpect} from '../src/controller/template/test'
-import {toList} from '../src/utils/utils'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {

@@ -975,6 +975,47 @@ returns the path to the home directory
     ```
 
 
+## vintner template inputs
+
+read and transforms inputs
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template inputs --path ${PATH} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"path": "${PATH}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/inputs
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/inputs", {
+		path: PATH,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/inputs", json={
+		"path": PATH,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| path |  true  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+| output |  true  | string | path of the output |
+
 ## vintner template package
 
 packages a directory to a CSAR
