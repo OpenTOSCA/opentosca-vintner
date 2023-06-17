@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - lib/scenario/types.yaml
@@ -45,59 +45,16 @@ topology_template:
         os_application_credential_secret:
             type: string
 
-    variability:
-        inputs:
-            mode:
-                type: string
-            public:
-                type: boolean
-                default: true
-
-        presets:
-            localhost:
-                inputs:
-                    mode: localhost
-
-            cloud:
-                inputs:
-                    mode: cloud
-
-            cloud-private:
-                inputs:
-                    mode: cloud
-                    public: false
-
-        expressions:
-            is_localhost: {equal: [{variability_input: mode}, localhost]}
-            is_cloud: {equal: [{variability_input: mode}, cloud]}
-
-        options:
-            mode: loose
-
     node_templates:
         web_shop:
             type: scenario.web_shop
-            # default_condition: false
-            # pruning: false
             properties:
-                - storage:
-                      value: false
-                      conditions: {logic_expression: is_localhost}
-                - storage:
-                      value: true
-                      conditions: {logic_expression: is_cloud}
+                storage: true
             requirements:
                 - host:
-                      node: compute_localhost
-                      conditions: {logic_expression: is_localhost}
-
-                - host:
                       node: compute_vm
-                      conditions: {logic_expression: is_cloud}
-
                 - database:
                       node: database
-                      conditions: {logic_expression: is_cloud}
 
         database:
             type: scenario.database
@@ -108,7 +65,6 @@ topology_template:
 
         monitor:
             type: scenario.monitor
-            conditions: {logic_expression: is_cloud}
             properties:
                 interval: 15 sec
             artifacts:
@@ -118,26 +74,17 @@ topology_template:
             requirements:
                 - host: compute_vm
 
-        compute_localhost:
-            type: compute.localhost
-            attributes:
-                private_address: localhost
-                public_address: localhost
-
         compute_vm:
             type: compute.vm
             properties:
-                - ports: [80, 3000]
-                - name: {concat: ['compute-vm-', {get_input: instance}]}
-                - image: Ubuntu 20.04
-                - flavor: m1.medium
-                - network:
-                      value: {get_input: compute_vm_network}
-                      conditions: {variability_input: public}
-                - security_groups: {get_input: compute_vm_security_groups}
-                - key_name: {get_input: compute_vm_key_name}
-                - ssh_user: {get_input: compute_vm_ssh_user}
-                - ssh_key_file: {get_input: compute_vm_ssh_key_file}
+                ports: [80, 3000]
+                name: {concat: ['compute-vm-', {get_input: instance}]}
+                image: Ubuntu 20.04
+                flavor: m1.medium
+                security_groups: {get_input: compute_vm_security_groups}
+                key_name: {get_input: compute_vm_key_name}
+                ssh_user: {get_input: compute_vm_ssh_user}
+                ssh_key_file: {get_input: compute_vm_ssh_key_file}
             requirements:
                 - host: compute_hypervisor
 
