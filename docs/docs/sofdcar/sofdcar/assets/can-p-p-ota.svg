@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="243px" preserveAspectRatio="none" style="width:480px;height:243px;background:#FFFFFF;" version="1.1" viewBox="0 0 480 243" width="480px" zoomAndPan="magnify"><defs/><g><!--MD5=[b5a43e681ff5188082669c0a2cca6322]
+entity software--><g id="elem_software"><rect fill="#F1F1F1" height="37.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="73" x="7" y="97"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="53" x="17" y="121.5332">software</text></g><!--MD5=[ffab504e64f30a506775986226342fdf]
+entity p_ecu--><g id="elem_p_ecu"><rect fill="#F1F1F1" height="37.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="59" x="14" y="200"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="24" y="224.5332">p_ecu</text></g><!--MD5=[dabe9a60eb880d00873d2d01258f688f]
+entity p_can_bus--><g id="elem_p_can_bus"><rect fill="#F1F1F1" height="37.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="90" x="115.5" y="97"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70" x="125.5" y="121.5332">p_can_bus</text></g><!--MD5=[5d0b003f5647ffae293bd0e52095909b]
+entity can_bus_proxy--><g id="elem_can_bus_proxy"><rect fill="#F1F1F1" height="37.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="116" x="240.5" y="97"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96" x="250.5" y="121.5332">can_bus_proxy</text></g><!--MD5=[65b04974fe4fc4b0b7d94a51597d0c92]
+entity can_bus_proxy_host--><g id="elem_can_bus_proxy_host"><rect fill="#F1F1F1" height="37.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151" x="223" y="200"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="233" y="224.5332">can_bus_proxy_host</text></g><!--MD5=[57220784cd10fd02b95ed95124c16164]
+entity network--><g id="elem_network"><path d="M401.0332,100.413 C403.6186,92.2911 411.0894,91.129 416.2862,97.7025 C420.8205,87.8667 426.2019,88.0975 433.2472,95.186 C440.1964,89.1515 444.825,90.3261 448.1311,98.8982 C453.2171,92.0934 459.7095,91.5056 463.6623,100.0452 C472.7129,103.652 473.1842,112.2931 465.9852,118.002 C473.2366,123.0118 471.013,128.9829 464.3632,132.4299 C460.8343,140.5224 453.1302,141.6587 447.7385,134.4543 C444.6281,141.1191 437.8984,143.3808 433.0157,136.3611 C426.9384,143.0524 420.3626,142.1086 416.1512,134.205 C410.6475,140.6288 404.1056,139.6362 400.9952,131.6821 C392.6135,130.1688 389.9302,124.172 393.9515,116.7917 C389.711,108.4339 390.3091,102.3004 401.0332,100.413 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49" x="407" y="121.5332">network</text></g><g id="elem_GMN13"><path d="M224.5,6 L224.5,32.3516 A0,0 0 0 0 224.5,32.3516 L294.5,32.3516 L298.5,96.9 L302.5,32.3516 L372.5,32.3516 A0,0 0 0 0 372.5,32.3516 L372.5,16 L362.5,6 L224.5,6 A0,0 0 0 0 224.5,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M362.5,6 L362.5,16 L372.5,16 L362.5,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="127" x="230.5" y="24.4951">can2udp, can2mqtt ...</text></g><g id="elem_GMN16"><path d="M143.5,6 L143.5,32.3516 A0,0 0 0 0 143.5,32.3516 L156.5,32.3516 L160.5,96.9 L164.5,32.3516 L177.5,32.3516 A0,0 0 0 0 177.5,32.3516 L177.5,16 L167.5,6 L143.5,6 A0,0 0 0 0 143.5,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M167.5,6 L167.5,16 L177.5,16 L167.5,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="13" x="149.5" y="24.4951">nil</text></g><!--MD5=[967f902172b42788d2ea99b5733d9748]
+link software to p_ecu--><g id="link_software_p_ecu"><path d="M43.5,135.06 C43.5,151.61 43.5,176.24 43.5,194.36 " fill="none" id="software-to-p_ecu" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="43.5,199.76,47.5,190.76,43.5,194.76,39.5,190.76,43.5,199.76" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[944a9919051af06c9da516e5271346d5]
+link software to p_can_bus--><g id="link_software_p_can_bus"><path d="M80.06,116 C90.05,116 100.04,116 110.03,116 " fill="none" id="software-to-p_can_bus" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="115.25,116,106.25,112,110.25,116,106.25,120,115.25,116" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[c73247c0cc95a596e4602410d43e8243]
+reverse link p_can_bus to can_bus_proxy--><g id="link_p_can_bus_can_bus_proxy"><path d="M210.69,116 C220.59,116 230.48,116 240.38,116 " fill="none" id="p_can_bus-backto-can_bus_proxy" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="205.51,116,214.51,120,210.51,116,214.51,112,205.51,116" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[da00fc4dd4398c6b0b46aeae34a02e64]
+link can_bus_proxy to can_bus_proxy_host--><g id="link_can_bus_proxy_can_bus_proxy_host"><path d="M298.5,135.06 C298.5,151.61 298.5,176.24 298.5,194.36 " fill="none" id="can_bus_proxy-to-can_bus_proxy_host" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="298.5,199.76,302.5,190.76,298.5,194.76,294.5,190.76,298.5,199.76" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[875cd073c4e1a88c6c8d0b681c4a7b4d]
+link can_bus_proxy to network--><g id="link_can_bus_proxy_network"><path d="M356.69,116 C366.64,116 376.6,116 386.55,116 " fill="none" id="can_bus_proxy-to-network" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="391.76,116,382.76,112,386.76,116,382.76,120,391.76,116" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[59867cabd5a97f8dfdeaeed1330e4239]
+@startuml
+skinparam componentStyle rectangle
+
+[software]
+[p_ecu]
+software - -> p_ecu
+
+[p_can_bus]
+software .ri.> p_can_bus
+
+[can_bus_proxy]
+p_can_bus <.ri. can_bus_proxy
+
+[can_bus_proxy_host]
+can_bus_proxy - -> can_bus_proxy_host
+
+cloud network
+can_bus_proxy .ri.> network
+
+note top of [can_bus_proxy]
+can2udp, can2mqtt ...
+end note
+
+note top of [p_can_bus]
+nil
+end note
+
+@enduml
+
+PlantUML version 1.2022.12(Sun Oct 23 20:12:26 CEST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

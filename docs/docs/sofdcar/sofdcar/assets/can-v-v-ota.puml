@@ -1,0 +1,36 @@
+@startuml
+skinparam componentStyle rectangle
+
+[software]
+[v_ecu]
+software --> v_ecu
+
+[v_can_bus]
+
+[can_bus_proxy]
+
+software .ri.> v_can_bus
+v_can_bus <.ri. can_bus_proxy
+
+[compute]
+v_ecu --> compute
+
+v_can_bus --> compute
+can_bus_proxy --> compute
+
+note top of [v_can_bus]
+init vcan
+end note
+
+note top of [can_bus_proxy]
+can2udp, can2mqtt ...
+end note
+
+cloud network
+can_bus_proxy .ri.> network
+
+note right of [v_ecu]
+mount v_can_bus
+end note
+
+@enduml

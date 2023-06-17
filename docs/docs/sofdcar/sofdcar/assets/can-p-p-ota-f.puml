@@ -1,0 +1,27 @@
+@startuml
+skinparam componentStyle rectangle
+
+[Actuator] <<sofdcar.nodes.Actuator>> as Actuator
+
+
+rectangle "ECU" {
+    [ECU Software] <<sofdcar.nodes.ECU.Software>> as ECUSoftware
+    [ECU Hardware] <<sofdcar.nodes.ECU.Hardware>> as ECUHardware
+    ECUSoftware --> ECUHardware : "  host"
+
+    ECUSoftware .l.> Actuator : "  GPIO    "
+}
+
+[CAN Bus] <<sofdcar.nodes.CAN.Bus>> as CANBus
+ECUSoftware .ri.> CANBus : "    CAN  "
+
+rectangle "HPC" {
+    [CAN Bus Bridge] <<sofdcar.nodes.CAN.Bridge>> as CANBridge
+    CANBus <.ri. CANBridge : "  CAN        "
+    [HPC] <<sofdcar.nodes.HPC.Hardware>> as HPCHardware
+    CANBridge --> HPCHardware : "  host"
+}
+
+cloud network
+CANBridge .ri.> network : "      CAN2MQTT, CAN2UDP ...  "
+@enduml

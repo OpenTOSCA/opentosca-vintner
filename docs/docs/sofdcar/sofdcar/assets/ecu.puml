@@ -1,0 +1,20 @@
+@startuml
+skinparam componentStyle rectangle
+
+rectangle "ECU A" {
+    [ECU Software A] <<sofdcar.nodes.ECU.Software>> as ECUSoftwareA
+    [ECU Hardware A] <<sofdcar.nodes.ECU.Hardware>>  as ECUHardwareA
+    ECUSoftwareA -(0- ECUHardwareA : "  host"
+}
+
+rectangle "ECU B" {
+    [ECU Software B] <<sofdcar.nodes.ECU.Software>> as ECUSoftwareB
+    [ECU Runtime B] <<sofdcar.nodes.ECU.Runtime>> as ECURuntimeB
+    [ECU Hardware B] <<sofdcar.nodes.ECU.Hardware>> as ECUHardwareB
+    ECUSoftwareB -(0- ECURuntimeB: "  host"
+    ECURuntimeB -(0- ECUHardwareB: "  host"
+}
+
+ECUSoftwareA -ri(0)- ECUSoftwareB: "     duplex       "
+
+@enduml

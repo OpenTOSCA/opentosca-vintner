@@ -1,0 +1,28 @@
+@startuml
+skinparam componentStyle rectangle
+
+[software]
+[p_ecu]
+software --> p_ecu
+
+[p_can_bus]
+software .ri.> p_can_bus
+
+[can_bus_proxy]
+p_can_bus <.ri. can_bus_proxy
+
+[can_bus_proxy_host]
+can_bus_proxy --> can_bus_proxy_host
+
+cloud network
+can_bus_proxy .ri.> network
+
+note top of [can_bus_proxy]
+can2udp, can2mqtt ...
+end note
+
+note top of [p_can_bus]
+nil
+end note
+
+@enduml

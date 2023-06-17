@@ -1,0 +1,35 @@
+@startuml
+skinparam componentStyle rectangle
+
+[software_a]
+[v_ecu_a]
+software_a --> v_ecu_a
+
+[v_can_bus]
+
+[software_b]
+[v_ecu_b]
+software_b --> v_ecu_b
+
+software_a -ri-> v_can_bus
+v_can_bus <-ri- software_b
+
+[compute]
+v_ecu_a --> compute
+v_ecu_b --> compute
+v_can_bus --> compute
+
+note top of [v_can_bus]
+init vcan
+end note
+
+
+note bottom of [v_ecu_a]
+mount v_can_bus
+end note
+
+note bottom of [v_ecu_b]
+mount v_can_bus
+end note
+
+@enduml
