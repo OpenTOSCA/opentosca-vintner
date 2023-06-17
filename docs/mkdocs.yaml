@@ -87,9 +87,9 @@ nav:
           - variability4tosca/feature-ide.md
           - variability4tosca/benchmark.md
           - Guides:
-                - variability4tosca/guides/artifacts.md
-                - variability4tosca/guides/pipes-and-filters.md
-                - variability4tosca/guides/pruning.md
+                - variability4tosca/guides/unfurl-artifacts.md
+                - variability4tosca/guides/xopera-pipes-and-filters.md
+                - variability4tosca/guides/xopera-pruning.md
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
