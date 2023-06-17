@@ -1,8 +1,8 @@
 ---
-title: Specification
+title: Profile
 ---
 
-# SofDCar Normative Types Specification 1.0 Release Candidate
+# TOSCA Software-Defined Car (SofDCar) Profile 1.0 Release Candidate
 
 This document specifies normative TOSCA types 
 contains [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
@@ -49,10 +49,10 @@ Normative TOSCA Type Definitions for Software-Defined Cars.
 
 ## Complete
 
-- [download](sofdcar-normative-types.yaml)
+- [download](tosca-sofdcar-profile.yaml)
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/sofdcar/sofdcar-normative-types.yaml"
+--8<-- "../docs/sofdcar/sofdcar/tosca-sofdcar-profile.yaml"
 ```
 
 
@@ -60,10 +60,10 @@ Normative TOSCA Type Definitions for Software-Defined Cars.
 
 Non-Normative TOSCA Type Definitions for Software-Defined Cars.
 
-- [download](sofdcar-non-normative-types.yaml)
+- [download](tosca-sofdcar-profile-non-normative.yaml)
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/sofdcar/sofdcar-non-normative-types.yaml"
+--8<-- "../docs/sofdcar/sofdcar/tosca-sofdcar-profile-non-normative.yaml"
 ```
 
 --8<-- "vacd.md"

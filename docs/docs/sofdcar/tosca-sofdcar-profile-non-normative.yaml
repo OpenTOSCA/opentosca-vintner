@@ -1,16 +1,16 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
-description: Non-Normative TOSCA Type Definitions for Software-Defined Cars.
+description: TOSCA Profile for Software-Defined Cars (Non-Normative).
 metadata:
-    template_name: SofDCar Non-Normative Types
+    template_name: TOSCA SofDCar Profile (Non-Normative)
     template_author: University of Stuttgart
     template_contact: miles.stoetzner@iste.uni-stuttgart.de
     template_version: 1.0.0-draft
-    template_id: sofdcar-normative-types
+    template_id: sofdcar-profile-non-normative
     template_license: https://www.apache.org/licenses/LICENSE-2.0
     acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
 
 imports:
-    - ../sofdcar/types.yaml
+    - ./tosca-sofdcar-profile.yaml
 
 node_types:
     ###################################################

@@ -19,11 +19,11 @@ Preprocessing includes, e.g., the resolving of variability.
 - [CLI Documentation](https://vintner.opentosca.org/interface)
 - [REST API Documentation](https://vintner.opentosca.org/interface)
 
-This repository holds the following specifications. 
+This repository holds the following specifications and profiles. 
 
 - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca/motivation)
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
-- [SofDCar Normative Types](https://vintner.opentosca.org/sofdcar/specification)
+- [SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
 # Haftungsausschluss
 
