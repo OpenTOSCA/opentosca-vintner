@@ -1,4 +1,4 @@
-# SofDCar Example "Distributed Locations"
+# Distributed Locations
 
 > Example of an architecture distributed across several geographical locations.
 

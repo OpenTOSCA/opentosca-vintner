@@ -94,7 +94,11 @@ nav:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
           - Conformance Tests: queries4tosca/tests
-    - sofdcar/specification.md
+    - SofDCar Normative Types:
+          - sofdcar/specification.md
+          - Guides:
+                - sofdcar/guides/zone/guide.md
+                - sofdcar/guides/location/guide.md
     - interface.md
     - dependencies.md
     - development.md

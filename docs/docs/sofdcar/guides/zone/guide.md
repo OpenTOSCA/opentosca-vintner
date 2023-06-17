@@ -1,4 +1,4 @@
-# SofDCar Example "Distributed Locations"
+# Zonal Architecture
 
 > Example of a zonal architecture connected to the cloud.
 
