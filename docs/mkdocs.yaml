@@ -79,7 +79,7 @@ nav:
     - installation.md
     - orchestrators.md
     - Variability4TOSCA:
-          - variability4tosca/motivation.md
+          - variability4tosca/motivation
           - variability4tosca/specification.md
           - variability4tosca/testing.md
           - Conformance Tests: variability4tosca/tests
@@ -87,9 +87,9 @@ nav:
           - variability4tosca/feature-ide.md
           - variability4tosca/benchmark.md
           - Guides:
-                - variability4tosca/guides/unfurl-artifacts.md
-                - variability4tosca/guides/xopera-pipes-and-filters.md
-                - variability4tosca/guides/xopera-pruning.md
+                - variability4tosca/guides/artifacts
+                - variability4tosca/guides/pipes-and-filters
+                - variability4tosca/guides/pruning
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
@@ -97,11 +97,11 @@ nav:
     - SofDCar Normative Types:
           - sofdcar/specification.md
           - Guides:
-                - sofdcar/guides/zone/guide.md
-                - sofdcar/guides/location/guide.md
+                - sofdcar/guides/zone
+                - sofdcar/guides/location
     - interface.md
     - dependencies.md
-    - development.md
+    - development
     - code-of-conduct.md
     - resources.md
     - publications.md

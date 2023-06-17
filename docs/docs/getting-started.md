@@ -5,11 +5,11 @@
 In this example, we will deploy a textfile on our local machine which has a different content depending on our input.
 This is just a simple example without any dependencies such as a Docker Engine or a cloud.
 For a more complex scenario including OpenStack and GCP see
-[Motivating Scenario](variability4tosca/motivation.md){target=_blank}.
+[Motivating Scenario](./variability4tosca/motivation){target=_blank}.
 First, install OpenTOSCA Vintner.
 
 In our case, we run on a Linux machine.
-For more information see [Installation](installation.md){target=_blank}.
+For more information see [Installation](./installation.md){target=_blank}.
 
 ```shell linenums="1"
 curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
@@ -20,7 +20,7 @@ We currently support [xOpera](https://github.com/xlab-si/xopera-opera){target=_b
 Since both can only be installed on Linux, we implemented a [WSL](https://docs.microsoft.com/en-us/windows/wsl){target=_blank}
 integration for both.
 Configure and enable your orchestrator.
-For more information see [Installation](installation.md){target=_blank}.
+For more information see [Installation](./installation.md){target=_blank}.
 
 ```shell linenums="1"
 vintner orchestrators init xopera

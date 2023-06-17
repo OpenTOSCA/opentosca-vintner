@@ -4,9 +4,6 @@ default:
 plot:
 	/usr/bin/env bash .scripts/plot.sh
 
-open:
-	/usr/bin/env bash .scripts/open.sh
-
 validate:
 	/usr/bin/env bash .scripts/validate.sh $(T)
 

@@ -106,7 +106,7 @@
         "server:start": "node -r dotenv/config -r ts-node/register -r tsconfig-paths/register src/cli/index.ts server start",
         "server:serve": "nodemon -r dotenv/config -r tsconfig-paths/register --ext \"ts,json\" src/cli/index.ts server start",
         "docs:install": "cd docs && pip install -r requirements.txt && sudo apt-get install pv",
-        "docs:serve": "cd docs && MKDOCS_IS_DEV=true mkdocs serve --watch-theme --dirtyreload",
+        "docs:serve": "cd docs && MKDOCS_IS_DEV=true mkdocs serve --watch-theme",
         "docs:open": "open-cli http://localhost:8000",
         "docs:build": "cd docs && mkdocs build",
         "docs:clean": "cd docs && rm -rf site",
