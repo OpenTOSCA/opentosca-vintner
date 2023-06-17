@@ -1,6 +1,6 @@
-import * as express from 'express'
 import Controller from '#controller'
 import hae from '#utils/hae'
+import * as express from 'express'
 
 const resolvers = express.Router()
 
@@ -81,6 +81,13 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         await Controller.template.test(req.body)
         res.json({})
+    })
+)
+
+resolvers.post(
+    '/template/inputs',
+    hae.express(async (req, res, next) => {
+        await Controller.template.inputs(req.body)
     })
 )
 

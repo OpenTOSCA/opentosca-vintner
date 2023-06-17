@@ -1,10 +1,10 @@
-import {Command, Option} from 'commander'
 import config from '#config'
 import Controller from '#controller'
+import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 import * as files from '#files'
-import benchmark, {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
-import console from 'console'
 import hae from '#utils/hae'
+import {Command, Option} from 'commander'
+import console from 'console'
 
 export const program = new Command()
 
@@ -206,6 +206,17 @@ template
     .action(
         hae.exit(async options => {
             await Controller.template.test(options)
+        })
+    )
+
+template
+    .command('inputs')
+    .description('read and transforms inputs')
+    .requiredOption('--path <string>', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.inputs(options)
         })
     )
 

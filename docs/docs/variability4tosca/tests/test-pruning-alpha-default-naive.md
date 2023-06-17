@@ -22,7 +22,7 @@ topology_template:
   variability:
     options:
       node_default_condition: true
-      node_default_condition_mode: naive
+      node_default_condition_mode: incomingnaive
       relation_default_condition: true
       relation_default_condition_mode: source-target
       type_default_condition: true

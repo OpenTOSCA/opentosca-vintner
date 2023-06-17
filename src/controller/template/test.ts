@@ -1,11 +1,11 @@
-import * as files from '#files'
-import path from 'path'
 import Controller from '#controller'
+import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import {toList} from '#utils'
+import * as validator from '#validator'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
-import * as validator from '#validator'
-import {toList} from '#utils'
+import path from 'path'
 
 export type TemplateTestOptions = {path: string}
 
@@ -29,11 +29,12 @@ export type VariabilityTestConfig = {
 }
 
 export default async function (options: TemplateTestOptions) {
-    const testsPath = path.join(options.path, 'tests')
+    const testsDir = path.join(options.path, 'tests')
 
     const tests: VariabilityTest[] = files
-        .listDirectories(testsPath)
-        .map(test => ({name: test, dir: path.join(testsPath, test)}))
+        .listDirectories(testsDir)
+        .filter(it => !it.startsWith('.'))
+        .map(test => ({name: test, dir: path.join(testsDir, test)}))
 
     const onlyTests = tests.filter(test => test.name.endsWith('---only'))
     const nonDisabledTests = tests.filter(test => !test.name.endsWith('---disabled'))

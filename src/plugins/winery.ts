@@ -1,9 +1,9 @@
 import {TemplatesRepositoryPlugin} from '#plugins/types'
 import {ServiceTemplate} from '#spec/service-template'
-import path from 'path'
-import os from 'os'
-import * as files from '../utils/files'
 import glob from 'glob'
+import os from 'os'
+import path from 'path'
+import * as files from '../utils/files'
 
 export class WineryPlugin implements TemplatesRepositoryPlugin {
     private readonly templatesPath: string

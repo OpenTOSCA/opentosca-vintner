@@ -10,7 +10,7 @@ This document specifies the conformance test suite for the Variability4TOSCA spe
 The specification is under active development and is not backwards compatible with any previous versions.
 
 Each test is described on a separate page.
-The description includes a variable service template, variability inputs,
+The description includes typically a variable service template, variability inputs,
 expected errors, expected variability-resolved service template and so on along with an explanation about the expected
 processing.
 
@@ -194,55 +194,59 @@ processing.
 | 176 | [pruning-alpha-default](./test-pruning-alpha-default.md) |
 | 177 | [pruning-alpha-default-naive](./test-pruning-alpha-default-naive.md) |
 | 178 | [pruning-alpha-pruning](./test-pruning-alpha-pruning.md) |
-| 179 | [pruning-bravo-default](./test-pruning-bravo-default.md) |
-| 180 | [pruning-bravo-pruning](./test-pruning-bravo-pruning.md) |
-| 181 | [pruning-charlie-default](./test-pruning-charlie-default.md) |
-| 182 | [pruning-charlie-pruning](./test-pruning-charlie-pruning.md) |
-| 183 | [pruning-delta-default](./test-pruning-delta-default.md) |
-| 184 | [pruning-delta-pruning](./test-pruning-delta-pruning.md) |
-| 185 | [pruning-echo-default](./test-pruning-echo-default.md) |
-| 186 | [pruning-echo-pruning](./test-pruning-echo-pruning.md) |
-| 187 | [pruning-foxtrott-default](./test-pruning-foxtrott-default.md) |
-| 188 | [pruning-foxtrott-pruning](./test-pruning-foxtrott-pruning.md) |
-| 189 | [pruning-hotel-default](./test-pruning-hotel-default.md) |
-| 190 | [pruning-hotel-pruning](./test-pruning-hotel-pruning.md) |
-| 191 | [pruning-india-default](./test-pruning-india-default.md) |
-| 192 | [pruning-india-pruning](./test-pruning-india-pruning.md) |
-| 193 | [pruning-juliett-default](./test-pruning-juliett-default.md) |
-| 194 | [pruning-juliett-pruning](./test-pruning-juliett-pruning.md) |
-| 195 | [pruning-kilo-default](./test-pruning-kilo-default.md) |
-| 196 | [pruning-kilo-pruning](./test-pruning-kilo-pruning.md) |
-| 197 | [pruning-lima-default](./test-pruning-lima-default.md) |
-| 198 | [pruning-lima-pruning](./test-pruning-lima-pruning.md) |
-| 199 | [pruning-mike-default](./test-pruning-mike-default.md) |
-| 200 | [pruning-mike-pruning](./test-pruning-mike-pruning.md) |
-| 201 | [pruning-pruning](./test-pruning-pruning.md) |
-| 202 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
-| 203 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
-| 204 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
-| 205 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
-| 206 | [Relation Pruning](./test-pruning-relation.md) |
-| 207 | [relationships-conditional](./test-relationships-conditional.md) |
-| 208 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 209 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 210 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 211 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 212 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 213 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 214 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 215 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
-| 216 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
-| 217 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 218 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
-| 219 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
-| 220 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
-| 221 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
-| 222 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
-| 223 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
-| 224 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
-| 225 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
-| 226 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
-| 227 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
-| 228 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
-| 229 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
+| 179 | [pruning-artifact-default](./test-pruning-artifact-default.md) |
+| 180 | [pruning-artifact-default-bravo](./test-pruning-artifact-default-bravo.md) |
+| 181 | [pruning-artifact-default-charlie](./test-pruning-artifact-default-charlie.md) |
+| 182 | [pruning-artifact-default-naive](./test-pruning-artifact-default-naive.md) |
+| 183 | [pruning-bravo-default](./test-pruning-bravo-default.md) |
+| 184 | [pruning-bravo-pruning](./test-pruning-bravo-pruning.md) |
+| 185 | [pruning-charlie-default](./test-pruning-charlie-default.md) |
+| 186 | [pruning-charlie-pruning](./test-pruning-charlie-pruning.md) |
+| 187 | [pruning-delta-default](./test-pruning-delta-default.md) |
+| 188 | [pruning-delta-pruning](./test-pruning-delta-pruning.md) |
+| 189 | [pruning-echo-default](./test-pruning-echo-default.md) |
+| 190 | [pruning-echo-pruning](./test-pruning-echo-pruning.md) |
+| 191 | [pruning-foxtrott-default](./test-pruning-foxtrott-default.md) |
+| 192 | [pruning-foxtrott-pruning](./test-pruning-foxtrott-pruning.md) |
+| 193 | [pruning-hotel-default](./test-pruning-hotel-default.md) |
+| 194 | [pruning-hotel-pruning](./test-pruning-hotel-pruning.md) |
+| 195 | [pruning-india-default](./test-pruning-india-default.md) |
+| 196 | [pruning-india-pruning](./test-pruning-india-pruning.md) |
+| 197 | [pruning-juliett-default](./test-pruning-juliett-default.md) |
+| 198 | [pruning-juliett-pruning](./test-pruning-juliett-pruning.md) |
+| 199 | [pruning-kilo-default](./test-pruning-kilo-default.md) |
+| 200 | [pruning-kilo-pruning](./test-pruning-kilo-pruning.md) |
+| 201 | [pruning-lima-default](./test-pruning-lima-default.md) |
+| 202 | [pruning-lima-pruning](./test-pruning-lima-pruning.md) |
+| 203 | [pruning-mike-default](./test-pruning-mike-default.md) |
+| 204 | [pruning-mike-pruning](./test-pruning-mike-pruning.md) |
+| 205 | [pruning-pruning](./test-pruning-pruning.md) |
+| 206 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
+| 207 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
+| 208 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
+| 209 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
+| 210 | [Relation Pruning](./test-pruning-relation.md) |
+| 211 | [relationships-conditional](./test-relationships-conditional.md) |
+| 212 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 213 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 214 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 215 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 216 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 217 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 218 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 219 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 220 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 221 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 222 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
+| 223 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
+| 224 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
+| 225 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
+| 226 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
+| 227 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
+| 228 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 229 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
+| 230 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
+| 231 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
+| 232 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
+| 233 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
 

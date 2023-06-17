@@ -51,7 +51,9 @@ markdown_extensions:
     - pymdownx.highlight:
           anchor_linenums: true
     - pymdownx.inlinehilite
-    - pymdownx.snippets
+    - pymdownx.snippets:
+          base_path:
+              - ./snippets
     - pymdownx.superfences
     - pymdownx.tabbed:
           alternate_style: true
@@ -90,11 +92,13 @@ nav:
     - Queries4TOSCA:
           - queries4tosca/getting-started.md
           - queries4tosca/specification.md
+          - Conformance Tests: queries4tosca/tests
     - interface.md
     - dependencies.md
     - development.md
     - code-of-conduct.md
     - resources.md
+    - publications.md
     - about-us.md
     - notes.md
     - faq.md

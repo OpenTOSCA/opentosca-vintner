@@ -1,9 +1,9 @@
-import {spawn, ChildProcessByStdio} from 'child_process'
-import path from 'path'
-import wsl from '#utils/wsl'
 import death from '#utils/death'
-import * as stream from 'stream'
+import wsl from '#utils/wsl'
 import * as validator from '#validator'
+import {ChildProcessByStdio, spawn} from 'child_process'
+import path from 'path'
+import * as stream from 'stream'
 
 export class Shell {
     private readonly wsl: boolean

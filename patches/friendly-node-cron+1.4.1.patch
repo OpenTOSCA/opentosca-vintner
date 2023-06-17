@@ -1,0 +1,7 @@
+diff --git a/node_modules/friendly-node-cron/index.d.ts b/node_modules/friendly-node-cron/index.d.ts
+new file mode 100644
+index 0000000..2dbfbb2
+--- /dev/null
++++ b/node_modules/friendly-node-cron/index.d.ts
+@@ -0,0 +1 @@
++export default function translate(value: string): string | null

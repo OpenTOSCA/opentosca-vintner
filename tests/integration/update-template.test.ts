@@ -1,11 +1,10 @@
-import Controller from '../../src/controller'
-import path from 'path'
+import Controller from '#controller'
 import * as files from '#files'
-import {ServiceTemplate} from '../../src/specification/service-template'
-import {Instance} from '../../src/repository/instances'
+import {Instance} from '#repository/instances'
+import {ServiceTemplate} from '#spec/service-template'
 import {expect} from 'chai'
-import {sleep} from '#utils'
 import {before} from 'mocha'
+import path from 'path'
 import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {

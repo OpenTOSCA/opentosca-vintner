@@ -1,7 +1,7 @@
 import {Instance} from '#repository/instances'
-import lock from '#utils/lock'
 import {Template} from '#repository/templates'
 import * as utils from '#utils'
+import lock from '#utils/lock'
 
 export type InstancesTemplateUpdateOptions = {instance: string; template: string}
 

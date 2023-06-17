@@ -1,7 +1,7 @@
-import {v4 as uuid4} from 'uuid'
-import * as validator from './validator'
 import day from '#utils/day'
 import _ from 'lodash'
+import {v4 as uuid4} from 'uuid'
+import * as validator from './validator'
 
 export function generateNonce() {
     return uuid4()

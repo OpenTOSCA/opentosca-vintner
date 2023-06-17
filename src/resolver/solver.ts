@@ -1,18 +1,14 @@
-import {
-    Artifact,
-    ConditionalElement,
-    Graph,
-    Group,
-    Input,
-    Node,
-    Policy,
-    Property,
-    Relation,
-    Type,
-} from '#/resolver/graph'
+import Artifact from '#graph/artifact'
+import Element from '#graph/element'
+import Graph from '#graph/graph'
+import Group from '#graph/group'
+import Input from '#graph/input'
+import Node from '#graph/node'
+import Policy from '#graph/policy'
+import Property from '#graph/property'
+import Relation from '#graph/relation'
+import Type from '#graph/type'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
-import * as utils from '#utils'
-import * as validator from '#validator'
 import {
     InputAssignmentPreset,
     LogicExpression,
@@ -20,15 +16,17 @@ import {
     VariabilityDefinition,
     VariabilityExpression,
 } from '#spec/variability'
-import _ from 'lodash'
-import stats from 'stats-lite'
-import {ensureArray, ensureDefined} from '#validator'
-import regression from 'regression'
+import * as utils from '#utils'
 import day from '#utils/day'
+import * as validator from '#validator'
+import {ensureArray, ensureDefined} from '#validator'
+import _ from 'lodash'
 import MiniSat from 'logic-solver'
+import regression from 'regression'
+import stats from 'stats-lite'
 
 type ExpressionContext = {
-    element?: ConditionalElement
+    element?: Element
 }
 
 export default class Solver {
@@ -183,7 +181,7 @@ export default class Solver {
         return property.value
     }
 
-    transformConditions(element: ConditionalElement) {
+    transformConditions(element: Element) {
         // Variability group are never present
         if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 
@@ -195,10 +193,10 @@ export default class Solver {
         conditions = utils.filterNotNull(conditions)
 
         // Add explicit conditions of a relation separately as own variable into the sat solver.
-        // Explicit conditions are referenced by has_incoming_relations.
-        if (element.isRelation()) {
+        // Explicit conditions are referenced by has_incoming_relation and has_artifact.
+        if (element.isRelation() || element.isArtifact()) {
             if (utils.isEmpty(conditions)) {
-                this.minisat.require(MiniSat.equiv(element.explicitId, element.source.id))
+                this.minisat.require(element.explicitId)
             } else {
                 this.minisat.require(
                     MiniSat.equiv(
@@ -457,9 +455,9 @@ export default class Solver {
         }
 
         /**
-         * has_sources
+         * has_source
          */
-        if (validator.isDefined(expression.has_sources)) {
+        if (validator.isDefined(expression.has_source)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -468,7 +466,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(node)) {
-                const name = expression.has_sources
+                const name = expression.has_source
                 validator.ensureString(name)
                 node = this.graph.getNode(name)
             }
@@ -477,9 +475,9 @@ export default class Solver {
         }
 
         /**
-         * has_incoming_relations
+         * has_incoming_relation
          */
-        if (validator.isDefined(expression.has_incoming_relations)) {
+        if (validator.isDefined(expression.has_incoming_relation)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -488,7 +486,7 @@ export default class Solver {
             }
 
             if (validator.isUndefined(node)) {
-                const name = expression.has_incoming_relations
+                const name = expression.has_incoming_relation
                 validator.ensureString(name)
                 node = this.graph.getNode(name)
             }
@@ -497,9 +495,9 @@ export default class Solver {
         }
 
         /**
-         * has_incoming_relations_naive
+         * has_incoming_relation_naive
          */
-        if (validator.isDefined(expression.has_incoming_relations_naive)) {
+        if (validator.isDefined(expression.has_incoming_relation_naive)) {
             let node: Node | undefined
             if (validator.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
@@ -508,12 +506,52 @@ export default class Solver {
             }
 
             if (validator.isUndefined(node)) {
-                const name = expression.has_incoming_relations
+                const name = expression.has_incoming_relation
                 validator.ensureString(name)
                 node = this.graph.getNode(name)
             }
 
             return MiniSat.or(node.ingoing.map(it => it.id))
+        }
+
+        /**
+         * has_artifact
+         */
+        if (validator.isDefined(expression.has_artifact)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.has_artifact
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.artifacts.map(it => it.explicitId))
+        }
+
+        /**
+         * has_artifact_naive
+         */
+        if (validator.isDefined(expression.has_artifact_naive)) {
+            let node: Node | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+                node = element
+            }
+
+            if (validator.isUndefined(node)) {
+                const name = expression.has_artifact_naive
+                validator.ensureString(name)
+                node = this.graph.getNode(name)
+            }
+
+            return MiniSat.or(node.artifacts.map(it => it.id))
         }
 
         /**

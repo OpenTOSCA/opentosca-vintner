@@ -1,4 +1,4 @@
-import Controller from '../../src/controller'
+import Controller from '#controller'
 import {Shell} from '#shell'
 import path from 'path'
 

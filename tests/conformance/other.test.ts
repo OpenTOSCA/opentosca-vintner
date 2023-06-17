@@ -1,8 +1,8 @@
-import {expect} from 'chai'
+import Graph from '#graph/graph'
+import Solver from '#resolver/solver'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {VariabilityExpression} from '#spec/variability'
-import Solver from '../../src/resolver/solver'
-import Graph from '../../src/resolver/graph'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '../../src/specification/service-template'
+import {expect} from 'chai'
 
 function getDefaultSolver(template?: ServiceTemplate) {
     return new Solver(

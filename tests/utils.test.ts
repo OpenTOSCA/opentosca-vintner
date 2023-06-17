@@ -1,5 +1,5 @@
-import {expect} from 'chai'
 import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber, toList} from '#utils'
+import {expect} from 'chai'
 
 describe('utils', () => {
     it('median of array of even length', () => {

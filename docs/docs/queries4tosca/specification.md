@@ -8,15 +8,14 @@ This document specifies a Query Language for TOSCA (Queries4TOSCA) inspired by [
 The specification is under active development and is not backwards compatible with any previous versions.
 
 
-## Statements
+## Queries4TOSCA
 
 The following statements can be used inside a query.
 
 ### FROM
 
-A FROM statement is used to denote which templates or instances the query should be executed on. It
-starts with the literal FROM, followed by a space and the word templates, which is an abbreviation for
-service templates, or instances. Afterwards, either a file path needs to be provided, or an asterisk
+A `FROM` statement is used to denote which templates or instances the query should be executed on. It
+starts with the literal `FROM`, followed by a space and the keyword `templates` or `instances`. Afterward, either a file path needs to be provided, or an asterisk
 can be used to select all service templates or instances, respectively.
 
 ```text linenums="1"
@@ -24,10 +23,10 @@ From = "FROM" ("instances" | "templates") ("/" | ".") ("*" | filePath)
 ```
 
 ### SELECT
-SELECT statements are used to select elements from a template. They are denoted by the keyword
-SELECT, followed by one or more path expressions separated by a comma. Path expressions are
-described in detail later. They can start with the special keywords Group or Policy, the
-name of an element, or a dot to select everything. Afterwards, a series of mapping steps, filters,
+`SELECT` statements are used to select elements from a template. They are denoted by the keyword
+`SELECT`, followed by one or more path expressions separated by a comma. Path expressions are
+described in detail later. They can start with the special keywords `Group` or `Policy`, the
+name of an element, or a dot to select everything. Afterward, a series of mapping steps, filters,
 or array accesses can be used. Lastly, there is an optional return structure.
 
 ```text linenums="1"
@@ -36,7 +35,7 @@ Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
 ```
 
 ### MATCH
-MATCH statements are used to search for a pattern inside the nodes of a service template. A pattern
+`MATCH` statements are used to search for a pattern inside the nodes of a service template. A pattern
 consists of at least one node, along with any number of additional nodes and relationships. 
 The syntax for denoting nodes and relationships is described in detail later.
 
@@ -48,8 +47,8 @@ Match = "MATCH" Node (Relationship Node)*
 Single-line comments begin with two forward slashes and extend to the end of the current line.
 Multi-line comments begin with a forward slash and an asterisk and end with another asterisk and
 slash and can be inserted anywhere.
+Here are some examples.
 
-Examples:
 ```text linenums="1"
 // single-line comment
 /* multi-line
@@ -59,28 +58,29 @@ comment */
 ## Paths4TOSCA
 
 Paths4TOSCA is a path expression syntax that can navigate the various parts of a service template. 
-Paths are separated by dots. All parts of a topology template (node_templates, inputs, etc...) can be accessed directly.
-The following expressions can be used:
+Paths are separated by dots. All parts of a topology template (`node_templates`, `inputs`, etc...) can be accessed directly.
+The following expressions can be used.
 
-| Symbol | Meaning | Description |
-| --- | --- | --- |
-| name |  Literal  | Used to access an element at the current position by its name |
-| . |  Path separator  | Mapping step |
-| * |  Wildcard  | Matches any child element |
-| SELF |  Current element  | Matches the element that contains the query (inside templates only) |
-| \[Condition] |  Filter  | Evaluates the predicate inside the brackets for every current element |
-| \[Integer] |  Array Access  | Returns the element at the specified position |
-| GROUP(name) |  Group members  | Returns the set of nodes that belong to the group with the specified name |
-| POLICY(name) |  Policy targets  | Returns the set of nodes that are targeted by the policy with the specified name |
-| @ |  Attributes  | Shortcut for attributes |
-| # |  Properties  | Shortcut for properties |
-| $ |  Requirements  | Shortcut for requirements |
-| % |  Capabilities  | Shortcut for capabilities |
+| Symbol       | Meaning         | Description                                                                       |
+|--------------|-----------------|-----------------------------------------------------------------------------------|
+| name         | Literal         | Used to access an element at the current position by its name.                    |
+| .            | Path Separator  | Mapping step.                                                                     |
+| *            | Wildcard        | Matches any child element.                                                        |
+| SELF         | Current Element | Matches the element that contains the query (inside templates only).              |
+| \[Condition] | Filter          | Evaluates the predicate inside the brackets for every current element.            |
+| \[Integer]   | Array Access    | Returns the element at the specified position.                                    |
+| GROUP(name)  | Group Members   | Returns the set of nodes that belong to the group with the specified name.        |
+| POLICY(name) | Policy Targets  | Returns the set of nodes that are targeted by the policy with the specified name. |
+| @            | Attributes      | Shortcut for attributes.                                                          |
+| #            | Properties      | Shortcut for properties.                                                          |
+| $            | Requirements    | Shortcut for requirements.                                                        |
+| %            | Capabilities    | Shortcut for capabilities.                                                        |
 
-Examples:
+Here are some examples.
+
 ```text linenums="1"
 node_templates.localhost       // Selecting a node directly by name
-node_templates.localhost.#     // Selecting attributes of webapp
+node_templates.localhost.#     // Selecting attributes a node
 node_templates.*               // Selecting all nodes
 GROUP(my-group)                // Selecting all nodes in group 'my-group'
 POLICY(my-policy)              // Selecting all nodes targeted by policy 'my-policy'
@@ -92,7 +92,7 @@ Elements can be filtered by putting a condition in square brackets. Strings need
 and may use regular expressions to find multiple possible matches.
 If a filter only consists of a single variable with no comparison operator, it will return
 true if the current element has a matching child element. Putting an exclamation mark before a condition negates it.
-The following operators can be used:
+The following operators can be used.
 
 | Symbol | Description |
 | --- | --- |
@@ -105,7 +105,8 @@ The following operators can be used:
 | <= |  Less than or equal |
 | =~ |  Matches regular expression |
 
-Examples:
+Here are some examples.
+
 ```text linenums="1"
 node_templates.*[type='textfile']       // equality
 node_templates.*[name!='localhost']     // inequality
@@ -121,13 +122,13 @@ return an empty result.
 
 ```text linenums="1"
 node_templates.*[0]                         // Selecting the first node template
-node_templates.localhost.requirements[1]    // Selecting the second requirement of webapp
+node_templates.localhost.requirements[1]    // Selecting the second requirement of a node
 ```
 
 ### Boolean Operators
 
-Boolean operators can be used in predicates to link two or more conditions. Boolean AND returns
-true if both predicates evaluate to true, Boolean OR returns true if at least one of the predicates
+Boolean operators can be used in predicates to link two or more conditions. `AND` returns
+true if both predicates evaluate to true, `OR` returns true if at least one of the predicates
 evaluates to true.
 
 ```text linenums="1"
@@ -145,7 +146,7 @@ to evaluate to a string. Instead of a key-value pair, it is also possible to onl
 a value, in which case it will automatically be used as the name for the key. 
 
 The expression in the first line returns a list of objects
-comprised of the keys Node Name and node type mapped to the names and types of individual nodes.
+comprised of the keys `Node Name` and `Node Type` mapped to the names and types of individual nodes.
 The second expression also returns a list of objects, but their keys are named directly after the values,
 namely name and type. The expression in the last line returns a list of objects consisting of only a
 single key-value pair, with the name of each individual node as the key, and the corresponding type
@@ -158,10 +159,10 @@ node_templates.*{name: type}                            // List of node names ma
 ```
 
 ## Patterns
-The following sections describes how to define patterns, which can be matched using a MATCH statement.
+The following sections describes how to define patterns, which can be matched using a `MATCH` statement.
 
 Nodes are denoted by a pair of parentheses. Inside those parentheses, a variable name can be
-given to the node, otherwise they are anonymous and cannot be referenced in the SELECT clause.
+given to the node, otherwise they are anonymous and cannot be referenced in the `SELECT` clause.
 
 ```text linenums="1"
 ()  // anonymous node template
@@ -169,7 +170,7 @@ given to the node, otherwise they are anonymous and cannot be referenced in the 
 ```
 
 Nodes can optionally contain a filter in square brackets that allows the same predicate syntax
-described above. Selecting a node template can be seen as the equivalent of a SELECT
+described above. Selecting a node template can be seen as the equivalent of a `SELECT`
 clause that implicitly starts at the path node_templates.*.
 
 ```text linenums="1"
@@ -177,7 +178,7 @@ clause that implicitly starts at the path node_templates.*.
 (n [type='textfile']) // node template with variable n and filter
 ```
 
-Between nodes, relationships can be specified. They are connected to nodes via dashes or arrows
+Relationships can be specified between nodes. They are connected to nodes via dashes or arrows
 to denote undirected or directed relationships, respectively. An incoming relationship means that
 the requirement of another node is fulfilled by a capability of the current node, while an outgoing
 relationship means that a requirement of the current node is fulfilled by the capability of the other
@@ -212,7 +213,7 @@ optionally by a number or a range. If both are omitted, relationships of any len
 
 ## Grammar 
 
-```
+```text linenums="1"
 Query {
   Main = (Expression | MatchExpression) end
   Expression = FromExpression Select
@@ -273,3 +274,5 @@ Query {
 }
 
 ```
+
+--8<-- "vacd.md"

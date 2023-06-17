@@ -1,7 +1,7 @@
-import {PredicateExpression} from './types'
+import Graph from '#/graph/graph'
 import {Query} from '#/query/query'
-import Graph from '#/resolver/graph'
 import {isUndefined} from '#validator'
+import {PredicateExpression} from './types'
 
 /**
  * Class that builds and searches a graph out of node templates and their relations
@@ -26,7 +26,11 @@ export class BfsGraph extends Graph {
         for (const relation of node.relations) {
             if (
                 isUndefined(predicate) ||
-                this.resolver.evaluatePredicate(relation.name, relation.relationship?.raw || {}, predicate)
+                this.resolver.evaluatePredicate(
+                    relation.name,
+                    relation.hasRelationship() ? relation.relationship.raw : {},
+                    predicate
+                )
             ) {
                 if ((direction == 'both' || direction == 'out') && relation.source.name == nodeName)
                     targets.push(relation.target.name)

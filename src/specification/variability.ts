@@ -1,27 +1,28 @@
+import Element from '#/graph/element'
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
-import {ConditionalElement} from '#/resolver/graph'
 
 export type VariabilityDefinition = {
     inputs: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
-    options?: VariabilityResolvingOptions
+    options?: VariabilityOptions
 }
 
-export type VariabilityResolvingOptions = {
+export type VariabilityOptions = {
     mode?: ResolvingMode
 } & DefaultOptions &
     PruningOptions &
     ConsistencyOptions &
     SolverOptions
 
-export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'loose'
+export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-export type NodeDefaultConditionMode = 'source' | 'incoming' | 'host' | 'source-host' | 'relation-host'
+// In realty, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
+export type NodeDefaultConditionMode = 'source' | 'incoming' | 'incomingnaive' | 'host' | 'artifact' | 'artifactnaive'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
@@ -143,6 +144,28 @@ export const ResolverModes = {
             type_pruning: false,
         },
     },
+    'default-loose': {
+        default: {
+            default_condition: true,
+            node_default_condition: true,
+            relation_default_condition: true,
+            policy_default_condition: true,
+            group_default_condition: true,
+            artifact_default_condition: true,
+            property_default_condition: true,
+            type_default_condition: true,
+        },
+        pruning: {
+            pruning: true,
+            node_pruning: false,
+            relation_pruning: true,
+            policy_pruning: true,
+            group_pruning: true,
+            artifact_pruning: true,
+            property_pruning: true,
+            type_pruning: true,
+        },
+    },
     loose: {
         default: {
             default_condition: true,
@@ -243,9 +266,11 @@ export type LogicExpression =
           // Node functions
           node_presence?: string
           host_presence?: string
-          has_sources?: string
-          has_incoming_relations?: string
-          has_incoming_relations_naive?: string
+          has_source?: string
+          has_incoming_relation?: string
+          has_incoming_relation_naive?: string
+          has_artifact?: string
+          has_artifact_naive?: string
 
           // Relation functions
           relation_presence?: [node: string, relation: string | number]
@@ -281,7 +306,7 @@ export type LogicExpression =
           container_presence?: 'SELF'
 
           // Cache
-          _cached_element?: ConditionalElement
+          _cached_element?: Element
           _visited?: boolean
           _id?: string
       }

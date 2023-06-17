@@ -1,0 +1,2 @@
+type: template
+error: Circular dependencies detected. Unable to resolve queries in your template.

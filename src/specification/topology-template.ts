@@ -2,7 +2,10 @@
  * Topology Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969450}
  */
+import {GroupTemplate} from './group-template'
 import {NodeTemplate} from './node-template'
+import {PolicyTemplate} from './policy-template'
+import {RelationshipTemplateMap} from './relationship-template'
 import {
     ValueExpression,
     VariabilityAlternative,
@@ -10,9 +13,6 @@ import {
     VariabilityPointList,
     VariabilityPointMap,
 } from './variability'
-import {GroupTemplate} from './group-template'
-import {RelationshipTemplateMap} from './relationship-template'
-import {PolicyTemplate} from './policy-template'
 
 export type TopologyTemplate = {
     description?: string

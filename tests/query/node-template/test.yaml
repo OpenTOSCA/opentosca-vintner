@@ -1,0 +1,1 @@
+query: FROM templates/tests/query/template.yaml SELECT node_templates.webapp

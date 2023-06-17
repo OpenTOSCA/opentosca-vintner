@@ -1,8 +1,7 @@
-// @ts-ignore
-import _human2cron from 'friendly-node-cron'
+import {InputAssignmentMap} from '#spec/topology-template'
 import * as validator from '#validator'
 import axios from 'axios'
-import {InputAssignmentMap} from '#spec/topology-template'
+import friendlyNodeCron from 'friendly-node-cron'
 
 export type SensorBaseOptions = {
     vintner: string
@@ -12,7 +11,7 @@ export type SensorBaseOptions = {
 }
 
 export function human2cron(value: string) {
-    const output = _human2cron(value)
+    const output = friendlyNodeCron(value)
     if (validator.isUndefined(output)) throw new Error(`Cron pattern "${value}" not valid`)
     return output
 }

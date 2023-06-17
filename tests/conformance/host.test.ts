@@ -1,5 +1,6 @@
+import Node from '#graph/node'
+import Relation from '#graph/relation'
 import {expect} from 'chai'
-import {Relation, Node} from '../../src/resolver/graph'
 
 describe('host', () => {
     it('connects_to', () => {

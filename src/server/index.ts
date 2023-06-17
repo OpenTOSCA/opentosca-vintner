@@ -1,13 +1,13 @@
-import bodyParser from 'body-parser'
-import http from 'http'
-import express from 'express'
-import resolvers from './resolvers'
-import type {ErrorRequestHandler} from 'express'
-import createError from 'http-errors'
-import cors from 'cors'
-import hae from '#utils/hae'
 import death from '#utils/death'
+import hae from '#utils/hae'
+import bodyParser from 'body-parser'
 import console from 'console'
+import cors from 'cors'
+import type {ErrorRequestHandler} from 'express'
+import express from 'express'
+import http from 'http'
+import createError from 'http-errors'
+import resolvers from './resolvers'
 
 export default {
     create: function () {

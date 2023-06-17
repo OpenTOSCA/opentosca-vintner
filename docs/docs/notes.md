@@ -153,19 +153,6 @@ stress --cpu 18 --vm 36 --vm-bytes 1024M
 ssh -N -R 2999:192.168.178.46:3001 pi
 ```
 
-## Conditional Elements Uniqueness
-
-| Element | Original Structure | Map | List | Unique | Original Unique |
-| ---------- |--| ---------------- | ---------------- | ---------------- | ---------------- |
-| Inputs | Map | :material-check: | :material-check: | :material-check: | :material-check: |
-| Nodes | Map | :material-check: | :material-check: | :material-check: | :material-check: |
-| Relations | List | :material-close: | :material-check: | :material-close: | :material-close: |
-| Properties | Map | :material-check: | :material-check: | :material-close: | :material-check: |
-| Policies | List | :material-close: | :material-check: | :material-close: | :material-close: |
-| Groups | Map | :material-check: | :material-check: | :material-check: | :material-check: |
-| Artifacts | Map | :material-check: | :material-check: | :material-close: | :material-check: |
-
-
 ## Limitations
 
 In the following, we briefly discuss limitations of our prototypical implementation.

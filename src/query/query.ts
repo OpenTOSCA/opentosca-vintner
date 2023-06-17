@@ -1,3 +1,9 @@
+import {BfsGraph} from '#/query/bfs-graph'
+import {getTemplates} from '#/query/utils'
+import * as files from '#files'
+import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import * as validator from '#validator'
 import {parse} from './parser'
 import {
     ConditionExpression,
@@ -11,12 +17,6 @@ import {
     SelectExpression,
     VariableExpression,
 } from './types'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import * as files from '#files'
-import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
-import {getTemplates} from '#/query/utils'
-import * as validator from '#validator'
-import {BfsGraph} from '#/query/bfs-graph'
 
 export type QueryResults = {[name: string]: QueryResult}
 export type QueryResult = Object
@@ -65,14 +65,14 @@ export class Query {
         const results: QueryResults = {}
         const templates = await this.evaluateFrom(expression.from)
 
-        for (const {template} of templates) {
+        for (const {name, template} of templates) {
             let result: any = template
             this.currentTemplate = template
 
             if (expression.match != null) result = this.evaluateMatch(result, expression.match)
             result = this.evaluateSelect(result, expression.select)
             if (result && !(Array.isArray(result) && result.length == 0)) {
-                results[it.name] = result
+                results[name] = result
             }
         }
 

@@ -1,16 +1,16 @@
-import * as path from 'path'
-import * as files from '#files'
-import {renderFile} from '../utils'
 import {
     getDefaultInputs,
     getDefaultVariableServiceTemplate,
     loadConfig,
     loadDefaultExpect,
     VariabilityTestConfig,
-} from '../../../src/controller/template/test'
-import {ServiceTemplate} from '../../../src/specification/service-template'
-import {InputAssignmentMap} from '../../../src/specification/topology-template'
+} from '#controller/template/test'
+import * as files from '#files'
+import {ServiceTemplate} from '#spec/service-template'
+import {InputAssignmentMap} from '#spec/topology-template'
 import * as validator from '#validator'
+import * as path from 'path'
+import {renderFile} from '../utils'
 
 type Test = {
     id: string

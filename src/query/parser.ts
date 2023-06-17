@@ -1,4 +1,7 @@
+import * as files from '#files'
+import {parseInt} from 'lodash'
 import ohm from 'ohm-js'
+import path from 'path'
 import {
     ConditionExpression,
     Expression,
@@ -12,9 +15,6 @@ import {
     StepExpression,
     VariableExpression,
 } from './types'
-import {parseInt} from 'lodash'
-import path from 'path'
-import * as files from '#files'
 
 /**
  * Parses Query4TOSCA expressions and returns an abstract syntax tree for further processing

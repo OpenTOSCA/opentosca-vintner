@@ -1,7 +1,7 @@
 import {Instance} from '#repository/instances'
+import Resolver from '#resolver'
 import * as utils from '#utils'
 import lock from '#utils/lock'
-import Resolver from '#resolver'
 
 export type InstanceResolveOptions = {
     instance: string
