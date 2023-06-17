@@ -15,25 +15,23 @@
         color: var(--md-accent-fg-color);
     }
 
-    .hero-content {
+    .hero-content-slim {
         margin: auto;
         text-align: center;
         max-width: 480px;
     }
 
-    .hero-image {
+    .hero-content-medium {
         margin: auto;
-        width: 38rem;
-    }
-
-    .vspace {
-        padding-top: 4rem;
+        width: 760px;
     }
 
     .hero .md-button {
         font-weight: 400;
         color: var(--md-primary-bg-color);
-        margin-right: 0.5rem;
+        margin-right: 0rem;
+        padding-right: 23px;
+        padding-left: 23px;
         margin-top: 0.5rem;
     }
 
@@ -48,6 +46,25 @@
         background-color: black;
         border-color: black;
         color: var(--md-accent-bg-color);
+    }
+
+    .hero-buttons-container {
+        max-width: 760px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    @media (max-width: 760px) {
+        .hero-buttons-container {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .hero-buttons-container {
+            flex-direction: column;
+        }
     }
 
     .md-header {
@@ -74,52 +91,60 @@
         }
     }
 </style>
-<section class="mdx-container">
-    <div class="md-grid md-typeset">
-        <div class="vspace"/>
+<section class='mdx-container'>
+    <div class='md-grid md-typeset'>
+        <div class='hero' style='padding-top: 4rem'>
 
-        <div class="hero">
-
-            <div class="hero-content">
-                <h1>OpenTOSCA <span class="accent-fg-color">Vintner</span></h1>
+            <div class='hero-content-slim'>
+                <h1>OpenTOSCA <span class='accent-fg-color'>Vintner</span></h1>
                 <p>
                     OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications
                     based on TOSCA orchestrator plugins.
                     Preprocessing includes, e.g., the resolving of variability.
                 </p>
+            </div>
 
+            <div class='hero-content-medium' style='padding-top: 1rem'>
+                <div class='hero-buttons-container'>
                 <a
-                        href="{{ page.next_page.url | url }}"
-                        title="{{ page.next_page.title | e }}"
-                        class="md-button md-button--primary"
+                    href="{{ 'getting-started' | url }}"
+                    title='Getting Started'
+                    class='md-button md-button--primary'
                 >
                     Getting Started
                 </a>
 
-                <a href="{{ 'variability4tosca/specification' | url }}" title="Variability4TOSCA"
-                   class="md-button md-button--primary">
+                <a href="{{ 'variability4tosca/specification' | url }}" title='Variability4TOSCA'
+                   class='md-button md-button--primary'>
                     Variability4TOSCA
                 </a>
 
+                <a href="{{ 'queries4tosca/specification' | url }}" title='Queries4TOSCA'
+                   class='md-button md-button--primary'>
+                    Queries4TOSCA
+                </a>
+
+                <a href="{{ 'sofdcar/specification' | url }}" title='SofDCar Normative Types'
+                   class='md-button md-button--primary'>
+                    SofDCar Normative Types
+                </a>
+                </div>
+            </div>
+
+            <div class='hero-content-medium' style='padding-top: 5px'>
+                <div id='cinema-home'></div>
+                <script>
+                    AsciinemaPlayer.create("{{ 'assets/casts/home.cast' | url }}", document.getElementById('cinema-home'), {
+                        autoplay: true,
+                        preload: true,
+                        cols: 200,
+                        rows: 20,
+                        fit: false,
+                        terminalFontSize: '10pt',
+                    })
+                </script>
             </div>
         </div>
-
-        <div class="vspace"/>
-
-        <div class="hero-image">
-            <div id="cinema-home"></div>
-            <script>
-                AsciinemaPlayer.create("{{ 'assets/casts/home.cast' | url }}", document.getElementById('cinema-home'), {
-                    autoplay: true,
-                    preload: true,
-                    cols: 200,
-                    rows: 20,
-                    fit: false,
-                    terminalFontSize: "10pt"
-                })
-            </script>
-        </div>
-
     </div>
 </section>
 {% endblock %} {% block content %}{% endblock %}

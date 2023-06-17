@@ -1,8 +1,8 @@
 ---
-title: Software-Defined Cars
+title: SofDCar Normative Types
 ---
 
-# SofDCar TOSCA Definitions
+# SofDCar Normative Types
 
 This repository
 contains [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html)
