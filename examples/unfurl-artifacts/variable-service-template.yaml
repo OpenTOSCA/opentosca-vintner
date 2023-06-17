@@ -91,7 +91,7 @@ topology_template:
 
         os_application_credential_secret:
             type: string
-            default: GUf5byNyo57yz7eSAx-aqFH1QmLRwi2mkEZRVanAXV0csPd__WMR9kf-Dy-SziWarf45llnRv-ud1cZE2WY-oA
+            default: '*****************'
             conditions: {logic_expression: is_community}
 
         gcp_credentials:
