@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extendedFeatureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendautolayout" value="true"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and mandatory="true" name="DBMS">
+			<graphics key="collapsed" value="false"/>
+			<alt mandatory="true" name="Storage">
+				<feature name="HDD"/>
+				<feature name="SSD"/>
+			</alt>
+			<feature name="Redundancy"/>
+			<alt mandatory="true" name="Plan">
+				<graphics key="collapsed" value="false"/>
+				<feature name="Community"/>
+				<feature name="Business"/>
+				<feature name="Enterprise"/>
+			</alt>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<eq>
+				<var>HDD</var>
+				<var>Community</var>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>SSD</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+		<rule>
+			<eq>
+				<var>Redundancy</var>
+				<disj>
+					<var>Business</var>
+					<var>Enterprise</var>
+				</disj>
+			</eq>
+		</rule>
+	</constraints>
+</extendedFeatureModel>

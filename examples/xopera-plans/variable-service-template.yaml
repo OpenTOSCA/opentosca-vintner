@@ -1,0 +1,152 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - lib/gcp/types.yaml
+
+topology_template:
+    inputs:
+        release:
+            type: string
+
+        gcp_project_id:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        db_password:
+            type: string
+
+    variability:
+        inputs:
+            plan:
+                type: string
+                default: COMMUNITY
+
+            language:
+                type: string
+                default: EN
+
+        expressions:
+            is_community: {equal: [{variability_input: plan}, COMMUNITY]}
+            is_business: {equal: [{variability_input: plan}, BUSINESS]}
+            is_enterprise: {equal: [{variability_input: plan}, ENTERPRISE]}
+            is_business_or_enterprise: {or: [{logic_expression: is_business}, {logic_expression: is_enterprise}]}
+
+            is_EN: {equal: [{variability_input: language}, EN]}
+            is_DE: {equal: [{variability_input: language}, DE]}
+            is_ES: {equal: [{variability_input: language}, ES]}
+
+        options:
+            type_default_condition: true
+            property_default_condition: true
+
+    node_templates:
+        shop:
+            type: node.application
+            properties:
+                - application_name: application
+                - language:
+                      conditions: {logic_expression: is_EN}
+                      value: EN
+
+                - language:
+                      conditions: {logic_expression: is_DE}
+                      value: DE
+
+                - language:
+                      conditions: {logic_expression: is_ES}
+                      value: ES
+
+                - analytical_reports:
+                      conditions: {not: {logic_expression: is_enterprise}}
+                      value: false
+
+                - analytical_reports:
+                      conditions: {logic_expression: is_enterprise}
+                      value: true
+
+                - application_environment:
+                      # Database
+                      DB_DIALECT: {get_property: [SELF, database, database_dialect]}
+                      DB_NAME: {get_property: [SELF, database, database_name]}
+                      DB_USERNAME: root
+                      DB_PASSWORD: {get_input: db_password}
+                      DB_ADDRESS: {get_property: [SELF, database, public_address]}
+            requirements:
+                - host: runtime
+                - database: database
+            artifacts:
+                - artifact_file:
+                      conditions: {logic_expression: is_community}
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+                - artifact_file:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.tar.gz
+        runtime:
+            type: gcp.appengine.engine
+            properties:
+                - instance_class:
+                      conditions: {logic_expression: is_community}
+                      value: F1
+
+                - instance_class:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: F4
+
+                - max_instances:
+                      conditions: {logic_expression: is_community}
+                      value: 1
+
+                - max_instances:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: 100
+            requirements:
+                - host: cloud
+
+        database:
+            type: gcp.sql.db
+            properties:
+                database_name: db
+                instance_name: {get_property: [SELF, host, instance_name]}
+                public_address: {get_attribute: [SELF, host, public_address]}
+            requirements:
+                - host: dbms
+
+        dbms:
+            type: gcp.sql.dbms
+            properties:
+                - instance_name: {concat: [{get_input: release}, '-', dbms]}
+                - root_password: {get_input: db_password}
+                - authorized_networks: '0.0.0.0/0'
+
+                - storage_type:
+                      conditions: {logic_expression: is_community}
+                      value: HDD
+
+                - storage_type:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: SSD
+
+                - availability_type:
+                      conditions: {logic_expression: is_community}
+                      value: zonal
+
+                - availability_type:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: regional
+
+            requirements:
+                - host: cloud
+
+        cloud:
+            type: gcp.provider
+            properties:
+                project_id: {get_input: gcp_project_id}
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}

@@ -1,0 +1,9 @@
+---
+- name: Create GCP Cloud SQL Instance
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: Set Attributes
+        set_stats:
+            data:
+                public_address: 'faked ip address'

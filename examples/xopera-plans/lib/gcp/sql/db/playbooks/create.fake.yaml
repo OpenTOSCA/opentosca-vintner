@@ -1,0 +1,7 @@
+---
+- name: Create GCP Cloud SQL Database
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: Create Database
+        shell: 'echo fake'

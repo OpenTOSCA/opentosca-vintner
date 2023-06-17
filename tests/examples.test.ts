@@ -1,13 +1,13 @@
 import {VariabilityTestGroup} from '#controller/template/test'
 import * as files from '#files'
 import path from 'path'
-import {runGroups} from '../utils'
+import {runGroups} from './utils'
 
 describe('examples', async () => {
     try {
         const groups: VariabilityTestGroup[] = []
 
-        const examplesDir = path.join(__dirname, '..', '..', 'examples')
+        const examplesDir = path.join(__dirname, '..', 'examples')
         const examples = files.listDirectories(examplesDir).filter(it => !it.startsWith('.'))
 
         for (const example of examples) {

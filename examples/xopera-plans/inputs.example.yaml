@@ -1,0 +1,7 @@
+release: abcdefgh
+
+gcp_project_id: '***********************'
+gcp_region: europe-west3
+gcp_service_account_file: '***********************'
+
+db_root_password: some-secret

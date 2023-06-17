@@ -1,0 +1,22 @@
+---
+- name: Create GCP Engine App
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
+
+      # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
+      - name: Enable Cloud Build API
+        shell: 'gcloud services enable cloudbuild.googleapis.com'
+
+      - name: Enable appengine.googleapis.com
+        shell: 'gcloud services enable appengine.googleapis.com'
+
+      # https://cloud.google.com/sdk/gcloud/reference/app/create
+      - name: Create App
+        shell: 'gcloud app create --region {{ region }}'
+        register: app_create_command
+        failed_when:
+            - "'Created' not in app_create_command.stderr"
+            - "'already contains' not in app_create_command.stderr"

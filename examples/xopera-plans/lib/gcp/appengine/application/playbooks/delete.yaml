@@ -1,0 +1,10 @@
+---
+- name: Create GCP Engine App
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
+
+      - name: Create App
+        shell: 'gcloud app services delete {{ application_name }} --quiet'
