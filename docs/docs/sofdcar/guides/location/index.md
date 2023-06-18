@@ -10,11 +10,11 @@ Example of an architecture distributed across several geographical locations.
 ## Service Template
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/guides/location/template.yaml"
+--8<-- "sofdcar/guides/location/template.yaml"
 ```
 
 ## Type Definitions
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/guides/location/types.yaml"
+--8<-- "sofdcar/guides/location/types.yaml"
 ```
