@@ -4,7 +4,7 @@ This project is developed for the purpose of research by the [Institute of Softw
 The development is partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de/Navigation/EN/Home/home.html){target=_blank} as part of the [Software-Defined Car (SofDCar)](https://sofdcar.de){target=_blank} project (19S21002).
 
 <figure markdown>
-  ![BMWK.svg](assets/images/BMWK.svg){width="350"}
+  ![BMWK.svg](BMWK.svg){width="350"}
 </figure>
 
 ## License
