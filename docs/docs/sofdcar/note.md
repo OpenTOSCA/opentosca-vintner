@@ -63,3 +63,38 @@ make open
 - management operations might represent manual or robotic tasks
 - [Model-based resource analysis and synthesis of service-oriented automotive software architectures](https://doi.org/10.1007/s10270-021-00896-9)
 - [Making the Case for Centralized Automotive E/E Architectures](https://doi.org/10.1109/TVT.2021.3054934)
+
+
+
+
+## Examples (Deprecated)
+
+### ECU Software and Hardware
+
+<p align="center">
+<img src="../assets/ecu.svg" alt="ecu"/>
+</p>
+
+### Physical CAN
+
+<p align="center">
+<img src="../assets/can-p-p.svg" alt="ecu"/>
+</p>
+
+### Physical OTA CAN
+
+<p align="center">
+<img src="../assets/can-p-p-ota.svg" alt="ecu"/>
+</p>
+
+### Virtual CAN
+
+<p align="center">
+<img src="../assets/can-v-v.svg" alt="ecu"/>
+</p>
+
+### Virtual OTA CAN
+
+<p align="center">
+<img src="../assets/can-v-v-ota.svg" alt="ecu"/>
+</p>

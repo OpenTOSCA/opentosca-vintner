@@ -23,7 +23,7 @@ theme:
         - navigation.instant
         - navigation.tracking
         # - navigation.expand
-        - navigation.indexes
+        # - navigation.indexes
         - content.code.annotate
         - toc.follow
         - navigation.sections
