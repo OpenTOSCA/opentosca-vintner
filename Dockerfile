@@ -10,6 +10,7 @@ RUN yarn lint:check
 RUN yarn style:check
 RUN yarn licenses:check
 RUN yarn test
+RUN yarn sofdcar:check
 
 # Build
 RUN yarn build
