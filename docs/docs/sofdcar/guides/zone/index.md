@@ -10,11 +10,11 @@ Example of a zonal architecture connected to the cloud.
 ## Service Template
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/guides/zone/template.yaml"
+--8<-- "sofdcar/guides/zone/template.yaml"
 ```
 
 ## Type Definitions
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/guides/zone/types.yaml"
+--8<-- "sofdcar/guides/zone/types.yaml"
 ```

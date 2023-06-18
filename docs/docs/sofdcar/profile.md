@@ -20,13 +20,13 @@ The specification is under active development and is not backwards compatible wi
 ## Normative TOSCA Type Definitions for Software-Defined Cars
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/tosca-sofdcar-profile.yaml"
+--8<-- "sofdcar/tosca-sofdcar-profile.yaml"
 ```
 
 ## Non-Normative TOSCA Type Definitions for Software-Defined Cars
 
 ```yaml linenums="1"
---8<-- "../docs/sofdcar/tosca-sofdcar-profile-non-normative.yaml"
+--8<-- "sofdcar/tosca-sofdcar-profile-non-normative.yaml"
 ```
 
 --8<-- "acd.md"
