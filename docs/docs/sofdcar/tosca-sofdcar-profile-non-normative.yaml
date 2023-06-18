@@ -1,0 +1,68 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: TOSCA Profile for Software-Defined Cars (Non-Normative).
+metadata:
+    template_name: TOSCA SofDCar Profile (Non-Normative)
+    template_author: University of Stuttgart
+    template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_version: 1.0.0-draft
+    template_id: sofdcar-profile-non-normative
+    template_license: https://www.apache.org/licenses/LICENSE-2.0
+    acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
+
+imports:
+    - ./tosca-sofdcar-profile.yaml
+
+node_types:
+    ###################################################
+    #
+    # Python
+    #
+    ###################################################
+
+    # Python Application
+    sofdcar.nodes.Python.Application:
+        derived_from: sofdcar.nodes.HPC.Software
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # Python Runtime
+    sofdcar.nodes.Python.Runtime:
+        derived_from: sofdcar.nodes.HPC.Software
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [sofdcar.nodes.Python.Application]
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    ###################################################
+    #
+    # Raspberry PI
+    #
+    ###################################################
+
+    # Raspberry PI
+    sofdcar.nodes.RaspberryPi:
+        derived_from: sofdcar.nodes.HPC.Hardware
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [sofdcar.nodes.HPC.Software, sofdcar.nodes.Python.Application]
+
+    ###################################################
+    #
+    # Arduino
+    #
+    ###################################################
+
+    # Arduino Software
+    sofdcar.nodes.Arduino.Software:
+        derived_from: sofdcar.nodes.ECU.Software
+
+    # Arduino Hardware
+    sofdcar.nodes.Arduino.Hardware:
+        derived_from: sofdcar.nodes.ECU.Hardware

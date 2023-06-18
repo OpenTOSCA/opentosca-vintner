@@ -1,0 +1,21 @@
+@startuml
+skinparam componentStyle rectangle
+
+[software_a]
+[p_ecu_a]
+software_a --> p_ecu_a
+
+[p_can_bus]
+
+[software_b]
+[p_ecu_b]
+software_b --> p_ecu_b
+
+software_a .ri.> p_can_bus
+p_can_bus <.ri. software_b
+
+note top of [p_can_bus]
+nil
+end note
+
+@enduml

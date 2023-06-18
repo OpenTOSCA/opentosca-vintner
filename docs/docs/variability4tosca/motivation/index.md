@@ -6,7 +6,7 @@ This application can be deployed in different variants.
 During development the application should be deployed on a single virtual machine whereas during production an elastic deployment is required and, therefore, the application is deployed on GCP.
 
 <figure markdown>
-  ![Motivating Scenario](../assets/images/variability4tosca/motivation/motivation.png){width="700"}
+  ![Motivating Scenario](motivation.png){width="700"}
   <figcaption>Figure 1: Motivating Scenario</figcaption>
 </figure>
 
@@ -24,7 +24,7 @@ You to fulfill the following requirements to follow this walkthrough.
 ## Preparation
 
 First, install OpenTOSCA Vintner.
-For more information see [Installation](../installation.md){target=_blank}.
+For more information see [Installation](../../installation.md){target=_blank}.
 
 ```shell linenums="1"
 curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
@@ -34,7 +34,7 @@ vintner setup init
 We currently support xOpera and Unfurl.
 Since both can only be installed on Linux, we implemented a WSL integration for both.
 In our case, we run on a Linux machine and use xOpera.
-For more information see [Orchestrators](../orchestrators.md){target=_blank}.
+For more information see [Orchestrators](../../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"
 vintner orchestrators init xopera
@@ -44,7 +44,7 @@ vintner orchestrators enable --orchestrator xopera
 ## Import
 
 <figure markdown>
-  ![Motivating Scenario](../assets/images/variability4tosca/motivation/vst.png){width="700"}
+  ![Motivating Scenario](variable-service-template.png){width="700"}
   <figcaption>Figure 2: Variable Service Template</figcaption>
 </figure>
 
@@ -127,6 +127,6 @@ vintner setup clean
 ## Publication
 
 More information can be found in the following publication.
-Also check our other [publications](../publications.md){target=_blank}.
+Also check our other [publications](../../publications.md){target=_blank}.
 
 - Stötzner, Miles, Steffen Becker, Uwe Breitenbücher, Kálmán Képes, and Frank Leymann. 2022. "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" Algorithms 15, no. 10: 382. [https://doi.org/10.3390/a15100382](https://doi.org/10.3390/a15100382){target=_blank}

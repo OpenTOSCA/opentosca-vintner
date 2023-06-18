@@ -135,5 +135,5 @@ jobs:
             - name: (DOCS) Generate Conformance Test Pages
               run: yarn docs:generate:tests
 
-            - name: (DOCS) Deploy Docs
+            - name: (DOCS) Build and Deploy Docs
               run: yarn docs:deploy

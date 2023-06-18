@@ -23,9 +23,10 @@ theme:
         - navigation.instant
         - navigation.tracking
         # - navigation.expand
-        - navigation.indexes
+        # - navigation.indexes
         - content.code.annotate
         - toc.follow
+        - navigation.sections
 
 extra_css:
     - assets/stylesheets/extra.css
@@ -74,32 +75,40 @@ plugins:
     - include_dir_to_nav
 
 nav:
-    - index.md
-    - getting-started.md
-    - installation.md
-    - orchestrators.md
-    - Variability4TOSCA:
-          - variability4tosca/motivation.md
-          - variability4tosca/specification.md
-          - variability4tosca/testing.md
-          - Conformance Tests: variability4tosca/tests
-          - variability4tosca/dynamic.md
-          - variability4tosca/feature-ide.md
-          - variability4tosca/benchmark.md
-          - Guides:
-                - variability4tosca/guides/unfurl-artifacts.md
-                - variability4tosca/guides/xopera-pipes-and-filters.md
-                - variability4tosca/guides/xopera-pruning.md
-    - Queries4TOSCA:
-          - queries4tosca/getting-started.md
-          - queries4tosca/specification.md
-          - Conformance Tests: queries4tosca/tests
-    - interface.md
-    - dependencies.md
-    - development.md
-    - code-of-conduct.md
-    - resources.md
-    - publications.md
-    - about-us.md
-    - notes.md
-    - faq.md
+    - OpenTOSCA Vintner:
+          - index.md
+          - getting-started.md
+          - installation.md
+          - orchestrators.md
+          - interface.md
+          - dependencies.md
+          - development
+    - Specifications:
+          - Variability4TOSCA:
+                - variability4tosca/motivation
+                - variability4tosca/specification.md
+                - variability4tosca/testing.md
+                - Conformance Tests: variability4tosca/tests
+                - variability4tosca/dynamic.md
+                - variability4tosca/feature-ide.md
+                - variability4tosca/benchmark.md
+                - Guides:
+                      - variability4tosca/guides/artifacts
+                      - variability4tosca/guides/pipes-and-filters
+                      - variability4tosca/guides/pruning
+          - Queries4TOSCA:
+                - queries4tosca/getting-started.md
+                - queries4tosca/specification.md
+                - Conformance Tests: queries4tosca/tests
+          - SofDCar Profile:
+                - sofdcar/profile.md
+                - Guides:
+                      - sofdcar/guides/zone
+                      - sofdcar/guides/location
+    - More Information:
+          - code-of-conduct.md
+          - resources.md
+          - publications.md
+          - about-us
+          - notes.md
+          - faq.md
