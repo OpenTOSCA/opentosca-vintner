@@ -21,6 +21,9 @@ node_types:
 
     # Python Application
     sofdcar.nodes.Python.Application:
+        description: >
+            Non-normative python application running on an HPC.
+            This application required a python runtime.
         derived_from: sofdcar.nodes.HPC.Software
         requirements:
             - host:
@@ -29,6 +32,9 @@ node_types:
 
     # Python Runtime
     sofdcar.nodes.Python.Runtime:
+        description: >
+            Non-normative python runtime running on an HPC.
+            This runtime is able to host python applications and requires a host.
         derived_from: sofdcar.nodes.HPC.Software
         capabilities:
             host:
@@ -41,12 +47,16 @@ node_types:
 
     ###################################################
     #
-    # Raspberry PI
+    # Raspberry Pi
     #
     ###################################################
 
-    # Raspberry PI
+    # Raspberry Pi
     sofdcar.nodes.RaspberryPi:
+        description: >
+            The hardware of an Raspberry Pi serving as a HPC hardware.
+            This Raspberry Pi is able to host HPC software. 
+            Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
         derived_from: sofdcar.nodes.HPC.Hardware
         capabilities:
             host:
@@ -61,8 +71,21 @@ node_types:
 
     # Arduino Software
     sofdcar.nodes.Arduino.Software:
+        description: The software running on an Arduino.
         derived_from: sofdcar.nodes.ECU.Software
+
+    # Arduino C++ Software
+    sofdcar.nodes.Arduino.Software.C++:
+        description: C++ software running on an Arduino.
+        derived_from: sofdcar.nodes.Arduino.Software
 
     # Arduino Hardware
     sofdcar.nodes.Arduino.Hardware:
+        description: >
+            The hardware of an Arduino serving as ECU hardware.
+            The Arduino is able to host Arduino software.
         derived_from: sofdcar.nodes.ECU.Hardware
+        capabilities:
+            host:
+                type: sofdcar.capabilities.Host.ECU.Software
+                valid_source_types: [sofdcar.nodes.Arduino.Software]
