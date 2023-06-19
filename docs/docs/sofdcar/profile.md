@@ -11,19 +11,38 @@ For example, an ECU supplier can model and distribute the deployment and managem
 Various OEMs can then import provided models and integrate them into their cars.
 The specification is under active development and is not backwards compatible with any previous versions.
 
-## Downloads 
 
-- [TOSCA SofDCar Profile](tosca-sofdcar-profile.yaml)
-- [TOSCA SofDCar Profile Non-Normative](tosca-sofdcar-profile-non-normative.yaml)
+## Normative TOSCA Type Definitions
+
+!!! Warning "TODO"
+    - in general, we have for each entity one abstract type to set e.g. properties for all
+    - list available node types (categorized)
+    - list available relationship types (categorized)
+    - describe concept of communication channels (and without)
+
+--8<-- "sofdcar/tosca-sofdcar-profile.md"
 
 
-## Normative TOSCA Type Definitions for Software-Defined Cars
+## Non-Normative TOSCA Type Definitions
+
+!!! Warning "TODO"
+    - non-normative example for Raspberry Pi and Arduino
+
+--8<-- "sofdcar/tosca-sofdcar-profile.md"
+
+## Appendix A "TOSCA SofDCar Profile"
+
+This appendix contains the complete TOSCA SofDCar profile.
+You can also download the profile [here](tosca-sofdcar-profile.yaml){download=tosca-sofdcar-profile.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile.yaml"
 ```
 
-## Non-Normative TOSCA Type Definitions for Software-Defined Cars
+## Appendix B "TOSCA SofDCar Profile (Non-Normative)"
+
+This appendix contains the complete non-normative TOSCA SofDCar profile.
+You can also download the non-normative profile [here](tosca-sofdcar-profile-non-normative.yaml){download=tosca-sofdcar-profile-non-normative.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile-non-normative.yaml"
