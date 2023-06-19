@@ -5,7 +5,7 @@ metadata:
     template_author: University of Stuttgart
     template_contact: miles.stoetzner@iste.uni-stuttgart.de
     template_version: 1.0.0-draft
-    template_id: sofdcar-profile
+    template_id: tosca-sofdcar-profile
     template_license: https://www.apache.org/licenses/LICENSE-2.0
     abbreviations: |
         - ASIL: Automotive Safety Integrity Level
@@ -199,7 +199,7 @@ node_types:
 
     sofdcar.nodes.ECU.Hardware:
         derived_from: sofdcar.nodes.Root
-        description: The hardware of en ECU.
+        description: The hardware of an ECU.
         capabilities:
             host:
                 type: sofdcar.capabilities.Host.ECU.Software

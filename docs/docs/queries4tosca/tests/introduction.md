@@ -41,3 +41,5 @@ processing.
 | 24 | [result-structure-simple](./test-result-structure-simple.md) |
 | 25 | [shortcut-property](./test-shortcut-property.md) |
 
+
+--8<-- "vacd.md"

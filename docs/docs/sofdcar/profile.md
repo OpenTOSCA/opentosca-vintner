@@ -13,8 +13,8 @@ The specification is under active development and is not backwards compatible wi
 
 ## Downloads 
 
-- [SofDCar Profile](tosca-sofdcar-profile.yaml)
-- [SofDCar Profile Non-Normative](tosca-sofdcar-profile-non-normative.yaml)
+- [TOSCA SofDCar Profile](tosca-sofdcar-profile.yaml)
+- [TOSCA SofDCar Profile Non-Normative](tosca-sofdcar-profile-non-normative.yaml)
 
 
 ## Normative TOSCA Type Definitions for Software-Defined Cars

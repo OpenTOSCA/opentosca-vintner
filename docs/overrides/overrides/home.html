@@ -30,10 +30,11 @@
         font-weight: 400;
         color: var(--md-primary-bg-color);
         margin-right: 0rem;
-        padding-right: 33px;
-        padding-left: 33px;
-        margin-top: 0.5rem;
+        padding-right: 20px;
+        padding-left: 20px;
         border-radius: 4px;
+        text-align: center;
+        flex-grow: 1;
     }
 
     .hero .md-button:focus,
@@ -54,6 +55,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        gap: 6px;
     }
 
     @media (max-width: 760px) {
@@ -65,6 +67,12 @@
     @media (max-width: 380px) {
         .hero-buttons-container {
             flex-direction: column;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .max-width-on-760 {
+            width: 100%;
         }
     }
 
@@ -105,7 +113,7 @@
                 </p>
             </div>
 
-            <div class='hero-content-medium' style='padding-top: 2rem'>
+            <div class='hero-content-medium max-width-on-760' style='padding-top: 2rem'>
                 <div class='hero-buttons-container'>
                 <a
                     href="{{ 'getting-started' | url }}"
@@ -125,9 +133,9 @@
                     Queries4TOSCA
                 </a>
 
-                <a href="{{ 'sofdcar/profile' | url }}" title='SofDCar Profile'
+                <a href="{{ 'sofdcar/profile' | url }}" title='TOSCA SofDCar Profile'
                    class='md-button md-button--primary'>
-                    SofDCar Profile
+                    TOSCA SofDCar Profile
                 </a>
                 </div>
             </div>
