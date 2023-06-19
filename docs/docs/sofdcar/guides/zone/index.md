@@ -4,8 +4,8 @@ Example of a zonal architecture connected to the cloud.
 
 ## Downloads
 
-- [Template](template.yaml)
-- [Types](types.yaml)
+- [Template](template.yaml){download=template.yaml}
+- [Types](types.yaml){download=types.yaml}
 
 ## Service Template
 

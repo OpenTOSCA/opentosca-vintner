@@ -5,7 +5,7 @@ metadata:
     template_author: University of Stuttgart
     template_contact: miles.stoetzner@iste.uni-stuttgart.de
     template_version: 1.0.0-draft
-    template_id: sofdcar-profile
+    template_id: tosca-sofdcar-profile
     template_license: https://www.apache.org/licenses/LICENSE-2.0
     abbreviations: |
         - ASIL: Automotive Safety Integrity Level
@@ -19,27 +19,29 @@ metadata:
         - MOST: Media-Oriented Systems Transport
         - OBD: On-Board Diagnostics
         - RADAR: Radio Detection and Ranging
+        - SOME/IP: Scalable Service-Oriented Middleware over IP
     acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
 
 artifact_types:
     sofdcar.artifacts.Root:
-        derived_from: tosca.artifacts.Root
         description: The artifact all other artifacts are derived from.
+        derived_from: tosca.artifacts.Root
 
     sofdcar.artifacts.Deployment:
-        derived_from: tosca.artifacts.Deployment
         description: The artifact all other deployment artifacts are derived from.
+        derived_from: tosca.artifacts.Deployment
 
     sofdcar.artifacts.Implementation:
-        derived_from: tosca.artifacts.Implementation
         description: The artifact all other implementation artifacts are derived from.
+        derived_from: tosca.artifacts.Implementation
 
 data_types:
     sofdcar.data.Root:
-        derived_from: tosca.datatypes.Root
         description: The data all other data are derived from.
+        derived_from: tosca.datatypes.Root
 
     sofdcar.data.GPIO.Pin:
+        description: The GPIO pin used, e.g., when connecting using GPIO.
         derived_from: sofdcar.data.Root
         properties:
             pin:
@@ -50,19 +52,20 @@ data_types:
                     - valid_values:
                           - in
                           - out
+                          - in/out
 
 capability_types:
     sofdcar.capabilities.Root:
-        derived_from: tosca.capabilities.Root
         description: The capability all other capabilities are derived from.
+        derived_from: tosca.capabilities.Root
 
     sofdcar.capabilities.Host.ECU.Software:
-        derived_from: tosca.capabilities.Container
         description: The capability to host an ECU software.
+        derived_from: tosca.capabilities.Container
 
     sofdcar.capabilities.OperatingSystem.RealTime:
-        derived_from: tosca.capabilities.OperatingSystem
         description: The capability to provide an OS with real time
+        derived_from: tosca.capabilities.OperatingSystem
         properties:
             time_guarantee:
                 type: integer
@@ -76,65 +79,69 @@ capability_types:
                           - soft
 
     sofdcar.capabilities.Endpoint:
+        description: The capability to provide an endpoint to which a client can connect to.
         derived_from: sofdcar.capabilities.Root
-        description: The capability to provide an endpoint.
 
     sofdcar.capabilities.Endpoint.CAN:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a CAN endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.CAN-FD:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a CAN-FD endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.LIN:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a LIN endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.MOST:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a MOST endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.GPIO:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a GPIO endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.FlexRay:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide a FlexRay endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.Ethernet:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide an Ethernet endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
     sofdcar.capabilities.Endpoint.OBD:
-        derived_from: sofdcar.capabilities.Endpoint
         description: The capability to provide an OBD endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.SOME/IP:
+        description: The capability to provide a SOME/IP endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
 
 interface_types:
     sofdcar.interfaces.Root:
-        derived_from: tosca.interfaces.Root
         description: The interface all other interfaces are derived from.
+        derived_from: tosca.interfaces.Root
 
     sofdcar.interfaces.Nodes:
-        derived_from: tosca.interfaces.node.lifecycle.Standard
         description: The standard management interface of nodes.
+        derived_from: tosca.interfaces.node.lifecycle.Standard
         operations:
             build:
                 description: Builds deployment artifacts.
 
     sofdcar.interfaces.Relationship:
-        derived_from: tosca.interfaces.relationship.Configure
         description: The standard management interface for relationships.
+        derived_from: tosca.interfaces.relationship.Configure
 
 relationship_types:
     sofdcar.relationships.Root:
-        derived_from: tosca.relationships.Root
         description: The relationship all other relationships are derived from.
+        derived_from: tosca.relationships.Root
 
     sofdcar.relationships.CAN:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for CAN connections.
+        derived_from: sofdcar.relationships.Root
         properties:
             interface:
                 type: string
@@ -152,20 +159,20 @@ relationship_types:
                 required: false
 
     sofdcar.relationships.CAN-FD:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for CAN-FD connections.
+        derived_from: sofdcar.relationships.Root
 
     sofdcar.relationships.LIN:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for LIN connections.
+        derived_from: sofdcar.relationships.Root
 
     sofdcar.relationships.MOST:
-        derived_from: sofdcar.relationships.Root
         description: The relationships for MOST connections.
+        derived_from: sofdcar.relationships.Root
 
     sofdcar.relationships.GPIO:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for GPIO connections.
+        derived_from: sofdcar.relationships.Root
         properties:
             pins:
                 type: list
@@ -173,49 +180,53 @@ relationship_types:
                     type: sofdcar.data.GPIO.Pin
 
     sofdcar.relationships.FlexRay:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for FlexRay connections.
+        derived_from: sofdcar.relationships.Root
 
     sofdcar.relationships.Ethernet:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for Ethernet connections.
+        derived_from: sofdcar.relationships.Root
 
     sofdcar.relationships.OBD:
-        derived_from: sofdcar.relationships.Root
         description: The relationship for OBD connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.SOME/IP:
+        description: The relationship for SOME/IP connections.
+        derived_from: sofdcar.relationships.Root
 
 node_types:
     sofdcar.nodes.Root:
-        derived_from: tosca.nodes.Root
         description: The node all other nodes are derived from.
+        derived_from: tosca.nodes.Root
 
     sofdcar.nodes.Vehicle:
-        derived_from: tosca.nodes.Root
         description: The node all other vehicles are derived from.
+        derived_from: tosca.nodes.Root
 
     sofdcar.nodes.Cloud:
-        derived_from: tosca.nodes.Root
         description: The node all other clouds are derived from.
+        derived_from: tosca.nodes.Root
 
     sofdcar.nodes.ECU.Hardware:
+        description: The hardware of an ECU.
         derived_from: sofdcar.nodes.Root
-        description: The hardware of en ECU.
         capabilities:
             host:
                 type: sofdcar.capabilities.Host.ECU.Software
                 valid_source_types: [sofdcar.nodes.ECU.Software]
 
     sofdcar.nodes.ECU.Software:
-        derived_from: sofdcar.nodes.Root
         description: The software running on an ECU.
+        derived_from: sofdcar.nodes.Root
         requirements:
             - host:
                   capability: sofdcar.capabilities.Host.ECU.Software
                   relationship: tosca.relationships.HostedOn
 
     sofdcar.nodes.ECU.Runtime:
-        derived_from: sofdcar.nodes.ECU.Software
         description: The runtime for an ECU software.
+        derived_from: sofdcar.nodes.ECU.Software
         capabilities:
             host:
                 type: sofdcar.capabilities.Host.ECU.Software
@@ -226,9 +237,11 @@ node_types:
                   relationship: tosca.relationships.HostedOn
 
     sofdcar.nodes.HPC.Software:
+        description: The software running on an HPC.
         derived_from: tosca.nodes.SoftwareComponent
 
     sofdcar.nodes.HPC.Hardware:
+        description: The hardware of an HPC.
         derived_from: sofdcar.nodes.Root
         capabilities:
             host:
@@ -236,41 +249,51 @@ node_types:
                 valid_source_types: [tosca.nodes.SoftwareComponent]
 
     sofdcar.nodes.Actuator:
+        description: The node all other actuators are derived from.
         derived_from: sofdcar.nodes.Root
 
-    sofdcar.nodes.Accelerating:
+    sofdcar.nodes.Accelerator:
+        description: The node all other accelerators are derived from.
         derived_from: sofdcar.nodes.Root
 
-    sofdcar.nodes.Braking:
+    sofdcar.nodes.Brake:
+        description: The node all other brakes are derived from.
         derived_from: sofdcar.nodes.Root
 
     sofdcar.nodes.Steering:
+        description: The node all other steerings are derived from.
         derived_from: sofdcar.nodes.Root
 
     sofdcar.nodes.Sensor:
+        description: The node all other sensors are derived from.
         derived_from: sofdcar.nodes.Root
 
     sofdcar.nodes.RADAR:
+        description: The node all other RADAR are derived from.
         derived_from: sofdcar.nodes.Sensor
 
     sofdcar.nodes.Camera:
+        description: The node all other cameras are derived from.
         derived_from: sofdcar.nodes.Sensor
 
     sofdcar.nodes.LIDAR:
+        description: The node all other LIDAR are derived from.
         derived_from: sofdcar.nodes.Sensor
 
     sofdcar.nodes.Ultrasonic:
+        description: The node all other ultrasonics are derived from.
         derived_from: sofdcar.nodes.Sensor
 
     sofdcar.nodes.Channel:
-        derived_from: sofdcar.nodes.Root
         description: The node all other communication channels are derived from.
+        derived_from: sofdcar.nodes.Root
         capabilities:
             endpoint:
                 type: sofdcar.capabilities.Endpoint
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.CAN:
+        description: The CAN channel all other CAN channels are derived from.
         derived_from: sofdcar.nodes.Channel
         properties:
             bitrate:
@@ -282,6 +305,7 @@ node_types:
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.CAN-FD:
+        description: The CAN-FD channel all other CAN-FD channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -289,6 +313,7 @@ node_types:
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.LIN:
+        description: The LIN channel all other LIN channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -296,6 +321,7 @@ node_types:
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.MOST:
+        description: The MOST channel all other MOST channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -303,6 +329,7 @@ node_types:
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.GPIO:
+        description: The GIP channel all other GIP channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -310,6 +337,7 @@ node_types:
                 occurrences: [2, 2]
 
     sofdcar.nodes.FlexRay:
+        description: The FlexRay channel all other FlexRay channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -317,6 +345,7 @@ node_types:
                 occurrences: [0, UNBOUNDED]
 
     sofdcar.nodes.Ethernet:
+        description: The ethernet channel all other ethernet channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
@@ -324,58 +353,67 @@ node_types:
                 occurrences: [2, 2]
 
     sofdcar.nodes.OBD:
+        description: The OBD channel all other OBD channels are derived from.
         derived_from: sofdcar.nodes.Channel
         capabilities:
             endpoint:
                 type: sofdcar.capabilities.Endpoint.OBD
                 occurrences: [2, 2]
 
+    sofdcar.nodes.SOME/IP:
+        description: The SOME/IP channel all other SOME/IP channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.SOME/IP
+                occurrences: [2, 2]
+
 group_types:
     sofdcar.groups.Root:
-        derived_from: tosca.groups.Root
         description: The group all other groups are derived from.
+        derived_from: tosca.groups.Root
 
     sofdcar.groups.Location:
+        description: The geographical location of nodes.
         derived_from: sofdcar.groups.Root
-        description: The geographical location of the components.
 
     sofdcar.groups.Domain:
-        derived_from: sofdcar.groups.Root
         description: The domain in a domain-oriented architecture.
+        derived_from: sofdcar.groups.Root
 
     sofdcar.groups.Zone:
-        derived_from: sofdcar.groups.Root
         description: The zone in a zone-oriented architecture.
+        derived_from: sofdcar.groups.Root
 
 policy_types:
     sofdcar.policies.Root:
-        derived_from: tosca.policies.Root
         description: The policy all other policies are derived from.
+        derived_from: tosca.policies.Root
 
     sofdcar.policies.Security:
+        description: The policy all other security-related policies are derived from.
         derived_from: sofdcar.policies.Root
-        description: The policy all other policies are derived from.
 
     sofdcar.policies.Safety:
+        description: The policy all other safety-related policies are derived from.
         derived_from: sofdcar.policies.Root
-        description: The policy all safety-related policies are derived from.
 
     sofdcar.policies.ASIL:
-        derived_from: sofdcar.policies.Safety
         description: The policy that all other ASIL policies are derived from.
+        derived_from: sofdcar.policies.Safety
 
     sofdcar.policies.ASIL.A:
-        derived_from: sofdcar.policies.ASIL
         description: The policy that represents the ASIL level A.
+        derived_from: sofdcar.policies.ASIL
 
     sofdcar.policies.ASIL.B:
-        derived_from: sofdcar.policies.ASIL
         description: The policy that represents the ASIL level B.
+        derived_from: sofdcar.policies.ASIL
 
     sofdcar.policies.ASIL.C:
-        derived_from: sofdcar.policies.ASIL
         description: The policy that represents the ASIL level C.
+        derived_from: sofdcar.policies.ASIL
 
     sofdcar.policies.ASIL.D:
-        derived_from: sofdcar.policies.ASIL
         description: The policy that represents the ASIL level D.
+        derived_from: sofdcar.policies.ASIL

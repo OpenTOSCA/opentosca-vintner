@@ -85,6 +85,7 @@ nav:
           - interface.md
           - dependencies.md
           - development
+          - GitHub: https://github.com/opentosca/opentosca-vintner
     - Specifications:
           - Variability4TOSCA:
                 - variability4tosca/motivation
@@ -102,12 +103,14 @@ nav:
                 - queries4tosca/getting-started.md
                 - queries4tosca/specification.md
                 - Conformance Tests: queries4tosca/tests
-          - SofDCar Profile:
+          - TOSCA SofDCar Profile:
                 - sofdcar/profile.md
                 - Guides:
                       - sofdcar/guides/zone
                       - sofdcar/guides/location
+          - TOSCA Simple Profile: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html
     - More Information:
+          - OpenTOSCA: https://www.opentosca.org
           - code-of-conduct.md
           - resources.md
           - publications.md

@@ -171,7 +171,7 @@ given to the node, otherwise they are anonymous and cannot be referenced in the 
 
 Nodes can optionally contain a filter in square brackets that allows the same predicate syntax
 described above. Selecting a node template can be seen as the equivalent of a `SELECT`
-clause that implicitly starts at the path node_templates.*.
+clause that implicitly starts at the path `node_templates.*`.
 
 ```text linenums="1"
 ([type='textfile'])   // anonymous node template with filter

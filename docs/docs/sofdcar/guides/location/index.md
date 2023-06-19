@@ -4,8 +4,8 @@ Example of an architecture distributed across several geographical locations.
 
 ## Downloads 
 
-- [Template](template.yaml)
-- [Types](types.yaml)
+- [Template](template.yaml){download=template.yaml}
+- [Types](types.yaml){download=types.yaml}
 
 ## Service Template
 

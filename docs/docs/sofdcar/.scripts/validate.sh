@@ -35,7 +35,7 @@ if [ ! -f puccini-tosca ]; then
     fi
 
     # Install Puccini
-    wget -q https://github.com/tliron/puccini/releases/download/v0.20.1/puccini_0.20.1_linux_amd64.tar.gz
+    wget https://github.com/tliron/puccini/releases/download/v0.20.1/puccini_0.20.1_linux_amd64.tar.gz
     tar -zxf puccini_0.20.1_linux_amd64.tar.gz puccini-tosca
     rm puccini_0.20.1_linux_amd64.tar.gz
 

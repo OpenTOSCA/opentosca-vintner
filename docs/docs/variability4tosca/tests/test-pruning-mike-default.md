@@ -58,7 +58,7 @@ topology_template:
 
 ## Variability-Resolved Service Template
 
-The following variability-resolved service templated is expected.
+The following variability-resolved service template is expected.
 
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3

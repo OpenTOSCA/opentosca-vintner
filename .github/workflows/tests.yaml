@@ -46,6 +46,9 @@ jobs:
             - name: (TEST) Run Tests
               run: yarn test
 
+            - name: (TEST) Check SofDCar
+              run: yarn sofdcar:check
+
             - name: (BUILD) Build Project
               run: yarn build
 
