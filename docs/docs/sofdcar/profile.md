@@ -16,21 +16,13 @@ The specification is under active development and is not backwards compatible wi
 
 ## Normative TOSCA Type Definitions
 
-!!! Warning "TODO"
-    - in general, we have for each entity one abstract type to set e.g. properties for all
-    - list available node types (categorized)
-    - list available relationship types (categorized)
-    - describe concept of communication channels (and without)
-
 --8<-- "sofdcar/tosca-sofdcar-profile.md"
 
 
 ## Non-Normative TOSCA Type Definitions
 
-!!! Warning "TODO"
-    - non-normative example for Raspberry Pi and Arduino
-
 --8<-- "sofdcar/tosca-sofdcar-profile-non-normative.md"
+
 
 ## Appendix A "TOSCA SofDCar Profile"
 
