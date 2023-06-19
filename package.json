@@ -115,6 +115,7 @@
         "docs:generate:interface": "yarn build && yarn ts-node -r tsconfig-paths/register docs/cmds/interface/generate",
         "docs:generate:licenses": "yarn ts-node -r tsconfig-paths/register docs/cmds/licenses/generate",
         "docs:generate:tests": "yarn ts-node -r tsconfig-paths/register docs/cmds/variability/generate && yarn ts-node -r tsconfig-paths/register docs/cmds/query/generate",
+        "docs:generate:sofdcar": "yarn ts-node -r tsconfig-paths/register docs/cmds/sofdcar/generate",
         "docs:record": "yarn docs:record:home && yarn docs:record:getting-started",
         "docs:record:home": "cd docs/cmds/casts && ./record.sh home",
         "docs:record:getting-started": "cd docs/cmds/casts && ./record.sh getting-started",
