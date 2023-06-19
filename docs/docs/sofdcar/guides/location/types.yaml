@@ -22,9 +22,9 @@ node_types:
             endpoint:
                 type: tosca.capabilities.Endpoint
         requirements:
-            - ecu:
-                  capability: tosca.capabilities.Endpoint
-                  relationship: tosca.relationships.ConnectsTo
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
                   occurrences: [0, 1]
 
     example.nodes.ECU.Runtime:

@@ -1,6 +1,11 @@
 # Distributed Locations
 
-Example of an architecture distributed across several geographical locations.
+In this document, we discuss an example of two geographically distributed ECUs which are connected via the cloud.
+
+<figure markdown>
+  ![Distributed Locations](diagram.svg){width="700"}
+  <figcaption>Figure 1: Distributed Locations</figcaption>
+</figure>
 
 ## Downloads 
 

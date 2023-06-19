@@ -1,11 +1,5 @@
 # Note
 
-- [SofDCar Normative Types](sofdcar)
-- [SofDCar Non-Normative Types](sofdcar-non-normative)
-- [SofDCar Example "Zone Architecture"](guides/zone)
-- [SofDCar Example "Distributed Locations"](guides/location)
-- [TOSCA Simple Profile in YAML 1.3 Normative Types](tosca)
-
 ## Naming Convention
 
 Types should be named according to the following pattern.
@@ -43,14 +37,6 @@ To install the plotting requirements on Windows, run the following commands.
 choco install make -y
 choco install wget -y
 choco install openjdk -y
-```
-
-## Open Repository
-
-The following command opens the repository in your default browser.
-
-```shell linenums="1"
-make open
 ```
 
 ## Notes

@@ -1,6 +1,6 @@
 # Zonal Architecture
 
-Example of a zonal architecture connected to the cloud.
+In this document, we discuss an example of a zonal architecture connected to the cloud using the TOSCA SofDCar Profile.
 
 ## Downloads
 
