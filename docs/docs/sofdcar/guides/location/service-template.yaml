@@ -25,29 +25,30 @@ topology_template:
         #
         ###################################################
 
-        location_a_ecu_software:
+        a_ecu_software:
             type: example.nodes.ECU.Software
             requirements:
-                - host: location_a_ecu_runtime
-                - ecu: location_b_ecu_software
+                - host: a_ecu_runtime
+                - can: a_can_bus
+                - connect: b_ecu_software
 
-        location_a_ecu_runtime:
+        a_ecu_runtime:
             type: example.nodes.ECU.Runtime
             requirements:
-                - host: location_a_ecu_hardware
+                - host: a_ecu_hardware
 
-        location_a_ecu_hardware:
+        a_ecu_hardware:
             type: example.nodes.ECU.Hardware
             requirements:
-                - can: location_a_can_bus
+                - can: a_can_bus
 
-        location_a_can_bus:
+        a_can_bus:
             type: sofdcar.nodes.CAN
 
-        location_a_can_bridge:
+        a_can_bridge:
             type: example.nodes.CAN.Bridge
             requirements:
-                - can: location_a_can_bus
+                - can: a_can_bus
                 - cloud: cloud_service
 
         ###################################################
@@ -56,28 +57,29 @@ topology_template:
         #
         ###################################################
 
-        location_b_ecu_software:
+        b_ecu_software:
             type: example.nodes.ECU.Software
             requirements:
-                - host: location_b_ecu_runtime
+                - host: b_ecu_runtime
+                - can: b_can_bus
 
-        location_b_ecu_runtime:
+        b_ecu_runtime:
             type: example.nodes.ECU.Runtime
             requirements:
-                - host: location_b_ecu_hardware
+                - host: b_ecu_hardware
 
-        location_b_ecu_hardware:
+        b_ecu_hardware:
             type: example.nodes.ECU.Hardware
             requirements:
-                - can: location_b_can_bus
+                - can: b_can_bus
 
-        location_b_can_bus:
+        b_can_bus:
             type: sofdcar.nodes.CAN
 
-        location_b_can_bridge:
+        b_can_bridge:
             type: example.nodes.CAN.Bridge
             requirements:
-                - can: location_b_can_bus
+                - can: b_can_bus
                 - cloud: cloud_service
 
     groups:
@@ -90,17 +92,17 @@ topology_template:
         location_a:
             type: sofdcar.groups.Location
             members:
-                - location_a_ecu_software
-                - location_a_ecu_runtime
-                - location_a_ecu_hardware
-                - location_a_can_bus
-                - location_a_can_bridge
+                - a_ecu_software
+                - a_ecu_runtime
+                - a_ecu_hardware
+                - a_can_bus
+                - a_can_bridge
 
         location_b:
             type: sofdcar.groups.Location
             members:
-                - location_b_ecu_software
-                - location_b_ecu_runtime
-                - location_b_ecu_hardware
-                - location_b_can_bus
-                - location_b_can_bridge
+                - b_ecu_software
+                - b_ecu_runtime
+                - b_ecu_hardware
+                - b_can_bus
+                - b_can_bridge

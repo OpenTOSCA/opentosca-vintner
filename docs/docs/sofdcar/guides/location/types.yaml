@@ -19,12 +19,16 @@ node_types:
     example.nodes.ECU.Software:
         derived_from: sofdcar.nodes.ECU.Software
         capabilities:
-            endpoint:
-                type: tosca.capabilities.Endpoint
+            connect:
+                type: sofdcar.capabilities.Endpoint.CAN
         requirements:
-            - ecu:
-                  capability: tosca.capabilities.Endpoint
-                  relationship: tosca.relationships.ConnectsTo
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+                  occurrences: [0, 1]
+            - connect:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
                   occurrences: [0, 1]
 
     example.nodes.ECU.Runtime:

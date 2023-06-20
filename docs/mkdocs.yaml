@@ -108,6 +108,7 @@ nav:
                 - Guides:
                       - sofdcar/guides/zone
                       - sofdcar/guides/location
+                - sofdcar/development.md
           - TOSCA Simple Profile: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html
     - More Information:
           - OpenTOSCA: https://www.opentosca.org
