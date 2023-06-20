@@ -30,38 +30,6 @@ sofdcar.artifacts.Implementation:
   derived_from: tosca.artifacts.Implementation
 ```
 
-### Data Types
-
-We specify the following data types.
-
-#### sofdcar.data.Root
-
-The data all other data are derived from.
-
-```yaml linenums="1"
-sofdcar.data.Root:
-  derived_from: tosca.datatypes.Root
-```
-
-#### sofdcar.data.GPIO.Pin
-
-The GPIO pin used, e.g., when connecting using GPIO.
-
-```yaml linenums="1"
-sofdcar.data.GPIO.Pin:
-  derived_from: sofdcar.data.Root
-  properties:
-    pin:
-      type: integer
-    direction:
-      type: string
-      constraints:
-        - valid_values:
-            - in
-            - out
-            - in/out
-```
-
 ### Capability Types
 
 We specify the following capability types.
@@ -194,6 +162,78 @@ sofdcar.capabilities.Endpoint.SOME/IP:
   derived_from: sofdcar.capabilities.Endpoint
 ```
 
+### Data Types
+
+We specify the following data types.
+
+#### sofdcar.data.Root
+
+The data all other data are derived from.
+
+```yaml linenums="1"
+sofdcar.data.Root:
+  derived_from: tosca.datatypes.Root
+```
+
+#### sofdcar.data.GPIO.Pin
+
+The GPIO pin used, e.g., when connecting using GPIO.
+
+```yaml linenums="1"
+sofdcar.data.GPIO.Pin:
+  derived_from: sofdcar.data.Root
+  properties:
+    pin:
+      type: integer
+    direction:
+      type: string
+      constraints:
+        - valid_values:
+            - in
+            - out
+            - in/out
+```
+
+### Group Types
+
+We specify the following group types.
+
+#### sofdcar.groups.Root
+
+The group all other groups are derived from.
+
+```yaml linenums="1"
+sofdcar.groups.Root:
+  derived_from: tosca.groups.Root
+```
+
+#### sofdcar.groups.Location
+
+The geographical location of nodes.
+
+```yaml linenums="1"
+sofdcar.groups.Location:
+  derived_from: sofdcar.groups.Root
+```
+
+#### sofdcar.groups.Domain
+
+The domain in a domain-oriented architecture.
+
+```yaml linenums="1"
+sofdcar.groups.Domain:
+  derived_from: sofdcar.groups.Root
+```
+
+#### sofdcar.groups.Zone
+
+The zone in a zone-oriented architecture.
+
+```yaml linenums="1"
+sofdcar.groups.Zone:
+  derived_from: sofdcar.groups.Root
+```
+
 ### Interface Types
 
 We specify the following interface types.
@@ -226,118 +266,6 @@ The standard management interface for relationships.
 ```yaml linenums="1"
 sofdcar.interfaces.Relationship:
   derived_from: tosca.interfaces.relationship.Configure
-```
-
-### Relationship Types
-
-We specify the following relationship types.
-
-#### sofdcar.relationships.Root
-
-The relationship all other relationships are derived from.
-
-```yaml linenums="1"
-sofdcar.relationships.Root:
-  derived_from: tosca.relationships.Root
-```
-
-#### sofdcar.relationships.CAN
-
-The relationship for CAN connections.
-
-```yaml linenums="1"
-sofdcar.relationships.CAN:
-  derived_from: sofdcar.relationships.Root
-  properties:
-    interface:
-      type: string
-      description: The interface name at the source at which the CAN bus is available.
-      default: can0
-    target_interface:
-      type: string
-      description: The interface name at the target at which the CAN bus is available.
-      required: false
-    bitrate:
-      type: integer
-      description: The bitrate of the CAN bus.
-      required: false
-```
-
-#### sofdcar.relationships.CAN-FD
-
-The relationship for CAN-FD connections.
-
-```yaml linenums="1"
-sofdcar.relationships.CAN-FD:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.LIN
-
-The relationship for LIN connections.
-
-```yaml linenums="1"
-sofdcar.relationships.LIN:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.MOST
-
-The relationships for MOST connections.
-
-```yaml linenums="1"
-sofdcar.relationships.MOST:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.GPIO
-
-The relationship for GPIO connections.
-
-```yaml linenums="1"
-sofdcar.relationships.GPIO:
-  derived_from: sofdcar.relationships.Root
-  properties:
-    pins:
-      type: list
-      entry_schema:
-        type: sofdcar.data.GPIO.Pin
-```
-
-#### sofdcar.relationships.FlexRay
-
-The relationship for FlexRay connections.
-
-```yaml linenums="1"
-sofdcar.relationships.FlexRay:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.Ethernet
-
-The relationship for Ethernet connections.
-
-```yaml linenums="1"
-sofdcar.relationships.Ethernet:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.OBD
-
-The relationship for OBD connections.
-
-```yaml linenums="1"
-sofdcar.relationships.OBD:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.SOME/IP
-
-The relationship for SOME/IP connections.
-
-```yaml linenums="1"
-sofdcar.relationships.SOME/IP:
-  derived_from: sofdcar.relationships.Root
 ```
 
 ### Node Types
@@ -674,46 +602,6 @@ sofdcar.nodes.SOME/IP:
         - 2
 ```
 
-### Group Types
-
-We specify the following group types.
-
-#### sofdcar.groups.Root
-
-The group all other groups are derived from.
-
-```yaml linenums="1"
-sofdcar.groups.Root:
-  derived_from: tosca.groups.Root
-```
-
-#### sofdcar.groups.Location
-
-The geographical location of nodes.
-
-```yaml linenums="1"
-sofdcar.groups.Location:
-  derived_from: sofdcar.groups.Root
-```
-
-#### sofdcar.groups.Domain
-
-The domain in a domain-oriented architecture.
-
-```yaml linenums="1"
-sofdcar.groups.Domain:
-  derived_from: sofdcar.groups.Root
-```
-
-#### sofdcar.groups.Zone
-
-The zone in a zone-oriented architecture.
-
-```yaml linenums="1"
-sofdcar.groups.Zone:
-  derived_from: sofdcar.groups.Root
-```
-
 ### Policy Types
 
 We specify the following policy types.
@@ -788,6 +676,118 @@ The policy that represents the ASIL level D.
 ```yaml linenums="1"
 sofdcar.policies.ASIL.D:
   derived_from: sofdcar.policies.ASIL
+```
+
+### Relationship Types
+
+We specify the following relationship types.
+
+#### sofdcar.relationships.Root
+
+The relationship all other relationships are derived from.
+
+```yaml linenums="1"
+sofdcar.relationships.Root:
+  derived_from: tosca.relationships.Root
+```
+
+#### sofdcar.relationships.CAN
+
+The relationship for CAN connections.
+
+```yaml linenums="1"
+sofdcar.relationships.CAN:
+  derived_from: sofdcar.relationships.Root
+  properties:
+    interface:
+      type: string
+      description: The interface name at the source at which the CAN bus is available.
+      default: can0
+    target_interface:
+      type: string
+      description: The interface name at the target at which the CAN bus is available.
+      required: false
+    bitrate:
+      type: integer
+      description: The bitrate of the CAN bus.
+      required: false
+```
+
+#### sofdcar.relationships.CAN-FD
+
+The relationship for CAN-FD connections.
+
+```yaml linenums="1"
+sofdcar.relationships.CAN-FD:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.LIN
+
+The relationship for LIN connections.
+
+```yaml linenums="1"
+sofdcar.relationships.LIN:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.MOST
+
+The relationships for MOST connections.
+
+```yaml linenums="1"
+sofdcar.relationships.MOST:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.GPIO
+
+The relationship for GPIO connections.
+
+```yaml linenums="1"
+sofdcar.relationships.GPIO:
+  derived_from: sofdcar.relationships.Root
+  properties:
+    pins:
+      type: list
+      entry_schema:
+        type: sofdcar.data.GPIO.Pin
+```
+
+#### sofdcar.relationships.FlexRay
+
+The relationship for FlexRay connections.
+
+```yaml linenums="1"
+sofdcar.relationships.FlexRay:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.Ethernet
+
+The relationship for Ethernet connections.
+
+```yaml linenums="1"
+sofdcar.relationships.Ethernet:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.OBD
+
+The relationship for OBD connections.
+
+```yaml linenums="1"
+sofdcar.relationships.OBD:
+  derived_from: sofdcar.relationships.Root
+```
+
+#### sofdcar.relationships.SOME/IP
+
+The relationship for SOME/IP connections.
+
+```yaml linenums="1"
+sofdcar.relationships.SOME/IP:
+  derived_from: sofdcar.relationships.Root
 ```
 
 
