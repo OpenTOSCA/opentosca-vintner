@@ -16,7 +16,7 @@ This appendix contains the complete service template of this guide.
 You can also download the service template [here](service-template.yaml){download=service-template.yaml}.
 
 ```yaml linenums="1"
---8<-- "sofdcar/guides/zone/template.yaml"
+--8<-- "sofdcar/guides/zone/service-template.yaml"
 ```
 
 ## Appendix B "Type Definitions"
