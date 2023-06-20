@@ -2,15 +2,22 @@
 ### <%= utils.toTitle(types_key) %>
 
 We specify the following <%= utils.toText(types_key) %>.
-<% Object.entries(types).forEach(([type_key, type]) => { %>
+<%
+
+Object.entries(types).forEach(([type_key, type]) => {
+    const description = type.description
+
+    delete type.description
+    const definition = {}
+    definition[type_key] = type
+
+%>
 #### <%= type_key %>
 
-<%= type.description %>
+<%= description %>
 
 ```yaml linenums="1"
-<%- type_key %>:
-<%- utils.toYAML(type).split('\n').map(it => '    ' + it).slice(0, -1).join('\n') -%>
-
+<%- utils.toYAML(definition) -%>
 ```
 <% }) -%>
 <% }) -%>

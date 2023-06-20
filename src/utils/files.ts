@@ -4,6 +4,7 @@ import extract from 'extract-zip'
 import * as fs from 'fs'
 import {copySync} from 'fs-extra'
 import * as yaml from 'js-yaml'
+import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
 import xml2js from 'xml2js'
@@ -84,12 +85,18 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
-export function toYAML(obj: any) {
-    return yaml.dump(obj, {
-        styles: {
-            '!!null': 'empty',
-        },
-    })
+export function toYAML(obj: any, options?: yaml.DumpOptions) {
+    return yaml.dump(
+        obj,
+        _.merge(
+            {
+                styles: {
+                    '!!null': 'empty',
+                },
+            },
+            options
+        )
+    )
 }
 
 export function toJSON(obj: any) {
