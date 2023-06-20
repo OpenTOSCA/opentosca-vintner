@@ -1,10 +1,9 @@
 # Zonal Architecture
 
 In this document, we discuss an example of a zonal architecture connected to the cloud using the TOSCA SofDCar profile.
-
-!!! Warning TODO
-    - description
-    - figure
+There are two zones each containing a zone control unit, an actuator, and a sensor.
+Communication inside a zone is based on CAN whereas communication between zones is based on Ethernet.
+A vehicle control unit connects both zones and also connects to some service running in the cloud.
 
 <figure markdown>
   ![Distributed Locations](diagram.svg){width="700"}
