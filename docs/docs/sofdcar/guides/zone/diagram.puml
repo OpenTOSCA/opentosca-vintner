@@ -1,0 +1,4 @@
+@startuml
+skinparam componentStyle rectangle
+
+@enduml

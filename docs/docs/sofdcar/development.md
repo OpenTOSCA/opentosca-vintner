@@ -1,5 +1,7 @@
 # Development
 
+This document holds conventions and instructions on development the TOSCA SofDCar profile.
+
 ## Naming Convention
 
 Types should be named according to the following pattern.

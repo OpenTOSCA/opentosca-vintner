@@ -42,4 +42,7 @@ rectangle "location_b" {
     b_ecu_hardware -(0- b_can_bus : "  can"
 }
 
+a_ecu_software -(0- b_ecu_software : "  connect"
+
+
 @enduml

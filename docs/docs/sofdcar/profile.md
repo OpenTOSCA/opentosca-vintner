@@ -24,8 +24,7 @@ These types mainly concern the following topics.
 - Sensors and actuators
 - Communications, such as CAN, FlexRay, and Ethernet
 
-A comment on modeling communication.
-The TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components and no CAN bus connected to the ECUs is modeled.
+Considering modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components and no CAN bus connected to the ECUs is modeled.
 However, this might not provide all required information.
 Therefore, we provide also node types to model, e.g., a CAN bus.
 This topic is also discussed in more detail in [TOSCA Networking](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482){target=_blank} in which they propose to have a TOSCA model for the application and a second one for the networking.

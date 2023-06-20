@@ -30,6 +30,7 @@ topology_template:
             requirements:
                 - host: a_ecu_runtime
                 - can: a_can_bus
+                - connect: b_ecu_software
 
         a_ecu_runtime:
             type: example.nodes.ECU.Runtime
