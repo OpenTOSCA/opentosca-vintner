@@ -1,5 +1,6 @@
 import archiver from 'archiver'
 import axios from 'axios'
+import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fs from 'fs'
 import {copySync} from 'fs-extra'
@@ -178,4 +179,14 @@ export async function download(source: string, target: string = temporary()): Pr
 
 export function temporary(name?: string) {
     return path.join(os.tmpdir(), name || utils.generateNonce())
+}
+
+export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        ejs.renderFile(source, data, (error, data) => {
+            if (validator.isDefined(error)) return reject(error)
+            if (validator.isDefined(target)) storeFile(target, data)
+            return resolve(data)
+        })
+    })
 }

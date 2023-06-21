@@ -1,0 +1,21 @@
+@startuml
+skinparam componentStyle rectangle
+
+rectangle "worker" {
+    [application] <<example.nodes.Application>>
+    [runtime] <<example.nodes.Runtime>>
+}
+rectangle "data" {
+    [database] <<example.nodes.Database>>
+    [dbms] <<example.nodes.DBMS>>
+}
+
+[compute] <<example.nodes.Compute>>
+
+application -(0- runtime : host
+application -(0- database : database
+runtime -(0- compute : host
+database -(0- dbms : host
+dbms -(0- compute : host
+
+@enduml

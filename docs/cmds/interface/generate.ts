@@ -1,9 +1,9 @@
 import {program} from '#/cli/program'
+import * as files from '#files'
 import * as utils from '#utils'
 import * as validator from '#validator'
 import {Command, Option} from 'commander'
 import * as path from 'path'
-import {renderFile} from '../utils'
 
 type CommandInformation = {
     commands: string[]
@@ -53,7 +53,7 @@ async function main() {
 
     data.sort((a, b) => a.usage.localeCompare(b.usage))
 
-    await renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
+    await files.renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
 
     function run(command: Command, commands: string[]) {
         if (command.name() !== 'vintner') commands.push(command.name())

@@ -1,0 +1,18 @@
+@startuml
+skinparam componentStyle rectangle
+
+<% graph.groups.forEach(group => { -%>
+<%- include('group.template.ejs', {group}); %>
+<% }) -%>
+
+<% graph.nodes.filter(it => utils.isEmpty(it.groups)).forEach(node => { -%>
+<%- include('node.template.ejs', {node}) %>
+<% }) -%>
+
+<% graph.nodes.forEach(node => { -%>
+<% node.outgoing.forEach(relation => { -%>
+<%- include('relation.template.ejs', {node, relation}) %>
+<% }) -%>
+<% }) -%>
+
+@enduml

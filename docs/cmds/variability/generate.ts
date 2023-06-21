@@ -10,7 +10,6 @@ import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as validator from '#validator'
 import * as path from 'path'
-import {renderFile} from '../utils'
 
 type Test = {
     id: string
@@ -51,14 +50,14 @@ async function main() {
         })
     }
 
-    await renderFile(
+    await files.renderFile(
         path.join(__dirname, 'introduction.template.ejs'),
         {tests},
         path.join(documentationDirectory, 'introduction.md')
     )
 
     for (const test of tests) {
-        await renderFile(
+        await files.renderFile(
             path.join(__dirname, 'test.template.ejs'),
             {test, utils: {toYAML: files.toYAML}},
             path.join(documentationDirectory, test.file)
