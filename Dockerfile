@@ -26,4 +26,7 @@ RUN yarn docs:install
 RUN yarn docs:generate:licenses
 RUN yarn docs:generate:interface
 RUN yarn docs:generate:tests
+RUN yarn docs:generate:sofdcar
+RUN yarn docs:generate:puml
+
 RUN yarn docs:build

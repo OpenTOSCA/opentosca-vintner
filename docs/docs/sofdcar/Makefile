@@ -1,6 +1,9 @@
 default:
 	/usr/bin/env bash .scripts/default.sh
 
+puml:
+	/usr/bin/env bash .scripts/puml.sh
+
 plot:
 	/usr/bin/env bash .scripts/plot.sh
 

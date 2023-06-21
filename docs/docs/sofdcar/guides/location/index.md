@@ -7,7 +7,7 @@ components as well as network-centric via explicitly modeling the CAN busses and
 hardware.
 
 <figure markdown>
-  ![Distributed Locations](diagram.svg){width="700"}
+  ![Distributed Locations](service-template.svg){width="700"}
   <figcaption>Figure 1: Distributed Locations</figcaption>
 </figure>
 

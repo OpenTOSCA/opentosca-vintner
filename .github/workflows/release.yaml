@@ -138,5 +138,11 @@ jobs:
             - name: (DOCS) Generate Conformance Test Pages
               run: yarn docs:generate:tests
 
+            - name: (DOCS) Generate TOSCA SofDCar Profile
+              run: yarn docs:generate:sofdcar
+
+            - name: (DOCS) Plot service templates
+              run: yarn docs:generate:puml
+
             - name: (DOCS) Build and Deploy Docs
               run: yarn docs:deploy
