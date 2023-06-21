@@ -6,7 +6,7 @@ import * as path from 'path'
 describe('puml', () => {
     it('generate puml', async () => {
         const input = path.join(__dirname, 'service-template.yaml')
-        const output = files.temporary()
+        const output = files.temporary('service-template.puml')
 
         await Controller.template.puml({path: input, output: output})
 
