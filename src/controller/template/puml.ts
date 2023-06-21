@@ -9,7 +9,7 @@ export type TemplatePUMLOptions = {
     output?: string
 }
 
-export default async function(options: TemplatePUMLOptions) {
+export default async function (options: TemplatePUMLOptions) {
     validator.ensureDefined(options.path, 'Inputs not defined')
     files.assertFile(options.path)
 
