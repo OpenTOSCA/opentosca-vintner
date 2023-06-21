@@ -21,7 +21,7 @@ This will install [puccini](https://github.com/tliron/puccini) in the background
 This only works on Linux or if WSL is installed.
 
 ```shell linenums="1"
-make validate T=relative/path/to/service/template
+yarn sofdcar:validate
 ```
 
 ## Plot Images
@@ -30,13 +30,12 @@ The following command plots all `.puml` files found in this repository using [Pl
 Read [PlantUML Guide](https://plantuml.com/de/guide) for modeling instructions.
 
 ```shell linenums="1"
-make plot
+yarn docs:generate:puml
 ```
 
 To install the plotting requirements on Windows, run the following commands.
 
 ```shell linenums="1"
-choco install make -y
 choco install wget -y
 choco install openjdk -y
 ```
