@@ -84,7 +84,7 @@ jobs:
             - name: (DOCS) Generate TOSCA SofDCar Profile
               run: yarn docs:generate:sofdcar
 
-            - name: (DOCS) Plot Service Templates
+            - name: (DOCS) Generate PlantUML of Service Templates
               run: yarn docs:generate:puml
 
             - name: (DOCS) Build Docs

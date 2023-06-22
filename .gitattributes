@@ -12,7 +12,6 @@
 *.zip   filter=lfs diff=lfs merge=lfs -text
 *.xz    filter=lfs diff=lfs merge=lfs -text
 *.jar    filter=lfs diff=lfs merge=lfs -text
-*puccini-tosca    filter=lfs diff=lfs merge=lfs -text
 
 *.jpg  binary
 *.gif  binary
