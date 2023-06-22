@@ -23,24 +23,24 @@ rectangle "sofdcar.relationships.OBD"
 rectangle "sofdcar.relationships.SOME/IP"
 
 
-"sofdcar.relationships.Root" --|> "tosca.relationships.Root"
+"tosca.relationships.Root" <|-- "sofdcar.relationships.Root"
 
-"sofdcar.relationships.CAN" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN"
 
-"sofdcar.relationships.CAN-FD" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN-FD"
 
-"sofdcar.relationships.LIN" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.LIN"
 
-"sofdcar.relationships.MOST" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.MOST"
 
-"sofdcar.relationships.GPIO" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.GPIO"
 
-"sofdcar.relationships.FlexRay" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.FlexRay"
 
-"sofdcar.relationships.Ethernet" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.Ethernet"
 
-"sofdcar.relationships.OBD" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.OBD"
 
-"sofdcar.relationships.SOME/IP" --|> "sofdcar.relationships.Root"
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.SOME/IP"
 
 @enduml

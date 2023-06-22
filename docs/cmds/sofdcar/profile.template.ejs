@@ -2,6 +2,11 @@
 ### <%= utils.toTitle(types_key) %>
 
 We specify the following <%= utils.toText(types_key) %>.
+An overview is given in the following figure.
+<figure markdown>
+    ![<%= utils.toTitle(types_key) %>](<%= utils.toFigure(types_key) %>){width="500"}
+    <figcaption><%= utils.toTitle(types_key) %></figcaption>
+</figure>
 <%
 
 Object.entries(types).forEach(([type_key, type]) => {

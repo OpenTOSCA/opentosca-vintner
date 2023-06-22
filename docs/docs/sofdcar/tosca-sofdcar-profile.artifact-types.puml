@@ -9,10 +9,10 @@ rectangle "sofdcar.artifacts.Deployment"
 rectangle "sofdcar.artifacts.Implementation"
 
 
-"sofdcar.artifacts.Root" --|> "tosca.artifacts.Root"
+"tosca.artifacts.Root" <|-- "sofdcar.artifacts.Root"
 
-"sofdcar.artifacts.Deployment" --|> "tosca.artifacts.Deployment"
+"tosca.artifacts.Deployment" <|-- "sofdcar.artifacts.Deployment"
 
-"sofdcar.artifacts.Implementation" --|> "tosca.artifacts.Implementation"
+"tosca.artifacts.Implementation" <|-- "sofdcar.artifacts.Implementation"
 
 @enduml

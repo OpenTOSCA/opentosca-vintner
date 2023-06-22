@@ -57,58 +57,58 @@ rectangle "sofdcar.nodes.OBD"
 rectangle "sofdcar.nodes.SOME/IP"
 
 
-"sofdcar.nodes.Root" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "sofdcar.nodes.Root"
 
-"sofdcar.nodes.Vehicle" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Vehicle"
 
-"sofdcar.nodes.Cloud" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Cloud"
 
-"sofdcar.nodes.ECU.Hardware" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.ECU.Hardware"
 
-"sofdcar.nodes.ECU.Software" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.ECU.Software"
 
-"sofdcar.nodes.ECU.Runtime" --|> "sofdcar.nodes.ECU.Software"
+"sofdcar.nodes.ECU.Software" <|-- "sofdcar.nodes.ECU.Runtime"
 
-"sofdcar.nodes.HPC.Software" --|> "tosca.nodes.SoftwareComponent"
+"tosca.nodes.SoftwareComponent" <|-- "sofdcar.nodes.HPC.Software"
 
-"sofdcar.nodes.HPC.Hardware" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.HPC.Hardware"
 
-"sofdcar.nodes.Actuator" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Actuator"
 
-"sofdcar.nodes.Accelerator" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Accelerator"
 
-"sofdcar.nodes.Brake" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Brake"
 
-"sofdcar.nodes.Steering" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Steering"
 
-"sofdcar.nodes.Sensor" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Sensor"
 
-"sofdcar.nodes.RADAR" --|> "sofdcar.nodes.Sensor"
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.RADAR"
 
-"sofdcar.nodes.Camera" --|> "sofdcar.nodes.Sensor"
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Camera"
 
-"sofdcar.nodes.LIDAR" --|> "sofdcar.nodes.Sensor"
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.LIDAR"
 
-"sofdcar.nodes.Ultrasonic" --|> "sofdcar.nodes.Sensor"
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Ultrasonic"
 
-"sofdcar.nodes.Channel" --|> "sofdcar.nodes.Root"
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Channel"
 
-"sofdcar.nodes.CAN" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.CAN"
 
-"sofdcar.nodes.CAN-FD" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.CAN-FD"
 
-"sofdcar.nodes.LIN" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.LIN"
 
-"sofdcar.nodes.MOST" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.MOST"
 
-"sofdcar.nodes.GPIO" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.GPIO"
 
-"sofdcar.nodes.FlexRay" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.FlexRay"
 
-"sofdcar.nodes.Ethernet" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.Ethernet"
 
-"sofdcar.nodes.OBD" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.OBD"
 
-"sofdcar.nodes.SOME/IP" --|> "sofdcar.nodes.Channel"
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.SOME/IP"
 
 @enduml

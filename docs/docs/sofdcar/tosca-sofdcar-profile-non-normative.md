@@ -2,6 +2,11 @@
 ### Node Types
 
 We specify the following node types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Node Types](tosca-sofdcar-profile-non-normative.node-types.svg){width="500"}
+    <figcaption>Node Types</figcaption>
+</figure>
 
 #### sofdcar.nodes.Python.Application
 
@@ -36,13 +41,13 @@ sofdcar.nodes.Python.Runtime:
         relationship: tosca.relationships.HostedOn
 ```
 
-#### sofdcar.nodes.RaspberryPi
+#### sofdcar.nodes.RaspberryPi.Hardware
 
-The hardware of an Raspberry Pi serving as a HPC hardware. This Raspberry Pi is able to host HPC software.  Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
+The hardware of an Raspberry Pi serving as a HPC hardware. This Raspberry Pi is able to host HPC software. Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
 
 
 ```yaml linenums="1"
-sofdcar.nodes.RaspberryPi:
+sofdcar.nodes.RaspberryPi.Hardware:
   derived_from: sofdcar.nodes.HPC.Hardware
   capabilities:
     host:

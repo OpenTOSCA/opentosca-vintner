@@ -7,8 +7,8 @@ rectangle "sofdcar.data.Root"
 rectangle "sofdcar.data.GPIO.Pin"
 
 
-"sofdcar.data.Root" --|> "tosca.datatypes.Root"
+"tosca.datatypes.Root" <|-- "sofdcar.data.Root"
 
-"sofdcar.data.GPIO.Pin" --|> "sofdcar.data.Root"
+"sofdcar.data.Root" <|-- "sofdcar.data.GPIO.Pin"
 
 @enduml

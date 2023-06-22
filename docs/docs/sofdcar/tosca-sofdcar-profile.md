@@ -2,6 +2,12 @@
 ### Artifact Types
 
 We specify the following artifact types.
+An overview is given in the following figure.
+
+<figure markdown>
+    ![Artifact Types](tosca-sofdcar-profile.artifact-types.svg){width="500"}
+    <figcaption>Artifact Types</figcaption>
+</figure>
 
 #### sofdcar.artifacts.Root
 
@@ -33,6 +39,11 @@ sofdcar.artifacts.Implementation:
 ### Capability Types
 
 We specify the following capability types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Capability Types](tosca-sofdcar-profile.capability-types.svg){width="500"}
+    <figcaption>Capability Types</figcaption>
+</figure>
 
 #### sofdcar.capabilities.Root
 
@@ -165,6 +176,11 @@ sofdcar.capabilities.Endpoint.SOME/IP:
 ### Data Types
 
 We specify the following data types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Data Types](tosca-sofdcar-profile.data-types.svg){width="500"}
+    <figcaption>Data Types</figcaption>
+</figure>
 
 #### sofdcar.data.Root
 
@@ -197,6 +213,11 @@ sofdcar.data.GPIO.Pin:
 ### Group Types
 
 We specify the following group types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Group Types](tosca-sofdcar-profile.group-types.svg){width="500"}
+    <figcaption>Group Types</figcaption>
+</figure>
 
 #### sofdcar.groups.Root
 
@@ -237,6 +258,11 @@ sofdcar.groups.Zone:
 ### Interface Types
 
 We specify the following interface types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Interface Types](tosca-sofdcar-profile.interface-types.svg){width="500"}
+    <figcaption>Interface Types</figcaption>
+</figure>
 
 #### sofdcar.interfaces.Root
 
@@ -271,6 +297,11 @@ sofdcar.interfaces.Relationship:
 ### Node Types
 
 We specify the following node types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Node Types](tosca-sofdcar-profile.node-types.svg){width="500"}
+    <figcaption>Node Types</figcaption>
+</figure>
 
 #### sofdcar.nodes.Root
 
@@ -287,7 +318,7 @@ The node all other vehicles are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Vehicle:
-  derived_from: tosca.nodes.Root
+  derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.Cloud
@@ -296,7 +327,7 @@ The node all other clouds are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Cloud:
-  derived_from: tosca.nodes.Root
+  derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.ECU.Hardware
@@ -605,6 +636,11 @@ sofdcar.nodes.SOME/IP:
 ### Policy Types
 
 We specify the following policy types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Policy Types](tosca-sofdcar-profile.policy-types.svg){width="500"}
+    <figcaption>Policy Types</figcaption>
+</figure>
 
 #### sofdcar.policies.Root
 
@@ -681,6 +717,11 @@ sofdcar.policies.ASIL.D:
 ### Relationship Types
 
 We specify the following relationship types.
+An overview is given in the following figure.
+<figure markdown>
+    ![Relationship Types](tosca-sofdcar-profile.relationship-types.svg){width="500"}
+    <figcaption>Relationship Types</figcaption>
+</figure>
 
 #### sofdcar.relationships.Root
 

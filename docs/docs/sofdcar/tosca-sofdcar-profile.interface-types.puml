@@ -9,10 +9,10 @@ rectangle "sofdcar.interfaces.Nodes"
 rectangle "sofdcar.interfaces.Relationship"
 
 
-"sofdcar.interfaces.Root" --|> "tosca.interfaces.Root"
+"tosca.interfaces.Root" <|-- "sofdcar.interfaces.Root"
 
-"sofdcar.interfaces.Nodes" --|> "tosca.interfaces.node.lifecycle.Standard"
+"tosca.interfaces.node.lifecycle.Standard" <|-- "sofdcar.interfaces.Nodes"
 
-"sofdcar.interfaces.Relationship" --|> "tosca.interfaces.relationship.Configure"
+"tosca.interfaces.relationship.Configure" <|-- "sofdcar.interfaces.Relationship"
 
 @enduml

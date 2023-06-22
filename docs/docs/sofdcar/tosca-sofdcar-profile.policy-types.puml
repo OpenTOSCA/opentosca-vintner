@@ -19,20 +19,20 @@ rectangle "sofdcar.policies.ASIL.C"
 rectangle "sofdcar.policies.ASIL.D"
 
 
-"sofdcar.policies.Root" --|> "tosca.policies.Root"
+"tosca.policies.Root" <|-- "sofdcar.policies.Root"
 
-"sofdcar.policies.Security" --|> "sofdcar.policies.Root"
+"sofdcar.policies.Root" <|-- "sofdcar.policies.Security"
 
-"sofdcar.policies.Safety" --|> "sofdcar.policies.Root"
+"sofdcar.policies.Root" <|-- "sofdcar.policies.Safety"
 
-"sofdcar.policies.ASIL" --|> "sofdcar.policies.Safety"
+"sofdcar.policies.Safety" <|-- "sofdcar.policies.ASIL"
 
-"sofdcar.policies.ASIL.A" --|> "sofdcar.policies.ASIL"
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.A"
 
-"sofdcar.policies.ASIL.B" --|> "sofdcar.policies.ASIL"
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.B"
 
-"sofdcar.policies.ASIL.C" --|> "sofdcar.policies.ASIL"
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.C"
 
-"sofdcar.policies.ASIL.D" --|> "sofdcar.policies.ASIL"
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.D"
 
 @enduml

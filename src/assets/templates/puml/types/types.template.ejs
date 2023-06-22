@@ -10,7 +10,7 @@ rectangle "<%= name %>"
 <% if (graph.serviceTemplate[type]) {
 const entries = Object.entries(graph.serviceTemplate[type])
 for ([name, definition] of entries) { %>
-"<%= name %>" --|> "<%= definition.derived_from %>"
+"<%= definition.derived_from %>" <|-- "<%= name %>"
 <% }} -%>
 
 @enduml

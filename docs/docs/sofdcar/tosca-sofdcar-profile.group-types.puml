@@ -11,12 +11,12 @@ rectangle "sofdcar.groups.Domain"
 rectangle "sofdcar.groups.Zone"
 
 
-"sofdcar.groups.Root" --|> "tosca.groups.Root"
+"tosca.groups.Root" <|-- "sofdcar.groups.Root"
 
-"sofdcar.groups.Location" --|> "sofdcar.groups.Root"
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Location"
 
-"sofdcar.groups.Domain" --|> "sofdcar.groups.Root"
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Domain"
 
-"sofdcar.groups.Zone" --|> "sofdcar.groups.Root"
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Zone"
 
 @enduml
