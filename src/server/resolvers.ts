@@ -92,6 +92,20 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/puml/topology',
+    hae.express(async (req, res, next) => {
+        await Controller.template.puml.topology(req.body)
+    })
+)
+
+resolvers.post(
+    '/template/puml/types',
+    hae.express(async (req, res, next) => {
+        await Controller.template.puml.types(req.body)
+    })
+)
+
+resolvers.post(
     '/templates/list',
     hae.express(async (req, res, next) => {
         const list = await Controller.templates.list()

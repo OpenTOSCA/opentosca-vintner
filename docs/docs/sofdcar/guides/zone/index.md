@@ -6,7 +6,7 @@ Communication inside a zone is based on CAN whereas communication between zones 
 A vehicle control unit connects both zones and also connects to some service running in the cloud.
 
 <figure markdown>
-  ![Distributed Locations](service-template.svg){width="700"}
+  ![Distributed Locations](service-template.topology.svg){width="700"}
   <figcaption>Figure 1: Zonal Architecture</figcaption>
 </figure>
 

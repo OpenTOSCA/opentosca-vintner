@@ -1,0 +1,114 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.nodes.Root"
+
+rectangle "sofdcar.nodes.Vehicle"
+
+rectangle "sofdcar.nodes.Cloud"
+
+rectangle "sofdcar.nodes.ECU.Hardware"
+
+rectangle "sofdcar.nodes.ECU.Software"
+
+rectangle "sofdcar.nodes.ECU.Runtime"
+
+rectangle "sofdcar.nodes.HPC.Software"
+
+rectangle "sofdcar.nodes.HPC.Hardware"
+
+rectangle "sofdcar.nodes.Actuator"
+
+rectangle "sofdcar.nodes.Accelerator"
+
+rectangle "sofdcar.nodes.Brake"
+
+rectangle "sofdcar.nodes.Steering"
+
+rectangle "sofdcar.nodes.Sensor"
+
+rectangle "sofdcar.nodes.RADAR"
+
+rectangle "sofdcar.nodes.Camera"
+
+rectangle "sofdcar.nodes.LIDAR"
+
+rectangle "sofdcar.nodes.Ultrasonic"
+
+rectangle "sofdcar.nodes.Channel"
+
+rectangle "sofdcar.nodes.CAN"
+
+rectangle "sofdcar.nodes.CAN-FD"
+
+rectangle "sofdcar.nodes.LIN"
+
+rectangle "sofdcar.nodes.MOST"
+
+rectangle "sofdcar.nodes.GPIO"
+
+rectangle "sofdcar.nodes.FlexRay"
+
+rectangle "sofdcar.nodes.Ethernet"
+
+rectangle "sofdcar.nodes.OBD"
+
+rectangle "sofdcar.nodes.SOME/IP"
+
+
+"sofdcar.nodes.Root" --|> "tosca.nodes.Root"
+
+"sofdcar.nodes.Vehicle" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Cloud" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.ECU.Hardware" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.ECU.Software" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.ECU.Runtime" --|> "sofdcar.nodes.ECU.Software"
+
+"sofdcar.nodes.HPC.Software" --|> "tosca.nodes.SoftwareComponent"
+
+"sofdcar.nodes.HPC.Hardware" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Actuator" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Accelerator" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Brake" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Steering" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Sensor" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.RADAR" --|> "sofdcar.nodes.Sensor"
+
+"sofdcar.nodes.Camera" --|> "sofdcar.nodes.Sensor"
+
+"sofdcar.nodes.LIDAR" --|> "sofdcar.nodes.Sensor"
+
+"sofdcar.nodes.Ultrasonic" --|> "sofdcar.nodes.Sensor"
+
+"sofdcar.nodes.Channel" --|> "sofdcar.nodes.Root"
+
+"sofdcar.nodes.CAN" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.CAN-FD" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.LIN" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.MOST" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.GPIO" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.FlexRay" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.Ethernet" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.OBD" --|> "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.SOME/IP" --|> "sofdcar.nodes.Channel"
+
+@enduml

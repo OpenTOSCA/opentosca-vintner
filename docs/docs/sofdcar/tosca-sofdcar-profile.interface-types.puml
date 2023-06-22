@@ -1,0 +1,18 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.interfaces.Root"
+
+rectangle "sofdcar.interfaces.Nodes"
+
+rectangle "sofdcar.interfaces.Relationship"
+
+
+"sofdcar.interfaces.Root" --|> "tosca.interfaces.Root"
+
+"sofdcar.interfaces.Nodes" --|> "tosca.interfaces.node.lifecycle.Standard"
+
+"sofdcar.interfaces.Relationship" --|> "tosca.interfaces.relationship.Configure"
+
+@enduml

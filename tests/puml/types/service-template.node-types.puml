@@ -1,0 +1,70 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "tosca.nodes.Root"
+
+rectangle "tosca.nodes.Abstract.Compute"
+
+rectangle "tosca.nodes.Compute"
+
+rectangle "tosca.nodes.SoftwareComponent"
+
+rectangle "tosca.nodes.WebServer"
+
+rectangle "tosca.nodes.WebApplication"
+
+rectangle "tosca.nodes.DBMS"
+
+rectangle "tosca.nodes.Database"
+
+rectangle "tosca.nodes.Abstract.Storage"
+
+rectangle "tosca.nodes.Storage.ObjectStorage"
+
+rectangle "tosca.nodes.Storage.BlockStorage"
+
+rectangle "tosca.nodes.Container.Runtime"
+
+rectangle "tosca.nodes.Container.Application"
+
+rectangle "tosca.nodes.LoadBalancer"
+
+rectangle "tosca.nodes.network.Network"
+
+rectangle "tosca.nodes.network.Port"
+
+
+"tosca.nodes.Root" --|> "tosca.entity.Root"
+
+"tosca.nodes.Abstract.Compute" --|> "tosca.nodes.Root"
+
+"tosca.nodes.Compute" --|> "tosca.nodes.Abstract.Compute"
+
+"tosca.nodes.SoftwareComponent" --|> "tosca.nodes.Root"
+
+"tosca.nodes.WebServer" --|> "tosca.nodes.SoftwareComponent"
+
+"tosca.nodes.WebApplication" --|> "tosca.nodes.Root"
+
+"tosca.nodes.DBMS" --|> "tosca.nodes.SoftwareComponent"
+
+"tosca.nodes.Database" --|> "tosca.nodes.Root"
+
+"tosca.nodes.Abstract.Storage" --|> "tosca.nodes.Root"
+
+"tosca.nodes.Storage.ObjectStorage" --|> "tosca.nodes.Abstract.Storage"
+
+"tosca.nodes.Storage.BlockStorage" --|> "tosca.nodes.Abstract.Storage"
+
+"tosca.nodes.Container.Runtime" --|> "tosca.nodes.SoftwareComponent"
+
+"tosca.nodes.Container.Application" --|> "tosca.nodes.Root"
+
+"tosca.nodes.LoadBalancer" --|> "tosca.nodes.Root"
+
+"tosca.nodes.network.Network" --|> "tosca.nodes.Root"
+
+"tosca.nodes.network.Port" --|> "tosca.nodes.Root"
+
+@enduml

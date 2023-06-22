@@ -134,6 +134,14 @@ export function removeDirectory(directory: string) {
     fs.rmSync(resolved, {recursive: true, force: true})
 }
 
+export function getDirectory(file: string) {
+    return path.parse(path.resolve(file)).dir
+}
+
+export function getFilename(file: string) {
+    return path.parse(path.resolve(file)).base
+}
+
 export async function extractArchive(source: string, target: string) {
     await extract(source, {dir: target})
 }

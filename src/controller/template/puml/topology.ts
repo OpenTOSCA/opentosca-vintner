@@ -4,20 +4,20 @@ import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import * as validator from '#validator'
 
-export type TemplatePUMLOptions = {
+export type TemplatePUMLTopologyOptions = {
     path: string
     output?: string
 }
 
-export default async function (options: TemplatePUMLOptions) {
-    validator.ensureDefined(options.path, 'Inputs not defined')
-    files.assertFile(options.path)
+export default async function (options: TemplatePUMLTopologyOptions) {
+    validator.ensureDefined(options.path, 'Path not defined')
 
-    const output = options.output ?? options.path.replace('.yaml', '.puml').replace('.yml', '.puml')
+    const output = options.output ?? options.path.replace(/(\.yaml|\.yml)/, '.topology.puml')
     if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 
     const graph = new Graph(files.loadYAML<ServiceTemplate>(options.path))
-    const puml = await new PUML(graph).plot()
+    const puml = new PUML(graph)
+    const plot = await puml.plotTopology()
 
-    files.storeFile(output, puml)
+    files.storeFile(output, plot)
 }
