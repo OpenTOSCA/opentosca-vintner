@@ -54,7 +54,7 @@ sofdcar.capabilities.Host.ECU.Software:
 
 #### sofdcar.capabilities.OperatingSystem.RealTime
 
-The capability to provide an real-time operating system.
+The capability to provide a real-time operating system.
 
 ```yaml linenums="1"
 sofdcar.capabilities.OperatingSystem.RealTime:
