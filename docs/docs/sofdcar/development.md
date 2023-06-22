@@ -21,7 +21,15 @@ This will install [puccini](https://github.com/tliron/puccini) in the background
 This only works on Linux or if WSL is installed.
 
 ```shell linenums="1"
-yarn sofdcar:validate
+# Validates a single service template
+yarn sofdcar:validate path/to/service-template.yaml
+```
+
+To validate all service templates, run the following command.
+
+```shell linenums="1"
+# Validate all
+yarn sofdcar:check
 ```
 
 ## Plot Images

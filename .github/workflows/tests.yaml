@@ -16,6 +16,11 @@ jobs:
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
 
+            - name: (PREPARE) Setup Apt Packages
+              uses: awalsh128/cache-apt-pkgs-action@v1.3.0
+              with:
+                  packages: graphviz
+
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
@@ -79,7 +84,7 @@ jobs:
             - name: (DOCS) Generate TOSCA SofDCar Profile
               run: yarn docs:generate:sofdcar
 
-            - name: (DOCS) Plot service templates
+            - name: (DOCS) Plot Service Templates
               run: yarn docs:generate:puml
 
             - name: (DOCS) Build Docs
