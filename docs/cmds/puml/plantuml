@@ -29,7 +29,7 @@ if [ ! -f plantuml-1.2022.12.jar ]; then
     wget -q https://github.com/plantuml/plantuml/releases/download/v1.2022.12/plantuml-1.2022.12.jar
 fi
 
+# Plot PlantUML
 # See https://github.com/mikitex70/plantuml-markdown#using-a-local-plantuml-binary
 set -o xtrace
-
 java $PLANTUML_JAVAOPTS -jar plantuml-1.2022.12.jar ${@}
