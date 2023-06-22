@@ -17,4 +17,6 @@ if ! which dot &>/dev/null; then
 fi
 
 # See https://github.com/mikitex70/plantuml-markdown#using-a-local-plantuml-binary
+set -o xtrace
+
 java $PLANTUML_JAVAOPTS -jar plantuml-1.2022.12.jar ${@}

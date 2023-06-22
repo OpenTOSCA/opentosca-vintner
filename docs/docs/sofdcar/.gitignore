@@ -1,9 +1,0 @@
-.idea
-.env
-.vscode
-
-.scripts/plantuml-1.2022.12.jar
-.scripts/puccini-tosca
-.scripts/puccini_0.20.1_linux_amd64.tar.gz
-
-*.opera
