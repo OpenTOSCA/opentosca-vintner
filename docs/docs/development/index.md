@@ -218,6 +218,42 @@ Behind the scenes, the following HTML is injected.
 {{ asciinema_player('getting-started') }}
 ```
 
+
+## Validate Service Template
+
+To validate a service template, run the following command.
+This will install [puccini](https://github.com/tliron/puccini) in the background and execute its parser.
+This only works on Linux or if WSL is installed.
+
+```shell linenums="1"
+yarn puccini:validate:single path/to/service-template.yaml
+```
+
+To validate all registered service templates, run the following command.
+
+```shell linenums="1"
+yarn puccini:check
+```
+
+## PlantUML
+
+We use [PlantUML](http://plantuml.com) for visualizing UML diagrams.
+Read [PlantUML Guide](https://plantuml.com/de/guide) for modeling instructions.
+
+The following command plots all `.puml` files found in this repository using [PlantUML](http://plantuml.com).
+This command is not executed in the pipeline since [mkdocs_build_plantuml](https://github.com/quantorconsulting/mkdocs_build_plantuml){target=_blank} to plot PUML when building mkdocs.
+
+```shell linenums="1"
+yarn docs:plot:puml
+```
+
+The following command generates PUML files for registered service templates.
+This command is executed in the pipeline.
+
+```shell linenums="1"
+yarn docs:generate:puml
+```
+
 ## Tests
 
 We use [mocha](https://mochajs.org){target=_blank} and [chai](https://www.chaijs.com){target=_blank} for testing.

@@ -9,7 +9,7 @@ RUN yarn --frozen-lockfile
 RUN yarn lint:check
 RUN yarn style:check
 RUN yarn licenses:check
-RUN yarn sofdcar:check
+RUN yarn puccini:check
 RUN yarn test
 
 # Build

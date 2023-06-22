@@ -49,8 +49,8 @@ jobs:
             - name: (TEST) Check Licenses
               run: yarn licenses:check
 
-            - name: (TEST) Check SofDCar
-              run: yarn sofdcar:check
+            - name: (TEST) Check Service Templates
+              run: yarn puccini:check
 
             - name: (TEST) Run Tests
               run: yarn test

@@ -6,3 +6,4 @@ mkdocs-glightbox==0.1.6
 mkdocs-bibtex==2.8.3
 mkdocs-include-dir-to-nav==1.2.0
 mkdocs-build-plantuml-plugin==1.7.4
+pv=0.1.3

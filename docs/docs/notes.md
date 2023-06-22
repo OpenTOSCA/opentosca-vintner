@@ -159,6 +159,19 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 git update-index --chmod=+x <path to file>
 ```
 
+## Naming Convention
+
+Types should be named according to the following pattern.
+
+```text linenums="1"
+type     = [domain]+.entity[.Name]+
+entity   = "nodes" | "relationships" | "capabilities" | "artifacts" | "datatypes" | "groups
+         | "policies" | "interfaces"
+word     = ("a" ... "z" | "A" ... "Z")[word]
+*        = word
+```
+
+
 ## Limitations
 
 In the following, we briefly discuss limitations of our prototypical implementation.

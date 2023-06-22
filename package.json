@@ -124,7 +124,7 @@
         "examples:xopera": "./examples/xopera-motivation/demo.sh",
         "examples:unfurl": "./examples/unfurl-motivation/demo.sh",
         "licenses:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0\" --excludePackages dreamopt@0.8.0",
-        "sofdcar:check": "docs/cmds/puccini/check-all.sh",
-        "sofdcar:check:single": "docs/cmds/puccini/check.sh"
+        "puccini:check": "docs/cmds/puccini/check-all.sh",
+        "puccini:check:single": "docs/cmds/puccini/check.sh"
     }
 }
