@@ -11,10 +11,13 @@ export class PUML {
         this.validate()
     }
 
-    // TODO: validate
     validate() {
-        // Components can only be part of a single group
         // No conditional elements, e.g., types
+
+        // Components can only be part of a single group
+        for (const node of this.graph.nodes) {
+            if (node.groups.length > 1) throw new Error(`${node.Display} is part of two groups`)
+        }
     }
 
     async plot() {
