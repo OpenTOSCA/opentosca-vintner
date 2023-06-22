@@ -13,7 +13,7 @@ if [ -z "$TEMPLATE" ]; then
 fi
 
 # Ensure that service template exists
-TEMPLATE_PATH="../${TEMPLATE}"
+TEMPLATE_PATH="${TEMPLATE}"
 if [ ! -f $TEMPLATE_PATH ]; then
     echo "Service Template at \"${TEMPLATE_PATH}\" does not exists"
     exit 1
@@ -38,9 +38,7 @@ if [ ! -f puccini-tosca ]; then
     wget https://github.com/tliron/puccini/releases/download/v0.20.1/puccini_0.20.1_linux_amd64.tar.gz
     tar -zxf puccini_0.20.1_linux_amd64.tar.gz puccini-tosca
     rm puccini_0.20.1_linux_amd64.tar.gz
-
 fi
-
 
 # Determine binary
 BINARY=./puccini-tosca
@@ -48,5 +46,5 @@ if which wsl &>/dev/null; then
     BINARY="wsl ${BINARY}"
 fi
 
-# Validate Service Template
+# Validate service template
 $BINARY parse $TEMPLATE_PATH > /dev/null

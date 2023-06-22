@@ -220,6 +220,17 @@ template
         })
     )
 
+template
+    .command('puml')
+    .description('generate puml')
+    .requiredOption('--path <string>', 'path to service template')
+    .option('--output [string]', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.puml(options)
+        })
+    )
+
 const templates = program.command('templates').description('handles templates repository')
 
 templates

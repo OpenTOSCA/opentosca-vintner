@@ -33,6 +33,7 @@ import openSetup from './setup/open'
 import pathSetup from './setup/path'
 import inputsTemplate from './template/inputs'
 import packageTemplate from './template/package'
+import pumlTemplate from './template/puml'
 import queryTemplate from './template/query'
 import resolveTemplate from './template/resolve'
 import testTemplate from './template/test'
@@ -92,6 +93,7 @@ const Controller = {
         query: queryTemplate,
         test: testTemplate,
         inputs: inputsTemplate,
+        puml: pumlTemplate,
     },
     templates: {
         delete: deleteTemplate,

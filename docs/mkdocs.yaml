@@ -75,6 +75,14 @@ plugins:
     - bibtex:
           bib_file: 'bibtex.bib'
     - include_dir_to_nav
+    - build_plantuml:
+          #render: 'local'
+          #bin_path: 'cmds/puml/plantuml'
+          output_format: 'svg'
+          diagram_root: 'docs'
+          output_folder: '.'
+          input_folder: '.'
+          input_extensions: 'puml'
 
 nav:
     - OpenTOSCA Vintner:
@@ -108,7 +116,6 @@ nav:
                 - Guides:
                       - sofdcar/guides/zone
                       - sofdcar/guides/location
-                - sofdcar/development.md
           - TOSCA Simple Profile: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html
     - More Information:
           - OpenTOSCA: https://www.opentosca.org

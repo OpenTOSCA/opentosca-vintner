@@ -3,8 +3,8 @@
  * and stores information in a CSV file.
  * At the same time the documentation page is generated.
  */
+import * as files from '#files'
 import * as path from 'path'
-import {renderFile} from '../utils'
 import * as utils from './utils'
 
 const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'licenses.csv')
@@ -30,7 +30,7 @@ async function main() {
     /**
      * Generate documentation page for dependency table
      */
-    await renderFile(
+    await files.renderFile(
         path.join(__dirname, 'template.ejs'),
         {data: dependencies, licenses: utils.LICENSES},
         path.join('docs', 'docs', 'dependencies.md')

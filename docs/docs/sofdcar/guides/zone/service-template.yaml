@@ -110,6 +110,12 @@ topology_template:
                 - zcu: zone_b_control_unit_software
 
     groups:
+        cloud:
+            type: tosca.groups.Root
+            members:
+                - cloud_service
+                - cloud_provider
+
         zone_a:
             type: sofdcar.groups.Zone
             members:
@@ -129,6 +135,13 @@ topology_template:
                 - zone_b_can_bus
                 - zone_b_actuator
                 - zone_b_sensor
+
+        zone_c:
+            type: sofdcar.groups.Zone
+            members:
+                - vehicle_control_unit_software
+                - vehicle_control_unit_hardware
+
     policies:
         - asil:
               type: sofdcar.policies.ASIL

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
 # Set working directory
@@ -7,6 +7,12 @@ cd "$(dirname "$0")"
 # Ensure that Java is installed
 if ! which java &>/dev/null; then
     echo "\"java\" not installed"
+    exit 1
+fi
+
+# Ensure that Plot is installed
+if ! which dot &>/dev/null; then
+    echo "\"dot\" not installed"
     exit 1
 fi
 
@@ -23,5 +29,7 @@ if [ ! -f plantuml-1.2022.12.jar ]; then
     wget -q https://github.com/plantuml/plantuml/releases/download/v1.2022.12/plantuml-1.2022.12.jar
 fi
 
-# Plot all files
-java -jar plantuml-1.2022.12.jar -tsvg ../**.puml
+# Plot PlantUML
+# See https://github.com/mikitex70/plantuml-markdown#using-a-local-plantuml-binary
+set -o xtrace
+java $PLANTUML_JAVAOPTS -jar plantuml-1.2022.12.jar ${@}
