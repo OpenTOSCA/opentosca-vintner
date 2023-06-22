@@ -75,6 +75,14 @@ plugins:
     - bibtex:
           bib_file: 'bibtex.bib'
     - include_dir_to_nav
+    - build_plantuml:
+          render: 'local' # or "local" for local rendering
+          bin_path: 'bin/plantuml'
+          output_format: 'svg'
+          diagram_root: 'docs'
+          output_folder: '.'
+          input_folder: '.'
+          input_extensions: 'puml'
 
 nav:
     - OpenTOSCA Vintner:

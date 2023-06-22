@@ -48,11 +48,11 @@ jobs:
             - name: (TEST) Check Licenses
               run: yarn licenses:check
 
-            - name: (TEST) Run Tests
-              run: yarn test
-
             - name: (TEST) Check SofDCar
               run: yarn sofdcar:check
+
+            - name: (TEST) Run Tests
+              run: yarn test
 
             - name: (BUILD) Build Project
               run: yarn build

@@ -24,4 +24,4 @@ if [ ! -f plantuml-1.2022.12.jar ]; then
 fi
 
 # Plot all files
-java -jar plantuml-1.2022.12.jar -tsvg ../**.puml
+./plantuml -tsvg ../**.puml
