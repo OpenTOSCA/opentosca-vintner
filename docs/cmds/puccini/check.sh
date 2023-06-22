@@ -13,7 +13,7 @@ if [ -z "$TEMPLATE" ]; then
 fi
 
 # Ensure that service template exists
-TEMPLATE_PATH="../${TEMPLATE}"
+TEMPLATE_PATH="${TEMPLATE}"
 if [ ! -f $TEMPLATE_PATH ]; then
     echo "Service Template at \"${TEMPLATE_PATH}\" does not exists"
     exit 1
