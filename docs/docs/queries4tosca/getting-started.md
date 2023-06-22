@@ -1,8 +1,13 @@
 # Getting Started
 
-This section will give a quick introduction to Queries4TOSCA. To run the example queries, you need to have a resolved instance of the
-["Getting Started" template](../getting-started.md){target=_blank}. If you don't have one, follow the steps: 
+There is no standardized way to query TOSCA repositories or instance data. 
+Therefore, we introduce Queries4TOSCA which defined a query language for TOSCA. 
+This language provides a graph-based query language which includes path expressions, filters, and pattern matching. 
+This section will give a quick introduction to Queries4TOSCA.
 
+## Preparation
+
+To run the example queries, you need to install OpenTOSCA Vintner and have a resolved instance of the ["Getting Started" template](../getting-started.md){target=_blank}.
 First, clone the repository. 
 --8<-- "clone.md"
 
@@ -15,7 +20,9 @@ vintner instances create --instance getting-started --template getting-started
 vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml
 ```
 
-Queries start with a `FROM` statement, followed by either `templates` or `instances` and the template respectively instance name.
+## Example Queries
+
+Queries start with a `FROM` statement, followed by either `templates` or `instances` and the name of the template or the name of the instance, respectively.
 Inside a `SELECT` statement, you can enter a path to the data that you want to return.
 
 To get the entire contents of the template, run the following command.
@@ -107,7 +114,7 @@ You can use an asterisk as a wildcard operator to get all child elements. The fo
 
 
 You can also specify a predicate in square brackets after any part of the path expression to filter elements.
-The following command will return only nodes of type `textfile`, which may be `first` or `second`, depending on how you resolved the template.
+The following command will return only nodes of type `textfile`.
 
 === "Query"
     ```shell linenums="1"
@@ -159,8 +166,8 @@ Note the lack of quotation marks - we are using a value from the template for bo
     - first: textfile
     ```
 
-`MATCH` statements are used to match patterns in the topology of a template. You can "draw" the pattern by surrounding nodes 
-with parentheses and connect them to other nodes via arrows. The following statement will return all nodes that have a requirement fulfilled by `localhost`.
+`MATCH` statements are used to match patterns in the topology of a template. You can "draw" the pattern by surrounding nodes with parentheses and connect them to other nodes via arrows.
+The following statement will return all nodes that have a requirement fulfilled by `localhost`.
 
 === "Query"
     ```shell linenums="1"
@@ -180,3 +187,6 @@ with parentheses and connect them to other nodes via arrows. The following state
         - host:
             node: localhost
     ```
+
+This is just a simple example.
+In a more complex scenario, it would be possible, e.g., to dynamically access the public address of a virtual machine which hosts a database to which a specific component connects.

@@ -64,7 +64,7 @@ capability_types:
         derived_from: tosca.capabilities.Container
 
     sofdcar.capabilities.OperatingSystem.RealTime:
-        description: The capability to provide an OS with real time
+        description: The capability to provide an real-time operating system.
         derived_from: tosca.capabilities.OperatingSystem
         properties:
             time_guarantee:
@@ -254,15 +254,15 @@ node_types:
 
     sofdcar.nodes.Accelerator:
         description: The node all other accelerators are derived from.
-        derived_from: sofdcar.nodes.Root
+        derived_from: sofdcar.nodes.Actuator
 
     sofdcar.nodes.Brake:
         description: The node all other brakes are derived from.
-        derived_from: sofdcar.nodes.Root
+        derived_from: sofdcar.nodes.Actuator
 
     sofdcar.nodes.Steering:
         description: The node all other steerings are derived from.
-        derived_from: sofdcar.nodes.Root
+        derived_from: sofdcar.nodes.Actuator
 
     sofdcar.nodes.Sensor:
         description: The node all other sensors are derived from.

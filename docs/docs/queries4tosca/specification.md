@@ -80,7 +80,7 @@ Here are some examples.
 
 ```text linenums="1"
 node_templates.localhost       // Selecting a node directly by name
-node_templates.localhost.#     // Selecting attributes a node
+node_templates.localhost.#     // Selecting attributes of a node
 node_templates.*               // Selecting all nodes
 GROUP(my-group)                // Selecting all nodes in group 'my-group'
 POLICY(my-policy)              // Selecting all nodes targeted by policy 'my-policy'
@@ -133,7 +133,7 @@ evaluates to true.
 
 ```text linenums="1"
 node_templates.*[type='textfile' AND name='first']
-node_templates.*[name='frist' OR name='second']
+node_templates.*[name='first' OR name='second']
 ```
 
 ### Return Structures
@@ -201,7 +201,7 @@ in the middle of the arrow.
 
 It is also possible to search for node templates connected over multiple relationships by specifying a
 cardinality. This can be accomplished by putting an asterisk at the end of a relationship, followed
-optionally by a number or a range. If both are omitted, relationships of any length will be matched.
+optionally by a number or a range.
 
 ```text linenums="1"
 (a)-{*2}->(b)       // exactly two hops between a and b
@@ -211,7 +211,9 @@ optionally by a number or a range. If both are omitted, relationships of any len
 (a)-{*}->(b)        // any amount of hops
 ```
 
-## Grammar 
+## Appendix A "Grammar" 
+
+This appendix contains the complete [Ohm](https://ohmjs.org){target=_blank} grammar of Queries4TOSCA.
 
 ```text linenums="1"
 Query {

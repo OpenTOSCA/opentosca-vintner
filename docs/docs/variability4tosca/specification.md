@@ -18,7 +18,7 @@ In the following, we quickly introduce some terminologies.
 - A condition holds if the conditions evaluates to true.
 - An element is present if all assigned conditions hold.
 - An element is absent if not all assigned conditions hold.
-- A variability resolver is a TOSCA processor that resolves the variability of a service template.
+- A variability resolver is a TOSCA processor that resolves the variability of a variable service template.
 
 ## Service Template
 
@@ -53,7 +53,7 @@ A variability definition defines variability inputs, variability presets, variab
 
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
-input `mode` and two variability conditions `is_dev` and `is_prod` which evaluate if `mode` equals `dev` resp. `prod`.
+input `mode` and two variability conditions `is_dev` and `is_prod` which evaluate if `mode` equals `dev` or `prod`, respectively.
 Furthermore, two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
 
 ```yaml linenums="1"
@@ -366,7 +366,7 @@ requirements:
 
 A relationship template can contain conditional properties.
 Note, the presence of a relationship template is bound to the presence of the requirement assignment in which it is used.
-A relationship template also hold conditional types properties.
+A relationship template can also hold conditional properties.
 
 | Keyname         | Mandatory | Type                                                                                 | Description                                                                                                                                                           |
 |-----------------|-----------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -528,7 +528,7 @@ An artifact can also hold conditional properties.
 | default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the topology template.                                                       |
 | pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the topology template.                                                                     |
 
-For example, the following node template `my_node` has two artifacts `artifact_b` and `artifact_b` assigned which are both conditional.
+For example, the following node template `my_node` has two artifacts `artifact_a` and `artifact_b` assigned which are both conditional.
 
 ```yaml linenums="1"
 my_node:
@@ -806,7 +806,7 @@ To check if an element is present, check that all assigned conditions hold:
 1. (Optional) Assign pruning conditions.
 1. Evaluate assigned conditions. 
 
-The element is present if only if all conditions hold.
+The element is present if and only if all conditions hold.
 
 ### Check Consistency
 
@@ -867,7 +867,7 @@ As an overview, the following table shows the collections that are used in TOSCA
 
 ### Element Uniqueness
 
-As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers such as the key in a mapy.
+As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers such as the key in a map.
 This is directly related to the used collections.
 
 | Element    | TOSCA            | Variability4TOSCA   |
