@@ -8,5 +8,5 @@ cd "$(dirname "$0")"
 for TEMPLATE in tosca-sofdcar-profile.yaml tosca-sofdcar-profile-non-normative.yaml guides/location/service-template.yaml guides/zone/service-template.yaml; do
   echo
   echo
-  ./validate.sh $TEMPLATE
+  ./check.sh $TEMPLATE
 done
