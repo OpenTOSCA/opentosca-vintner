@@ -35,36 +35,36 @@ rectangle "tosca.nodes.network.Network"
 rectangle "tosca.nodes.network.Port"
 
 
-"tosca.nodes.Root" --|> "tosca.entity.Root"
+"tosca.entity.Root" <|-- "tosca.nodes.Root"
 
-"tosca.nodes.Abstract.Compute" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.Abstract.Compute"
 
-"tosca.nodes.Compute" --|> "tosca.nodes.Abstract.Compute"
+"tosca.nodes.Abstract.Compute" <|-- "tosca.nodes.Compute"
 
-"tosca.nodes.SoftwareComponent" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.SoftwareComponent"
 
-"tosca.nodes.WebServer" --|> "tosca.nodes.SoftwareComponent"
+"tosca.nodes.SoftwareComponent" <|-- "tosca.nodes.WebServer"
 
-"tosca.nodes.WebApplication" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.WebApplication"
 
-"tosca.nodes.DBMS" --|> "tosca.nodes.SoftwareComponent"
+"tosca.nodes.SoftwareComponent" <|-- "tosca.nodes.DBMS"
 
-"tosca.nodes.Database" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.Database"
 
-"tosca.nodes.Abstract.Storage" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.Abstract.Storage"
 
-"tosca.nodes.Storage.ObjectStorage" --|> "tosca.nodes.Abstract.Storage"
+"tosca.nodes.Abstract.Storage" <|-- "tosca.nodes.Storage.ObjectStorage"
 
-"tosca.nodes.Storage.BlockStorage" --|> "tosca.nodes.Abstract.Storage"
+"tosca.nodes.Abstract.Storage" <|-- "tosca.nodes.Storage.BlockStorage"
 
-"tosca.nodes.Container.Runtime" --|> "tosca.nodes.SoftwareComponent"
+"tosca.nodes.SoftwareComponent" <|-- "tosca.nodes.Container.Runtime"
 
-"tosca.nodes.Container.Application" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.Container.Application"
 
-"tosca.nodes.LoadBalancer" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.LoadBalancer"
 
-"tosca.nodes.network.Network" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.network.Network"
 
-"tosca.nodes.network.Port" --|> "tosca.nodes.Root"
+"tosca.nodes.Root" <|-- "tosca.nodes.network.Port"
 
 @enduml

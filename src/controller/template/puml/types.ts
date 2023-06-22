@@ -8,7 +8,7 @@ import path from 'path'
 export type TemplatePUMLTypesOptions = {
     path: string
     output?: string
-    types: string[]
+    types?: string[]
 }
 
 export default async function (options: TemplatePUMLTypesOptions) {
