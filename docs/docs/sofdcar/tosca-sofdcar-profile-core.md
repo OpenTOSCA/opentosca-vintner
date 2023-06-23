@@ -1,11 +1,11 @@
 
 ### Artifact Types
 
-We specify the following artifact types.
+We specify the following normative artifact types.
 An overview is given in the following Figure 1.
 
 <figure markdown>
-![Artifact Types](tosca-sofdcar-profile.artifact-types.svg)
+![Artifact Types](tosca-sofdcar-profile-core.artifact-types.svg)
 <figcaption>Figure 1: TOSCA SofDCar Artifact Types</figcaption>
 </figure>
 
@@ -38,11 +38,11 @@ sofdcar.artifacts.Implementation:
 
 ### Capability Types
 
-We specify the following capability types.
+We specify the following normative capability types.
 An overview is given in the following Figure 2.
 
 <figure markdown>
-![Capability Types](tosca-sofdcar-profile.capability-types.svg)
+![Capability Types](tosca-sofdcar-profile-core.capability-types.svg)
 <figcaption>Figure 2: TOSCA SofDCar Capability Types</figcaption>
 </figure>
 
@@ -93,94 +93,13 @@ sofdcar.capabilities.Endpoint:
   derived_from: sofdcar.capabilities.Root
 ```
 
-#### sofdcar.capabilities.Endpoint.CAN
-
-The capability to provide a CAN endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.CAN:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.CAN-FD
-
-The capability to provide a CAN-FD endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.CAN-FD:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.LIN
-
-The capability to provide a LIN endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.LIN:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.MOST
-
-The capability to provide a MOST endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.MOST:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.GPIO
-
-The capability to provide a GPIO endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.GPIO:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.FlexRay
-
-The capability to provide a FlexRay endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.FlexRay:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.Ethernet
-
-The capability to provide an Ethernet endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.Ethernet:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.OBD
-
-The capability to provide an OBD endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.OBD:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
-#### sofdcar.capabilities.Endpoint.SOME/IP
-
-The capability to provide a SOME/IP endpoint.
-
-```yaml linenums="1"
-sofdcar.capabilities.Endpoint.SOME/IP:
-  derived_from: sofdcar.capabilities.Endpoint
-```
-
 ### Data Types
 
-We specify the following data types.
+We specify the following normative data types.
 An overview is given in the following Figure 3.
 
 <figure markdown>
-![Data Types](tosca-sofdcar-profile.data-types.svg)
+![Data Types](tosca-sofdcar-profile-core.data-types.svg)
 <figcaption>Figure 3: TOSCA SofDCar Data Types</figcaption>
 </figure>
 
@@ -193,32 +112,13 @@ sofdcar.data.Root:
   derived_from: tosca.datatypes.Root
 ```
 
-#### sofdcar.data.GPIO.Pin
-
-The GPIO pin used, e.g., when connecting using GPIO.
-
-```yaml linenums="1"
-sofdcar.data.GPIO.Pin:
-  derived_from: sofdcar.data.Root
-  properties:
-    pin:
-      type: integer
-    direction:
-      type: string
-      constraints:
-        - valid_values:
-            - in
-            - out
-            - in/out
-```
-
 ### Group Types
 
-We specify the following group types.
+We specify the following normative group types.
 An overview is given in the following Figure 4.
 
 <figure markdown>
-![Group Types](tosca-sofdcar-profile.group-types.svg)
+![Group Types](tosca-sofdcar-profile-core.group-types.svg)
 <figcaption>Figure 4: TOSCA SofDCar Group Types</figcaption>
 </figure>
 
@@ -260,11 +160,11 @@ sofdcar.groups.Zone:
 
 ### Interface Types
 
-We specify the following interface types.
+We specify the following normative interface types.
 An overview is given in the following Figure 5.
 
 <figure markdown>
-![Interface Types](tosca-sofdcar-profile.interface-types.svg)
+![Interface Types](tosca-sofdcar-profile-core.interface-types.svg)
 <figcaption>Figure 5: TOSCA SofDCar Interface Types</figcaption>
 </figure>
 
@@ -300,11 +200,11 @@ sofdcar.interfaces.Relationship:
 
 ### Node Types
 
-We specify the following node types.
+We specify the following normative node types.
 An overview is given in the following Figure 6.
 
 <figure markdown>
-![Node Types](tosca-sofdcar-profile.node-types.svg)
+![Node Types](tosca-sofdcar-profile-core.node-types.svg)
 <figcaption>Figure 6: TOSCA SofDCar Node Types</figcaption>
 </figure>
 
@@ -499,152 +399,13 @@ sofdcar.nodes.Channel:
         - UNBOUNDED
 ```
 
-#### sofdcar.nodes.CAN
-
-The CAN channel all other CAN channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.CAN:
-  derived_from: sofdcar.nodes.Channel
-  properties:
-    bitrate:
-      type: integer
-      required: false
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.CAN
-      occurrences:
-        - 0
-        - UNBOUNDED
-```
-
-#### sofdcar.nodes.CAN-FD
-
-The CAN-FD channel all other CAN-FD channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.CAN-FD:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.CAN-FD
-      occurrences:
-        - 0
-        - UNBOUNDED
-```
-
-#### sofdcar.nodes.LIN
-
-The LIN channel all other LIN channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.LIN:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.LIN
-      occurrences:
-        - 0
-        - UNBOUNDED
-```
-
-#### sofdcar.nodes.MOST
-
-The MOST channel all other MOST channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.MOST:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.MOST
-      occurrences:
-        - 0
-        - UNBOUNDED
-```
-
-#### sofdcar.nodes.GPIO
-
-The GIP channel all other GIP channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.GPIO:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.GPIO
-      occurrences:
-        - 2
-        - 2
-```
-
-#### sofdcar.nodes.FlexRay
-
-The FlexRay channel all other FlexRay channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.FlexRay:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.FlexRay
-      occurrences:
-        - 0
-        - UNBOUNDED
-```
-
-#### sofdcar.nodes.Ethernet
-
-The ethernet channel all other ethernet channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.Ethernet:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.Ethernet
-      occurrences:
-        - 2
-        - 2
-```
-
-#### sofdcar.nodes.OBD
-
-The OBD channel all other OBD channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.OBD:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.OBD
-      occurrences:
-        - 2
-        - 2
-```
-
-#### sofdcar.nodes.SOME/IP
-
-The SOME/IP channel all other SOME/IP channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.SOME/IP:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.SOME/IP
-      occurrences:
-        - 2
-        - 2
-```
-
 ### Policy Types
 
-We specify the following policy types.
+We specify the following normative policy types.
 An overview is given in the following Figure 7.
 
 <figure markdown>
-![Policy Types](tosca-sofdcar-profile.policy-types.svg)
+![Policy Types](tosca-sofdcar-profile-core.policy-types.svg)
 <figcaption>Figure 7: TOSCA SofDCar Policy Types</figcaption>
 </figure>
 
@@ -675,58 +436,13 @@ sofdcar.policies.Safety:
   derived_from: sofdcar.policies.Root
 ```
 
-#### sofdcar.policies.ASIL
-
-The policy that all other ASIL policies are derived from.
-
-```yaml linenums="1"
-sofdcar.policies.ASIL:
-  derived_from: sofdcar.policies.Safety
-```
-
-#### sofdcar.policies.ASIL.A
-
-The policy that represents the ASIL level A.
-
-```yaml linenums="1"
-sofdcar.policies.ASIL.A:
-  derived_from: sofdcar.policies.ASIL
-```
-
-#### sofdcar.policies.ASIL.B
-
-The policy that represents the ASIL level B.
-
-```yaml linenums="1"
-sofdcar.policies.ASIL.B:
-  derived_from: sofdcar.policies.ASIL
-```
-
-#### sofdcar.policies.ASIL.C
-
-The policy that represents the ASIL level C.
-
-```yaml linenums="1"
-sofdcar.policies.ASIL.C:
-  derived_from: sofdcar.policies.ASIL
-```
-
-#### sofdcar.policies.ASIL.D
-
-The policy that represents the ASIL level D.
-
-```yaml linenums="1"
-sofdcar.policies.ASIL.D:
-  derived_from: sofdcar.policies.ASIL
-```
-
 ### Relationship Types
 
-We specify the following relationship types.
+We specify the following normative relationship types.
 An overview is given in the following Figure 8.
 
 <figure markdown>
-![Relationship Types](tosca-sofdcar-profile.relationship-types.svg)
+![Relationship Types](tosca-sofdcar-profile-core.relationship-types.svg)
 <figcaption>Figure 8: TOSCA SofDCar Relationship Types</figcaption>
 </figure>
 
@@ -737,105 +453,6 @@ The relationship all other relationships are derived from.
 ```yaml linenums="1"
 sofdcar.relationships.Root:
   derived_from: tosca.relationships.Root
-```
-
-#### sofdcar.relationships.CAN
-
-The relationship for CAN connections.
-
-```yaml linenums="1"
-sofdcar.relationships.CAN:
-  derived_from: sofdcar.relationships.Root
-  properties:
-    interface:
-      type: string
-      description: The interface name at the source at which the CAN bus is available.
-      default: can0
-    target_interface:
-      type: string
-      description: The interface name at the target at which the CAN bus is available.
-      required: false
-    bitrate:
-      type: integer
-      description: The bitrate of the CAN bus.
-      required: false
-```
-
-#### sofdcar.relationships.CAN-FD
-
-The relationship for CAN-FD connections.
-
-```yaml linenums="1"
-sofdcar.relationships.CAN-FD:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.LIN
-
-The relationship for LIN connections.
-
-```yaml linenums="1"
-sofdcar.relationships.LIN:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.MOST
-
-The relationships for MOST connections.
-
-```yaml linenums="1"
-sofdcar.relationships.MOST:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.GPIO
-
-The relationship for GPIO connections.
-
-```yaml linenums="1"
-sofdcar.relationships.GPIO:
-  derived_from: sofdcar.relationships.Root
-  properties:
-    pins:
-      type: list
-      entry_schema:
-        type: sofdcar.data.GPIO.Pin
-```
-
-#### sofdcar.relationships.FlexRay
-
-The relationship for FlexRay connections.
-
-```yaml linenums="1"
-sofdcar.relationships.FlexRay:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.Ethernet
-
-The relationship for Ethernet connections.
-
-```yaml linenums="1"
-sofdcar.relationships.Ethernet:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.OBD
-
-The relationship for OBD connections.
-
-```yaml linenums="1"
-sofdcar.relationships.OBD:
-  derived_from: sofdcar.relationships.Root
-```
-
-#### sofdcar.relationships.SOME/IP
-
-The relationship for SOME/IP connections.
-
-```yaml linenums="1"
-sofdcar.relationships.SOME/IP:
-  derived_from: sofdcar.relationships.Root
 ```
 
 

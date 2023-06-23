@@ -26,8 +26,8 @@ async function run(name: string) {
 }
 
 async function main() {
-    await run('tosca-sofdcar-profile')
-    await run('tosca-sofdcar-profile-non-normative')
+    await run('tosca-sofdcar-profile-core')
+    await run('tosca-sofdcar-profile-extended')
 }
 
 main()

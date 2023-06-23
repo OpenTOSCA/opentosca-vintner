@@ -14,9 +14,9 @@ Various OEMs can then import provided models and integrate them into their cars.
 The specification is under active development and is not backwards compatible with any previous versions.
 
 
-## Normative TOSCA Type Definitions
+## TOSCA SofDCar Core Profile
 
-The normative TOSCA type definitions contain high-level type definitions which are supposed to be extended by custom types.
+The core normative TOSCA type definitions contain high-level type definitions which are linked to the normative TOSCA type definitions of the [TOSCA Simple Profile in YAML 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 These types mainly concern the following topics.
 
 - ECU hardware and software
@@ -26,36 +26,44 @@ These types mainly concern the following topics.
 
 Considering modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components and no CAN bus connected to the ECUs is modeled.
 However, this might not provide all required information.
-Therefore, we provide also node types to model, e.g., a CAN bus.
+Therefore, we provide also a node type to model, e.g., a CAN bus.
 This topic is also discussed in more detail in [TOSCA Networking](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482){target=_blank} in which they propose to have a TOSCA model for the application and a second one for the networking.
 
---8<-- "sofdcar/tosca-sofdcar-profile.md"
+--8<-- "sofdcar/tosca-sofdcar-profile-core.md"
 
 
-## Non-Normative TOSCA Type Definitions
+## TOSCA SofDCar Extended Profile
 
-The non-normative TOSCA type definitions contain type definitions focusing on showing how the normative types can be used to model an Arduino as ECU and an Raspberry Pi as HPC.
-However, since these types are non-normative they are not required to be supported.
+The extended normative TOSCA type definitions contain additional high-level type definitions which are derived from the core type definitions.
+These types mainly concern specific communications, such as CAN, and ECUs, such as Arduino.
 
---8<-- "sofdcar/tosca-sofdcar-profile-non-normative.md"
-
+--8<-- "sofdcar/tosca-sofdcar-profile-extended.md"
 
 ## Appendix A "TOSCA SofDCar Profile"
 
-This appendix contains the complete TOSCA SofDCar profile.
+This appendix contains the TOSCA SofDCar profile.
 You can also download the profile [here](tosca-sofdcar-profile.yaml){download=tosca-sofdcar-profile.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile.yaml"
 ```
 
-## Appendix B "TOSCA SofDCar Profile (Non-Normative)"
+## Appendix B "TOSCA SofDCar Core Profile"
 
-This appendix contains the complete non-normative TOSCA SofDCar profile.
-You can also download the non-normative profile [here](tosca-sofdcar-profile-non-normative.yaml){download=tosca-sofdcar-profile-non-normative.yaml}.
+This appendix contains the TOSCA SofDCar Core profile.
+You can also download the profile [here](tosca-sofdcar-profile-core.yaml){download=tosca-sofdcar-profile-core.yaml}.
 
 ```yaml linenums="1"
---8<-- "sofdcar/tosca-sofdcar-profile-non-normative.yaml"
+--8<-- "sofdcar/tosca-sofdcar-profile-core.yaml"
+```
+
+## Appendix C "TOSCA SofDCar Extended Profile"
+
+This appendix contains the TOSCA SofDCar Extended profile.
+You can also download the extended profile [here](tosca-sofdcar-profile-extended.yaml){download=tosca-sofdcar-profile-extended.yaml}.
+
+```yaml linenums="1"
+--8<-- "sofdcar/tosca-sofdcar-profile-extended.yaml"
 ```
 
 --8<-- "acd.md"

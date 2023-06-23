@@ -1,0 +1,286 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: TOSCA Profile for Software-Defined Cars (Extended).
+metadata:
+    template_name: TOSCA SofDCar Profile (Extended)
+    template_author: Miles Stötzner
+    template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_version: 1.0.0-draft
+    template_id: tosca-sofdcar-profile-extended
+    template_license: https://www.apache.org/licenses/LICENSE-2.0
+    abbreviations: |
+        - ASIL: Automotive Safety Integrity Level
+        - CAN: Controller Area Network
+        - CAN-FD: Controller Area Network Flexible Data-Rate
+        - ECU: Electronic Control Unit
+        - GPIO: General-Purpose Input/ Output
+        - HPC: High Performance Computer
+        - LIDAR: Light Detection and Ranging
+        - LIN: Local Interconnect Network
+        - MOST: Media-Oriented Systems Transport
+        - OBD: On-Board Diagnostics
+        - RADAR: Radio Detection and Ranging
+        - SOME/IP: Scalable Service-Oriented Middleware over IP
+    acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
+
+imports:
+    - ./tosca-sofdcar-profile-core.yaml
+
+capability_types:
+    sofdcar.capabilities.Endpoint.CAN:
+        description: The capability to provide a CAN endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.CAN-FD:
+        description: The capability to provide a CAN-FD endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.LIN:
+        description: The capability to provide a LIN endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.MOST:
+        description: The capability to provide a MOST endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.GPIO:
+        description: The capability to provide a GPIO endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.FlexRay:
+        description: The capability to provide a FlexRay endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.Ethernet:
+        description: The capability to provide an Ethernet endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.OBD:
+        description: The capability to provide an OBD endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+    sofdcar.capabilities.Endpoint.SOME/IP:
+        description: The capability to provide a SOME/IP endpoint.
+        derived_from: sofdcar.capabilities.Endpoint
+
+data_types:
+    sofdcar.data.GPIO.Pin:
+        description: The GPIO pin used, e.g., when connecting using GPIO.
+        derived_from: sofdcar.data.Root
+        properties:
+            pin:
+                type: integer
+            direction:
+                type: string
+                constraints:
+                    - valid_values:
+                          - in
+                          - out
+                          - in/out
+
+node_types:
+    sofdcar.nodes.CAN:
+        description: The CAN channel all other CAN channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        properties:
+            bitrate:
+                type: integer
+                required: false
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.CAN
+                occurrences: [0, UNBOUNDED]
+
+    sofdcar.nodes.CAN-FD:
+        description: The CAN-FD channel all other CAN-FD channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.CAN-FD
+                occurrences: [0, UNBOUNDED]
+
+    sofdcar.nodes.LIN:
+        description: The LIN channel all other LIN channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.LIN
+                occurrences: [0, UNBOUNDED]
+
+    sofdcar.nodes.MOST:
+        description: The MOST channel all other MOST channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.MOST
+                occurrences: [0, UNBOUNDED]
+
+    sofdcar.nodes.GPIO:
+        description: The GIP channel all other GIP channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.GPIO
+                occurrences: [2, 2]
+
+    sofdcar.nodes.FlexRay:
+        description: The FlexRay channel all other FlexRay channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.FlexRay
+                occurrences: [0, UNBOUNDED]
+
+    sofdcar.nodes.Ethernet:
+        description: The ethernet channel all other ethernet channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.Ethernet
+                occurrences: [2, 2]
+
+    sofdcar.nodes.OBD:
+        description: The OBD channel all other OBD channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.OBD
+                occurrences: [2, 2]
+
+    sofdcar.nodes.SOME/IP:
+        description: The SOME/IP channel all other SOME/IP channels are derived from.
+        derived_from: sofdcar.nodes.Channel
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint.SOME/IP
+                occurrences: [2, 2]
+
+    sofdcar.nodes.Python.Application:
+        description: >
+            Non-normative python application running on an HPC.
+            This application requires a python runtime.
+        derived_from: sofdcar.nodes.HPC.Software
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    sofdcar.nodes.Python.Runtime:
+        description: >
+            Non-normative python runtime running on an HPC.
+            This runtime is able to host python applications and requires a host.
+        derived_from: sofdcar.nodes.HPC.Software
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [sofdcar.nodes.Python.Application]
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    sofdcar.nodes.RaspberryPi.Hardware:
+        description: >
+            The hardware of an Raspberry Pi serving as a HPC hardware.
+            This Raspberry Pi is able to host HPC software.
+            Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
+        derived_from: sofdcar.nodes.HPC.Hardware
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [sofdcar.nodes.HPC.Software, sofdcar.nodes.Python.Application]
+
+    sofdcar.nodes.Arduino.Software:
+        description: The software running on an Arduino.
+        derived_from: sofdcar.nodes.ECU.Software
+
+    sofdcar.nodes.Arduino.Software.C++:
+        description: C++ software running on an Arduino.
+        derived_from: sofdcar.nodes.Arduino.Software
+
+    sofdcar.nodes.Arduino.Hardware:
+        description: >
+            The hardware of an Arduino serving as ECU hardware.
+            The Arduino is able to host Arduino software.
+        derived_from: sofdcar.nodes.ECU.Hardware
+        capabilities:
+            host:
+                type: sofdcar.capabilities.Host.ECU.Software
+                valid_source_types: [sofdcar.nodes.Arduino.Software]
+
+policy_types:
+    sofdcar.policies.ASIL:
+        description: The policy that all other ASIL policies are derived from.
+        derived_from: sofdcar.policies.Safety
+
+    sofdcar.policies.ASIL.A:
+        description: The policy that represents the ASIL level A.
+        derived_from: sofdcar.policies.ASIL
+
+    sofdcar.policies.ASIL.B:
+        description: The policy that represents the ASIL level B.
+        derived_from: sofdcar.policies.ASIL
+
+    sofdcar.policies.ASIL.C:
+        description: The policy that represents the ASIL level C.
+        derived_from: sofdcar.policies.ASIL
+
+    sofdcar.policies.ASIL.D:
+        description: The policy that represents the ASIL level D.
+        derived_from: sofdcar.policies.ASIL
+
+relationship_types:
+    sofdcar.relationships.CAN:
+        description: The relationship for CAN connections.
+        derived_from: sofdcar.relationships.Root
+        properties:
+            interface:
+                type: string
+                description: The interface name at the source at which the CAN bus is available.
+                default: can0
+
+            target_interface:
+                type: string
+                description: The interface name at the target at which the CAN bus is available.
+                required: false
+
+            bitrate:
+                type: integer
+                description: The bitrate of the CAN bus.
+                required: false
+
+    sofdcar.relationships.CAN-FD:
+        description: The relationship for CAN-FD connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.LIN:
+        description: The relationship for LIN connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.MOST:
+        description: The relationships for MOST connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.GPIO:
+        description: The relationship for GPIO connections.
+        derived_from: sofdcar.relationships.Root
+        properties:
+            pins:
+                type: list
+                entry_schema:
+                    type: sofdcar.data.GPIO.Pin
+
+    sofdcar.relationships.FlexRay:
+        description: The relationship for FlexRay connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.Ethernet:
+        description: The relationship for Ethernet connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.OBD:
+        description: The relationship for OBD connections.
+        derived_from: sofdcar.relationships.Root
+
+    sofdcar.relationships.SOME/IP:
+        description: The relationship for SOME/IP connections.
+        derived_from: sofdcar.relationships.Root

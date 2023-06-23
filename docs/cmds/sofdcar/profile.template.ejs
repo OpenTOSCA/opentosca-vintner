@@ -1,8 +1,8 @@
 <% Object.entries(template).filter(([key, _]) => key.endsWith('_types')).sort((a, b) => a[0].localeCompare(b[0])).forEach(([types_key, types], index) => { %>
 ### <%= utils.toTitle(types_key) %>
 
-We specify the following <%= utils.toText(types_key) %>.
-An overview is given in the following Figure <%= index + 1%>.
+We specify the following normative <%= utils.toText(types_key) %>.
+An overview is given in Figure <%= index + 1%>.
 
 <figure markdown>
 ![<%= utils.toTitle(types_key) %>](<%= utils.toFigure(types_key) %>)

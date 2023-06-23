@@ -1,0 +1,22 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.capabilities.Root"
+
+rectangle "sofdcar.capabilities.Host.ECU.Software"
+
+rectangle "sofdcar.capabilities.OperatingSystem.RealTime"
+
+rectangle "sofdcar.capabilities.Endpoint"
+
+
+"tosca.capabilities.Root" <|-- "sofdcar.capabilities.Root"
+
+"tosca.capabilities.Container" <|-- "sofdcar.capabilities.Host.ECU.Software"
+
+"tosca.capabilities.OperatingSystem" <|-- "sofdcar.capabilities.OperatingSystem.RealTime"
+
+"sofdcar.capabilities.Root" <|-- "sofdcar.capabilities.Endpoint"
+
+@enduml
