@@ -1,8 +1,20 @@
 #!/bin/bash
 set -e
 
-yarn cli template puml topology --path docs/docs/sofdcar/guides/location/service-template.yaml
-yarn cli template puml topology --path docs/docs/sofdcar/guides/zone/service-template.yaml
+# Set working directory
+cd "$(dirname "$0")"
+cd ../../../
 
-yarn cli template puml types --path docs/docs/sofdcar/tosca-sofdcar-profile.yaml
-yarn cli template puml types --path docs/docs/sofdcar/tosca-sofdcar-profile-non-normative.yaml
+# Default way to execute vintner is using ts-node which takes long
+VINTNER_CLI="yarn cli"
+
+# Optimize executing vintner by using node
+if [ -f "build/cli/index.js" ]; then
+    VINTNER_CLI="yarn vintner"
+fi
+
+$VINTNER_CLI template puml topology --path docs/docs/sofdcar/guides/location/service-template.yaml
+$VINTNER_CLI template puml topology --path docs/docs/sofdcar/guides/zone/service-template.yaml
+
+$VINTNER_CLI template puml types --path docs/docs/sofdcar/tosca-sofdcar-profile.yaml
+$VINTNER_CLI template puml types --path docs/docs/sofdcar/tosca-sofdcar-profile-non-normative.yaml
