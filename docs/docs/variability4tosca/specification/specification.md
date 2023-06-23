@@ -258,11 +258,6 @@ variability:
 
 ## Variability Expression
 
-<figure markdown>
-   ![Variability Expressions](variability-expressions.svg)
-   <figcaption>Figure 1: Different variability expressions types</figcaption>
-</figure>
-
 A variability expression is an expression which consists of operators and functions which are listed below.
 For example, the following expression returns the total amount of costs.
 This result might be used inside a variability condition to ensure that the deployment costs are within a specific
@@ -277,6 +272,12 @@ topology_template:
 
 There are different kinds of variability expressions, as displayed in Figure 1.
 Value expressions return any kind of value and logic expressions return Booleans.
+
+<figure markdown>
+   ![Variability Expressions](variability-expressions.svg)
+   <figcaption>Figure 1: Different variability expressions types</figcaption>
+</figure>
+
 
 ## Variability Condition
 
