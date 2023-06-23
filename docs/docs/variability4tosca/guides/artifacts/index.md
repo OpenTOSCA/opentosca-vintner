@@ -103,7 +103,8 @@ Afterward, you can undeploy the application.
 vintner instances undeploy --instance artifacts
 ```
 
-You can also optionally remove the instance or cleanup your filesystem (this will also remove other instances from the filesystem).
+You can also optionally remove the instance or cleanup your filesystem.
+Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 # (optional) Delete instance
