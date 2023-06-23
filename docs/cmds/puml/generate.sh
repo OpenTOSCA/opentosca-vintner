@@ -9,6 +9,7 @@ cd ../../../
 VINTNER_CLI="yarn cli"
 
 # Optimize executing vintner by using node
+# Note, this might not be the latest build, e.g., when executed locally
 if [ -f "build/cli/index.js" ]; then
     VINTNER_CLI="yarn vintner"
 fi
