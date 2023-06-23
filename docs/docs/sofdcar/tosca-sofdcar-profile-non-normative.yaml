@@ -23,7 +23,7 @@ node_types:
     sofdcar.nodes.Python.Application:
         description: >
             Non-normative python application running on an HPC.
-            This application required a python runtime.
+            This application requires a python runtime.
         derived_from: sofdcar.nodes.HPC.Software
         requirements:
             - host:

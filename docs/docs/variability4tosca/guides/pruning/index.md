@@ -20,11 +20,7 @@ curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 
-## Orchestrator
-
-We currently support xOpera and Unfurl.
-Since both can only be installed on Linux, we implemented a WSL integration for both.
-In our case, we run on a Linux machine and use xOpera.
+Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"

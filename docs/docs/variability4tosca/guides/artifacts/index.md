@@ -28,11 +28,7 @@ curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 vintner setup init
 ```
 
-## Orchestrator
-
-We currently support xOpera and Unfurl.
-Since both can only be installed on Linux, we implemented a WSL integration for both.
-In our case, we run on a Linux machine and use Unfurl.
+Next, we configure Unfurl as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"
@@ -40,7 +36,7 @@ vintner orchestrators init unfurl
 vintner orchestrators enable --orchestrator unfurl
 ```
 
-## Import 
+## Import the Template
 
 !!! Warning "TODO"
     - figures for vst
@@ -107,7 +103,8 @@ Afterward, you can undeploy the application.
 vintner instances undeploy --instance artifacts
 ```
 
-You can also optionally remove the instance and cleanup your filesystem (this will also removes other instances from the filesystem).
+You can also optionally remove the instance or cleanup your filesystem.
+Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 # (optional) Delete instance

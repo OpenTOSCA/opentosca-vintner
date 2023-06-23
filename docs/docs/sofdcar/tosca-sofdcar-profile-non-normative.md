@@ -5,7 +5,7 @@ We specify the following node types.
 
 #### sofdcar.nodes.Python.Application
 
-Non-normative python application running on an HPC. This application required a python runtime.
+Non-normative python application running on an HPC. This application requires a python runtime.
 
 
 ```yaml linenums="1"
@@ -36,13 +36,13 @@ sofdcar.nodes.Python.Runtime:
         relationship: tosca.relationships.HostedOn
 ```
 
-#### sofdcar.nodes.RaspberryPi
+#### sofdcar.nodes.RaspberryPi.Hardware
 
-The hardware of an Raspberry Pi serving as a HPC hardware. This Raspberry Pi is able to host HPC software.  Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
+The hardware of an Raspberry Pi serving as a HPC hardware. This Raspberry Pi is able to host HPC software. Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
 
 
 ```yaml linenums="1"
-sofdcar.nodes.RaspberryPi:
+sofdcar.nodes.RaspberryPi.Hardware:
   derived_from: sofdcar.nodes.HPC.Hardware
   capabilities:
     host:
