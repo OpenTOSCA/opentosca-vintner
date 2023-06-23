@@ -2,11 +2,11 @@
 ### Artifact Types
 
 We specify the following normative artifact types.
-An overview is given in the following Figure 1.
+An overview is given in Figure c1.
 
 <figure markdown>
 ![Artifact Types](tosca-sofdcar-profile-core.artifact-types.svg)
-<figcaption>Figure 1: TOSCA SofDCar Artifact Types</figcaption>
+<figcaption>Figure c1: TOSCA SofDCar Core Artifact Types</figcaption>
 </figure>
 
 #### sofdcar.artifacts.Root
@@ -39,11 +39,11 @@ sofdcar.artifacts.Implementation:
 ### Capability Types
 
 We specify the following normative capability types.
-An overview is given in the following Figure 2.
+An overview is given in Figure c2.
 
 <figure markdown>
 ![Capability Types](tosca-sofdcar-profile-core.capability-types.svg)
-<figcaption>Figure 2: TOSCA SofDCar Capability Types</figcaption>
+<figcaption>Figure c2: TOSCA SofDCar Core Capability Types</figcaption>
 </figure>
 
 #### sofdcar.capabilities.Root
@@ -96,11 +96,11 @@ sofdcar.capabilities.Endpoint:
 ### Data Types
 
 We specify the following normative data types.
-An overview is given in the following Figure 3.
+An overview is given in Figure c3.
 
 <figure markdown>
 ![Data Types](tosca-sofdcar-profile-core.data-types.svg)
-<figcaption>Figure 3: TOSCA SofDCar Data Types</figcaption>
+<figcaption>Figure c3: TOSCA SofDCar Core Data Types</figcaption>
 </figure>
 
 #### sofdcar.data.Root
@@ -115,11 +115,11 @@ sofdcar.data.Root:
 ### Group Types
 
 We specify the following normative group types.
-An overview is given in the following Figure 4.
+An overview is given in Figure c4.
 
 <figure markdown>
 ![Group Types](tosca-sofdcar-profile-core.group-types.svg)
-<figcaption>Figure 4: TOSCA SofDCar Group Types</figcaption>
+<figcaption>Figure c4: TOSCA SofDCar Core Group Types</figcaption>
 </figure>
 
 #### sofdcar.groups.Root
@@ -161,11 +161,11 @@ sofdcar.groups.Zone:
 ### Interface Types
 
 We specify the following normative interface types.
-An overview is given in the following Figure 5.
+An overview is given in Figure c5.
 
 <figure markdown>
 ![Interface Types](tosca-sofdcar-profile-core.interface-types.svg)
-<figcaption>Figure 5: TOSCA SofDCar Interface Types</figcaption>
+<figcaption>Figure c5: TOSCA SofDCar Core Interface Types</figcaption>
 </figure>
 
 #### sofdcar.interfaces.Root
@@ -201,11 +201,11 @@ sofdcar.interfaces.Relationship:
 ### Node Types
 
 We specify the following normative node types.
-An overview is given in the following Figure 6.
+An overview is given in Figure c6.
 
 <figure markdown>
 ![Node Types](tosca-sofdcar-profile-core.node-types.svg)
-<figcaption>Figure 6: TOSCA SofDCar Node Types</figcaption>
+<figcaption>Figure c6: TOSCA SofDCar Core Node Types</figcaption>
 </figure>
 
 #### sofdcar.nodes.Root
@@ -402,11 +402,11 @@ sofdcar.nodes.Channel:
 ### Policy Types
 
 We specify the following normative policy types.
-An overview is given in the following Figure 7.
+An overview is given in Figure c7.
 
 <figure markdown>
 ![Policy Types](tosca-sofdcar-profile-core.policy-types.svg)
-<figcaption>Figure 7: TOSCA SofDCar Policy Types</figcaption>
+<figcaption>Figure c7: TOSCA SofDCar Core Policy Types</figcaption>
 </figure>
 
 #### sofdcar.policies.Root
@@ -439,11 +439,11 @@ sofdcar.policies.Safety:
 ### Relationship Types
 
 We specify the following normative relationship types.
-An overview is given in the following Figure 8.
+An overview is given in Figure c8.
 
 <figure markdown>
 ![Relationship Types](tosca-sofdcar-profile-core.relationship-types.svg)
-<figcaption>Figure 8: TOSCA SofDCar Relationship Types</figcaption>
+<figcaption>Figure c8: TOSCA SofDCar Core Relationship Types</figcaption>
 </figure>
 
 #### sofdcar.relationships.Root

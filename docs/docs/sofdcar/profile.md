@@ -16,13 +16,13 @@ The specification is under active development and is not backwards compatible wi
 
 ## TOSCA SofDCar Core Profile
 
-The core normative TOSCA type definitions contain high-level type definitions which are linked to the normative TOSCA type definitions of the [TOSCA Simple Profile in YAML 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
+The core normative TOSCA type definitions contain high-level type definitions which are mainly derived from the normative TOSCA type definitions of the [TOSCA Simple Profile in YAML 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 These types mainly concern the following topics.
 
 - ECU hardware and software
 - HPC hardware and software
 - Sensors and actuators
-- Communications, such as CAN, FlexRay, and Ethernet
+- Communication channels
 
 Considering modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components and no CAN bus connected to the ECUs is modeled.
 However, this might not provide all required information.
@@ -35,7 +35,7 @@ This topic is also discussed in more detail in [TOSCA Networking](https://docs.o
 ## TOSCA SofDCar Extended Profile
 
 The extended normative TOSCA type definitions contain additional high-level type definitions which are derived from the core type definitions.
-These types mainly concern specific communications, such as CAN, and ECUs, such as Arduino.
+These types mainly concern specific communications, such as CAN or FlexRay, but also ECUs and HPCs, such as Arduino or Raspberry Pi.
 
 --8<-- "sofdcar/tosca-sofdcar-profile-extended.md"
 
