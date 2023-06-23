@@ -9,7 +9,7 @@ title: Profile
 This document specifies the TOSCA Software-Defined Car (SofDCar) profile.
 This profile includes normative TOSCA types for the domain of software-defined cars. 
 Standardizing such normative TOSCA types improves interoperability.
-For example, an ECU supplier can model and distribute the deployment and management of his ECUs using these types. 
+For example, an ECU supplier can model and distribute the deployment and management of their ECUs using these types. 
 Various OEMs can then import provided models and integrate them into their cars.
 The specification is under active development and is not backwards compatible with any previous versions.
 

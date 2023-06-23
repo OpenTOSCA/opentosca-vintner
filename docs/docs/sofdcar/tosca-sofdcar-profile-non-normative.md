@@ -11,7 +11,7 @@ An overview is given in the following Figure 1.
 
 #### sofdcar.nodes.Python.Application
 
-Non-normative python application running on an HPC. This application required a python runtime.
+Non-normative python application running on an HPC. This application requires a python runtime.
 
 
 ```yaml linenums="1"

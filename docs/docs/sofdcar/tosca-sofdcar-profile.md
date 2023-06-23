@@ -66,7 +66,7 @@ sofdcar.capabilities.Host.ECU.Software:
 
 #### sofdcar.capabilities.OperatingSystem.RealTime
 
-The capability to provide an OS with real time
+The capability to provide a real-time operating system.
 
 ```yaml linenums="1"
 sofdcar.capabilities.OperatingSystem.RealTime:
@@ -418,7 +418,7 @@ The node all other accelerators are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Accelerator:
-  derived_from: sofdcar.nodes.Root
+  derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Brake
@@ -427,7 +427,7 @@ The node all other brakes are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Brake:
-  derived_from: sofdcar.nodes.Root
+  derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Steering
@@ -436,7 +436,7 @@ The node all other steerings are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Steering:
-  derived_from: sofdcar.nodes.Root
+  derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Sensor
