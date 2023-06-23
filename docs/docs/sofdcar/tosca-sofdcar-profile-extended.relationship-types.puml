@@ -2,8 +2,6 @@
 skinparam componentStyle rectangle
 
 
-rectangle "sofdcar.relationships.Root"
-
 rectangle "sofdcar.relationships.CAN"
 
 rectangle "sofdcar.relationships.CAN-FD"
@@ -22,8 +20,6 @@ rectangle "sofdcar.relationships.OBD"
 
 rectangle "sofdcar.relationships.SOME/IP"
 
-
-"tosca.relationships.Root" <|-- "sofdcar.relationships.Root"
 
 "sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN"
 

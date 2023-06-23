@@ -1,0 +1,217 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: TOSCA Profile for Software-Defined Cars (Core).
+metadata:
+    template_name: TOSCA SofDCar Profile (Core)
+    template_author: Miles Stötzner
+    template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_version: 1.0.0-draft
+    template_id: tosca-sofdcar-profile-core
+    template_license: https://www.apache.org/licenses/LICENSE-2.0
+    abbreviations: |
+        - ASIL: Automotive Safety Integrity Level
+        - CAN: Controller Area Network
+        - CAN-FD: Controller Area Network Flexible Data-Rate
+        - ECU: Electronic Control Unit
+        - GPIO: General-Purpose Input/ Output
+        - HPC: High Performance Computer
+        - LIDAR: Light Detection and Ranging
+        - LIN: Local Interconnect Network
+        - MOST: Media-Oriented Systems Transport
+        - OBD: On-Board Diagnostics
+        - RADAR: Radio Detection and Ranging
+        - SOME/IP: Scalable Service-Oriented Middleware over IP
+    acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
+
+artifact_types:
+    sofdcar.artifacts.Root:
+        description: The artifact all other artifacts are derived from.
+        derived_from: tosca.artifacts.Root
+
+    sofdcar.artifacts.Deployment:
+        description: The artifact all other deployment artifacts are derived from.
+        derived_from: tosca.artifacts.Deployment
+
+    sofdcar.artifacts.Implementation:
+        description: The artifact all other implementation artifacts are derived from.
+        derived_from: tosca.artifacts.Implementation
+
+capability_types:
+    sofdcar.capabilities.Root:
+        description: The capability all other capabilities are derived from.
+        derived_from: tosca.capabilities.Root
+
+    sofdcar.capabilities.Host.ECU.Software:
+        description: The capability to host an ECU software.
+        derived_from: tosca.capabilities.Container
+
+    sofdcar.capabilities.OperatingSystem.RealTime:
+        description: The capability to provide a real-time operating system.
+        derived_from: tosca.capabilities.OperatingSystem
+        properties:
+            time_guarantee:
+                type: integer
+                required: false
+            guarantee_type:
+                type: string
+                constraints:
+                    - valid_values:
+                          - hard
+                          - firm
+                          - soft
+
+    sofdcar.capabilities.Endpoint:
+        description: The capability to provide an endpoint to which a client can connect to.
+        derived_from: sofdcar.capabilities.Root
+
+data_types:
+    sofdcar.data.Root:
+        description: The data all other data are derived from.
+        derived_from: tosca.datatypes.Root
+
+group_types:
+    sofdcar.groups.Root:
+        description: The group all other groups are derived from.
+        derived_from: tosca.groups.Root
+
+    sofdcar.groups.Location:
+        description: The geographical location of nodes.
+        derived_from: sofdcar.groups.Root
+
+    sofdcar.groups.Domain:
+        description: The domain in a domain-oriented architecture.
+        derived_from: sofdcar.groups.Root
+
+    sofdcar.groups.Zone:
+        description: The zone in a zone-oriented architecture.
+        derived_from: sofdcar.groups.Root
+
+interface_types:
+    sofdcar.interfaces.Root:
+        description: The interface all other interfaces are derived from.
+        derived_from: tosca.interfaces.Root
+
+    sofdcar.interfaces.Nodes:
+        description: The standard management interface of nodes.
+        derived_from: tosca.interfaces.node.lifecycle.Standard
+        operations:
+            build:
+                description: Builds deployment artifacts.
+
+    sofdcar.interfaces.Relationship:
+        description: The standard management interface for relationships.
+        derived_from: tosca.interfaces.relationship.Configure
+
+node_types:
+    sofdcar.nodes.Root:
+        description: The node all other nodes are derived from.
+        derived_from: tosca.nodes.Root
+
+    sofdcar.nodes.Vehicle:
+        description: The node all other vehicles are derived from.
+        derived_from: sofdcar.nodes.Root
+
+    sofdcar.nodes.Cloud:
+        description: The node all other clouds are derived from.
+        derived_from: sofdcar.nodes.Root
+
+    sofdcar.nodes.ECU.Hardware:
+        description: The hardware of an ECU.
+        derived_from: sofdcar.nodes.Root
+        capabilities:
+            host:
+                type: sofdcar.capabilities.Host.ECU.Software
+                valid_source_types: [sofdcar.nodes.ECU.Software]
+
+    sofdcar.nodes.ECU.Software:
+        description: The software running on an ECU.
+        derived_from: sofdcar.nodes.Root
+        requirements:
+            - host:
+                  capability: sofdcar.capabilities.Host.ECU.Software
+                  relationship: tosca.relationships.HostedOn
+
+    sofdcar.nodes.ECU.Runtime:
+        description: The runtime for an ECU software.
+        derived_from: sofdcar.nodes.ECU.Software
+        capabilities:
+            host:
+                type: sofdcar.capabilities.Host.ECU.Software
+                valid_source_types: [sofdcar.nodes.ECU.Software]
+        requirements:
+            - host:
+                  capability: sofdcar.capabilities.Host.ECU.Software
+                  relationship: tosca.relationships.HostedOn
+
+    sofdcar.nodes.HPC.Software:
+        description: The software running on an HPC.
+        derived_from: tosca.nodes.SoftwareComponent
+
+    sofdcar.nodes.HPC.Hardware:
+        description: The hardware of an HPC.
+        derived_from: sofdcar.nodes.Root
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [tosca.nodes.SoftwareComponent]
+
+    sofdcar.nodes.Actuator:
+        description: The node all other actuators are derived from.
+        derived_from: sofdcar.nodes.Root
+
+    sofdcar.nodes.Accelerator:
+        description: The node all other accelerators are derived from.
+        derived_from: sofdcar.nodes.Actuator
+
+    sofdcar.nodes.Brake:
+        description: The node all other brakes are derived from.
+        derived_from: sofdcar.nodes.Actuator
+
+    sofdcar.nodes.Steering:
+        description: The node all other steerings are derived from.
+        derived_from: sofdcar.nodes.Actuator
+
+    sofdcar.nodes.Sensor:
+        description: The node all other sensors are derived from.
+        derived_from: sofdcar.nodes.Root
+
+    sofdcar.nodes.RADAR:
+        description: The node all other RADAR are derived from.
+        derived_from: sofdcar.nodes.Sensor
+
+    sofdcar.nodes.Camera:
+        description: The node all other cameras are derived from.
+        derived_from: sofdcar.nodes.Sensor
+
+    sofdcar.nodes.LIDAR:
+        description: The node all other LIDAR are derived from.
+        derived_from: sofdcar.nodes.Sensor
+
+    sofdcar.nodes.Ultrasonic:
+        description: The node all other ultrasonics are derived from.
+        derived_from: sofdcar.nodes.Sensor
+
+    sofdcar.nodes.Channel:
+        description: The node all other communication channels are derived from.
+        derived_from: sofdcar.nodes.Root
+        capabilities:
+            endpoint:
+                type: sofdcar.capabilities.Endpoint
+                occurrences: [0, UNBOUNDED]
+
+policy_types:
+    sofdcar.policies.Root:
+        description: The policy all other policies are derived from.
+        derived_from: tosca.policies.Root
+
+    sofdcar.policies.Security:
+        description: The policy all other security-related policies are derived from.
+        derived_from: sofdcar.policies.Root
+
+    sofdcar.policies.Safety:
+        description: The policy all other safety-related policies are derived from.
+        derived_from: sofdcar.policies.Root
+
+relationship_types:
+    sofdcar.relationships.Root:
+        description: The relationship all other relationships are derived from.
+        derived_from: tosca.relationships.Root

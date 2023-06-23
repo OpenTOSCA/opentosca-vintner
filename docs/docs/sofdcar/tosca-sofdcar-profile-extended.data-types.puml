@@ -2,12 +2,8 @@
 skinparam componentStyle rectangle
 
 
-rectangle "sofdcar.data.Root"
-
 rectangle "sofdcar.data.GPIO.Pin"
 
-
-"tosca.datatypes.Root" <|-- "sofdcar.data.Root"
 
 "sofdcar.data.Root" <|-- "sofdcar.data.GPIO.Pin"
 

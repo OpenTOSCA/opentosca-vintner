@@ -12,7 +12,7 @@ A vehicle control unit connects both zones and also connects to some service run
 
 ## Appendix A "Service Template"
 
-This appendix contains the complete service template of this guide.
+This appendix contains the service template of this guide.
 You can also download the service template [here](service-template.yaml){download=service-template.yaml}.
 
 ```yaml linenums="1"
@@ -21,7 +21,7 @@ You can also download the service template [here](service-template.yaml){downloa
 
 ## Appendix B "Type Definitions"
 
-This appendix contains the complete type definitions of this guide.
+This appendix contains the type definitions of this guide.
 You can also download the type definitions [here](types.yaml){download=types.yaml}
 
 ```yaml linenums="1"

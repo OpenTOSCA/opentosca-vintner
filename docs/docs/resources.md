@@ -7,7 +7,9 @@ This page contains a collection of interesting resources such as the TOSCA speci
 - [TOSCA Version 1.0](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html){target=_blank}
 - [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
 - [TOSCA Version 2.0](https://docs.oasis-open.org/tosca/TOSCA/v2.0/TOSCA-v2.0.html){target=_blank}
-- [Variability4TOSCA](variability4tosca/specification.md){target=_blank}
+- [Variability4TOSCA](variability4tosca/specification){target=_blank}
+- [Queries4TOSCA](queries4tosca/specification){target=_blank}
+- [TOSCA SofDCar Profile](sofdcar/profile){target=_blank}
 
 ## Introductions
 

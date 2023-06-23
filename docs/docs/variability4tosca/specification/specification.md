@@ -264,16 +264,24 @@ This result might be used inside a variability condition to ensure that the depl
 budget.
 
 ```yaml linenums="1"
-variability: 
-    expressions:
-        my_expression: {add: [{variability_input: costs_offering_a}, {variability_input: costs_offering_b}]}
+topology_template:
+   variability: 
+       expressions:
+           my_expression: {add: [{variability_input: costs_offering_a}, {variability_input: costs_offering_b}]}
 ```
 
-There are value expressions which return any kind of value and logic expressions which return Booleans.
+There are different kinds of variability expressions, as displayed in Figure 1.
+Value expressions return any kind of value and logic expressions return Booleans.
+
+<figure markdown>
+   ![Variability Expressions](variability-expressions.svg)
+   <figcaption>Figure 1: Different variability expressions types</figcaption>
+</figure>
+
 
 ## Variability Condition
 
-A variability condition is a logic expression targeting the presence of an element.
+A variability condition is a logic expression targeting the presence of an element, as displayed in Figure 1.
 Allowed operators and functions are listed below.
 For example, the following variability condition `is_prod` evaluates to true if the variability input `mode` equals `prod`.
 

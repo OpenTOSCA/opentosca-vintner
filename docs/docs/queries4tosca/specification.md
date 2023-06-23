@@ -213,7 +213,7 @@ optionally by a number or a range.
 
 ## Appendix A "Grammar" 
 
-This appendix contains the complete [Ohm](https://ohmjs.org){target=_blank} grammar of Queries4TOSCA.
+This appendix contains the [Ohm](https://ohmjs.org){target=_blank} grammar of Queries4TOSCA.
 
 ```text linenums="1"
 Query {
