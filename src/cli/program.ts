@@ -220,14 +220,28 @@ template
         })
     )
 
-template
-    .command('puml')
-    .description('generate puml')
+const puml = template.command('puml').description('generate puml')
+
+const pumlTopology = puml
+    .command('topology')
+    .description('plot topology as PlantUML')
     .requiredOption('--path <string>', 'path to service template')
     .option('--output [string]', 'path of the output')
     .action(
         hae.exit(async options => {
-            await Controller.template.puml(options)
+            await Controller.template.puml.topology(options)
+        })
+    )
+
+const pumlTypes = puml
+    .command('types')
+    .description('plot types as PlantUML (each entity types is plotted separately)')
+    .requiredOption('--path <string>', 'path to service template')
+    .option('--output [string]', 'path of the output directory (default: the directory of the service template')
+    .option('--types [string...]', 'entity types to consider, e.g., "node_types" (default: Every defined entity type)')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.puml.types(options)
         })
     )
 

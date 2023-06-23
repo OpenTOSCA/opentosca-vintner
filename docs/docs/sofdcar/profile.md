@@ -29,7 +29,6 @@ However, this might not provide all required information.
 Therefore, we provide also node types to model, e.g., a CAN bus.
 This topic is also discussed in more detail in [TOSCA Networking](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482){target=_blank} in which they propose to have a TOSCA model for the application and a second one for the networking.
 
-
 --8<-- "sofdcar/tosca-sofdcar-profile.md"
 
 

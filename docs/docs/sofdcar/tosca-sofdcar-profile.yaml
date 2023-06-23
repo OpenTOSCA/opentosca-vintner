@@ -202,11 +202,11 @@ node_types:
 
     sofdcar.nodes.Vehicle:
         description: The node all other vehicles are derived from.
-        derived_from: tosca.nodes.Root
+        derived_from: sofdcar.nodes.Root
 
     sofdcar.nodes.Cloud:
         description: The node all other clouds are derived from.
-        derived_from: tosca.nodes.Root
+        derived_from: sofdcar.nodes.Root
 
     sofdcar.nodes.ECU.Hardware:
         description: The hardware of an ECU.

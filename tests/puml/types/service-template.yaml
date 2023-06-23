@@ -1,0 +1,291 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    tosca.nodes.Root:
+        derived_from: tosca.entity.Root
+        description: The TOSCA Node Type all other TOSCA base Node Types derive from
+        attributes:
+            tosca_id:
+                type: string
+            tosca_name:
+                type: string
+            state:
+                type: string
+        capabilities:
+            feature:
+                type: tosca.capabilities.Node
+        requirements:
+            - dependency:
+                  capability: tosca.capabilities.Node
+                  node: tosca.nodes.Root
+                  relationship: tosca.relationships.DependsOn
+                  occurrences: [0, UNBOUNDED]
+        interfaces:
+            Standard:
+                type: tosca.interfaces.node.lifecycle.Standard
+
+    tosca.nodes.Abstract.Compute:
+        derived_from: tosca.nodes.Root
+        description: The TOSCA Abstract.Compute node represents an abstract compute resource without any requirements on storage or network resources.
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: []
+
+    tosca.nodes.Compute:
+        derived_from: tosca.nodes.Abstract.Compute
+        attributes:
+            private_address:
+                type: string
+            public_address:
+                type: string
+            networks:
+                type: map
+                entry_schema:
+                    type: tosca.datatypes.network.NetworkInfo
+            ports:
+                type: map
+                entry_schema:
+                    type: tosca.datatypes.network.PortInfo
+        requirements:
+            - local_storage:
+                  capability: tosca.capabilities.Attachment
+                  node: tosca.nodes.Storage.BlockStorage
+                  relationship: tosca.relationships.AttachesTo
+                  occurrences: [0, UNBOUNDED]
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [tosca.nodes.SoftwareComponent]
+            endpoint:
+                type: tosca.capabilities.Endpoint.Admin
+            os:
+                type: tosca.capabilities.OperatingSystem
+            scalable:
+                type: tosca.capabilities.Scalable
+            binding:
+                type: tosca.capabilities.network.Bindable
+
+    tosca.nodes.SoftwareComponent:
+        derived_from: tosca.nodes.Root
+        properties:
+            component_version:
+                type: version
+                required: false
+            admin_credential:
+                type: tosca.datatypes.Credential
+                required: false
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  node: tosca.nodes.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    tosca.nodes.WebServer:
+        derived_from: tosca.nodes.SoftwareComponent
+        capabilities:
+            data_endpoint: tosca.capabilities.Endpoint
+            admin_endpoint: tosca.capabilities.Endpoint.Admin
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [tosca.nodes.WebApplication]
+
+    tosca.nodes.WebApplication:
+        derived_from: tosca.nodes.Root
+        properties:
+            context_root:
+                type: string
+        capabilities:
+            app_endpoint:
+                type: tosca.capabilities.Endpoint
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  node: tosca.nodes.WebServer
+                  relationship: tosca.relationships.HostedOn
+
+    tosca.nodes.DBMS:
+        derived_from: tosca.nodes.SoftwareComponent
+        properties:
+            root_password:
+                type: string
+                required: false
+                description: the optional root password for the DBMS service
+            port:
+                type: integer
+                required: false
+                description: the port the DBMS service will listen to for data and requests
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [tosca.nodes.Database]
+
+    tosca.nodes.Database:
+        derived_from: tosca.nodes.Root
+        properties:
+            name:
+                type: string
+                description: the logical name of the database
+            port:
+                type: integer
+                description: the port the underlying database service will listen to for data
+            user:
+                type: string
+                description: the optional user account name for DB administration
+                required: false
+            password:
+                type: string
+                description: the optional password for the DB user account
+                required: false
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  node: tosca.nodes.DBMS
+                  relationship: tosca.relationships.HostedOn
+        capabilities:
+            database_endpoint:
+                type: tosca.capabilities.Endpoint.Database
+
+    tosca.nodes.Abstract.Storage:
+        derived_from: tosca.nodes.Root
+        properties:
+            name:
+                type: string
+            size:
+                type: scalar-unit.size
+                default: 0 MB
+                constraints:
+                    - greater_or_equal: 0 MB
+
+    tosca.nodes.Storage.ObjectStorage:
+        derived_from: tosca.nodes.Abstract.Storage
+        properties:
+            maxsize:
+                type: scalar-unit.size
+                constraints:
+                    - greater_or_equal: 0 GB
+        capabilities:
+            storage_endpoint:
+                type: tosca.capabilities.Endpoint
+
+    tosca.nodes.Storage.BlockStorage:
+        derived_from: tosca.nodes.Abstract.Storage
+        properties:
+            volume_id:
+                type: string
+                required: false
+            snapshot_id:
+                type: string
+                required: false
+        capabilities:
+            attachment:
+                type: tosca.capabilities.Attachment
+
+    tosca.nodes.Container.Runtime:
+        derived_from: tosca.nodes.SoftwareComponent
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [tosca.nodes.Container.Application]
+            scalable:
+                type: tosca.capabilities.Scalable
+
+    tosca.nodes.Container.Application:
+        derived_from: tosca.nodes.Root
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  node: tosca.nodes.Container.Runtime
+                  relationship: tosca.relationships.HostedOn
+            - storage:
+                  capability: tosca.capabilities.Storage
+            - network:
+                  capability: tosca.capabilities.Endpoint
+
+    tosca.nodes.LoadBalancer:
+        derived_from: tosca.nodes.Root
+        properties:
+            algorithm:
+                type: string
+                required: false
+                status: experimental
+        capabilities:
+            client:
+                type: tosca.capabilities.Endpoint.Public
+                occurrences: [0, UNBOUNDED]
+
+        requirements:
+            - application:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.RoutesTo
+                  occurrences: [0, UNBOUNDED]
+
+    tosca.nodes.network.Network:
+        derived_from: tosca.nodes.Root
+        properties:
+            ip_version:
+                type: integer
+                required: false
+                default: 4
+                constraints:
+                    - valid_values: [4, 6]
+            cidr:
+                type: string
+                required: false
+            start_ip:
+                type: string
+                required: false
+            end_ip:
+                type: string
+                required: false
+            gateway_ip:
+                type: string
+                required: false
+            network_name:
+                type: string
+                required: false
+            network_id:
+                type: string
+                required: false
+            segmentation_id:
+                type: string
+                required: false
+            network_type:
+                type: string
+                required: false
+            physical_network:
+                type: string
+                required: false
+        capabilities:
+            link:
+                type: tosca.capabilities.network.Linkable
+
+    tosca.nodes.network.Port:
+        derived_from: tosca.nodes.Root
+        properties:
+            ip_address:
+                type: string
+                required: false
+            order:
+                type: integer
+                required: true
+                default: 0
+                constraints:
+                    - greater_or_equal: 0
+            is_default:
+                type: boolean
+                required: false
+                default: false
+            ip_range_start:
+                type: string
+                required: false
+            ip_range_end:
+                type: string
+                required: false
+        requirements:
+            - link:
+                  capability: tosca.capabilities.network.Linkable
+                  relationship: tosca.relationships.network.LinksTo
+            - binding:
+                  capability: tosca.capabilities.network.Bindable
+                  relationship: tosca.relationships.network.BindsTo

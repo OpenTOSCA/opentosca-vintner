@@ -1057,6 +1057,84 @@ packages a directory to a CSAR
 | template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
 
+## vintner template puml topology
+
+plot topology
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template puml topology --path ${PATH}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"path": "${PATH}"}' \
+            ${SERVER_ADDRESS}/template/puml/topology
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/puml/topology", {
+		path: PATH
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/puml/topology", json={
+		"path": PATH
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| path |  true  | string | path to service template |
+| output |  false  | string | path of the output |
+
+## vintner template puml types
+
+plot types
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template puml types --path ${PATH}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"path": "${PATH}"}' \
+            ${SERVER_ADDRESS}/template/puml/types
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/puml/types", {
+		path: PATH
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/puml/types", json={
+		"path": PATH
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| path |  true  | string | path to service template |
+| output |  false  | string | path of the output |
+
 ## vintner template query
 
 resolves all queries in a given service template

@@ -4,14 +4,26 @@ import {expect} from 'chai'
 import * as path from 'path'
 
 describe('puml', () => {
-    it('generate puml', async () => {
-        const input = path.join(__dirname, 'service-template.yaml')
-        const output = files.temporary('service-template.puml')
+    it('topology', async () => {
+        const input = path.join(__dirname, 'topology', 'service-template.yaml')
+        const output = files.temporary('service-template.topology.puml')
 
-        await Controller.template.puml({path: input, output: output})
+        await Controller.template.puml.topology({path: input, output})
 
         const result = files.loadFile(output)
-        const expected = files.loadFile(path.join(__dirname, 'service-template.puml'))
+        const expected = files.loadFile(path.join(__dirname, 'topology', 'service-template.topology.puml'))
+        expect(result).to.equal(expected)
+    })
+
+    it('types', async () => {
+        const input = path.join(__dirname, 'types', 'service-template.yaml')
+        const output = files.temporary()
+        files.createDirectory(output)
+
+        await Controller.template.puml.types({path: input, output})
+
+        const result = files.loadFile(path.join(output, 'service-template.node-types.puml'))
+        const expected = files.loadFile(path.join(__dirname, 'types', 'service-template.node-types.puml'))
         expect(result).to.equal(expected)
     })
 })

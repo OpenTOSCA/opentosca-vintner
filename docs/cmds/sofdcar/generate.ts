@@ -18,6 +18,7 @@ async function run(name: string) {
                         .map(it => utils.toFirstUpperCase(it))
                         .join(' '),
                 toText: (value: string) => value.split('_').join(' '),
+                toFigure: (value: string) => name + '.' + value.replace('_', '-') + '.svg',
             },
         },
         path.join(dir, name + '.md')

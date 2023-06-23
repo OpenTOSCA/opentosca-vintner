@@ -1,7 +1,13 @@
-<% Object.entries(template).filter(([key, _]) => key.endsWith('_types')).sort((a, b) => a[0].localeCompare(b[0])).forEach(([types_key, types]) => { %>
+<% Object.entries(template).filter(([key, _]) => key.endsWith('_types')).sort((a, b) => a[0].localeCompare(b[0])).forEach(([types_key, types], index) => { %>
 ### <%= utils.toTitle(types_key) %>
 
 We specify the following <%= utils.toText(types_key) %>.
+An overview is given in the following Figure <%= index + 1%>.
+
+<figure markdown>
+![<%= utils.toTitle(types_key) %>](<%= utils.toFigure(types_key) %>)
+<figcaption>Figure <%= index + 1%>: TOSCA SofDCar <%= utils.toTitle(types_key) %></figcaption>
+</figure>
 <%
 
 Object.entries(types).forEach(([type_key, type]) => {

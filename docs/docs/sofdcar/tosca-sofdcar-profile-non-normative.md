@@ -2,6 +2,12 @@
 ### Node Types
 
 We specify the following node types.
+An overview is given in the following Figure 1.
+
+<figure markdown>
+![Node Types](tosca-sofdcar-profile-non-normative.node-types.svg)
+<figcaption>Figure 1: TOSCA SofDCar Node Types</figcaption>
+</figure>
 
 #### sofdcar.nodes.Python.Application
 
