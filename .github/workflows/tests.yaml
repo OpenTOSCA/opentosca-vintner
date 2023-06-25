@@ -87,5 +87,10 @@ jobs:
             - name: (DOCS) Generate PlantUML of Service Templates
               run: yarn docs:generate:puml
 
+            - name: (DOCS) Start PlantUML Server
+              run: yarn puml:up
+
             - name: (DOCS) Build Docs
               run: yarn docs:build
+              env:
+                  MKDOCS_PUML_SERVER: http://127.0.0.1:8080
