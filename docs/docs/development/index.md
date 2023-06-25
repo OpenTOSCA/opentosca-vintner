@@ -254,6 +254,21 @@ This command is executed in the pipeline.
 yarn docs:generate:puml
 ```
 
+Note, for plotting SVGs we use the public PlantUML server https://www.plantuml.com/plantuml. 
+It is also possible to start a local PlantUML server using Docker. 
+Therefore, run the following command. 
+
+```shell linenums="1"
+yarn puml:up
+```
+
+However, you also need to configure the following environment variables in `docs/.env`.
+
+```yaml linenums="1"
+MKDOCS_PUML_SERVER=http://localhost:8080
+MKDOCS_PUML_SERVER_SSL=true
+```
+
 ## Tests
 
 We use [mocha](https://mochajs.org){target=_blank} and [chai](https://www.chaijs.com){target=_blank} for testing.
