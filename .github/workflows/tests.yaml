@@ -92,5 +92,5 @@ jobs:
 
             - name: (DOCS) Build Docs
               run: yarn docs:build
-              env:
-                  MKDOCS_PUML_SERVER: http://127.0.0.1:8080
+            #  env:
+            #     MKDOCS_PUML_SERVER: http://127.0.0.1:8080
