@@ -1,7 +1,10 @@
 # Distributed Locations
 
-In this document, we discuss an example of two geographically distributed ECUs, as shown in Figure 1.
-These two ECUs communicate via CAN which is bridged over the cloud.
+In this document, we discuss an example of two geographically distributed ECUs using the TOSCA SofDCar profile.
+
+## Scenario
+
+These two ECUs communicate via CAN which is bridged over the cloud, as shown in Figure 1.
 Thereby, we model the CAN communication application-centric via a direct relationship between the two software
 components as well as network-centric via explicitly modeling the CAN busses and their connections to the underlying
 hardware.
