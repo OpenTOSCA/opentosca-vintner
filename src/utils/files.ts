@@ -1,3 +1,4 @@
+import * as crypto from '#crypto'
 import archiver from 'archiver'
 import axios from 'axios'
 import * as ejs from 'ejs'
@@ -59,7 +60,16 @@ export function loadYAML<T>(file: string) {
     return yaml.load(loadFile(file)) as T
 }
 
-export function storeFile(file: string, data: string) {
+export function storeFile(file: string, data: string, options?: {onlyIfChanged?: boolean}) {
+    // Write file only if changed, e.g., to prevent updating the file mtime
+    if (options?.onlyIfChanged) {
+        if (exists(file)) {
+            if (crypto.checksum(data) == crypto.checksum(loadFile(file))) {
+                return
+            }
+        }
+    }
+
     fs.writeFileSync(path.resolve(file), data)
     return file
 }
@@ -197,4 +207,8 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
             return resolve(data)
         })
     })
+}
+
+export function stat(file: string) {
+    return fs.statSync(file)
 }

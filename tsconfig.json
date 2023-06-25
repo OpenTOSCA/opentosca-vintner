@@ -17,6 +17,7 @@
             "#plugins": ["src/plugins"],
             "#spec/*": ["src/specification/*"],
             "#files": ["src/utils/files"],
+            "#crypto": ["src/utils/crypto"],
             "#shell": ["src/utils/shell"],
             "#utils": ["src/utils/utils"],
             "#validator": ["src/utils/validator"]

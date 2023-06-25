@@ -22,12 +22,12 @@ export default async function (options: TemplatePUMLTypesOptions) {
     const result = await plotter.plotTypes(options.types)
 
     for (const [type, plot] of Object.entries(result)) {
-        const outputFile = path.join(
+        const output = path.join(
             outputDir,
             files.getFilename(options.path).replace(/(\.yaml|\.yml)/, '.' + type.replace('_', '-') + '.puml')
         )
-        if (!outputFile.endsWith('.puml')) throw new Error(`Output path "${outputFile}" does not end with '.puml'`)
+        if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 
-        files.storeFile(outputFile, plot)
+        files.storeFile(output, plot, {onlyIfChanged: true})
     }
 }
