@@ -72,6 +72,9 @@ jobs:
             - name: (DOCS) Install Dependencies
               run: yarn docs:install
 
+            - name: (DOCS) Build Documentation Commands
+              run: yarn docs:generate:cmds
+
             - name: (DOCS) Generate Licenses Page
               run: yarn docs:generate:licenses
 
@@ -87,8 +90,8 @@ jobs:
             - name: (DOCS) Generate PlantUML of Service Templates
               run: yarn docs:generate:puml
 
-            - name: (DOCS) Start PlantUML Server
-              run: yarn puml:up
+            # - name: (DOCS) Start PlantUML Server
+            #  run: yarn puml:up
 
             - name: (DOCS) Build Docs
               run: yarn docs:build

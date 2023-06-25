@@ -1,0 +1,5 @@
+{
+    "extends": "./tsconfig.json",
+    "include": ["docs/cmds"],
+    "exclude": ["node_modules", "src"]
+}
