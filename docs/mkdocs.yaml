@@ -32,11 +32,11 @@ extra_css:
     - assets/stylesheets/extra.css
     - assets/stylesheets/typeset.css
     - assets/stylesheets/asciinema-player.css
+    - assets/stylesheets/enumerate-headers.css
 
 extra_javascript:
     - assets/javascripts/tablesort.min.js
     - assets/javascripts/tablesort-controller.js
-    - assets/javascripts/fix-enumerate-headings.js
 
 extra:
     prod: !ENV [MKDOCS_IS_PROD, true]
@@ -87,10 +87,6 @@ plugins:
           output_folder: '.'
           input_folder: '.'
           input_extensions: 'puml'
-    - enumerate-headings:
-          strict: true
-          toc_depth: 6
-          increment_across_pages: false
 
 nav:
     - OpenTOSCA Vintner:
