@@ -75,7 +75,7 @@
         "pkg": "^5.8.1",
         "postinstall-postinstall": "^2.1.0",
         "prettier": "^2.8.7",
-        "semver": "^7.4.0",
+        "semver": "^7.5.2",
         "sync-directory": "^6.0.4",
         "ts-node": "^10.9.1",
         "tsc-alias": "^1.8.5",
