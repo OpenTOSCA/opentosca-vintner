@@ -134,6 +134,9 @@ jobs:
             - name: (DOCS) Install Dependencies
               run: yarn docs:install
 
+            - name: (DOCS) Build Documentation Commands
+              run: yarn docs:build:commands
+
             - name: (DOCS) Generate Licenses Page
               run: yarn docs:generate:licenses
 

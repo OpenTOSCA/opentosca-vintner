@@ -113,7 +113,7 @@
         "docs:build": "bash docs/cmds/mkdocs build --strict",
         "docs:clean": "cd docs && rm -rf site",
         "docs:deploy": "bash docs/cmds/mkdocs gh-deploy --force --strict",
-        "docs:generate:commands": "tsc -p tsconfig.docs.cmds.json && tsc-alias -p tsconfig.docs.cmds.json && syncdir docs/cmds build-docs/docs/cmds --quiet && syncdir src/assets build-docs/src/assets --quiet",
+        "docs:build:commands": "tsc -p tsconfig.docs.json && tsc-alias -p tsconfig.docs.json && syncdir docs/cmds build-docs/docs/cmds --quiet && syncdir src/assets build-docs/src/assets --quiet",
         "docs:generate:interface": "bash docs/cmds/command.sh interface",
         "docs:generate:licenses": "bash docs/cmds/command.sh licenses",
         "docs:generate:tests": "bash docs/cmds/command.sh variability  && bash docs/cmds/command.sh query",

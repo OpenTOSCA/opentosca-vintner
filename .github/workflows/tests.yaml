@@ -68,7 +68,7 @@ jobs:
               run: yarn docs:install
 
             - name: (DOCS) Build Documentation Commands
-              run: yarn docs:generate:commands
+              run: yarn docs:build:commands
 
             - name: (DOCS) Generate Licenses Page
               run: yarn docs:generate:licenses
