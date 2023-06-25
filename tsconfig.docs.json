@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "build-docs"
+    },
+    "include": ["src", "docs/cmds"],
+    "exclude": ["node_modules", "tests"]
+}

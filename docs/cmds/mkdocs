@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+# Set working directory
+cd "$(dirname "$0")"
+cd ../
+
+if [ -f ".env" ]; then
+  source .env
+fi
+
+# Ensure that Java is installed
+if ! which mkdocs &>/dev/null; then
+    echo "\"mkdocs\" not installed"
+    exit 1
+fi
+
+mkdocs ${@}

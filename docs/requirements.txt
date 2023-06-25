@@ -1,5 +1,5 @@
 asciinema==2.0.2
-pyyaml_env_tag
+pyyaml_env_tag==0.1
 mkdocs-material==8.5.7
 mkdocs-macros-plugin==0.7.0
 mkdocs-glightbox==0.1.6

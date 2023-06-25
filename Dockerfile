@@ -23,6 +23,7 @@ RUN apt-get update -y \
     && apt-get clean  \
     && rm -rf /var/lib/apt/lists/*
 RUN yarn docs:install
+RUN yarn docs:build:commands
 RUN yarn docs:generate:licenses
 RUN yarn docs:generate:interface
 RUN yarn docs:generate:tests

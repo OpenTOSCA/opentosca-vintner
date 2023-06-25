@@ -19,5 +19,5 @@ export default async function (options: TemplatePUMLTopologyOptions) {
     const puml = new PUML(graph)
     const plot = await puml.plotTopology()
 
-    files.storeFile(output, plot)
+    files.storeFile(output, plot, {onlyIfChanged: true})
 }

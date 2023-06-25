@@ -16,11 +16,6 @@ jobs:
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
 
-            - name: (PREPARE) Setup Apt Packages
-              uses: awalsh128/cache-apt-pkgs-action@v1.3.0
-              with:
-                  packages: graphviz
-
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
@@ -71,6 +66,9 @@ jobs:
 
             - name: (DOCS) Install Dependencies
               run: yarn docs:install
+
+            - name: (DOCS) Build Documentation Commands
+              run: yarn docs:build:commands
 
             - name: (DOCS) Generate Licenses Page
               run: yarn docs:generate:licenses

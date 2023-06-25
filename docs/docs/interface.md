@@ -1059,7 +1059,7 @@ packages a directory to a CSAR
 
 ## vintner template puml topology
 
-plot topology
+plot topology as PlantUML
 
 
 === "CLI"
@@ -1098,7 +1098,7 @@ plot topology
 
 ## vintner template puml types
 
-plot types
+plot types as PlantUML (each entity types is plotted separately)
 
 
 === "CLI"
@@ -1133,7 +1133,8 @@ plot types
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to service template |
-| output |  false  | string | path of the output |
+| output |  false  | string | path of the output directory (default: the directory of the service template |
+| types |  false  | string... | entity types to consider, e.g., "node_types" (default: Every defined entity type) |
 
 ## vintner template query
 
