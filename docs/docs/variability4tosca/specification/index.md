@@ -121,6 +121,8 @@ The following options are general options.
 
 ### Default Condition Options
 
+_This is an experimental feature._
+
 The following options are used to configure the default conditions of elements.
 
 | Keyname                         | Mandatory | Type                                                                                                  | Default       | Description                                    |
@@ -136,6 +138,8 @@ The following options are used to configure the default conditions of elements.
 | property_default_condition      | false     | Boolean                                                                                               | false         | Enable default condition for properties.       |
 
 ### Pruning Options
+
+_This is an experimental feature._
 
 The following options are used to configure the pruning of elements.
 
@@ -180,6 +184,8 @@ The following options are used to configure the optimization.
 
 ### Resolving Modes
 
+_This is an experimental feature._
+
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
 | Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
@@ -194,6 +200,8 @@ There are several predefined resolving modes which provide different useful comb
 
 
 ## Default Conditions
+
+_This is an experimental feature._
 
 The following default conditions can be assigned to elements.
 
@@ -307,16 +315,16 @@ A node template is a conditional element, thus, variability conditions and other
 These conditions must hold otherwise the respective node template is not present.
 A node template can also hold conditional types, artifact, and properties.
 
-| Keyname                     | Mandatory | Type                                                                                 | Description                                                                                                                                                           |
-|-----------------------------|-----------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type                        | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                   |
-| conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
-| artifacts                   | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                    | 
-| properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. | 
-| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                              |
-| node_default_condition_mode | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                     |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                        |
-| weight                      | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                      |
+| Keyname                | Mandatory | Type                                                                                 | Description                                                                                                                                                          |
+|------------------------|-----------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type                   | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                  |
+| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                   |
+| artifacts              | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                   | 
+| properties             | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. | 
+| default_condition      | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._          |
+| default_condition_mode | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element. _This is an experimental feature._                                                                                 |
+| pruning                | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                    |
+| weight                 | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                     |
 
 For example, the following node template has a variability condition assigned.
 
@@ -331,12 +339,12 @@ prod_database:
 A type is a conditional element, thus, variability conditions and further options can be assigned to a type assignment.
 These conditions must hold otherwise the respective relationship is not present.
 
-| Keyname              | Mandatory | Type                                                   | Description                                                                                                              |
-|----------------------|-----------|--------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.       |
-| default_alternative  | false     | Boolean                                                | Declare the type as default. This overwrites assigned conditions. There must be only one default assignment.             |                                                                                                       |
-| default_condition    | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. |
-| pruning              | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template.           |
+| Keyname              | Mandatory | Type                                                   | Description                                                                                                                                       |
+|----------------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                |
+| default_alternative  | false     | Boolean                                                | Declare the type as default. This overwrites assigned conditions. There must be only one default assignment.                                      |                                                                                                       |
+| default_condition    | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                                                                                                                  |
+| pruning              | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
 
 
 For example, the following node template `database` has a conditional type switching between a development and production database.
@@ -355,13 +363,13 @@ database:
 A requirement assignment is a conditional element, thus, variability conditions and other options can be assigned. 
 These conditions must hold otherwise the respective relationship is not present.
 
-| Keyname                | Mandatory | Type                                                   | Description                                                                                                                    |
-|------------------------|-----------|--------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.             |
+| Keyname                | Mandatory | Type                                                   | Description                                                                                                                   |
+|------------------------|-----------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.            |
 | default_alternative    | false     | Boolean                                                | Declare the requirement assignment as default. This overwrites assigned conditions. There must be only one default assignment. |                                                                                                       |
-| default_condition      | false     | Boolean                                                | Enable default condition for this element (overrides variability options).                                                     |
-| default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this element.                                                                              |
-| pruning                | false     | Boolean                                                | Enable pruning for this element (overrides variability options).                                                               |
+| default_condition      | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                    |
+| default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this element. _This is an experimental feature._|
+| pruning                | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                              |
 
 For example, the following requirement assignment `host` has a variability condition assigned.
 
@@ -410,8 +418,8 @@ However, this only applies if the property assignment is wrapped as the followin
 | expression            | false     | ValueExpression                                        | A value expressions which is evaluated and used as value.                                                                |
 | conditions            | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.       |
 | default_alternative   | false     | Boolean                                                | Declare the value as default. This overwrites assigned conditions. There must be only one default assignment.            |                                                                                                       |
-| default_condition     | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. |
-| pruning               | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template.           |
+| default_condition     | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
+| pruning               | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._           |
 
 These keywords are used to detect if a property assignment is wrapped. 
 Thus, if any of these keywords must be used as value for property, then this property must be wrapped.
@@ -444,14 +452,13 @@ Furthermore, group elements can be node templates and requirement assignments.
 We refer to such a group also as variability group.
 A variability group is always absent and, thus, always removed when resolving variability.
 
-| Keyname                     | Mandatory | Type                                                                       | Description                                                                                                                                                           |
-|-----------------------------|-----------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                                                                   |
-| members                     | false        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                                                                   |
-| conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
+| Keyname                     | Mandatory | Type                                                                       | Description                                                                                                                                                          |
+|-----------------------------|-----------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type                        | true      | String &#124; List(Map(String, TypeAssignment))                              | The type or a list of conditional type assignments.                                                                                                                  |
+| members                     | false        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                                                                  |
+| conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                   |
 | properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. |
-| node_default_condition_mode | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                     |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                        |
+| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                    |
 
 For example, the following group `example_group` is a conditional group which is only present if assigned conditions hold.
 
@@ -484,8 +491,8 @@ A policy can also hold conditional types and properties.
 | type              | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                   |
 | conditions        | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
 | properties        | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. |
-| default_condition | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                              |
-| pruning           | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                        |
+| default_condition | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                              |
+| pruning           | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                        |
 
 For example, the following policy template `anticollocation` has the variability condition `is_prod` assigned.
 Depending on the presence of this policy, the node templates `wordpress` and `mysql` _must not_ be hosted on the same server, e.g., during production.
@@ -530,13 +537,13 @@ An (deployment) artifact is a conditional element, thus, variability conditions 
 These conditions must hold otherwise the respective artifact is not present.
 An artifact can also hold conditional properties.
 
-| Keyname             | Mandatory | Type                                                                         | Description                                                                                                                                                           |
-|---------------------|-----------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| conditions          | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
-| default_alternative | false        | Boolean                                                                      | Declare the value as default. This overwrites assigned conditions. There must be only one default artifact.                                                           |                                                                                                       |
-| properties      | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. |
-| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                              |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template.                                                            |
+| Keyname             | Mandatory | Type                                                                         | Description                                                                                                                                                             |
+|---------------------|-----------|------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions          | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                      |
+| default_alternative | false        | Boolean                                                                      | Declare the value as default. This overwrites assigned conditions. There must be only one default artifact.                                                             |                                                                                                       |
+| properties      | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.   |
+| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._             |
+| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template. _This is an experimental feature._                           |
 
 For example, the following node template `my_node` has two artifacts `artifact_a` and `artifact_b` assigned which are both conditional.
 
@@ -555,11 +562,11 @@ my_node:
 A topology template input is a conditional element, thus, variability conditions and other options can be assigned.
 These conditions must hold otherwise the respective input is not present.
 
-| Keyname    | Mandatory | Type                                                                       | Description                                                                                                              |
-|------------|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| conditions | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.       |
-| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template.               |
+| Keyname    | Mandatory | Type                                                                       | Description                                                                                                                                                 |
+|------------|-----------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                          |
+| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
+| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template. _This is an experimental feature._              |
 
 For example, the topology template input has a variability condition assigned.
 
@@ -813,8 +820,8 @@ To check if an element is present, check that all assigned conditions hold:
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to variability groups via `conditions` which the element is member of.
 1. (Optional) Assign default conditions if no conditions have been collected yet.
-1. (Optional) Assign pruning conditions.
-1. Evaluate assigned conditions. 
+1. (_Experimental_) (Optional) Assign pruning conditions.
+1. Evaluate assigned conditions.
 
 The element is present if all conditions hold.
 
@@ -839,6 +846,8 @@ Since the derived variability-resolved service template might be further process
 some or all of these consistency steps might be omitted.
 
 ### Pruning Elements
+
+_This is an experimental feature._
 
 To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
 For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
