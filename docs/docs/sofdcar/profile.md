@@ -31,7 +31,6 @@ This topic is also discussed in more detail in [TOSCA Networking](https://docs.o
 
 --8<-- "sofdcar/tosca-sofdcar-profile-core.md"
 
-
 ## TOSCA SofDCar Extended Profile
 
 The extended normative TOSCA type definitions contain additional high-level type definitions which are derived from the core type definitions.
