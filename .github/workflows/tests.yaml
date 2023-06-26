@@ -76,8 +76,11 @@ jobs:
             - name: (DOCS) Generate Interface Page
               run: yarn docs:generate:interface
 
-            - name: (DOCS) Generate Conformance Test Pages
-              run: yarn docs:generate:tests
+            - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
+              run: yarn docs:generate:tests:variability
+
+            - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
+              run: yarn docs:generate:tests:query
 
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
               run: yarn docs:generate:sofdcar

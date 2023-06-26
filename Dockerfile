@@ -26,7 +26,8 @@ RUN yarn docs:install
 RUN yarn docs:build:commands
 RUN yarn docs:generate:licenses
 RUN yarn docs:generate:interface
-RUN yarn docs:generate:tests
+RUN yarn docs:generate:tests:variability
+RUN yarn docs:generate:tests:query
 RUN yarn docs:generate:sofdcar
 RUN yarn docs:generate:puml
 
