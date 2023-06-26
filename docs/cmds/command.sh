@@ -12,8 +12,6 @@ if [ -z "${COMMAND}" ]; then
   exit 1
 fi
 
-pwd
-
 # Optimize executing command by using node
 # Note, this might not be the latest build, e.g., when executed locally
 if [ -d "build-docs" ]; then
