@@ -18,6 +18,7 @@ yarn-error.log
 .DS_STORE
 
 build-docs
+dist-docs
 
 # xopera
 *.opera
