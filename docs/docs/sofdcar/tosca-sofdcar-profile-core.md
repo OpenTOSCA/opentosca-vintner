@@ -399,6 +399,15 @@ sofdcar.nodes.Channel:
         - UNBOUNDED
 ```
 
+#### sofdcar.nodes.Battery
+
+The node all other batteries are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Battery:
+  derived_from: sofdcar.nodes.Root
+```
+
 ### Policy Types
 
 We specify the following normative policy types.

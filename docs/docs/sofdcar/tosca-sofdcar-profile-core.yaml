@@ -198,6 +198,10 @@ node_types:
                 type: sofdcar.capabilities.Endpoint
                 occurrences: [0, UNBOUNDED]
 
+    sofdcar.nodes.Battery:
+        description: The node all other batteries are derived from.
+        derived_from: sofdcar.nodes.Root
+
 policy_types:
     sofdcar.policies.Root:
         description: The policy all other policies are derived from.
