@@ -24,7 +24,7 @@ The capability to provide a CAN-FD endpoint.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Endpoint.CAN-FD:
-  derived_from: sofdcar.capabilities.CAN
+  derived_from: sofdcar.capabilities.Endpoint.CAN
 ```
 
 #### sofdcar.capabilities.Endpoint.LIN
@@ -78,7 +78,7 @@ The capability to provide an OBD endpoint.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Endpoint.OBD:
-  derived_from: sofdcar.capabilities.Endpoint
+  derived_from: sofdcar.capabilities.Endpoint.CAN
 ```
 
 #### sofdcar.capabilities.Endpoint.SOME/IP
@@ -487,7 +487,7 @@ The relationship for OBD connections.
 
 ```yaml linenums="1"
 sofdcar.relationships.OBD:
-  derived_from: sofdcar.relationships.Root
+  derived_from: sofdcar.relationships.CAN
 ```
 
 #### sofdcar.relationships.SOME/IP

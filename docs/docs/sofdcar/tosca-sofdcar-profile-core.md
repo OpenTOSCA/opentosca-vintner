@@ -339,6 +339,24 @@ sofdcar.nodes.Steering:
   derived_from: sofdcar.nodes.Actuator
 ```
 
+#### sofdcar.nodes.Light
+
+The node all other lights are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Light:
+  derived_from: sofdcar.nodes.Actuator
+```
+
+#### sofdcar.nodes.Airbag
+
+The node all other airbags are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Airbag:
+  derived_from: sofdcar.nodes.Actuator
+```
+
 #### sofdcar.nodes.Sensor
 
 The node all other sensors are derived from.
