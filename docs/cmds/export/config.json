@@ -1,0 +1,38 @@
+[
+    {
+        "page": "variability4tosca/specification",
+        "name": "Variability4TOSCA - 01 - Motivation"
+    },
+    {
+        "page": "variability4tosca/specification",
+        "name": "Variability4TOSCA - 02 - Specification"
+    },
+    {
+        "page": "variability4tosca/testing",
+        "name": "Variability4TOSCA - 03 - Testing"
+    },
+    {
+        "page": "variability4tosca/feature-ide",
+        "name": "Variability4TOSCA - 04 - FeatureIDE"
+    },
+    {
+        "page": "queries4tosca/getting-started",
+        "name": "Queries4TOSCA - 01 - Getting Started"
+    },
+    {
+        "page": "queries4tosca/specification",
+        "name": "Queries4TOSCA - 02 - Specification"
+    },
+    {
+        "page": "sofdcar/profile",
+        "name": "TOSCA SofDCar Profile - 01 - Profile"
+    },
+    {
+        "page": "sofdcar/guides/zone",
+        "name": "TOSCA SofDCar Profile - 02 - Guide - Zone"
+    },
+    {
+        "page": "sofdcar/guides/location",
+        "name": "TOSCA SofDCar Profile - 03 - Guide - Location"
+    }
+]

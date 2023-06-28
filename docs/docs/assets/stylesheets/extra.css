@@ -96,3 +96,9 @@
     color: var(--md-typeset-a-color) !important;
     opacity: 100%;
 }
+
+
+/* Fix small images not centered */
+.md-typeset figure img {
+    display: unset;
+}
