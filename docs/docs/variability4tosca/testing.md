@@ -2,6 +2,8 @@
 title: Testing
 ---
 
+--8<-- "enumerate.html"
+
 # Variability4TOSCA Testing 1.0 Release Candidate
 
 This document specifies variability tests for the Variability4TOSCA specification to continuously test that the variability is resolved as expected, e.g., during

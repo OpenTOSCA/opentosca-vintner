@@ -2,6 +2,8 @@
 title: Specification
 ---
 
+--8<-- "enumerate.html"
+
 # Queries4TOSCA Specification 1.0 Release Candidate
 
 This document specifies a Query Language for TOSCA (Queries4TOSCA) inspired by [XPath](https://www.w3schools.com/xml/xpath_intro.asp){target=_blank} and [Cypher](https://opencypher.org){target=_blank}.

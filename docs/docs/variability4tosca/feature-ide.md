@@ -2,16 +2,20 @@
 title: Feature IDE
 ---
 
+--8<-- "enumerate.html"
+
 # Variability4TOSCA Feature IDE Integration 1.0 Release Candidate
 
 This document specifies the integration of [FeatureIDE](https://featureide.github.io){target=_blank} into the Variability4TOSCA specification.
 The specification is under active development and is not backwards compatible with any previous versions.
 
-In order to generate only valid service templates, feature models can be used to model dependencies between variability inputs. 
+## FeatureIDE Integration
+
+In order to generate only valid service templates, feature models can be used to model dependencies between variability inputs.
 A feature model of Feature IDE is supposed to be packaged as `feature-model.xml` at the root of the CSAR.
 In the following, we describe the mapping between the Extended XML Configuration to variability inputs.
 
-## Features
+### Features
 
 Each feature is mapped to a Boolean variability input.
 The value is `true` if either `automatic` or `manual` is `selected`.
@@ -42,7 +46,7 @@ Feature names can be overridden by the value of the attribute `__name`.
     feature_overridden: true
     ```
 
-## Attributes
+### Attributes
 
 Each attribute is mapped to a variability input.
 The values are parsed by a JSON parser. 
@@ -92,7 +96,7 @@ The full attribute name (including the feature namespacing) can be overridden by
     fully_overridden: something else
     ```
 
-## Example
+### Example
 
 The following example of a complete FeatureIDE Extended XML Configuration contains examples of the above introduced concepts.
 

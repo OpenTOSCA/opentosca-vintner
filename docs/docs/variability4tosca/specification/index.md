@@ -2,6 +2,8 @@
 title: Specification
 ---
 
+--8<-- "enumerate.html"
+
 # Variability4TOSCA Specification 1.0 Release Candidate
 
 This document specifies Variability4TOSCA which extends
