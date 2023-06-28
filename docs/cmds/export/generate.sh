@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-DIST_DOCS="../../../dist-docs"
+# Set working directory
+cd "$(dirname "$0")"
 
 # Ensure that Google Chrome is installed
 if ! which google-chrome &>/dev/null; then
@@ -9,9 +10,8 @@ if ! which google-chrome &>/dev/null; then
   exit 1
 fi
 
-# Set working directory
-cd "$(dirname "$0")"
-
+# (Re-) Create output directory
+DIST_DOCS="../../../dist-docs"
 rm -rf $DIST_DOCS
 mkdir $DIST_DOCS
 
@@ -22,6 +22,7 @@ if [ ! -f "$CONFIG_PATH" ]; then
   exit 1
 fi
 
+# Export each page
 jq -M -r '.[] | .url, .name' config.json <<<cat |
   while
     read -r url
