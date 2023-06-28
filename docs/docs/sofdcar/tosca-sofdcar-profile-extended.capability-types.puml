@@ -23,7 +23,7 @@ rectangle "sofdcar.capabilities.Endpoint.SOME/IP"
 
 "sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.CAN"
 
-"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.CAN-FD"
+"sofdcar.capabilities.Endpoint.CAN" <|-- "sofdcar.capabilities.Endpoint.CAN-FD"
 
 "sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.LIN"
 
@@ -35,8 +35,8 @@ rectangle "sofdcar.capabilities.Endpoint.SOME/IP"
 
 "sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.Ethernet"
 
-"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.OBD"
+"sofdcar.capabilities.Endpoint.CAN" <|-- "sofdcar.capabilities.Endpoint.OBD"
 
-"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.SOME/IP"
+"sofdcar.capabilities.Endpoint.Ethernet" <|-- "sofdcar.capabilities.Endpoint.SOME/IP"
 
 @enduml

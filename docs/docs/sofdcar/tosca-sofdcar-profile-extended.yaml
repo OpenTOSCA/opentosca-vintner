@@ -32,7 +32,7 @@ capability_types:
 
     sofdcar.capabilities.Endpoint.CAN-FD:
         description: The capability to provide a CAN-FD endpoint.
-        derived_from: sofdcar.capabilities.Endpoint
+        derived_from: sofdcar.capabilities.Endpoint.CAN
 
     sofdcar.capabilities.Endpoint.LIN:
         description: The capability to provide a LIN endpoint.
@@ -56,11 +56,11 @@ capability_types:
 
     sofdcar.capabilities.Endpoint.OBD:
         description: The capability to provide an OBD endpoint.
-        derived_from: sofdcar.capabilities.Endpoint
+        derived_from: sofdcar.capabilities.Endpoint.CAN
 
     sofdcar.capabilities.Endpoint.SOME/IP:
         description: The capability to provide a SOME/IP endpoint.
-        derived_from: sofdcar.capabilities.Endpoint
+        derived_from: sofdcar.capabilities.Endpoint.Ethernet
 
 data_types:
     sofdcar.data.GPIO.Pin:
@@ -92,7 +92,7 @@ node_types:
 
     sofdcar.nodes.CAN-FD:
         description: The CAN-FD channel all other CAN-FD channels are derived from.
-        derived_from: sofdcar.nodes.Channel
+        derived_from: sofdcar.nodes.CAN
         capabilities:
             endpoint:
                 type: sofdcar.capabilities.Endpoint.CAN-FD
@@ -138,17 +138,9 @@ node_types:
                 type: sofdcar.capabilities.Endpoint.Ethernet
                 occurrences: [2, 2]
 
-    sofdcar.nodes.OBD:
-        description: The OBD channel all other OBD channels are derived from.
-        derived_from: sofdcar.nodes.Channel
-        capabilities:
-            endpoint:
-                type: sofdcar.capabilities.Endpoint.OBD
-                occurrences: [2, 2]
-
     sofdcar.nodes.SOME/IP:
         description: The SOME/IP channel all other SOME/IP channels are derived from.
-        derived_from: sofdcar.nodes.Channel
+        derived_from: sofdcar.nodes.Ethernet
         capabilities:
             endpoint:
                 type: sofdcar.capabilities.Endpoint.SOME/IP
@@ -250,7 +242,7 @@ relationship_types:
 
     sofdcar.relationships.CAN-FD:
         description: The relationship for CAN-FD connections.
-        derived_from: sofdcar.relationships.Root
+        derived_from: sofdcar.relationships.CAN
 
     sofdcar.relationships.LIN:
         description: The relationship for LIN connections.
@@ -279,8 +271,8 @@ relationship_types:
 
     sofdcar.relationships.OBD:
         description: The relationship for OBD connections.
-        derived_from: sofdcar.relationships.Root
+        derived_from: sofdcar.relationships.CAN
 
     sofdcar.relationships.SOME/IP:
         description: The relationship for SOME/IP connections.
-        derived_from: sofdcar.relationships.Root
+        derived_from: sofdcar.relationships.Ethernet
