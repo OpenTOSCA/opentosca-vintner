@@ -26,6 +26,10 @@ rectangle "sofdcar.nodes.Brake"
 
 rectangle "sofdcar.nodes.Steering"
 
+rectangle "sofdcar.nodes.Light"
+
+rectangle "sofdcar.nodes.Airbag"
+
 rectangle "sofdcar.nodes.Sensor"
 
 rectangle "sofdcar.nodes.RADAR"
@@ -37,6 +41,8 @@ rectangle "sofdcar.nodes.LIDAR"
 rectangle "sofdcar.nodes.Ultrasonic"
 
 rectangle "sofdcar.nodes.Channel"
+
+rectangle "sofdcar.nodes.Battery"
 
 
 "tosca.nodes.Root" <|-- "sofdcar.nodes.Root"
@@ -63,6 +69,10 @@ rectangle "sofdcar.nodes.Channel"
 
 "sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Steering"
 
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Light"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Airbag"
+
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Sensor"
 
 "sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.RADAR"
@@ -74,5 +84,7 @@ rectangle "sofdcar.nodes.Channel"
 "sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Ultrasonic"
 
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Battery"
 
 @enduml

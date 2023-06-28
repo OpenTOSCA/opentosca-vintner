@@ -23,7 +23,7 @@ rectangle "sofdcar.relationships.SOME/IP"
 
 "sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN"
 
-"sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN-FD"
+"sofdcar.relationships.CAN" <|-- "sofdcar.relationships.CAN-FD"
 
 "sofdcar.relationships.Root" <|-- "sofdcar.relationships.LIN"
 
@@ -35,8 +35,8 @@ rectangle "sofdcar.relationships.SOME/IP"
 
 "sofdcar.relationships.Root" <|-- "sofdcar.relationships.Ethernet"
 
-"sofdcar.relationships.Root" <|-- "sofdcar.relationships.OBD"
+"sofdcar.relationships.CAN" <|-- "sofdcar.relationships.OBD"
 
-"sofdcar.relationships.Root" <|-- "sofdcar.relationships.SOME/IP"
+"sofdcar.relationships.Ethernet" <|-- "sofdcar.relationships.SOME/IP"
 
 @enduml

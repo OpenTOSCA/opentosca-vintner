@@ -24,7 +24,7 @@ The capability to provide a CAN-FD endpoint.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Endpoint.CAN-FD:
-  derived_from: sofdcar.capabilities.Endpoint
+  derived_from: sofdcar.capabilities.CAN
 ```
 
 #### sofdcar.capabilities.Endpoint.LIN
@@ -87,7 +87,7 @@ The capability to provide a SOME/IP endpoint.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Endpoint.SOME/IP:
-  derived_from: sofdcar.capabilities.Endpoint
+  derived_from: sofdcar.capabilities.Endpoint.Ethernet
 ```
 
 ### Data Types
@@ -154,7 +154,7 @@ The CAN-FD channel all other CAN-FD channels are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.CAN-FD:
-  derived_from: sofdcar.nodes.Channel
+  derived_from: sofdcar.nodes.CAN
   capabilities:
     endpoint:
       type: sofdcar.capabilities.Endpoint.CAN-FD
@@ -238,28 +238,13 @@ sofdcar.nodes.Ethernet:
         - 2
 ```
 
-#### sofdcar.nodes.OBD
-
-The OBD channel all other OBD channels are derived from.
-
-```yaml linenums="1"
-sofdcar.nodes.OBD:
-  derived_from: sofdcar.nodes.Channel
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint.OBD
-      occurrences:
-        - 2
-        - 2
-```
-
 #### sofdcar.nodes.SOME/IP
 
 The SOME/IP channel all other SOME/IP channels are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.SOME/IP:
-  derived_from: sofdcar.nodes.Channel
+  derived_from: sofdcar.nodes.Ethernet
   capabilities:
     endpoint:
       type: sofdcar.capabilities.Endpoint.SOME/IP
@@ -443,7 +428,7 @@ The relationship for CAN-FD connections.
 
 ```yaml linenums="1"
 sofdcar.relationships.CAN-FD:
-  derived_from: sofdcar.relationships.Root
+  derived_from: sofdcar.relationships.CAN
 ```
 
 #### sofdcar.relationships.LIN
@@ -511,7 +496,7 @@ The relationship for SOME/IP connections.
 
 ```yaml linenums="1"
 sofdcar.relationships.SOME/IP:
-  derived_from: sofdcar.relationships.Root
+  derived_from: sofdcar.relationships.Ethernet
 ```
 
 

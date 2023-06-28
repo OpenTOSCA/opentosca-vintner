@@ -170,6 +170,14 @@ node_types:
         description: The node all other steerings are derived from.
         derived_from: sofdcar.nodes.Actuator
 
+    sofdcar.nodes.Light:
+        description: The node all other lights are derived from.
+        derived_from: sofdcar.nodes.Actuator
+
+    sofdcar.nodes.Airbag:
+        description: The node all other airbags are derived from.
+        derived_from: sofdcar.nodes.Actuator
+
     sofdcar.nodes.Sensor:
         description: The node all other sensors are derived from.
         derived_from: sofdcar.nodes.Root

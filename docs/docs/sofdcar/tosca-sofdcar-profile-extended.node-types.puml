@@ -16,8 +16,6 @@ rectangle "sofdcar.nodes.FlexRay"
 
 rectangle "sofdcar.nodes.Ethernet"
 
-rectangle "sofdcar.nodes.OBD"
-
 rectangle "sofdcar.nodes.SOME/IP"
 
 rectangle "sofdcar.nodes.Python.Application"
@@ -35,7 +33,7 @@ rectangle "sofdcar.nodes.Arduino.Hardware"
 
 "sofdcar.nodes.Channel" <|-- "sofdcar.nodes.CAN"
 
-"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.CAN-FD"
+"sofdcar.nodes.CAN" <|-- "sofdcar.nodes.CAN-FD"
 
 "sofdcar.nodes.Channel" <|-- "sofdcar.nodes.LIN"
 
@@ -47,9 +45,7 @@ rectangle "sofdcar.nodes.Arduino.Hardware"
 
 "sofdcar.nodes.Channel" <|-- "sofdcar.nodes.Ethernet"
 
-"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.OBD"
-
-"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.SOME/IP"
+"sofdcar.nodes.Ethernet" <|-- "sofdcar.nodes.SOME/IP"
 
 "sofdcar.nodes.HPC.Software" <|-- "sofdcar.nodes.Python.Application"
 
