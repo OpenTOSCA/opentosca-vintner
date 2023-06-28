@@ -76,6 +76,8 @@ plugins:
     - bibtex:
           bib_file: 'bibtex.bib'
     - include_dir_to_nav
+    - git-revision-date-localized:
+          enabled: !ENV [MKDCOS_REVISION_ENABLED, true]
     - build_plantuml:
           #render: 'local'
           #bin_path: 'cmds/puml/plantuml'
