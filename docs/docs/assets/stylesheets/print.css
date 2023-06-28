@@ -2,3 +2,9 @@
     size: A4;
     margin: 8mm;
 }
+
+@media print {
+    body {
+        zoom: 70%;
+    }
+}

@@ -9,7 +9,7 @@ if [ -f ".env" ]; then
   source .env
 fi
 
-# Ensure that Java is installed
+# Ensure that mkdocs is installed
 if ! which mkdocs &>/dev/null; then
     echo "\"mkdocs\" not installed"
     exit 1

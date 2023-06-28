@@ -1,0 +1,38 @@
+[
+    {
+        "url": "https://vintner.opentosca.org/variability4tosca/specification",
+        "name": "variability4tosca-01-motivation"
+    },
+    {
+        "url": "https://vintner.opentosca.org/variability4tosca/specification",
+        "name": "variability4tosca-02-specification"
+    },
+    {
+        "url": "https://vintner.opentosca.org/variability4tosca/testing",
+        "name": "variability4tosca-03-testing"
+    },
+    {
+        "url": "https://vintner.opentosca.org/variability4tosca/feature-ide",
+        "name": "variability4tosca-04-feature-ide"
+    },
+    {
+        "url": "https://vintner.opentosca.org/queries4tosca/getting-started",
+        "name": "queries4tosca-01-getting-started"
+    },
+    {
+        "url": "https://vintner.opentosca.org/queries4tosca/specification",
+        "name": "queries4tosca-02-specification"
+    },
+    {
+        "url": "https://vintner.opentosca.org/sofdcar/profile",
+        "name": "tosca-sofdcar-profile-01-profile"
+    },
+    {
+        "url": "https://vintner.opentosca.org/sofdcar/guides/zone",
+        "name": "tosca-sofdcar-profile-02-guides-zone"
+    },
+    {
+        "url": "https://vintner.opentosca.org/sofdcar/guides/location",
+        "name": "tosca-sofdcar-profile-03-guides-location"
+    }
+]
