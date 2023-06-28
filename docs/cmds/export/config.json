@@ -1,38 +1,38 @@
 [
     {
-        "url": "https://vintner.opentosca.org/variability4tosca/specification",
-        "name": "variability4tosca-01-motivation"
+        "page": "variability4tosca/specification",
+        "name": "Variability4TOSCA - 01 - Motivation"
     },
     {
-        "url": "https://vintner.opentosca.org/variability4tosca/specification",
-        "name": "variability4tosca-02-specification"
+        "page": "variability4tosca/specification",
+        "name": "Variability4TOSCA - 02 - Specification"
     },
     {
-        "url": "https://vintner.opentosca.org/variability4tosca/testing",
-        "name": "variability4tosca-03-testing"
+        "page": "variability4tosca/testing",
+        "name": "Variability4TOSCA - 03 - Testing"
     },
     {
-        "url": "https://vintner.opentosca.org/variability4tosca/feature-ide",
-        "name": "variability4tosca-04-feature-ide"
+        "page": "variability4tosca/feature-ide",
+        "name": "Variability4TOSCA - 04 - FeatureIDE"
     },
     {
-        "url": "https://vintner.opentosca.org/queries4tosca/getting-started",
-        "name": "queries4tosca-01-getting-started"
+        "page": "queries4tosca/getting-started",
+        "name": "Queries4TOSCA - 01 - Getting Started"
     },
     {
-        "url": "https://vintner.opentosca.org/queries4tosca/specification",
-        "name": "queries4tosca-02-specification"
+        "page": "queries4tosca/specification",
+        "name": "Queries4TOSCA - 02 - Specification"
     },
     {
-        "url": "https://vintner.opentosca.org/sofdcar/profile",
-        "name": "tosca-sofdcar-profile-01-profile"
+        "page": "sofdcar/profile",
+        "name": "TOSCA SofDCar Profile - 01 - Profile"
     },
     {
-        "url": "https://vintner.opentosca.org/sofdcar/guides/zone",
-        "name": "tosca-sofdcar-profile-02-guides-zone"
+        "page": "sofdcar/guides/zone",
+        "name": "TOSCA SofDCar Profile - 02 - Guide - Zone"
     },
     {
-        "url": "https://vintner.opentosca.org/sofdcar/guides/location",
-        "name": "tosca-sofdcar-profile-03-guides-location"
+        "page": "sofdcar/guides/location",
+        "name": "TOSCA SofDCar Profile - 03 - Guide - Location"
     }
 ]

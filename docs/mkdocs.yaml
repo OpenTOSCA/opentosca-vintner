@@ -32,7 +32,6 @@ extra_css:
     - assets/stylesheets/extra.css
     - assets/stylesheets/typeset.css
     - assets/stylesheets/asciinema-player.css
-    - assets/stylesheets/enumerate-headers.css
     - assets/stylesheets/print.css
 
 extra_javascript:

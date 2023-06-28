@@ -4,6 +4,12 @@ set -e
 # Set working directory
 cd "$(dirname "$0")"
 
+# Set docs server
+DOCS_SERVER="$1"
+if [ -z "${DOCS_SERVER}" ]; then
+  DOCS_SERVER="https://vintner.opentosca.org"
+fi
+
 # Ensure that Google Chrome is installed
 if ! which google-chrome &>/dev/null; then
   echo "\"google-chrome\" not installed"
@@ -23,11 +29,12 @@ if [ ! -f "$CONFIG_PATH" ]; then
 fi
 
 # Export each page
-jq -M -r '.[] | .url, .name' config.json <<<cat |
+jq -M -r '.[] | .page, .name' config.json <<<cat |
   while
-    read -r url
+    read -r page
     read -r name
   do
-    echo "Exporting ${url}"
-    google-chrome --headless --print-to-pdf="${DIST_DOCS}/${name}.pdf" "$url"
+    URL="${DOCS_SERVER}/${page}"
+    echo "Exporting ${URL}"
+    google-chrome --headless --print-to-pdf="${DIST_DOCS}/${name}.pdf" "${URL}"
   done
