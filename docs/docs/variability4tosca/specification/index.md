@@ -579,6 +579,22 @@ inputs:
        conditions: <VariabilityCondition>
 ```
 
+## Import Definition
+
+An import definition is a conditional element, thus, variability conditions and other options can be assigned.
+These conditions must hold otherwise the respective import is not present.
+
+| Keyname           | Mandatory | Type                                                                                 | Description                                                                                                                                                           |
+|-------------------|-----------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions        | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
+
+For example, the following import has a variability condition assigned.
+
+```yaml linenums="1"
+import:
+   - file: some_file
+     conditions: <VariabilityCondition>
+```
 
 ## Normative Group Types
 
@@ -686,6 +702,7 @@ The following presence operators can be used inside a logic expression.
 | policy_property_presence    | Tuple(Policy: String &#124; Number, Property: String &#124; Number)                 | Boolean | Returns if property of policy is present.                                                                                                                                        |
 | artifact_property_presence  | Tuple(Node: String, Artifact: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of artifact is present.                                                                                                                                      |
 | container_presence          | SELF                                                                                | Boolean | Returns if container is present. Can only be used inside a property or artifact.                                                                                                 |
+| import_presence             | Number                                                                              | Boolean | Returns if import is present.                                                                                                                                                    |
 
 
 ### String Operators 
@@ -911,7 +928,7 @@ The identifier of an element is constructed as follows.
 <Element Type>.<Element Name>[@<Element Index>][.<Element Container ID>]
 ```
 
-Available element types are `node`, `relation`, `property`, `group`, `policy`, `artifact`, `input`, and `type`.
+Available element types are `node`, `relation`, `property`, `group`, `policy`, `artifact`, `input`, `type`, and `import`.
 
 For example, consider the given variable service template.
 
@@ -953,7 +970,7 @@ The display representation of an element is constructed as follows.
 <Element Type> "<Element Name>[@<Element Index>]"[ of <Element Container Display>]
 ```
 
-Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, and `Type`.
+Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, `Type`, and `Import`.
 
 For example, consider the given variable service template.
 

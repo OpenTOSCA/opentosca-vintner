@@ -41,6 +41,9 @@ export default class Transformer {
         // Transform inputs
         this.transformInputs()
 
+        // Transform imports
+        this.transformImports()
+
         // Set TOSCA definitions version
         this.graph.serviceTemplate.tosca_definitions_version = TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3
 
@@ -241,5 +244,22 @@ export default class Transformer {
             }, {})
 
         if (utils.isEmpty(template.properties)) delete template.properties
+    }
+
+    private transformImports() {
+        // Delete all imports which are not present
+        if (validator.isDefined(this.graph.serviceTemplate.imports)) {
+            this.graph.serviceTemplate.imports = this.graph.imports
+                .filter(it => it.present)
+                .map(it => {
+                    const definition = it.raw
+                    this.clean(definition)
+                    return definition
+                })
+
+            if (utils.isEmpty(this.graph.serviceTemplate.imports)) {
+                delete this.graph.serviceTemplate.imports
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
  * Service Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969451}
  */
+import {ImportDefinition} from '#spec/import-definition'
 import {GroupType} from './group-type'
 import {TopologyTemplate} from './topology-template'
 
@@ -12,6 +13,7 @@ export enum TOSCA_DEFINITIONS_VERSION {
 
 export type ServiceTemplate = {
     tosca_definitions_version: TOSCA_DEFINITIONS_VERSION
+    imports?: ImportDefinition[]
     metadata?: {[key: string]: string}
     description?: string
     topology_template?: TopologyTemplate

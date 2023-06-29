@@ -2,6 +2,7 @@ import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Group from '#graph/group'
+import Import from '#graph/import'
 import Input from '#graph/input'
 import Node from '#graph/node'
 import Policy from '#graph/policy'
@@ -853,6 +854,26 @@ export default class Solver {
             }
 
             return input.id
+        }
+
+        /**
+         * import_presence
+         */
+        if (validator.isDefined(expression.import_presence)) {
+            let imp: Import | undefined
+            if (validator.isDefined(expression._cached_element)) {
+                const element = expression._cached_element
+                if (!element.isImport()) throw new Error(`${element.Display} is not an import`)
+                imp = element
+            }
+
+            if (validator.isUndefined(imp)) {
+                const index = expression.import_presence
+                validator.ensureNumber(index)
+                imp = this.graph.getImport(index)
+            }
+
+            return imp.id
         }
 
         /**
