@@ -29,5 +29,4 @@ tosca.interfaces.node.lifecycle.Variability
 A rough idea has been also mentioned in
 [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969505){target=_blank}.
 
---8<-- "ack.md"
---8<-- "contact.md"
+--8<-- "acd.md"
