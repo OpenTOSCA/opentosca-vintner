@@ -1,1 +1,2 @@
-name: 'Operator "variance"'
+name: 'Operator "linear_regression"'
+description: Assigns the value of the expression which is to find the linear regression of all the given numbers to the property "value" of the node "container".
