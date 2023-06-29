@@ -1,3 +1,4 @@
+import Import from '#graph/import'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import * as validator from '#validator'
@@ -124,6 +125,10 @@ export default abstract class Element {
     }
 
     isType(): this is Type {
+        return false
+    }
+
+    isImport(): this is Import {
         return false
     }
 }
