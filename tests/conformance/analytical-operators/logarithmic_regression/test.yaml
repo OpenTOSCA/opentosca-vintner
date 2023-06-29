@@ -1,1 +1,2 @@
 name: 'Operator "logarithmic_regression"'
+description: Assigns the value of the expression which is to find the logarithmic regression of all the given numbers to the property "value" of the node "container".
