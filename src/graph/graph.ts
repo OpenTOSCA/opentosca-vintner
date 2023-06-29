@@ -1,3 +1,4 @@
+import Import from '#graph/import'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
@@ -73,6 +74,8 @@ export default class Graph {
 
     artifacts: Artifact[] = []
 
+    imports: Import[] = []
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
 
@@ -99,6 +102,9 @@ export default class Graph {
         // Policies
         this.buildPolicies()
 
+        // Imports
+        this.buildImports()
+
         // Elements
         this.elements = [
             ...this.types,
@@ -109,6 +115,7 @@ export default class Graph {
             ...this.groups,
             ...this.inputs,
             ...this.artifacts,
+            ...this.imports,
         ]
     }
 
@@ -189,6 +196,14 @@ export default class Graph {
             this.inputs.push(input)
             this.inputsMap.set(name, input)
         })
+    }
+
+    private buildImports() {
+        for (const [index, definition] of (this.serviceTemplate.imports || []).entries()) {
+            const imp = new Import({index, raw: definition})
+            imp.graph = this
+            this.imports.push(imp)
+        }
     }
 
     private buildNodesAndRelations() {
@@ -608,6 +623,12 @@ export default class Graph {
 
         validator.ensureDefined(artifact, `Artifact "${utils.pretty(member)}" not found`)
         return artifact
+    }
+
+    getImport(index: number) {
+        const imp = this.imports[index]
+        validator.ensureDefined(imp, `Import "${index}" not found`)
+        return imp
     }
 
     getNodeProperty(data: NodePropertyPresenceArguments) {

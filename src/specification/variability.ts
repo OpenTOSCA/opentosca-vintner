@@ -298,6 +298,9 @@ export type LogicExpression =
           // Input functions
           input_presence?: string
 
+          // Import functions
+          import_presence?: number
+
           // Intrinsic functions
           logic_expression?: string
           variability_input?: string
