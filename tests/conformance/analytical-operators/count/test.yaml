@@ -1,2 +1,2 @@
 name: 'Operator "count"'
-description: Assigns the value of the expression to the property "value" of the node "container".
+description: Assigns the value of the expression which is to count the given numbers using "count" function to the property "value" of the node "container".

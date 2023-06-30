@@ -1,2 +1,2 @@
 name: 'Operator "max"'
-description: Assigns the value of the expression which is to find the Maximum number among all the given numbers to the property "value" of the node "container".
+description: Assigns the value of the expression which is to find the Maximum number among all the given numbers using "max" function to the property "value" of the node "container".
