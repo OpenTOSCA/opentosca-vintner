@@ -9,7 +9,7 @@ title: Specification
 This document specifies Variability4TOSCA which extends
 [TOSCA Simple Profile in YAML Version 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}
 with conditional elements to model deployment variability.
-This includes conditional node templates, relationship templates, properties, artifacts, groups, policies, types, and inputs.
+This includes conditional node templates, relationship templates, properties, artifacts, groups, policies, types, inputs, and imports.
 In the following, we discuss the differences and the [processes to resolve the variability](#processing).
 The specification is under active development and is not backwards compatible with any previous versions.
 

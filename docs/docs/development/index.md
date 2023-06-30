@@ -356,6 +356,7 @@ Therefore, make changes to the package inside `node_modules`, then run the follo
 yarn patch-package ${package-name}
 ```
 
+If you need to patch the `package.json`, then append the option `--option 'nothing'` as stated in [#311](https://github.com/ds300/patch-package/issues/311){target=_blank}.
 
 ## Build
 
