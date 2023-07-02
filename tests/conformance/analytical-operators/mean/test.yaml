@@ -1,2 +1,2 @@
 name: 'Operator "mean"'
-Assigns the value of the expression which is to find the Mean of all the given numbers using "mean" function to the property "value" of the node "container".
+description: Assigns the value of the expression which is to find the Mean of all the given numbers using "mean" function to the property "value" of the node "container".

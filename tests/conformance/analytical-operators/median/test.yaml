@@ -1,2 +1,2 @@
 name: 'Operator "median"'
-Assigns the value of the expression which is to find the Median of all the given numbers using "median" function to the property "value" of the node "container".
+description: Assigns the value of the expression which is to find the Median of all the given numbers using "median" function to the property "value" of the node "container".
