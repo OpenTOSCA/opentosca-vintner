@@ -1,5 +1,5 @@
 description:
     - type default condition of nodes is enabled
-    - under the "conditions" the "artifact_presence" function checks if artifact is present or not.
+    - under the "conditions" the "artifact_presence" function checks if artifact named "artifact_one" is present or not .
     - "artifact_one" is absent since false is assigned as condition.
     - Thus "artifact_one" is not present.
