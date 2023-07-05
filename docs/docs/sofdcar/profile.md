@@ -21,15 +21,18 @@ The specification is under active development and is not backwards compatible wi
 The core normative TOSCA type definitions contain high-level type definitions which are mainly derived from the normative TOSCA type definitions of the [TOSCA Simple Profile in YAML 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 These types mainly concern the following topics.
 
-- ECU hardware and software
-- HPC hardware and software
+- Hardware and software of Electronic Computing Units (ECUs) which are typically microcontroller
+- Hardware and software of high-performance computing platforms (HPCs) which are typically microprocessors 
 - Sensors and actuators
 - Communication channels
 
-Considering modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components and no CAN bus connected to the ECUs is modeled.
+Considering the modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components. 
+Thus, no (physical) CAN bus is modeled between the ECUs.
 However, this might not provide all required information.
-Therefore, we provide also a node type to model, e.g., a CAN bus.
-This topic is also discussed in more detail in [TOSCA Networking](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482){target=_blank} in which they propose to have a TOSCA model for the application and a second one for the networking.
+This issue is also discussed in the [networking section of the TOSCA specification](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482){target=_blank}.
+In this section, the authors of TOSCA propose to have a TOSCA model for the application and a second separate one for the networking.
+Therefore, we provide type definitions to model such an automotive TOSCA networking model which includes, e.g., a physical CAN bus.
+
 
 --8<-- "sofdcar/tosca-sofdcar-profile-core.md"
 
