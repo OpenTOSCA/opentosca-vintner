@@ -1,0 +1,4 @@
+description:
+     -type default condition of nodes is enabled
+     -In the artifact "artifact_one" the function "container_presence" checks if container is present or not.
+     -container is present since default condition true is assigned.
