@@ -348,6 +348,15 @@ sofdcar.nodes.Light:
   derived_from: sofdcar.nodes.Actuator
 ```
 
+#### sofdcar.nodes.Cooling
+
+The node all other coolings are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Cooling:
+  derived_from: sofdcar.nodes.Actuator
+```
+
 #### sofdcar.nodes.Airbag
 
 The node all other airbags are derived from.
@@ -399,6 +408,15 @@ The node all other ultrasonics are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Ultrasonic:
+  derived_from: sofdcar.nodes.Sensor
+```
+
+#### sofdcar.nodes.Microphone
+
+The node all other microphones are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Microphone:
   derived_from: sofdcar.nodes.Sensor
 ```
 

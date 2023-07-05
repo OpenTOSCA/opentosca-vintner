@@ -141,9 +141,3 @@ topology_template:
             members:
                 - vehicle_control_unit_software
                 - vehicle_control_unit_hardware
-
-    policies:
-        - asil:
-              type: sofdcar.policies.ASIL
-              targets:
-                  - zone_a_control_unit_software
