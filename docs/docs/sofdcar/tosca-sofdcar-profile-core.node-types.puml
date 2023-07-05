@@ -28,6 +28,8 @@ rectangle "sofdcar.nodes.Steering"
 
 rectangle "sofdcar.nodes.Light"
 
+rectangle "sofdcar.nodes.Cooling"
+
 rectangle "sofdcar.nodes.Airbag"
 
 rectangle "sofdcar.nodes.Sensor"
@@ -39,6 +41,8 @@ rectangle "sofdcar.nodes.Camera"
 rectangle "sofdcar.nodes.LIDAR"
 
 rectangle "sofdcar.nodes.Ultrasonic"
+
+rectangle "sofdcar.nodes.Microphone"
 
 rectangle "sofdcar.nodes.Channel"
 
@@ -71,6 +75,8 @@ rectangle "sofdcar.nodes.Battery"
 
 "sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Light"
 
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Cooling"
+
 "sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Airbag"
 
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Sensor"
@@ -82,6 +88,8 @@ rectangle "sofdcar.nodes.Battery"
 "sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.LIDAR"
 
 "sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Ultrasonic"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Microphone"
 
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Channel"
 

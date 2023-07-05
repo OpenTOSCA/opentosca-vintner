@@ -288,7 +288,7 @@ sofdcar.nodes.Python.Runtime:
 
 #### sofdcar.nodes.RaspberryPi.Hardware
 
-The hardware of an Raspberry Pi serving as a HPC hardware. This Raspberry Pi is able to host HPC software. Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
+The hardware of a Raspberry Pi serving as an HPC hardware. This Raspberry Pi is able to host HPC software. Furthermore, the Raspberry Pi is able to directly host python applications without explicit python runtime since a python runtime is already installed on the Raspberry Pi.
 
 
 ```yaml linenums="1"
