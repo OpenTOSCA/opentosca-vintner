@@ -170,4 +170,4 @@ We fixed some of them by patching the dependencies using [`patch-package`](https
 
 1. The release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
 However, the project is according to the author licensed under MIT as stated in [#2](https://github.com/andreyvit/dreamopt.js/issues/2){target=_blank}.
-1. We moved the dependency [@types/yauzl](https://www.npmjs.com/package/@types/yauzl){target=_blank} at [extract-zip@2.0.1](https://github.com/maxogden/extract-zip){target=_blank} to the development dependencies.
+1. We moved the optional dependency [@types/yauzl](https://www.npmjs.com/package/@types/yauzl){target=_blank} at [extract-zip@2.0.1](https://github.com/maxogden/extract-zip){target=_blank} to the development dependencies.
