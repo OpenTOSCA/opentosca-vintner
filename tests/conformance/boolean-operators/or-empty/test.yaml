@@ -1,2 +1,5 @@
 name: 'Operator "or" Evaluates to "False" (Empty)'
-description: Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".
+description: 
+-type default condition of nodes is enabled.
+-The fuction "or" evaluates the condition which is an empty list.
+-The node "container" is absent since the condition evaluates to false.

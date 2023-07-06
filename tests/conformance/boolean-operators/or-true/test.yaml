@@ -1,2 +1,5 @@
 name: 'Operator "or" Evaluates to "true"'
-description: Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
+description:
+-type default condition of nodes is enabled.
+-The fuction "or" evaluates the condition which is a list containing [false, true, false, false].
+-The node "container" is present since the condition evaluates to true.
