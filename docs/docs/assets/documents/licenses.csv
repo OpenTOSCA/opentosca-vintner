@@ -40,7 +40,7 @@ debug,4.3.4,MIT,https://github.com/debug-js/debug
 delayed-stream,1.0.0,MIT,https://github.com/felixge/node-delayed-stream
 depd,2.0.0,MIT,https://github.com/dougwilson/nodejs-depd
 destroy,1.2.0,MIT,https://github.com/stream-utils/destroy
-dreamopt,0.8.0,UNKNOWN,https://github.com/andreyvit/dreamopt.js
+dreamopt,0.8.0,MIT,https://github.com/andreyvit/dreamopt.js
 ee-first,1.1.1,MIT,https://github.com/jonathanong/ee-first
 ejs,3.1.9,Apache-2.0,https://github.com/mde/ejs
 encodeurl,1.0.2,MIT,https://github.com/pillarjs/encodeurl
