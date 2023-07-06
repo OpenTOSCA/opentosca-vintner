@@ -49,7 +49,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 39  | [delayed-stream](https://github.com/felixge/node-delayed-stream){target=_blank} | 1.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 40  | [depd](https://github.com/dougwilson/nodejs-depd){target=_blank} | 2.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 41  | [destroy](https://github.com/stream-utils/destroy){target=_blank} | 1.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 42  | [dreamopt](https://github.com/andreyvit/dreamopt.js){target=_blank} | 0.8.0 |  [UNKNOWN](){target=_blank} |
+| 42  | [dreamopt](https://github.com/andreyvit/dreamopt.js){target=_blank} | 0.8.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 43  | [ee-first](https://github.com/jonathanong/ee-first){target=_blank} | 1.1.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 44  | [ejs](https://github.com/mde/ejs){target=_blank} | 3.1.9 |  [Apache-2.0](https://choosealicense.com/licenses/apache-2.0){target=_blank} |
 | 45  | [encodeurl](https://github.com/pillarjs/encodeurl){target=_blank} | 1.0.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -170,5 +170,4 @@ We fixed some of them by patching the dependencies using [`patch-package`](https
 
 1. The release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
 However, the project is according to the author licensed under MIT as stated in [#2](https://github.com/andreyvit/dreamopt.js/issues/2){target=_blank}.
-
 1. We moved the dependency [@types/yauzl](https://www.npmjs.com/package/@types/yauzl){target=_blank} at [extract-zip@2.0.1](https://github.com/maxogden/extract-zip){target=_blank} to the development dependencies.

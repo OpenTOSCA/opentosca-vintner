@@ -21,7 +21,7 @@ The specification is under active development and is not backwards compatible wi
 The core normative TOSCA type definitions contain high-level type definitions which are mainly derived from the normative TOSCA type definitions of the [TOSCA Simple Profile in YAML 1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html){target=_blank}.
 These types mainly concern the following topics.
 
-- Hardware and software of electronic computing units (ECUs) which are typically microcontroller
+- Hardware and software of electronic computing units (ECUs) which are typically microcontrollers
 - Hardware and software of high performance computing platforms (HPCs) which are typically microprocessors 
 - Sensors and actuators
 - Communication channels
