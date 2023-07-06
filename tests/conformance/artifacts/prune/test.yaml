@@ -1,5 +1,6 @@
 name: Artifact Pruning
 description:
+
      -type default condition of nodes is enabled.
      -artifact pruning is enabled as true.
      -In "node_one" there is one artifact named "artifact_two_one" with type "artifact".
