@@ -1,2 +1,5 @@
-name: 'Operator "and"  Evaluates to "true" (Nested)'
-description: Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
+name: 'Operator "and" Evaluates to "true"'
+description: 
+-type default condition of nodes is enabled.
+-The fuction "and" evaluates the condition which is a list containing [true, true, true, true].
+-The node "container" is present since the condition evaluates to true.

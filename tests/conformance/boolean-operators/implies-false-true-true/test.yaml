@@ -1,2 +1,5 @@
 name: 'Operator "implies": false true -> true'
-description: Assigns "true" to the property "value" of the node "container" since the expression evaluates to "true".
+description: 
+-type default condition of nodes is enabled.
+-The fuction "implies" evaluates the condition which is a list containing [false, true].
+-The node "container" is present since the condition evaluates to true.
