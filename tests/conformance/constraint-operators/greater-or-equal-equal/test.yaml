@@ -1,2 +1,4 @@
-name: 'Operator "greater_or_equal" Evaluates to "true" (Greater)'
-description: Assigns "true" to the property "value" of the node "container" since the first parameter is greater than the second parameter.
+name: 'Operator "greater_or_equal" Evaluates to "true" (Equal)'
+description:
+-The "greater_or_equal" operator evaluates the expression. 
+-Assigns "true" to the property "value" of the node "container" since the both parameters are equal.
