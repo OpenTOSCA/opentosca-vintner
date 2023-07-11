@@ -47,7 +47,7 @@ topology_template:
                 DB_DIALECT: {get_property: [gcp_database, database_dialect]}
                 DB_ADDRESS: {get_attribute: [gcp_database, public_address]}
 
-                APPLICATION_LANGUAGE: 'DE'
+                APPLICATION_LANGUAGE: DE
                 APPLICATION_ANALYTICAL_REPORTS: false
             requirements:
                 - database: gcp_database

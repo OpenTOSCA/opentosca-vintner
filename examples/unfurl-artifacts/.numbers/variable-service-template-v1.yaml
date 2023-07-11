@@ -1,0 +1,218 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        shop_business_de:
+            type: node.app
+            conditions: {logic_expression: is_business_de}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: DE
+                - APPLICATION_ANALYTICAL_REPORTS: false
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_business_de}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_business_de}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        shop_business_en:
+            type: node.app
+            conditions: {logic_expression: is_business_en}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: EN
+                - APPLICATION_ANALYTICAL_REPORTS: false
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_business_en}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_business_en}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        shop_business_es:
+            type: node.app
+            conditions: {logic_expression: is_business_es}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: ES
+                - APPLICATION_ANALYTICAL_REPORTS: false
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_business_es}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_business_es}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        shop_community_de:
+            type: node.app
+            conditions: {logic_expression: is_community_de}
+            properties:
+                - DB_DIALECT: sqlite
+                - APPLICATION_LANGUAGE: DE
+            requirements:
+                - host:
+                      node: os_runtime
+                      conditions: {logic_expression: is_community_de}
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_community_de}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+
+        shop_community_en:
+            type: node.app
+            conditions: {logic_expression: is_community_en}
+            properties:
+                - DB_DIALECT: sqlite
+                - APPLICATION_LANGUAGE: EN
+            requirements:
+                - host:
+                      node: os_runtime
+                      conditions: {logic_expression: is_community_en}
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_community_en}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+
+        shop_community_es:
+            type: node.app
+            conditions: {logic_expression: is_community_es}
+            properties:
+                - DB_DIALECT: sqlite
+                - APPLICATION_LANGUAGE: ES
+            requirements:
+                - host:
+                      node: os_runtime
+                      conditions: {logic_expression: is_community_es}
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_community_es}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.community.tar.gz
+
+        shop_enterprise_de:
+            type: node.app
+            conditions: {logic_expression: is_enterprise_de}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: DE
+                - APPLICATION_ANALYTICAL_REPORTS: true
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_enterprise_de}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_enterprise_de}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        shop_enterprise_en:
+            type: node.app
+            conditions: {logic_expression: is_enterprise_en}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: EN
+                - APPLICATION_ANALYTICAL_REPORTS: true
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_enterprise_en}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_enterprise_en}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        shop_enterprise_es:
+            type: node.app
+            conditions: {logic_expression: is_enterprise_es}
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: ES
+                - APPLICATION_ANALYTICAL_REPORTS: true
+            requirements:
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_enterprise_es}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_enterprise_es}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+            conditions: {logic_expression: is_business_or_enterprise}
+
+        gcp_database:
+            type: gcp.database
+            conditions: {logic_expression: is_business_or_enterprise}
+            requirements:
+                - host:
+                      node: gcp_dbms_business
+                      conditions: {logic_expression: is_business}
+                - host:
+                      node: gcp_dbms_enterprise
+                      conditions: {logic_expression: is_enterprise}
+
+        gcp_dbms_business:
+            type: gcp.dbms
+            conditions: {logic_expression: is_business}
+            properties:
+                - availability_type: ZONAL
+
+        gcp_dbms_enterprise:
+            type: gcp.dbms
+            conditions: {logic_expression: is_enterprise}
+            properties:
+                - availability_type: REGIONAL
+
+        os_runtime:
+            type: node.runtime
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host:
+                      node: os_vm
+                      conditions: {logic_expression: is_community}
+
+        os_database:
+            type: sqlite.database
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host:
+                      node: os_vm
+                      conditions: {logic_expression: is_community}
+
+        os_vm:
+            type: os.vm
+            conditions: {logic_expression: is_community}

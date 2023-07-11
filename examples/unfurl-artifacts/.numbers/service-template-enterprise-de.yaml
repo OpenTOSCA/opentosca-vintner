@@ -1,0 +1,36 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        shop:
+            type: node.app
+            properties:
+                - DB_DIALECT: mysql
+                - APPLICATION_LANGUAGE: DE
+                - APPLICATION_ANALYTICAL_REPORTS: true
+
+            requirements:
+                - host:
+                      node: gcp_runtime
+
+                - database:
+                      node: gcp_database
+
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+
+        gcp_database:
+            type: gcp.database
+            requirements:
+                - host:
+                      node: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.dbms
+            properties:
+                - availability_type: REGIONAL

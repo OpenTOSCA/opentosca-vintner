@@ -10,6 +10,7 @@ imports:
     - file: lib/os_vm.yaml
 
     - file: lib/gcp_app.yaml
+    - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
 
@@ -37,8 +38,8 @@ topology_template:
         options:
             type_default_condition: true
             property_default_condition: true
-            relation_default_condition: ture
-            expected_hosting_consistency_check: false # TODO: enable this again
+            relation_default_condition: true
+            expected_hosting_consistency_check: true # TODO: enable this again
 
     inputs:
         language:
@@ -142,15 +143,15 @@ topology_template:
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_EN}
-                      value: 'EN'
+                      value: EN
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_DE}
-                      value: 'DE'
+                      value: DE
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_ES}
-                      value: 'ES'
+                      value: ES
 
                 - APPLICATION_ANALYTICAL_REPORTS:
                       conditions: {logic_expression: is_business}
