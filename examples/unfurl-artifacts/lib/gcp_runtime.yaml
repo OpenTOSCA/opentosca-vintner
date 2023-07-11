@@ -6,8 +6,3 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
