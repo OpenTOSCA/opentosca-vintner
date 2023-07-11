@@ -200,6 +200,17 @@ template
     )
 
 template
+    .command('stats')
+    .description('collects stats of a given service template')
+    .requiredOption('--template <strings...>', 'path to service template')
+    .action(
+        hae.exit(async options => {
+            const result = await Controller.template.stats(options)
+            console.log(result)
+        })
+    )
+
+template
     .command('test')
     .description('runs tests defined in the CSAR')
     .requiredOption('--path <string>', 'path or link to the extracted CSAR')

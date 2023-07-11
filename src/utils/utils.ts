@@ -158,3 +158,13 @@ export function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; op
     result = _.merge(result, _.clone(data.options))
     return result
 }
+
+export function sumObjects(objects: {[key: string]: number}[]) {
+    return objects.reduce((a, b) => {
+        for (const key in b) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (b.hasOwnProperty(key)) a[key] = (a[key] || 0) + b[key]
+        }
+        return a
+    }, {})
+}
