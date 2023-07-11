@@ -99,3 +99,4 @@ topology_template:
                 port_one: 3000
                 port_two: 9100
                 machine_name: shop
+                flavor_name: 'm1.small'
