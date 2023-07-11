@@ -13,6 +13,10 @@ node_types:
             machine_name:
                 type: string
 
+            flavor_name:
+                type: string
+                default: 'm1.small'
+
             os_region_name:
                 type: string
                 default: {get_input: os_region_name}
@@ -73,6 +77,7 @@ node_types:
                         port_one = {{ SELF.port_one }}
                         port_two = {{ SELF.port_two }}
                         machine_name = "{{ SELF.machine_name }}"
+                        flavor_name = "{{ SELF.flavor_name }}"
                     main: |
                         terraform {
                         required_version = ">= 0.14.0"
@@ -127,7 +132,7 @@ node_types:
                         resource "openstack_compute_instance_v2" "machine" {
                           name            = var.machine_name
                           image_name      = "Ubuntu 20.04"
-                          flavor_name     = "m1.small"
+                          flavor_name     = var.flavor_name
                           key_pair        = "default"
                           security_groups = ["default", openstack_compute_secgroup_v2.ports.name]
 

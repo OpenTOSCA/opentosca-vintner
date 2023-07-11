@@ -45,6 +45,10 @@ node_types:
                 type: string
                 default: {get_input: gcp_region}
 
+            auto_scaling:
+                type: boolean
+                default: {eval: '.::.requirements[.name=host]::.target::auto_scaling'}
+
         requirements:
             - database:
                   capability: tosca.capabilities.Endpoint.Database
@@ -80,6 +84,8 @@ node_types:
 
                         application_name = "{{ SELF.application_name }}"
                         artifact = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
+
+                        auto_scaling="{{ SELF.auto_scaling }}"
                     main: |
                         terraform {
                            required_providers {
@@ -107,7 +113,6 @@ node_types:
                          variable "region" {
                            type        = string
                          }
-
 
                          variable "artifact" {
                            type        = string
@@ -149,7 +154,10 @@ node_types:
                            type        = string
                          }
 
-                         
+                         variable "auto_scaling" {
+                           type        = bool
+                         } 
+
                          variable "try" {
                            type = string
                            default = "try-7"
@@ -168,6 +176,12 @@ node_types:
                            deployment {
                              zip {
                                source_url = "https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}"
+                             }
+                           }
+
+                           automatic_scaling {
+                             standard_scheduler_settings {
+                               max_instances = var.auto_scaling ? 100 : 1
                              }
                            }
 

@@ -23,6 +23,8 @@ topology_template:
 
         gcp_runtime:
             type: gcp.runtime
+            properties:
+                auto_scaling: true
 
         gcp_database:
             type: gcp.database

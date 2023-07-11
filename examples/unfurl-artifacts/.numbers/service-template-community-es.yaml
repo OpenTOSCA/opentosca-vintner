@@ -33,3 +33,5 @@ topology_template:
 
         os_vm:
             type: os.vm
+            properties:
+                flavor_name: 'm1.small'

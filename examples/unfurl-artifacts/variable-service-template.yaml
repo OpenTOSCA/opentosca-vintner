@@ -180,6 +180,8 @@ topology_template:
         gcp_runtime:
             type: gcp.runtime
             conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                auto_scaling: true
 
         gcp_database:
             type: gcp.database
@@ -225,3 +227,4 @@ topology_template:
                 port_one: 3000
                 port_two: 9100
                 machine_name: shop
+                flavor_name: 'm1.small'
