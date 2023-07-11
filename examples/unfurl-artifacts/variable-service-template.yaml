@@ -39,7 +39,6 @@ topology_template:
             type_default_condition: true
             property_default_condition: true
             relation_default_condition: true
-            expected_hosting_consistency_check: true # TODO: enable this again
 
     inputs:
         language:
@@ -163,6 +162,7 @@ topology_template:
 
             requirements:
                 - host: os_runtime
+                - host: gcp_runtime
                 - database: os_database
                 - database: gcp_database
 
@@ -176,6 +176,10 @@ topology_template:
                       type: tosca.artifacts.File
                       conditions: {logic_expression: is_business_or_enterprise}
                       file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+            conditions: {logic_expression: is_business_or_enterprise}
 
         gcp_database:
             type: gcp.database

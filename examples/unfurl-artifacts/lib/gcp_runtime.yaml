@@ -1,0 +1,13 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    gcp.runtime:
+        derived_from: tosca.nodes.Root
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

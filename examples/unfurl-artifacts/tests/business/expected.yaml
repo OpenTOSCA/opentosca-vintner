@@ -10,6 +10,7 @@ imports:
     - file: lib/os_vm.yaml
 
     - file: lib/gcp_app.yaml
+    - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
 
@@ -50,12 +51,16 @@ topology_template:
                 APPLICATION_LANGUAGE: DE
                 APPLICATION_ANALYTICAL_REPORTS: false
             requirements:
+                - host: gcp_runtime
                 - database: gcp_database
 
             artifacts:
                 artifact:
                     type: tosca.artifacts.File
                     file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
 
         gcp_database:
             type: gcp.database
