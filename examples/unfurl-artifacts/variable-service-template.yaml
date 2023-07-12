@@ -4,12 +4,12 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
     - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
@@ -111,15 +111,11 @@ topology_template:
 
     node_templates:
         shop:
-            type:
-                - node.app:
-                      conditions: {logic_expression: is_community}
-                - gcp.app:
-                      conditions: {logic_expression: is_business_or_enterprise}
-
+            type: shop.app
             properties:
                 - application_name: shop
 
+                # Database Connection
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: db_password}
@@ -137,9 +133,10 @@ topology_template:
                       value: {get_attribute: [os_database, public_address]}
 
                 - DB_ADDRESS:
-                      conditions: {node_presence: gcp_database}
-                      value: {get_attribute: [gcp_database, public_address]}
+                      conditions: {node_presence: gcp_dbms}
+                      value: {get_attribute: [gcp_dbms, public_address]}
 
+                # Application Configuration
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_EN}
                       value: EN
@@ -159,6 +156,41 @@ topology_template:
                 - APPLICATION_ANALYTICAL_REPORTS:
                       conditions: {logic_expression: is_enterprise}
                       value: true
+
+                # Deployment Mode
+                - deployment_mode:
+                      conditions: {logic_expression: is_community}
+                      value: OS
+
+                # GCP
+                - deployment_mode:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: GCP
+
+                - credentials:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_credentials}
+
+                - project:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_project}
+
+                - region:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_region}
+
+                - auto_scaling:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_property: [gcp_runtime, auto_scaling]}
+
+                # OS
+                - ssh_user:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: ssh_user}
+
+                - ssh_key_file:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: ssh_key_file}
 
             requirements:
                 - host: os_runtime
@@ -182,6 +214,9 @@ topology_template:
             conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 auto_scaling: true
+            capabilities:
+                properties:
+                    connection: local
 
         gcp_database:
             type: gcp.database

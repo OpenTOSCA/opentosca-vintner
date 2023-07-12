@@ -4,12 +4,12 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
     - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
@@ -62,7 +62,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: node.app
+            type: shop.app
             properties:
                 application_name: shop
 
@@ -73,6 +73,10 @@ topology_template:
                 DB_ADDRESS: {get_attribute: [os_database, public_address]}
 
                 APPLICATION_LANGUAGE: DE
+
+                deployment_mode: OS
+                ssh_user: {get_input: ssh_user}
+                ssh_key_file: {get_input: ssh_key_file}
             requirements:
                 - host: os_runtime
                 - database: os_database

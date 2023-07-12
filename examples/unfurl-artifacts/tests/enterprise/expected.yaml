@@ -4,12 +4,12 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
     - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
@@ -38,7 +38,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: gcp.app
+            type: shop.app
             properties:
                 application_name: shop
 
@@ -46,10 +46,16 @@ topology_template:
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: db_password}
                 DB_DIALECT: {get_property: [gcp_database, database_dialect]}
-                DB_ADDRESS: {get_attribute: [gcp_database, public_address]}
+                DB_ADDRESS: {get_attribute: [gcp_dbms, public_address]}
 
                 APPLICATION_LANGUAGE: DE
                 APPLICATION_ANALYTICAL_REPORTS: true
+
+                deployment_mode: GCP
+                credentials: {get_input: gcp_credentials}
+                project: {get_input: gcp_project}
+                region: {get_input: gcp_region}
+                auto_scaling: {get_property: [gcp_runtime, auto_scaling]}
             requirements:
                 - host: gcp_runtime
                 - database: gcp_database
@@ -63,6 +69,9 @@ topology_template:
             type: gcp.runtime
             properties:
                 auto_scaling: true
+            capabilities:
+                properties:
+                    connection: local
 
         gcp_database:
             type: gcp.database

@@ -66,13 +66,11 @@ node_types:
                     public_address: public_address
                 inputs:
                     tfvars: |
-                        # os_region_name = "{{ SELF.os_region_name}}"
-                        # os_auth_type = "{{ SELF.os_auth_type}}"
-                        # os_auth_url = "{{ SELF.os_auth_url}}"
-                        # os_identity_api_version = "{{ SELF.os_identity_api_version}}"
-                        # os_interface = "{{ SELF.os_interface}}"
-                        # os_application_credential_id = "{{ SELF.os_application_credential_id}}"
-                        # os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
+                        os_region_name = "{{ SELF.os_region_name}}"
+                        os_auth_url = "{{ SELF.os_auth_url}}"
+
+                        os_application_credential_id = "{{ SELF.os_application_credential_id}}"
+                        os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
 
                         port_one = {{ SELF.port_one }}
                         port_two = {{ SELF.port_two }}
@@ -89,13 +87,28 @@ node_types:
                           }
                         }
 
-                        # not auth_type, identity_api_version
                         provider "openstack" {
-                          #region_name = var.os_region_name
-                          #auth_url = var.os_auth_url
+                          region = var.os_region_name
+                          auth_url = var.os_auth_url
 
-                          #application_credential_id = var.os_application_credential_id
-                          #application_credential_secret = var.os_application_credential_secret
+                          application_credential_id = var.os_application_credential_id
+                          application_credential_secret = var.os_application_credential_secret
+                        }
+
+                        variable "os_region_name" {
+                          type        = string
+                        }
+
+                        variable "os_auth_url" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_id" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_secret" {
+                          type        = string
                         }
 
                         variable "port_one" {
@@ -107,6 +120,10 @@ node_types:
                         }
 
                         variable "machine_name" {
+                          type        = string
+                        }
+
+                        variable "flavor_name" {
                           type        = string
                         }
 

@@ -11,3 +11,5 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible

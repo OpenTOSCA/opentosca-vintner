@@ -23,11 +23,6 @@ node_types:
                 type: string
                 default: {get_input: gcp_region}
 
-        attributes:
-            public_address:
-                type: string
-                default: {get_attribute: [SELF, host, public_address]}
-
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database

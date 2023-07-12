@@ -18,6 +18,7 @@ node_types:
                 default: {get_input: gcp_credentials}
 
             project:
+                type: string
                 default: {get_input: gcp_project}
 
             region:
