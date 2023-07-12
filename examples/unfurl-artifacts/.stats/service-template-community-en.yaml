@@ -17,7 +17,7 @@ topology_template:
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
         os_runtime:
             type: node.runtime

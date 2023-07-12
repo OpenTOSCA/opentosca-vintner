@@ -30,7 +30,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/stoetzms/.ssh/bw-cloud--laptop-default
+            default: /home/milesstoetzner/.ssh/bw-cloud--laptop-default
 
         os_region_name:
             type: string
@@ -83,7 +83,7 @@ topology_template:
             artifacts:
                 artifact:
                     type: tosca.artifacts.File
-                    file: files/application.community.tar.gz
+                    file: files/application.community.xz
 
         os_runtime:
             type: node.runtime

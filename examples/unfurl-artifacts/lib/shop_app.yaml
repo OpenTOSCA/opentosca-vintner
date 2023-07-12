@@ -110,6 +110,8 @@ node_types:
                                   copy:
                                       dest: '{{ SELF.application_directory }}/.env'
                                       content: |
+                                          PORT=3000
+                                          INTERFACE="::"
                                           DB_DIALECT={{ SELF.DB_DIALECT}}
                                           DB_NAME={{ SELF.DB_NAME }}
                                           DB_USERNAME={{ SELF.DB_USERNAME }}
@@ -148,7 +150,7 @@ node_types:
                                   when: '"{{ SELF.deployment_mode }}" == "OS"'
 
                                 - name: active service account
-                                  shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project_id }}'
+                                  shell: 'gcloud auth activate-service-account --key-file {{ SELF.credentials }} --project {{ SELF.project }}'
                                   when: '"{{ SELF.deployment_mode }}" == "GCP"'
 
                                 - name: Create working directory
@@ -159,7 +161,7 @@ node_types:
 
                                 - name: Extract deployment artifact in working directory
                                   unarchive:
-                                      src: '{{ artifact_file }}'
+                                      src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                       dest: '{{ tempdir_info.path }}'
                                   when: '"{{ SELF.deployment_mode }}" == "GCP"'
 

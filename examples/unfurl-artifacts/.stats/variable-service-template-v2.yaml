@@ -54,7 +54,7 @@ topology_template:
                 - artifact:
                       type: tosca.artifacts.File
                       conditions: {logic_expression: is_community}
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
                 - artifact:
                       type: tosca.artifacts.File

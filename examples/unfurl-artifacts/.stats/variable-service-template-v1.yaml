@@ -75,7 +75,7 @@ topology_template:
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
         shop_community_en:
             type: node.app
@@ -93,7 +93,7 @@ topology_template:
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
         shop_community_es:
             type: node.app
@@ -111,7 +111,7 @@ topology_template:
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
         shop_enterprise_de:
             type: node.app

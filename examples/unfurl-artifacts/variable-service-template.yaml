@@ -96,7 +96,7 @@ topology_template:
 
         gcp_credentials:
             type: string
-            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
             conditions: {logic_expression: is_business_or_enterprise}
 
         gcp_project:
@@ -202,7 +202,7 @@ topology_template:
                 - artifact:
                       type: tosca.artifacts.File
                       conditions: {logic_expression: is_community}
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
                 - artifact:
                       type: tosca.artifacts.File
@@ -215,8 +215,9 @@ topology_template:
             properties:
                 auto_scaling: true
             capabilities:
-                properties:
-                    connection: local
+                endpoint:
+                  properties:
+                      connection: local
 
         gcp_database:
             type: gcp.database
@@ -259,7 +260,6 @@ topology_template:
             type: os.vm
             conditions: {logic_expression: is_community}
             properties:
-                port_one: 3000
-                port_two: 9100
+                port: 3000
                 machine_name: shop
                 flavor_name: 'm1.small'

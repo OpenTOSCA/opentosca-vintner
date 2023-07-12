@@ -4,10 +4,7 @@ node_types:
     os.vm:
         derived_from: unfurl.nodes.Installer.Terraform
         properties:
-            port_one:
-                type: string
-
-            port_two:
+            port:
                 type: string
 
             machine_name:
@@ -72,8 +69,7 @@ node_types:
                         os_application_credential_id = "{{ SELF.os_application_credential_id}}"
                         os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
 
-                        port_one = {{ SELF.port_one }}
-                        port_two = {{ SELF.port_two }}
+                        port = {{ SELF.port }}
                         machine_name = "{{ SELF.machine_name }}"
                         flavor_name = "{{ SELF.flavor_name }}"
                     main: |
@@ -111,11 +107,7 @@ node_types:
                           type        = string
                         }
 
-                        variable "port_one" {
-                          type        = string
-                        }
-
-                        variable "port_two" {
+                        variable "port" {
                           type        = string
                         }
 
@@ -132,22 +124,12 @@ node_types:
                             description = "ports for ${var.machine_name}"
                         }
 
-                        resource "openstack_networking_secgroup_rule_v2" "port_one" {
+                        resource "openstack_networking_secgroup_rule_v2" "port" {
                             direction         = "ingress"
                             ethertype         = "IPv6"
                             protocol          = "tcp"
-                            port_range_min    = var.port_one
-                            port_range_max    = var.port_one
-                            remote_ip_prefix  = "::/0"
-                            security_group_id = openstack_networking_secgroup_v2.ports.id
-                        }
-
-                        resource "openstack_networking_secgroup_rule_v2" "port_two" {
-                            direction         = "ingress"
-                            ethertype         = "IPv6"
-                            protocol          = "tcp"
-                            port_range_min    = var.port_two
-                            port_range_max    = var.port_two
+                            port_range_min    = var.port
+                            port_range_max    = var.port
                             remote_ip_prefix  = "::/0"
                             security_group_id = openstack_networking_secgroup_v2.ports.id
                         }
