@@ -8,7 +8,6 @@ node_types:
             application_name:
                 type: string
 
-            # Database Connection
             DB_DIALECT:
                 type: string
 
@@ -24,7 +23,6 @@ node_types:
             DB_ADDRESS:
                 type: string
 
-            # Application Configuration
             APPLICATION_LANGUAGE:
                 type: string
 
@@ -32,16 +30,19 @@ node_types:
                 type: boolean
                 required: false
 
-            # Artifact
             artifact:
                 type: string
                 default: {eval: '.artifacts::artifact '}
 
-            # Deployment Mode
             deployment_mode:
                 type: string
 
+            ###################################################
+            #
             # GCP
+            #
+            ###################################################
+
             credentials:
                 type: string
                 required: false
@@ -58,7 +59,12 @@ node_types:
                 type: boolean
                 required: false
 
+            ###################################################
+            #
             # OS
+            #
+            ###################################################
+
             ssh_user:
                 type: string
                 required: false
@@ -87,24 +93,29 @@ node_types:
                     inputs:
                         playbook:
                             q:
+                                ###################################################
+                                #
+                                # OS
+                                #
+                                ###################################################
+
                                 - name: wait for ssh
                                   wait_for_connection:
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
+                                  when: SELF.deployment_mode == "OS"
 
                                 - name: Create application directory
                                   file:
                                       path: '{{ SELF.application_directory }}'
                                       state: directory
                                   become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
+                                  when: SELF.deployment_mode == "OS"
 
                                 - name: Extract deployment artifact in application directory
                                   unarchive:
                                       src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                       dest: '{{ SELF.application_directory }}'
                                   become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
-
+                                  when: SELF.deployment_mode == "OS"
 
                                 - name: create .env file
                                   copy:
@@ -120,7 +131,7 @@ node_types:
                                           APPLICATION_LANGUAGE={{ SELF.APPLICATION_LANGUAGE }}
                                       mode: a+x
                                   become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
+                                  when: SELF.deployment_mode == "OS"
 
                                 - name: create service
                                   copy:
@@ -138,7 +149,7 @@ node_types:
                                           [Install]
                                           WantedBy=multi-user.target
                                   become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
+                                  when: SELF.deployment_mode == "OS"
 
                                 - name: start service
                                   systemd:
@@ -147,23 +158,29 @@ node_types:
                                       enabled: yes
                                       daemon_reload: yes
                                   become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
+                                  when: SELF.deployment_mode == "OS"
+
+                                ###################################################
+                                #
+                                # GCP
+                                #
+                                ###################################################
 
                                 - name: active service account
                                   shell: 'gcloud auth activate-service-account --key-file {{ SELF.credentials }} --project {{ SELF.project }}'
-                                  when: '"{{ SELF.deployment_mode }}" == "GCP"'
+                                  when: SELF.deployment_mode == "GCP"
 
                                 - name: Create working directory
                                   tempfile:
                                       state: directory
                                   register: tempdir_info
-                                  when: '"{{ SELF.deployment_mode }}" == "GCP"'
+                                  when: SELF.deployment_mode == "GCP"
 
                                 - name: Extract deployment artifact in working directory
                                   unarchive:
                                       src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                       dest: '{{ tempdir_info.path }}'
-                                  when: '"{{ SELF.deployment_mode }}" == "GCP"'
+                                  when: SELF.deployment_mode == "GCP"
 
                                 # https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=node.js
                                 - name: Configure app yaml
@@ -183,12 +200,74 @@ node_types:
                                               DB_ADDRESS: {{ SELF.DB_ADDRESS }}
                                               APPLICATION_LANGUAGE: {{ SELF.APPLICATION_LANGUAGE }}
                                               APPLICATION_ANALYTICAL_REPORTS: {{ SELF.APPLICATION_ANALYTICAL_REPORTS }}
-                                  when: '"{{ SELF.deployment_mode }}" == "GCP"'
+                                  when: SELF.deployment_mode == "GCP"
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 - name: Create App
                                   shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
-                                  when: '"{{ SELF.deployment_mode }}" == "GCP"'
+                                  when: SELF.deployment_mode == "GCP"
+
+                        playbookArgs:
+                            - --key-file={{ SELF.ssh_key_file }}
+                            - --user={{ SELF.ssh_user }}
+                            - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+                delete:
+                    implementation:
+                        primary: Ansible
+                        operation_host: HOST
+                    inputs:
+                        playbook:
+                            q:
+                                ###################################################
+                                #
+                                # OS
+                                #
+                                ###################################################
+
+                                - name: wait for ssh
+                                  wait_for_connection:
+                                  when: SELF.deployment_mode == "OS"
+
+                                - name: stop service
+                                  systemd:
+                                      name: '{{ SELF.application_name }}'
+                                      state: stopped
+                                  become: true
+                                  when: SELF.deployment_mode == "OS"
+
+                                - name: Delete systemd service
+                                  file:
+                                      path: '/etc/systemd/system/{{ SELF.application_name }}.service'
+                                      state: absent
+                                  when: SELF.deployment_mode == "OS"
+
+                                - name: Reload daemon
+                                  systemd:
+                                      daemon_reload: true
+                                  when: SELF.deployment_mode == "OS"
+
+                                - name: delete application directory
+                                  file:
+                                      path: '{{ SELF.application_directory }}'
+                                      state: absent
+                                  become: true
+                                  when: SELF.deployment_mode == "OS"
+
+                                ###################################################
+                                #
+                                # GCP
+                                #
+                                ###################################################
+
+                                - name: active service account
+                                  shell: 'gcloud auth activate-service-account --key-file {{ SELF.credentials }} --project {{ SELF.project }}'
+                                  when: SELF.deployment_mode == "GCP"
+
+                                # https://cloud.google.com/sdk/gcloud/reference/app/deploy
+                                - name: Create App
+                                  shell: 'gcloud app services delete {{ SELF.application_name }} --quiet'
+                                  when: SELF.deployment_mode == "GCP"
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}
