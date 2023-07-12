@@ -4,7 +4,7 @@
 
 - complete community run does not work since unfurl does not understand that public_ip of os_vm is dynamic ...
 
-- unfurl does not always undeploy everything
+- undeploy for shop gcp
 
 
 ```
