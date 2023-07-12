@@ -127,23 +127,29 @@ node_types:
                           type        = string
                         }
 
-                        resource "openstack_compute_secgroup_v2" "ports" {
-                          name        = "${var.machine_name}-ports"
-                          description = "ports for ${var.machine_name}"
+                        resource "openstack_networking_secgroup_v2" "ports" {
+                            name        = "${var.machine_name}-ports"
+                            description = "ports for ${var.machine_name}"
+                        }
 
-                          rule {
-                            from_port   = var.port_one 
-                            to_port     = var.port_one 
-                            ip_protocol = "tcp"
-                            cidr        = "0.0.0.0/0"
-                          }
+                        resource "openstack_networking_secgroup_rule_v2" "port_one" {
+                            direction         = "ingress"
+                            ethertype         = "IPv6"
+                            protocol          = "tcp"
+                            port_range_min    = var.port_one
+                            port_range_max    = var.port_one
+                            remote_ip_prefix  = "::/0"
+                            security_group_id = openstack_networking_secgroup_v2.ports.id
+                        }
 
-                          rule {
-                            from_port   = var.port_two 
-                            to_port     = var.port_two 
-                            ip_protocol = "tcp"
-                            cidr        = "0.0.0.0/0"
-                          }
+                        resource "openstack_networking_secgroup_rule_v2" "port_two" {
+                            direction         = "ingress"
+                            ethertype         = "IPv6"
+                            protocol          = "tcp"
+                            port_range_min    = var.port_two
+                            port_range_max    = var.port_two
+                            remote_ip_prefix  = "::/0"
+                            security_group_id = openstack_networking_secgroup_v2.ports.id
                         }
 
                         resource "openstack_compute_instance_v2" "machine" {
@@ -151,7 +157,7 @@ node_types:
                           image_name      = "Ubuntu 20.04"
                           flavor_name     = var.flavor_name
                           key_pair        = "default"
-                          security_groups = ["default", openstack_compute_secgroup_v2.ports.name]
+                          security_groups = ["default", openstack_networking_secgroup_v2.ports.name]
 
                           network {
                             name = "public-belwue-v6only"
@@ -159,5 +165,9 @@ node_types:
                         }
 
                         output "public_address" {
-                          value = openstack_compute_instance_v2.machine.access_ip_v4
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
+                        }
+
+                        output "public_ip" {
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
                         }

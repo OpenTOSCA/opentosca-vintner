@@ -56,7 +56,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/stoetzms/.ssh/bw-cloud--laptop-default
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
             conditions: {logic_expression: is_community}
 
         os_region_name:

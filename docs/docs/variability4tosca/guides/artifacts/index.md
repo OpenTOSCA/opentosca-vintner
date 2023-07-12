@@ -10,10 +10,11 @@ In the following, we provide a detailed step-by-step tutorial to deploy the ente
 
 You to fulfill the following requirements to follow this walkthrough.
 
-- Access to a GCP project
 - A machine having Ubuntu22.04 LTS installed
+- Ipv6 support, thus, WSL is no suitable
+- Access to a GCP project
+- Gcloud cli installed
 - Git installed on your machine
-- Python3 installed on your machine
 - [Unfurl](https://github.com/onecommons/unfurl){target=_blank} installed on your machine
 - Terraform installed on your machine
 - Terraform is already authenticated

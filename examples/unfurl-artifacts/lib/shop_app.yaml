@@ -105,12 +105,6 @@ node_types:
                                   become: true
                                   when: '"{{ SELF.deployment_mode }}" == "OS"'
 
-                                - name: install
-                                  shell: 'sudo npm install'
-                                  args:
-                                      chdir: '{{ SELF.application_directory }}'
-                                  become: true
-                                  when: '"{{ SELF.deployment_mode }}" == "OS"'
 
                                 - name: create .env file
                                   copy:
