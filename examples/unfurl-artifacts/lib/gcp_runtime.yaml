@@ -2,14 +2,74 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
     gcp.runtime:
-        derived_from: tosca.nodes.Root
+        derived_from: unfurl.nodes.Installer.Terraform
         properties:
             auto_scaling:
                 type: boolean
                 default: true
+
+            credentials:
+                type: string
+                default: {get_input: gcp_credentials}
+
+            project:
+                type: string
+                default: {get_input: gcp_project}
+
+            region:
+                type: string
+                default: {get_input: gcp_region}
 
         capabilities:
             host:
                 type: tosca.capabilities.Compute
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+            defaults:
+                inputs:
+                    tfvars: |
+                        project = "{{ SELF.project }}"
+                        region = "{{ SELF.region }}"
+                        credentials = "{{ SELF.credentials }}"
+                    main: |
+                        terraform {
+                           required_providers {
+                             google = {
+                               source = "hashicorp/google"
+                               version = "4.67.0"
+                             }
+                           }
+                         }
+
+                         provider "google" {
+                           project = var.project
+                           region = var.region
+                           credentials = var.credentials
+                         }
+
+                         variable "credentials" {
+                           type        = string
+                         }
+
+                         variable "project" {
+                           type        = string
+                         }
+
+                         variable "region" {
+                           type        = string
+                         }
+
+                         resource "google_project_service" "app_engine_reporting" {
+                           project  = var.project
+                           service = "appenginereporting.googleapis.com"
+                         }
+
+                         resource "google_project_service" "app_engine_admin" {
+                           project  = var.project
+                           service = "appengine.googleapis.com"
+                         }

@@ -54,6 +54,7 @@ node_types:
 
                         name = "{{ SELF.instance_name}}"
                         password = "{{ SELF.root_password }}"
+                        backups = {{ SELF.backups | lower }}
                         availability_type = "{{ SELF.availability_type }}"
                     main: |
                         terraform {
@@ -99,8 +100,22 @@ node_types:
                            type        = bool
                          }
 
+                         resource "google_project_service" "cloud_sql_component" {
+                           project  = var.project
+                           service = "sql-component.googleapis.com"
+                         }
+
+                         resource "google_project_service" "cloud_sql_admin" {
+                           depends_on = [ google_project_service.cloud_sql_component ]
+
+                           project  = var.project
+                           service = "sqladmin.googleapis.com"
+                         }
+
                          # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
                          resource "google_sql_database_instance" "dbms" {
+                           depends_on = [ google_project_service.cloud_sql_admin ]
+
                            name             = var.name
                            database_version = "MYSQL_5_7"
                            root_password = var.password
