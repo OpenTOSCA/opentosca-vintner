@@ -10,10 +10,8 @@ topology_template:
             requirements:
                 - host:
                       node: os_runtime
-
                 - database:
                       node: os_database
-
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File

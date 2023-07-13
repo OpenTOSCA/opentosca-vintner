@@ -8,14 +8,11 @@ topology_template:
                 - DB_DIALECT: mysql
                 - APPLICATION_LANGUAGE: EN
                 - APPLICATION_ANALYTICAL_REPORTS: true
-
             requirements:
                 - host:
                       node: gcp_runtime
-
                 - database:
                       node: gcp_database
-
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
