@@ -1,0 +1,111 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        shop:
+            type: shop.app
+            properties:
+                - DB_DIALECT:
+                      conditions: {node_presence: os_database}
+                      value: sqlite
+
+                - DB_DIALECT:
+                      conditions: {node_presence: gcp_database}
+                      value: mysql
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_EN}
+                      value: EN
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_DE}
+                      value: DE
+
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_ES}
+                      value: ES
+
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_business}
+                      value: false
+
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_enterprise}
+                      value: true
+
+            requirements:
+                - host:
+                      node: os_runtime
+                      conditions: {logic_expression: is_community}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_business_or_enterprise}
+
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_community}
+
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_business_or_enterprise}
+
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_community}
+                      file: files/application.community.xz
+
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+            conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                auto_scaling: true
+
+        gcp_database:
+            type: gcp.database
+            conditions: {logic_expression: is_business_or_enterprise}
+            requirements:
+                - host:
+                      node: gcp_dbms
+                      conditions: {logic_expression: is_business_or_enterprise}
+
+        gcp_dbms:
+            type: gcp.dbms
+            conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                - backups: true
+                - availability_type:
+                      conditions: {logic_expression: is_business}
+                      value: ZONAL
+
+                - availability_type:
+                      conditions: {logic_expression: is_enterprise}
+                      value: REGIONAL
+
+        os_runtime:
+            type: node.runtime
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host:
+                      node: os_vm
+                      conditions: {logic_expression: is_community}
+
+        os_database:
+            type: sqlite.database
+            conditions: {logic_expression: is_community}
+            requirements:
+                - host:
+                      node: os_vm
+                      conditions: {logic_expression: is_community}
+
+        os_vm:
+            type: os.vm
+            conditions: {logic_expression: is_community}
+            properties:
+                flavor_name: 'm1.small'

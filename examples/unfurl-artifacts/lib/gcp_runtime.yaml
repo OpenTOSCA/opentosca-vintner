@@ -1,15 +1,12 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
-    gcp.database:
+    gcp.runtime:
         derived_from: unfurl.nodes.Installer.Terraform
         properties:
-            database_name:
-                type: string
-
-            database_dialect:
-                type: string
-                default: mysql
+            auto_scaling:
+                type: boolean
+                default: true
 
             credentials:
                 type: string
@@ -24,31 +21,21 @@ node_types:
                 default: {get_input: gcp_region}
 
         capabilities:
-            database:
-                type: tosca.capabilities.Endpoint.Database
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
+            host:
+                type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
 
         interfaces:
             Standard:
                 operations:
                     configure:
-                    delete:
             defaults:
-                outputs:
-                    public_ip: public_address
-                    public_address: public_address
                 inputs:
                     tfvars: |
                         project = "{{ SELF.project }}"
                         region = "{{ SELF.region }}"
                         credentials = "{{ SELF.credentials }}"
-
-                        name = "{{ SELF.database_name }}"
-                        instance = "shop"
                     main: |
                         terraform {
                            required_providers {
@@ -77,15 +64,12 @@ node_types:
                            type        = string
                          }
 
-                         variable "name" {
-                           type        = string
+                         resource "google_project_service" "app_engine_reporting" {
+                           project  = var.project
+                           service = "appenginereporting.googleapis.com"
                          }
 
-                         variable "instance" {
-                           type        = string
-                         }
-
-                         resource "google_sql_database" "database" {
-                           name     = var.name
-                           instance = var.instance
+                         resource "google_project_service" "app_engine_admin" {
+                           project  = var.project
+                           service = "appengine.googleapis.com"
                          }

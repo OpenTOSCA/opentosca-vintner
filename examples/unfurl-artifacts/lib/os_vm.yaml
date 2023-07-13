@@ -4,14 +4,15 @@ node_types:
     os.vm:
         derived_from: unfurl.nodes.Installer.Terraform
         properties:
-            port_one:
-                type: string
-
-            port_two:
+            port:
                 type: string
 
             machine_name:
                 type: string
+
+            flavor_name:
+                type: string
+                default: 'm1.small'
 
             os_region_name:
                 type: string
@@ -62,17 +63,15 @@ node_types:
                     public_address: public_address
                 inputs:
                     tfvars: |
-                        # os_region_name = "{{ SELF.os_region_name}}"
-                        # os_auth_type = "{{ SELF.os_auth_type}}"
-                        # os_auth_url = "{{ SELF.os_auth_url}}"
-                        # os_identity_api_version = "{{ SELF.os_identity_api_version}}"
-                        # os_interface = "{{ SELF.os_interface}}"
-                        # os_application_credential_id = "{{ SELF.os_application_credential_id}}"
-                        # os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
+                        os_region_name = "{{ SELF.os_region_name}}"
+                        os_auth_url = "{{ SELF.os_auth_url}}"
 
-                        port_one = {{ SELF.port_one }}
-                        port_two = {{ SELF.port_two }}
+                        os_application_credential_id = "{{ SELF.os_application_credential_id}}"
+                        os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
+
+                        port = {{ SELF.port }}
                         machine_name = "{{ SELF.machine_name }}"
+                        flavor_name = "{{ SELF.flavor_name }}"
                     main: |
                         terraform {
                         required_version = ">= 0.14.0"
@@ -84,20 +83,31 @@ node_types:
                           }
                         }
 
-                        # not auth_type, identity_api_version
                         provider "openstack" {
-                          #region_name = var.os_region_name
-                          #auth_url = var.os_auth_url
+                          region = var.os_region_name
+                          auth_url = var.os_auth_url
 
-                          #application_credential_id = var.os_application_credential_id
-                          #application_credential_secret = var.os_application_credential_secret
+                          application_credential_id = var.os_application_credential_id
+                          application_credential_secret = var.os_application_credential_secret
                         }
 
-                        variable "port_one" {
+                        variable "os_region_name" {
                           type        = string
                         }
 
-                        variable "port_two" {
+                        variable "os_auth_url" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_id" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_secret" {
+                          type        = string
+                        }
+
+                        variable "port" {
                           type        = string
                         }
 
@@ -105,31 +115,31 @@ node_types:
                           type        = string
                         }
 
-                        resource "openstack_compute_secgroup_v2" "ports" {
-                          name        = "${var.machine_name}-ports"
-                          description = "ports for ${var.machine_name}"
+                        variable "flavor_name" {
+                          type        = string
+                        }
 
-                          rule {
-                            from_port   = var.port_one 
-                            to_port     = var.port_one 
-                            ip_protocol = "tcp"
-                            cidr        = "0.0.0.0/0"
-                          }
+                        resource "openstack_networking_secgroup_v2" "ports" {
+                            name        = "${var.machine_name}-ports"
+                            description = "ports for ${var.machine_name}"
+                        }
 
-                          rule {
-                            from_port   = var.port_two 
-                            to_port     = var.port_two 
-                            ip_protocol = "tcp"
-                            cidr        = "0.0.0.0/0"
-                          }
+                        resource "openstack_networking_secgroup_rule_v2" "port" {
+                            direction         = "ingress"
+                            ethertype         = "IPv6"
+                            protocol          = "tcp"
+                            port_range_min    = var.port
+                            port_range_max    = var.port
+                            remote_ip_prefix  = "::/0"
+                            security_group_id = openstack_networking_secgroup_v2.ports.id
                         }
 
                         resource "openstack_compute_instance_v2" "machine" {
                           name            = var.machine_name
                           image_name      = "Ubuntu 20.04"
-                          flavor_name     = "m1.small"
+                          flavor_name     = var.flavor_name
                           key_pair        = "default"
-                          security_groups = ["default", openstack_compute_secgroup_v2.ports.name]
+                          security_groups = ["default", openstack_networking_secgroup_v2.ports.name]
 
                           network {
                             name = "public-belwue-v6only"
@@ -137,5 +147,9 @@ node_types:
                         }
 
                         output "public_address" {
-                          value = openstack_compute_instance_v2.machine.access_ip_v4
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
+                        }
+
+                        output "public_ip" {
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
                         }

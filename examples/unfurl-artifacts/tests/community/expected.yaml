@@ -4,12 +4,13 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
+    - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
 
@@ -29,7 +30,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/stoetzms/.ssh/bw-cloud--laptop-default
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -61,24 +62,28 @@ topology_template:
 
     node_templates:
         shop:
-            type: node.app
+            type: shop.app
             properties:
                 application_name: shop
 
                 DB_NAME: shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: db_password}
-                DB_DIALECT: {get_property: [os_database, database_dialect]}
+                DB_DIALECT: sqlite
                 DB_ADDRESS: {get_attribute: [os_database, public_address]}
 
                 APPLICATION_LANGUAGE: DE
+
+                deployment_mode: OS
+                ssh_user: {get_input: ssh_user}
+                ssh_key_file: {get_input: ssh_key_file}
             requirements:
                 - host: os_runtime
                 - database: os_database
             artifacts:
                 artifact:
                     type: tosca.artifacts.File
-                    file: files/application.community.tar.gz
+                    file: files/application.community.xz
 
         os_runtime:
             type: node.runtime
@@ -95,6 +100,6 @@ topology_template:
         os_vm:
             type: os.vm
             properties:
-                port_one: 3000
-                port_two: 9100
+                port: 3000
                 machine_name: shop
+                flavor_name: 'm1.small'

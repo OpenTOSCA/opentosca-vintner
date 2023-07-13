@@ -4,12 +4,13 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
+    - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
 
@@ -25,7 +26,7 @@ topology_template:
 
         gcp_credentials:
             type: string
-            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
@@ -37,25 +38,41 @@ topology_template:
 
     node_templates:
         shop:
-            type: gcp.app
+            type: shop.app
             properties:
                 application_name: shop
 
                 DB_NAME: shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: db_password}
-                DB_DIALECT: {get_property: [gcp_database, database_dialect]}
-                DB_ADDRESS: {get_attribute: [gcp_database, public_address]}
+                DB_DIALECT: mysql
+                DB_ADDRESS: {get_attribute: [gcp_dbms, public_address]}
 
-                APPLICATION_LANGUAGE: 'DE'
+                APPLICATION_LANGUAGE: DE
                 APPLICATION_ANALYTICAL_REPORTS: false
+
+                deployment_mode: GCP
+                credentials: {get_input: gcp_credentials}
+                project: {get_input: gcp_project}
+                region: {get_input: gcp_region}
+                auto_scaling: {get_property: [gcp_runtime, auto_scaling]}
             requirements:
+                - host: gcp_runtime
                 - database: gcp_database
 
             artifacts:
                 artifact:
                     type: tosca.artifacts.File
                     file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+            properties:
+                auto_scaling: true
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
 
         gcp_database:
             type: gcp.database
@@ -69,4 +86,5 @@ topology_template:
             properties:
                 instance_name: shop
                 root_password: {get_input: db_password}
+                backups: true
                 availability_type: ZONAL

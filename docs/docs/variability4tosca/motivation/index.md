@@ -95,7 +95,7 @@ vintner instances inspect --instance motivation
 
 Finally, we can deploy the application.
 Therefore, we need to provide deployment inputs which contain, e.g., credentials for accessing OpenStack.
-An example for the deployment inputs is given in [`examples/xopera-motivation/inputs.example.yaml`]({{ get_repo_url('examples/xopera-motivation/inputs.example.yaml') }}){target=_blank}.
+An example for the deployment inputs is given in {{ repo_link('examples/xopera-motivation/inputs.example.yaml') }}.
 The deployment will take some minutes.
 
 ```shell linenums="1"

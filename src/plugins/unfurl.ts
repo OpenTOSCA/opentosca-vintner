@@ -44,8 +44,10 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         return Promise.reject('Not Implemented')
     }
 
-    redeploy(instance: Instance) {
-        return Promise.reject('Not Implemented')
+    async redeploy(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [this.getBinary(instance), 'deploy', '--approve']
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
     }
 
     getBinary(instance: Instance) {

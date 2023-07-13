@@ -42,7 +42,7 @@ vintner orchestrators enable --orchestrator xopera
 
 Deploy the Raspberry Pi variant of the pipes-and-filters application.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
-An example for the deployment inputs is given in [`examples/xopera-pipes-and-filters/inputs.example.yaml`]({{ get_repo_url('examples/xopera-pipes-and-filters/inputs.example.yaml') }}){target=_blank}.
+An example for the deployment inputs is given in {{ repo_link('examples/xopera-pipes-and-filters/inputs.example.yaml') }}.
 
 ```shell linenums="1"
 # Add variable service template

@@ -4,12 +4,13 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/node_app.yaml
+    - file: lib/shop_app.yaml
+
     - file: lib/node_runtime.yaml
     - file: lib/sqlite.yaml
     - file: lib/os_vm.yaml
 
-    - file: lib/gcp_app.yaml
+    - file: lib/gcp_runtime.yaml
     - file: lib/gcp_database.yaml
     - file: lib/gcp_dbms.yaml
 
@@ -37,8 +38,7 @@ topology_template:
         options:
             type_default_condition: true
             property_default_condition: true
-            relation_default_condition: ture
-            expected_hosting_consistency_check: false # TODO: enable this again
+            relation_default_condition: true
 
     inputs:
         language:
@@ -56,7 +56,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/stoetzms/.ssh/bw-cloud--laptop-default
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
             conditions: {logic_expression: is_community}
 
         os_region_name:
@@ -96,7 +96,7 @@ topology_template:
 
         gcp_credentials:
             type: string
-            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
             conditions: {logic_expression: is_business_or_enterprise}
 
         gcp_project:
@@ -111,14 +111,15 @@ topology_template:
 
     node_templates:
         shop:
-            type:
-                - node.app:
-                      conditions: {logic_expression: is_community}
-                - gcp.app:
-                      conditions: {logic_expression: is_business_or_enterprise}
-
+            type: shop.app
             properties:
                 - application_name: shop
+
+                ###################################################
+                #
+                # Database Connection
+                #
+                ###################################################
 
                 - DB_NAME: shop
                 - DB_USERNAME: root
@@ -126,31 +127,37 @@ topology_template:
 
                 - DB_DIALECT:
                       conditions: {node_presence: os_database}
-                      value: {get_property: [os_database, database_dialect]}
+                      value: sqlite
 
                 - DB_DIALECT:
                       conditions: {node_presence: gcp_database}
-                      value: {get_property: [gcp_database, database_dialect]}
+                      value: mysql
 
                 - DB_ADDRESS:
                       conditions: {node_presence: os_database}
                       value: {get_attribute: [os_database, public_address]}
 
                 - DB_ADDRESS:
-                      conditions: {node_presence: gcp_database}
-                      value: {get_attribute: [gcp_database, public_address]}
+                      conditions: {node_presence: gcp_dbms}
+                      value: {get_attribute: [gcp_dbms, public_address]}
+
+                ###################################################
+                #
+                # Application Configuration
+                #
+                ###################################################
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_EN}
-                      value: 'EN'
+                      value: EN
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_DE}
-                      value: 'DE'
+                      value: DE
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_ES}
-                      value: 'ES'
+                      value: ES
 
                 - APPLICATION_ANALYTICAL_REPORTS:
                       conditions: {logic_expression: is_business}
@@ -160,8 +167,53 @@ topology_template:
                       conditions: {logic_expression: is_enterprise}
                       value: true
 
+                - deployment_mode:
+                      conditions: {logic_expression: is_community}
+                      value: OS
+
+                ###################################################
+                #
+                # GCP
+                #
+                ###################################################
+
+                - deployment_mode:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: GCP
+
+                - credentials:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_credentials}
+
+                - project:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_project}
+
+                - region:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_region}
+
+                - auto_scaling:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_property: [gcp_runtime, auto_scaling]}
+
+                ###################################################
+                #
+                # OS
+                #
+                ###################################################
+
+                - ssh_user:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: ssh_user}
+
+                - ssh_key_file:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: ssh_key_file}
+
             requirements:
                 - host: os_runtime
+                - host: gcp_runtime
                 - database: os_database
                 - database: gcp_database
 
@@ -169,12 +221,22 @@ topology_template:
                 - artifact:
                       type: tosca.artifacts.File
                       conditions: {logic_expression: is_community}
-                      file: files/application.community.tar.gz
+                      file: files/application.community.xz
 
                 - artifact:
                       type: tosca.artifacts.File
                       conditions: {logic_expression: is_business_or_enterprise}
                       file: files/application.enterprise.zip
+
+        gcp_runtime:
+            type: gcp.runtime
+            conditions: {logic_expression: is_business_or_enterprise}
+            properties:
+                auto_scaling: true
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
 
         gcp_database:
             type: gcp.database
@@ -190,6 +252,7 @@ topology_template:
             properties:
                 - instance_name: shop
                 - root_password: {get_input: db_password}
+                - backups: true
 
                 - availability_type:
                       conditions: {logic_expression: is_business}
@@ -217,6 +280,6 @@ topology_template:
             type: os.vm
             conditions: {logic_expression: is_community}
             properties:
-                port_one: 3000
-                port_two: 9100
+                port: 3000
                 machine_name: shop
+                flavor_name: 'm1.small'

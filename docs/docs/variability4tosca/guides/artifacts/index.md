@@ -1,22 +1,32 @@
 # Artifacts
 
-In the following, we provide a detailed step-by-step tutorial to deploy the enterprise variant of the shopping application to showcase conditional deployment artifacts and configurations.
+In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of the shopping application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
+The motivating scenario is a simple shopping application that consists of a shop component and a database. 
+Thereby, we take the role of a SaaS provider which offers different pricing plans to his customers.
+Furthermore, there are two different deployment artifacts: the community deployment artifact and the enterprise deployment artifact.
+The community deployment artifact implements the core functionality of the shop component whereas the enterprise deployment artifact additionally implements analytical reporting functionalities.
 
-!!! Warning "TODO"
-    - discuss each variant
-    - figures for each variant
+There is a free community plan that deploys the community deployment artifact along with SQLite on a small virtual machine.
+In contrast, the business plan is a paid plan that deploys the enterprise deployment artifact which contains analytical reporting functionalities along with MySQL on Google Cloud Platform (GCP).
+However, to have full access to all analytical reporting functionalities, the enterprise plan is required. 
+An important aspect of the deployment of the shop component is that the correct SQL dialect must be configured.
+
+<figure markdown>
+  ![Motivating Scenario](motivation.png){width="700"}
+  <figcaption>Figure 1: The available plans of our motivating scenario.</figcaption>
+</figure>
 
 ## Requirements
 
-You to fulfill the following requirements to follow this walkthrough.
+You need to fulfill the following requirements to follow this step-by-step tutorial.
 
-- Access to a GCP project
 - A machine having Ubuntu22.04 LTS installed
+- Ipv6 support, thus, WSL is no suitable
+- Access to a GCP project
+- Gcloud CLI installed on your machine
 - Git installed on your machine
-- Python3 installed on your machine
 - [Unfurl](https://github.com/onecommons/unfurl){target=_blank} installed on your machine
-- Terraform installed on your machine
-- Terraform is already authenticated
+- Terraform installed (and authenticated) on your machine
 
 ## Preparation
 
@@ -38,8 +48,11 @@ vintner orchestrators enable --orchestrator unfurl
 
 ## Import the Template
 
-!!! Warning "TODO"
-    - figures for vst
+<figure markdown>
+  ![Motivating Scenario](variable-service-template.png){width="700"}
+  <figcaption>Figure 2: The Variability4TOSCA service template (variable service template) of our motivating scenario.</figcaption>
+</figure>
+
 
 First, we clone the repository.
 --8<-- "clone.md"
@@ -56,7 +69,8 @@ vintner instances create --instance artifacts --template artifacts
 ```
 
 We can optionally inspect the variable service template.
-This template contains all possible elements having conditions assigned.
+This template contains all possible elements having conditions assigned, as presented in Figure 2.
+For example, the MySQL database has a condition assigned that checks if the enterprise deployment artifact is present.
 
 ```shell linenums="1"
 # (optional) Inspect variable service template
@@ -65,7 +79,8 @@ vintner templates inspect --template artifacts
 
 ## Resolve Variability
 
-We intend to deploy the enterprise variant of the application.
+We intend to deploy use the enterprise plan of the application.
+Furthermore, we want to configure the display language of the shop component to be German.
 Therefore, we need to resolve the variability by providing respective variability inputs.
 
 ```shell linenums="1"
@@ -74,7 +89,8 @@ vintner instances resolve --instance artifacts --inputs examples/unfurl-artifact
 ```
 
 You can optionally inspect the generated service template.
-This template contains only the nodes required for the enterprise variant.
+This template contains only the elements required for the enterprise plan.
+Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
 
 ```shell linenums="1"
 # (optional) Inspect service template
@@ -86,8 +102,8 @@ vintner instances inspect --instance artifacts
 
 Finally, we can deploy the application.
 Therefore, we need to provide deployment inputs.
-An example for the deployment inputs is given in [`examples/unfurl-artifacts/inputs.example.yaml`]({{ get_repo_url('examples/unfurl-artifacts/inputs.example.yaml') }}){target=_blank}.
-The deployment will take some minutes.
+An example for the deployment inputs is given in {{ repo_link('examples/unfurl-artifacts/deployment-inputs.example.yaml') }}.
+The deployment will take around 15-20 minutes.
 
 ```shell linenums="1"
 # Deploy instance
@@ -113,4 +129,3 @@ vintner instances delete --instance artifacts
 # (optional) Cleanup 
 vintner setup clean
 ```
-

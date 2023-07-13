@@ -37,6 +37,7 @@ import pumlTopologyTemplate from './template/puml/topology'
 import pumlTypesTemplate from './template/puml/types'
 import queryTemplate from './template/query'
 import resolveTemplate from './template/resolve'
+import statsTemplate from './template/stats'
 import testTemplate from './template/test'
 import unpackageTemplate from './template/unpackage'
 import codeTemplate from './templates/code'
@@ -94,6 +95,7 @@ const Controller = {
         query: queryTemplate,
         test: testTemplate,
         inputs: inputsTemplate,
+        stats: statsTemplate,
         puml: {
             topology: pumlTopologyTemplate,
             types: pumlTypesTemplate,

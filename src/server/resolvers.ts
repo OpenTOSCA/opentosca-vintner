@@ -77,6 +77,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/stats',
+    hae.express(async (req, res, next) => {
+        const stats = await Controller.template.stats(req.body)
+        res.json({stats})
+    })
+)
+
+resolvers.post(
     '/template/test',
     hae.express(async (req, res, next) => {
         await Controller.template.test(req.body)

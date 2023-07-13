@@ -13,11 +13,15 @@ node_types:
             availability_type:
                 type: string
 
+            backups:
+                type: boolean
+
             credentials:
                 type: string
                 default: {get_input: gcp_credentials}
 
             project:
+                type: string
                 default: {get_input: gcp_project}
 
             region:
@@ -50,6 +54,7 @@ node_types:
 
                         name = "{{ SELF.instance_name}}"
                         password = "{{ SELF.root_password }}"
+                        backups = {{ SELF.backups | lower }}
                         availability_type = "{{ SELF.availability_type }}"
                     main: |
                         terraform {
@@ -87,12 +92,30 @@ node_types:
                            type        = string
                          }                        
 
-                        variable "availability_type" {
+                         variable "availability_type" {
                            type        = string
+                         }
+
+                         variable "backups" {
+                           type        = bool
+                         }
+
+                         resource "google_project_service" "cloud_sql_component" {
+                           project  = var.project
+                           service = "sql-component.googleapis.com"
+                         }
+
+                         resource "google_project_service" "cloud_sql_admin" {
+                           depends_on = [ google_project_service.cloud_sql_component ]
+
+                           project  = var.project
+                           service = "sqladmin.googleapis.com"
                          }
 
                          # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
                          resource "google_sql_database_instance" "dbms" {
+                           depends_on = [ google_project_service.cloud_sql_admin ]
+
                            name             = var.name
                            database_version = "MYSQL_5_7"
                            root_password = var.password
@@ -104,8 +127,8 @@ node_types:
                              availability_type = var.availability_type
 
                              backup_configuration {
-                               enabled = true
-                               binary_log_enabled = true
+                               enabled = var.backups
+                               binary_log_enabled = var.backups
                              }
 
                              ip_configuration {
