@@ -1,5 +1,5 @@
 name: 'Operator "implies": false false -> true'
-description: 
--type default condition of nodes is enabled.
--The fuction "implies" evaluates the condition which is a list containing [false, false].
--The node "container" is present since the condition evaluates to true.
+description: |
+    - type default condition of nodes is enabled.
+    - The fuction "implies" evaluates the condition which is a list containing [false, false].
+    - The node "container" is present since the condition evaluates to true.

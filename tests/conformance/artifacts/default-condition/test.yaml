@@ -1,7 +1,7 @@
-description:
-     -type default condition of nodes is enabled.
-     -artifact_default_condition is enabled as true.
-     -In "node_one" there is one artifact named "artifact_two_one" with type "artifact".
-     -In "node_two" there is no artifact present.
-     -In node_one, "artifact_two_one" is absent since false is assigned as condition.
-     -"node_two" is present since node default condition is true.
+description: |
+    - type default condition of nodes is enabled.
+    - artifact_default_condition is enabled as true.
+    - In "node_one" there is one artifact named "artifact_two_one" with type "artifact".
+    - In "node_two" there is no artifact present.
+    - In node_one, "artifact_two_one" is absent since false is assigned as condition.
+    - "node_two" is present since node default condition is true.

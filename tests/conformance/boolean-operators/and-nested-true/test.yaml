@@ -1,7 +1,7 @@
 name: 'Operator "and"  Evaluates to "true" (Nested)'
-description: 
--type default condition of nodes is enabled.
--There is nested fuction "and" evaluating the condition such as-
-                1) the inner "and" evaluates list [true, true] to "true".
-                2) the outer "and" evaluates the result of 1) and "true" to true.
--The node "container" is present since the condition finally evaluates to true.
+description: |
+    - type default condition of nodes is enabled.
+    - There is nested fuction "and" evaluating the condition such as-
+    - the inner "and" evaluates list [true, true] to "true".
+    - the outer "and" evaluates the result of 1) and "true" to true.
+    - The node "container" is present since the condition finally evaluates to true.

@@ -1,2 +1,4 @@
 name: 'Operator "max_length" Evaluates to "true" (Less)'
-description: Assigns "true" to the property "value" of the node "container" since the parameter "hallo" has less than 6 characters.
+description: |
+    - The "max_length" operator evaluates the expression.
+    - Assigns "true" to the property "value" of the node "container" since the parameter "hallo" has less than 6 characters.

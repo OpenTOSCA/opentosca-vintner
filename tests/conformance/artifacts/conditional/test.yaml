@@ -1,11 +1,11 @@
-description:
-     -type default condition of nodes is enabled
-     -In "node_one" there are two artifacts named "artifact_one_one" with type "artifact_a" and "artifact_b".
-     -In "node_two" there is one artifacts named "artifact_two_one" with type "artifact".
-     -In "node_three" there is one artifact named "artifact_three_one" with type "artifact".
-     -In "node_four" there is one artifact named "artifact_three_one" with type "artifact".
-     -In node_one, "artifact_a" is present since true is assigned as condition.
-     -In node_one, "artifact_b" is absent since false is assigned as condition.
-     -In node_two, "artifact" is present since true is assigned as condition.
-     -In node_three, "artifact" is present since true is assigned as default condition.
-     -In node_four, "artifact" is absent since false is assigned as condition.
+description: |
+    - type default condition of nodes is enabled
+    - In "node_one" there are two artifacts named "artifact_one_one" with type "artifact_a" and "artifact_b".
+    - In "node_two" there is one artifacts named "artifact_two_one" with type "artifact".
+    - In "node_three" there is one artifact named "artifact_three_one" with type "artifact".
+    - In "node_four" there is one artifact named "artifact_three_one" with type "artifact".
+    - In node_one, "artifact_a" is present since true is assigned as condition.
+    - In node_one, "artifact_b" is absent since false is assigned as condition.
+    - In node_two, "artifact" is present since true is assigned as condition.
+    - In node_three, "artifact" is present since true is assigned as default condition.
+    - In node_four, "artifact" is absent since false is assigned as condition.

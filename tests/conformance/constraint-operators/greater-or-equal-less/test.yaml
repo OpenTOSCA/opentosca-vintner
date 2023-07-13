@@ -1,4 +1,4 @@
 name: 'Operator "greater_or_equal" Evaluates to "false" (Less)'
-description: 
--The "greater_or_equal" operator evaluates the expression.
--Assigns "false" to the property "value" of the node "container" since the first parameter is less than the second parameter.
+description: |
+    - The "greater_or_equal" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the first parameter is less than the second parameter.

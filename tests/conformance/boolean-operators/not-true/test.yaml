@@ -1,5 +1,5 @@
 name: 'Operator "not" Evaluates to "true"'
-description: 
--type default condition of nodes is enabled.
--The fuction "not" evaluates the condition which is complement of "false".
--The node "container" is present since the condition evaluates to true.
+description: |
+    - type default condition of nodes is enabled.
+    - The fuction "not" evaluates the condition which is complement of "false".
+    - The node "container" is present since the condition evaluates to true.

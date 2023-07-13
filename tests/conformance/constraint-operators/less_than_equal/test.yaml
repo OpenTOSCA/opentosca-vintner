@@ -1,2 +1,4 @@
 name: 'Operator "less" Evaluates to "false" (Equal)'
-description: Assigns "false" to the property "value" of the node "container" since both parameters are equal.
+description: |
+    - The "less" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since both parameters are equal.

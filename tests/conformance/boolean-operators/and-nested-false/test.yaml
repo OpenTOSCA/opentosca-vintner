@@ -1,7 +1,7 @@
 name: 'Operator "and" Evaluates to "false" (Nested)'
-description: 
--type default condition of nodes is enabled.
--There is nested fuction "and" evaluating the condition such as-
-                1) the inner "and" evaluates list [true, false] to "false".
-                2) the outer "and" evaluates the result of 1) and "true" to false.
--The node "container" is absent since the condition finally evaluates to false.
+description: |
+    - type default condition of nodes is enabled.
+    - There is nested fuction "and" evaluating the condition such as-
+    - the inner "and" evaluates list [true, false] to "false".
+    - the outer "and" evaluates the result of 1) and "true" to false.
+    - The node "container" is absent since the condition finally evaluates to false.

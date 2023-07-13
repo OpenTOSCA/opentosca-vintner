@@ -1,2 +1,4 @@
 name: 'Operator "greater" Evaluates to "true" (Greater)'
-description: Assigns "true" to the property "value" of the node "container" since the second parameter is greater than the first parameter.
+description: |
+    - The "greater" operator evaluates the expression.
+    - Assigns "true" to the property "value" of the node "container" since the second parameter is greater than the first parameter.

@@ -1,5 +1,5 @@
 name: 'Operator "and" Evaluates to "True" (Empty)'
-description: 
--type default condition of nodes is enabled.
--The fuction "and" evaluates the condition which is an empty list.
--The node "container" is present since the condition evaluates to true.
+description: |
+    - type default condition of nodes is enabled.
+    - The fuction "and" evaluates the condition which is an empty list.
+    - The node "container" is present since the condition evaluates to true.
