@@ -1,0 +1,3 @@
+description: |
+    - The "same" operator evaluates the expression.
+    - Assigns "true" to the property "value" of the node "container" since the first date is same as the second date.
