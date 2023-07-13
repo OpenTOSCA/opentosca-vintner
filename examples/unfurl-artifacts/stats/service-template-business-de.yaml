@@ -32,4 +32,5 @@ topology_template:
         gcp_dbms:
             type: gcp.dbms
             properties:
+                - backups: true
                 - availability_type: ZONAL

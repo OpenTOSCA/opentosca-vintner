@@ -13,6 +13,9 @@ node_types:
             availability_type:
                 type: string
 
+            backups:
+                type: boolean
+
             credentials:
                 type: string
                 default: {get_input: gcp_credentials}
@@ -88,8 +91,12 @@ node_types:
                            type        = string
                          }                        
 
-                        variable "availability_type" {
+                         variable "availability_type" {
                            type        = string
+                         }
+
+                         variable "backups" {
+                           type        = bool
                          }
 
                          # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
@@ -105,8 +112,8 @@ node_types:
                              availability_type = var.availability_type
 
                              backup_configuration {
-                               enabled = true
-                               binary_log_enabled = true
+                               enabled = var.backups
+                               binary_log_enabled = var.backups
                              }
 
                              ip_configuration {

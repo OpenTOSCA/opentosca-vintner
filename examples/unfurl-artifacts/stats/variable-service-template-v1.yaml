@@ -191,12 +191,14 @@ topology_template:
             type: gcp.dbms
             conditions: {logic_expression: is_business}
             properties:
+                - backups: true
                 - availability_type: ZONAL
 
         gcp_dbms_enterprise:
             type: gcp.dbms
             conditions: {logic_expression: is_enterprise}
             properties:
+                - backups: true
                 - availability_type: REGIONAL
 
         os_runtime:

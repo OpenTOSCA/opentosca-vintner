@@ -252,6 +252,7 @@ topology_template:
             properties:
                 - instance_name: shop
                 - root_password: {get_input: db_password}
+                - backups: true
 
                 - availability_type:
                       conditions: {logic_expression: is_business}
