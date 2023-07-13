@@ -34,11 +34,11 @@ export default async function (options: TemplateStatsOptions) {
                 relations: graph.relations.length,
                 properties: graph.properties.length,
                 types: graph.types.length,
-                policies: graph.types.length,
+                policies: graph.policies.length,
                 groups: graph.groups.length,
                 inputs: graph.inputs.length,
                 artifacts: graph.artifacts.length,
-                imports: graph.artifacts.length,
+                imports: graph.imports.length,
                 elements: graph.elements.length,
                 nrpa: graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length,
             }

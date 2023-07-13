@@ -3,15 +3,15 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     node_templates:
         shop:
-            type: node.app
+            type: shop.app
             properties:
                 - DB_DIALECT:
                       conditions: {node_presence: os_database}
-                      value: {get_property: [os_database, database_dialect]}
+                      value: sqlite
 
                 - DB_DIALECT:
                       conditions: {node_presence: gcp_database}
-                      value: {get_property: [gcp_database, database_dialect]}
+                      value: mysql
 
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_EN}

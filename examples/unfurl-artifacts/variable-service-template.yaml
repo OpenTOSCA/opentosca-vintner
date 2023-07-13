@@ -115,18 +115,23 @@ topology_template:
             properties:
                 - application_name: shop
 
+                ###################################################
+                #
                 # Database Connection
+                #
+                ###################################################
+
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: db_password}
 
                 - DB_DIALECT:
                       conditions: {node_presence: os_database}
-                      value: {get_property: [os_database, database_dialect]}
+                      value: sqlite
 
                 - DB_DIALECT:
                       conditions: {node_presence: gcp_database}
-                      value: {get_property: [gcp_database, database_dialect]}
+                      value: mysql
 
                 - DB_ADDRESS:
                       conditions: {node_presence: os_database}
@@ -136,7 +141,12 @@ topology_template:
                       conditions: {node_presence: gcp_dbms}
                       value: {get_attribute: [gcp_dbms, public_address]}
 
+                ###################################################
+                #
                 # Application Configuration
+                #
+                ###################################################
+
                 - APPLICATION_LANGUAGE:
                       conditions: {logic_expression: is_EN}
                       value: EN
@@ -157,12 +167,16 @@ topology_template:
                       conditions: {logic_expression: is_enterprise}
                       value: true
 
-                # Deployment Mode
                 - deployment_mode:
                       conditions: {logic_expression: is_community}
                       value: OS
 
+                ###################################################
+                #
                 # GCP
+                #
+                ###################################################
+
                 - deployment_mode:
                       conditions: {logic_expression: is_business_or_enterprise}
                       value: GCP
@@ -183,7 +197,12 @@ topology_template:
                       conditions: {logic_expression: is_business_or_enterprise}
                       value: {get_property: [gcp_runtime, auto_scaling]}
 
+                ###################################################
+                #
                 # OS
+                #
+                ###################################################
+
                 - ssh_user:
                       conditions: {logic_expression: is_community}
                       value: {get_input: ssh_user}
@@ -216,8 +235,8 @@ topology_template:
                 auto_scaling: true
             capabilities:
                 endpoint:
-                  properties:
-                      connection: local
+                    properties:
+                        connection: local
 
         gcp_database:
             type: gcp.database

@@ -3,7 +3,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     node_templates:
         shop_business_de:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_business_de}
             properties:
                 - DB_DIALECT: mysql
@@ -22,7 +22,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         shop_business_en:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_business_en}
             properties:
                 - DB_DIALECT: mysql
@@ -41,7 +41,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         shop_business_es:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_business_es}
             properties:
                 - DB_DIALECT: mysql
@@ -60,7 +60,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         shop_community_de:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_community_de}
             properties:
                 - DB_DIALECT: sqlite
@@ -78,7 +78,7 @@ topology_template:
                       file: files/application.community.xz
 
         shop_community_en:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_community_en}
             properties:
                 - DB_DIALECT: sqlite
@@ -96,7 +96,7 @@ topology_template:
                       file: files/application.community.xz
 
         shop_community_es:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_community_es}
             properties:
                 - DB_DIALECT: sqlite
@@ -114,7 +114,7 @@ topology_template:
                       file: files/application.community.xz
 
         shop_enterprise_de:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_enterprise_de}
             properties:
                 - DB_DIALECT: mysql
@@ -133,7 +133,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         shop_enterprise_en:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_enterprise_en}
             properties:
                 - DB_DIALECT: mysql
@@ -152,7 +152,7 @@ topology_template:
                       file: files/application.enterprise.zip
 
         shop_enterprise_es:
-            type: node.app
+            type: shop.app
             conditions: {logic_expression: is_enterprise_es}
             properties:
                 - DB_DIALECT: mysql

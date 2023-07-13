@@ -3,10 +3,10 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     node_templates:
         shop:
-            type: node.app
+            type: shop.app
             properties:
                 - DB_DIALECT: sqlite
-                - APPLICATION_LANGUAGE: DE
+                - APPLICATION_LANGUAGE: EN
             requirements:
                 - host:
                       node: os_runtime

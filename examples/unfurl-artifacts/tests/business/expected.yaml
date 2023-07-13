@@ -45,7 +45,7 @@ topology_template:
                 DB_NAME: shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: db_password}
-                DB_DIALECT: {get_property: [gcp_database, database_dialect]}
+                DB_DIALECT: mysql
                 DB_ADDRESS: {get_attribute: [gcp_dbms, public_address]}
 
                 APPLICATION_LANGUAGE: DE

@@ -69,7 +69,7 @@ topology_template:
                 DB_NAME: shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: db_password}
-                DB_DIALECT: {get_property: [os_database, database_dialect]}
+                DB_DIALECT: sqlite
                 DB_ADDRESS: {get_attribute: [os_database, public_address]}
 
                 APPLICATION_LANGUAGE: DE
