@@ -70,8 +70,9 @@ topology_template:
             properties:
                 auto_scaling: true
             capabilities:
-                properties:
-                    connection: local
+                endpoint:
+                    properties:
+                        connection: local
 
         gcp_database:
             type: gcp.database

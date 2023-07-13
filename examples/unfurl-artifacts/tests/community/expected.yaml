@@ -30,7 +30,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--laptop-default
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -100,7 +100,6 @@ topology_template:
         os_vm:
             type: os.vm
             properties:
-                port_one: 3000
-                port_two: 9100
+                port: 3000
                 machine_name: shop
                 flavor_name: 'm1.small'
