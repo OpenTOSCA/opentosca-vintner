@@ -11,36 +11,41 @@
 [![OpenTOSCA](https://img.shields.io/badge/OpenTOSCA-%E2%9D%A4%EF%B8%8F-ff69b4)](https://opentosca.org)
 [![MiniSat](https://img.shields.io/badge/MiniSat-%E2%9D%A4%EF%B8%8F-ff69b4)](https://github.com/meteor/logic-solver)
 
-OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
-Preprocessing includes, e.g., the resolving of variability.
+## Getting Started
+
+**OpenTOSCA Vintner** is a **TOSCA preprocessing and management layer** which is able to deploy applications based on TOSCA orchestrator plugins.
+Preprocessing includes, e.g., the resolving of **variability**.
 
 - [Documentation](https://vintner.opentosca.org)
 - [Getting Started](https://vintner.opentosca.org/getting-started)
 - [CLI Documentation](https://vintner.opentosca.org/interface)
 - [REST API Documentation](https://vintner.opentosca.org/interface)
 
-This repository holds the following specifications and profiles. 
+## Specifications
+
+This repository holds the following **specifications** and **profiles**. 
 
 - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca/motivation)
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
-# Step-by-Step Guides
+## Step-by-Step Guides
 
-This repository holds the step-by-step guides of the following publications.
+This repository holds the **step-by-step guides** of the following publications.
 
-## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
+### Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies (CoopIS 2023)
 
-- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/motivation
-- Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
-- Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
-
-
-## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
-
-- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/guides/artifacts/
+- Publication: _Currently under Review_ 
+- Guide: https://vintner.opentosca.org/variability4tosca/guides/artifacts/
 - Model of the motivating scenario https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts
 - Models of the complexity evaluation: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats
+
+### Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model (Algorithms 2022)
+
+- Publication: https://doi.org/10.3390/a15100382
+- Guide: https://vintner.opentosca.org/variability4tosca/motivation
+- Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
+- Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
 
 # Haftungsausschluss
 

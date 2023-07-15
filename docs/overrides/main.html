@@ -1,3 +1,11 @@
-{% extends "base.html" %} {% block extrahead %}
+{% extends "base.html" %}
+
+{% block extrahead %}
 <script src="{{ 'assets/javascripts/asciinema-player.min.js' | url }}"></script>
+{% endblock %}
+
+{% block announce %}
+<div style="text-align: center">
+    Check out the <a href="{{ 'variability4tosca/guides/artifacts' | url }}" title='CoopIS 2023 Step-by-Step Guide'>step-by-step guide</a> for the publication submitted at <em>CoopIS 2023</em> &#128293;&#128293;&#128293;
+</div>
 {% endblock %}

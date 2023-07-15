@@ -1,4 +1,4 @@
-# Artifacts
+# Conditional Deployment Artifacts and Conditional Properties
 
 In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of the shopping application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
 The motivating scenario is a simple shopping application that consists of a shop component and a database. 
@@ -129,3 +129,9 @@ vintner instances delete --instance artifacts
 # (optional) Cleanup 
 vintner setup clean
 ```
+
+
+## Publication
+
+This guide is part of our submission to the CoopIS 2023 which is currently under review.
+Also check our other [publications](../../publications.md){target=_blank}.
