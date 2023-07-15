@@ -240,11 +240,13 @@ node_types:
                                   file:
                                       path: '/etc/systemd/system/{{ SELF.application_name }}.service'
                                       state: absent
+                                  become: true
                                   when: SELF.deployment_mode == "OS"
 
                                 - name: Reload daemon
                                   systemd:
                                       daemon_reload: true
+                                  become: true
                                   when: SELF.deployment_mode == "OS"
 
                                 - name: delete application directory
