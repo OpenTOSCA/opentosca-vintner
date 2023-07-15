@@ -36,16 +36,16 @@ This repository holds the **step-by-step guides** of the following publications.
 ### Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies (CoopIS 2023)
 
 - Publication: _Currently under Review_ 
-- [Step-by-Step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
-- [Model of the motivating scenario](examples/unfurl-artifacts)
-- [Models of the complexity evaluation](examples/unfurl-artifacts/stats)
+- [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
+- [Model of the Motivating Scenario](examples/unfurl-artifacts)
+- [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
 ### Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model (Algorithms 2022)
 
 - Publication: https://doi.org/10.3390/a15100382
-- [Step-by-Step guide](https://vintner.opentosca.org/variability4tosca/motivation)
-- [Model of the motivating scenario using Unfurl](examples/unfurl-motivation)
-- [Model of the motivating scenario using xOpera](examples/xopera-motivation)
+- [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
+- [Model of the Motivating Scenario using Unfurl](examples/unfurl-motivation)
+- [Model of the Motivating Scenario using xOpera](examples/xopera-motivation)
 
 # Haftungsausschluss
 
