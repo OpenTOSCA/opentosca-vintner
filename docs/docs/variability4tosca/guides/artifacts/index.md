@@ -134,4 +134,4 @@ vintner setup clean
 ## Publication
 
 This guide is part of our submission to the CoopIS 2023 which is currently under review.
-Also check our other [publications](../../publications.md){target=_blank}.
+Also check our other [publications](../../../publications.md){target=_blank}.
