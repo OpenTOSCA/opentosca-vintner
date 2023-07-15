@@ -25,6 +25,24 @@ This repository holds the following specifications and profiles.
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
+# Step-by-Step Guides
+
+This repository holds the step-by-step guides of the following publications.
+
+## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
+
+
+- Step-by-Step Guide: https://vintner.opentosca.org/variability4tosca/motivation
+- Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
+- Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
+
+
+## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
+
+- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/guides/artifacts/
+- Model of the motivating scenario https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts
+- Models of the complexity evaluation: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats
+
 # Haftungsausschluss
 
 Dies ist ein Forschungsprototyp. Die Haftung für entgangenen Gewinn, Produktionsausfall, Betriebsunterbrechung,
