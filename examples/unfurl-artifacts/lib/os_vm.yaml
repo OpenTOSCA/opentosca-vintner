@@ -59,7 +59,7 @@ node_types:
                     delete:
             defaults:
                 outputs:
-                    public_ip: public_address
+                    public_ip: public_ip
                     public_address: public_address
                 inputs:
                     tfvars: |
