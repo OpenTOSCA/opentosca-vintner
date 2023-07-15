@@ -31,8 +31,7 @@ This repository holds the step-by-step guides of the following publications.
 
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
 
-
-- Step-by-Step Guide: https://vintner.opentosca.org/variability4tosca/motivation
+- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/motivation
 - Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
 - Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
 
