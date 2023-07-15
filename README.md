@@ -13,7 +13,7 @@
 
 ## Getting Started
 
-**OpenTOSCA Vintner** is a **TOSCA preprocessing and management layer** which is able to deploy applications based on TOSCA orchestrator plugins.
+OpenTOSCA Vintner is a **TOSCA preprocessing and management layer** which is able to deploy applications based on TOSCA orchestrator plugins.
 Preprocessing includes, e.g., the resolving of **variability**.
 
 - [Documentation](https://vintner.opentosca.org)
@@ -36,16 +36,16 @@ This repository holds the **step-by-step guides** of the following publications.
 ### Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies (CoopIS 2023)
 
 - Publication: _Currently under Review_ 
-- Guide: https://vintner.opentosca.org/variability4tosca/guides/artifacts/
-- Model of the motivating scenario https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts
-- Models of the complexity evaluation: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats
+- [Step-by-Step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
+- [Model of the motivating scenario](examples/unfurl-artifacts)
+- [Models of the complexity evaluation](examples/unfurl-artifacts/stats)
 
 ### Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model (Algorithms 2022)
 
 - Publication: https://doi.org/10.3390/a15100382
-- Guide: https://vintner.opentosca.org/variability4tosca/motivation
-- Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
-- Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
+- [Step-by-Step guide](https://vintner.opentosca.org/variability4tosca/motivation)
+- [Model of the motivating scenario using Unfurl](examples/unfurl-motivation)
+- [Model of the motivating scenario using xOpera](examples/xopera-motivation)
 
 # Haftungsausschluss
 
