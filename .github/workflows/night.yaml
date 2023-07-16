@@ -115,7 +115,6 @@ jobs:
             ###################################################
 
             - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
-              id: xopera-motivation-deploy
               run: |
                   vintner setup clean
                   vintner setup init
@@ -127,17 +126,16 @@ jobs:
                   vintner instances create --instance motivation --template motivation
                   vintner instances resolve --instance motivation --presets prod
 
-                  cp examples/xopera-motivation/inputs.ignored.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  cp examples/xopera-motivation/inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
                   sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
 
             - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
-              id: xopera-motivation-attest
               run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
               run: vintner instances undeploy --instance motivation
-              if: steps['xopera-motivation-deploy'].outcome == 'success' || steps['xopera-motivation-deploy'].outcome == 'failure' || steps['xopera-motivation-attest'].outcome == 'success' || steps['xopera-motivation-attest'].outcome == 'failure'
+              if: always()
 
             ###################################################
             #
@@ -146,7 +144,6 @@ jobs:
             ###################################################
 
             - name: (UNFURL-ARTIFACTS) Deploy the enterprise plan of unfurl-artifacts on GCP
-              id: unfurl-artifacts-deploy
               run: |
                   vintner setup clean
                   vintner setup init
@@ -162,9 +159,8 @@ jobs:
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
 
             - name: (UNFURL-ARTIFACTS) Test the enterprise plan of unfurl-artifacts on GCP
-              id: unfurl-artifacts-attest
               run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
-              if: steps['unfurl-artifacts-deploy'].outcome == 'success' || steps['unfurl-artifacts-deploy'].outcome == 'failure' || steps['unfurl-artifacts-attest'].outcome == 'success' || steps['unfurl-artifacts-attest'].outcome == 'failure'
+              if: always()
