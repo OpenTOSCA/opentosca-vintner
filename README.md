@@ -1,5 +1,6 @@
 # OpenTOSCA Vintner
 
+> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#step-by-step-guides).
 
 [![release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://www.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OpenTOSCA/opentosca-vintner&amp;utm_campaign=Badge_Grade)
@@ -25,22 +26,22 @@ This repository holds the following specifications and profiles.
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
-# Step-by-Step Guides
-
 This repository holds the step-by-step guides of the following publications.
 
-## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
+- **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
+  - CoopIS 2023
+  - _Currently under Review_
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
+  - [Model of the Motivating Scenario](examples/unfurl-artifacts)
+  - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
-- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/motivation
-- Model of the motivating scenario using Unfurl: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-motivation
-- Model of the motivating scenario using xOpera: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation
 
-
-## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
-
-- Step-by-Step guide: https://vintner.opentosca.org/variability4tosca/guides/artifacts/
-- Model of the motivating scenario https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts
-- Models of the complexity evaluation: https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats
+- **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**
+  - Algorithms 2022
+  - https://doi.org/10.3390/a15100382
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
+  - [Model of the Motivating Scenario using Unfurl](examples/unfurl-motivation)
+  - [Model of the Motivating Scenario using xOpera](examples/xopera-motivation)
 
 # Haftungsausschluss
 

@@ -1,5 +1,8 @@
 # Pipes and Filters Application
 
+!!! Warning
+    This document presents experimental features and is still in an early stage.
+
 In the following, we provide a detailed step-by-step tutorial to deploy the Raspberry Pi variant of the pipes-and-filters application to showcase conditional deployment artifacts and properties.
 The application can be either installed on a Raspberry Pi or on a virtual machine. 
 Based on the underlying host, either an arm64 or x64 binary must be used. 
