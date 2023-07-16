@@ -133,10 +133,10 @@ jobs:
 
             - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
               id: xopera-motivation-attest
-              run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
-              run: vintner instances undeploy --instance artifacts
+              run: vintner instances undeploy --instance motivation
               if: steps['xopera-motivation-deploy'].outcome == 'success' || steps['xopera-motivation-deploy'].outcome == 'failure' || steps['xopera-motivation-attest'].outcome == 'success' || steps['xopera-motivation-attest'].outcome == 'failure'
 
             ###################################################
