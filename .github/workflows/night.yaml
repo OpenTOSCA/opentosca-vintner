@@ -109,8 +109,9 @@ jobs:
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
 
             - name: (EXAMPLES) Test the enterprise plan of unfurl-artifacts on GCP
+              id: unfurl-artifacts-attest
               run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (EXAMPLES) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
-              if: failure() && (steps['unfurl-artifacts-deploy'].outcome == 'failure' || steps['unfurl-artifacts-deploy'].outcome == 'success')
+              if: steps['unfurl-artifacts-deploy'].outcome == 'success' || steps['unfurl-artifacts-deploy'].outcome == 'failure' || steps['unfurl-artifacts-attest'].outcome == 'success' || steps['unfurl-artifacts-attest'].outcome == 'failure'
