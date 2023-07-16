@@ -2,7 +2,7 @@ name: Night
 on:
     workflow_dispatch:
     schedule:
-        - cron: '20 4 * * *'
+        - cron: '20 4 * * 2'
     push:
         branches:
             - fix/night-workflow
@@ -14,6 +14,8 @@ jobs:
         steps:
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
+              with:
+                  lfs: true
 
             - name: (PREPARE) Setup Git
               run: |
@@ -94,6 +96,7 @@ jobs:
             # GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
             # See https://github.com/actions/runner-images/issues/668
             - name: (EXAMPLES) Deploy the enterprise plan of unfurl-artifacts on GCP
+              id: unfurl-artifacts-deploy
               run: |
                   vintner orchestrators init unfurl
                   vintner orchestrators enable --orchestrator unfurl
@@ -110,4 +113,4 @@ jobs:
 
             - name: (EXAMPLES) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
-              if: always()
+              if: failure() && (steps['unfurl-artifacts-deploy']outcome == 'failure' || steps['unfurl-artifacts-deploy']outcome == 'success')
