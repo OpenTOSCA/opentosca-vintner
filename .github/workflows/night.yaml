@@ -18,10 +18,28 @@ jobs:
             - name: (PREPARE) Setup gcloud CLI
               uses: google-github-actions/setup-gcloud@v1
 
-            - name: (PREPARE) Setup GCP credentialsGCP
-              run: echo ${GCP_CREDENTIALS} | base64 --decode > gcp-credentials.json
+            - name: (PREPARE) Setup GCP credentials
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
+                      require('fs')
+                        .writeFileSync('gcp-credentials.json', 
+                            new Buffer
+                                .from(process.env.GCP_CREDENTIALS, 'base64')
+                                .toString('utf-8')
+                        )
               env:
-                  GCP_CREDENTIALS: ${{ secrets.GITHUB_TOKEN }}
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+            - name: (PREPARE) Setup Terraform
+              run: |
+                  mkdir ~/terraform.d
+                  echo 'credentials "app.terraform.io" {' >> ~/terraform.d/.terraformrc
+                  echo '  token = "${TERRAFORM_API_TOKEN}"' >> ~/terraform.d/.terraformrc
+                  echo '}' >> ~/terraform.d/.terraformrc
+              env:
+                  TERRAFORM_API_TOKEN: ${{ secrets.TERRAFORM_API_TOKEN }}
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
