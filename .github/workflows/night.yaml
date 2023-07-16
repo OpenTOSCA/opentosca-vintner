@@ -8,22 +8,67 @@ on:
             - fix/night-workflow
 
 jobs:
-    release:
-        name: Release
+    night:
+        name: Night
         runs-on: ubuntu-22.04
         steps:
-            - name: (INSTALLATION) Install vintner
-              run: |
-                  curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+            - name: (PREPARE) Checkout Repository
+              uses: actions/checkout@v3
 
-            - name: (VERIFY) Verify signature
+            - name: (PREPARE) Setup gcloud CLI
+              uses: google-github-actions/setup-gcloud@v1
+
+            - name: (PREPARE) Setup GCP credentialsGCP
+              run: echo ${GCP_CREDENTIALS} | base64 --decode > gcp-credentials.json
+              env:
+                  GCP_CREDENTIALS: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: (PREPARE) Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.x
+                  cache: pip
+
+            - name: (PREPARE) Install xOpera
+              run: pip install opera
+
+            - name: (PREPARE) Install Unfurl
+              run: |
+                  pip install unfurl[full]
+                  unfurl home --init
+
+            - name: (INSTALLATION) Install vintner
+              run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+
+            - name: (INSTALLATION) Verify signature
               run: |
                   curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
                   gpg --verify vintner-linux-x64.asc /usr/bin/vintner
 
-            - name: (SETUP) Test setup
+            - name: (INSTALLATION) Test setup
               run: |
                   vintner --version
                   vintner setup init
                   vintner setup benchmark --seeds 10 250
+
+            # GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
+            # See https://github.com/actions/runner-images/issues/668
+            - name: (EXAMPLES) Deploy the enterprise plan of unfurl-artifacts on GCP
+              run: |
+                  vintner orchestrators init unfurl
+                  vintner orchestrators enable --orchestrators unfurl
+
+                  vintner templates import --template artifacts --path examples/unfurl-artifacts
+                  vintner instances create --instance artifacts --template artifacts
+                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+
+                  echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+
+            - name: (EXAMPLES) Test the enterprise plan of unfurl-artifacts on GCP
+              run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (EXAMPLES) Undeploy the enterprise plan of unfurl-artifacts on GCP
+              run: vintner instances undeploy --instance artifacts
+              if: always()
