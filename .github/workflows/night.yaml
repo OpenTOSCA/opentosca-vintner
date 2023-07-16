@@ -42,7 +42,8 @@ jobs:
                       if (!process.env.TERRAFORM_API_TOKEN) throw 'TERRAFORM_TOKEN undefined'
                       const fs = require('fs')
                       const path = require('path')
-                      const file = path.resolve(process.env.HOME, '.terraform.d', 'credentials.tfrc.json')
+                      const dir = path.resolve(process.env.HOME, '.terraform.d')
+                      const file = path.resolve(dir, 'credentials.tfrc.json')
                       const content = JSON.stringify({
                           "credentials": {
                             "app.terraform.io": {
@@ -50,6 +51,7 @@ jobs:
                             }
                           }
                       }, null, 4)
+                      fs.mkdirSync(dir)
                       fs.writeFileSync(file, content)
               env:
                   TERRAFORM_API_TOKEN: ${{ secrets.TERRAFORM_API_TOKEN }}
