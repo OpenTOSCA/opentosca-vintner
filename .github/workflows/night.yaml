@@ -15,6 +15,11 @@ jobs:
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
 
+            - name: (PREPARE) Setup Git
+              run: |
+                  git config --global user.name "${GITHUB_ACTOR}"
+                  git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
+
             - name: (PREPARE) Setup gcloud CLI
               uses: google-github-actions/setup-gcloud@v1
 
@@ -23,21 +28,29 @@ jobs:
               with:
                   script: |
                       if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
-                      require('fs')
-                        .writeFileSync('gcp-credentials.json', 
-                            new Buffer
-                                .from(process.env.GCP_CREDENTIALS, 'base64')
-                                .toString('utf-8')
-                        )
+                      const fs = require('fs')
+                      const file = 'gcp-credentials.json'
+                      const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
+                      fs.writeFileSync(file, content)
               env:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
             - name: (PREPARE) Setup Terraform
-              run: |
-                  mkdir ~/terraform.d
-                  echo 'credentials "app.terraform.io" {' >> ~/terraform.d/.terraformrc
-                  echo '  token = "${TERRAFORM_API_TOKEN}"' >> ~/terraform.d/.terraformrc
-                  echo '}' >> ~/terraform.d/.terraformrc
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      if (!process.env.TERRAFORM_API_TOKEN) throw 'TERRAFORM_TOKEN undefined'
+                      const fs = require('fs')
+                      const path = require('path')
+                      const file = path.resolve(process.env.HOME, '.terraform.d', 'credentials.tfrc.json')
+                      const content = JSON.stringify({
+                          "credentials": {
+                            "app.terraform.io": {
+                                "token": process.env.TERRAFORM_API_TOKEN
+                            }
+                          }
+                      }, null, 4)
+                      fs.writeFileSync(file, content)
               env:
                   TERRAFORM_API_TOKEN: ${{ secrets.TERRAFORM_API_TOKEN }}
 
