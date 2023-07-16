@@ -38,7 +38,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: pip install opera
+              run: pip install opera==0.6.9
 
             - name: (TEST) Check ESLint
               run: yarn lint:check

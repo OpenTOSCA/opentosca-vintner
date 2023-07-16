@@ -63,12 +63,18 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: pip install opera
+              run: pip install opera==0.6.9
+
+            - name: (PREPARE) Cache Unfurl
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/.unfurl_home
+                  key: unfurl-home
 
             - name: (PREPARE) Install Unfurl
               run: |
-                  pip install unfurl[full]
-                  unfurl home --init
+                  pip install unfurl==0.7.1
+                  yes | unfurl home --init
 
             - name: (INSTALLATION) Install vintner
               run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
