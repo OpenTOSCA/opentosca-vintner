@@ -12,11 +12,7 @@
 
       # https://cloud.google.com/sql/docs/mysql/create-instance
       - name: Create Instance
-        shell: 'gcloud sql instances create {{ instance_name }} --tier {{ instance_tier }} --region {{ region }} --database-version={{ database_version }} --authorized-networks {{ authorized_networks }} --async'
-        register: create_command
-
-      - name: Wait until instance is created
-        shell: 'gcloud beta sql operations wait {{ (create_command.stdout | from_yaml).name }}'
+        shell: 'gcloud sql instances create {{ instance_name }} --tier {{ instance_tier }} --region {{ region }} --database-version={{ database_version }} --authorized-networks {{ authorized_networks }} --timeout unlimited'
 
       # https://cloud.google.com/sql/docs/mysql/create-instance
       - name: Set Root Password

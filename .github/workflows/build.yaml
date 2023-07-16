@@ -7,6 +7,12 @@ jobs:
         name: Build
         runs-on: ubuntu-22.04
         steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
             - name: (PREPARE) Set up QEMU
               uses: docker/setup-qemu-action@v2
 
@@ -21,6 +27,12 @@ jobs:
 
             - name: (PREPARE) Install Dependencies
               run: rm -rf node_modules && yarn --frozen-lockfile
+
+            ###################################################
+            #
+            # Build
+            #
+            ###################################################
 
             - name: (BUILD) Build Project
               run: yarn build
@@ -57,6 +69,12 @@ jobs:
                   do 
                     tar -cJf ${BINARY}.xz ${BINARY}             
                   done
+
+            ###################################################
+            #
+            # Release
+            #
+            ###################################################
 
             - name: (RELEASE) Delete Build Release
               run: gh release delete build-${GITHUB_SHA} || true

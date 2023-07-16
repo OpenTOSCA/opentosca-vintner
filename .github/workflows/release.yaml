@@ -11,6 +11,12 @@ jobs:
         name: Release
         runs-on: ubuntu-22.04
         steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
             - name: (PREPARE) Set up QEMU
               uses: docker/setup-qemu-action@v2
 
@@ -40,6 +46,12 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: pip install opera==0.6.9
 
+            ###################################################
+            #
+            # Test
+            #
+            ###################################################
+
             - name: (TEST) Check ESLint
               run: yarn lint:check
 
@@ -54,6 +66,12 @@ jobs:
 
             - name: (TEST) Run Tests
               run: yarn test
+
+            ###################################################
+            #
+            # Build
+            #
+            ###################################################
 
             - name: (BUILD) Build Project
               run: yarn build
@@ -91,6 +109,12 @@ jobs:
                     tar -cJf ${BINARY}.xz ${BINARY}             
                   done
 
+            ###################################################
+            #
+            # Release
+            #
+            ###################################################
+
             - name: (RELEASE) Delete Latest Release
               run: gh release delete latest || true
               env:
@@ -125,6 +149,12 @@ jobs:
               run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            ###################################################
+            #
+            # Docs
+            #
+            ###################################################
 
             - name: (DOCS) Setup Git
               run: |
