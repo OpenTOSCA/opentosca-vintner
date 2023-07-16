@@ -90,7 +90,7 @@ jobs:
             - name: (EXAMPLES) Deploy the enterprise plan of unfurl-artifacts on GCP
               run: |
                   vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrators unfurl
+                  vintner orchestrators enable --orchestrator unfurl
 
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
                   vintner instances create --instance artifacts --template artifacts
