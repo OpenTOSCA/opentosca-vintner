@@ -101,8 +101,6 @@ node_types:
                          }
 
                          resource "google_project_service" "cloud_sql_admin" {
-                           depends_on = [ google_project_service.cloud_sql_component ]
-
                            project  = var.project
                            service = "sqladmin.googleapis.com"
                          }
