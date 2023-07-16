@@ -1,5 +1,6 @@
 # OpenTOSCA Vintner
 
+> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at CoopIS 2023. Additional links are [below](#step-by-step-guides).
 
 [![release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://www.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OpenTOSCA/opentosca-vintner&amp;utm_campaign=Badge_Grade)
@@ -11,10 +12,10 @@
 [![OpenTOSCA](https://img.shields.io/badge/OpenTOSCA-%E2%9D%A4%EF%B8%8F-ff69b4)](https://opentosca.org)
 [![MiniSat](https://img.shields.io/badge/MiniSat-%E2%9D%A4%EF%B8%8F-ff69b4)](https://github.com/meteor/logic-solver)
 
-## Getting Started
+## Overview 
 
-OpenTOSCA Vintner is a **TOSCA preprocessing and management layer** which is able to deploy applications based on TOSCA orchestrator plugins.
-Preprocessing includes, e.g., the resolving of **variability**.
+OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
+Preprocessing includes, e.g., the resolving of variability.
 
 - [Documentation](https://vintner.opentosca.org)
 - [Getting Started](https://vintner.opentosca.org/getting-started)
@@ -23,7 +24,7 @@ Preprocessing includes, e.g., the resolving of **variability**.
 
 ## Specifications
 
-This repository holds the following **specifications** and **profiles**. 
+This repository holds the following specifications and profiles. 
 
 - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca/motivation)
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
@@ -31,21 +32,22 @@ This repository holds the following **specifications** and **profiles**.
 
 ## Step-by-Step Guides
 
-This repository holds the **step-by-step guides** of the following publications.
+This repository holds the step-by-step guides of the following publications.
 
-### Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies (CoopIS 2023)
+- **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
+  - CoopIS 2023
+  - _Currently under Review_
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
+  - [Model of the Motivating Scenario](examples/unfurl-artifacts)
+  - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
-- Publication: _Currently under Review_ 
-- [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
-- [Model of the Motivating Scenario](examples/unfurl-artifacts)
-- [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
-### Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model (Algorithms 2022)
-
-- Publication: https://doi.org/10.3390/a15100382
-- [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
-- [Model of the Motivating Scenario using Unfurl](examples/unfurl-motivation)
-- [Model of the Motivating Scenario using xOpera](examples/xopera-motivation)
+- **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**
+  - Algorithms 2022
+  - https://doi.org/10.3390/a15100382
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
+  - [Model of the Motivating Scenario using Unfurl](examples/unfurl-motivation)
+  - [Model of the Motivating Scenario using xOpera](examples/xopera-motivation)
 
 # Haftungsausschluss
 
