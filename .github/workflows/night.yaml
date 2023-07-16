@@ -23,11 +23,12 @@ jobs:
 
             - name: (VERIFY) Verify signature
               run: |
-                  curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
-                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+                  tar -xf vintner-linux-x64.xz
 
+                  curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
                   gpg --verify vintner-linux-x64.asc
 
-                  rm vintner-linux-x64.xz.asc
                   rm vintner-linux-x64.xz
+                  rm vintner-linux-x64.asc
