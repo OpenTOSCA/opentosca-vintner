@@ -119,7 +119,7 @@ jobs:
                   vintner setup clean
                   vintner setup init
 
-                  vintner orchestrators init xopera
+                  vintner orchestrators init xopera --venv false --dir false
                   vintner orchestrators enable --orchestrator xopera
 
                   vintner templates import --template motivation --path examples/xopera-motivation
