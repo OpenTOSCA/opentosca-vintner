@@ -1,0 +1,33 @@
+name: Night
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '20 4 * * *'
+    push:
+        branches:
+            - fix/night-workflow
+
+jobs:
+    release:
+        name: Release
+        runs-on: ubuntu-22.04
+        steps:
+            - name: (INSTALLATION) Install vintner
+              run: |
+                  curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+                  vintner setup init
+                  vintner --version
+
+            - name: (BENCHMARK) Run benchmark
+              run: vintner setup benchmark --seeds 10 250
+
+            - name: (VERIFY) Verify signature
+              run: |
+                  curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+
+                  gpg --verify vintner-linux-x64.asc
+
+                  rm vintner-linux-x64.xz.asc
+                  rm vintner-linux-x64.xz
