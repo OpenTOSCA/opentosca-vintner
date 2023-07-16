@@ -113,4 +113,4 @@ jobs:
 
             - name: (EXAMPLES) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
-              if: failure() && (steps['unfurl-artifacts-deploy']outcome == 'failure' || steps['unfurl-artifacts-deploy']outcome == 'success')
+              if: failure() && (steps['unfurl-artifacts-deploy'].outcome == 'failure' || steps['unfurl-artifacts-deploy'].outcome == 'success')
