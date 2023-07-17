@@ -11,6 +11,9 @@ topology_template:
         release:
             type: string
 
+        gcp_project:
+            type: string
+
         gcp_region:
             type: string
 
