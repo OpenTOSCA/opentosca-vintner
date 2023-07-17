@@ -46,6 +46,10 @@ Branches should be names as follows
 Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
 The commit message should not have a link to the merge request.
 
+## GitHub Flow 
+
+Our branching workflow follows [GitHub Flow](https://docs.github.com/de/get-started/quickstart/github-flow){target=_blank}.
+
 ## Signed Commits
 
 Commits are required to be signed.
@@ -389,3 +393,8 @@ Thereby, an existing release and `latest` tag is deleted.
 There is only one release at total.
 During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
 The current version can be checked using `vintner --version`.
+
+## Night
+
+Every night, the `night` workflow is scheduled.
+This workflow ensures that the latest release is correctly signed and can be executed.

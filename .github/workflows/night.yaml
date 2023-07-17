@@ -1,0 +1,169 @@
+# GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
+# See https://github.com/actions/runner-images/issues/668
+
+name: Night
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '20 4 * * 2'
+    push:
+        branches:
+            - fix/night-workflow
+
+concurrency: night
+jobs:
+    night:
+        name: Night
+        runs-on: ubuntu-22.04
+        steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
+            - name: (PREPARE) Checkout Repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Setup Git
+              run: |
+                  git config --global user.name "${GITHUB_ACTOR}"
+                  git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
+
+            - name: (PREPARE) Setup gcloud CLI
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: 438.0.0
+
+            - name: (PREPARE) Setup GCP credentials
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
+                      const fs = require('fs')
+                      const file = 'gcp-credentials.json'
+                      const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
+                      fs.writeFileSync(file, content)
+              env:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+            - name: (PREPARE) Setup Terraform
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      if (!process.env.TERRAFORM_API_TOKEN) throw 'TERRAFORM_TOKEN undefined'
+                      const fs = require('fs')
+                      const path = require('path')
+                      const dir = path.resolve(process.env.HOME, '.terraform.d')
+                      const file = path.resolve(dir, 'credentials.tfrc.json')
+                      const content = JSON.stringify({
+                          "credentials": {
+                            "app.terraform.io": {
+                                "token": process.env.TERRAFORM_API_TOKEN
+                            }
+                          }
+                      }, null, 4)
+                      fs.mkdirSync(dir)
+                      fs.writeFileSync(file, content)
+              env:
+                  TERRAFORM_API_TOKEN: ${{ secrets.TERRAFORM_API_TOKEN }}
+
+            - name: (PREPARE) Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.x
+                  cache: pip
+
+            - name: (PREPARE) Install xOpera
+              run: pip install opera==0.6.9
+
+            - name: (PREPARE) Cache Unfurl
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/.unfurl_home
+                  key: unfurl-home
+
+            - name: (PREPARE) Install Unfurl
+              run: |
+                  pip install unfurl==0.7.1
+                  yes | unfurl home --init
+
+            ###################################################
+            #
+            # Installation
+            #
+            ###################################################
+
+            - name: (INSTALLATION) Install vintner
+              run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+
+            - name: (INSTALLATION) Verify signature
+              run: |
+                  curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+                  gpg --verify vintner-linux-x64.asc /usr/bin/vintner
+
+            - name: (INSTALLATION) Test setup
+              run: |
+                  vintner --version
+                  vintner setup init
+                  vintner setup benchmark --seeds 10 250
+
+            ###################################################
+            #
+            # xOpera Motivation
+            #
+            ###################################################
+
+            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
+              run: |
+                  vintner setup clean
+                  vintner setup init
+
+                  vintner orchestrators init xopera --no-venv
+                  vintner orchestrators enable --orchestrator xopera
+
+                  vintner templates import --template motivation --path examples/xopera-motivation
+                  vintner instances create --instance motivation --template motivation
+                  vintner instances resolve --instance motivation --presets prod
+
+                  cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+
+            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
+              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
+              run: vintner instances undeploy --instance motivation
+              if: always()
+
+            ###################################################
+            #
+            # Unfurl Artifacts
+            #
+            ###################################################
+
+            - name: (UNFURL-ARTIFACTS) Deploy the enterprise plan of unfurl-artifacts on GCP
+              run: |
+                  vintner setup clean
+                  vintner setup init
+
+                  vintner orchestrators init unfurl --no-venv
+                  vintner orchestrators enable --orchestrator unfurl
+
+                  vintner templates import --template artifacts --path examples/unfurl-artifacts
+                  vintner instances create --instance artifacts --template artifacts
+                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+
+                  echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+
+            - name: (UNFURL-ARTIFACTS) Test the enterprise plan of unfurl-artifacts on GCP
+              run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
+              run: vintner instances undeploy --instance artifacts
+              if: always()

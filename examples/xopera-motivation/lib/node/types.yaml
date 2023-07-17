@@ -55,6 +55,12 @@ node_types:
             gcp_service_account_file:
                 type: string
 
+            gcp_region:
+                type: string
+
+            gcp_project:
+                type: string
+
         attributes:
             public_address:
                 type: string
@@ -103,6 +109,13 @@ node_types:
                         type: string
                         value: {get_property: [SELF, gcp_service_account_file]}
 
+                    gcp_region:
+                        type: string
+                        value: {get_property: [SELF, gcp_region]}
+
+                    gcp_project:
+                        type: string
+                        value: {get_property: [SELF, gcp_project]}
                 operations:
                     create:
                         implementation:

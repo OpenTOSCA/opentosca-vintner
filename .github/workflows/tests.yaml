@@ -10,11 +10,19 @@ jobs:
         name: Tests
         runs-on: ubuntu-22.04
         steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
             - name: (PREPARE) Set up QEMU
               uses: docker/setup-qemu-action@v2
 
             - name: (PREPARE) Checkout Repository
               uses: actions/checkout@v3
+              with:
+                  lfs: true
 
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
@@ -32,7 +40,13 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: pip install opera
+              run: pip install opera==0.6.9
+
+            ###################################################
+            #
+            # Test
+            #
+            ###################################################
 
             - name: (TEST) Check ESLint
               run: yarn lint:check
@@ -49,6 +63,12 @@ jobs:
             - name: (TEST) Run Tests
               run: yarn test
 
+            ###################################################
+            #
+            # Build
+            #
+            ###################################################
+
             - name: (BUILD) Build Project
               run: yarn build
 
@@ -63,6 +83,12 @@ jobs:
 
             - name: (BUILD) Package Binaries
               run: yarn package
+
+            ###################################################
+            #
+            # Docs
+            #
+            ###################################################
 
             - name: (DOCS) Install Dependencies
               run: yarn docs:install

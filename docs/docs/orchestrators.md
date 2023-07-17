@@ -23,7 +23,7 @@ vintner orchestrators enable --orchestrator xopera-wsl
 
 ## Unfurl
 ```shell linenums="1"
-pip install unfurl[full]
+pip install unfurl
 unfurl home --init
 
 vintner orchestrators init unfurl
@@ -32,7 +32,7 @@ vintner orchestrators enable --orchestrator unfurl
 
 ## Unfurl WSL
 ```shell linenums="1"
-pip install unfurl[full]
+pip install unfurl
 unfurl home --init
 
 vintner orchestrators init unfurl-wsl

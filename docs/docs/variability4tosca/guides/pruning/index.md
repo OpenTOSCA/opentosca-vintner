@@ -35,7 +35,7 @@ vintner orchestrators enable --orchestrator xopera
 
 Deploy the cloud variant of the pruning application.
 Therefore, import the template, create an instance, resolve the variability and finally deploy the application.
-An example for the deployment inputs is given in {{ repo_link('examples/xopera-pruning/inputs.example.yaml') }}.
+An example for the deployment inputs is given in {{ repo_link('examples/xopera-pruning/deployment-inputs.example.yaml') }}.
 
 ```shell linenums="1"
 # Add variable service template
