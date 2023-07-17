@@ -179,7 +179,7 @@ node_types:
 
             project:
                 type: string
-                default: {get_property: [SELF, HOST, project]}
+                default: {get_property: [SELF, host, project]}
 
         capabilities:
             host:
