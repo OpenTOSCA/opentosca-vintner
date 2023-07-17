@@ -1,6 +1,6 @@
 # OpenTOSCA Vintner
 
-> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#user-content-stoetzner-2023-VDMMv2).
+> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#user-content-stoetzner-2023-vdmmv2).
 
 [![Release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Night](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml/badge.svg)](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml)
