@@ -213,6 +213,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#github-flow">
+    GitHub Flow
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#signed-commits">
     Signed Commits
   </a>
@@ -300,6 +305,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#release">
     Release
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#night">
+    Night
   </a>
 </li>
 </ul>
@@ -1918,6 +1928,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#github-flow">
+    GitHub Flow
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#signed-commits">
     Signed Commits
   </a>
@@ -2007,6 +2022,11 @@
     Release
   </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#night">
+    Night
+  </a>
+</li>
 </ul>
 </nav>
 </div>
@@ -2052,6 +2072,8 @@ This includes the following file extensions <code>.bin</code>, <code>.gz</code>,
 <h2 id="squash-and-merge">Squash and Merge<a class="headerlink" href="#squash-and-merge" title="Permanent link">¶</a></h2>
 <p>Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
 The commit message should not have a link to the merge request.</p>
+<h2 id="github-flow">GitHub Flow<a class="headerlink" href="#github-flow" title="Permanent link">¶</a></h2>
+<p>Our branching workflow follows <a href="https://docs.github.com/de/get-started/quickstart/github-flow" target="_blank">GitHub Flow</a>.</p>
 <h2 id="signed-commits">Signed Commits<a class="headerlink" href="#signed-commits" title="Permanent link">¶</a></h2>
 <p>Commits are required to be signed.
 Therefore, you need to register a signing key.
@@ -2314,12 +2336,15 @@ Thereby, an existing release and <code>latest</code> tag is deleted.
 There is only one release at total.
 During the workflow the string <code>__VERSION__</code> inside a Javascript file is replace with the current commit hash.
 The current version can be checked using <code>vintner --version</code>.</p>
+<h2 id="night">Night<a class="headerlink" href="#night" title="Permanent link">¶</a></h2>
+<p>Every night, the <code>night</code> workflow is scheduled.
+This workflow ensures that the latest release is correctly signed and can be executed.</p>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 6, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
 </small>
 </div>
 </article>
