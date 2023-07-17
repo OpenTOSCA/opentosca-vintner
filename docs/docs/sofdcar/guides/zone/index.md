@@ -1,3 +1,9 @@
+---
+tags:
+- SofDCar
+- Guide
+---
+
 # Zonal Architecture
 
 In this document, we discuss an example of a zonal architecture using the TOSCA SofDCar profile.

@@ -1,5 +1,8 @@
 --- 
 title: Feature IDE
+tags:
+- Variability4TOSCA
+- Specification
 ---
 
 --8<-- "enumerate.html"

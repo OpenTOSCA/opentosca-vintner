@@ -1,3 +1,9 @@
+--- 
+tags:
+- Variability4TOSCA
+- Specification
+---
+
 # Benchmark
 
 To benchmark our implementation of a Variability4TOSCA processor, we run several tests.

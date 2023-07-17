@@ -1,3 +1,11 @@
+---
+tags:
+- Variability4TOSCA
+- Guide
+- Publication
+- CoopIS 2023
+---
+
 # Conditional Deployment Artifacts and Conditional Properties
 
 In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of the shopping application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.

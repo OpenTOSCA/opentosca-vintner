@@ -1,3 +1,8 @@
+---
+tags:
+- Vintner
+---
+
 # Installation
 
 In this document, we describe ways to install `vintner`.

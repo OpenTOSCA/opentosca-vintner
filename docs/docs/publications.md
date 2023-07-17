@@ -1,3 +1,9 @@
+---
+tags:
+- Misc
+- Publication
+---
+
 # Publications
 
 This document contains a list of selected publications.
