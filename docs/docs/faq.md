@@ -8,7 +8,7 @@ But it is possible to deploy applications using orchestrator plugins.
 ## How can I contribute? 
 
 Contributions are very much welcome.
-Please read [Development](./development){target=_blank}, and [Code of Conduct](code-of-conduct.md){target=_blank}.
+Please read [Development](contributing/development){target=_blank} and [Code of Conduct](contributing/code-of-conduct.md){target=_blank}.
 
 ## Under which license is Vintner available?
 
