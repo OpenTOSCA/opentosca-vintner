@@ -150,7 +150,7 @@ This command is executed in the pipeline.
 yarn docs:generate:puml
 ```
 
-Note, for plotting SVGs we use the public PlantUML server https://www.plantuml.com/plantuml.
+Note, we use the public PlantUML server [https://www.plantuml.com/plantuml](https://www.plantuml.com/plantuml){target=_blank} for plotting SVGs.
 It is also possible to start a local PlantUML server using Docker.
 Therefore, run the following command.
 

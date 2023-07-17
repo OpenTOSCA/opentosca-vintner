@@ -45,4 +45,4 @@ def define_env(env):
         terminalFontSize: "13px"
     });
 </script>
-""" % {"id": 'asciinema-player-' + cast, "url": fix_url('assets/casts/' + cast + '.cast')}
+""" % {"id": 'asciinema-player-' + cast, "url": '/assets/casts/' + cast + '.cast'}
