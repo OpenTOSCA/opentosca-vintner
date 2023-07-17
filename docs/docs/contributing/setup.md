@@ -1,10 +1,6 @@
----
-title: Environment
----
+# Setup
 
-# Working Environment
-
-We use the following working environment during development. 
+We use the following setup as working environment during development. 
 
 ## Node.js
 
@@ -16,10 +12,19 @@ nvm install v16.14.0
 nvm use 16.14.0
 ```
 
+## Yarn 
+
+We are using [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en){target=_blank}.
+Install it as follows.
+
+```shell linenums="1"
+npm install --global yarn
+```
+
 ## Repository
 
-The repository is a monorepo consisting of the CLI, server, docs and tests using the following commands.
-We are using  [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en/){target=_blank}.
+The repository is a monorepo consisting of the CLI, server, docs and tests.
+Clone it as follows.
 
 ```shell linenums="1"
 git clone https://github.com/opentosca/opentosca-vintner.git
@@ -34,6 +39,22 @@ yarn --frozen-lockfile
 Larges files, such as binaries or archives used in examples, are added using [git lfs](https://git-lfs.com){target=_blank}.
 This includes the following file extensions `.bin`, `.gz`, `.tar`, `.zip`, `.xz`, and `.jar`.
 
+## Signed Commits
+
+Commits are required to be signed.
+Therefore, you need to register a signing key.
+For more information see
+
+- [Generating a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key){target=_blank}
+- [Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account){target=_blank}
+- [Telling Git About Your Signing Key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key){target=_blank}
+- [Signing Commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits){target=_blank}
+
+You can enable auto-signing for a specific repository with the following command
+
+```shell linenums="1"
+git config commit.gpgsign true
+```
 
 ## JetBrains
 

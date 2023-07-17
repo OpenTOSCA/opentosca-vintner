@@ -125,7 +125,7 @@ nav:
           - TOSCA Simple Profile: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html
 
     - Contributing:
-          - contributing/environment.md
+          - contributing/setup.md
           - contributing/development.md
           - contributing/documentation.md
           - contributing/code-of-conduct.md

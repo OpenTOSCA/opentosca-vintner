@@ -1,8 +1,10 @@
 # Documentation
 
-{{ linux_only_notice() }}
+This document gives an introduction on writing the documentation.
 
 ## MkDocs
+
+{{ linux_only_notice() }}
 
 The documentation is powered by [Material for MkDocs](https://squidfunk.github.io/mkdocs-material){target=_blank}.
 Corresponding files are located in the `docs` directory.
@@ -21,13 +23,13 @@ With the following command you can install `mkdocs-material` along with its requ
 yarn docs:install
 ```
 
-To start a local development server on [http://localhost:8000](http://localhost:8000){target=_blank}, run
+To start a local development server on [http://localhost:8000](http://localhost:8000){target=_blank}, run the following command.
 
 ```shell linenums="1"
 yarn docs:serve
 ```
 
-Once the server is running, run the following command to open the docs in your browser
+Once the server is running, run the following command to open the docs in your browser.
 
 ```shell linenums="1"
 yarn docs:open
@@ -80,11 +82,6 @@ This will embed the cast `docs/docs/assets/casts/getting-started.cast` inside th
 
 {{ asciinema_player('getting-started') }}
 
-Behind the scenes, the following HTML is injected.
-
-```text linenums="1"
-{{ asciinema_player('getting-started') }}
-```
 
 ## Export 
 
