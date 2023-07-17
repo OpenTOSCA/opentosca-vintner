@@ -126,6 +126,10 @@ node_types:
                 type: string
                 default: {get_property: [SELF, host, region]}
 
+            project:
+                type: string
+                default: {get_property: [SELF, host, project]}
+
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database
