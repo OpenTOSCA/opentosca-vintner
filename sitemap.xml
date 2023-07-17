@@ -6,11 +6,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/code-of-conduct/</loc>
-         <lastmod>2023-07-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://vintner.opentosca.org/dependencies/</loc>
          <lastmod>2023-07-17</lastmod>
          <changefreq>daily</changefreq>
@@ -36,11 +31,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/notes/</loc>
-         <lastmod>2023-07-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://vintner.opentosca.org/orchestrators/</loc>
          <lastmod>2023-07-17</lastmod>
          <changefreq>daily</changefreq>
@@ -61,7 +51,27 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/development/</loc>
+         <loc>https://vintner.opentosca.org/contributing/code-of-conduct/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/contributing/development/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/contributing/documentation/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/contributing/notes/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/contributing/setup/</loc>
          <lastmod>2023-07-17</lastmod>
          <changefreq>daily</changefreq>
     </url>

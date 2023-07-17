@@ -102,3 +102,8 @@
 .md-typeset figure img {
     display: unset;
 }
+
+/* Black banner */
+.md-banner {
+    background-color: black;
+}
