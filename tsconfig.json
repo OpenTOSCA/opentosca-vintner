@@ -25,7 +25,8 @@
         "outDir": "build",
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": false,
-        "useUnknownInCatchVariables": false
+        "useUnknownInCatchVariables": false,
+        "sourceMap": true
     },
     "include": ["src", "tests", "docs/cmds"],
     "exclude": ["node_modules"]

@@ -45,3 +45,4 @@ dist
 !tests/tmp/.gitkeep
 tests/tmp
 .nyc_output
+coverage

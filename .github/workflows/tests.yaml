@@ -63,6 +63,13 @@ jobs:
             - name: (TEST) Run Tests
               run: yarn test
 
+            # TODO: move this to release only
+            - name: (TEST) Upload Tests to Codacy
+              uses: codacy/codacy-coverage-reporter-action@v1
+              with:
+                  project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+                  coverage-reports: coverage/lcov.info
+
             ###################################################
             #
             # Build
