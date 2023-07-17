@@ -2,6 +2,7 @@ release: abcdefgh
 
 gcp_region: europe-west3
 gcp_service_account_file: '***********************'
+gcp_project: stoetzms-387808
 
 root_password: some-secret
 

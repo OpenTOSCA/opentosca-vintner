@@ -100,7 +100,7 @@ The deployment will take some minutes.
 
 ```shell linenums="1"
 # Deploy instance
-# See examples/xopera-motivation/inputs.example.yaml as reference
+# See examples/xopera-motivation/deployment-inputs.example.yaml as reference
 vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 ```
 

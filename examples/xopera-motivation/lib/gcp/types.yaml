@@ -8,6 +8,8 @@ node_types:
                 type: string
             service_account_file:
                 type: string
+            project:
+                type: string
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -30,18 +32,21 @@ node_types:
             root_password:
                 type: string
 
+            authorized_networks:
+                type: string
+                # default: 0.0.0.0/0
+
             region:
                 type: string
                 default: {get_property: [SELF, host, region]}
-                # default: europe-west3
 
             service_account_file:
                 type: string
                 default: {get_property: [SELF, host, service_account_file]}
 
-            authorized_networks:
+            project:
                 type: string
-                # default: 0.0.0.0/0
+                default: {get_property: [SELF, host, project]}
 
         attributes:
             public_address:
@@ -76,6 +81,10 @@ node_types:
                         type: string
                         value: {get_property: [SELF, root_password]}
 
+                    authorized_networks:
+                        type: string
+                        value: {get_property: [SELF, authorized_networks]}
+
                     region:
                         type: string
                         value: {get_property: [SELF, region]}
@@ -84,9 +93,9 @@ node_types:
                         type: string
                         value: {get_property: [SELF, service_account_file]}
 
-                    authorized_networks:
+                    project:
                         type: string
-                        value: {get_property: [SELF, authorized_networks]}
+                        default: {get_property: [SELF, project]}
 
                 operations:
                     create: sql/dbms/playbooks/create.yaml
@@ -113,6 +122,10 @@ node_types:
                 type: string
                 default: {get_property: [SELF, host, service_account_file]}
 
+            region:
+                type: string
+                default: {get_property: [SELF, host, region]}
+
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database
@@ -137,6 +150,14 @@ node_types:
                         type: string
                         value: {get_property: [SELF, service_account_file]}
 
+                    region:
+                        type: string
+                        value: {get_property: [SELF, region]}
+
+                    project:
+                        type: string
+                        default: {get_property: [SELF, project]}
+
                 operations:
                     create: sql/db/playbooks/create.yaml
                     delete: sql/db/playbooks/delete.yaml
@@ -155,6 +176,10 @@ node_types:
             service_account_file:
                 type: string
                 default: {get_property: [SELF, host, service_account_file]}
+
+            project:
+                type: string
+                default: {get_property: [SELF, HOST, project]}
 
         capabilities:
             host:
@@ -175,6 +200,10 @@ node_types:
                     service_account_file:
                         type: string
                         value: {get_property: [SELF, service_account_file]}
+
+                    project:
+                        type: string
+                        default: {get_property: [SELF, project]}
 
                 operations:
                     create: appengine/engine/playbooks/create.yaml

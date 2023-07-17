@@ -1,6 +1,6 @@
 # OpenTOSCA Vintner
 
-> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#step-by-step-guides).
+> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#stoetzner-2023-VDMMv2).
 
 [![Release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Night](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml/badge.svg)](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml)
@@ -29,6 +29,7 @@ This repository holds the following specifications and profiles.
 
 This repository holds the step-by-step guides of the following publications.
 
+<a id="stoetzner-2023-VDMMv2"></a>
 - **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
   - CoopIS 2023
   - _Currently under Review_
@@ -36,7 +37,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Model of the Motivating Scenario](examples/unfurl-artifacts)
   - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
-
+<a id="stoetzner-2022-VDMM"></a>
 - **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**
   - Algorithms 2022
   - https://doi.org/10.3390/a15100382
