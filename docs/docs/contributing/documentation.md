@@ -29,7 +29,7 @@ yarn docs:install
 ```
 
 To start a local development server on [http://localhost:8000](http://localhost:8000){target=_blank}, run the following command.
-Note that the performance is suffering due to the used plugins.
+Note that the performance is suffering due to the heavy use of plugins.
 
 ```shell linenums="1"
 yarn docs:serve
