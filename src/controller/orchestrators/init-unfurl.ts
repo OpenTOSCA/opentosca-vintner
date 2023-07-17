@@ -4,7 +4,7 @@ import lock from '#utils/lock'
 
 export default async function (option: UnfurlNativeConfig) {
     await lock.try(Plugins.getLockKey(), () => {
-        const data = Plugins.getConfig()
+        const data = Plugins.loadConfig()
         data.unfurl = option
         Plugins.setConfig(data)
     })

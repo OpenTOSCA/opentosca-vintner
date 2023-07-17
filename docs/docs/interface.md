@@ -609,6 +609,7 @@ initializes unfurl plugin
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
+| no-venv |  false  | boolean | disable the use of a virtual environment |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
 ## vintner orchestrators init unfurl-wsl
@@ -643,6 +644,7 @@ initializes unfurl-wsl plugin
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
+| no-venv |  false  | boolean | disable the use of a virtual environment |
 | dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
 
 ## vintner orchestrators init xopera
@@ -677,6 +679,7 @@ initializes xopera plugin
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
+| no-venv |  false  | boolean | disable the use of a virtual environment |
 | dir |  false  | string | directory of xopera (default: "~/opera") |
 
 ## vintner orchestrators init xopera-wsl
@@ -711,6 +714,7 @@ initializes xopera-wsl plugin
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
+| no-venv |  false  | boolean | enable the use of a virtual environment |
 | dir |  false  | string | directory of opera (default: "~/opera") |
 
 ## vintner query
@@ -878,6 +882,7 @@ benchmarks the variability resolver
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
+| io |  false  | boolean | enable read and writes to the filesystem |
 | no-io |  false  | boolean | disable read and writes to the filesystem |
 | seeds |  false  | numbers... | seed for generating service templates (default: [10,250,500,1000,2500,5000,10000]) |
 | runs |  false  | number | number of measurements for each test (default: 10) |
@@ -1219,6 +1224,44 @@ resolves variability
 | presets |  false  | strings... | names of variability presets (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 | output |  true  | string | path of the output |
+
+## vintner template stats
+
+collects stats of a given service template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template stats --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/template/stats
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/stats", {
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/stats", json={
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | strings... | path to service template |
 
 ## vintner template test
 

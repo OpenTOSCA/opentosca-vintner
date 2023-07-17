@@ -4,7 +4,7 @@ import lock from '#utils/lock'
 
 export default async function (option: xOperaWLSConfig) {
     await lock.try(Plugins.getLockKey(), () => {
-        const data = Plugins.getConfig()
+        const data = Plugins.loadConfig()
         data.xOperaWSL = option
         Plugins.setConfig(data)
     })

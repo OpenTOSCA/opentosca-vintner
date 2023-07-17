@@ -2,6 +2,8 @@ import config from '#config'
 import Controller from '#controller'
 import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 import * as files from '#files'
+import {UnfurlNativeDefaults, UnfurlWSLDefaults} from '#plugins/unfurl'
+import {xOperaNativeDefaults, xOperaWSLDefaults} from '#plugins/xopera'
 import hae from '#utils/hae'
 import {Command, Option} from 'commander'
 import console from 'console'
@@ -60,6 +62,7 @@ setup
 setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
+    .option('--io [boolean]', 'enable read and writes to the filesystem')
     .option('--no-io [boolean]', 'disable read and writes to the filesystem')
     .addOption(
         new Option('--seeds [numbers...]', 'seed for generating service templates').default([
@@ -95,8 +98,9 @@ const initOrchestrators = orchestrators.command('init').description('initializes
 initOrchestrators
     .command('xopera')
     .description('initializes xopera plugin')
-    .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of xopera', '~/opera')
+    .option('--venv [boolean]', 'enable the use of a virtual environment', xOperaNativeDefaults.venv)
+    .option('--no-venv [boolean]', 'disable the use of a virtual environment')
+    .option('--dir [string]', 'directory of xopera', xOperaNativeDefaults.dir)
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.initxOpera(options)
@@ -106,8 +110,9 @@ initOrchestrators
 initOrchestrators
     .command('xopera-wsl')
     .description('initializes xopera-wsl plugin')
-    .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of opera', '~/opera')
+    .option('--venv [boolean]', 'enable the use of a virtual environment', xOperaWSLDefaults.venv)
+    .option('--no-venv [boolean]', 'enable the use of a virtual environment')
+    .option('--dir [string]', 'directory of opera', xOperaWSLDefaults.dir)
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.initxOperaWSL(options)
@@ -117,8 +122,9 @@ initOrchestrators
 initOrchestrators
     .command('unfurl')
     .description('initializes unfurl plugin')
-    .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of unfurl', '~/.unfurl_home')
+    .option('--venv [boolean]', 'enable the use of a virtual environment', UnfurlNativeDefaults.venv)
+    .option('--no-venv [boolean]', 'disable the use of a virtual environment')
+    .option('--dir [string]', 'directory of unfurl', UnfurlNativeDefaults.dir)
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.initUnfurl(options)
@@ -128,8 +134,9 @@ initOrchestrators
 initOrchestrators
     .command('unfurl-wsl')
     .description('initializes unfurl-wsl plugin')
-    .option('--venv [boolean]', 'enable the use of a virtual environment', true)
-    .option('--dir [string]', 'directory of unfurl', '~/.unfurl_home')
+    .option('--venv [boolean]', 'enable the use of a virtual environment', UnfurlWSLDefaults.venv)
+    .option('--no-venv [boolean]', 'disable the use of a virtual environment')
+    .option('--dir [string]', 'directory of unfurl', UnfurlWSLDefaults.dir)
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.initUnfurlWSL(options)
