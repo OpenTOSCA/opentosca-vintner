@@ -46,6 +46,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/tags/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/about-us/</loc>
          <lastmod>2023-07-17</lastmod>
          <changefreq>daily</changefreq>
@@ -1472,6 +1477,11 @@
     </url>
     <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-scenario-worker-worker-true/</loc>
+         <lastmod>2023-07-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/tags/</loc>
          <lastmod>2023-07-17</lastmod>
          <changefreq>daily</changefreq>
     </url>

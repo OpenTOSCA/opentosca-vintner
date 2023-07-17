@@ -1840,6 +1840,11 @@
         FAQ
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tags/">
+        Tags
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -1919,6 +1924,9 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
+<nav class="md-tags">
+<a class="md-tag" href="../../tags/#contributing">Contributing</a>
+</nav>
 <h1 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">¶</a></h1>
 <p>This document gives an introduction on writing the documentation.</p>
 <h2 id="mkdocs">MkDocs<a class="headerlink" href="#mkdocs" title="Permanent link">¶</a></h2>
@@ -1936,7 +1944,8 @@ To install <a href="https://pandoc.org" target="_blank">pandoc</a> on Ubuntu you
 <p>With the following command you can install <code>mkdocs-material</code> along with its requirements globally on your system.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>yarn<span class="w"> </span>docs:install
 </code></pre></div></td></tr></table></div>
-<p>To start a local development server on <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>, run the following command.</p>
+<p>To start a local development server on <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>, run the following command.
+Note that the performance is suffering due to the heavy use of plugins.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>docs:serve
 </code></pre></div></td></tr></table></div>
 <p>Once the server is running, run the following command to open the docs in your browser.</p>
