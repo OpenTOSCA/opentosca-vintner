@@ -10,6 +10,7 @@ on:
         branches:
             - fix/night-workflow
 
+concurrency: night
 jobs:
     night:
         name: Night
