@@ -1,5 +1,8 @@
 ---
 title: Testing
+tags: 
+- Variability4TOSCA
+- Specification
 ---
 
 --8<-- "enumerate.html"

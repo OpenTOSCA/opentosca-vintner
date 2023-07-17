@@ -1,5 +1,8 @@
 ---
 title: Introduction
+tags:
+- Queries4TOSCA
+- Specification
 ---
 
 --8<-- "enumerate.html"

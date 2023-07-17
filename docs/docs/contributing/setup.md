@@ -1,3 +1,8 @@
+---
+tags:
+- Contributing
+---
+
 # Setup
 
 We use the following setup as working environment during development. 

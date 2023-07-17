@@ -1,5 +1,7 @@
 ---
 title: Code of Conduct
+tags:
+- Contributing
 ---
 
 # Contributor Covenant Code of Conduct

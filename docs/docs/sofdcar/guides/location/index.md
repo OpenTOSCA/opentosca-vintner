@@ -1,3 +1,9 @@
+---
+tags:
+- SofDCar
+- Guide
+---
+
 # Distributed Locations
 
 In this document, we discuss an example of two geographically distributed ECUs using the TOSCA SofDCar profile.

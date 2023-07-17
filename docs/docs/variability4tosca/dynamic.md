@@ -1,5 +1,9 @@
 --- 
 title: Dynamic Deployment Artifacts
+tags:
+- Variability4TOSCA
+- Specification
+- Experimental
 ---
 
 --8<-- "enumerate.html"

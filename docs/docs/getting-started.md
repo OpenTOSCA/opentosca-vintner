@@ -1,3 +1,9 @@
+---
+tags:
+- Vintner
+- Guide
+---
+
 # Getting Started
 
 {{ asciinema_player('getting-started') }}

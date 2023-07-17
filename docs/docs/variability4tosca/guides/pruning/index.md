@@ -1,3 +1,10 @@
+---
+tags:
+- Variability4TOSCA
+- Guide
+- Experimental
+---
+
 # Pruning Application
 
 !!! Warning

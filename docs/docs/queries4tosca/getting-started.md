@@ -1,3 +1,9 @@
+---
+tags:
+- Queries4TOSCA
+- Guide
+---
+
 # Getting Started
 
 There is no standardized way to query TOSCA repositories or instance data. 

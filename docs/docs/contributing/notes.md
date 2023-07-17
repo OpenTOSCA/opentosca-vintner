@@ -1,3 +1,8 @@
+---
+tags:
+- Contributing
+---
+
 # Notes
 
 This document contains a collection of arbitrary notes.
