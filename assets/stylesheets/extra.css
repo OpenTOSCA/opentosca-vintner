@@ -1,0 +1,104 @@
+:root > * {
+    --md-typeset-a-color: var(--md-accent-fg-color);
+}
+
+/**
+ * Tables Full Width
+ */
+.md-typeset__table {
+    min-width: 100%;
+}
+
+.md-typeset table:not([class]) {
+    display: table;
+}
+
+/**
+ * Checkmark Color */
+.md-typeset [type=checkbox]:checked+.task-list-indicator:before {
+    background-color: var(--md-accent-fg-color);
+}
+
+
+/**
+ * Code Blocks Full Width in Content Tabs on Mobile
+ * See https://github.com/squidfunk/mkdocs-material/issues/4072
+ */
+@media (max-width: 720px) {
+    div.tabbed-block > div.highlight > table.highlighttable > tbody {
+        margin: 0 -0.8rem;
+    }
+
+    div.tabbed-block > div.highlight > pre > code {
+        margin: 0 -0.8rem;
+    }
+}
+
+.figure {
+    border: var(--md-typeset-table-color) solid 0.05rem;
+    max-width: 90% !important;
+    margin: auto;
+}
+
+/* Disable Navbar Shadow */
+.md-header {
+    box-shadow: none;
+    border-top: 2pt solid #ff6e42;
+    border-bottom: 0.05rem solid var(--md-typeset-table-color);
+}
+
+
+.highlight tbody:first-child {
+    border: var(--md-typeset-table-color) solid 0.05rem;
+    border-radius: 2px;
+}
+
+/* Disable shadow at Admonition */
+.md-typeset .admonition {
+    box-shadow: none;
+}
+
+.md-footer {
+    margin-top: 2rem;
+    border-top: 0.05rem solid var(--md-typeset-table-color);
+    background-color: inherit;
+    color: inherit;
+}
+
+.md-footer a:hover {
+    color: var(--md-typeset-a-color) !important;
+    opacity: 100%;
+}
+
+.md-footer-meta {
+    border-top: 0.05rem solid var(--md-typeset-table-color);
+    background-color: whitesmoke;
+}
+
+.md-copyright {
+    color: inherit;
+}
+
+.md-footer-meta.md-typeset a {
+    color: var(--md-default-fg-color) !important;
+}
+
+.md-footer-meta a:hover {
+    color: var(--md-typeset-a-color) !important;
+}
+
+.md-source:hover {
+    color: var(--md-typeset-a-color) !important;
+    opacity: 100%;
+}
+
+.md-logo:hover {
+    color: var(--md-typeset-a-color) !important;
+    opacity: 100%;
+}
+
+
+/* Fix small images not centered */
+.md-typeset figure img {
+    display: unset;
+}

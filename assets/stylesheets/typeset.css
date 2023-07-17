@@ -1,0 +1,114 @@
+/**
+ * Static Font Size since responsive ones scale too much
+ */
+
+.md-typeset h1 {
+    color: var(--md-typeset-color);
+}
+
+.md-typeset h1,
+.md-typeset h2 {
+    font-weight: 400;
+}
+
+/* Text Font Size */
+.md-typeset {
+    font-size: 15px;
+}
+
+/* Source Repository */
+.md-source__repository {
+    font-size: 13px;
+}
+
+/* Search Input */
+.md-search__input {
+    font-size: 14px;
+}
+
+/* Navbar Title */
+.md-header__topic .md-ellipsis {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+/* Sidebar Title */
+body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div > div > nav > label {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+/* Code */
+.md-typeset code {
+    font-size: 14px;
+}
+
+.linenos {
+    font-size: 14px;
+}
+
+/* Code Linenumbers */
+.highlighttable .linenos {
+    font-size: 14px;
+}
+
+.md-tabs__link {
+    font-size: 15px;
+}
+
+.md-nav__item {
+    font-size: 15px;
+}
+
+/* Footer Navigation Direction */
+.md-footer__direction {
+    font-size: 14px;
+}
+
+/* Footer Navigation Title */
+.md-footer__title {
+    font-size: 18px;
+}
+
+/* Copyright Text */
+.md-copyright {
+    font-size: 14px;
+}
+
+/* Admonition Text */
+.admonition p {
+    font-size: 15px;
+}
+
+/* Tabbed Content Title  */
+body > div.md-container > main > div > div.md-content > article > div.tabbed-set.tabbed-alternate > div.tabbed-labels > label {
+    font-size: 15px;
+    font-weight: 400;
+    color: inherit;
+}
+
+/* TOC Title */
+body > div.md-container > main > div > div.md-sidebar.md-sidebar--secondary > div > div > nav > label {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+/* Table Headers */
+tr > th {
+    font-size: 15px;
+}
+
+/* Table Rows */
+tr > td {
+    font-size: 15px;
+}
+
+/* Code Blocks Titles */
+.highlight span.filename {
+    font-weight: 400;
+}
+
+/* Disable line below Tabbed Content */
+.md-typeset .tabbed-labels {
+    box-shadow: none;
+}

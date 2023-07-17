@@ -1,0 +1,22 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.groups.Root"
+
+rectangle "sofdcar.groups.Location"
+
+rectangle "sofdcar.groups.Domain"
+
+rectangle "sofdcar.groups.Zone"
+
+
+"tosca.groups.Root" <|-- "sofdcar.groups.Root"
+
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Location"
+
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Domain"
+
+"sofdcar.groups.Root" <|-- "sofdcar.groups.Zone"
+
+@enduml

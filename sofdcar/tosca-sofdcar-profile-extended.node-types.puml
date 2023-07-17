@@ -1,0 +1,62 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.nodes.CAN"
+
+rectangle "sofdcar.nodes.CAN-FD"
+
+rectangle "sofdcar.nodes.LIN"
+
+rectangle "sofdcar.nodes.MOST"
+
+rectangle "sofdcar.nodes.GPIO"
+
+rectangle "sofdcar.nodes.FlexRay"
+
+rectangle "sofdcar.nodes.Ethernet"
+
+rectangle "sofdcar.nodes.SOME/IP"
+
+rectangle "sofdcar.nodes.Python.Application"
+
+rectangle "sofdcar.nodes.Python.Runtime"
+
+rectangle "sofdcar.nodes.RaspberryPi.Hardware"
+
+rectangle "sofdcar.nodes.Arduino.Software"
+
+rectangle "sofdcar.nodes.Arduino.Software.C++"
+
+rectangle "sofdcar.nodes.Arduino.Hardware"
+
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.CAN"
+
+"sofdcar.nodes.CAN" <|-- "sofdcar.nodes.CAN-FD"
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.LIN"
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.MOST"
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.GPIO"
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.FlexRay"
+
+"sofdcar.nodes.Channel" <|-- "sofdcar.nodes.Ethernet"
+
+"sofdcar.nodes.Ethernet" <|-- "sofdcar.nodes.SOME/IP"
+
+"sofdcar.nodes.HPC.Software" <|-- "sofdcar.nodes.Python.Application"
+
+"sofdcar.nodes.HPC.Software" <|-- "sofdcar.nodes.Python.Runtime"
+
+"sofdcar.nodes.HPC.Hardware" <|-- "sofdcar.nodes.RaspberryPi.Hardware"
+
+"sofdcar.nodes.ECU.Software" <|-- "sofdcar.nodes.Arduino.Software"
+
+"sofdcar.nodes.Arduino.Software" <|-- "sofdcar.nodes.Arduino.Software.C++"
+
+"sofdcar.nodes.ECU.Hardware" <|-- "sofdcar.nodes.Arduino.Hardware"
+
+@enduml

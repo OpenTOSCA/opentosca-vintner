@@ -1,0 +1,18 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.artifacts.Root"
+
+rectangle "sofdcar.artifacts.Deployment"
+
+rectangle "sofdcar.artifacts.Implementation"
+
+
+"tosca.artifacts.Root" <|-- "sofdcar.artifacts.Root"
+
+"tosca.artifacts.Deployment" <|-- "sofdcar.artifacts.Deployment"
+
+"tosca.artifacts.Implementation" <|-- "sofdcar.artifacts.Implementation"
+
+@enduml

@@ -1,0 +1,14 @@
+@page {
+    size: A4;
+    margin: 8mm;
+
+    @bottom-right {
+        content: 'Page' counter(page) '/' counter(pages);
+    }
+}
+
+@media print {
+    body {
+        zoom: 70%;
+    }
+}

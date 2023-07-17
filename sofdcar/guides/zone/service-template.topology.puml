@@ -1,0 +1,52 @@
+@startuml
+skinparam componentStyle rectangle
+
+rectangle "cloud" {
+    [cloud_service] <<example.nodes.Cloud.Service>>
+    [cloud_provider] <<example.nodes.Cloud.Provider>>
+}
+rectangle "zone_a" {
+    [zone_a_control_unit_software] <<example.nodes.ZCU.Software>>
+    [zone_a_control_unit_hardware] <<example.nodes.ZCU.Hardware>>
+    [zone_a_ethernet] <<sofdcar.nodes.Ethernet>>
+    [zone_a_can_bus] <<sofdcar.nodes.CAN>>
+    [zone_a_actuator] <<example.nodes.Actuator>>
+    [zone_a_sensor] <<example.nodes.Sensor>>
+}
+rectangle "zone_b" {
+    [zone_b_control_unit_software] <<example.nodes.ZCU.Software>>
+    [zone_b_control_unit_hardware] <<example.nodes.ZCU.Hardware>>
+    [zone_b_ethernet] <<sofdcar.nodes.Ethernet>>
+    [zone_b_can_bus] <<sofdcar.nodes.CAN>>
+    [zone_b_actuator] <<example.nodes.Actuator>>
+    [zone_b_sensor] <<example.nodes.Sensor>>
+}
+rectangle "zone_c" {
+    [vehicle_control_unit_software] <<example.nodes.VCU.Software>>
+    [vehicle_control_unit_hardware] <<example.nodes.VCU.Hardware>>
+}
+
+
+cloud_service -(0- cloud_provider : host
+vehicle_control_unit_software -(0- vehicle_control_unit_hardware : host
+vehicle_control_unit_software -(0- cloud_service : cloud
+vehicle_control_unit_hardware -(0- zone_a_ethernet : ethernet
+vehicle_control_unit_hardware -(0- zone_b_ethernet : ethernet
+zone_a_control_unit_software -(0- zone_a_control_unit_hardware : host
+zone_a_control_unit_software -(0- vehicle_control_unit_software : vcu
+zone_a_control_unit_hardware -(0- zone_a_ethernet : ethernet
+zone_a_control_unit_hardware -(0- zone_a_can_bus : can
+zone_a_actuator -(0- zone_a_can_bus : can
+zone_a_actuator -(0- zone_a_control_unit_software : zcu
+zone_a_sensor -(0- zone_a_can_bus : can
+zone_a_sensor -(0- zone_a_control_unit_software : zcu
+zone_b_control_unit_software -(0- zone_b_control_unit_hardware : host
+zone_b_control_unit_software -(0- vehicle_control_unit_software : vcu
+zone_b_control_unit_hardware -(0- zone_b_ethernet : ethernet
+zone_b_control_unit_hardware -(0- zone_b_can_bus : can
+zone_b_actuator -(0- zone_b_can_bus : can
+zone_b_actuator -(0- zone_b_control_unit_software : zcu
+zone_b_sensor -(0- zone_b_can_bus : can
+zone_b_sensor -(0- zone_b_control_unit_software : zcu
+
+@enduml

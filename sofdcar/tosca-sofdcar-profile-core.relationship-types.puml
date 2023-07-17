@@ -1,0 +1,10 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.relationships.Root"
+
+
+"tosca.relationships.Root" <|-- "sofdcar.relationships.Root"
+
+@enduml

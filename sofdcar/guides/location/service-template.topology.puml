@@ -1,0 +1,39 @@
+@startuml
+skinparam componentStyle rectangle
+
+rectangle "cloud" {
+    [cloud_service] <<example.nodes.Cloud.Service>>
+    [cloud_provider] <<example.nodes.Cloud.Provider>>
+}
+rectangle "location_a" {
+    [a_ecu_software] <<example.nodes.ECU.Software>>
+    [a_ecu_runtime] <<example.nodes.ECU.Runtime>>
+    [a_ecu_hardware] <<example.nodes.ECU.Hardware>>
+    [a_can_bus] <<sofdcar.nodes.CAN>>
+    [a_can_bridge] <<example.nodes.CAN.Bridge>>
+}
+rectangle "location_b" {
+    [b_ecu_software] <<example.nodes.ECU.Software>>
+    [b_ecu_runtime] <<example.nodes.ECU.Runtime>>
+    [b_ecu_hardware] <<example.nodes.ECU.Hardware>>
+    [b_can_bus] <<sofdcar.nodes.CAN>>
+    [b_can_bridge] <<example.nodes.CAN.Bridge>>
+}
+
+
+cloud_service -(0- cloud_provider : host
+a_ecu_software -(0- a_ecu_runtime : host
+a_ecu_software -(0- a_can_bus : can
+a_ecu_software -(0- b_ecu_software : connect
+a_ecu_runtime -(0- a_ecu_hardware : host
+a_ecu_hardware -(0- a_can_bus : can
+a_can_bridge -(0- a_can_bus : can
+a_can_bridge -(0- cloud_service : cloud
+b_ecu_software -(0- b_ecu_runtime : host
+b_ecu_software -(0- b_can_bus : can
+b_ecu_runtime -(0- b_ecu_hardware : host
+b_ecu_hardware -(0- b_can_bus : can
+b_can_bridge -(0- b_can_bus : can
+b_can_bridge -(0- cloud_service : cloud
+
+@enduml

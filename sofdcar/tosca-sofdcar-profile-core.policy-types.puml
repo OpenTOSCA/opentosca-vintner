@@ -1,0 +1,18 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.policies.Root"
+
+rectangle "sofdcar.policies.Security"
+
+rectangle "sofdcar.policies.Safety"
+
+
+"tosca.policies.Root" <|-- "sofdcar.policies.Root"
+
+"sofdcar.policies.Root" <|-- "sofdcar.policies.Security"
+
+"sofdcar.policies.Root" <|-- "sofdcar.policies.Safety"
+
+@enduml

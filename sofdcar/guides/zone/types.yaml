@@ -1,0 +1,75 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+imports:
+    - ../../tosca-sofdcar-profile.yaml
+    - ../../tosca-sofdcar-profile-extended.yaml
+
+node_types:
+    example.nodes.Cloud.Service:
+        derived_from: tosca.nodes.SoftwareComponent
+        capabilities:
+            endpoint:
+                type: tosca.capabilities.Endpoint
+
+    example.nodes.Cloud.Provider:
+        derived_from: sofdcar.nodes.Cloud
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+    example.nodes.VCU.Software:
+        derived_from: sofdcar.nodes.HPC.Software
+        capabilities:
+            endpoint:
+                type: tosca.capabilities.Endpoint
+        requirements:
+            - cloud:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+
+    example.nodes.VCU.Hardware:
+        derived_from: sofdcar.nodes.HPC.Hardware
+        requirements:
+            - ethernet:
+                  capability: sofdcar.capabilities.Endpoint.Ethernet
+                  relationship: sofdcar.relationships.Ethernet
+                  occurrences: [0, UNBOUNDED]
+
+    example.nodes.ZCU.Software:
+        derived_from: sofdcar.nodes.HPC.Software
+        capabilities:
+            endpoint:
+                type: tosca.capabilities.Endpoint
+        requirements:
+            - vcu:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+
+    example.nodes.ZCU.Hardware:
+        derived_from: sofdcar.nodes.HPC.Hardware
+        requirements:
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+            - ethernet:
+                  capability: sofdcar.capabilities.Endpoint.Ethernet
+                  relationship: sofdcar.relationships.Ethernet
+
+    example.nodes.Actuator:
+        derived_from: sofdcar.nodes.Actuator
+        requirements:
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+            - zcu:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+
+    example.nodes.Sensor:
+        derived_from: sofdcar.nodes.Sensor
+        requirements:
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+            - zcu:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo

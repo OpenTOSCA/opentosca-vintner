@@ -1,0 +1,52 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+imports:
+    - ../../tosca-sofdcar-profile.yaml
+    - ../../tosca-sofdcar-profile-extended.yaml
+
+node_types:
+    example.nodes.Cloud.Service:
+        derived_from: tosca.nodes.SoftwareComponent
+        capabilities:
+            endpoint:
+                type: tosca.capabilities.Endpoint
+
+    example.nodes.Cloud.Provider:
+        derived_from: sofdcar.nodes.Cloud
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+    example.nodes.ECU.Software:
+        derived_from: sofdcar.nodes.ECU.Software
+        capabilities:
+            connect:
+                type: sofdcar.capabilities.Endpoint.CAN
+        requirements:
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+                  occurrences: [0, 1]
+            - connect:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+                  occurrences: [0, 1]
+
+    example.nodes.ECU.Runtime:
+        derived_from: sofdcar.nodes.ECU.Runtime
+
+    example.nodes.ECU.Hardware:
+        derived_from: sofdcar.nodes.ECU.Hardware
+        requirements:
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN
+
+    example.nodes.CAN.Bridge:
+        derived_from: sofdcar.nodes.Root
+        requirements:
+            - cloud:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+            - can:
+                  capability: sofdcar.capabilities.Endpoint.CAN
+                  relationship: sofdcar.relationships.CAN

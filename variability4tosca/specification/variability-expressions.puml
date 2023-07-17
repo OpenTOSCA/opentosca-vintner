@@ -1,0 +1,20 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "Variability Expression"
+
+rectangle "Value Expression"
+
+rectangle "Logic Expression"
+
+rectangle "Variability Condition"
+
+
+"Variability Expression" <|-- "Value Expression"
+
+"Variability Expression" <|-- "Logic Expression"
+
+"Logic Expression" <|-- "Variability Condition"
+
+@enduml
