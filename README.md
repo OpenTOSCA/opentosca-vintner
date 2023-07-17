@@ -29,7 +29,7 @@ This repository holds the following specifications and profiles.
 
 This repository holds the step-by-step guides of the following publications.
 
-<a id="stoetzner-2023-VDMMv2"></a>
+<a id="stoetzner-2023-vdmmv2"></a>
 - **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
   - CoopIS 2023
   - _Currently under Review_
@@ -37,7 +37,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Model of the Motivating Scenario](examples/unfurl-artifacts)
   - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
 
-<a id="stoetzner-2022-VDMM"/></a>
+<a id="stoetzner-2022-vdmm"/></a>
 - **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**
   - Algorithms 2022
   - https://doi.org/10.3390/a15100382
