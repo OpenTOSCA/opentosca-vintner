@@ -14,7 +14,14 @@ export type xOperaNativeConfig = {
     dir: string
 }
 
+export const xOperaNativeDefaults: xOperaNativeConfig = {
+    venv: true,
+    dir: '~/opera',
+}
+
 export type xOperaWLSConfig = xOperaNativeConfig
+
+export const xOperaWSLDefaults: xOperaWLSConfig = xOperaNativeDefaults
 
 export class xOperaPlugin implements OrchestratorPlugin {
     private readonly config: xOperaConfig
