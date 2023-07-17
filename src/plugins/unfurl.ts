@@ -12,7 +12,14 @@ export type UnfurlNativeConfig = {
     dir: string
 }
 
+export const UnfurlNativeDefaults: UnfurlNativeConfig = {
+    venv: true,
+    dir: '~/.unfurl_home',
+}
+
 export type UnfurlWSLConfig = UnfurlNativeConfig
+
+export const UnfurlWSLDefaults: UnfurlWSLConfig = UnfurlNativeDefaults
 
 export class UnfurlPlugin implements OrchestratorPlugin {
     private readonly config: UnfurlConfig

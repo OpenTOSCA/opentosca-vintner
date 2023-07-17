@@ -11,7 +11,7 @@ import {OrchestratorsConfig} from './types'
 
 const configPath = path.join(config.home, 'plugins.yaml')
 
-function getConfig() {
+function loadConfig() {
     return files.loadYAML<OrchestratorsConfig>(configPath)
 }
 
@@ -20,7 +20,7 @@ function setConfig(config: OrchestratorsConfig) {
 }
 
 function getOrchestrator() {
-    const config = getConfig()
+    const config = loadConfig()
 
     switch (config.enabled) {
         case 'xopera':
@@ -69,7 +69,7 @@ function getLockKey() {
 
 export default {
     getLockKey,
-    getConfig,
+    loadConfig,
     setConfig,
     getOrchestrator,
     getTemplateRepository,
