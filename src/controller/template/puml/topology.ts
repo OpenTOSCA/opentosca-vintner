@@ -12,6 +12,7 @@ export type TemplatePUMLTopologyOptions = {
 
 export default async function (options: TemplatePUMLTopologyOptions) {
     validator.ensureDefined(options.path, 'Path not defined')
+    console.log(`Handling file "${path.resolve(options.path)}"`)
 
     const output = options.output ?? options.path.replace(/(\.yaml|\.yml)/, '.topology.puml')
     if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
@@ -27,6 +28,7 @@ export default async function (options: TemplatePUMLTopologyOptions) {
         }
     )
 
+    console.log(`Writing file "${path.resolve(output)}" if changed`)
     files.storeFile(output, plot, {onlyIfChanged: true})
 }
 
