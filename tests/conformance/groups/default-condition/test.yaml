@@ -2,5 +2,5 @@ description: |
     - Removes node "magic" and relations "magic.0" and "application.magic" from topology (and from group members of group "group_one") since "group_one" is a variability group and its conditions are "false".
     - Removes group "group_one" since it is a variability group.
     - Removes node "magic" from group "group_two" since the node is not present.
-    - Removes node "magic" from "group_three" since the node is not present.
-    - Group "group_three" is not removed since its conditions are "true".
+    - Removes group "group_three" since its node is not present. Members are not removed since the group is a conditional group and not a variability group.
+    

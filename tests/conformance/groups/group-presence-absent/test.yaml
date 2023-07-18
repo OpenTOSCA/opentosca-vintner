@@ -1,0 +1,3 @@
+description: |
+    - under the "conditions" the "group_presence" function checks if group named "group_one" is present or not.
+    - "group_one" is absent since false is assigned as condition.
