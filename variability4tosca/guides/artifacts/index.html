@@ -1946,8 +1946,7 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Then, we import the template and create an instance.
-Note, creating an instance does not deploy the application but sets everything up for doing so.</p>
+<p>Then, we import the template and initialize an instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span>
@@ -1956,7 +1955,7 @@ Note, creating an instance does not deploy the application but sets everything u
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>artifacts<span class="w"> </span>--path<span class="w"> </span>examples/unfurl-artifacts
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># Add instance</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>vintner<span class="w"> </span>instances<span class="w"> </span>create<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--template<span class="w"> </span>artifacts
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--template<span class="w"> </span>artifacts
 </code></pre></div></td></tr></table></div>
 <p>We can optionally inspect the variable service template.
 This template contains all possible elements having conditions assigned, as presented in Figure 2.
@@ -2015,7 +2014,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 19, 2023</span>
 </small>
 </div>
 </article>

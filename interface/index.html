@@ -223,8 +223,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-create">
-    vintner instances create
+<a class="md-nav__link" href="#vintner-instances-continue">
+    vintner instances continue
   </a>
 </li>
 <li class="md-nav__item">
@@ -240,6 +240,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#vintner-instances-info">
     vintner instances info
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vintner-instances-init">
+    vintner instances init
   </a>
 </li>
 <li class="md-nav__item">
@@ -263,13 +268,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-redeploy">
-    vintner instances redeploy
+<a class="md-nav__link" href="#vintner-instances-resolve">
+    vintner instances resolve
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-resolve">
-    vintner instances resolve
+<a class="md-nav__link" href="#vintner-instances-swap">
+    vintner instances swap
   </a>
 </li>
 <li class="md-nav__item">
@@ -285,11 +290,6 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#vintner-instances-update">
     vintner instances update
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-update-template">
-    vintner instances update-template
   </a>
 </li>
 <li class="md-nav__item">
@@ -2133,8 +2133,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-create">
-    vintner instances create
+<a class="md-nav__link" href="#vintner-instances-continue">
+    vintner instances continue
   </a>
 </li>
 <li class="md-nav__item">
@@ -2150,6 +2150,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#vintner-instances-info">
     vintner instances info
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vintner-instances-init">
+    vintner instances init
   </a>
 </li>
 <li class="md-nav__item">
@@ -2173,13 +2178,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-redeploy">
-    vintner instances redeploy
+<a class="md-nav__link" href="#vintner-instances-resolve">
+    vintner instances resolve
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-resolve">
-    vintner instances resolve
+<a class="md-nav__link" href="#vintner-instances-swap">
+    vintner instances swap
   </a>
 </li>
 <li class="md-nav__item">
@@ -2195,11 +2200,6 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#vintner-instances-update">
     vintner instances update
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vintner-instances-update-template">
-    vintner instances update-template
   </a>
 </li>
 <li class="md-nav__item">
@@ -2540,12 +2540,12 @@
 </tr>
 </tbody>
 </table>
-<h2 id="vintner-instances-create">vintner instances create<a class="headerlink" href="#vintner-instances-create" title="Permanent link">¶</a></h2>
-<p>creates a new instance</p>
+<h2 id="vintner-instances-continue">vintner instances continue<a class="headerlink" href="#vintner-instances-continue" title="Permanent link">¶</a></h2>
+<p>continue instance (deployment)</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:4"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio"><input id="__tabbed_10_2" name="__tabbed_10" type="radio"><input id="__tabbed_10_3" name="__tabbed_10" type="radio"><input id="__tabbed_10_4" name="__tabbed_10" type="radio"><div class="tabbed-labels"><label for="__tabbed_10_1">CLI</label><label for="__tabbed_10_2">cURL</label><label for="__tabbed_10_3">JavaScript</label><label for="__tabbed_10_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>create<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span><span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span><span class="k">continue</span><span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -2554,32 +2554,28 @@
 <span class="normal"><a href="#__codelineno-12-3">3</a></span>
 <span class="normal"><a href="#__codelineno-12-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/create
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/continue
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
 <span class="normal"><a href="#__codelineno-13-2">2</a></span>
 <span class="normal"><a href="#__codelineno-13-3">3</a></span>
-<span class="normal"><a href="#__codelineno-13-4">4</a></span>
-<span class="normal"><a href="#__codelineno-13-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/create"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span><span class="p">,</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/continue"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
 <span class="normal"><a href="#__codelineno-14-2">2</a></span>
 <span class="normal"><a href="#__codelineno-14-3">3</a></span>
-<span class="normal"><a href="#__codelineno-14-4">4</a></span>
-<span class="normal"><a href="#__codelineno-14-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/create"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span><span class="p">,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/continue"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -2598,13 +2594,13 @@
 <td>instance</td>
 <td>true</td>
 <td>string</td>
-<td>instance name (must match /^[a-z-]+$/)</td>
+<td>instance name</td>
 </tr>
 <tr>
-<td>template</td>
-<td>true</td>
-<td>string</td>
-<td>template name</td>
+<td>verbose</td>
+<td>false</td>
+<td>boolean</td>
+<td>verbose</td>
 </tr>
 </tbody>
 </table>
@@ -2794,12 +2790,12 @@
 </tr>
 </tbody>
 </table>
-<h2 id="vintner-instances-inspect">vintner instances inspect<a class="headerlink" href="#vintner-instances-inspect" title="Permanent link">¶</a></h2>
-<p>inspects variability-resolved service template</p>
+<h2 id="vintner-instances-init">vintner instances init<a class="headerlink" href="#vintner-instances-init" title="Permanent link">¶</a></h2>
+<p>initializes a new instance</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="14:4"><input checked="checked" id="__tabbed_14_1" name="__tabbed_14" type="radio"/><input id="__tabbed_14_2" name="__tabbed_14" type="radio"/><input id="__tabbed_14_3" name="__tabbed_14" type="radio"/><input id="__tabbed_14_4" name="__tabbed_14" type="radio"/><div class="tabbed-labels"><label for="__tabbed_14_1">CLI</label><label for="__tabbed_14_2">cURL</label><label for="__tabbed_14_3">JavaScript</label><label for="__tabbed_14_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span><span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -2808,28 +2804,96 @@
 <span class="normal"><a href="#__codelineno-28-3">3</a></span>
 <span class="normal"><a href="#__codelineno-28-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/inspect
+<a id="__codelineno-28-3" name="__codelineno-28-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/init
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span>
 <span class="normal"><a href="#__codelineno-29-2">2</a></span>
 <span class="normal"><a href="#__codelineno-29-3">3</a></span>
-<span class="normal"><a href="#__codelineno-29-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/inspect"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
-<a id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-29-4">4</a></span>
+<span class="normal"><a href="#__codelineno-29-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/init"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span><span class="p">,</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1">1</a></span>
 <span class="normal"><a href="#__codelineno-30-2">2</a></span>
 <span class="normal"><a href="#__codelineno-30-3">3</a></span>
-<span class="normal"><a href="#__codelineno-30-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/inspect"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-30-4">4</a></span>
+<span class="normal"><a href="#__codelineno-30-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/init"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span><span class="p">,</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instance</td>
+<td>true</td>
+<td>string</td>
+<td>instance name (must match /^[a-z-]+$/)</td>
+</tr>
+<tr>
+<td>template</td>
+<td>true</td>
+<td>string</td>
+<td>template name</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vintner-instances-inspect">vintner instances inspect<a class="headerlink" href="#vintner-instances-inspect" title="Permanent link">¶</a></h2>
+<p>inspects variability-resolved service template</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="15:4"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio"/><input id="__tabbed_15_2" name="__tabbed_15" type="radio"/><input id="__tabbed_15_3" name="__tabbed_15" type="radio"/><input id="__tabbed_15_4" name="__tabbed_15" type="radio"/><div class="tabbed-labels"><label for="__tabbed_15_1">CLI</label><label for="__tabbed_15_2">cURL</label><label for="__tabbed_15_3">JavaScript</label><label for="__tabbed_15_4">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-31-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-32-1">1</a></span>
+<span class="normal"><a href="#__codelineno-32-2">2</a></span>
+<span class="normal"><a href="#__codelineno-32-3">3</a></span>
+<span class="normal"><a href="#__codelineno-32-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/inspect
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-33-1">1</a></span>
+<span class="normal"><a href="#__codelineno-33-2">2</a></span>
+<span class="normal"><a href="#__codelineno-33-3">3</a></span>
+<span class="normal"><a href="#__codelineno-33-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/inspect"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-34-1">1</a></span>
+<span class="normal"><a href="#__codelineno-34-2">2</a></span>
+<span class="normal"><a href="#__codelineno-34-3">3</a></span>
+<span class="normal"><a href="#__codelineno-34-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/inspect"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -2854,40 +2918,40 @@
 </table>
 <h2 id="vintner-instances-list">vintner instances list<a class="headerlink" href="#vintner-instances-list" title="Permanent link">¶</a></h2>
 <p>lists all instances</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="15:4"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio"/><input id="__tabbed_15_2" name="__tabbed_15" type="radio"/><input id="__tabbed_15_3" name="__tabbed_15" type="radio"/><input id="__tabbed_15_4" name="__tabbed_15" type="radio"/><div class="tabbed-labels"><label for="__tabbed_15_1">CLI</label><label for="__tabbed_15_2">cURL</label><label for="__tabbed_15_3">JavaScript</label><label for="__tabbed_15_4">Python</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="16:4"><input checked="checked" id="__tabbed_16_1" name="__tabbed_16" type="radio"/><input id="__tabbed_16_2" name="__tabbed_16" type="radio"/><input id="__tabbed_16_3" name="__tabbed_16" type="radio"/><input id="__tabbed_16_4" name="__tabbed_16" type="radio"/><div class="tabbed-labels"><label for="__tabbed_16_1">CLI</label><label for="__tabbed_16_2">cURL</label><label for="__tabbed_16_3">JavaScript</label><label for="__tabbed_16_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-31-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>list<span class="w"> </span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-35-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>list<span class="w"> </span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-32-1">1</a></span>
-<span class="normal"><a href="#__codelineno-32-2">2</a></span>
-<span class="normal"><a href="#__codelineno-32-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/list
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-36-1">1</a></span>
+<span class="normal"><a href="#__codelineno-36-2">2</a></span>
+<span class="normal"><a href="#__codelineno-36-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/list
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-33-1">1</a></span>
-<span class="normal"><a href="#__codelineno-33-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/list"</span><span class="p">)</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-37-1">1</a></span>
+<span class="normal"><a href="#__codelineno-37-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/list"</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-34-1">1</a></span>
-<span class="normal"><a href="#__codelineno-34-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-34-2" name="__codelineno-34-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/list"</span><span class="p">)</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-38-1">1</a></span>
+<span class="normal"><a href="#__codelineno-38-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/list"</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
 </div>
 <h2 id="vintner-instances-open">vintner instances open<a class="headerlink" href="#vintner-instances-open" title="Permanent link">¶</a></h2>
 <p>opens template directory in a file browser</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="16:1"><input checked="checked" id="__tabbed_16_1" name="__tabbed_16" type="radio"/><div class="tabbed-labels"><label for="__tabbed_16_1">CLI</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio"/><div class="tabbed-labels"><label for="__tabbed_17_1">CLI</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-35-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>open<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-39-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>open<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -2912,10 +2976,10 @@
 </table>
 <h2 id="vintner-instances-path">vintner instances path<a class="headerlink" href="#vintner-instances-path" title="Permanent link">¶</a></h2>
 <p>returns the path to the instance directory</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio"/><div class="tabbed-labels"><label for="__tabbed_17_1">CLI</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="18:1"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio"/><div class="tabbed-labels"><label for="__tabbed_18_1">CLI</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-36-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>path<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-40-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>path<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -2935,70 +2999,6 @@
 <td>true</td>
 <td>string</td>
 <td>instance name</td>
-</tr>
-</tbody>
-</table>
-<h2 id="vintner-instances-redeploy">vintner instances redeploy<a class="headerlink" href="#vintner-instances-redeploy" title="Permanent link">¶</a></h2>
-<p>redeploy instance</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="18:4"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio"/><input id="__tabbed_18_2" name="__tabbed_18" type="radio"/><input id="__tabbed_18_3" name="__tabbed_18" type="radio"/><input id="__tabbed_18_4" name="__tabbed_18" type="radio"/><div class="tabbed-labels"><label for="__tabbed_18_1">CLI</label><label for="__tabbed_18_2">cURL</label><label for="__tabbed_18_3">JavaScript</label><label for="__tabbed_18_4">Python</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-37-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>redeploy<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-38-1">1</a></span>
-<span class="normal"><a href="#__codelineno-38-2">2</a></span>
-<span class="normal"><a href="#__codelineno-38-3">3</a></span>
-<span class="normal"><a href="#__codelineno-38-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-38-2" name="__codelineno-38-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-38-3" name="__codelineno-38-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-38-4" name="__codelineno-38-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/redeploy
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-39-1">1</a></span>
-<span class="normal"><a href="#__codelineno-39-2">2</a></span>
-<span class="normal"><a href="#__codelineno-39-3">3</a></span>
-<span class="normal"><a href="#__codelineno-39-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-39-2" name="__codelineno-39-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/redeploy"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-39-3" name="__codelineno-39-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
-<a id="__codelineno-39-4" name="__codelineno-39-4"></a><span class="p">})</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-40-1">1</a></span>
-<span class="normal"><a href="#__codelineno-40-2">2</a></span>
-<span class="normal"><a href="#__codelineno-40-3">3</a></span>
-<span class="normal"><a href="#__codelineno-40-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-40-2" name="__codelineno-40-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/redeploy"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-40-3" name="__codelineno-40-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
-<a id="__codelineno-40-4" name="__codelineno-40-4"></a><span class="p">})</span>
-</code></pre></div></td></tr></table></div>
-</div>
-</div>
-</div>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Mandatory</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>instance</td>
-<td>true</td>
-<td>string</td>
-<td>instance name</td>
-</tr>
-<tr>
-<td>verbose</td>
-<td>false</td>
-<td>boolean</td>
-<td>verbose</td>
 </tr>
 </tbody>
 </table>
@@ -3072,38 +3072,106 @@
 </tr>
 </tbody>
 </table>
-<h2 id="vintner-instances-unadapt">vintner instances unadapt<a class="headerlink" href="#vintner-instances-unadapt" title="Permanent link">¶</a></h2>
-<p>stop adaptation loop of instance</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="20:3"><input checked="checked" id="__tabbed_20_1" name="__tabbed_20" type="radio"/><input id="__tabbed_20_2" name="__tabbed_20" type="radio"/><input id="__tabbed_20_3" name="__tabbed_20" type="radio"/><div class="tabbed-labels"><label for="__tabbed_20_1">cURL</label><label for="__tabbed_20_2">JavaScript</label><label for="__tabbed_20_3">Python</label></div>
+<h2 id="vintner-instances-swap">vintner instances swap<a class="headerlink" href="#vintner-instances-swap" title="Permanent link">¶</a></h2>
+<p>swap instance template</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="20:4"><input checked="checked" id="__tabbed_20_1" name="__tabbed_20" type="radio"/><input id="__tabbed_20_2" name="__tabbed_20" type="radio"/><input id="__tabbed_20_3" name="__tabbed_20" type="radio"/><input id="__tabbed_20_4" name="__tabbed_20" type="radio"/><div class="tabbed-labels"><label for="__tabbed_20_1">CLI</label><label for="__tabbed_20_2">cURL</label><label for="__tabbed_20_3">JavaScript</label><label for="__tabbed_20_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-45-1">1</a></span>
-<span class="normal"><a href="#__codelineno-45-2">2</a></span>
-<span class="normal"><a href="#__codelineno-45-3">3</a></span>
-<span class="normal"><a href="#__codelineno-45-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-45-2" name="__codelineno-45-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-45-3" name="__codelineno-45-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-45-4" name="__codelineno-45-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/unadapt
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-45-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>swap<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span><span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-46-1">1</a></span>
 <span class="normal"><a href="#__codelineno-46-2">2</a></span>
 <span class="normal"><a href="#__codelineno-46-3">3</a></span>
-<span class="normal"><a href="#__codelineno-46-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-46-2" name="__codelineno-46-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/unadapt"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-46-3" name="__codelineno-46-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
-<a id="__codelineno-46-4" name="__codelineno-46-4"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-46-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-46-3" name="__codelineno-46-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/swap
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-47-1">1</a></span>
 <span class="normal"><a href="#__codelineno-47-2">2</a></span>
 <span class="normal"><a href="#__codelineno-47-3">3</a></span>
-<span class="normal"><a href="#__codelineno-47-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-47-2" name="__codelineno-47-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/unadapt"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-47-3" name="__codelineno-47-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
-<a id="__codelineno-47-4" name="__codelineno-47-4"></a><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-47-4">4</a></span>
+<span class="normal"><a href="#__codelineno-47-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/swap"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-47-3" name="__codelineno-47-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span><span class="p">,</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-48-1">1</a></span>
+<span class="normal"><a href="#__codelineno-48-2">2</a></span>
+<span class="normal"><a href="#__codelineno-48-3">3</a></span>
+<span class="normal"><a href="#__codelineno-48-4">4</a></span>
+<span class="normal"><a href="#__codelineno-48-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/swap"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-48-3" name="__codelineno-48-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span><span class="p">,</span>
+<a id="__codelineno-48-4" name="__codelineno-48-4"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span>
+<a id="__codelineno-48-5" name="__codelineno-48-5"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instance</td>
+<td>true</td>
+<td>string</td>
+<td>instance name</td>
+</tr>
+<tr>
+<td>template</td>
+<td>true</td>
+<td>string</td>
+<td>template name</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vintner-instances-unadapt">vintner instances unadapt<a class="headerlink" href="#vintner-instances-unadapt" title="Permanent link">¶</a></h2>
+<p>stop adaptation loop of instance</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="21:3"><input checked="checked" id="__tabbed_21_1" name="__tabbed_21" type="radio"/><input id="__tabbed_21_2" name="__tabbed_21" type="radio"/><input id="__tabbed_21_3" name="__tabbed_21" type="radio"/><div class="tabbed-labels"><label for="__tabbed_21_1">cURL</label><label for="__tabbed_21_2">JavaScript</label><label for="__tabbed_21_3">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-49-1">1</a></span>
+<span class="normal"><a href="#__codelineno-49-2">2</a></span>
+<span class="normal"><a href="#__codelineno-49-3">3</a></span>
+<span class="normal"><a href="#__codelineno-49-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-49-3" name="__codelineno-49-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-49-4" name="__codelineno-49-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/unadapt
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-50-1">1</a></span>
+<span class="normal"><a href="#__codelineno-50-2">2</a></span>
+<span class="normal"><a href="#__codelineno-50-3">3</a></span>
+<span class="normal"><a href="#__codelineno-50-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/unadapt"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
+<a id="__codelineno-50-4" name="__codelineno-50-4"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-51-1">1</a></span>
+<span class="normal"><a href="#__codelineno-51-2">2</a></span>
+<span class="normal"><a href="#__codelineno-51-3">3</a></span>
+<span class="normal"><a href="#__codelineno-51-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/unadapt"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -3128,40 +3196,40 @@
 </table>
 <h2 id="vintner-instances-undeploy">vintner instances undeploy<a class="headerlink" href="#vintner-instances-undeploy" title="Permanent link">¶</a></h2>
 <p>undeploys instance</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="21:4"><input checked="checked" id="__tabbed_21_1" name="__tabbed_21" type="radio"/><input id="__tabbed_21_2" name="__tabbed_21" type="radio"/><input id="__tabbed_21_3" name="__tabbed_21" type="radio"/><input id="__tabbed_21_4" name="__tabbed_21" type="radio"/><div class="tabbed-labels"><label for="__tabbed_21_1">CLI</label><label for="__tabbed_21_2">cURL</label><label for="__tabbed_21_3">JavaScript</label><label for="__tabbed_21_4">Python</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="22:4"><input checked="checked" id="__tabbed_22_1" name="__tabbed_22" type="radio"/><input id="__tabbed_22_2" name="__tabbed_22" type="radio"/><input id="__tabbed_22_3" name="__tabbed_22" type="radio"/><input id="__tabbed_22_4" name="__tabbed_22" type="radio"/><div class="tabbed-labels"><label for="__tabbed_22_1">CLI</label><label for="__tabbed_22_2">cURL</label><label for="__tabbed_22_3">JavaScript</label><label for="__tabbed_22_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-48-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-52-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-49-1">1</a></span>
-<span class="normal"><a href="#__codelineno-49-2">2</a></span>
-<span class="normal"><a href="#__codelineno-49-3">3</a></span>
-<span class="normal"><a href="#__codelineno-49-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-49-2" name="__codelineno-49-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-49-3" name="__codelineno-49-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-49-4" name="__codelineno-49-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/undeploy
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-53-1">1</a></span>
+<span class="normal"><a href="#__codelineno-53-2">2</a></span>
+<span class="normal"><a href="#__codelineno-53-3">3</a></span>
+<span class="normal"><a href="#__codelineno-53-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-53-2" name="__codelineno-53-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-53-3" name="__codelineno-53-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-53-4" name="__codelineno-53-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/undeploy
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-50-1">1</a></span>
-<span class="normal"><a href="#__codelineno-50-2">2</a></span>
-<span class="normal"><a href="#__codelineno-50-3">3</a></span>
-<span class="normal"><a href="#__codelineno-50-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-50-2" name="__codelineno-50-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/undeploy"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-50-3" name="__codelineno-50-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
-<a id="__codelineno-50-4" name="__codelineno-50-4"></a><span class="p">})</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-54-1">1</a></span>
+<span class="normal"><a href="#__codelineno-54-2">2</a></span>
+<span class="normal"><a href="#__codelineno-54-3">3</a></span>
+<span class="normal"><a href="#__codelineno-54-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-54-2" name="__codelineno-54-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/undeploy"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-54-3" name="__codelineno-54-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
+<a id="__codelineno-54-4" name="__codelineno-54-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-51-1">1</a></span>
-<span class="normal"><a href="#__codelineno-51-2">2</a></span>
-<span class="normal"><a href="#__codelineno-51-3">3</a></span>
-<span class="normal"><a href="#__codelineno-51-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-51-2" name="__codelineno-51-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/undeploy"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-51-3" name="__codelineno-51-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
-<a id="__codelineno-51-4" name="__codelineno-51-4"></a><span class="p">})</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-55-1">1</a></span>
+<span class="normal"><a href="#__codelineno-55-2">2</a></span>
+<span class="normal"><a href="#__codelineno-55-3">3</a></span>
+<span class="normal"><a href="#__codelineno-55-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-55-2" name="__codelineno-55-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/undeploy"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-55-3" name="__codelineno-55-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
+<a id="__codelineno-55-4" name="__codelineno-55-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -3192,40 +3260,40 @@
 </table>
 <h2 id="vintner-instances-update">vintner instances update<a class="headerlink" href="#vintner-instances-update" title="Permanent link">¶</a></h2>
 <p>update instance</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="22:4"><input checked="checked" id="__tabbed_22_1" name="__tabbed_22" type="radio"/><input id="__tabbed_22_2" name="__tabbed_22" type="radio"/><input id="__tabbed_22_3" name="__tabbed_22" type="radio"/><input id="__tabbed_22_4" name="__tabbed_22" type="radio"/><div class="tabbed-labels"><label for="__tabbed_22_1">CLI</label><label for="__tabbed_22_2">cURL</label><label for="__tabbed_22_3">JavaScript</label><label for="__tabbed_22_4">Python</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="23:4"><input checked="checked" id="__tabbed_23_1" name="__tabbed_23" type="radio"/><input id="__tabbed_23_2" name="__tabbed_23" type="radio"/><input id="__tabbed_23_3" name="__tabbed_23" type="radio"/><input id="__tabbed_23_4" name="__tabbed_23" type="radio"/><div class="tabbed-labels"><label for="__tabbed_23_1">CLI</label><label for="__tabbed_23_2">cURL</label><label for="__tabbed_23_3">JavaScript</label><label for="__tabbed_23_4">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-52-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>update<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-56-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>update<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-53-1">1</a></span>
-<span class="normal"><a href="#__codelineno-53-2">2</a></span>
-<span class="normal"><a href="#__codelineno-53-3">3</a></span>
-<span class="normal"><a href="#__codelineno-53-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-53-2" name="__codelineno-53-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-53-3" name="__codelineno-53-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-53-4" name="__codelineno-53-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/update
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-57-1">1</a></span>
+<span class="normal"><a href="#__codelineno-57-2">2</a></span>
+<span class="normal"><a href="#__codelineno-57-3">3</a></span>
+<span class="normal"><a href="#__codelineno-57-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-57-3" name="__codelineno-57-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-57-4" name="__codelineno-57-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/update
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-54-1">1</a></span>
-<span class="normal"><a href="#__codelineno-54-2">2</a></span>
-<span class="normal"><a href="#__codelineno-54-3">3</a></span>
-<span class="normal"><a href="#__codelineno-54-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-54-2" name="__codelineno-54-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/update"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-54-3" name="__codelineno-54-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
-<a id="__codelineno-54-4" name="__codelineno-54-4"></a><span class="p">})</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-58-1">1</a></span>
+<span class="normal"><a href="#__codelineno-58-2">2</a></span>
+<span class="normal"><a href="#__codelineno-58-3">3</a></span>
+<span class="normal"><a href="#__codelineno-58-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/update"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-58-3" name="__codelineno-58-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span>
+<a id="__codelineno-58-4" name="__codelineno-58-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-55-1">1</a></span>
-<span class="normal"><a href="#__codelineno-55-2">2</a></span>
-<span class="normal"><a href="#__codelineno-55-3">3</a></span>
-<span class="normal"><a href="#__codelineno-55-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-55-2" name="__codelineno-55-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/update"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-55-3" name="__codelineno-55-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
-<a id="__codelineno-55-4" name="__codelineno-55-4"></a><span class="p">})</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-59-1">1</a></span>
+<span class="normal"><a href="#__codelineno-59-2">2</a></span>
+<span class="normal"><a href="#__codelineno-59-3">3</a></span>
+<span class="normal"><a href="#__codelineno-59-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/update"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span>
+<a id="__codelineno-59-4" name="__codelineno-59-4"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -3257,74 +3325,6 @@
 <td>false</td>
 <td>boolean</td>
 <td>verbose</td>
-</tr>
-</tbody>
-</table>
-<h2 id="vintner-instances-update-template">vintner instances update-template<a class="headerlink" href="#vintner-instances-update-template" title="Permanent link">¶</a></h2>
-<p>update instance template</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="23:4"><input checked="checked" id="__tabbed_23_1" name="__tabbed_23" type="radio"/><input id="__tabbed_23_2" name="__tabbed_23" type="radio"/><input id="__tabbed_23_3" name="__tabbed_23" type="radio"/><input id="__tabbed_23_4" name="__tabbed_23" type="radio"/><div class="tabbed-labels"><label for="__tabbed_23_1">CLI</label><label for="__tabbed_23_2">cURL</label><label for="__tabbed_23_3">JavaScript</label><label for="__tabbed_23_4">Python</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-56-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>update-template<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE</span><span class="si">}</span><span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-57-1">1</a></span>
-<span class="normal"><a href="#__codelineno-57-2">2</a></span>
-<span class="normal"><a href="#__codelineno-57-3">3</a></span>
-<span class="normal"><a href="#__codelineno-57-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-57-2" name="__codelineno-57-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-57-3" name="__codelineno-57-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-57-4" name="__codelineno-57-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/instances/update-template
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-58-1">1</a></span>
-<span class="normal"><a href="#__codelineno-58-2">2</a></span>
-<span class="normal"><a href="#__codelineno-58-3">3</a></span>
-<span class="normal"><a href="#__codelineno-58-4">4</a></span>
-<span class="normal"><a href="#__codelineno-58-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
-<a id="__codelineno-58-2" name="__codelineno-58-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/instances/update-template"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-58-3" name="__codelineno-58-3"></a><span class="w">    </span><span class="nx">instance</span><span class="o">:</span><span class="w"> </span><span class="nx">INSTANCE</span><span class="p">,</span>
-<a id="__codelineno-58-4" name="__codelineno-58-4"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span>
-<a id="__codelineno-58-5" name="__codelineno-58-5"></a><span class="p">})</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-59-1">1</a></span>
-<span class="normal"><a href="#__codelineno-59-2">2</a></span>
-<span class="normal"><a href="#__codelineno-59-3">3</a></span>
-<span class="normal"><a href="#__codelineno-59-4">4</a></span>
-<span class="normal"><a href="#__codelineno-59-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1"></a><span class="kn">import</span> <span class="nn">requests</span>
-<a id="__codelineno-59-2" name="__codelineno-59-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/instances/update-template"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-59-3" name="__codelineno-59-3"></a>    <span class="s2">"instance"</span><span class="p">:</span> <span class="n">INSTANCE</span><span class="p">,</span>
-<a id="__codelineno-59-4" name="__codelineno-59-4"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span>
-<a id="__codelineno-59-5" name="__codelineno-59-5"></a><span class="p">})</span>
-</code></pre></div></td></tr></table></div>
-</div>
-</div>
-</div>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Mandatory</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>instance</td>
-<td>true</td>
-<td>string</td>
-<td>instance name</td>
-</tr>
-<tr>
-<td>template</td>
-<td>true</td>
-<td>string</td>
-<td>template name</td>
 </tr>
 </tbody>
 </table>
