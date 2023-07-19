@@ -24,14 +24,11 @@ export default async function (options: TemplatePUMLTypesOptions) {
 
     const result: {[key: string]: string} = {}
     for (const type of types) {
-        result[type] = await files.renderFile(
-            path.join(files.ASSETS_DIR, 'templates', 'puml', 'types', 'types.template.ejs'),
-            {
-                graph,
-                utils,
-                type,
-            }
-        )
+        result[type] = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'types', 'types.template.ejs'), {
+            graph,
+            utils,
+            type,
+        })
     }
 
     for (const [type, plot] of Object.entries(result)) {

@@ -4,7 +4,7 @@ import axios from 'axios'
 import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fs from 'fs'
-import {copySync} from 'fs-extra'
+import * as extra from 'fs-extra'
 import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
@@ -14,6 +14,7 @@ import * as utils from './utils'
 import * as validator from './validator'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
+export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -29,6 +30,16 @@ export function assertDirectory(dir: string, file = false) {
     } else {
         if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
     }
+}
+
+export function isEmpty(dir: string) {
+    const resolved = path.resolve(dir)
+    return fs.readdirSync(resolved).length === 0
+}
+
+export function assertEmpty(dir: string) {
+    const resolved = path.resolve(dir)
+    if (!isEmpty(resolved)) throw new Error(`Directory "${resolved}" is not empty`)
 }
 
 export function isFile(path: string) {
@@ -117,7 +128,7 @@ export function toJSON(obj: any) {
 }
 
 export function copy(source: string, target: string) {
-    copySync(path.resolve(source), path.resolve(target))
+    extra.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {

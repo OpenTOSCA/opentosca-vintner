@@ -222,6 +222,16 @@ program
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
+    .command('init')
+    .description('initializes a CSAR')
+    .requiredOption('--template <string>', 'path of the directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.init(options)
+        })
+    )
+
+template
     .command('package')
     .description('packages a directory to a CSAR')
     .requiredOption('--template <string>', 'path to variable service template')
