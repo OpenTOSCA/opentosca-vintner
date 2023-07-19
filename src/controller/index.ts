@@ -11,6 +11,7 @@ import licenseInfo from './info/license'
 import repoInfo from './info/repo'
 import adaptInstance from './instances/adapt'
 import codeInstance from './instances/code'
+import continueInstance from './instances/continue'
 import deleteInstance from './instances/delete'
 import deployInstance from './instances/deploy'
 import infoInstance from './instances/info'
@@ -19,7 +20,6 @@ import inspectInstance from './instances/inspect'
 import listInstances from './instances/list'
 import openInstance from './instances/open'
 import pathInstance from './instances/path'
-import redeployInstance from './instances/redeploy'
 import resolveInstance from './instances/resolve'
 import unadaptInstance from './instances/unadapt'
 import undeployInstance from './instances/undeploy'
@@ -75,7 +75,7 @@ const Controller = {
         code: codeInstance,
         path: pathInstance,
         undeploy: undeployInstance,
-        redeploy: redeployInstance,
+        continue: continueInstance,
         update: updateInstance,
         resolve: resolveInstance,
         adapt: adaptInstance,

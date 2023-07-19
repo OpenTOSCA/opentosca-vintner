@@ -498,13 +498,13 @@ instances
     )
 
 instances
-    .command('redeploy')
-    .description('redeploy instance')
+    .command('continue')
+    .description('continue instance (deployment)')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
-            await Controller.instances.redeploy(options)
+            await Controller.instances.continue(options)
         })
     )
 

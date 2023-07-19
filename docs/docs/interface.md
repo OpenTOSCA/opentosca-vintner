@@ -135,6 +135,45 @@ opens the instance directory in visual studio code
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
+## vintner instances continue
+
+continue instance (deployment)
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances continue --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/continue
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/continue", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/continue", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| verbose |  false  | boolean | verbose |
+
 ## vintner instances delete
 
 deletes instance
@@ -388,45 +427,6 @@ returns the path to the instance directory
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-
-## vintner instances redeploy
-
-redeploy instance
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances redeploy --instance ${INSTANCE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}"}' \
-            ${SERVER_ADDRESS}/instances/redeploy
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/redeploy", {
-		instance: INSTANCE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/redeploy", json={
-		"instance": INSTANCE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name |
-| verbose |  false  | boolean | verbose |
 
 ## vintner instances resolve
 

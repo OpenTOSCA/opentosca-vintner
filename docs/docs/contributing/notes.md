@@ -75,11 +75,11 @@ ${vintner_home}/
 1. Deployment inputs are copied to the service inputs directory.
 1. Deployment command is sent to orchestrator. Variability-resolved service template is used.
 
-### Redeploy an Instance
+### Continue an Instance Deployment
 
-!!! note "vintner instances redeploy"
+!!! note "vintner instances continue"
 
-1. Deployment command is sent once again to the orchestrator. Variability-resolve service templated is used. For
+1. Continue deployment command is sent to the orchestrator. Variability-resolve service templated is used. For
    example, to rerun a failed deployment.
 
 ### Update an Instance Template
