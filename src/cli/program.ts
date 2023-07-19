@@ -87,7 +87,7 @@ setup
 const info = program.command('info').description('infos about vintner')
 
 info.command('about')
-    .description('')
+    .description('general information')
     .action(
         hae.exit(async options => {
             await Controller.info.about()
@@ -95,7 +95,7 @@ info.command('about')
     )
 
 info.command('license')
-    .description('license')
+    .description('license of vintner')
     .action(
         hae.exit(async options => {
             await Controller.info.license()
@@ -127,7 +127,7 @@ info.command('repo')
     )
 
 info.command('dependencies')
-    .description('lists the dependencies used to implement vintner')
+    .description('dependencies used to implement vintner')
     .action(
         hae.exit(async options => {
             await Controller.info.dependencies()
