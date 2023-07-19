@@ -82,7 +82,7 @@ jobs:
             #
             ###################################################
 
-            - name: (DOCS) Generate Licenses Page
+            - name: (DOCS) Generate Dependencies Page
               run: yarn docs:generate:dependencies
 
             - name: (BUILD) Build Project
