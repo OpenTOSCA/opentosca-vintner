@@ -59,7 +59,7 @@ An example for the deployment inputs is given in {{ repo_link('examples/xopera-p
 vintner templates import --template pipes-and-filters --path examples/xopera-pipes-and-filters
 
 # Add instance
-vintner instances create --instance pipes-and-filters --template pipes-and-filters
+vintner instances init --instance pipes-and-filters --template pipes-and-filters
 
 # Resolve variability
 vintner instances resolve --instance pipes-and-filters --presets raspberry

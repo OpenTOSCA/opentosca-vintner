@@ -150,7 +150,7 @@ jobs:
                   vintner orchestrators enable --orchestrator xopera
 
                   vintner templates import --template motivation --path examples/xopera-motivation
-                  vintner instances create --instance motivation --template motivation
+                  vintner instances init --instance motivation --template motivation
                   vintner instances resolve --instance motivation --presets prod
 
                   cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
@@ -179,7 +179,7 @@ jobs:
                   vintner orchestrators enable --orchestrator unfurl
 
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
-                  vintner instances create --instance artifacts --template artifacts
+                  vintner instances init --instance artifacts --template artifacts
                   vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 
                   echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml

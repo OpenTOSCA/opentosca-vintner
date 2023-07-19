@@ -49,12 +49,12 @@ vintner orchestrators enable --orchestrator unfurl-wsl
 The following table describes which feature of the orchestrators are integrated. 
 The orchestrators provide more features than we integrated, thus, checkout [TOSSS](https://tosss.opentosca.org){target=_blank}.
 
-| Feature | xOpera | Unfurl |
-| -- |-------| --- |
-| Deploy a service template | :material-check: | :material-check: |
-| Redeploy a service template | :material-check: | :material-close: | 
-| Update a service template | :material-check: | :material-close: | 
-| Undeploy a service template | :material-check: |:material-check: |
+| Feature                         | xOpera | Unfurl |
+|---------------------------------|-------| --- |
+| Deploy a service template       | :material-check: | :material-check: |
+| Continue a service template     | :material-check: | :material-close: | 
+| Update a service template       | :material-check: | :material-close: | 
+| Undeploy a service template     | :material-check: |:material-check: |
 | Access Node Instance Attributes | :material-check: | :material-close: |
 
 

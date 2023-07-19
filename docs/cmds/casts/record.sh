@@ -15,5 +15,11 @@ if [ ! -f "${CAST_INPUT}" ]; then
   exit 1
 fi
 
+# Ensure that asciinema is installed
+if ! which asciinema &>/dev/null; then
+  echo "\"asciinema\" not installed"
+  exit 1
+fi
+
 echo "Recoding cast \"${CAST_NAME}\" ..."
 asciinema rec -c "bash ${CAST_INPUT}" --overwrite "${CAST_OUTPUT}"

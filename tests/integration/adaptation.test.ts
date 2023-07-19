@@ -40,7 +40,7 @@ if (!integrationTestsEnabled) {
             // Create instance
             const instanceName = 'xopera-getting-started-instance'
             const instance = new Instance(instanceName)
-            await Controller.instances.create({
+            await Controller.instances.init({
                 instance: instanceName,
                 template,
             })

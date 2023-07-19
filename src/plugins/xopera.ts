@@ -54,7 +54,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute(command)
     }
 
-    async redeploy(instance: Instance, options?: OrchestratorOperationOptions) {
+    async continue(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'deploy',
@@ -100,7 +100,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
                 }
             }
 
-            await this.redeploy(instance, options)
+            await this.continue(instance, options)
         }
     }
 

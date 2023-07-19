@@ -52,9 +52,9 @@ ${vintner_home}/
 
 ## Workflows
 
-### Create a new Instance
+### Initialize a new Instance
 
-!!! note "vintner instances create"
+!!! note "vintner instances init"
 
 1. Instance directory is created.
 1. Extracted CSAR (Template) is copied into instance template directory.
@@ -75,16 +75,16 @@ ${vintner_home}/
 1. Deployment inputs are copied to the service inputs directory.
 1. Deployment command is sent to orchestrator. Variability-resolved service template is used.
 
-### Redeploy an Instance
+### Continue an Instance Deployment
 
-!!! note "vintner instances redeploy"
+!!! note "vintner instances continue"
 
-1. Deployment command is sent once again to the orchestrator. Variability-resolve service templated is used. For
+1. Continue deployment command is sent to the orchestrator. Variability-resolve service templated is used. For
    example, to rerun a failed deployment.
 
-### Update an Instance Template
+### Swap an Instance Template
 
-!!! note "vintner instances update-template"
+!!! note "vintner instances swap"
 
 1. New template is copied into (new) instance template directory
 1. Instance info is updated
@@ -132,14 +132,6 @@ Note, this does not undeploy the instance.
 - `load${data}` returns data loaded from the filesystem, e.g. `Instance#loadServiceInputs`.
 - `set${data}` writes data to filesystem, e.g. `Instance#setService`.
 
-## Install NodeJS on Linux
-
-```shell linenums="1"
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo bash -
-sudo apt-get install nodejs -y
-sudo npm install -g yarn
-```
-
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
@@ -167,7 +159,7 @@ git update-index --chmod=+x <path to file>
 
 ## Install gcloud CLI
 
-Install gcloud on Ubunutu, as described in https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb.
+Install gcloud on Ubunutu, as described in [https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb](https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb){target=_blank}.
 
 ```shell linenums="1"
 sudo apt-get update
@@ -194,7 +186,7 @@ word     = ("a" ... "z" | "A" ... "Z")[word]
 
 In the following, we briefly discuss limitations of our prototypical implementation.
 
-1. We expect that each relationship templates is used exactly once
-1. We expect that `relationship` at requirement assignments is a string
+1. We expect that each relationship templates is used exactly once.
+1. We expect that `relationship` at requirement assignments is a string.
 1. We expect that names of hosting relations match `/^(.*_)?host(_.*)?$/` since we do not implement the TOSCA type system.
 1. We expect that names of connection relations match `/^(.*_)?connection(_.*)?$/` since we do not implement the TOSCA type system.

@@ -11,7 +11,7 @@ if (!integrationTestsEnabled) {
     console.log()
     console.warn('Skipping integration tests')
 } else {
-    describe('update-template', () => {
+    describe('swap', () => {
         before(async () => {
             await checkSetup()
         })
@@ -20,9 +20,9 @@ if (!integrationTestsEnabled) {
             await initSetup()
         })
 
-        it('xopera-test-update-template', async () => {
+        it('xopera-test-swap-template', async () => {
             // Alpha Template
-            const alphaName = 'xopera-test-update-template-alpha'
+            const alphaName = 'xopera-test-swap-template-alpha'
             const alphaDirectoy = path.join(examplesDir, alphaName)
             const alphaTemplate = files.loadYAML<ServiceTemplate>(
                 path.join(alphaDirectoy, 'variable-service-template.yaml')
@@ -33,7 +33,7 @@ if (!integrationTestsEnabled) {
             })
 
             // Bravo Template
-            const bravoName = 'xopera-test-update-template-bravo'
+            const bravoName = 'xopera-test-swap-template-bravo'
             const bravoDirectoy = path.join(examplesDir, bravoName)
             const bravoTemplate = files.loadYAML<ServiceTemplate>(
                 path.join(bravoDirectoy, 'variable-service-template.yaml')
@@ -44,9 +44,9 @@ if (!integrationTestsEnabled) {
             })
 
             // Create instance
-            const instanceName = 'xopera-test-update-template'
+            const instanceName = 'xopera-test-swap-template'
             const instance = new Instance(instanceName)
-            await Controller.instances.create({
+            await Controller.instances.init({
                 instance: instanceName,
                 template: alphaName,
             })
@@ -58,8 +58,8 @@ if (!integrationTestsEnabled) {
             await Controller.instances.resolve({instance: instanceName})
             await Controller.instances.deploy({instance: instanceName})
 
-            // Update template
-            await Controller.instances.updateTemplate({
+            // Swap template
+            await Controller.instances.swap({
                 instance: instanceName,
                 template: bravoName,
             })
