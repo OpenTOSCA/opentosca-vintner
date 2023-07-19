@@ -444,6 +444,15 @@ sofdcar.nodes.Battery:
   derived_from: sofdcar.nodes.Root
 ```
 
+#### sofdcar.nodes.Feature
+
+The node all other features are derived from.
+
+```yaml linenums="1"
+sofdcar.nodes.Feature:
+  derived_from: sofdcar.nodes.Root
+```
+
 ### Policy Types
 
 We specify the following normative policy types.

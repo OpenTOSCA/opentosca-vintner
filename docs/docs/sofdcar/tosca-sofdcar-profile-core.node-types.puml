@@ -48,6 +48,8 @@ rectangle "sofdcar.nodes.Channel"
 
 rectangle "sofdcar.nodes.Battery"
 
+rectangle "sofdcar.nodes.Feature"
+
 
 "tosca.nodes.Root" <|-- "sofdcar.nodes.Root"
 
@@ -94,5 +96,7 @@ rectangle "sofdcar.nodes.Battery"
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Channel"
 
 "sofdcar.nodes.Root" <|-- "sofdcar.nodes.Battery"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Feature"
 
 @enduml
