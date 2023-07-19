@@ -218,6 +218,10 @@ node_types:
         description: The node all other batteries are derived from.
         derived_from: sofdcar.nodes.Root
 
+    sofdcar.nodes.Feature:
+        description: The node all other features are derived from.
+        derived_from: sofdcar.nodes.Root
+
 policy_types:
     sofdcar.policies.Root:
         description: The policy all other policies are derived from.
