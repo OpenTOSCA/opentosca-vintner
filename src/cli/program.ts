@@ -102,6 +102,14 @@ info.command('license')
         })
     )
 
+info.command('author')
+    .description('open author')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.author()
+        })
+    )
+
 info.command('contact')
     .description('contact us')
     .action(

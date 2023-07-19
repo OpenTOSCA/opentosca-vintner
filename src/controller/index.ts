@@ -3,6 +3,7 @@ import fileSensor from '#controller/sensors/file'
 import locationSensor from '#controller/sensors/location'
 import weekdaySensor from '#controller/sensors/weekday'
 import aboutInfo from './info/about'
+import authorInfo from './info/author'
 import contactInfo from './info/contact'
 import dependenciesInfo from './info/dependencies'
 import docsInfo from './info/docs'
@@ -62,6 +63,7 @@ const Controller = {
         license: licenseInfo,
         repo: repoInfo,
         dependencies: dependenciesInfo,
+        author: authorInfo,
     },
     instances: {
         create: createInstance,

@@ -1,3 +1,7 @@
+import open from '#utils/open'
+
 export default async function () {
-    console.log('https://miles.stoetzner.de')
+    const url = 'mailto://miles.stoetzner@iste.uni-stuttgart.de'
+    console.log(url)
+    await open.url(url)
 }
