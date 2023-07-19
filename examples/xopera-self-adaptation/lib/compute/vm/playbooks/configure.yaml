@@ -22,7 +22,7 @@
       - name: Install tools
         shell: apt-get update -y && apt-get install net-tools nano git wget curl tree nmap stress jq -y
 
-      - name: Install NodeJS
+      - name: Install Node.js
         shell: |
             if [ ! -f /usr/bin/node ]; then
                 curl -fsSL https://deb.nodesource.com/setup_16.x | bash -

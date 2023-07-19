@@ -132,14 +132,6 @@ Note, this does not undeploy the instance.
 - `load${data}` returns data loaded from the filesystem, e.g. `Instance#loadServiceInputs`.
 - `set${data}` writes data to filesystem, e.g. `Instance#setService`.
 
-## Install NodeJS on Linux
-
-```shell linenums="1"
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo bash -
-sudo apt-get install nodejs -y
-sudo npm install -g yarn
-```
-
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
@@ -167,7 +159,7 @@ git update-index --chmod=+x <path to file>
 
 ## Install gcloud CLI
 
-Install gcloud on Ubunutu, as described in https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb.
+Install gcloud on Ubunutu, as described in [https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb](https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb){target=_blank}.
 
 ```shell linenums="1"
 sudo apt-get update
@@ -194,7 +186,7 @@ word     = ("a" ... "z" | "A" ... "Z")[word]
 
 In the following, we briefly discuss limitations of our prototypical implementation.
 
-1. We expect that each relationship templates is used exactly once
-1. We expect that `relationship` at requirement assignments is a string
+1. We expect that each relationship templates is used exactly once.
+1. We expect that `relationship` at requirement assignments is a string.
 1. We expect that names of hosting relations match `/^(.*_)?host(_.*)?$/` since we do not implement the TOSCA type system.
 1. We expect that names of connection relations match `/^(.*_)?connection(_.*)?$/` since we do not implement the TOSCA type system.
