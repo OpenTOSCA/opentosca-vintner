@@ -36,6 +36,9 @@ jobs:
             #
             ###################################################
 
+            - name: (DOCS) Generate Dependencies Page
+              run: yarn docs:generate:dependencies
+
             - name: (BUILD) Build Project
               run: yarn build
 

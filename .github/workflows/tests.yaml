@@ -54,8 +54,8 @@ jobs:
             - name: (TEST) Check Prettier
               run: yarn style:check
 
-            - name: (TEST) Check Licenses
-              run: yarn licenses:check
+            - name: (TEST) Check Dependencies
+              run: yarn dependencies:check
 
             - name: (TEST) Check Service Templates
               run: yarn puccini:check
@@ -68,6 +68,9 @@ jobs:
             # Build
             #
             ###################################################
+
+            - name: (DOCS) Generate Dependencies Page
+              run: yarn docs:generate:dependencies
 
             - name: (BUILD) Build Project
               run: yarn build
@@ -95,9 +98,6 @@ jobs:
 
             - name: (DOCS) Build Documentation Commands
               run: yarn docs:build:commands
-
-            - name: (DOCS) Generate Licenses Page
-              run: yarn docs:generate:licenses
 
             - name: (DOCS) Generate Interface Page
               run: yarn docs:generate:interface

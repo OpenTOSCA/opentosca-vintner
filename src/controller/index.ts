@@ -2,6 +2,13 @@ import computeSensor from '#controller/sensors/compute'
 import fileSensor from '#controller/sensors/file'
 import locationSensor from '#controller/sensors/location'
 import weekdaySensor from '#controller/sensors/weekday'
+import aboutInfo from './info/about'
+import authorInfo from './info/author'
+import contactInfo from './info/contact'
+import dependenciesInfo from './info/dependencies'
+import docsInfo from './info/docs'
+import licenseInfo from './info/license'
+import repoInfo from './info/repo'
 import adaptInstance from './instances/adapt'
 import codeInstance from './instances/code'
 import createInstance from './instances/create'
@@ -49,6 +56,15 @@ import openTemplate from './templates/open'
 import pathTemplate from './templates/path'
 
 const Controller = {
+    info: {
+        contact: contactInfo,
+        docs: docsInfo,
+        about: aboutInfo,
+        license: licenseInfo,
+        repo: repoInfo,
+        dependencies: dependenciesInfo,
+        author: authorInfo,
+    },
     instances: {
         create: createInstance,
         delete: deleteInstance,

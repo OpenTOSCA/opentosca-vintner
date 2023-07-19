@@ -25,7 +25,7 @@ export default async function (options: TemplatePUMLTypesOptions) {
     const result: {[key: string]: string} = {}
     for (const type of types) {
         result[type] = await files.renderFile(
-            path.join(__dirname, '..', '..', '..', 'assets', 'templates', 'puml', 'types', 'types.template.ejs'),
+            path.join(files.ASSETS_DIR, 'templates', 'puml', 'types', 'types.template.ejs'),
             {
                 graph,
                 utils,

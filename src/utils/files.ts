@@ -13,6 +13,8 @@ import xml2js from 'xml2js'
 import * as utils from './utils'
 import * as validator from './validator'
 
+export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
+
 export function exists(file: string) {
     return fs.existsSync(file)
 }
@@ -196,7 +198,7 @@ export async function download(source: string, target: string = temporary()): Pr
 }
 
 export function temporary(name?: string) {
-    return path.join(os.tmpdir(), name || utils.generateNonce())
+    return path.join(os.tmpdir(), name || crypto.generateNonce())
 }
 
 export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
