@@ -21,10 +21,10 @@ import listInstances from './instances/list'
 import openInstance from './instances/open'
 import pathInstance from './instances/path'
 import resolveInstance from './instances/resolve'
+import swapInstance from './instances/swap'
 import unadaptInstance from './instances/unadapt'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
-import updateInstanceTemplate from './instances/update-template'
 import enableOrchestrator from './orchestrators/enable'
 import initUnfurl from './orchestrators/init-unfurl'
 import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
@@ -80,7 +80,7 @@ const Controller = {
         resolve: resolveInstance,
         adapt: adaptInstance,
         unadapt: unadaptInstance,
-        updateTemplate: updateInstanceTemplate,
+        swap: swapInstance,
         info: infoInstance,
     },
     query: {

@@ -234,9 +234,9 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/instances/update-template',
+    '/instances/swap',
     hae.express(async (req, res, next) => {
-        await Controller.instances.updateTemplate(req.body)
+        await Controller.instances.swap(req.body)
         res.json({})
     })
 )

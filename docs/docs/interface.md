@@ -580,14 +580,14 @@ update instance
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
 
-## vintner instances update-template
+## vintner instances swap
 
 update instance template
 
 
 === "CLI"
     ```shell linenums="1"
-    vintner instances update-template --instance ${INSTANCE} --template ${TEMPLATE}
+    vintner instances swap --instance ${INSTANCE} --template ${TEMPLATE}
     ```
 
 === "cURL"
@@ -595,13 +595,13 @@ update instance template
     curl --header "Content-Type: application/json" \
             --request POST \
             --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
-            ${SERVER_ADDRESS}/instances/update-template
+            ${SERVER_ADDRESS}/instances/swap
     ```
 
 === "JavaScript"
     ```javascript linenums="1"
     const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/update-template", {
+    await axios.post(SERVER_ADDRESS + "/instances/swap", {
 		instance: INSTANCE,
 		template: TEMPLATE
     })
@@ -610,7 +610,7 @@ update instance template
 === "Python"
     ```python linenums="1"
     import requests
-    requests.post(SERVER_ADDRESS + "/instances/update-template", json={
+    requests.post(SERVER_ADDRESS + "/instances/swap", json={
 		"instance": INSTANCE,
 		"template": TEMPLATE
     })

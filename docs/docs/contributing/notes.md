@@ -82,9 +82,9 @@ ${vintner_home}/
 1. Continue deployment command is sent to the orchestrator. Variability-resolve service templated is used. For
    example, to rerun a failed deployment.
 
-### Update an Instance Template
+### Swap an Instance Template
 
-!!! note "vintner instances update-template"
+!!! note "vintner instances swap"
 
 1. New template is copied into (new) instance template directory
 1. Instance info is updated
