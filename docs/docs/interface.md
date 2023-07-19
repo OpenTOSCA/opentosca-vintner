@@ -468,6 +468,47 @@ resolves variability
 | presets |  false  | string... | names of variability presets (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
 
+## vintner instances swap
+
+swap instance template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances swap --instance ${INSTANCE} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/instances/swap
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/swap", {
+		instance: INSTANCE,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/swap", json={
+		"instance": INSTANCE,
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| template |  true  | string | template name |
+
 ## vintner instances unadapt
 
 stop adaptation loop of instance
@@ -579,47 +620,6 @@ update instance
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
-
-## vintner instances swap
-
-update instance template
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances swap --instance ${INSTANCE} --template ${TEMPLATE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
-            ${SERVER_ADDRESS}/instances/swap
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/swap", {
-		instance: INSTANCE,
-		template: TEMPLATE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/swap", json={
-		"instance": INSTANCE,
-		"template": TEMPLATE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name |
-| template |  true  | string | template name |
 
 ## vintner orchestrators enable
 
