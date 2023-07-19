@@ -8,7 +8,7 @@ RUN yarn --frozen-lockfile
 # Test
 RUN yarn lint:check
 RUN yarn style:check
-RUN yarn licenses:check
+RUN yarn dependencies:check
 RUN yarn puccini:check
 RUN yarn test
 

@@ -109,14 +109,14 @@ Run the following command, to run to benchmark the variability resolving.
 yarn benchmark
 ```
 
-## Licenses
+## Dependencies
 
-[license-checker](https://github.com/davglass/license-checker){target=_blank} is used for handling licenses of (transitive) dependencies.
+We use [license-checker](https://github.com/davglass/license-checker){target=_blank} for handling licenses of (transitive) dependencies.
 To check that (transitive) dependencies are licensed as expected, run the following command.
 This check is also executed inside workflows.
 
 ```shell linenums="1"
-yarn licenses:check
+yarn dependencies:check
 ```
 
 

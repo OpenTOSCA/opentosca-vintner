@@ -117,7 +117,7 @@ This command is also executed during the `release` workflow and, therefore, over
 yarn docs:generate:interface
 ```
 
-## Licenses
+## Dependencies
 
 To generate a list of licenses for all (transitive) dependencies, run the following command
 This command is also executed during the `release` workflow and, therefore, overwrites respective files.

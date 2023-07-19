@@ -61,8 +61,8 @@ jobs:
             - name: (TEST) Check Prettier
               run: yarn style:check
 
-            - name: (TEST) Check Licenses
-              run: yarn licenses:check
+            - name: (TEST) Check Dependencies
+              run: yarn dependencies:check
 
             - name: (TEST) Check Service Templates
               run: yarn puccini:check
