@@ -156,7 +156,7 @@ resolvers.post(
 resolvers.post(
     '/instances/create',
     hae.express(async (req, res, next) => {
-        await Controller.instances.create(req.body)
+        await Controller.instances.init(req.body)
         res.json({})
     })
 )

@@ -11,10 +11,10 @@ import licenseInfo from './info/license'
 import repoInfo from './info/repo'
 import adaptInstance from './instances/adapt'
 import codeInstance from './instances/code'
-import createInstance from './instances/create'
 import deleteInstance from './instances/delete'
 import deployInstance from './instances/deploy'
 import infoInstance from './instances/info'
+import initInstance from './instances/init'
 import inspectInstance from './instances/inspect'
 import listInstances from './instances/list'
 import openInstance from './instances/open'
@@ -66,7 +66,7 @@ const Controller = {
         author: authorInfo,
     },
     instances: {
-        create: createInstance,
+        init: initInstance,
         delete: deleteInstance,
         deploy: deployInstance,
         inspect: inspectInstance,

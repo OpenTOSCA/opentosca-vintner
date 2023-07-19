@@ -46,7 +46,7 @@ if (!integrationTestsEnabled) {
             // Create instance
             const instanceName = 'xopera-test-update-template'
             const instance = new Instance(instanceName)
-            await Controller.instances.create({
+            await Controller.instances.init({
                 instance: instanceName,
                 template: alphaName,
             })

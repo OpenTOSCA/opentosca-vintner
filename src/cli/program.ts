@@ -411,13 +411,13 @@ instances
     )
 
 instances
-    .command('create')
-    .description('creates a new instance')
+    .command('init')
+    .description('initializes a new instance')
     .requiredOption('--instance <string>', 'instance name (must match /^[a-z\\-]+$/)')
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            await Controller.instances.create(options)
+            await Controller.instances.init(options)
         })
     )
 

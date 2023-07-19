@@ -18,6 +18,17 @@ general information
     ```
 
 
+## vintner info author
+
+open author
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner info author 
+    ```
+
+
 ## vintner info contact
 
 contact us
@@ -123,47 +134,6 @@ opens the instance directory in visual studio code
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-
-## vintner instances create
-
-creates a new instance
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances create --instance ${INSTANCE} --template ${TEMPLATE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
-            ${SERVER_ADDRESS}/instances/create
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/create", {
-		instance: INSTANCE,
-		template: TEMPLATE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/create", json={
-		"instance": INSTANCE,
-		"template": TEMPLATE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
-| template |  true  | string | template name |
 
 ## vintner instances delete
 
@@ -280,6 +250,47 @@ display instance info
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
+
+## vintner instances init
+
+initializes a new instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances init --instance ${INSTANCE} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/instances/init
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/init", {
+		instance: INSTANCE,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/init", json={
+		"instance": INSTANCE,
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
+| template |  true  | string | template name |
 
 ## vintner instances inspect
 

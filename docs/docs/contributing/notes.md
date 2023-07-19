@@ -52,9 +52,9 @@ ${vintner_home}/
 
 ## Workflows
 
-### Create a new Instance
+### Initialize a new Instance
 
-!!! note "vintner instances create"
+!!! note "vintner instances init"
 
 1. Instance directory is created.
 1. Extracted CSAR (Template) is copied into instance template directory.

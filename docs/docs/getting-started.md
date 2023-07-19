@@ -36,14 +36,14 @@ vintner orchestrators enable --orchestrator xopera
 Then, we clone the repository.
 --8<-- "clone.md"
 
-Next, we import the template and create an application instance.
+Then, we import the template and initialize an instance.
 
 ```shell linenums="1"
 # Import the template
 vintner templates import --template getting-started --path examples/xopera-getting-started
 
 # Create an instance
-vintner instances create --instance getting-started --template getting-started
+vintner instances init --instance getting-started --template getting-started
 ```
 
 The imported template contains the following conditional node templates.
