@@ -13,6 +13,9 @@ We are using [Node.js](https://nodejs.org){target=_blank} version `16.14.0`.
 To install node, use [nvm](https://github.com/nvm-sh/nvm){target=_blank} or [nvm-windows](https://github.com/coreybutler/nvm-windows){target=_blank}.
 
 ```shell linenums="1"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.bashrc
+
 nvm install v16.14.0
 nvm use 16.14.0
 ```

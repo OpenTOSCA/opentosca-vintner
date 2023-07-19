@@ -3,9 +3,9 @@ import {Template} from '#repository/templates'
 import * as utils from '#utils'
 import lock from '#utils/lock'
 
-export type InstancesTemplateUpdateOptions = {instance: string; template: string}
+export type InstancesSwapOptions = {instance: string; template: string}
 
-export default async function (options: InstancesTemplateUpdateOptions) {
+export default async function (options: InstancesSwapOptions) {
     const instance = new Instance(options.instance)
     const template = new Template(options.template)
 

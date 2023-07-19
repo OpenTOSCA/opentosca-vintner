@@ -154,9 +154,9 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/instances/create',
+    '/instances/init',
     hae.express(async (req, res, next) => {
-        await Controller.instances.create(req.body)
+        await Controller.instances.init(req.body)
         res.json({})
     })
 )
@@ -171,6 +171,14 @@ resolvers.post(
 
 resolvers.post(
     '/instances/deploy',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.undeploy(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/continue',
     hae.express(async (req, res, next) => {
         await Controller.instances.undeploy(req.body)
         res.json({})
@@ -226,9 +234,9 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/instances/update-template',
+    '/instances/swap',
     hae.express(async (req, res, next) => {
-        await Controller.instances.updateTemplate(req.body)
+        await Controller.instances.swap(req.body)
         res.json({})
     })
 )

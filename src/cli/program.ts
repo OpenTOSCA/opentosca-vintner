@@ -411,13 +411,13 @@ instances
     )
 
 instances
-    .command('create')
-    .description('creates a new instance')
+    .command('init')
+    .description('initializes a new instance')
     .requiredOption('--instance <string>', 'instance name (must match /^[a-z\\-]+$/)')
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            await Controller.instances.create(options)
+            await Controller.instances.init(options)
         })
     )
 
@@ -498,13 +498,13 @@ instances
     )
 
 instances
-    .command('redeploy')
-    .description('redeploy instance')
+    .command('continue')
+    .description('continue instance (deployment)')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
-            await Controller.instances.redeploy(options)
+            await Controller.instances.continue(options)
         })
     )
 
@@ -521,13 +521,13 @@ instances
     )
 
 instances
-    .command('update-template')
-    .description('update instance template')
+    .command('swap')
+    .description('swap instance template')
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            await Controller.instances.updateTemplate(options)
+            await Controller.instances.swap(options)
         })
     )
 

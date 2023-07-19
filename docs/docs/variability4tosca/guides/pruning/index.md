@@ -49,7 +49,7 @@ An example for the deployment inputs is given in {{ repo_link('examples/xopera-p
 vintner templates import --template pruning --path examples/xopera-pruning
 
 # Add instance
-vintner instances create --instance pruning --template pruning
+vintner instances init --instance pruning --template pruning
 
 # Resolve variability
 vintner instances resolve --instance pruning --presets cloud

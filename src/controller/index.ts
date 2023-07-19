@@ -11,20 +11,20 @@ import licenseInfo from './info/license'
 import repoInfo from './info/repo'
 import adaptInstance from './instances/adapt'
 import codeInstance from './instances/code'
-import createInstance from './instances/create'
+import continueInstance from './instances/continue'
 import deleteInstance from './instances/delete'
 import deployInstance from './instances/deploy'
 import infoInstance from './instances/info'
+import initInstance from './instances/init'
 import inspectInstance from './instances/inspect'
 import listInstances from './instances/list'
 import openInstance from './instances/open'
 import pathInstance from './instances/path'
-import redeployInstance from './instances/redeploy'
 import resolveInstance from './instances/resolve'
+import swapInstance from './instances/swap'
 import unadaptInstance from './instances/unadapt'
 import undeployInstance from './instances/undeploy'
 import updateInstance from './instances/update'
-import updateInstanceTemplate from './instances/update-template'
 import enableOrchestrator from './orchestrators/enable'
 import initUnfurl from './orchestrators/init-unfurl'
 import initUnfurlWSL from './orchestrators/init-unfurl-wsl'
@@ -66,7 +66,7 @@ const Controller = {
         author: authorInfo,
     },
     instances: {
-        create: createInstance,
+        init: initInstance,
         delete: deleteInstance,
         deploy: deployInstance,
         inspect: inspectInstance,
@@ -75,12 +75,12 @@ const Controller = {
         code: codeInstance,
         path: pathInstance,
         undeploy: undeployInstance,
-        redeploy: redeployInstance,
+        continue: continueInstance,
         update: updateInstance,
         resolve: resolveInstance,
         adapt: adaptInstance,
         unadapt: unadaptInstance,
-        updateTemplate: updateInstanceTemplate,
+        swap: swapInstance,
         info: infoInstance,
     },
     query: {

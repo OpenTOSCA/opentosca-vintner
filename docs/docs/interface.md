@@ -18,6 +18,17 @@ general information
     ```
 
 
+## vintner info author
+
+open author
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner info author 
+    ```
+
+
 ## vintner info contact
 
 contact us
@@ -124,46 +135,44 @@ opens the instance directory in visual studio code
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
-## vintner instances create
+## vintner instances continue
 
-creates a new instance
+continue instance (deployment)
 
 
 === "CLI"
     ```shell linenums="1"
-    vintner instances create --instance ${INSTANCE} --template ${TEMPLATE}
+    vintner instances continue --instance ${INSTANCE}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
-            ${SERVER_ADDRESS}/instances/create
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/continue
     ```
 
 === "JavaScript"
     ```javascript linenums="1"
     const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/create", {
-		instance: INSTANCE,
-		template: TEMPLATE
+    await axios.post(SERVER_ADDRESS + "/instances/continue", {
+		instance: INSTANCE
     })
     ```
 
 === "Python"
     ```python linenums="1"
     import requests
-    requests.post(SERVER_ADDRESS + "/instances/create", json={
-		"instance": INSTANCE,
-		"template": TEMPLATE
+    requests.post(SERVER_ADDRESS + "/instances/continue", json={
+		"instance": INSTANCE
     })
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
-| template |  true  | string | template name |
+| instance |  true  | string | instance name |
+| verbose |  false  | boolean | verbose |
 
 ## vintner instances delete
 
@@ -281,6 +290,47 @@ display instance info
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
+## vintner instances init
+
+initializes a new instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances init --instance ${INSTANCE} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/instances/init
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/init", {
+		instance: INSTANCE,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/init", json={
+		"instance": INSTANCE,
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
+| template |  true  | string | template name |
+
 ## vintner instances inspect
 
 inspects variability-resolved service template
@@ -378,45 +428,6 @@ returns the path to the instance directory
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
-## vintner instances redeploy
-
-redeploy instance
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances redeploy --instance ${INSTANCE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}"}' \
-            ${SERVER_ADDRESS}/instances/redeploy
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/redeploy", {
-		instance: INSTANCE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/redeploy", json={
-		"instance": INSTANCE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name |
-| verbose |  false  | boolean | verbose |
-
 ## vintner instances resolve
 
 resolves variability
@@ -456,6 +467,47 @@ resolves variability
 | instance |  true  | string | instance name |
 | presets |  false  | string... | names of variability presets (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+
+## vintner instances swap
+
+swap instance template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances swap --instance ${INSTANCE} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/instances/swap
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/swap", {
+		instance: INSTANCE,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/swap", json={
+		"instance": INSTANCE,
+		"template": TEMPLATE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| template |  true  | string | template name |
 
 ## vintner instances unadapt
 
@@ -568,47 +620,6 @@ update instance
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
-
-## vintner instances update-template
-
-update instance template
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner instances update-template --instance ${INSTANCE} --template ${TEMPLATE}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"instance": "${INSTANCE}", "template": "${TEMPLATE}"}' \
-            ${SERVER_ADDRESS}/instances/update-template
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/instances/update-template", {
-		instance: INSTANCE,
-		template: TEMPLATE
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/instances/update-template", json={
-		"instance": INSTANCE,
-		"template": TEMPLATE
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| instance |  true  | string | instance name |
-| template |  true  | string | template name |
 
 ## vintner orchestrators enable
 

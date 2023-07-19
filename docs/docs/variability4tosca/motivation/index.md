@@ -58,15 +58,14 @@ vintner orchestrators enable --orchestrator xopera
 First, we clone the repository.
 --8<-- "clone.md"
 
-Then, we import the template and create an instance.
-Note, creating an instance does not deploy the application but sets everything up for doing so.
+Then, we import the template and initialize an instance.
 
 ```shell linenums="1"
 # Add variable service template
 vintner templates import --template motivation --path opentosca-vintner/examples/motivation
 
 # Add instance
-vintner instances create --instance motivation --template motivation
+vintner instances init --instance motivation --template motivation
 ```
 
 We can optionally inspect the variable service template.
