@@ -7,7 +7,7 @@ import * as files from '#files'
 import * as path from 'path'
 import * as utils from './utils'
 
-const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'licenses.csv')
+const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'dependencies.csv')
 
 async function main() {
     /**

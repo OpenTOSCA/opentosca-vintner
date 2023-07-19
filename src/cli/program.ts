@@ -11,6 +11,9 @@ import console from 'console'
 export const program = new Command()
 
 program.name('vintner').version(config.version)
+    .description(`OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins. Preprocessing includes, e.g., the resolving of deployment variability.
+
+Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.`)
 
 const setup = program.command('setup').description('setups the filesystem')
 
@@ -78,6 +81,56 @@ setup
             console.table(results)
             if (options.markdown) console.log('\n', benchmark2markdown(results, options))
             if (options.latex) console.log('\n', benchmark2latex(results, options))
+        })
+    )
+
+const info = program.command('info').description('infos about vintner')
+
+info.command('about')
+    .description('')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.about()
+        })
+    )
+
+info.command('license')
+    .description('license')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.license()
+        })
+    )
+
+info.command('contact')
+    .description('contact us')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.contact()
+        })
+    )
+
+info.command('docs')
+    .description('open documentation')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.docs()
+        })
+    )
+
+info.command('repo')
+    .description('open repository')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.repo()
+        })
+    )
+
+info.command('dependencies')
+    .description('lists the dependencies used to implement vintner')
+    .action(
+        hae.exit(async options => {
+            await Controller.info.dependencies()
         })
     )
 

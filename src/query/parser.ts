@@ -27,7 +27,7 @@ export function parse(query: string, startRule?: string) {
     throw new Error(`Unable to parse query: \n ${match.message}`)
 }
 
-const grammar = ohm.grammar(files.loadFile(path.join(__dirname, '..', 'assets', 'grammar.ohm')))
+const grammar = ohm.grammar(files.loadFile(path.join(files.ASSETS_DIR, 'grammar.ohm')))
 const semantics = grammar.createSemantics()
 semantics.addOperation('buildAST', {
     Main(a, _) {

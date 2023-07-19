@@ -21,7 +21,7 @@ export default async function (options: TemplatePUMLTopologyOptions) {
     validate(graph)
 
     const plot = await files.renderFile(
-        path.join(__dirname, '..', '..', '..', 'assets', 'templates', 'puml', 'topology', 'template.template.ejs'),
+        path.join(files.ASSETS_DIR, 'templates', 'puml', 'topology', 'template.template.ejs'),
         {
             graph,
             utils,

@@ -69,6 +69,9 @@ jobs:
             #
             ###################################################
 
+            - name: (DOCS) Generate Licenses Page
+              run: yarn docs:generate:dependencies
+
             - name: (BUILD) Build Project
               run: yarn build
 
@@ -95,9 +98,6 @@ jobs:
 
             - name: (DOCS) Build Documentation Commands
               run: yarn docs:build:commands
-
-            - name: (DOCS) Generate Licenses Page
-              run: yarn docs:generate:licenses
 
             - name: (DOCS) Generate Interface Page
               run: yarn docs:generate:interface

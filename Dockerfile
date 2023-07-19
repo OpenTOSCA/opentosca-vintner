@@ -24,7 +24,7 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 RUN yarn docs:install
 RUN yarn docs:build:commands
-RUN yarn docs:generate:licenses
+RUN yarn docs:generate:dependencies
 RUN yarn docs:generate:interface
 RUN yarn docs:generate:tests:variability
 RUN yarn docs:generate:tests:query
