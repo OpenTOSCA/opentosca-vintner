@@ -225,6 +225,7 @@ template
     .command('init')
     .description('initializes a CSAR')
     .requiredOption('--template <string>', 'path of the directory')
+    .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
     .action(
         hae.exit(async options => {
             await Controller.template.init(options)

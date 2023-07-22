@@ -1,7 +1,6 @@
 --- 
 tags:
 - Variability4TOSCA
-- Specification
 ---
 
 # Benchmark

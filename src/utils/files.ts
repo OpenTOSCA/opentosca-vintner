@@ -9,6 +9,7 @@ import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
+import {async as syncDirectory} from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
 import * as validator from './validator'
@@ -224,4 +225,8 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 
 export function stat(file: string) {
     return fs.statSync(file)
+}
+
+export async function sync(source: string, target: string) {
+    await syncDirectory(path.resolve(source), path.resolve(target))
 }
