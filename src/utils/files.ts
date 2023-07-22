@@ -106,6 +106,10 @@ export function storeJSON(file: string, data: any | string) {
     return file
 }
 
+export function storeENV(file: string, data: any | string) {
+    // TODO. store ENV
+}
+
 export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }

@@ -5,6 +5,6 @@ set -e
 cd "$(dirname "$0")"
 
 # Load configuration
-source ../.env
+source configuration.sh
 
-yarn cli setup clean
+$VINTNER instances code --instance ${TEMPLATE_NAME}
