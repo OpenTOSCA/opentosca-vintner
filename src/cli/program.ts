@@ -224,7 +224,9 @@ const template = program.command('template').description('handles stand-alone va
 template
     .command('init')
     .description('initializes a CSAR')
-    .requiredOption('--template <string>', 'path of the directory')
+    .requiredOption('--path <string>', 'path of the directory')
+    .option('--template <string>', 'template name (default: directory name of --path)')
+    .option('--vintner <string>', 'vintner binary to execute', 'yarn cli')
     .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
     .action(
         hae.exit(async options => {

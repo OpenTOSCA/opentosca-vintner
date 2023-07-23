@@ -3,28 +3,28 @@ import * as validator from '#validator'
 import path from 'path'
 
 export type TemplateInitOptions = {
-    name?: string
+    template?: string
     vintner?: string
-    template: string
+    path: string
     force?: boolean
 }
 
 export default async function (options: TemplateInitOptions) {
-    if (validator.isUndefined(options.template)) throw new Error(`Template not defined`)
-    files.createDirectory(options.template)
+    if (validator.isUndefined(options.path)) throw new Error(`Template not defined`)
+    files.createDirectory(options.path)
 
     options.force = options.force ?? false
     validator.ensureBoolean(options.force)
-    if (!options.force) files.assertEmpty(options.template)
+    if (!options.force) files.assertEmpty(options.path)
 
-    // TODO: get default name by path
-    // TODO: mv name template and mv template path
-    options.name = options.name ?? 'TODO'
+    options.template = options.template ?? files.getDirectory(options.path)
+    validator.ensureName(options.template)
+
     options.vintner = options.vintner ?? 'yarn cli'
 
-    await files.sync(path.join(files.TEMPLATES_DIR, 'template-init'), options.template)
-    await files.storeENV(path.join(options.template, 'scripts', 'configuration'), {
-        TEMPLATE_NAME: options.name,
+    await files.sync(path.join(files.TEMPLATES_DIR, 'template-init'), options.path)
+    await files.storeENV(path.join(options.path, 'scripts', 'configuration'), {
+        TEMPLATE_NAME: options.template,
         VINTNER: options.vintner,
     })
 }
