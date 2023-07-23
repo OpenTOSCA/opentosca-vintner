@@ -72,7 +72,7 @@ get-intrinsic,1.2.0,MIT,https://github.com/ljharb/get-intrinsic
 get-stream,5.2.0,MIT,https://github.com/sindresorhus/get-stream
 glob,10.1.0,ISC,https://github.com/isaacs/node-glob
 glob-parent,5.1.2,ISC,https://github.com/gulpjs/glob-parent
-glob-to-regexp,0.3.0,UNKNOWN,https://github.com/fitzgen/glob-to-regexp
+glob-to-regexp,0.3.0,BSD-2-Clause,https://github.com/fitzgen/glob-to-regexp
 graceful-fs,4.2.11,ISC,https://github.com/isaacs/node-graceful-fs
 has,1.0.3,MIT,https://github.com/tarruda/has
 has-flag,4.0.0,MIT,https://github.com/sindresorhus/has-flag

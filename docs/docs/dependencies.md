@@ -86,7 +86,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 71  | [get-stream](https://github.com/sindresorhus/get-stream){target=_blank} | 5.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 72  | [glob](https://github.com/isaacs/node-glob){target=_blank} | 10.1.0 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 73  | [glob-parent](https://github.com/gulpjs/glob-parent){target=_blank} | 5.1.2 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
-| 74  | [glob-to-regexp](https://github.com/fitzgen/glob-to-regexp){target=_blank} | 0.3.0 |  [UNKNOWN](){target=_blank} |
+| 74  | [glob-to-regexp](https://github.com/fitzgen/glob-to-regexp){target=_blank} | 0.3.0 |  [BSD-2-Clause](https://choosealicense.com/licenses/bsd-2-clause){target=_blank} |
 | 75  | [graceful-fs](https://github.com/isaacs/node-graceful-fs){target=_blank} | 4.2.11 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 76  | [has](https://github.com/tarruda/has){target=_blank} | 1.0.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 77  | [has-flag](https://github.com/sindresorhus/has-flag){target=_blank} | 4.0.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
@@ -199,3 +199,4 @@ We fixed some of them by patching the dependencies.
 1. The release of [dreamopt@0.8.0](https://www.npmjs.com/package/dreamopt){target=_blank} has no license.
 However, the project is according to the author licensed under MIT as stated in [#2](https://github.com/andreyvit/dreamopt.js/issues/2){target=_blank}.
 1. We moved the optional dependency [@types/yauzl](https://www.npmjs.com/package/@types/yauzl){target=_blank} at [extract-zip@2.0.1](https://github.com/maxogden/extract-zip){target=_blank} to the development dependencies.
+1. [glob-to-regexp@0.3.0](https://github.com/fitzgen/glob-to-regexp){target=_blank} is licensed under [BSD-2-Clause](https://github.com/fitzgen/glob-to-regexp/commit/dd7b8a061b986098d67fed9cc93fc015771b4741){target=_blank}.

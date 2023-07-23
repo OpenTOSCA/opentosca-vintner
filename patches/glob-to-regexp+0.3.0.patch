@@ -1,0 +1,11 @@
+diff --git a/node_modules/glob-to-regexp/package.json b/node_modules/glob-to-regexp/package.json
+index 9a356a2..ed8d54c 100644
+--- a/node_modules/glob-to-regexp/package.json
++++ b/node_modules/glob-to-regexp/package.json
+@@ -19,5 +19,5 @@
+     "wildcard"
+   ],
+   "author": "Nick Fitzgerald <fitzgen@gmail.com>",
+-  "license": "BSD"
++  "license": "BSD-2-Clause"
+ }
