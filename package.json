@@ -126,6 +126,7 @@
         "docs:record:getting-started": "cd docs/cmds/casts && bash record.sh getting-started",
         "docs:export": "bash docs/cmds/export/generate.sh",
         "docs:export:local": "bash docs/cmds/export/generate.sh http://localhost:8000",
+        "examples:generate:getting-started": "yarn cli template init --path examples/xopera-getting-started --force",
         "examples:xopera": "bash examples/xopera-motivation/demo.sh",
         "examples:unfurl": "bash examples/unfurl-motivation/demo.sh",
         "dependencies:check": "license-checker --production --summary --onlyAllow \"MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0\" --excludePackages dreamopt@0.8.0",

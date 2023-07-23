@@ -89,25 +89,18 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
 }
 
 export function storeYAML(file: string, data: any | string) {
-    if (validator.isString(data)) {
-        fs.writeFileSync(path.resolve(file), data)
-    } else {
-        fs.writeFileSync(path.resolve(file), toYAML(data))
-    }
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toYAML(data))
     return file
 }
 
 export function storeJSON(file: string, data: any | string) {
-    if (validator.isString(data)) {
-        fs.writeFileSync(path.resolve(file), data)
-    } else {
-        fs.writeFileSync(path.resolve(file), toJSON(data))
-    }
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toJSON(data))
     return file
 }
 
 export function storeENV(file: string, data: any | string) {
-    // TODO. store ENV
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toENV(data))
+    return file
 }
 
 export async function loadXML<T>(file: string) {
@@ -130,6 +123,12 @@ export function toYAML(obj: any, options?: yaml.DumpOptions) {
 
 export function toJSON(obj: any) {
     return utils.pretty(obj)
+}
+
+export function toENV(obj: {[key: string]: string | number | boolean}) {
+    return Object.entries(obj)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(`\n`)
 }
 
 export function copy(source: string, target: string) {
@@ -168,6 +167,10 @@ export function getDirectory(file: string) {
 
 export function getFilename(file: string) {
     return path.parse(path.resolve(file)).base
+}
+
+export function getName(file: string) {
+    return path.parse(path.resolve(file)).name
 }
 
 export async function extractArchive(source: string, target: string) {
