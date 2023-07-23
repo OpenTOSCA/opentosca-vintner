@@ -38,6 +38,7 @@ import codeSetup from './setup/code'
 import initSetup from './setup/init'
 import openSetup from './setup/open'
 import pathSetup from './setup/path'
+import initTemplate from './template/init'
 import inputsTemplate from './template/inputs'
 import packageTemplate from './template/package'
 import pumlTopologyTemplate from './template/puml/topology'
@@ -105,6 +106,7 @@ const Controller = {
         code: codeSetup,
     },
     template: {
+        init: initTemplate,
         package: packageTemplate,
         unpackage: unpackageTemplate,
         resolve: resolveTemplate,

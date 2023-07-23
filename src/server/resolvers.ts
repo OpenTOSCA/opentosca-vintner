@@ -61,6 +61,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/init',
+    hae.express(async (req, res, next) => {
+        await Controller.template.init(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/template/resolve',
     hae.express(async (req, res, next) => {
         await Controller.template.resolve(req.body)

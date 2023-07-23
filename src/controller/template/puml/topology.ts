@@ -20,13 +20,10 @@ export default async function (options: TemplatePUMLTopologyOptions) {
     const graph = new Graph(files.loadYAML<ServiceTemplate>(options.path))
     validate(graph)
 
-    const plot = await files.renderFile(
-        path.join(files.ASSETS_DIR, 'templates', 'puml', 'topology', 'template.template.ejs'),
-        {
-            graph,
-            utils,
-        }
-    )
+    const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'topology', 'template.template.ejs'), {
+        graph,
+        utils,
+    })
 
     console.log(`Writing file "${path.resolve(output)}" if changed`)
     files.storeFile(output, plot, {onlyIfChanged: true})

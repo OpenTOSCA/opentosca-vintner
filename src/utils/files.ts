@@ -4,16 +4,18 @@ import axios from 'axios'
 import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fs from 'fs'
-import {copySync} from 'fs-extra'
+import * as extra from 'fs-extra'
 import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
+import {async as syncDirectory} from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
 import * as validator from './validator'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
+export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -29,6 +31,16 @@ export function assertDirectory(dir: string, file = false) {
     } else {
         if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
     }
+}
+
+export function isEmpty(dir: string) {
+    const resolved = path.resolve(dir)
+    return fs.readdirSync(resolved).length === 0
+}
+
+export function assertEmpty(dir: string) {
+    const resolved = path.resolve(dir)
+    if (!isEmpty(resolved)) throw new Error(`Directory "${resolved}" is not empty`)
 }
 
 export function isFile(path: string) {
@@ -77,20 +89,17 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
 }
 
 export function storeYAML(file: string, data: any | string) {
-    if (validator.isString(data)) {
-        fs.writeFileSync(path.resolve(file), data)
-    } else {
-        fs.writeFileSync(path.resolve(file), toYAML(data))
-    }
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toYAML(data))
     return file
 }
 
 export function storeJSON(file: string, data: any | string) {
-    if (validator.isString(data)) {
-        fs.writeFileSync(path.resolve(file), data)
-    } else {
-        fs.writeFileSync(path.resolve(file), toJSON(data))
-    }
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toJSON(data))
+    return file
+}
+
+export function storeENV(file: string, data: any | string) {
+    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toENV(data))
     return file
 }
 
@@ -116,8 +125,14 @@ export function toJSON(obj: any) {
     return utils.pretty(obj)
 }
 
+export function toENV(obj: {[key: string]: string | number | boolean}) {
+    return Object.entries(obj)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(`\n`)
+}
+
 export function copy(source: string, target: string) {
-    copySync(path.resolve(source), path.resolve(target))
+    extra.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {
@@ -152,6 +167,10 @@ export function getDirectory(file: string) {
 
 export function getFilename(file: string) {
     return path.parse(path.resolve(file)).base
+}
+
+export function getName(file: string) {
+    return path.parse(path.resolve(file)).name
 }
 
 export async function extractArchive(source: string, target: string) {
@@ -213,4 +232,8 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 
 export function stat(file: string) {
     return fs.statSync(file)
+}
+
+export async function sync(source: string, target: string) {
+    await syncDirectory(path.resolve(source), path.resolve(target))
 }

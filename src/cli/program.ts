@@ -222,6 +222,19 @@ program
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
+    .command('init')
+    .description('initializes a CSAR')
+    .requiredOption('--path <string>', 'path of the directory')
+    .option('--template <string>', 'template name (default: directory name of --path)')
+    .option('--vintner <string>', 'vintner binary to execute', 'yarn cli')
+    .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.init(options)
+        })
+    )
+
+template
     .command('package')
     .description('packages a directory to a CSAR')
     .requiredOption('--template <string>', 'path to variable service template')

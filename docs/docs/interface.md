@@ -1062,6 +1062,51 @@ returns the path to the home directory
     ```
 
 
+## vintner template init
+
+initializes a CSAR
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template init --path ${PATH} --template ${TEMPLATE} --vintner ${VINTNER}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"path": "${PATH}", "template": "${TEMPLATE}", "vintner": "${VINTNER}"}' \
+            ${SERVER_ADDRESS}/template/init
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/init", {
+		path: PATH,
+		template: TEMPLATE,
+		vintner: VINTNER
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/init", json={
+		"path": PATH,
+		"template": TEMPLATE,
+		"vintner": VINTNER
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| path |  true  | string | path of the directory |
+| template |  true  | string | template name (default: directory name of --path) |
+| vintner |  true  | string | vintner binary to execute (default: "yarn cli") |
+| force |  false  | boolean | force initialization, e.g., on non-empty directories |
+
 ## vintner template inputs
 
 read and transforms inputs

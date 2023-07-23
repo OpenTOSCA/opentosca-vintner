@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 set -e
 
+# Set working directory
+cd "$(dirname "$0")"
+
 CAST_NAME=$1
 CAST_INPUT="./${CAST_NAME}.sh"
 CAST_OUTPUT="../../docs/assets/casts/${CAST_NAME}.cast"

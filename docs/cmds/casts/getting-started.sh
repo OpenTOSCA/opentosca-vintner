@@ -10,6 +10,8 @@ fi
 . magic.sh -n
 TYPE_SPEED=100
 
+# Set working directory
+cd "$(dirname "$0")"
 cd ../../../
 
 echo '# Installation'
