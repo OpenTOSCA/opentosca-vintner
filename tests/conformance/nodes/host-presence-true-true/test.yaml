@@ -1,5 +1,6 @@
+error: Node "container" has more than one hosting relations
 description: |
     - Under the condition, "host_presence" function checks if the hosts of the given two nodes is present or not.
     - node_one is present since true is assigned as the condition.
     - node_two is preent since true is assigned as the condition.
-    - an error is thrown "Node "container" has more than one hosting relations" since there are multiple hosting relations present.
+    - an error is thrown since there are multiple hosting relations present.
