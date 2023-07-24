@@ -1,0 +1,4 @@
+description: |
+    - Under the condition the "policy_presence" function checks if policy_one is present or not.
+    - policy_one is absent since false is assigned as the condition.
+    - hence the container is absent since the condition gives false.

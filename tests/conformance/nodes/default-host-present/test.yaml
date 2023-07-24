@@ -1,0 +1,4 @@
+description: |
+    - The function "target_presence" returns true since the the target "node_two" is present.
+    - hence node_one is present since the condition is true.
+    - node_two is present since true is assigned as condition. 

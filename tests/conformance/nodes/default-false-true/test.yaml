@@ -1,0 +1,6 @@
+description: |
+    - node default condition is assigned as false.
+    - under the node_one the default_condition is assigned true which enables the node_default_condition.
+    - hence node_one is absent.
+    - node_two is absent since false is assigned as condition.
+    - node_three is absent since false is assigned as condition.

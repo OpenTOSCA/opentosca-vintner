@@ -1,0 +1,4 @@
+description: |
+    - The function "target_presence" returns false since the the target "node_two" is not present.
+    - hence node_one is absent since the condition is false.
+    - node_two is absent since false is assigned as condition. 

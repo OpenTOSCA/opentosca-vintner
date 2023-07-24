@@ -1,0 +1,4 @@
+description: |
+    - Under the condition, "node_presence" function checks if the node is present or not.
+    - node is absent since false is assigned as the condition.
+    - Container is not present since the "node_presence" function returns false in the condition.

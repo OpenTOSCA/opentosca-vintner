@@ -1,0 +1,4 @@
+description: |
+    - under the node_templates node "one" is absent since false is assigned as condition.
+    - node "three" is present since default condition is true.
+    - node "two" is present since the requirement is true. 

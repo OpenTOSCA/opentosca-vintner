@@ -1,2 +1,2 @@
 name: 'Operator "concat"'
-description: Assigns the value of the intrinsic function to the property "value" of the node "container".
+description: Assigns the value of the expression which is to concat the given strings using "concat" function to the property "value" of the node "container".
