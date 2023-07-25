@@ -216,5 +216,5 @@ jobs:
               uses: tsickert/discord-webhook@v5.3.0
               with:
                   webhook-url: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
-                  content: Night workflow [${{ GITHUB_RUN_ID }}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${{ GITHUB_RUN_ID }}) cancelled.
+                  content: Night workflow [${{ env.GITHUB_RUN_ID }}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${{ env.GITHUB_RUN_ID }}) cancelled.
               if: cancelled()
