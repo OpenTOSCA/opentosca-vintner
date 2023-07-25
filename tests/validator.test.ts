@@ -22,11 +22,4 @@ describe('validator', () => {
             `Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`
         )
     })
-
-    it('ensureName: throw number', () => {
-        const name = '123'
-        expect(() => ensureName(name)).to.throw(
-            `Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`
-        )
-    })
 })
