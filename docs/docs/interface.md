@@ -1562,6 +1562,8 @@ imports a new template
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
 | path |  true  | string | path or link to the CSAR |
+| git-repository |  false  | string | git repository to clone |
+| git-checkout |  false  | string | git checkout to checkout after cloning |
 
 ## vintner templates inspect
 

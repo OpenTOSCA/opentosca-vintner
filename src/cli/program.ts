@@ -354,6 +354,8 @@ templates
     .description('imports a new template')
     .requiredOption('--template <string>', 'template name')
     .requiredOption('--path <string>', 'path or link to the CSAR')
+    .option('--git-repository [string]', 'git repository')
+    .option('--git-checkout [string]', 'git checkout')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)

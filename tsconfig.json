@@ -19,6 +19,7 @@
             "#files": ["src/utils/files"],
             "#crypto": ["src/utils/crypto"],
             "#shell": ["src/utils/shell"],
+            "#git": ["src/utils/git"],
             "#utils": ["src/utils/utils"],
             "#validator": ["src/utils/validator"]
         },

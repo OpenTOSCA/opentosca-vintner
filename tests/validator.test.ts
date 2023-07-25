@@ -13,20 +13,13 @@ describe('validator', () => {
     })
 
     it('ensureName: is name', () => {
-        expect(() => ensureName('this-is-a-valid-name')).not.to.throw()
+        expect(() => ensureName('this-is-a-valid-name-v0.0.2')).not.to.throw()
     })
 
     it('ensureName: throw space', () => {
         const name = ' '
         expect(() => ensureName(name)).to.throw(
-            `Name "${name}" not allowed. Only small characters and hyphens are allowed.`
-        )
-    })
-
-    it('ensureName: throw number', () => {
-        const name = '123'
-        expect(() => ensureName(name)).to.throw(
-            `Name "${name}" not allowed. Only small characters and hyphens are allowed.`
+            `Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`
         )
     })
 })

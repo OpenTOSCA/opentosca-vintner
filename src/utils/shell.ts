@@ -1,3 +1,4 @@
+import * as utils from '#utils'
 import death from '#utils/death'
 import wsl from '#utils/wsl'
 import * as validator from '#validator'
@@ -21,18 +22,30 @@ export class Shell {
         return path.resolve(file)
     }
 
-    async execute(parts: string[]) {
+    async execute(parts: string[], options: {cwd?: string} = {}) {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
-            console.log(`Executing ${this.wsl ? 'on WSL' : 'locally'} the command`, command)
+
+            console.log(
+                utils.joinNotNull([
+                    'Executing',
+                    this.wsl ? 'on WSL' : 'locally',
+                    validator.isDefined(options.cwd) ? `in directory "${options.cwd}"` : undefined,
+                    `the command "${command}"`,
+                ])
+            )
 
             let child: ChildProcessByStdio<stream.Writable, null, null>
             if (this.wsl) {
-                child = spawn('wsl', {stdio: ['pipe', process.stdout, process.stdout]})
+                child = spawn('wsl', {stdio: ['pipe', process.stdout, process.stdout], cwd: options.cwd})
                 child.stdin.write(command)
                 child.stdin.end()
             } else {
-                child = spawn(command, {shell: true, stdio: ['pipe', process.stdout, process.stdout]})
+                child = spawn(command, {
+                    shell: true,
+                    stdio: ['pipe', process.stdout, process.stdout],
+                    cwd: options.cwd,
+                })
             }
 
             death.register({
