@@ -1,9 +1,10 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import runQuery from '#controller/query/run'
 import resolveQueries from '#controller/template/query'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {UnexpectedError} from '#utils/error'
-import * as validator from '#validator'
 import {expect} from 'chai'
 import path from 'path'
 import {expectAsyncThrow} from '../utils'
@@ -26,7 +27,7 @@ export class QueryTest {
     expected: any
 
     constructor(name: string) {
-        validator.ensureName(name)
+        assert.isName(name)
 
         this.id = name
         this.dir = path.join(__dirname, name)
@@ -45,17 +46,17 @@ export class QueryTest {
         if (!this.ofTypeDefault() && !this.ofTypeTemplate()) throw new Error(`Test "${this.id}" has no template"`)
 
         // Set default path to template
-        if (validator.isUndefined(config.template)) {
+        if (check.isUndefined(config.template)) {
             if (this.ofTypeDefault()) this.config.template = path.join(__dirname, 'template.yaml')
             if (this.ofTypeTemplate()) this.config.template = path.join(this.dir, 'template.yaml')
         }
-        validator.ensureDefined(this.config.template, `Test "${this.id}" has no template path"`)
+        assert.isDefined(this.config.template, `Test "${this.id}" has no template path"`)
 
         // Load template
         this.template = files.loadYAML(this.config.template)
 
         // Load result
-        this.expected = validator.isUndefined(config.error)
+        this.expected = check.isUndefined(config.error)
             ? files.loadYAML(path.join(this.dir, 'expected.yaml'))
             : undefined
     }
@@ -76,7 +77,7 @@ export class QueryTest {
 
     toDefaultTest() {
         const query = this.config.query
-        validator.ensureString(query)
+        assert.isString(query)
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const test = this
 
@@ -106,7 +107,7 @@ export class QueryTest {
                 return output
             }
 
-            if (validator.isDefined(test.config.error)) {
+            if (check.isDefined(test.config.error)) {
                 await expectAsyncThrow(fn, test.config.error)
             } else {
                 const output = await fn()

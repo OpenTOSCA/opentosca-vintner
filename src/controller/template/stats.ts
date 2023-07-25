@@ -1,8 +1,8 @@
+import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
-import * as validator from '#validator'
 
 export type TemplateStatsOptions = {
     template: string[]
@@ -24,7 +24,7 @@ export type TemplateStats = {
 }
 
 export default async function (options: TemplateStatsOptions) {
-    if (validator.isUndefined(options.template)) throw new Error(`Template not defined`)
+    assert.isDefined(options.template, 'Template not defined')
 
     return utils.sumObjects(
         options.template.map(it => {

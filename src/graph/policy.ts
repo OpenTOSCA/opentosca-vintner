@@ -1,7 +1,7 @@
+import * as check from '#check'
 import {PolicyTemplate} from '#spec/policy-template'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Element from './element'
 import Group from './group'
 import Node from './node'
@@ -30,7 +30,7 @@ export default class Policy extends Element {
     }
 
     get toscaId() {
-        if (validator.isDefined(this.index)) return this.index
+        if (check.isDefined(this.index)) return this.index
         return this.name
     }
 
@@ -44,7 +44,7 @@ export default class Policy extends Element {
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition))
+        if (check.isUndefined(this._defaultCondition))
             this._defaultCondition = {has_present_target: this.toscaId, _cached_element: this}
         return this._defaultCondition
     }
@@ -53,7 +53,7 @@ export default class Policy extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }

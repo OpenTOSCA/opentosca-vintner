@@ -1,5 +1,5 @@
 import * as files from '#files'
-import {sleep} from '#utils'
+import * as utils from '#utils'
 import {expect} from 'chai'
 
 describe('files', () => {
@@ -9,7 +9,7 @@ describe('files', () => {
         files.storeFile(file, 'value')
         const first = files.stat(file).mtime
 
-        await sleep(1111)
+        await utils.sleep(1111)
 
         files.storeFile(file, 'another_value', {onlyIfChanged: true})
         const second = files.stat(file).mtime
@@ -25,7 +25,7 @@ describe('files', () => {
         files.storeFile(file, 'value')
         const first = files.stat(file).mtime
 
-        await sleep(1111)
+        await utils.sleep(1111)
 
         files.storeFile(file, 'value', {onlyIfChanged: true})
         const second = files.stat(file).mtime

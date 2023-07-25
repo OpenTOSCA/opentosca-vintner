@@ -1,6 +1,6 @@
 import Graph from '#/graph/graph'
 import {Query} from '#/query/query'
-import {isUndefined} from '#validator'
+import * as check from '#check'
 import {PredicateExpression} from './types'
 
 /**
@@ -21,11 +21,11 @@ export class BfsGraph extends Graph {
     private getNext(nodeName: string, direction: string, predicate?: PredicateExpression): string[] {
         const targets: string[] = []
         const node = this.nodesMap.get(nodeName)
-        if (isUndefined(node)) return targets
+        if (check.isUndefined(node)) return targets
 
         for (const relation of node.relations) {
             if (
-                isUndefined(predicate) ||
+                check.isUndefined(predicate) ||
                 this.resolver.evaluatePredicate(
                     relation.name,
                     relation.hasRelationship() ? relation.relationship.raw : {},

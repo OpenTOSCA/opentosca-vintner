@@ -1,7 +1,7 @@
+import * as check from '#check'
 import Import from '#graph/import'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Artifact from './artifact'
 import Graph from './graph'
 import Group from './group'
@@ -21,12 +21,12 @@ export default abstract class Element {
 
     private _id?: string
     get id() {
-        if (validator.isUndefined(this._id)) {
+        if (check.isUndefined(this._id)) {
             let id = this.type + '.' + this.name
-            if (validator.isDefined(this.index)) {
+            if (check.isDefined(this.index)) {
                 id += '@' + this.index.toString()
             }
-            if (validator.isDefined(this.container)) {
+            if (check.isDefined(this.container)) {
                 id += '.' + this.container.id
             }
             this._id = id
@@ -40,13 +40,13 @@ export default abstract class Element {
 
     private _display?: string
     get display() {
-        if (validator.isUndefined(this._display)) {
+        if (check.isUndefined(this._display)) {
             let display = this.type + ' "' + this.name
-            if (validator.isDefined(this.index)) {
+            if (check.isDefined(this.index)) {
                 display += '@' + this.index.toString()
             }
             display += '"'
-            if (validator.isDefined(this.container)) {
+            if (check.isDefined(this.container)) {
                 display += ' of ' + this.container.display
             }
             this._display = display
@@ -64,13 +64,13 @@ export default abstract class Element {
 
     private _effectiveConditions?: LogicExpression[]
     set effectiveConditions(conditions: LogicExpression[]) {
-        if (validator.isDefined(this._effectiveConditions))
+        if (check.isDefined(this._effectiveConditions))
             throw new Error(`${this.Display} has already effective conditions assigned`)
         this._effectiveConditions = conditions
     }
 
     get effectiveConditions() {
-        if (validator.isUndefined(this._effectiveConditions))
+        if (check.isUndefined(this._effectiveConditions))
             throw new Error(`${this.Display} has no effective conditions assigned`)
         return this._effectiveConditions
     }
@@ -92,7 +92,7 @@ export default abstract class Element {
     }
 
     get graph() {
-        if (validator.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
+        if (check.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
         return this._graph
     }
 

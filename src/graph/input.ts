@@ -1,7 +1,7 @@
+import * as check from '#check'
 import {InputDefinition} from '#spec/topology-template'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Element from './element'
 
 export default class Input extends Element {
@@ -27,7 +27,7 @@ export default class Input extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }

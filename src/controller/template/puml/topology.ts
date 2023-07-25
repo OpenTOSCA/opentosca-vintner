@@ -1,8 +1,8 @@
+import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import path from 'path'
 
 export type TemplatePUMLTopologyOptions = {
@@ -11,7 +11,7 @@ export type TemplatePUMLTopologyOptions = {
 }
 
 export default async function (options: TemplatePUMLTopologyOptions) {
-    validator.ensureDefined(options.path, 'Path not defined')
+    assert.isDefined(options.path, 'Path not defined')
     console.log(`Handling file "${path.resolve(options.path)}"`)
 
     const output = options.output ?? options.path.replace(/(\.yaml|\.yml)/, '.topology.puml')

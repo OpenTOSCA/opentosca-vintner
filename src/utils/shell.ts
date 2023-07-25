@@ -1,7 +1,7 @@
+import * as check from '#check'
 import * as utils from '#utils'
 import death from '#utils/death'
 import wsl from '#utils/wsl'
-import * as validator from '#validator'
 import {ChildProcessByStdio, spawn} from 'child_process'
 import path from 'path'
 import * as stream from 'stream'
@@ -30,7 +30,7 @@ export class Shell {
                 utils.joinNotNull([
                     'Executing',
                     this.wsl ? 'on WSL' : 'locally',
-                    validator.isDefined(options.cwd) ? `in directory "${options.cwd}"` : undefined,
+                    check.isDefined(options.cwd) ? `in directory "${options.cwd}"` : undefined,
                     `the command "${command}"`,
                 ])
             )
@@ -50,7 +50,7 @@ export class Shell {
 
             death.register({
                 stop: function () {
-                    if (validator.isDefined(child)) child.kill()
+                    if (check.isDefined(child)) child.kill()
                 },
             })
 

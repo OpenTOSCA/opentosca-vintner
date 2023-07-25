@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Property from '#graph/property'
@@ -13,8 +15,6 @@ import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {ElementType} from '#spec/type-assignment'
 import * as utils from '#utils'
-import * as validator from '#validator'
-import {ensureDefined} from '#validator'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -67,7 +67,7 @@ export default class Transformer {
 
     private transformNodes() {
         // Delete node templates which are not present
-        if (validator.isDefined(this.topology.node_templates)) {
+        if (check.isDefined(this.topology.node_templates)) {
             this.topology.node_templates = this.graph.nodes
                 .filter(node => node.present)
                 .reduce<NodeTemplateMap>((map, node) => {
@@ -84,7 +84,7 @@ export default class Transformer {
                         .filter(it => it.present)
                         .map(relation => {
                             const assignment = relation.raw
-                            if (!validator.isString(assignment)) this.clean(assignment)
+                            if (!check.isString(assignment)) this.clean(assignment)
 
                             const map: RequirementAssignmentMap = {}
                             map[relation.name] = assignment
@@ -96,7 +96,7 @@ export default class Transformer {
                     template.artifacts = node.artifacts
                         .filter(it => it.present)
                         .reduce<ArtifactDefinitionMap>((map, artifact) => {
-                            if (!validator.isString(artifact.raw)) this.clean(artifact.raw)
+                            if (!check.isString(artifact.raw)) this.clean(artifact.raw)
 
                             this.transformProperties(artifact, artifact.raw)
 
@@ -118,7 +118,7 @@ export default class Transformer {
 
     private transformRelations() {
         // Delete all relationship templates which have no present relations
-        if (validator.isDefined(this.topology.relationship_templates)) {
+        if (check.isDefined(this.topology.relationship_templates)) {
             this.graph.relations.forEach(relation => {
                 if (relation.hasRelationship()) {
                     if (!relation.present)
@@ -137,7 +137,7 @@ export default class Transformer {
 
     private transformGroups() {
         // Delete all groups which are not present and remove all members which are not present
-        if (validator.isDefined(this.topology.groups)) {
+        if (check.isDefined(this.topology.groups)) {
             this.topology.groups = this.graph.groups
                 .filter(group => group.present)
                 .reduce<GroupTemplateMap>((map, group) => {
@@ -146,9 +146,9 @@ export default class Transformer {
                     template.members = template.members.reduce<GroupMember[]>((acc, it) => {
                         let element: Node | Relation | undefined
 
-                        if (validator.isString(it)) element = this.graph.getNode(it)
-                        if (validator.isArray(it)) element = this.graph.getRelation(it)
-                        ensureDefined(element, `Member "${utils.pretty(it)}" has bad format`)
+                        if (check.isString(it)) element = this.graph.getNode(it)
+                        if (check.isArray(it)) element = this.graph.getRelation(it)
+                        assert.isDefined(element, `Member "${utils.pretty(it)}" has bad format`)
 
                         if (element.present) acc.push(it)
                         return acc
@@ -171,7 +171,7 @@ export default class Transformer {
 
     private transformPolicies() {
         // Delete all policy templates which are not present and remove all targets which are not present
-        if (validator.isDefined(this.topology.policies)) {
+        if (check.isDefined(this.topology.policies)) {
             this.topology.policies = this.graph.policies
                 .filter(policy => policy.present)
                 .map(policy => {
@@ -182,10 +182,10 @@ export default class Transformer {
 
                     template.targets = template.targets?.filter(target => {
                         const node = this.graph.nodesMap.get(target)
-                        if (validator.isDefined(node)) return node.present
+                        if (check.isDefined(node)) return node.present
 
                         const group = this.graph.groupsMap.get(target)
-                        if (validator.isDefined(group)) return group.present
+                        if (check.isDefined(group)) return group.present
 
                         throw new Error(
                             `Policy target "${target}" of "${policy.display}" is neither a node template nor a group template`
@@ -205,7 +205,7 @@ export default class Transformer {
 
     private transformInputs() {
         // Delete all topology template inputs which are not present
-        if (validator.isDefined(this.topology.inputs)) {
+        if (check.isDefined(this.topology.inputs)) {
             this.topology.inputs = this.graph.inputs
                 .filter(input => input.present)
                 .reduce<InputDefinitionMap>((map, input) => {
@@ -223,7 +223,7 @@ export default class Transformer {
 
     private transformType(element: {types: Type[]; Display: string}, template: {type: ElementType}) {
         const type = element.types.find(it => it.present)
-        if (validator.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
+        if (check.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
         template.type = type.name
     }
 
@@ -231,13 +231,13 @@ export default class Transformer {
         element: {properties: Property[]},
         template: {properties?: PropertyAssignmentMap | PropertyAssignmentList} | string
     ) {
-        if (validator.isString(template)) return
+        if (check.isString(template)) return
 
         template.properties = element.properties
             .filter(it => it.present)
             .reduce<PropertyAssignmentMap>((map, property) => {
-                if (validator.isDefined(property)) {
-                    if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+                if (check.isDefined(property)) {
+                    if (check.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
                     map[property.name] = property.value
                 }
                 return map
@@ -248,7 +248,7 @@ export default class Transformer {
 
     private transformImports() {
         // Delete all imports which are not present
-        if (validator.isDefined(this.graph.serviceTemplate.imports)) {
+        if (check.isDefined(this.graph.serviceTemplate.imports)) {
             this.graph.serviceTemplate.imports = this.graph.imports
                 .filter(it => it.present)
                 .map(it => {

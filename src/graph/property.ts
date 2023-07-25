@@ -1,3 +1,4 @@
+import * as check from '#check'
 import {bratanize} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
@@ -6,7 +7,6 @@ import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, ValueExpression} from '#spec/variability'
-import * as validator from '#validator'
 import Artifact from './artifact'
 import Element from './element'
 import Group from './group'
@@ -56,13 +56,13 @@ export default class Property extends Element {
     }
 
     get toscaId(): [string, string | number] {
-        if (validator.isDefined(this.index)) return [this.container.name, this.index]
+        if (check.isDefined(this.index)) return [this.container.name, this.index]
         return [this.container.name, this.name]
     }
 
     get defaultEnabled() {
         return Boolean(
-            !validator.isObject(this.raw) || validator.isArray(this.raw)
+            !check.isObject(this.raw) || check.isArray(this.raw)
                 ? this.graph.options.default.property_default_condition
                 : this.raw.default_condition ?? this.graph.options.default.property_default_condition
         )
@@ -70,7 +70,7 @@ export default class Property extends Element {
 
     get pruningEnabled() {
         return Boolean(
-            !validator.isObject(this.raw) || validator.isArray(this.raw)
+            !check.isObject(this.raw) || check.isArray(this.raw)
                 ? this.graph.options.pruning.property_pruning
                 : this.raw.pruning ?? this.graph.options.pruning.property_pruning
         )
@@ -82,7 +82,7 @@ export default class Property extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = this.container.getPropertyCondition(this)
         return this._presenceCondition
     }
@@ -90,7 +90,7 @@ export default class Property extends Element {
     // Check if no other property having the same name is present
     private _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultAlternativeCondition))
+        if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = bratanize(
                 this.container.propertiesMap.get(this.name)!.filter(it => it !== this)
             )

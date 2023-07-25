@@ -1,3 +1,4 @@
+import * as check from '#check'
 import * as crypto from '#crypto'
 import archiver from 'archiver'
 import axios from 'axios'
@@ -12,7 +13,6 @@ import * as path from 'path'
 import {async as syncDirectory} from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
-import * as validator from './validator'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
@@ -89,17 +89,17 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
 }
 
 export function storeYAML(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toYAML(data))
+    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toYAML(data))
     return file
 }
 
 export function storeJSON(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toJSON(data))
+    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toJSON(data))
     return file
 }
 
 export function storeENV(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), validator.isString(data) ? data : toENV(data))
+    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toENV(data))
     return file
 }
 
@@ -223,8 +223,8 @@ export function temporary(name?: string) {
 export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
     return new Promise((resolve, reject) => {
         ejs.renderFile(source, data, (error, data) => {
-            if (validator.isDefined(error)) return reject(error)
-            if (validator.isDefined(target)) storeFile(target, data)
+            if (check.isDefined(error)) return reject(error)
+            if (check.isDefined(target)) storeFile(target, data)
             return resolve(data)
         })
     })

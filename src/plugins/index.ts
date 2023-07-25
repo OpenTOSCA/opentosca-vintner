@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import config from '#config'
 import * as files from '#files'
 import {FilePlugin} from '#plugins/file'
@@ -5,7 +6,6 @@ import {UnfurlPlugin} from '#plugins/unfurl'
 import {VintnerPlugin} from '#plugins/vintner'
 import {WineryPlugin} from '#plugins/winery'
 import {xOperaPlugin} from '#plugins/xopera'
-import * as validator from '#validator'
 import path from 'path'
 import {OrchestratorsConfig} from './types'
 
@@ -24,19 +24,19 @@ function getOrchestrator() {
 
     switch (config.enabled) {
         case 'xopera':
-            validator.ensureDefined(config.xOpera, 'xOpera is enabled but no config was found')
+            assert.isDefined(config.xOpera, 'xOpera is enabled but no config was found')
             return new xOperaPlugin({...config.xOpera, wsl: false})
 
         case 'xopera-wsl':
-            validator.ensureDefined(config.xOperaWSL, 'xOperaWSL is enabled but no config was found')
+            assert.isDefined(config.xOperaWSL, 'xOperaWSL is enabled but no config was found')
             return new xOperaPlugin({...config.xOperaWSL, wsl: true})
 
         case 'unfurl':
-            validator.ensureDefined(config.unfurl, 'Unfurl is enabled but no config was found')
+            assert.isDefined(config.unfurl, 'Unfurl is enabled but no config was found')
             return new UnfurlPlugin({...config.unfurl, wsl: false})
 
         case 'unfurl-wsl':
-            validator.ensureDefined(config.unfurlWSL, 'UnfurlWSL is enabled but no config was found')
+            assert.isDefined(config.unfurlWSL, 'UnfurlWSL is enabled but no config was found')
             return new UnfurlPlugin({...config.unfurlWSL, wsl: true})
 
         case undefined:

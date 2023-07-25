@@ -1,8 +1,8 @@
+import * as check from '#check'
 import * as files from '#files'
 import {Instance} from '#repository/instances'
 import {Shell} from '#shell'
-import {joinNotNull} from '#utils'
-import * as validator from '#validator'
+import * as utils from '#utils'
 import console from 'console'
 import _ from 'lodash'
 import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
@@ -30,7 +30,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
 
     constructor(config: xOperaConfig) {
         this.config = config
-        this.binary = joinNotNull(
+        this.binary = utils.joinNotNull(
             [
                 this.config.venv ? `cd ${this.config.dir}` : undefined,
                 this.config.venv ? '. .venv/bin/activate' : undefined,
@@ -89,7 +89,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
             // Add lost public_address back to node instance
             // This is a hotfix for https://github.com/xlab-si/xopera-opera/issues/262 and is not reliable
             for (const [node, nodeAttributes] of Object.entries(attributes)) {
-                if (validator.isString(nodeAttributes.attributes.public_address)) {
+                if (check.isString(nodeAttributes.attributes.public_address)) {
                     console.log(`Node "${node}" has public address "${nodeAttributes.attributes.public_address}"`)
                     const nodePath = this.getNodeInstance(instance, node)
                     if (files.isFile(nodePath)) {

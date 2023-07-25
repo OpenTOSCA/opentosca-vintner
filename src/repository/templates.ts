@@ -1,8 +1,8 @@
+import * as check from '#check'
 import config from '#config'
 import * as files from '#files'
 import * as git from '#git'
 import {ServiceTemplate} from '#spec/service-template'
-import * as validator from '#validator'
 import path from 'path'
 
 export class Templates {
@@ -44,11 +44,11 @@ export class Template {
     }
 
     async importTemplate(options: {path: string; gitRepository?: string; gitCheckout?: string}) {
-        if (validator.isDefined(options.gitRepository)) {
+        if (check.isDefined(options.gitRepository)) {
             const repoDir = files.temporary()
 
             await git.clone(options.gitRepository, repoDir)
-            if (validator.isDefined(options.gitCheckout)) {
+            if (check.isDefined(options.gitCheckout)) {
                 await git.checkout(options.gitCheckout, repoDir)
             }
 

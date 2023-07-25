@@ -1,5 +1,5 @@
+import * as check from '#check'
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as validator from '#validator'
 import axios from 'axios'
 import friendlyNodeCron from 'friendly-node-cron'
 
@@ -12,7 +12,7 @@ export type SensorBaseOptions = {
 
 export function human2cron(value: string) {
     const output = friendlyNodeCron(value)
-    if (validator.isUndefined(output)) throw new Error(`Cron pattern "${value}" not valid`)
+    if (check.isUndefined(output)) throw new Error(`Cron pattern "${value}" not valid`)
     return output
 }
 

@@ -1,6 +1,6 @@
+import * as check from '#check'
 import day from '#utils/day'
 import _ from 'lodash'
-import * as validator from './validator'
 
 export function mapIsEmpty<K, V>(map: Map<K, V>) {
     return map.size === 0
@@ -16,14 +16,14 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
 export function groupBy<T>(elements: T[], by: (element: T) => string) {
     return elements.reduce<{[name: string]: T[]}>((map, element) => {
         const id = by(element)
-        if (validator.isUndefined(map[id])) map[id] = []
+        if (check.isUndefined(map[id])) map[id] = []
         map[id].push(element)
         return map
     }, {})
 }
 
 export function toList<T>(data: T | T[] | undefined): T[] {
-    if (validator.isUndefined(data)) return []
+    if (check.isUndefined(data)) return []
     if (Array.isArray(data)) return data
     return [data]
 }
@@ -41,9 +41,9 @@ export function firstEntry<V>(map: {[key: string]: V}): [string, V] {
 }
 
 export function isEmpty(obj: any) {
-    if (validator.isUndefined(obj)) return true
-    if (validator.isArray(obj)) return obj.length === 0
-    if (validator.isObject(obj)) return Object.keys(obj).length === 0
+    if (check.isUndefined(obj)) return true
+    if (check.isArray(obj)) return obj.length === 0
+    if (check.isObject(obj)) return Object.keys(obj).length === 0
     throw new Error(`Can not check if obj ${pretty(obj)} is empty`)
 }
 
@@ -52,11 +52,11 @@ export function last<T>(array: T[]) {
 }
 
 export function listDelete<T>(list?: Array<T>, indexes?: Array<number>) {
-    if (validator.isUndefined(list) || validator.isUndefined(indexes)) return
+    if (check.isUndefined(list) || check.isUndefined(indexes)) return
     indexes.sort()
     while (indexes.length) {
         const index = indexes.pop()
-        if (validator.isUndefined(index)) return
+        if (check.isUndefined(index)) return
         list.splice(index, 1)
     }
 }
@@ -140,9 +140,9 @@ export function toFirstUpperCase(value: string) {
 export function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; options: T}) {
     let result = _.clone(data.base)
 
-    if (validator.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
+    if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
 
-    if (validator.isDefined(data.flag)) {
+    if (check.isDefined(data.flag)) {
         // @ts-ignore
         for (const key of Object.keys(data.base)) {
             // @ts-ignore

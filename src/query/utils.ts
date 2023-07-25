@@ -1,9 +1,8 @@
+import * as check from '#check'
 import Plugins from '#plugins'
 import {Instance, Instances} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
-import {firstKey, firstValue} from '#utils'
-import * as validator from '#validator'
-import {isString} from '#validator'
+import * as utils from '#utils'
 
 /**
  * Tries to load all service template from a given source and path
@@ -70,19 +69,19 @@ function resolveAllGets(template: ServiceTemplate) {
         if (typeof object == 'object') {
             if (object === null) return null
 
-            if (firstKey(object) == 'get_property' || firstKey(object) == 'get_attribute') {
+            if (utils.firstKey(object) == 'get_property' || utils.firstKey(object) == 'get_attribute') {
                 if (path.includes('node_templates')) {
                     numberOfGets++
                     return Object.keys(object)[0] == 'get_property'
-                        ? getPropertyOrAttribute('properties', template, firstValue(object), path)
-                        : getPropertyOrAttribute('attributes', template, firstValue(object), path)
+                        ? getPropertyOrAttribute('properties', template, utils.firstValue(object), path)
+                        : getPropertyOrAttribute('attributes', template, utils.firstValue(object), path)
                 } else {
                     return object
                 }
             }
 
-            if (firstKey(object) === 'get_input') {
-                return resolvePath(template.topology_template?.inputs, firstValue(object)) || object
+            if (utils.firstKey(object) === 'get_input') {
+                return resolvePath(template.topology_template?.inputs, utils.firstValue(object)) || object
             }
 
             Object.keys(object).forEach(key => {
@@ -126,22 +125,21 @@ function getPropertyOrAttribute(
  * @param relName The name of the capability or requirement
  */
 function getRelationship(template: ServiceTemplate, node: Object, relName: string): Object | null {
-    if (validator.isArray(template.topology_template?.node_templates))
-        throw new Error(`Node templates must not be a list`)
+    if (check.isArray(template.topology_template?.node_templates)) throw new Error(`Node templates must not be a list`)
 
     const reqs: [] = resolvePath(node, 'requirements') || []
     const caps: [] = resolvePath(node, 'capabilities') || []
     for (const req of reqs) {
-        if (firstKey(req) == relName) {
-            if (isString(firstValue(req))) {
-                return template.topology_template?.node_templates?.[firstValue(req) as string] || {}
+        if (utils.firstKey(req) == relName) {
+            if (check.isString(utils.firstValue(req))) {
+                return template.topology_template?.node_templates?.[utils.firstValue(req) as string] || {}
             } else {
                 return template.topology_template?.node_templates?.[req[relName]['node']] || {}
             }
         }
     }
     for (const cap of caps) {
-        if (firstKey(cap) == relName) {
+        if (utils.firstKey(cap) == relName) {
             return cap
         }
     }
