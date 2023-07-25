@@ -73,7 +73,7 @@ export function stringify(obj: any) {
     return JSON.stringify(obj)
 }
 
-export function joinNotNull(array: (string | undefined)[], separator: string) {
+export function joinNotNull(array: (string | undefined)[], separator = ' ') {
     return filterNotNull(array).join(separator)
 }
 
