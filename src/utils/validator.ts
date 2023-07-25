@@ -82,7 +82,7 @@ export function ensureObject(element: unknown): asserts element is object {
 }
 
 export function ensureName(name: string) {
-    if (!name.match(/^[a-z-0-9\.]+$/))
+    if (!name.match(/^[a-z-0-9.]+$/))
         throw new Error(`Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`)
 }
 
