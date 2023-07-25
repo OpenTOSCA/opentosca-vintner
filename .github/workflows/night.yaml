@@ -191,3 +191,30 @@ jobs:
             - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
               if: always()
+
+            ###################################################
+            #
+            # Notification
+            #
+            ###################################################
+
+            - name: (NOTIFICATION) Send success notification
+              run: |
+                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) succeeded.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
+              env:
+                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+              if: success()
+
+            - name: (NOTIFICATION) Send failure notification
+              run: |
+                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) failed.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
+              env:
+                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+              if: failure()
+
+            - name: (DISCORD) Send cancel notification
+              run: |
+                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) cancelled.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
+              env:
+                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+              if: cancelled()
