@@ -3,7 +3,7 @@ import {expect} from 'chai'
 
 // TODO: add more tests
 
-describe('validator', () => {
+describe('assert', () => {
     it('isStringOrNumber: is string', () => {
         expect(() => assert.isStringOrNumber('string')).not.to.throw()
     })
@@ -12,11 +12,11 @@ describe('validator', () => {
         expect(() => assert.isStringOrNumber(1)).not.to.throw()
     })
 
-    it('ensureName: is name', () => {
+    it('isName: is name', () => {
         expect(() => assert.isName('this-is-a-valid-name-v0.0.2')).not.to.throw()
     })
 
-    it('ensureName: throw space', () => {
+    it('isName: throw space', () => {
         const name = ' '
         expect(() => assert.isName(name)).to.throw(
             `Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`

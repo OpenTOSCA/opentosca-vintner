@@ -3,7 +3,11 @@ import * as utils from '#utils'
 import {Dayjs} from 'dayjs'
 
 export function isDefined<T>(element: T | undefined | null, msg: string): asserts element is T {
-    if (check.isUndefined(element)) throw new Error(msg)
+    if (!check.isDefined(element)) throw new Error(msg)
+}
+
+export function isUndefined<T>(element: T | undefined | null, msg: string): asserts element is undefined | null {
+    if (!check.isUndefined(element)) throw new Error(msg)
 }
 
 export function isString(element: unknown): asserts element is string {
