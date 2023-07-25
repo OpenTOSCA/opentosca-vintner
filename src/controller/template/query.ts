@@ -1,8 +1,8 @@
 import {Query} from '#/query/query'
 import {getParentNode} from '#/query/utils'
+import * as check from '#check'
 import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {isString} from '#validator'
 
 export type TemplateQueryOptions = {
     template: string
@@ -39,13 +39,13 @@ export class TemplateQueryResolver {
         let numberOfQueries = 0
         // Recursively go through template to find any queries and resolve them
         const recursiveRun = (object: any, path: string) => {
-            if (isString(object)) {
+            if (check.isString(object)) {
                 if (this.queryRegex.test(object)) {
                     numberOfQueries++
                     const match = object.match(this.queryRegex)?.pop() || ''
                     const queryResult = this.runQuery(path, match)
                     // if result is also a query, leave this entry as it is and let it resolve in a later loop
-                    return isString(queryResult) && this.queryRegex.test(queryResult) ? object : queryResult
+                    return check.isString(queryResult) && this.queryRegex.test(queryResult) ? object : queryResult
                 } else {
                     return object
                 }

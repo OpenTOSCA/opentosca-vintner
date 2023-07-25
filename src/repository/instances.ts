@@ -1,9 +1,9 @@
+import * as check from '#check'
 import config from '#config'
 import * as files from '#files'
 import Plugins from '#plugins'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as validator from '#validator'
 import _ from 'lodash'
 import * as path from 'path'
 import {Template} from './templates'
@@ -84,11 +84,9 @@ export class Instance {
     loadInfo() {
         const info = files.loadYAML<InstanceInfo>(this.getInfo())
 
-        if (validator.isUndefined(info.name)) throw new Error(`${this.getName()} has no name`)
-        if (validator.isUndefined(info.creation_timestamp))
-            throw new Error(`${this.getName()} has no creation timestamp`)
-        if (validator.isUndefined(info.template_timestamp))
-            throw new Error(`${this.getName()} has no template timestamp`)
+        if (check.isUndefined(info.name)) throw new Error(`${this.getName()} has no name`)
+        if (check.isUndefined(info.creation_timestamp)) throw new Error(`${this.getName()} has no creation timestamp`)
+        if (check.isUndefined(info.template_timestamp)) throw new Error(`${this.getName()} has no template timestamp`)
 
         return info
     }
@@ -100,7 +98,7 @@ export class Instance {
 
     loadResolvedTimestamp() {
         const info = this.loadInfo()
-        if (validator.isUndefined(info.resolved_timestamp))
+        if (check.isUndefined(info.resolved_timestamp))
             throw new Error(`Instance "${this.getName()}" does not have a service template`)
         return info.resolved_timestamp
     }
@@ -114,7 +112,7 @@ export class Instance {
     }
 
     getTemplateDirectory(time?: number) {
-        if (validator.isUndefined(time)) time = this.loadInfo().template_timestamp
+        if (check.isUndefined(time)) time = this.loadInfo().template_timestamp
         return path.join(this.getTemplatesDirectory(), time.toString())
     }
 
@@ -149,12 +147,12 @@ export class Instance {
 
     hasServiceInputs() {
         const time = this.loadServiceInputsTimestamp()
-        if (validator.isDefined(time)) files.assertFile(this.getServiceInputs(time))
-        return validator.isDefined(time)
+        if (check.isDefined(time)) files.assertFile(this.getServiceInputs(time))
+        return check.isDefined(time)
     }
 
     getServiceInputs(time?: number) {
-        if (validator.isUndefined(time)) time = this.loadInfo().service_inputs_timestamp
+        if (check.isUndefined(time)) time = this.loadInfo().service_inputs_timestamp
         return path.join(this.getServiceInputsDirectory(), `${time}.yaml`)
     }
 

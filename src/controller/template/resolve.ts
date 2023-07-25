@@ -1,7 +1,7 @@
+import * as check from '#check'
 import * as files from '#files'
 import Resolver from '#resolver'
 import {ServiceTemplate} from '#spec/service-template'
-import * as validator from '#validator'
 
 export type TemplateResolveOptions = {
     template: string
@@ -11,8 +11,8 @@ export type TemplateResolveOptions = {
 }
 
 export default async function (options: TemplateResolveOptions) {
-    if (validator.isUndefined(options.template)) throw new Error(`Template not defined`)
-    if (validator.isUndefined(options.output)) throw new Error(`Output not defined`)
+    if (check.isUndefined(options.template)) throw new Error(`Template not defined`)
+    if (check.isUndefined(options.output)) throw new Error(`Output not defined`)
     const inputs = await Resolver.loadInputs(options.inputs)
     const template = files.loadYAML<ServiceTemplate>(options.template)
     const result = await Resolver.resolve({template, inputs, presets: options.presets})

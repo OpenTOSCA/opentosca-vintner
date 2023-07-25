@@ -1,8 +1,8 @@
+import * as check from '#check'
 import Controller from '#controller'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
-import {toList} from '#utils'
-import * as validator from '#validator'
+import * as utils from '#utils'
 import * as console from 'console'
 import jsonDiff from 'json-diff'
 import path from 'path'
@@ -58,11 +58,11 @@ async function runTest(dir: string, vstdir: string) {
             template: getDefaultVariableServiceTemplate(vstdir),
             inputs: getDefaultInputs(dir),
             output,
-            presets: toList(config.presets),
+            presets: utils.toList(config.presets),
         })
     }
 
-    if (validator.isDefined(config.error)) {
+    if (check.isDefined(config.error)) {
         try {
             await fn()
         } catch (e) {

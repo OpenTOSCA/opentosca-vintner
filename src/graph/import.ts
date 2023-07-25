@@ -1,7 +1,7 @@
+import * as check from '#check'
 import {ImportDefinition} from '#spec/import-definition'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Element from './element'
 
 export default class Import extends Element {
@@ -17,7 +17,7 @@ export default class Import extends Element {
         this.name = data.index.toString()
         this.raw = data.raw
 
-        if (!validator.isString(data.raw)) this.conditions = utils.toList(data.raw.conditions)
+        if (!check.isString(data.raw)) this.conditions = utils.toList(data.raw.conditions)
     }
 
     get toscaId() {
@@ -30,7 +30,7 @@ export default class Import extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {import_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }

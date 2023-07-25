@@ -1,5 +1,6 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import * as files from '#files'
-import * as validator from '#validator'
 import path from 'path'
 
 export type TemplateInitOptions = {
@@ -10,15 +11,15 @@ export type TemplateInitOptions = {
 }
 
 export default async function (options: TemplateInitOptions) {
-    if (validator.isUndefined(options.path)) throw new Error(`Template not defined`)
+    if (check.isUndefined(options.path)) throw new Error(`Template not defined`)
     files.createDirectory(options.path)
 
     options.force = options.force ?? false
-    validator.ensureBoolean(options.force)
+    assert.isBoolean(options.force)
     if (!options.force) files.assertEmpty(options.path)
 
     options.template = options.template ?? files.getName(options.path)
-    validator.ensureName(options.template)
+    assert.isName(options.template)
 
     options.vintner = options.vintner ?? 'yarn cli'
 

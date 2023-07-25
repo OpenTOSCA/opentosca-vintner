@@ -1,3 +1,4 @@
+import * as check from '#check'
 import Controller from '#controller'
 import {Instance} from '#repository/instances'
 import Resolver from '#resolver'
@@ -6,7 +7,6 @@ import * as utils from '#utils'
 import {emitter, events} from '#utils/emitter'
 import hae from '#utils/hae'
 import lock from '#utils/lock'
-import * as validator from '#validator'
 import jsonDiff from 'json-diff'
 import _ from 'lodash'
 
@@ -38,7 +38,7 @@ export default async function (options: InstancesAdaptationOptions) {
  */
 emitter.on(events.start_adaptation, async (instance: Instance) => {
     // Stop loop if there are no enqueued entries
-    if (!validator.isDefined(queue[instance.getName()])) return
+    if (!check.isDefined(queue[instance.getName()])) return
     // Stop current process if there is already another one running
     if (running[instance.getName()]) return
     // Stop loop if adaptation is stopped
@@ -59,7 +59,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
              */
             // Get enqueued entries
             const entries = queue[instance.getName()]
-            if (validator.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
+            if (check.isUndefined(entries)) throw new Error(`Values of instance "${instance.getName()}" are empty`)
 
             // Construct current variability inputs
             if (!cache[instance.getName()]) cache[instance.getName()] = instance.loadVariabilityInputs()

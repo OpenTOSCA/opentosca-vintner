@@ -1,9 +1,9 @@
+import * as check from '#check'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as featureIDE from '#utils/feature-ide'
-import * as validator from '#validator'
 import Checker from './checker'
 import Solver from './solver'
 import Transformer from './transformer'
@@ -25,8 +25,8 @@ export type ResolveResult = {
 }
 
 async function resolve(options: ResolveOptions): Promise<ResolveResult> {
-    if (validator.isUndefined(options.presets)) options.presets = []
-    if (!validator.isArray(options.presets)) throw new Error(`Presets must be a list`)
+    if (check.isUndefined(options.presets)) options.presets = []
+    if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
     // Generate graph
     const graph = new Graph(options.template)
@@ -58,7 +58,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 }
 
 async function loadInputs(file?: string) {
-    if (validator.isUndefined(file)) return {}
+    if (check.isUndefined(file)) return {}
     if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
     return files.loadYAML<InputAssignmentMap>(file)
 }

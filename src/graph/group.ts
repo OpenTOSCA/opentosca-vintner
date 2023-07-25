@@ -1,8 +1,8 @@
+import * as check from '#check'
 import {GroupTemplate} from '#spec/group-template'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Element from './element'
 import Node from './node'
 import Property from './property'
@@ -28,7 +28,7 @@ export default class Group extends Element {
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
         this.variability =
-            validator.isString(this.raw.type) &&
+            check.isString(this.raw.type) &&
             (this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
                 this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS)
     }
@@ -47,14 +47,14 @@ export default class Group extends Element {
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition))
+        if (check.isUndefined(this._defaultCondition))
             this._defaultCondition = {has_present_member: this.toscaId, _cached_element: this}
         return this._defaultCondition
     }
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }

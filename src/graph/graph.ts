@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import Import from '#graph/import'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {PropertyAssignmentValue} from '#spec/property-assignments'
@@ -22,8 +24,6 @@ import {
     VariabilityPointMap,
 } from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
-import {ensureDefined} from '#validator'
 import Artifact from './artifact'
 import Element from './element'
 import Group from './group'
@@ -126,7 +126,7 @@ export default class Graph {
         // Get resolver mode
         const mode = options.mode ?? 'strict'
         const map = ResolverModes[mode]
-        if (validator.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
+        if (check.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
 
         // Build default options
         this.options.default = utils.propagateOptions<DefaultOptions>({
@@ -146,11 +146,7 @@ export default class Graph {
 
         // Build optimization options
         const optimization = options.optimization
-        if (
-            validator.isDefined(optimization) &&
-            !validator.isBoolean(optimization) &&
-            !['min', 'max'].includes(optimization)
-        ) {
+        if (check.isDefined(optimization) && !check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
         this.options.solver = {optimization: optimization ?? 'min'}
@@ -176,8 +172,8 @@ export default class Graph {
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
-        if (validator.isUndefined(data)) return []
-        if (validator.isArray(data)) return data
+        if (check.isUndefined(data)) return []
+        if (check.isArray(data)) return data
         return Object.entries(data).map(([name, template]) => {
             const map: {[name: string]: T} = {}
             map[name] = template
@@ -241,11 +237,11 @@ export default class Graph {
                 node.relations.push(relation)
                 this.relations.push(relation)
 
-                if (!validator.isString(assignment)) {
-                    if (validator.isString(assignment.relationship)) {
+                if (!check.isString(assignment)) {
+                    if (check.isString(assignment.relationship)) {
                         const relationshipTemplate = (this.serviceTemplate.topology_template?.relationship_templates ||
                             {})[assignment.relationship]
-                        validator.ensureDefined(
+                        assert.isDefined(
                             relationshipTemplate,
                             `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
                         )
@@ -268,7 +264,7 @@ export default class Graph {
                         this.buildProperties(relation, relationshipTemplate)
                     }
 
-                    if (validator.isObject(assignment.relationship)) {
+                    if (check.isObject(assignment.relationship)) {
                         throw new Error(
                             `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
                         )
@@ -283,8 +279,8 @@ export default class Graph {
             })
 
             // Artifacts
-            if (validator.isDefined(nodeTemplate.artifacts)) {
-                if (validator.isArray(nodeTemplate.artifacts)) {
+            if (check.isDefined(nodeTemplate.artifacts)) {
+                if (check.isArray(nodeTemplate.artifacts)) {
                     for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
                         this.buildArtifact(node, artifactMap, artifactIndex)
                     }
@@ -313,9 +309,9 @@ export default class Graph {
 
         // Assign ingoing relations to nodes and assign target to relation
         this.relations.forEach(relation => {
-            const targetName = validator.isString(relation.raw) ? relation.raw : relation.raw.node
+            const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
             const target = this.nodesMap.get(targetName)
-            validator.ensureDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
+            assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
 
             relation.target = target
             target.ingoing.push(relation)
@@ -324,11 +320,11 @@ export default class Graph {
     }
 
     private buildTypes(element: TypeContainer, template: TypeContainerTemplate) {
-        if (validator.isString(template)) return
-        if (validator.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
+        if (check.isString(template)) return
+        if (check.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
 
         // Collect types
-        const types: VariabilityPointList<TypeAssignment> = validator.isString(template.type)
+        const types: VariabilityPointList<TypeAssignment> = check.isString(template.type)
             ? [
                   (() => {
                       const map: {[name: string]: TypeAssignment} = {}
@@ -376,11 +372,11 @@ export default class Graph {
     }
 
     private buildProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
-        if (validator.isString(template)) return
+        if (check.isString(template)) return
 
-        if (validator.isObject(template.properties)) {
+        if (check.isObject(template.properties)) {
             // Properties is a Property Assignment List
-            if (validator.isArray(template.properties)) {
+            if (check.isArray(template.properties)) {
                 for (const [propertyIndex, propertyAssignmentListEntry] of template.properties.entries()) {
                     const [propertyName, propertyAssignment] = utils.firstEntry(propertyAssignmentListEntry)
 
@@ -388,12 +384,12 @@ export default class Graph {
 
                     // Property is not conditional
                     if (
-                        validator.isString(propertyAssignment) ||
-                        validator.isNumber(propertyAssignment) ||
-                        validator.isBoolean(propertyAssignment) ||
-                        validator.isArray(propertyAssignment) ||
-                        (validator.isUndefined(propertyAssignment.value) &&
-                            validator.isUndefined(propertyAssignment.expression))
+                        check.isString(propertyAssignment) ||
+                        check.isNumber(propertyAssignment) ||
+                        check.isBoolean(propertyAssignment) ||
+                        check.isArray(propertyAssignment) ||
+                        (check.isUndefined(propertyAssignment.value) &&
+                            check.isUndefined(propertyAssignment.expression))
                     ) {
                         property = new Property({
                             name: propertyName,
@@ -408,7 +404,7 @@ export default class Graph {
                         // Property is conditional
                         property = new Property({
                             name: propertyName,
-                            conditions: validator.isDefined(propertyAssignment.default_alternative)
+                            conditions: check.isDefined(propertyAssignment.default_alternative)
                                 ? [false]
                                 : utils.toList(propertyAssignment.conditions),
                             default: propertyAssignment.default_alternative ?? false,
@@ -456,7 +452,7 @@ export default class Graph {
 
         // Ensure that every property has at least a value or a value expression assigned
         element.properties.forEach(property => {
-            if (validator.isUndefined(property.value) && validator.isUndefined(property.expression)) {
+            if (check.isUndefined(property.value) && check.isUndefined(property.expression)) {
                 throw new Error(`${property.Display} has no value or expression defined`)
             }
         })
@@ -476,9 +472,9 @@ export default class Graph {
             template.members.forEach(member => {
                 let element: Node | Relation | undefined
 
-                if (validator.isString(member)) element = this.getNode(member)
-                if (validator.isArray(member)) element = this.getRelation(member)
-                ensureDefined(element, `Member "${utils.pretty(member)}" has bad format`)
+                if (check.isString(member)) element = this.getNode(member)
+                if (check.isArray(member)) element = this.getRelation(member)
+                assert.isDefined(element, `Member "${utils.pretty(member)}" has bad format`)
 
                 element.groups.push(group)
                 group.members.push(element)
@@ -494,8 +490,8 @@ export default class Graph {
 
     private buildPolicies() {
         if (
-            validator.isDefined(this.serviceTemplate.topology_template?.policies) &&
-            !validator.isArray(this.serviceTemplate.topology_template?.policies)
+            check.isDefined(this.serviceTemplate.topology_template?.policies) &&
+            !check.isArray(this.serviceTemplate.topology_template?.policies)
         )
             throw new Error(`Policies must be an array`)
 
@@ -510,12 +506,12 @@ export default class Graph {
 
             template.targets?.forEach(target => {
                 const node = this.nodesMap.get(target)
-                if (validator.isDefined(node)) {
+                if (check.isDefined(node)) {
                     return policy.targets.push(node)
                 }
 
                 const group = this.groupsMap.get(target)
-                if (validator.isDefined(group)) {
+                if (check.isDefined(group)) {
                     return policy.targets.push(group)
                 }
 
@@ -532,7 +528,7 @@ export default class Graph {
 
     getNode(name: string) {
         const node = this.nodesMap.get(name)
-        validator.ensureDefined(node, `Node "${name}" not found`)
+        assert.isDefined(node, `Node "${name}" not found`)
         return node
     }
 
@@ -556,15 +552,15 @@ export default class Graph {
         let type
         const toscaId = utils.last(data)
 
-        if (validator.isString(toscaId)) {
+        if (check.isString(toscaId)) {
             const types = container.typesMap.get(toscaId) || []
             if (types.length > 1) throw new Error(`Type "${utils.pretty(data)}" is ambiguous`)
             type = types[0]
         }
 
-        if (validator.isNumber(toscaId)) type = container.types[toscaId]
+        if (check.isNumber(toscaId)) type = container.types[toscaId]
 
-        validator.ensureDefined(type, `Type "${utils.pretty(data)}" not found`)
+        assert.isDefined(type, `Type "${utils.pretty(data)}" not found`)
         return type
     }
 
@@ -573,39 +569,39 @@ export default class Graph {
         const node = this.getNode(member[0])
 
         // Element is [node name, relation name]
-        if (validator.isString(member[1])) {
+        if (check.isString(member[1])) {
             const relations = node.outgoingMap.get(member[1]) || []
             if (relations.length > 1) throw new Error(`Relation "${utils.pretty(member)}" is ambiguous`)
             relation = relations[0]
         }
 
         // Element is [node name, relation index]
-        if (validator.isNumber(member[1])) relation = node.outgoing[member[1]]
+        if (check.isNumber(member[1])) relation = node.outgoing[member[1]]
 
-        validator.ensureDefined(relation, `Relation "${utils.pretty(member)}" not found`)
+        assert.isDefined(relation, `Relation "${utils.pretty(member)}" not found`)
         return relation
     }
 
     getGroup(name: string) {
         const group = this.groupsMap.get(name)
-        validator.ensureDefined(group, `Group "${name}" not found`)
+        assert.isDefined(group, `Group "${name}" not found`)
         return group
     }
 
     getPolicy(element: string | number) {
         let policy
 
-        if (validator.isString(element)) {
+        if (check.isString(element)) {
             const policies = this.policiesMap.get(element) || []
             if (policies.length > 1) throw new Error(`Policy "${element}" is ambiguous`)
             policy = policies[0]
         }
 
-        if (validator.isNumber(element)) {
+        if (check.isNumber(element)) {
             policy = this.policies[element]
         }
 
-        if (validator.isUndefined(policy)) throw new Error(`Policy "${element}" not found`)
+        if (check.isUndefined(policy)) throw new Error(`Policy "${element}" not found`)
         return policy
     }
 
@@ -613,21 +609,21 @@ export default class Graph {
         let artifact
         const node = this.getNode(member[0])
 
-        if (validator.isString(member[1])) {
+        if (check.isString(member[1])) {
             const artifacts = node.artifactsMap.get(member[1]) || []
             if (artifacts.length > 1) throw new Error(`Artifact "${utils.pretty(member)}" is ambiguous`)
             artifact = artifacts[0]
         }
 
-        if (validator.isNumber(member[1])) artifact = node.artifacts[member[1]]
+        if (check.isNumber(member[1])) artifact = node.artifacts[member[1]]
 
-        validator.ensureDefined(artifact, `Artifact "${utils.pretty(member)}" not found`)
+        assert.isDefined(artifact, `Artifact "${utils.pretty(member)}" not found`)
         return artifact
     }
 
     getImport(index: number) {
         const imp = this.imports[index]
-        validator.ensureDefined(imp, `Import "${index}" not found`)
+        assert.isDefined(imp, `Import "${index}" not found`)
         return imp
     }
 
@@ -655,21 +651,21 @@ export default class Graph {
         let property
         const toscaId = utils.last(data)
 
-        if (validator.isString(toscaId)) {
+        if (check.isString(toscaId)) {
             const properties = container.propertiesMap.get(toscaId) || []
             if (properties.length > 1) throw new Error(`Property "${utils.pretty(data)}" is ambiguous`)
             property = properties[0]
         }
 
-        if (validator.isNumber(toscaId)) property = container.properties[toscaId]
+        if (check.isNumber(toscaId)) property = container.properties[toscaId]
 
-        validator.ensureDefined(property, `Property "${utils.pretty(data)}" not found`)
+        assert.isDefined(property, `Property "${utils.pretty(data)}" not found`)
         return property
     }
 
     getInput(name: string) {
         const input = this.inputsMap.get(name)
-        validator.ensureDefined(input, `Input "${name}" not found`)
+        assert.isDefined(input, `Input "${name}" not found`)
         return input
     }
 }

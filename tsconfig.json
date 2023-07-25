@@ -21,7 +21,8 @@
             "#shell": ["src/utils/shell"],
             "#git": ["src/utils/git"],
             "#utils": ["src/utils/utils"],
-            "#validator": ["src/utils/validator"]
+            "#check": ["src/utils/check"],
+            "#assert": ["src/utils/assert"]
         },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,

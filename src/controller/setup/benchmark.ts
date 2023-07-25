@@ -1,7 +1,7 @@
 import {countLines, getSize, loadYAML, storeYAML, temporary} from '#files'
 import Resolver from '#resolver'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {getMedianFromSorted, hrtime2ms, prettyBytes, prettyMilliseconds, prettyNumber} from '#utils'
+import * as utils from '#utils'
 
 type BenchmarkOptions = {
     io?: boolean
@@ -53,7 +53,7 @@ export default async function (options: BenchmarkOptions) {
                 if (io) storeYAML(output, result)
 
                 const end = process.hrtime(start)
-                const duration = hrtime2ms(end)
+                const duration = utils.hrtime2ms(end)
 
                 if (io) {
                     size = getSize(input)
@@ -65,16 +65,16 @@ export default async function (options: BenchmarkOptions) {
                 measurements.push(duration)
             }
 
-            const median = getMedianFromSorted(measurements.sort())
+            const median = utils.getMedianFromSorted(measurements.sort())
             const templates = 4 * seed
             const result = {
                 IO: io,
-                seed: prettyNumber(seed),
-                templates: prettyNumber(templates),
-                median: prettyMilliseconds(median),
-                median_per_template: prettyMilliseconds(median / templates),
-                file_size: prettyBytes(size),
-                file_lines: prettyNumber(lines),
+                seed: utils.prettyNumber(seed),
+                templates: utils.prettyNumber(templates),
+                median: utils.prettyMilliseconds(median),
+                median_per_template: utils.prettyMilliseconds(median / templates),
+                file_size: utils.prettyBytes(size),
+                file_lines: utils.prettyNumber(lines),
             }
             results.push(result)
         }

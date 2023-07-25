@@ -1,3 +1,4 @@
+import * as check from '#check'
 import {
     getDefaultInputs,
     getDefaultVariableServiceTemplate,
@@ -8,7 +9,6 @@ import {
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as validator from '#validator'
 import * as path from 'path'
 
 type Test = {
@@ -44,7 +44,7 @@ async function main() {
                 config,
                 inputs,
                 template,
-                expected: validator.isUndefined(config.error) ? loadDefaultExpect(dir) : undefined,
+                expected: check.isUndefined(config.error) ? loadDefaultExpect(dir) : undefined,
                 file: `test-${id}.md`,
             })
         })

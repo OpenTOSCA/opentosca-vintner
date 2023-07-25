@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
@@ -19,8 +21,6 @@ import {
 } from '#spec/variability'
 import * as utils from '#utils'
 import day from '#utils/day'
-import * as validator from '#validator'
-import {ensureArray, ensureDefined} from '#validator'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
 import regression from 'regression'
@@ -70,15 +70,12 @@ export default class Solver {
          * Get initial solution
          */
         const solution = this.minisat.solve()
-        if (validator.isUndefined(solution)) throw new Error(`Could not solve`)
+        if (check.isUndefined(solution)) throw new Error(`Could not solve`)
 
         /**
          * Get optimized solution
          */
-        if (
-            this.graph.options.solver.optimization === true ||
-            validator.isString(this.graph.options.solver.optimization)
-        ) {
+        if (this.graph.options.solver.optimization === true || check.isString(this.graph.options.solver.optimization)) {
             const nodes = this.graph.nodes.map(it => it.id)
             const weights = this.graph.nodes.map(it => it.weight)
             let optimized
@@ -97,7 +94,7 @@ export default class Solver {
                 optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
             }
 
-            if (validator.isUndefined(optimized)) throw new Error(`Could not optimize`)
+            if (check.isUndefined(optimized)) throw new Error(`Could not optimize`)
             this.result = optimized.getMap()
         } else {
             this.result = solution.getMap()
@@ -108,7 +105,7 @@ export default class Solver {
          */
         for (const element of this.graph.elements) {
             const present = this.result[element.id]
-            if (validator.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
+            if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
             element.present = present
         }
 
@@ -173,12 +170,12 @@ export default class Solver {
     }
 
     evaluateProperty(property: Property) {
-        if (validator.isDefined(property.expression))
+        if (check.isDefined(property.expression))
             property.value = this.evaluateValueExpression(property.expression, {
                 element: property,
             })
 
-        if (validator.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
+        if (check.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)
         return property.value
     }
 
@@ -211,7 +208,7 @@ export default class Solver {
 
         // Add condition that checks if no other bratan is present
         if (element.defaultAlternative) {
-            if (validator.isUndefined(element.defaultAlternativeCondition))
+            if (check.isUndefined(element.defaultAlternativeCondition))
                 throw new Error(`${element.Display} has no default alternative condition`)
             conditions = [element.defaultAlternativeCondition]
         }
@@ -260,13 +257,13 @@ export default class Solver {
     }
 
     setPreset(name?: string) {
-        if (validator.isUndefined(name)) return this
+        if (check.isUndefined(name)) return this
         this.setInputs(this.getPreset(name).inputs)
         return this
     }
 
     setInputs(inputs?: InputAssignmentMap) {
-        if (validator.isUndefined(inputs)) return this
+        if (check.isUndefined(inputs)) return this
         this.inputs = _.merge(this.inputs, inputs)
         return this
     }
@@ -280,25 +277,25 @@ export default class Solver {
 
         // Get variability input definition
         const definition = this.options?.inputs[name]
-        validator.ensureDefined(definition, `Variability input "${name}" is not defined`)
+        assert.isDefined(definition, `Variability input "${name}" is not defined`)
 
         // Return assigned value
         value = this.inputs[name]
-        if (validator.isDefined(value)) return value
+        if (check.isDefined(value)) return value
 
         // Return default value
-        if (validator.isDefined(definition.default)) {
+        if (check.isDefined(definition.default)) {
             this.setInput(name, definition.default)
             return definition.default
         }
 
         // Return default expression
-        validator.ensureDefined(
+        assert.isDefined(
             definition.default_expression,
             `Variability input "${name}" has no value nor default (expression) assigned`
         )
         value = this.evaluateValueExpression(definition.default_expression, {})
-        validator.ensureDefined(value, `Did not find variability input "${name}"`)
+        assert.isDefined(value, `Did not find variability input "${name}"`)
         this.setInput(name, value)
         return value
     }
@@ -309,48 +306,48 @@ export default class Solver {
 
     getPreset(name: string) {
         const set: InputAssignmentPreset | undefined = (this.options?.presets || {})[name]
-        validator.ensureDefined(set, `Did not find variability set "${name}"`)
+        assert.isDefined(set, `Did not find variability set "${name}"`)
         return set
     }
 
     getLogicExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find logic expression "${name}"`)
+        assert.isDefined(condition, `Did not find logic expression "${name}"`)
         return condition as LogicExpression
     }
 
     getValueExpression(name: string) {
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
-        validator.ensureDefined(condition, `Did not find value expression "${name}"`)
+        assert.isDefined(condition, `Did not find value expression "${name}"`)
         return condition as ValueExpression
     }
 
     private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): MiniSat.Operand {
-        if (validator.isString(expression)) return expression
-        if (validator.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
+        if (check.isString(expression)) return expression
+        if (check.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
 
         /**
          * logic_expression
          * The expression is first transformed and then added as a separate clause, thus, can be referenced by its name
          */
-        if (validator.isDefined(expression.logic_expression)) {
+        if (check.isDefined(expression.logic_expression)) {
             // Find referenced expression
             const name = expression.logic_expression
-            validator.ensureString(name)
+            assert.isString(name)
             const found = this.getLogicExpression(name)
 
             // Found expression is in this case actually a value expression
-            if (validator.isString(found))
+            if (check.isString(found))
                 throw new Error(`Logic expression "${utils.pretty(expression)}" must not be a string`)
 
             // If the found expression is a boolean then just return the boolean (which requires transformation first)
-            if (validator.isBoolean(found)) return this.transformLogicExpression(found, context)
+            if (check.isBoolean(found)) return this.transformLogicExpression(found, context)
 
             // Assign id to expression which can be reused by other logic expressions
-            if (validator.isUndefined(found._id)) found._id = 'expression.' + name
+            if (check.isUndefined(found._id)) found._id = 'expression.' + name
 
             // Transform found expression and add it to MiniSat
-            if (validator.isUndefined(found._visited)) {
+            if (check.isUndefined(found._visited)) {
                 this.minisat.require(MiniSat.equiv(found._id, this.transformLogicExpression(found, context)))
                 found._visited = true
             }
@@ -362,35 +359,35 @@ export default class Solver {
         /**
          * and
          */
-        if (validator.isDefined(expression.and)) {
+        if (check.isDefined(expression.and)) {
             return MiniSat.and(expression.and.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * or
          */
-        if (validator.isDefined(expression.or)) {
+        if (check.isDefined(expression.or)) {
             return MiniSat.or(expression.or.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * not
          */
-        if (validator.isDefined(expression.not)) {
+        if (check.isDefined(expression.not)) {
             return MiniSat.not(this.transformLogicExpression(expression.not, context))
         }
 
         /**
          * xor
          */
-        if (validator.isDefined(expression.xor)) {
+        if (check.isDefined(expression.xor)) {
             return MiniSat.exactlyOne(expression.xor.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * implies
          */
-        if (validator.isDefined(expression.implies)) {
+        if (check.isDefined(expression.implies)) {
             return MiniSat.implies(
                 this.transformLogicExpression(expression.implies[0], context),
                 this.transformLogicExpression(expression.implies[1], context)
@@ -400,24 +397,24 @@ export default class Solver {
         /**
          * amo
          */
-        if (validator.isDefined(expression.amo)) {
+        if (check.isDefined(expression.amo)) {
             return MiniSat.atMostOne(expression.amo.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**
          * node_presence
          */
-        if (validator.isDefined(expression.node_presence)) {
+        if (check.isDefined(expression.node_presence)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.node_presence
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -427,20 +424,20 @@ export default class Solver {
         /**
          * host_presence
          */
-        if (validator.isDefined(expression.host_presence)) {
+        if (check.isDefined(expression.host_presence)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.host_presence
-                validator.ensureString(name)
+                assert.isString(name)
 
                 if (name === 'SELF') {
-                    if (validator.isUndefined(context.element))
+                    if (check.isUndefined(context.element))
                         throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
 
                     if (!context.element.isNode())
@@ -458,17 +455,17 @@ export default class Solver {
         /**
          * has_source
          */
-        if (validator.isDefined(expression.has_source)) {
+        if (check.isDefined(expression.has_source)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.has_source
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -478,17 +475,17 @@ export default class Solver {
         /**
          * has_incoming_relation
          */
-        if (validator.isDefined(expression.has_incoming_relation)) {
+        if (check.isDefined(expression.has_incoming_relation)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.has_incoming_relation
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -498,17 +495,17 @@ export default class Solver {
         /**
          * has_incoming_relation_naive
          */
-        if (validator.isDefined(expression.has_incoming_relation_naive)) {
+        if (check.isDefined(expression.has_incoming_relation_naive)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.has_incoming_relation
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -518,17 +515,17 @@ export default class Solver {
         /**
          * has_artifact
          */
-        if (validator.isDefined(expression.has_artifact)) {
+        if (check.isDefined(expression.has_artifact)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.has_artifact
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -538,17 +535,17 @@ export default class Solver {
         /**
          * has_artifact_naive
          */
-        if (validator.isDefined(expression.has_artifact_naive)) {
+        if (check.isDefined(expression.has_artifact_naive)) {
             let node: Node | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
                 node = element
             }
 
-            if (validator.isUndefined(node)) {
+            if (check.isUndefined(node)) {
                 const name = expression.has_artifact_naive
-                validator.ensureString(name)
+                assert.isString(name)
                 node = this.graph.getNode(name)
             }
 
@@ -558,21 +555,21 @@ export default class Solver {
         /**
          * relation_presence
          */
-        if (validator.isDefined(expression.relation_presence)) {
+        if (check.isDefined(expression.relation_presence)) {
             let relation: Relation | undefined
 
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isRelation()) throw new Error(`${element.Display} is not a relation`)
                 relation = element
             }
 
-            if (validator.isUndefined(relation)) {
+            if (check.isUndefined(relation)) {
                 const node = expression.relation_presence[0]
-                validator.ensureString(node)
+                assert.isString(node)
 
                 const id = expression.relation_presence[1]
-                validator.ensureStringOrNumber(id)
+                assert.isStringOrNumber(id)
 
                 relation = this.graph.getRelation([node, id])
             }
@@ -583,12 +580,12 @@ export default class Solver {
         /**
          * source_presence
          */
-        if (validator.isDefined(expression.source_presence)) {
+        if (check.isDefined(expression.source_presence)) {
             const element = expression.source_presence
-            validator.ensureString(element)
+            assert.isString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "source_presence" but received "${element}"`)
-            if (validator.isUndefined(context.element))
+            if (check.isUndefined(context.element))
                 throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
 
@@ -598,12 +595,12 @@ export default class Solver {
         /**
          * target_presence
          */
-        if (validator.isDefined(expression.target_presence)) {
+        if (check.isDefined(expression.target_presence)) {
             const element = expression.target_presence
-            validator.ensureString(element)
+            assert.isString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "target_presence" but received "${element}"`)
-            if (validator.isUndefined(context.element))
+            if (check.isUndefined(context.element))
                 throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isRelation()) throw new Error(`"target_presence" is only valid inside a relation`)
 
@@ -613,12 +610,12 @@ export default class Solver {
         /**
          * container_presence
          */
-        if (validator.isDefined(expression.container_presence)) {
+        if (check.isDefined(expression.container_presence)) {
             const element = expression.container_presence
-            validator.ensureString(element)
+            assert.isString(element)
             if (element !== 'SELF')
                 throw new Error(`"SELF" is the only valid value for "container_presence" but received "${element}"`)
-            if (validator.isUndefined(context.element))
+            if (check.isUndefined(context.element))
                 throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
             if (!context.element.isProperty() && !context.element.isArtifact())
                 throw new Error(`"container_presence" is only valid inside a property or artifact`)
@@ -629,17 +626,17 @@ export default class Solver {
         /**
          * policy_presence
          */
-        if (validator.isDefined(expression.policy_presence)) {
+        if (check.isDefined(expression.policy_presence)) {
             let policy: Policy | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
                 policy = element
             }
 
-            if (validator.isUndefined(policy)) {
+            if (check.isUndefined(policy)) {
                 const name = expression.policy_presence
-                validator.ensureStringOrNumber(name)
+                assert.isStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
 
@@ -649,17 +646,17 @@ export default class Solver {
         /**
          * has_present_target
          */
-        if (validator.isDefined(expression.has_present_target)) {
+        if (check.isDefined(expression.has_present_target)) {
             let policy: Policy | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
                 policy = element
             }
 
-            if (validator.isUndefined(policy)) {
+            if (check.isUndefined(policy)) {
                 const name = expression.has_present_target
-                validator.ensureStringOrNumber(name)
+                assert.isStringOrNumber(name)
                 policy = this.graph.getPolicy(name)
             }
 
@@ -677,17 +674,17 @@ export default class Solver {
         /**
          * group_presence
          */
-        if (validator.isDefined(expression.group_presence)) {
+        if (check.isDefined(expression.group_presence)) {
             let group: Group | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
                 group = element
             }
 
-            if (validator.isUndefined(group)) {
+            if (check.isUndefined(group)) {
                 const name = expression.group_presence
-                validator.ensureString(name)
+                assert.isString(name)
                 group = this.graph.getGroup(name)
             }
 
@@ -697,17 +694,17 @@ export default class Solver {
         /**
          * has_present_member
          */
-        if (validator.isDefined(expression.has_present_member)) {
+        if (check.isDefined(expression.has_present_member)) {
             let group: Group | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
                 group = element
             }
 
-            if (validator.isUndefined(group)) {
+            if (check.isUndefined(group)) {
                 const name = expression.has_present_member
-                validator.ensureString(name)
+                assert.isString(name)
                 group = this.graph.getGroup(name)
             }
 
@@ -717,17 +714,17 @@ export default class Solver {
         /**
          * artifact_presence
          */
-        if (validator.isDefined(expression.artifact_presence)) {
+        if (check.isDefined(expression.artifact_presence)) {
             let artifact: Artifact | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
                 artifact = element
             }
 
-            if (validator.isUndefined(artifact)) {
-                validator.ensureString(expression.artifact_presence[0])
-                validator.ensureStringOrNumber(expression.artifact_presence[1])
+            if (check.isUndefined(artifact)) {
+                assert.isString(expression.artifact_presence[0])
+                assert.isStringOrNumber(expression.artifact_presence[1])
                 artifact = this.graph.getArtifact(expression.artifact_presence)
             }
 
@@ -737,17 +734,17 @@ export default class Solver {
         /**
          * node_property_presence
          */
-        if (validator.isDefined(expression.node_property_presence)) {
+        if (check.isDefined(expression.node_property_presence)) {
             let property: Property | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
                 property = element
             }
 
-            if (validator.isUndefined(property)) {
-                validator.ensureString(expression.node_property_presence[0])
-                validator.ensureStringOrNumber(expression.node_property_presence[1])
+            if (check.isUndefined(property)) {
+                assert.isString(expression.node_property_presence[0])
+                assert.isStringOrNumber(expression.node_property_presence[1])
                 property = this.graph.getNodeProperty(expression.node_property_presence)
             }
 
@@ -757,18 +754,18 @@ export default class Solver {
         /**
          * relation_property_presence
          */
-        if (validator.isDefined(expression.relation_property_presence)) {
+        if (check.isDefined(expression.relation_property_presence)) {
             let property: Property | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
                 property = element
             }
 
-            if (validator.isUndefined(property)) {
-                validator.ensureString(expression.relation_property_presence[0])
-                validator.ensureStringOrNumber(expression.relation_property_presence[1])
-                validator.ensureStringOrNumber(expression.relation_property_presence[2])
+            if (check.isUndefined(property)) {
+                assert.isString(expression.relation_property_presence[0])
+                assert.isStringOrNumber(expression.relation_property_presence[1])
+                assert.isStringOrNumber(expression.relation_property_presence[2])
                 property = this.graph.getRelationProperty(expression.relation_property_presence)
             }
 
@@ -778,17 +775,17 @@ export default class Solver {
         /**
          * group_property_presence
          */
-        if (validator.isDefined(expression.group_property_presence)) {
+        if (check.isDefined(expression.group_property_presence)) {
             let property: Property | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
                 property = element
             }
 
-            if (validator.isUndefined(property)) {
-                validator.ensureString(expression.group_property_presence[0])
-                validator.ensureStringOrNumber(expression.group_property_presence[1])
+            if (check.isUndefined(property)) {
+                assert.isString(expression.group_property_presence[0])
+                assert.isStringOrNumber(expression.group_property_presence[1])
                 property = this.graph.getGroupProperty(expression.group_property_presence)
             }
 
@@ -798,17 +795,17 @@ export default class Solver {
         /**
          * policy_property_presence
          */
-        if (validator.isDefined(expression.policy_property_presence)) {
+        if (check.isDefined(expression.policy_property_presence)) {
             let property: Property | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
                 property = element
             }
 
-            if (validator.isUndefined(property)) {
-                validator.ensureStringOrNumber(expression.policy_property_presence[0])
-                validator.ensureStringOrNumber(expression.policy_property_presence[1])
+            if (check.isUndefined(property)) {
+                assert.isStringOrNumber(expression.policy_property_presence[0])
+                assert.isStringOrNumber(expression.policy_property_presence[1])
                 property = this.graph.getPolicyProperty(expression.policy_property_presence)
             }
 
@@ -818,18 +815,18 @@ export default class Solver {
         /**
          * artifact_property_presence
          */
-        if (validator.isDefined(expression.artifact_property_presence)) {
+        if (check.isDefined(expression.artifact_property_presence)) {
             let property: Property | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
                 property = element
             }
 
-            if (validator.isUndefined(property)) {
-                validator.ensureString(expression.artifact_property_presence[0])
-                validator.ensureStringOrNumber(expression.artifact_property_presence[1])
-                validator.ensureStringOrNumber(expression.artifact_property_presence[2])
+            if (check.isUndefined(property)) {
+                assert.isString(expression.artifact_property_presence[0])
+                assert.isStringOrNumber(expression.artifact_property_presence[1])
+                assert.isStringOrNumber(expression.artifact_property_presence[2])
                 property = this.graph.getArtifactProperty(expression.artifact_property_presence)
             }
 
@@ -839,17 +836,17 @@ export default class Solver {
         /**
          * input_presence
          */
-        if (validator.isDefined(expression.input_presence)) {
+        if (check.isDefined(expression.input_presence)) {
             let input: Input | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isInput()) throw new Error(`${element.Display} is not an input`)
                 input = element
             }
 
-            if (validator.isUndefined(input)) {
+            if (check.isUndefined(input)) {
                 const name = expression.input_presence
-                validator.ensureString(name)
+                assert.isString(name)
                 input = this.graph.getInput(name)
             }
 
@@ -859,17 +856,17 @@ export default class Solver {
         /**
          * import_presence
          */
-        if (validator.isDefined(expression.import_presence)) {
+        if (check.isDefined(expression.import_presence)) {
             let imp: Import | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isImport()) throw new Error(`${element.Display} is not an import`)
                 imp = element
             }
 
-            if (validator.isUndefined(imp)) {
+            if (check.isUndefined(imp)) {
                 const index = expression.import_presence
-                validator.ensureNumber(index)
+                assert.isNumber(index)
                 imp = this.graph.getImport(index)
             }
 
@@ -879,17 +876,17 @@ export default class Solver {
         /**
          * node_type_presence
          */
-        if (validator.isDefined(expression.node_type_presence)) {
+        if (check.isDefined(expression.node_type_presence)) {
             let type: Type | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isType()) throw new Error(`${element.Display} is not a type`)
                 type = element
             }
 
-            if (validator.isUndefined(type)) {
-                validator.ensureString(expression.node_type_presence[0])
-                validator.ensureStringOrNumber(expression.node_type_presence[1])
+            if (check.isUndefined(type)) {
+                assert.isString(expression.node_type_presence[0])
+                assert.isStringOrNumber(expression.node_type_presence[1])
                 type = this.graph.getNodeType(expression.node_type_presence)
             }
 
@@ -899,17 +896,17 @@ export default class Solver {
         /**
          * relation_type_presence
          */
-        if (validator.isDefined(expression.relation_type_presence)) {
+        if (check.isDefined(expression.relation_type_presence)) {
             let type: Type | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isType()) throw new Error(`${element.Display} is not a type`)
                 type = element
             }
 
-            if (validator.isUndefined(type)) {
-                validator.ensureString(expression.relation_type_presence[0])
-                validator.ensureStringOrNumber(expression.relation_type_presence[1])
+            if (check.isUndefined(type)) {
+                assert.isString(expression.relation_type_presence[0])
+                assert.isStringOrNumber(expression.relation_type_presence[1])
                 type = this.graph.getRelationType(expression.relation_type_presence)
             }
 
@@ -919,17 +916,17 @@ export default class Solver {
         /**
          * group_type_presence
          */
-        if (validator.isDefined(expression.group_type_presence)) {
+        if (check.isDefined(expression.group_type_presence)) {
             let type: Type | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isType()) throw new Error(`${element.Display} is not a type`)
                 type = element
             }
 
-            if (validator.isUndefined(type)) {
-                validator.ensureString(expression.group_type_presence[0])
-                validator.ensureStringOrNumber(expression.group_type_presence[1])
+            if (check.isUndefined(type)) {
+                assert.isString(expression.group_type_presence[0])
+                assert.isStringOrNumber(expression.group_type_presence[1])
                 type = this.graph.getGroupType(expression.group_type_presence)
             }
 
@@ -939,17 +936,17 @@ export default class Solver {
         /**
          * policy_type_presence
          */
-        if (validator.isDefined(expression.policy_type_presence)) {
+        if (check.isDefined(expression.policy_type_presence)) {
             let type: Type | undefined
-            if (validator.isDefined(expression._cached_element)) {
+            if (check.isDefined(expression._cached_element)) {
                 const element = expression._cached_element
                 if (!element.isType()) throw new Error(`${element.Display} is not a type`)
                 type = element
             }
 
-            if (validator.isUndefined(type)) {
-                validator.ensureString(expression.policy_type_presence[0])
-                validator.ensureStringOrNumber(expression.policy_type_presence[1])
+            if (check.isUndefined(type)) {
+                assert.isString(expression.policy_type_presence[0])
+                assert.isStringOrNumber(expression.policy_type_presence[1])
                 type = this.graph.getPolicyType(expression.policy_type_presence)
             }
 
@@ -961,13 +958,13 @@ export default class Solver {
          * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */
         const result = this.evaluateValueExpression(expression, context)
-        validator.ensureBoolean(result)
+        assert.isBoolean(result)
         return this.transformLogicExpression(result, context)
     }
 
     evaluateValueExpression(expression: ValueExpression, context: ExpressionContext): InputAssignmentValue {
-        if (validator.isObject(expression) && !validator.isArray(expression)) {
-            if (validator.isDefined(expression._cached_result)) return expression._cached_result
+        if (check.isObject(expression) && !check.isArray(expression)) {
+            if (check.isDefined(expression._cached_result)) return expression._cached_result
             const result = this.evaluateValueExpressionRunner(expression, context)
             expression._cached_result = result
             return result
@@ -980,20 +977,20 @@ export default class Solver {
         expression: ValueExpression,
         context: ExpressionContext
     ): InputAssignmentValue {
-        validator.ensureDefined(expression, `Received undefined condition`)
+        assert.isDefined(expression, `Received undefined condition`)
 
-        if (validator.isString(expression)) return expression
-        if (validator.isBoolean(expression)) return expression
-        if (validator.isNumber(expression)) return expression
-        if (validator.isArray(expression)) return expression
+        if (check.isString(expression)) return expression
+        if (check.isBoolean(expression)) return expression
+        if (check.isNumber(expression)) return expression
+        if (check.isArray(expression)) return expression
 
         /**
          * add
          */
-        if (validator.isDefined(expression.add)) {
+        if (check.isDefined(expression.add)) {
             return expression.add.reduce<number>((sum, element) => {
                 const value = this.evaluateValueExpression(element, context)
-                validator.ensureNumber(value)
+                assert.isNumber(value)
                 return sum + value
             }, 0)
         }
@@ -1001,13 +998,13 @@ export default class Solver {
         /**
          * sub
          */
-        if (validator.isDefined(expression.sub)) {
+        if (check.isDefined(expression.sub)) {
             const first = this.evaluateValueExpression(expression.sub[0], context)
-            validator.ensureNumber(first)
+            assert.isNumber(first)
 
             return expression.sub.slice(1).reduce<number>((difference, element) => {
                 const value = this.evaluateValueExpression(element, context)
-                validator.ensureNumber(value)
+                assert.isNumber(value)
                 return difference - value
             }, first)
         }
@@ -1015,10 +1012,10 @@ export default class Solver {
         /**
          * mul
          */
-        if (validator.isDefined(expression.mul)) {
+        if (check.isDefined(expression.mul)) {
             return expression.mul.reduce<number>((product, element) => {
                 const value = this.evaluateValueExpression(element, context)
-                validator.ensureNumber(value)
+                assert.isNumber(value)
                 return product * value
             }, 1)
         }
@@ -1026,13 +1023,13 @@ export default class Solver {
         /**
          * div
          */
-        if (validator.isDefined(expression.div)) {
+        if (check.isDefined(expression.div)) {
             const first = this.evaluateValueExpression(expression.div[0], context)
-            validator.ensureNumber(first)
+            assert.isNumber(first)
 
             return expression.div.slice(1).reduce<number>((quotient, element) => {
                 const value = this.evaluateValueExpression(element, context)
-                validator.ensureNumber(value)
+                assert.isNumber(value)
                 return quotient / value
             }, first)
         }
@@ -1040,12 +1037,12 @@ export default class Solver {
         /**
          * mod
          */
-        if (validator.isDefined(expression.mod)) {
+        if (check.isDefined(expression.mod)) {
             const first = this.evaluateValueExpression(expression.mod[0], context)
-            validator.ensureNumber(first)
+            assert.isNumber(first)
 
             const second = this.evaluateValueExpression(expression.mod[1], context)
-            validator.ensureNumber(second)
+            assert.isNumber(second)
 
             return first % second
         }
@@ -1053,39 +1050,39 @@ export default class Solver {
         /**
          * variability_input
          */
-        if (validator.isDefined(expression.variability_input)) {
-            validator.ensureString(expression.variability_input)
+        if (check.isDefined(expression.variability_input)) {
+            assert.isString(expression.variability_input)
             return this.evaluateValueExpression(this.getInput(expression.variability_input), context)
         }
 
         /**
          * value_expression
          */
-        if (validator.isDefined(expression.value_expression)) {
-            validator.ensureString(expression.value_expression)
+        if (check.isDefined(expression.value_expression)) {
+            assert.isString(expression.value_expression)
             return this.evaluateValueExpression(this.getValueExpression(expression.value_expression), context)
         }
 
         /**
          * concat
          */
-        if (validator.isDefined(expression.concat)) {
+        if (check.isDefined(expression.concat)) {
             return expression.concat.map(c => this.evaluateValueExpression(c, context)).join('')
         }
 
         /**
          * join
          */
-        if (validator.isDefined(expression.join)) {
+        if (check.isDefined(expression.join)) {
             return expression.join[0].map(c => this.evaluateValueExpression(c, context)).join(expression.join[1])
         }
 
         /**
          * token
          */
-        if (validator.isDefined(expression.token)) {
+        if (check.isDefined(expression.token)) {
             const element = this.evaluateValueExpression(expression.token[0], context)
-            validator.ensureString(element)
+            assert.isString(element)
             const token = expression.token[1]
             const index = expression.token[2]
             return element.split(token)[index]
@@ -1094,7 +1091,7 @@ export default class Solver {
         /**
          * equal
          */
-        if (validator.isDefined(expression.equal)) {
+        if (check.isDefined(expression.equal)) {
             const first = this.evaluateValueExpression(expression.equal[0], context)
             return expression.equal.every(element => {
                 const value = this.evaluateValueExpression(element, context)
@@ -1105,7 +1102,7 @@ export default class Solver {
         /**
          * greater
          */
-        if (validator.isDefined(expression.greater)) {
+        if (check.isDefined(expression.greater)) {
             return (
                 this.evaluateValueExpression(expression.greater[0], context) >
                 this.evaluateValueExpression(expression.greater[1], context)
@@ -1115,7 +1112,7 @@ export default class Solver {
         /**
          * greater_or_equal
          */
-        if (validator.isDefined(expression.greater_or_equal)) {
+        if (check.isDefined(expression.greater_or_equal)) {
             return (
                 this.evaluateValueExpression(expression.greater_or_equal[0], context) >=
                 this.evaluateValueExpression(expression.greater_or_equal[1], context)
@@ -1125,7 +1122,7 @@ export default class Solver {
         /**
          * less
          */
-        if (validator.isDefined(expression.less)) {
+        if (check.isDefined(expression.less)) {
             return (
                 this.evaluateValueExpression(expression.less[0], context) <
                 this.evaluateValueExpression(expression.less[1], context)
@@ -1135,7 +1132,7 @@ export default class Solver {
         /**
          * less_or_equal
          */
-        if (validator.isDefined(expression.less_or_equal)) {
+        if (check.isDefined(expression.less_or_equal)) {
             return (
                 this.evaluateValueExpression(expression.less_or_equal[0], context) <=
                 this.evaluateValueExpression(expression.less_or_equal[1], context)
@@ -1145,7 +1142,7 @@ export default class Solver {
         /**
          * in_range
          */
-        if (validator.isDefined(expression.in_range)) {
+        if (check.isDefined(expression.in_range)) {
             const element = this.evaluateValueExpression(expression.in_range[0], context)
             const lower = expression.in_range[1][0]
             const upper = expression.in_range[1][1]
@@ -1155,7 +1152,7 @@ export default class Solver {
         /**
          * valid_values
          */
-        if (validator.isDefined(expression.valid_values)) {
+        if (check.isDefined(expression.valid_values)) {
             const element = this.evaluateValueExpression(expression.valid_values[0], context)
             const valid = expression.valid_values[1].map(c => this.evaluateValueExpression(c, context))
             return valid.includes(element)
@@ -1164,12 +1161,12 @@ export default class Solver {
         /**
          * length
          */
-        if (validator.isDefined(expression.length)) {
+        if (check.isDefined(expression.length)) {
             const element = this.evaluateValueExpression(expression.length[0], context)
-            validator.ensureString(element)
+            assert.isString(element)
 
             const length = this.evaluateValueExpression(expression.length[1], context)
-            validator.ensureNumber(length)
+            assert.isNumber(length)
 
             return element.length === length
         }
@@ -1177,12 +1174,12 @@ export default class Solver {
         /**
          * min_length
          */
-        if (validator.isDefined(expression.min_length)) {
+        if (check.isDefined(expression.min_length)) {
             const element = this.evaluateValueExpression(expression.min_length[0], context)
-            validator.ensureString(element)
+            assert.isString(element)
 
             const length = this.evaluateValueExpression(expression.min_length[1], context)
-            validator.ensureNumber(length)
+            assert.isNumber(length)
 
             return element.length >= length
         }
@@ -1190,12 +1187,12 @@ export default class Solver {
         /**
          * max_length
          */
-        if (validator.isDefined(expression.max_length)) {
+        if (check.isDefined(expression.max_length)) {
             const element = this.evaluateValueExpression(expression.max_length[0], context)
-            validator.ensureString(element)
+            assert.isString(element)
 
             const length = this.evaluateValueExpression(expression.max_length[1], context)
-            validator.ensureNumber(length)
+            assert.isNumber(length)
 
             return element.length <= length
         }
@@ -1203,90 +1200,90 @@ export default class Solver {
         /**
          * sum
          */
-        if (validator.isDefined(expression.sum)) {
+        if (check.isDefined(expression.sum)) {
             const elements = expression.sum
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return utils.toFixed(stats.sum(elements))
         }
 
         /**
          * count
          */
-        if (validator.isDefined(expression.count)) {
+        if (check.isDefined(expression.count)) {
             const elements = expression.count
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return elements.length
         }
 
         /**
          * min
          */
-        if (validator.isDefined(expression.min)) {
+        if (check.isDefined(expression.min)) {
             const elements = expression.min
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             const min = _.min(elements)
-            ensureDefined(min, `Minimum of "${utils.stringify(elements)}" does not exist`)
+            assert.isDefined(min, `Minimum of "${utils.stringify(elements)}" does not exist`)
             return min
         }
 
         /**
          * max
          */
-        if (validator.isDefined(expression.max)) {
+        if (check.isDefined(expression.max)) {
             const elements = expression.max
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             const max = _.max(elements)
-            ensureDefined(max, `Maximum of "${utils.stringify(elements)}" does not exist`)
+            assert.isDefined(max, `Maximum of "${utils.stringify(elements)}" does not exist`)
             return max
         }
 
         /**
          * median
          */
-        if (validator.isDefined(expression.median)) {
+        if (check.isDefined(expression.median)) {
             const elements = expression.median
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return stats.median(elements)
         }
 
         /**
          * mean
          */
-        if (validator.isDefined(expression.mean)) {
+        if (check.isDefined(expression.mean)) {
             const elements = expression.mean
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return utils.toFixed(stats.mean(elements))
         }
 
         /**
          * variance
          */
-        if (validator.isDefined(expression.variance)) {
+        if (check.isDefined(expression.variance)) {
             const elements = expression.variance
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return utils.toFixed(stats.variance(elements))
         }
 
         /**
          * standard_deviation
          */
-        if (validator.isDefined(expression.standard_deviation)) {
+        if (check.isDefined(expression.standard_deviation)) {
             const elements = expression.standard_deviation
-            validator.ensureNumbers(elements)
+            assert.isNumbers(elements)
             return utils.toFixed(stats.stdev(elements))
         }
 
         /**
          * linear_regression
          */
-        if (validator.isDefined(expression.linear_regression)) {
-            ensureArray(expression.linear_regression)
+        if (check.isDefined(expression.linear_regression)) {
+            assert.isArray(expression.linear_regression)
             const elements = expression.linear_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
+            assert.isArray(elements)
+            elements.forEach(it => assert.isNumbers(it))
 
             const prediction = expression.linear_regression[1]
-            validator.ensureNumber(prediction)
+            assert.isNumber(prediction)
 
             return utils.toFixed(regression.linear(elements).predict(prediction)[1])
         }
@@ -1294,17 +1291,17 @@ export default class Solver {
         /**
          * polynomial_regression
          */
-        if (validator.isDefined(expression.polynomial_regression)) {
-            ensureArray(expression.polynomial_regression)
+        if (check.isDefined(expression.polynomial_regression)) {
+            assert.isArray(expression.polynomial_regression)
             const elements = expression.polynomial_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
+            assert.isArray(elements)
+            elements.forEach(it => assert.isNumbers(it))
 
             const order = expression.polynomial_regression[1]
-            validator.ensureNumber(order)
+            assert.isNumber(order)
 
             const prediction = expression.polynomial_regression[2]
-            validator.ensureNumber(prediction)
+            assert.isNumber(prediction)
 
             return utils.toFixed(regression.polynomial(elements, {order}).predict(prediction)[1])
         }
@@ -1312,14 +1309,14 @@ export default class Solver {
         /**
          * logarithmic_regression
          */
-        if (validator.isDefined(expression.logarithmic_regression)) {
-            ensureArray(expression.logarithmic_regression)
+        if (check.isDefined(expression.logarithmic_regression)) {
+            assert.isArray(expression.logarithmic_regression)
             const elements = expression.logarithmic_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
+            assert.isArray(elements)
+            elements.forEach(it => assert.isNumbers(it))
 
             const prediction = expression.logarithmic_regression[1]
-            validator.ensureNumber(prediction)
+            assert.isNumber(prediction)
 
             return utils.toFixed(regression.logarithmic(elements).predict(prediction)[1])
         }
@@ -1327,14 +1324,14 @@ export default class Solver {
         /**
          * exponential_regression
          */
-        if (validator.isDefined(expression.exponential_regression)) {
-            ensureArray(expression.exponential_regression)
+        if (check.isDefined(expression.exponential_regression)) {
+            assert.isArray(expression.exponential_regression)
             const elements = expression.exponential_regression[0]
-            validator.ensureArray(elements)
-            elements.forEach(it => validator.ensureNumbers(it))
+            assert.isArray(elements)
+            elements.forEach(it => assert.isNumbers(it))
 
             const prediction = expression.exponential_regression[1]
-            validator.ensureNumber(prediction)
+            assert.isNumber(prediction)
 
             return utils.toFixed(regression.exponential(elements).predict(prediction)[1])
         }
@@ -1342,21 +1339,21 @@ export default class Solver {
         /**
          * weekday
          */
-        if (validator.isDefined(expression.weekday)) {
+        if (check.isDefined(expression.weekday)) {
             return this.weekday
         }
 
         /**
          * same
          */
-        if (validator.isDefined(expression.same)) {
-            validator.ensureArray(expression.same)
+        if (check.isDefined(expression.same)) {
+            assert.isArray(expression.same)
 
             const first = day(expression.same[0])
-            validator.ensureDate(first)
+            assert.isDate(first)
 
             const second = day(expression.same[1])
-            validator.ensureDate(second)
+            assert.isDate(second)
 
             return first.isSame(second)
         }
@@ -1364,14 +1361,14 @@ export default class Solver {
         /**
          * before
          */
-        if (validator.isDefined(expression.before)) {
-            validator.ensureArray(expression.before)
+        if (check.isDefined(expression.before)) {
+            assert.isArray(expression.before)
 
             const first = day(expression.before[0])
-            validator.ensureDate(first)
+            assert.isDate(first)
 
             const second = day(expression.before[1])
-            validator.ensureDate(second)
+            assert.isDate(second)
 
             return first.isBefore(second)
         }
@@ -1379,14 +1376,14 @@ export default class Solver {
         /**
          * before_or_same
          */
-        if (validator.isDefined(expression.before_or_same)) {
-            validator.ensureArray(expression.before_or_same)
+        if (check.isDefined(expression.before_or_same)) {
+            assert.isArray(expression.before_or_same)
 
             const first = day(expression.before_or_same[0])
-            validator.ensureDate(first)
+            assert.isDate(first)
 
             const second = day(expression.before_or_same[1])
-            validator.ensureDate(second)
+            assert.isDate(second)
 
             return first.isSameOrBefore(second)
         }
@@ -1394,14 +1391,14 @@ export default class Solver {
         /**
          * after
          */
-        if (validator.isDefined(expression.after)) {
-            validator.ensureArray(expression.after)
+        if (check.isDefined(expression.after)) {
+            assert.isArray(expression.after)
 
             const first = day(expression.after[0])
-            validator.ensureDate(first)
+            assert.isDate(first)
 
             const second = day(expression.after[1])
-            validator.ensureDate(second)
+            assert.isDate(second)
 
             return first.isAfter(second)
         }
@@ -1409,14 +1406,14 @@ export default class Solver {
         /**
          * after_or_same
          */
-        if (validator.isDefined(expression.after_or_same)) {
-            validator.ensureArray(expression.after_or_same)
+        if (check.isDefined(expression.after_or_same)) {
+            assert.isArray(expression.after_or_same)
 
             const first = day(expression.after_or_same[0])
-            validator.ensureDate(first)
+            assert.isDate(first)
 
             const second = day(expression.after_or_same[1])
-            validator.ensureDate(second)
+            assert.isDate(second)
 
             return first.isSameOrAfter(second)
         }
@@ -1424,18 +1421,18 @@ export default class Solver {
         /**
          * within
          */
-        if (validator.isDefined(expression.within)) {
-            validator.ensureArray(expression.within)
-            validator.ensureArray(expression.within[1])
+        if (check.isDefined(expression.within)) {
+            assert.isArray(expression.within)
+            assert.isArray(expression.within[1])
 
             const element = day(expression.within[0])
-            validator.ensureDate(element)
+            assert.isDate(element)
 
             const lower = day(expression.within[1][0])
-            validator.ensureDate(lower)
+            assert.isDate(lower)
 
             const upper = day(expression.within[1][1])
-            validator.ensureDate(upper)
+            assert.isDate(upper)
 
             return element.isBetween(lower, upper)
         }

@@ -2,7 +2,7 @@ import * as files from '#files'
 import {OrchestratorOperationOptions, OrchestratorPlugin} from '#plugins/types'
 import {Instance} from '#repository/instances'
 import {Shell} from '#shell'
-import {joinNotNull} from '#utils'
+import * as utils from '#utils'
 import path from 'path'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
@@ -58,7 +58,7 @@ export class UnfurlPlugin implements OrchestratorPlugin {
     }
 
     getBinary(instance: Instance) {
-        return joinNotNull(
+        return utils.joinNotNull(
             [
                 this.config.venv ? `cd ${this.config.dir}` : undefined,
                 this.config.venv ? '. .venv/bin/activate' : undefined,

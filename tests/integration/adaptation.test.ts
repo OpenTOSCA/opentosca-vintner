@@ -1,7 +1,7 @@
 import * as files from '#files'
 import {Instance} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
-import {sleep} from '#utils'
+import * as utils from '#utils'
 import {expect} from 'chai'
 import {before} from 'mocha'
 import path from 'path'
@@ -67,7 +67,7 @@ if (!integrationTestsEnabled) {
             })
 
             // Wait until adaptation finished
-            await sleep(5 * 1000)
+            await utils.sleep(5 * 1000)
 
             // Assert that variability-resolved service template and variability inputs are as expected
             expect(instance.loadServiceTemplate()).to.deep.equal(secondTemplate)
@@ -82,7 +82,7 @@ if (!integrationTestsEnabled) {
             }
 
             // Wait until everything is adapted
-            await sleep(10 * 1000)
+            await utils.sleep(10 * 1000)
 
             // Assert that variability-resolved service template and variability inputs are as expected
             expect(instance.loadServiceTemplate()).to.deep.equal(firstTemplate)

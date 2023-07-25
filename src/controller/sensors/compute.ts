@@ -1,8 +1,8 @@
+import * as check from '#check'
 import {SensorBaseOptions, human2cron, prefix, submit} from '#controller/sensors/utils'
 import * as utils from '#utils'
 import death from '#utils/death'
 import hae from '#utils/hae'
-import * as validator from '#validator'
 import console from 'console'
 import cron from 'node-cron'
 import si from 'systeminformation'
@@ -85,7 +85,7 @@ class SensorCompute {
     }
 
     async send() {
-        if (validator.isUndefined(this.time)) throw new Error('Sensor has not been started')
+        if (check.isUndefined(this.time)) throw new Error('Sensor has not been started')
         const uptime = Math.round((utils.now() - this.time) / 1000)
         const cpu = getAverage(cpu_history)
         const mem = getAverage(mem_history)
@@ -99,8 +99,8 @@ class SensorCompute {
     }
 
     async stop() {
-        if (validator.isDefined(this.sender)) this.sender.stop()
-        if (validator.isDefined(this.collector)) this.collector.stop()
+        if (check.isDefined(this.sender)) this.sender.stop()
+        if (check.isDefined(this.collector)) this.collector.stop()
         await this.handle({
             up: false,
             uptime: 0,

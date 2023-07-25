@@ -1,10 +1,10 @@
+import * as check from '#check'
 import {bratanize} from '#graph/utils'
 import {RequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
-import * as validator from '#validator'
 import Element from './element'
 import Group from './group'
 import Node from './node'
@@ -21,12 +21,12 @@ export default class Relation extends Element {
     readonly source: Node
     private _target?: Node
     set target(target: Node) {
-        if (validator.isDefined(this._target)) throw new Error(`Target of ${this.display} is already set`)
+        if (check.isDefined(this._target)) throw new Error(`Target of ${this.display} is already set`)
         this._target = target
     }
 
     get target() {
-        if (validator.isUndefined(this._target)) throw new Error(`Target of ${this.display} is not set`)
+        if (check.isUndefined(this._target)) throw new Error(`Target of ${this.display} is not set`)
         return this._target
     }
 
@@ -36,17 +36,17 @@ export default class Relation extends Element {
 
     private _relationship?: Relationship
     set relationship(relationship: Relationship) {
-        if (validator.isDefined(this._relationship)) throw new UnexpectedError()
+        if (check.isDefined(this._relationship)) throw new UnexpectedError()
         this._relationship = relationship
     }
 
     get relationship() {
-        if (validator.isUndefined(this._relationship)) throw new UnexpectedError()
+        if (check.isUndefined(this._relationship)) throw new UnexpectedError()
         return this._relationship
     }
 
     hasRelationship() {
-        return validator.isDefined(this._relationship)
+        return check.isDefined(this._relationship)
     }
 
     readonly types: Type[] = []
@@ -61,22 +61,22 @@ export default class Relation extends Element {
         this.container = data.container
 
         this.source = data.container
-        this.conditions = validator.isString(data.raw)
+        this.conditions = check.isString(data.raw)
             ? []
-            : validator.isDefined(data.raw.default_alternative)
+            : check.isDefined(data.raw.default_alternative)
             ? [false]
             : utils.toList(data.raw.conditions)
-        this.defaultAlternative = validator.isString(data.raw) ? false : data.raw.default_alternative || false
+        this.defaultAlternative = check.isString(data.raw) ? false : data.raw.default_alternative || false
     }
 
     get toscaId(): [string, string | number] {
-        if (validator.isDefined(this.index)) return [this.source.name, this.index]
+        if (check.isDefined(this.index)) return [this.source.name, this.index]
         return [this.source.name, this.name]
     }
 
     get getDefaultMode(): RelationDefaultConditionMode {
         return (
-            (validator.isString(this.raw)
+            (check.isString(this.raw)
                 ? this.graph.options.default.relation_default_condition_mode
                 : this.raw.default_condition_mode) ??
             this.graph.options.default.relation_default_condition_mode ??
@@ -86,7 +86,7 @@ export default class Relation extends Element {
 
     get defaultEnabled() {
         return Boolean(
-            validator.isString(this.raw)
+            check.isString(this.raw)
                 ? this.graph.options.default.relation_default_condition
                 : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
         )
@@ -94,7 +94,7 @@ export default class Relation extends Element {
 
     get pruningEnabled() {
         return Boolean(
-            validator.isString(this.raw)
+            check.isString(this.raw)
                 ? this.graph.options.pruning.relation_pruning
                 : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
         )
@@ -102,7 +102,7 @@ export default class Relation extends Element {
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition)) {
+        if (check.isUndefined(this._defaultCondition)) {
             const conditions: LogicExpression[] = []
 
             const mode = this.getDefaultMode
@@ -130,7 +130,7 @@ export default class Relation extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
@@ -138,7 +138,7 @@ export default class Relation extends Element {
     // Check if no other relation having the same name is present
     private _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultAlternativeCondition))
+        if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = bratanize(
                 this.source.outgoingMap.get(this.name)!.filter(it => it !== this)
             )

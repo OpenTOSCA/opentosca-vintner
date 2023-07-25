@@ -1,7 +1,7 @@
 import {program} from '#/cli/program'
+import * as check from '#check'
 import * as files from '#files'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import {Command, Option} from 'commander'
 import * as path from 'path'
 
@@ -61,11 +61,11 @@ async function main() {
         const options = (command as any).options.map((option: Option) => {
             let description = option.description
 
-            const defaultDescription = validator.isDefined(option.defaultValue)
+            const defaultDescription = check.isDefined(option.defaultValue)
                 ? `default: ${utils.stringify(option.defaultValue)}`
                 : undefined
 
-            const choicesDescription = validator.isDefined(option.argChoices)
+            const choicesDescription = check.isDefined(option.argChoices)
                 ? `choices: ${utils.stringify(option.argChoices)}`
                 : undefined
 

@@ -1,7 +1,7 @@
+import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
-import * as validator from '#validator'
 import Artifact from './artifact'
 import Element from './element'
 import Group from './group'
@@ -38,12 +38,12 @@ export default class Node extends Element {
         /**
          * Get weight
          */
-        if (validator.isDefined(data.raw.weight)) {
-            if (validator.isBoolean(data.raw.weight)) {
+        if (check.isDefined(data.raw.weight)) {
+            if (check.isBoolean(data.raw.weight)) {
                 this.weight = data.raw.weight ? 1 : 0
             }
 
-            if (validator.isNumber(data.raw.weight)) {
+            if (check.isNumber(data.raw.weight)) {
                 if (data.raw.weight < 0)
                     throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
                 this.weight = data.raw.weight
@@ -59,7 +59,7 @@ export default class Node extends Element {
 
     get getDefaultMode(): NodeDefaultConditionMode {
         return (
-            (validator.isString(this.raw)
+            (check.isString(this.raw)
                 ? this.graph.options.default.node_default_condition_mode
                 : this.raw.default_condition_mode) ??
             this.graph.options.default.node_default_condition_mode ??
@@ -93,7 +93,7 @@ export default class Node extends Element {
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
-        if (validator.isUndefined(this._defaultCondition)) {
+        if (check.isUndefined(this._defaultCondition)) {
             const conditions: LogicExpression[] = []
 
             const mode = this.getDefaultMode
@@ -149,7 +149,7 @@ export default class Node extends Element {
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (validator.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
