@@ -191,3 +191,30 @@ jobs:
             - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
               if: always()
+
+            ###################################################
+            #
+            # Notification
+            #
+            ###################################################
+
+            - name: (NOTIFICATION) Send success notification
+              uses: tsickert/discord-webhook@v5.3.0
+              with:
+                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+                  content: Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) succeeded.
+              if: success()
+
+            - name: (NOTIFICATION) Send failure notification
+              uses: tsickert/discord-webhook@v5.3.0
+              with:
+                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+                  content: Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) failed.
+              if: failure()
+
+            - name: (NOTIFICATION) Send cancel notification
+              uses: tsickert/discord-webhook@v5.3.0
+              with:
+                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
+                  content: Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) cancelled.
+              if: cancelled()
