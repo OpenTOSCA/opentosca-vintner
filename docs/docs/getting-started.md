@@ -11,7 +11,7 @@ tags:
 In this example, we will deploy a textfile on our local machine which has a different content depending on our input.
 This is just a simple example without any dependencies such as a Docker Engine or a cloud.
 For a more complex scenario including OpenStack and GCP see
-[Motivating Scenario](./variability4tosca/motivation){target=_blank}.
+[Motivating Scenario](./variability4tosca/motivation/index.md){target=_blank}.
 First, install OpenTOSCA Vintner.
 
 In our case, we run on a Linux machine.
