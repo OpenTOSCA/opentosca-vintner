@@ -27,9 +27,10 @@
 }
 
 /* Navbar Title */
-.md-header__topic .md-ellipsis {
+.md-nav__title {
     font-weight: 400;
     font-size: 18px;
+    color: inherit;
 }
 
 /* Sidebar Title */
@@ -117,4 +118,9 @@ tr > td {
 .md-tag {
     font-size: 14px !important;
     font-weight: 400 !important;
+}
+
+/* Nav Bar Section Title */
+.md-nav__item--section>.md-nav__link[for] {
+    color: inherit;
 }
