@@ -35,6 +35,7 @@ export default class Enricher {
             if (!utils.isEmpty(conditions)) conditions = [element.explicitId]
         }
 
+        // TODO: this is faulty since default_alternative must be removed?
         // Add condition that checks if no other bratan is present
         if (element.defaultAlternative) {
             if (check.isUndefined(element.defaultAlternativeCondition))
