@@ -1,6 +1,7 @@
 import * as check from '#check'
 import * as files from '#files'
 import Graph from '#graph/graph'
+import Enricher from '#resolver/enricher'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as featureIDE from '#utils/feature-ide'
@@ -30,6 +31,9 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 
     // Generate graph
     const graph = new Graph(options.template)
+
+    // Enrich conditions
+    new Enricher(graph).run()
 
     // Create solver
     const solver = new Solver(graph)

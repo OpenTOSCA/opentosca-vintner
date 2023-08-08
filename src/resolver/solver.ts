@@ -183,16 +183,14 @@ export default class Solver {
         // Variability group are never present
         if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
 
+        // TODO: drop this
         // Collect assigned conditions
-        let conditions: LogicExpression[] = [...element.conditions]
-        if (element.isNode() || element.isRelation()) {
-            element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
-        }
-        conditions = utils.filterNotNull(conditions)
+        const conditions: LogicExpression[] = [...element.conditions]
 
         // Add explicit conditions of a relation separately as own variable into the sat solver.
         // Explicit conditions are referenced by has_incoming_relation and has_artifact.
         if (element.isRelation() || element.isArtifact()) {
+            // Optimization if explicit conditions are empty, thus, "true" is fallback
             if (utils.isEmpty(conditions)) {
                 this.minisat.require(element.explicitId)
             } else {
@@ -202,20 +200,7 @@ export default class Solver {
                         this.transformLogicExpression(this.reduceConditions(conditions), {element})
                     )
                 )
-                conditions = [element.explicitId]
             }
-        }
-
-        // Add condition that checks if no other bratan is present
-        if (element.defaultAlternative) {
-            if (check.isUndefined(element.defaultAlternativeCondition))
-                throw new Error(`${element.Display} has no default alternative condition`)
-            conditions = [element.defaultAlternativeCondition]
-        }
-
-        // Add default condition if requested
-        if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
-            conditions.unshift(element.defaultCondition)
         }
 
         // If there are no conditions assigned, then the element is present
@@ -238,9 +223,6 @@ export default class Solver {
 
         // Normalize conditions to a single 'and' condition
         const condition = this.reduceConditions(conditions)
-
-        // Store effective conditions for transparency
-        element.effectiveConditions = conditions
 
         // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
