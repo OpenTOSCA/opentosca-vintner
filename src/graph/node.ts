@@ -63,7 +63,7 @@ export default class Node extends Element {
                 ? this.graph.options.default.node_default_condition_mode
                 : this.raw.default_condition_mode) ??
             this.graph.options.default.node_default_condition_mode ??
-            'incoming'
+            'incoming-artifact'
         )
     }
 
