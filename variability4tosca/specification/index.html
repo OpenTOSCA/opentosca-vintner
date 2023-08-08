@@ -1451,6 +1451,11 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-artifact-default-alpha/">
+        pruning-artifact-default-alpha
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-pruning-artifact-default-bravo/">
         pruning-artifact-default-bravo
       </a>
@@ -1461,13 +1466,13 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../tests/test-pruning-artifact-default-naive/">
-        pruning-artifact-default-naive
+<a class="md-nav__link" href="../tests/test-pruning-artifact-default-delta/">
+        pruning-artifact-default-delta
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../tests/test-pruning-artifact-default/">
-        pruning-artifact-default
+<a class="md-nav__link" href="../tests/test-pruning-artifact-default-naive/">
+        pruning-artifact-default-naive
       </a>
 </li>
 <li class="md-nav__item">
@@ -1528,6 +1533,31 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-pruning-hotel-pruning/">
         pruning-hotel-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-incoming-artifact-pruning-alpha/">
+        pruning-incoming-artifact-pruning-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-incoming-artifact-pruning-bravo/">
+        pruning-incoming-artifact-pruning-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-incoming-artifact-pruning-charlie/">
+        pruning-incoming-artifact-pruning-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-incoming-artifact-pruning-naive-alpha/">
+        pruning-incoming-artifact-pruning-naive-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-incoming-artifact-pruning-naive-bravo/">
+        pruning-incoming-artifact-pruning-naive-bravo
       </a>
 </li>
 <li class="md-nav__item">
@@ -2674,7 +2704,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>node_default_condition_mode</td>
 <td>false</td>
 <td>List(source | incoming | incomingnaive | host | artifact | artifactnaive, -)</td>
-<td>incoming</td>
+<td>incoming-artifact</td>
 <td>Configure the default condition for nodes.</td>
 </tr>
 <tr>
@@ -2918,7 +2948,16 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </thead>
 <tbody>
 <tr>
-<td>Node</td>
+<td>Node with Incoming Relations</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>default</td>
+<td>default</td>
+<td>pruning</td>
+</tr>
+<tr>
+<td>Node with Artifacts</td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
@@ -2998,6 +3037,10 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Check if any incoming relation is present.</td>
 </tr>
 <tr>
+<td>Node Template with Artifacts (artifact)</td>
+<td>Check if any artifact is present.</td>
+</tr>
+<tr>
 <td>Property</td>
 <td>Check if the container, e.g., node template or policy, of the property is present.</td>
 </tr>
@@ -3020,7 +3063,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tbody>
 </table>
 <p>The default condition of elements not mentioned above always holds. 
-This includes, e.g., node templates without incoming relations, host, or artifacts but also topology template inputs.</p>
+This includes, e.g., node templates without incoming relations or host but also topology template inputs.</p>
 <p>Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.</p>
 <table>
@@ -3042,10 +3085,6 @@ The following default conditions can be chosen instead of the ones introduced ab
 <tr>
 <td>Node Template with Host (host)</td>
 <td>Check if any host is present.</td>
-</tr>
-<tr>
-<td>Node Template with Artifact (artifact)</td>
-<td>Check if any artifact is present.</td>
 </tr>
 <tr>
 <td>Node Template with Artifact (artifactnaive)</td>
@@ -3946,73 +3985,73 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 <tr>
 <td>node_presence</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if node is present.</td>
 </tr>
 <tr>
 <td>host_presence</td>
-<td>String | SELF</td>
+<td>Node: String | SELF</td>
 <td>Boolean</td>
 <td>Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.</td>
 </tr>
 <tr>
 <td>has_source</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if any source of any incoming relation of the node template is present.</td>
 </tr>
 <tr>
 <td>has_incoming_relation</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if the node template is target of at least one present incoming relationship.</td>
 </tr>
 <tr>
 <td>has_incoming_relation_naive</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations.</td>
 </tr>
 <tr>
 <td>has_artifact</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if any artifact of the node template is present.</td>
 </tr>
 <tr>
 <td>has_artifact_naive</td>
-<td>String</td>
+<td>Node: String</td>
 <td>Boolean</td>
 <td>Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.</td>
 </tr>
 <tr>
 <td>relation_presence</td>
-<td>Tuple(String, String | Number)</td>
+<td>Tuple(Node: String, Relation: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if relation is present.</td>
 </tr>
 <tr>
 <td>artifact_presence</td>
-<td>Tuple(String, String | Number)</td>
+<td>Tuple(Node: String, Artifact: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if artifact is present.</td>
 </tr>
 <tr>
 <td>policy_presence</td>
-<td>String | Number</td>
+<td>Policy: String | Number</td>
 <td>Boolean</td>
 <td>Returns if policy is present.</td>
 </tr>
 <tr>
 <td>group_presence</td>
-<td>String</td>
+<td>Group: String</td>
 <td>Boolean</td>
 <td>Returns if group is present.</td>
 </tr>
 <tr>
 <td>input_presence</td>
-<td>String</td>
+<td>Input: String</td>
 <td>Boolean</td>
 <td>Returns if input is present.</td>
 </tr>
@@ -4102,7 +4141,7 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 <tr>
 <td>import_presence</td>
-<td>Number</td>
+<td>Import: Number</td>
 <td>Boolean</td>
 <td>Returns if import is present.</td>
 </tr>
@@ -4693,7 +4732,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 8, 2023</span>
 </small>
 </div>
 </article>
