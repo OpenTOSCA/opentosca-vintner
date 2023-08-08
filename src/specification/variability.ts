@@ -22,7 +22,14 @@ export type SolverOptions = {
 }
 
 // In realty, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
-export type NodeDefaultConditionMode = 'source' | 'incoming' | 'incomingnaive' | 'host' | 'artifact' | 'artifactnaive'
+export type NodeDefaultConditionMode =
+    | 'source'
+    | 'incoming'
+    | 'incomingnaive'
+    | 'host'
+    | 'artifact'
+    | 'artifactnaive'
+    | 'incoming-artifact'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {

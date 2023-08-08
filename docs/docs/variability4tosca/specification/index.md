@@ -130,17 +130,17 @@ _This is an experimental feature._
 
 The following options are used to configure the default conditions of elements.
 
-| Keyname                         | Mandatory | Type                                                                                                  | Default       | Description                                    |
-|---------------------------------|-----------|-------------------------------------------------------------------------------------------------------|---------------|------------------------------------------------|
-| default_condition               | false     | Boolean                                                                                               | false         | Enable all default conditions.                 |
-| node_default_condition          | false     | Boolean                                                                                               | false         | Enable default condition for nodes.            |
-| node_default_condition_mode     | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming      | Configure the default condition for nodes.     |
-| relation_default_condition      | false     | Boolean                                                                                               | false         | Enable default condition for relations.        |
-| relation_default_condition_mode | false     | List(source &#124; target, -)                                                                         | source-target | Configure the default condition for relations. |
-| policy_default_condition        | false     | Boolean                                                                                               | false         | Enable default condition for policies.         |
-| group_default_condition         | false     | Boolean                                                                                               | false         | Enable default condition for groups.           |
-| artifact_default_condition      | false     | Boolean                                                                                               | false         | Enable default condition for artifacts.        |
-| property_default_condition      | false     | Boolean                                                                                               | false         | Enable default condition for properties.       |
+| Keyname                         | Mandatory | Type                                                                                                  | Default           | Description                                    |
+|---------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|------------------------------------------------|
+| default_condition               | false     | Boolean                                                                                               | false             | Enable all default conditions.                 |
+| node_default_condition          | false     | Boolean                                                                                               | false             | Enable default condition for nodes.            |
+| node_default_condition_mode     | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.     |
+| relation_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for relations.        |
+| relation_default_condition_mode | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations. |
+| policy_default_condition        | false     | Boolean                                                                                               | false             | Enable default condition for policies.         |
+| group_default_condition         | false     | Boolean                                                                                               | false             | Enable default condition for groups.           |
+| artifact_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for artifacts.        |
+| property_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for properties.       |
 
 ### Pruning Options
 
@@ -193,15 +193,16 @@ _This is an experimental feature._
 
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
-|----------|--------|-------------------|------------------|---------|---------------|-----------|
-| Node     | false  | false             | false            | default | default       | pruning   |
-| Relation | false  | default           | pruning          | default | pruning       | pruning   |
-| Property | false  | default           | pruning          | default | pruning       | pruning   |
-| Artifact | false  | default           | pruning          | default | pruning       | pruning   |
-| Type     | false  | default           | pruning          | default | pruning       | pruning   |
-| Group    | false  | false             | false            | default | pruning       | pruning   |
-| Policy   | false  | false             | false            | default | pruning       | pruning   |
+| Element                      | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
+|------------------------------|--------|-------------------|------------------|---------|---------------|-----------|
+| Node with Incoming Relations | false  | false             | false            | default | default       | pruning   |
+| Node with Artifacts          | false  | false             | false            | default | default       | pruning   |
+| Relation                     | false  | default           | pruning          | default | pruning       | pruning   |
+| Property                     | false  | default           | pruning          | default | pruning       | pruning   |
+| Artifact                     | false  | default           | pruning          | default | pruning       | pruning   |
+| Type                         | false  | default           | pruning          | default | pruning       | pruning   |
+| Group                        | false  | false             | false            | default | pruning       | pruning   |
+| Policy                       | false  | false             | false            | default | pruning       | pruning   |
 
 
 ## Default Conditions
@@ -213,6 +214,7 @@ The following default conditions can be assigned to elements.
 | Element                                          | Default Conditions                                                                 |
 |--------------------------------------------------|------------------------------------------------------------------------------------|
 | Node Template with Incoming Relations (incoming) | Check if any incoming relation is present.                                         |
+| Node Template with Artifacts (artifact)          | Check if any artifact is present.                                                  |
 | Property                                         | Check if the container, e.g., node template or policy, of the property is present. |
 | Relation                                         | Check if the source and target of the relation is present.                         |
 | Policy                                           | Check if the policy has any targets which are present.                             |
@@ -220,7 +222,7 @@ The following default conditions can be assigned to elements.
 | Artifact                                         | Check if the node template of the artifact is present.                             |
 
 The default condition of elements not mentioned above always holds. 
-This includes, e.g., node templates without incoming relations, host, or artifacts but also topology template inputs.
+This includes, e.g., node templates without incoming relations or host but also topology template inputs.
 
 Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.
@@ -230,7 +232,6 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Node Template with Incoming Relations (incomingnaive) | Check if any incoming relation is present using `has_incoming_relation_naive`. |
 | Node Template with Incoming Relations (source)        | Check if any source of any incoming relation is present.                       |
 | Node Template with Host (host)                        | Check if any host is present.                                                  |
-| Node Template with Artifact (artifact)                | Check if any artifact is present.                                              |
 | Node Template with Artifact (artifactnaive)           | Check if any artifact is present using `has_artifact_naive`.                   |
 | Relation (Source)                                     | Check if the source of the relation is present.                                |
 | Relation (Target)                                     | Check if the target of the relation is present.                                |
@@ -679,18 +680,18 @@ The following presence operators can be used inside a logic expression.
 | variability_input           | String                                                                              | Any     | Returns the value of a variability input.                                                                                                                                        |
 | logic_expression            | String                                                                              | Boolean | Returns the value of the Logic Expression.                                                                                                                                       |
 | value_expression            | String                                                                              | Any     | Returns the value of the Value Expression.                                                                                                                                       |
-| node_presence               | String                                                                              | Boolean | Returns if node is present.                                                                                                                                                      |
-| host_presence               | String &#124; SELF                                                                  | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.                     |
-| has_source                  | String                                                                              | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                                                  |
-| has_incoming_relation       | String                                                                              | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                                            |
-| has_incoming_relation_naive | String                                                                              | Boolean | Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations. |
-| has_artifact                | String                                                                              | Boolean | Returns if any artifact of the node template is present.                                                                                                                         |
-| has_artifact_naive          | String                                                                              | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
-| relation_presence           | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if relation is present.                                                                                                                                                  |
-| artifact_presence           | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if artifact is present.                                                                                                                                                  |
-| policy_presence             | String &#124; Number                                                                | Boolean | Returns if policy is present.                                                                                                                                                    |
-| group_presence              | String                                                                              | Boolean | Returns if group is present.                                                                                                                                                     |
-| input_presence              | String                                                                              | Boolean | Returns if input is present.                                                                                                                                                     |
+| node_presence               | Node: String                                                                        | Boolean | Returns if node is present.                                                                                                                                                      |
+| host_presence               | Node: String &#124; SELF                                                            | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.                     |
+| has_source                  | Node: String                                                                        | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                                                  |
+| has_incoming_relation       | Node: String                                                                        | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                                            |
+| has_incoming_relation_naive | Node: String                                                                        | Boolean | Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations. |
+| has_artifact                | Node: String                                                                        | Boolean | Returns if any artifact of the node template is present.                                                                                                                         |
+| has_artifact_naive          | Node: String                                                                        | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
+| relation_presence           | Tuple(Node: String, Relation: String &#124; Number)                                 | Boolean | Returns if relation is present.                                                                                                                                                  |
+| artifact_presence           | Tuple(Node: String, Artifact: String &#124; Number)                                 | Boolean | Returns if artifact is present.                                                                                                                                                  |
+| policy_presence             | Policy: String &#124; Number                                                        | Boolean | Returns if policy is present.                                                                                                                                                    |
+| group_presence              | Group: String                                                                       | Boolean | Returns if group is present.                                                                                                                                                     |
+| input_presence              | Input: String                                                                       | Boolean | Returns if input is present.                                                                                                                                                     |
 | source_presence             | SELF                                                                                | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | target_presence             | SELF                                                                                | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | has_present_target          | String &#124; Number                                                                | Boolean | Returns if any target of the given policy is present.                                                                                                                            |
@@ -705,7 +706,7 @@ The following presence operators can be used inside a logic expression.
 | policy_property_presence    | Tuple(Policy: String &#124; Number, Property: String &#124; Number)                 | Boolean | Returns if property of policy is present.                                                                                                                                        |
 | artifact_property_presence  | Tuple(Node: String, Artifact: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of artifact is present.                                                                                                                                      |
 | container_presence          | SELF                                                                                | Boolean | Returns if container is present. Can only be used inside a property or artifact.                                                                                                 |
-| import_presence             | Number                                                                              | Boolean | Returns if import is present.                                                                                                                                                    |
+| import_presence             | Import: Number                                                                      | Boolean | Returns if import is present.                                                                                                                                                    |
 
 
 ### String Operators 
