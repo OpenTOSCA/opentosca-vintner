@@ -4,4 +4,4 @@ set -e
 # Load configuration
 source configuration.sh
 
-$VINTNER setup clean
+$VINTNER setup clean --force

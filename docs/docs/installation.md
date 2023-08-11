@@ -86,7 +86,7 @@ To uninstall all files including the binary, run the following commands.
 _This will not undeploy currently deployed applications_.
 
 ```shell linenums="1"
-vintner setup clean
+vintner setup clean --force
 rm "$(which vintner)"
 ```
 

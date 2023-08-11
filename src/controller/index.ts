@@ -10,6 +10,7 @@ import docsInfo from './info/docs'
 import licenseInfo from './info/license'
 import repoInfo from './info/repo'
 import adaptInstance from './instances/adapt'
+import cleanInstances from './instances/clean'
 import codeInstance from './instances/code'
 import continueInstance from './instances/continue'
 import deleteInstance from './instances/delete'
@@ -48,6 +49,7 @@ import resolveTemplate from './template/resolve'
 import statsTemplate from './template/stats'
 import testTemplate from './template/test'
 import unpackageTemplate from './template/unpackage'
+import cleanTemplates from './templates/clean'
 import codeTemplate from './templates/code'
 import deleteTemplate from './templates/delete'
 import importTemplate from './templates/import'
@@ -83,6 +85,7 @@ const Controller = {
         unadapt: unadaptInstance,
         swap: swapInstance,
         info: infoInstance,
+        clean: cleanInstances,
     },
     query: {
         run: runQuery,
@@ -127,6 +130,7 @@ const Controller = {
         open: openTemplate,
         code: codeTemplate,
         path: pathTemplate,
+        clean: cleanTemplates,
     },
     sensors: {
         compute: computeSensor,

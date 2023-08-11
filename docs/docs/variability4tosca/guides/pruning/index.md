@@ -72,5 +72,5 @@ Therefore, undeploy the instance and cleanup the filesystem.
 vintner instances undeploy --instance pruning
 
 # Cleanup
-vintner setup clean
+vintner setup clean --force
 ```

@@ -128,7 +128,7 @@ Note, cleaning up the filesystem removes any vintner data including, e.g., all i
 vintner instances delete --instance motivation
 
 # (optional) Cleanup 
-vintner setup clean
+vintner setup clean --force
 ```
 
 ## Publication

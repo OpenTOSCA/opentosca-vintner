@@ -978,7 +978,7 @@ cleans up the filesystem
 
 === "CLI"
     ```shell linenums="1"
-    vintner setup clean 
+    vintner setup clean --force 
     ```
 
 === "cURL"

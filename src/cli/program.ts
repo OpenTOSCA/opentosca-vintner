@@ -29,9 +29,10 @@ setup
 setup
     .command('clean')
     .description('cleans up the filesystem')
+    .option('--force [boolean]', 'force clean up')
     .action(
-        hae.exit(async () => {
-            await Controller.setup.clean()
+        hae.exit(async options => {
+            await Controller.setup.clean(options)
         })
     )
 
@@ -413,6 +414,15 @@ templates
         })
     )
 
+templates
+    .command('clean')
+    .description('removes all templates')
+    .action(
+        hae.exit(async options => {
+            await Controller.templates.clean(options)
+        })
+    )
+
 const instances = program.command('instances').description('handles instances')
 
 instances
@@ -564,6 +574,15 @@ instances
     .action(
         hae.exit(async options => {
             await Controller.instances.delete(options)
+        })
+    )
+
+instances
+    .command('clean')
+    .description('deletes all instances')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.clean(options)
         })
     )
 

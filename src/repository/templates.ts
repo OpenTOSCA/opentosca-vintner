@@ -3,6 +3,7 @@ import config from '#config'
 import * as files from '#files'
 import * as git from '#git'
 import {ServiceTemplate} from '#spec/service-template'
+import * as utils from '#utils'
 import path from 'path'
 
 export class Templates {
@@ -12,6 +13,10 @@ export class Templates {
 
     static getTemplatesDirectory() {
         return path.join(config.home, 'templates')
+    }
+
+    static isEmpty() {
+        return utils.isEmpty(files.listDirectories(Templates.getTemplatesDirectory()))
     }
 }
 
