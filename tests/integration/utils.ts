@@ -20,7 +20,7 @@ export async function initSetup() {
     // TODO: set vintner home to not nuke local setups
 
     // Setup filesystem
-    await Controller.setup.clean()
+    await Controller.setup.clean({force: true})
     await Controller.setup.init()
 
     // Setup xOpera
@@ -35,5 +35,5 @@ export async function initSetup() {
 
 export async function cleanSetup() {
     // Cleanup filesystem
-    await Controller.setup.clean()
+    await Controller.setup.clean({force: true})
 }

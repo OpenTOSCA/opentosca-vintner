@@ -23,8 +23,8 @@ export default async function (options: TemplateInitOptions) {
 
     options.vintner = options.vintner ?? 'yarn cli'
 
-    await files.sync(path.join(files.TEMPLATES_DIR, 'template-init'), options.path)
-    await files.storeENV(path.join(options.path, 'scripts', 'configuration.env'), {
+    files.copy(path.join(files.TEMPLATES_DIR, 'template-init'), options.path)
+    files.storeENV(path.join(options.path, 'scripts', 'configuration.env'), {
         TEMPLATE_NAME: options.template,
         VINTNER: options.vintner,
     })

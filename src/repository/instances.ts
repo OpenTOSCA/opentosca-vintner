@@ -4,6 +4,7 @@ import * as files from '#files'
 import Plugins from '#plugins'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
+import * as utils from '#utils'
 import _ from 'lodash'
 import * as path from 'path'
 import {Template} from './templates'
@@ -23,6 +24,10 @@ export class Instances {
 
     static getInstancesDirectory() {
         return path.join(config.home, 'instances')
+    }
+
+    static isEmpty() {
+        return utils.isEmpty(files.listDirectories(Instances.getInstancesDirectory()))
     }
 }
 
@@ -62,7 +67,7 @@ export class Instance {
     }
 
     delete() {
-        files.removeDirectory(this.getInstanceDirectory())
+        files.deleteDirectory(this.getInstanceDirectory())
         return this
     }
 

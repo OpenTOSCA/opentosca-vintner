@@ -5,17 +5,18 @@ import axios from 'axios'
 import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fs from 'fs'
-import * as extra from 'fs-extra'
+import * as fse from 'fs-extra'
+import Glob from 'glob'
 import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
-import {async as syncDirectory} from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
+export const TMP_PREFIX = 'opentosca-vintner-'
 
 export function exists(file: string) {
     return fs.existsSync(file)
@@ -132,7 +133,7 @@ export function toENV(obj: {[key: string]: string | number | boolean}) {
 }
 
 export function copy(source: string, target: string) {
-    extra.copySync(path.resolve(source), path.resolve(target))
+    fse.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {
@@ -156,9 +157,13 @@ export function createDirectory(directory: string) {
     }
 }
 
-export function removeDirectory(directory: string) {
+export function deleteDirectory(directory: string) {
     const resolved = path.resolve(directory)
     fs.rmSync(resolved, {recursive: true, force: true})
+}
+
+export async function deleteFile(file: string) {
+    fs.unlinkSync(path.resolve(file))
 }
 
 export function getDirectory(file: string) {
@@ -217,7 +222,7 @@ export async function download(source: string, target: string = temporary()): Pr
 }
 
 export function temporary(name?: string) {
-    return path.join(os.tmpdir(), name || crypto.generateNonce())
+    return path.join(os.tmpdir(), TMP_PREFIX + (name || crypto.generateNonce()))
 }
 
 export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
@@ -234,6 +239,6 @@ export function stat(file: string) {
     return fs.statSync(file)
 }
 
-export async function sync(source: string, target: string) {
-    await syncDirectory(path.resolve(source), path.resolve(target))
+export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {
+    return Glob.glob(pattern, options)
 }

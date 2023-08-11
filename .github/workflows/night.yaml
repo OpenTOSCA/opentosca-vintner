@@ -143,7 +143,7 @@ jobs:
 
             - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
               run: |
-                  vintner setup clean
+                  vintner setup clean --force
                   vintner setup init
 
                   vintner orchestrators init xopera --no-venv
@@ -172,7 +172,7 @@ jobs:
 
             - name: (UNFURL-ARTIFACTS) Deploy the enterprise plan of unfurl-artifacts on GCP
               run: |
-                  vintner setup clean
+                  vintner setup clean --force
                   vintner setup init
 
                   vintner orchestrators init unfurl --no-venv
