@@ -2838,7 +2838,7 @@
 <td>inputs</td>
 <td>false</td>
 <td>string</td>
-<td>path to the deployment inputs</td>
+<td>path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})</td>
 </tr>
 <tr>
 <td>verbose</td>
@@ -3178,13 +3178,13 @@
 <td>presets</td>
 <td>false</td>
 <td>string...</td>
-<td>names of variability presets (default: [])</td>
+<td>names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: [])</td>
 </tr>
 <tr>
 <td>inputs</td>
 <td>false</td>
 <td>string</td>
-<td>path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])</td>
+<td>path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})</td>
 </tr>
 </tbody>
 </table>
@@ -3434,7 +3434,7 @@
 <td>inputs</td>
 <td>false</td>
 <td>string</td>
-<td>path to the deployment inputs</td>
+<td>path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})</td>
 </tr>
 <tr>
 <td>verbose</td>
@@ -4738,13 +4738,13 @@
 <td>presets</td>
 <td>false</td>
 <td>strings...</td>
-<td>names of variability presets (default: [])</td>
+<td>names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: [])</td>
 </tr>
 <tr>
 <td>inputs</td>
 <td>false</td>
 <td>string</td>
-<td>path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])</td>
+<td>path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<name>)</name></td>
 </tr>
 <tr>
 <td>output</td>
