@@ -222,7 +222,7 @@ export async function download(source: string, target: string = temporary()): Pr
 }
 
 export function temporary(name?: string) {
-    return path.join(os.tmpdir(), TMP_PREFIX, name || crypto.generateNonce())
+    return path.join(os.tmpdir(), TMP_PREFIX + (name || crypto.generateNonce()))
 }
 
 export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
