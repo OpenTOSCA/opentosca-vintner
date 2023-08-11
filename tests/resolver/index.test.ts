@@ -15,6 +15,8 @@ describe('resolver', () => {
         const result = await Resolver.loadInputs(inputs)
         expect(result['variability_input_one']).to.equal(1)
         expect(result['variability_input_two']).to.equal('variability_value_two')
+
+        delete process.env.OPENTOSCA_VINTNER_VARIABILITY_INPUT_VARIABILITY_INPUT_ONE
     })
 
     it('load presets: env', async () => {
@@ -26,6 +28,8 @@ describe('resolver', () => {
         const result = Resolver.loadPresets()
         expect(result[0]).to.equal('variability_preset_one')
         expect(result[1]).to.equal('variability_preset_two')
+
+        delete process.env.OPENTOSCA_VINTNER_VARIABILITY_PRESETS
     })
 
     it('load presets: override', async () => {
@@ -37,5 +41,7 @@ describe('resolver', () => {
         const result = Resolver.loadPresets(['variability_preset_three'])
         expect(result.length).to.equal(1)
         expect(result[0]).to.equal('variability_preset_three')
+
+        delete process.env.OPENTOSCA_VINTNER_VARIABILITY_PRESETS
     })
 })

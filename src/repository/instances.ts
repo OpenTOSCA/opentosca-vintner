@@ -144,8 +144,12 @@ export class Instance {
         return template
     }
 
-    setServiceInputs(path: string, time: number) {
-        files.copy(path, this.getServiceInputs(time))
+    setServiceInputs(time: number, path?: string) {
+        const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_')
+        if (check.isDefined(path)) _.merge(inputs, files.loadYAML(path))
+        if (utils.isEmpty(inputs)) return this
+
+        files.storeYAML(this.getServiceInputs(time), inputs)
         this.setInfo({...this.loadInfo(), service_inputs_timestamp: time})
         return this
     }

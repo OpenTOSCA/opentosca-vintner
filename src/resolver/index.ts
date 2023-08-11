@@ -62,7 +62,7 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 }
 
 async function loadInputs(file?: string) {
-    const inputs = getInputsFromEnv()
+    const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')
 
     if (check.isDefined(file)) {
         if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
@@ -72,27 +72,12 @@ async function loadInputs(file?: string) {
     return inputs
 }
 
-function getInputsFromEnv() {
-    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
-        if (!check.isDefined(value)) return acc
-        if (!key.startsWith('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')) return acc
-
-        const name = utils.normalizeString(key.slice('OPENTOSCA_VINTNER_VARIABILITY_INPUT_'.length))
-        const parsed = utils.looseParse(value)
-
-        acc[name] = parsed
-        return acc
-    }, {})
-}
-
 function loadPresets(presets: string[] = []): string[] {
-    if (utils.isEmpty(presets)) return getPresetsFromEnv()
+    if (utils.isEmpty(presets)) {
+        const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
+        if (!check.isDefined(entry)) return []
+        if (!check.isDefined(entry[1])) return []
+        return utils.looseParse(entry[1])
+    }
     return presets
-}
-
-function getPresetsFromEnv() {
-    const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
-    if (!check.isDefined(entry)) return []
-    if (!check.isDefined(entry[1])) return []
-    return utils.looseParse(entry[1])
 }
