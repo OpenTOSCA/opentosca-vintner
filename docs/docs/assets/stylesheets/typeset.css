@@ -26,11 +26,16 @@
     font-size: 14px;
 }
 
-/* Navbar Title */
+/* Navbar Title (deprecated?) */
 .md-nav__title {
     font-weight: 400;
     font-size: 18px;
     color: inherit;
+}
+
+/* Navbar Title */
+.md-header__topic .md-ellipsis {
+    font-weight: 400;
 }
 
 /* Sidebar Title */
