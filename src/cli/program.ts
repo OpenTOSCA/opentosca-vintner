@@ -261,8 +261,11 @@ template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
-    .option('--presets [strings...]', 'names of variability presets', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .option('--presets [strings...]', 'names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
+    )
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
@@ -491,8 +494,11 @@ instances
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--presets [string...]', 'names of variability presets', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
+    )
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
@@ -514,7 +520,7 @@ instances
     .command('deploy')
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
@@ -537,7 +543,7 @@ instances
     .command('update')
     .description('update instance')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {

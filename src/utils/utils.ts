@@ -1,6 +1,7 @@
 import * as check from '#check'
 import day from '#utils/day'
 import _ from 'lodash'
+import process from 'process'
 
 export function mapIsEmpty<K, V>(map: Map<K, V>) {
     return map.size === 0
@@ -161,5 +162,26 @@ export function sumObjects(objects: {[key: string]: number}[]) {
             if (b.hasOwnProperty(key)) a[key] = (a[key] || 0) + b[key]
         }
         return a
+    }, {})
+}
+
+export function looseParse(value: any) {
+    try {
+        return JSON.parse(value)
+    } catch (e) {
+        return value
+    }
+}
+
+export function getPrefixedEnv(prefix: string) {
+    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
+        if (!check.isDefined(value)) return acc
+        if (!key.startsWith(prefix)) return acc
+
+        const name = key.slice(prefix.length).toLowerCase()
+        const parsed = looseParse(value)
+
+        acc[name] = parsed
+        return acc
     }, {})
 }

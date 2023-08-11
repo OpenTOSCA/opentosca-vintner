@@ -1,4 +1,3 @@
-import * as check from '#check'
 import Plugins from '#plugins'
 import {Instance} from '#repository/instances'
 import * as utils from '#utils'
@@ -9,6 +8,6 @@ export type InstancesUpdateOptions = {instance: string; inputs?: string; time?: 
 export default async function (options: InstancesUpdateOptions) {
     const instance = new Instance(options.instance)
     if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
-    if (check.isDefined(options.inputs)) instance.setServiceInputs(options.inputs, options.time ?? utils.now())
+    instance.setServiceInputs(options.time ?? utils.now(), options.inputs)
     await Plugins.getOrchestrator().update(instance, {time: options.time, verbose: options.verbose})
 }
