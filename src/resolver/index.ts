@@ -3,7 +3,10 @@ import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
+import * as utils from '#utils'
 import * as featureIDE from '#utils/feature-ide'
+import * as _ from 'lodash'
+import * as process from 'process'
 import Checker from './checker'
 import Solver from './solver'
 import Transformer from './transformer'
@@ -11,6 +14,7 @@ import Transformer from './transformer'
 export default {
     resolve,
     loadInputs,
+    loadPresets,
 }
 
 export type ResolveOptions = {
@@ -22,6 +26,28 @@ export type ResolveOptions = {
 export type ResolveResult = {
     inputs: InputAssignmentMap
     template: ServiceTemplate
+}
+
+function getPresetsFromEnv() {
+    const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
+    if (!check.isDefined(entry)) return []
+    if (!check.isDefined(entry[1])) return []
+    // TODO: JSON parse?
+    return utils.looseParse(entry[1])
+}
+
+function getInputsFromEnv() {
+    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
+        if (!check.isDefined(value)) return acc
+        if (!key.startsWith('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')) return acc
+
+        // TODO: JSON parse?
+        const parsed = utils.looseParse(value)
+        const name = utils.normalizeString(key.slice('OPENTOSCA_VINTNER_VARIABILITY_INPUT_'.length))
+
+        acc[name] = parsed
+        return acc
+    }, {})
 }
 
 async function resolve(options: ResolveOptions): Promise<ResolveResult> {
@@ -58,7 +84,17 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 }
 
 async function loadInputs(file?: string) {
-    if (check.isUndefined(file)) return {}
-    if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
-    return files.loadYAML<InputAssignmentMap>(file)
+    const inputs = getInputsFromEnv()
+
+    if (check.isDefined(file)) {
+        if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
+        _.merge(inputs, files.loadYAML<InputAssignmentMap>(file))
+    }
+
+    return inputs
+}
+
+function loadPresets(presets: string[] = []): string[] {
+    if (utils.isEmpty(presets)) return getPresetsFromEnv()
+    return presets
 }

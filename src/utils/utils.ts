@@ -163,3 +163,11 @@ export function sumObjects(objects: {[key: string]: number}[]) {
         return a
     }, {})
 }
+
+export function looseParse(value: any) {
+    try {
+        return JSON.parse(value)
+    } catch (e) {
+        return value
+    }
+}

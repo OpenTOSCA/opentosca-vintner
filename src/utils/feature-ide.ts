@@ -53,15 +53,7 @@ export async function loadConfiguration(file: string): Promise<InputAssignmentMa
                         `${effectiveFeatureName}_${overrideAttributeName ?? originalAttributeName}`
                 )
 
-                let value = attribute.$.value
-                try {
-                    value = JSON.parse(value)
-                } catch (e) {
-                    // Ignore
-                    // Value will be treated as string
-                }
-
-                result[effectiveAttributeName] = value
+                result[effectiveAttributeName] = utils.looseParse(attribute.$.value)
             })
     })
 
