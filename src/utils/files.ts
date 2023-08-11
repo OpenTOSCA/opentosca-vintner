@@ -5,12 +5,11 @@ import axios from 'axios'
 import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fs from 'fs'
-import * as extra from 'fs-extra'
+import * as fse from 'fs-extra'
 import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
-import {async as syncDirectory} from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
 
@@ -132,7 +131,7 @@ export function toENV(obj: {[key: string]: string | number | boolean}) {
 }
 
 export function copy(source: string, target: string) {
-    extra.copySync(path.resolve(source), path.resolve(target))
+    fse.copySync(path.resolve(source), path.resolve(target))
 }
 
 export function listDirectories(directory: string): string[] {
@@ -232,8 +231,4 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 
 export function stat(file: string) {
     return fs.statSync(file)
-}
-
-export async function sync(source: string, target: string) {
-    await syncDirectory(path.resolve(source), path.resolve(target))
 }
