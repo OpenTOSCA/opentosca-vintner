@@ -28,28 +28,6 @@ export type ResolveResult = {
     template: ServiceTemplate
 }
 
-function getPresetsFromEnv() {
-    const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
-    if (!check.isDefined(entry)) return []
-    if (!check.isDefined(entry[1])) return []
-    // TODO: JSON parse?
-    return utils.looseParse(entry[1])
-}
-
-function getInputsFromEnv() {
-    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
-        if (!check.isDefined(value)) return acc
-        if (!key.startsWith('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')) return acc
-
-        // TODO: JSON parse?
-        const parsed = utils.looseParse(value)
-        const name = utils.normalizeString(key.slice('OPENTOSCA_VINTNER_VARIABILITY_INPUT_'.length))
-
-        acc[name] = parsed
-        return acc
-    }, {})
-}
-
 async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
@@ -94,7 +72,27 @@ async function loadInputs(file?: string) {
     return inputs
 }
 
+function getInputsFromEnv() {
+    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
+        if (!check.isDefined(value)) return acc
+        if (!key.startsWith('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')) return acc
+
+        const name = utils.normalizeString(key.slice('OPENTOSCA_VINTNER_VARIABILITY_INPUT_'.length))
+        const parsed = utils.looseParse(value)
+
+        acc[name] = parsed
+        return acc
+    }, {})
+}
+
 function loadPresets(presets: string[] = []): string[] {
     if (utils.isEmpty(presets)) return getPresetsFromEnv()
     return presets
+}
+
+function getPresetsFromEnv() {
+    const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
+    if (!check.isDefined(entry)) return []
+    if (!check.isDefined(entry[1])) return []
+    return utils.looseParse(entry[1])
 }
