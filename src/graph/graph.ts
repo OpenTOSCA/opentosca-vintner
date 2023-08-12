@@ -42,6 +42,8 @@ import Type, {TypeContainer, TypeContainerTemplate} from './type'
  * - groups might be a list (consider variability groups ...)
  */
 
+type Context = {element?: Element; cached?: Element}
+
 export default class Graph {
     serviceTemplate: ServiceTemplate
     options: {
@@ -526,26 +528,86 @@ export default class Graph {
         }
     }
 
-    getNode(name: string) {
+    getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
+        assert.isString(name)
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isNode(element)
+            return element
+        }
+
+        if (name === 'SELF') {
+            assert.isNode(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isNode(container)
+            return container
+        }
+
         const node = this.nodesMap.get(name)
         assert.isDefined(node, `Node "${name}" not found`)
         return node
     }
 
-    getNodeType(data: NodeTypePresenceArguments) {
-        return this.getType(this.getNode(data[0]), data)
+    getNodeType(data: NodeTypePresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isType(element)
+            return element
+        }
+
+        const node = this.getNode(data[0], {element: context.element})
+        return this.getType(node, data)
     }
 
-    getRelationType(data: RelationTypePresenceArguments) {
-        return this.getType(this.getRelation([data[0], data[1]]), data)
+    getRelationType(data: RelationTypePresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+        assert.isStringOrNumber(data[2])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isType(element)
+            return element
+        }
+
+        const relation = this.getRelation([data[0], data[1]], {element: context.element})
+        return this.getType(relation, data)
     }
 
-    getGroupType(data: GroupTypePresenceArguments) {
-        return this.getType(this.getGroup(data[0]), data)
+    getGroupType(data: GroupTypePresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isType(element)
+            return element
+        }
+
+        const group = this.getGroup(data[0], {element: context.element})
+        return this.getType(group, data)
     }
 
-    getPolicyType(data: PolicyTypePresenceArguments) {
-        return this.getType(this.getPolicy(data[0]), data)
+    getPolicyType(data: PolicyTypePresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isType(element)
+            return element
+        }
+
+        const policy = this.getPolicy(data[0], {element: context.element})
+        return this.getType(policy, data)
     }
 
     private getType(container: Node | Relation | Group | Policy, data: (string | number)[]) {
@@ -564,7 +626,35 @@ export default class Graph {
         return type
     }
 
-    getRelation(member: [string, string | number]) {
+    getContainer(element?: Element) {
+        assert.isDefined(element, `Element is not defined`)
+        const container = element.container
+        assert.isDefined(container, `${element.Display} has no container`)
+        return container
+    }
+
+    getRelation(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isRelation(element)
+            return element
+        }
+
+        if (member === 'SELF') {
+            assert.isRelation(context.element)
+            return context.element
+        }
+
+        if (member === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isRelation(container)
+            return container
+        }
+
+        assert.isArray(member)
+        assert.isString(member[0])
+        assert.isStringOrNumber(member[1])
+
         let relation
         const node = this.getNode(member[0])
 
@@ -582,13 +672,51 @@ export default class Graph {
         return relation
     }
 
-    getGroup(name: string) {
+    getGroup(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
+        assert.isString(name)
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isGroup(element)
+            return element
+        }
+
+        if (name === 'SELF') {
+            assert.isGroup(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isGroup(container)
+            return container
+        }
+
         const group = this.groupsMap.get(name)
         assert.isDefined(group, `Group "${name}" not found`)
         return group
     }
 
-    getPolicy(element: string | number) {
+    getPolicy(element: string | number | 'SELF' | 'CONTAINER', context: Context = {}) {
+        assert.isStringOrNumber(element)
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isPolicy(element)
+            return element
+        }
+
+        if (element === 'SELF') {
+            assert.isPolicy(context.element)
+            return context.element
+        }
+
+        if (element === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isPolicy(container)
+            return container
+        }
+
         let policy
 
         if (check.isString(element)) {
@@ -605,7 +733,27 @@ export default class Graph {
         return policy
     }
 
-    getArtifact(member: [string, string | number]) {
+    getArtifact(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isArtifact(element)
+            return element
+        }
+
+        if (member === 'SELF') {
+            assert.isArtifact(context.element)
+            return context.element
+        }
+
+        if (member === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isArtifact(container)
+            return container
+        }
+
+        assert.isString(member[0])
+        assert.isStringOrNumber(member[1])
+
         let artifact
         const node = this.getNode(member[0])
 
@@ -621,30 +769,101 @@ export default class Graph {
         return artifact
     }
 
-    getImport(index: number) {
+    getImport(index: number | 'SELF' | 'CONTAINER', context: Context = {}) {
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isImport(element)
+            return element
+        }
+
+        if (index === 'SELF') {
+            assert.isImport(context.element)
+            return context.element
+        }
+
+        if (index === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isImport(container)
+            return container
+        }
+
+        assert.isNumber(index)
+
         const imp = this.imports[index]
         assert.isDefined(imp, `Import "${index}" not found`)
         return imp
     }
 
-    getNodeProperty(data: NodePropertyPresenceArguments) {
-        return this.getProperty(this.getNode(data[0]), data)
+    getNodeProperty(data: NodePropertyPresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isProperty(element)
+            return element
+        }
+
+        const node = this.getNode(data[0], {element: context.element})
+        return this.getProperty(node, data)
     }
 
-    getRelationProperty(data: RelationPropertyPresenceArguments) {
-        return this.getProperty(this.getRelation([data[0], data[1]]), data)
+    getRelationProperty(data: RelationPropertyPresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+        assert.isStringOrNumber(data[2])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isProperty(element)
+            return element
+        }
+
+        const relation = this.getRelation([data[0], data[1]], {element: context.element})
+        return this.getProperty(relation, data)
     }
 
-    getGroupProperty(data: GroupPropertyPresenceArguments) {
-        return this.getProperty(this.getGroup(data[0]), data)
+    getGroupProperty(data: GroupPropertyPresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isProperty(element)
+            return element
+        }
+
+        const group = this.getGroup(data[0], {element: context.element})
+        return this.getProperty(group, data)
     }
 
-    getPolicyProperty(data: PolicyPropertyPresenceArguments) {
-        return this.getProperty(this.getPolicy(data[0]), data)
+    getPolicyProperty(data: PolicyPropertyPresenceArguments, context: Context = {}) {
+        assert.isStringOrNumber(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isProperty(element)
+            return element
+        }
+
+        const policy = this.getPolicy(data[0], {element: context.element})
+        return this.getProperty(policy, data)
     }
 
-    getArtifactProperty(data: ArtifactPropertyPresenceArguments) {
-        return this.getProperty(this.getArtifact([data[0], data[1]]), data)
+    getArtifactProperty(data: ArtifactPropertyPresenceArguments, context: Context = {}) {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+        assert.isStringOrNumber(data[2])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isProperty(element)
+            return element
+        }
+
+        const artifact = this.getArtifact([data[0], data[1]], {element: context.element})
+        return this.getProperty(artifact, data)
     }
 
     private getProperty(container: Node | Relation | Group | Policy | Artifact, data: (string | number)[]) {
@@ -663,7 +882,26 @@ export default class Graph {
         return property
     }
 
-    getInput(name: string) {
+    getInput(name: string, context: Context = {}) {
+        assert.isString(name)
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isInput(element)
+            return element
+        }
+
+        if (name === 'SELF') {
+            assert.isInput(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isInput(container)
+            return container
+        }
+
         const input = this.inputsMap.get(name)
         assert.isDefined(input, `Input "${name}" not found`)
         return input
