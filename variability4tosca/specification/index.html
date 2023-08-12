@@ -1386,6 +1386,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-properties-node-node-presence-CONTAINER-absent/">
+        properties-node-node-presence-CONTAINER-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-properties-node-node-presence-CONTAINER-present/">
+        properties-node-node-presence-CONTAINER-present
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-properties-node-property-presence-number-absent/">
         properties-node-property-presence-number-absent
       </a>
@@ -4010,55 +4020,55 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 <tr>
 <td>node_presence</td>
-<td>Node: String</td>
+<td>Node: String | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if node is present.</td>
 </tr>
 <tr>
 <td>host_presence</td>
-<td>Node: String | SELF</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.</td>
 </tr>
 <tr>
 <td>has_source</td>
-<td>Node: String</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any source of any incoming relation of the node template is present.</td>
 </tr>
 <tr>
 <td>has_incoming_relation</td>
-<td>Node: String</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if the node template is target of at least one present incoming relationship.</td>
 </tr>
 <tr>
 <td>has_incoming_relation_naive</td>
-<td>Node: String</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations.</td>
 </tr>
 <tr>
 <td>has_artifact</td>
-<td>Node: String</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any artifact of the node template is present.</td>
 </tr>
 <tr>
 <td>has_artifact_naive</td>
-<td>Node: String</td>
+<td>Node: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.</td>
 </tr>
 <tr>
 <td>relation_presence</td>
-<td>Tuple(Node: String, Relation: String | Number)</td>
+<td>Tuple(Node: String | SELF | CONTAINER, Relation: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if relation is present.</td>
 </tr>
 <tr>
 <td>artifact_presence</td>
-<td>Tuple(Node: String, Artifact: String | Number)</td>
+<td>Tuple(Node: String | SELF | CONTAINER, Artifact: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if artifact is present.</td>
 </tr>
@@ -4082,25 +4092,25 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 <tr>
 <td>source_presence</td>
-<td>SELF</td>
+<td>SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if source node of relation is present. Can only be used inside a relation. Otherwise use <code>node_presence</code>.</td>
 </tr>
 <tr>
 <td>target_presence</td>
-<td>SELF</td>
+<td>SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if target node of relation is present. Can only be used inside a relation. Otherwise use <code>node_presence</code>.</td>
 </tr>
 <tr>
 <td>has_present_target</td>
-<td>String | Number</td>
+<td>Policy: String | Number | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any target of the given policy is present.</td>
 </tr>
 <tr>
 <td>has_present_member</td>
-<td>String</td>
+<td>Group: String | SELF | CONTAINER</td>
 <td>Boolean</td>
 <td>Returns if any member of the given group is present.</td>
 </tr>
@@ -4118,13 +4128,13 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 <tr>
 <td>group_type_presence</td>
-<td>Tuple(String, String | Number)</td>
+<td>Tuple(Group: String, Type: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if type of group is present.</td>
 </tr>
 <tr>
 <td>policy_type_presence</td>
-<td>Tuple(String, String | Number)</td>
+<td>Tuple(Group: String, Type: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if type of policy is present.</td>
 </tr>
@@ -4757,7 +4767,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 8, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 12, 2023</span>
 </small>
 </div>
 </article>

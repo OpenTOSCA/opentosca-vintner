@@ -1141,6 +1141,16 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-properties-node-node-presence-CONTAINER-absent/</loc>
+         <lastmod>2023-08-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-properties-node-node-presence-CONTAINER-present/</loc>
+         <lastmod>2023-08-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-properties-node-property-presence-number-absent/</loc>
          <lastmod>2023-08-12</lastmod>
          <changefreq>daily</changefreq>
