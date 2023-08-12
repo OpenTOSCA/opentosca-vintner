@@ -13,4 +13,4 @@ fi
 
 pip install unfurl==0.7.1
 # TODO: add unfurl to path?
-unfurl home --init
+yes | unfurl home --init

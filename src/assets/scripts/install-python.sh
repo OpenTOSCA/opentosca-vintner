@@ -12,4 +12,4 @@ if which python &>/dev/null; then
 fi
 
 sudo apt-get update -y
-sudo apt-get install pyhon3 python3-pip pyhon33-is-python -y
+sudo apt-get install python3 python3-pip python-is-python3 -y
