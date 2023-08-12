@@ -15,6 +15,8 @@ For more information see [Interface](interface.md){target=_blank}.
 ## xOpera
 
 ```shell linenums="1"
+pip install opera==0.6.9
+
 vintner orchestrators init xopera
 vintner orchestrators enable --orchestrator xopera
 ```
@@ -22,13 +24,15 @@ vintner orchestrators enable --orchestrator xopera
 ## xOpera WSL
 
 ```shell linenums="1"
+pip install opera==0.6.9
+
 vintner orchestrators init xopera-wsl
 vintner orchestrators enable --orchestrator xopera-wsl
 ```
 
 ## Unfurl
 ```shell linenums="1"
-pip install unfurl
+pip install unfurl==0.7.1
 unfurl home --init
 
 vintner orchestrators init unfurl
@@ -37,7 +41,7 @@ vintner orchestrators enable --orchestrator unfurl
 
 ## Unfurl WSL
 ```shell linenums="1"
-pip install unfurl
+pip install unfurl==0.7.1
 unfurl home --init
 
 vintner orchestrators init unfurl-wsl

@@ -156,19 +156,6 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 git update-index --chmod=+x <path to file>
 ```
 
-
-## Install gcloud CLI
-
-Install gcloud on Ubunutu, as described in [https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb](https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb){target=_blank}.
-
-```shell linenums="1"
-sudo apt-get update
-sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo
-echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-sudo apt-get update && sudo apt-get install google-cloud-cli
-```
-
 ## Naming Convention
 
 Types should be named according to the following pattern.
