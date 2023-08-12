@@ -491,11 +491,6 @@ export default class Solver {
          * source_presence
          */
         if (check.isDefined(expression.source_presence)) {
-            if (expression.source_presence !== 'SELF')
-                throw new Error(
-                    `"SELF" is the only valid value for "source_presence" but received "${expression.source_presence}"`
-                )
-
             const relation = this.graph.getRelation(expression.source_presence, {element, cached})
             return relation.source.id
         }
@@ -512,14 +507,6 @@ export default class Solver {
          * container_presence
          */
         if (check.isDefined(expression.container_presence)) {
-            const element = expression.container_presence
-            assert.isString(element)
-
-            // TODO: also support CONTAINER?
-
-            if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "container_presence" but received "${element}"`)
-
             const container = this.graph.getContainer(context.element)
             return container.id
         }
