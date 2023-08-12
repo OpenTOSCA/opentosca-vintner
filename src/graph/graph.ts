@@ -543,8 +543,7 @@ export default class Graph {
         }
 
         if (name === 'CONTAINER') {
-            const container = context.element?.container
-            assert.isDefined(container, `${context.element?.Display} has no container`)
+            const container = this.getContainer(context.element)
             assert.isNode(container)
             return container
         }
@@ -673,7 +672,7 @@ export default class Graph {
         return relation
     }
 
-    getGroup(name: string, context: Context = {}) {
+    getGroup(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
         assert.isString(name)
 
         if (check.isDefined(context.cached)) {
@@ -682,18 +681,40 @@ export default class Graph {
             return element
         }
 
+        if (name === 'SELF') {
+            assert.isGroup(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isGroup(container)
+            return container
+        }
+
         const group = this.groupsMap.get(name)
         assert.isDefined(group, `Group "${name}" not found`)
         return group
     }
 
-    getPolicy(element: string | number, context: Context = {}) {
+    getPolicy(element: string | number | 'SELF' | 'CONTAINER', context: Context = {}) {
         assert.isStringOrNumber(element)
 
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isPolicy(element)
             return element
+        }
+
+        if (element === 'SELF') {
+            assert.isPolicy(context.element)
+            return context.element
+        }
+
+        if (element === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isPolicy(container)
+            return container
         }
 
         let policy
@@ -712,15 +733,26 @@ export default class Graph {
         return policy
     }
 
-    getArtifact(member: [string, string | number], context: Context = {}) {
-        assert.isString(member[0])
-        assert.isStringOrNumber(member[1])
-
+    getArtifact(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isArtifact(element)
             return element
         }
+
+        if (member === 'SELF') {
+            assert.isArtifact(context.element)
+            return context.element
+        }
+
+        if (member === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isArtifact(container)
+            return container
+        }
+
+        assert.isString(member[0])
+        assert.isStringOrNumber(member[1])
 
         let artifact
         const node = this.getNode(member[0])
@@ -737,14 +769,25 @@ export default class Graph {
         return artifact
     }
 
-    getImport(index: number, context: Context = {}) {
-        assert.isNumber(index)
-
+    getImport(index: number | 'SELF' | 'CONTAINER', context: Context = {}) {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isImport(element)
             return element
         }
+
+        if (index === 'SELF') {
+            assert.isImport(context.element)
+            return context.element
+        }
+
+        if (index === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isImport(container)
+            return container
+        }
+
+        assert.isNumber(index)
 
         const imp = this.imports[index]
         assert.isDefined(imp, `Import "${index}" not found`)
@@ -846,6 +889,17 @@ export default class Graph {
             const element = context.cached
             assert.isInput(element)
             return element
+        }
+
+        if (name === 'SELF') {
+            assert.isInput(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isInput(container)
+            return container
         }
 
         const input = this.inputsMap.get(name)

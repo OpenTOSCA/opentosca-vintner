@@ -504,9 +504,6 @@ export default class Solver {
          * target_presence
          */
         if (check.isDefined(expression.target_presence)) {
-            if (expression.target_presence !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "target_presence" but received "${element}"`)
-
             const relation = this.graph.getRelation(expression.target_presence, {element, cached})
             return relation.target.id
         }

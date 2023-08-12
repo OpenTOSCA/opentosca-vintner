@@ -271,18 +271,18 @@ export type LogicExpression =
           policy_type_presence?: PolicyTypePresenceArguments
 
           // Node functions
-          node_presence?: string
-          host_presence?: string
-          has_source?: string
-          has_incoming_relation?: string
-          has_incoming_relation_naive?: string
-          has_artifact?: string
-          has_artifact_naive?: string
+          node_presence?: string | 'CONTAINER'
+          host_presence?: string | 'SELF' | 'CONTAINER'
+          has_source?: string | 'SELF' | 'CONTAINER'
+          has_incoming_relation?: string | 'SELF' | 'CONTAINER'
+          has_incoming_relation_naive?: string | 'SELF' | 'CONTAINER'
+          has_artifact?: string | 'SELF' | 'CONTAINER'
+          has_artifact_naive?: string | 'SELF' | 'CONTAINER'
 
           // Relation functions
-          relation_presence?: [node: string, relation: string | number]
-          source_presence?: 'SELF'
-          target_presence?: 'SELF'
+          relation_presence?: [node: string | 'SELF' | 'CONTAINER', relation: string | number]
+          source_presence?: 'SELF' | 'CONTAINER'
+          target_presence?: 'SELF' | 'CONTAINER'
 
           // Property functions
           node_property_presence?: NodePropertyPresenceArguments
@@ -299,8 +299,8 @@ export type LogicExpression =
           has_present_target?: string | number
 
           // Group functions
-          group_presence?: string
-          has_present_member?: string
+          group_presence?: string | 'SELF' | 'CONTAINER'
+          has_present_member?: string | 'SELF' | 'CONTAINER'
 
           // Input functions
           input_presence?: string
