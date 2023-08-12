@@ -12,5 +12,4 @@ if which unfurl &>/dev/null; then
 fi
 
 pip install unfurl==0.7.1
-# TODO: add unfurl to path?
 yes | unfurl home --init
