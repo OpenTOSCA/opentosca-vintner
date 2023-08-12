@@ -526,7 +526,27 @@ export default class Graph {
         }
     }
 
-    getNode(name: string) {
+    getNode(name: string | 'SELF' | 'CONTAINER', context: {element?: Element; cached?: Element} = {}) {
+        assert.isString(name)
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isNode(element)
+            return element
+        }
+
+        if (name === 'SELF') {
+            assert.isNode(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = context.element?.container
+            assert.isDefined(container, `${context.element?.Display} has no container`)
+            assert.isNode(container)
+            return container
+        }
+
         const node = this.nodesMap.get(name)
         assert.isDefined(node, `Node "${name}" not found`)
         return node
@@ -564,7 +584,32 @@ export default class Graph {
         return type
     }
 
-    getRelation(member: [string, string | number]) {
+    getRelation(
+        member: [string, string | number] | 'SELF' | 'CONTAINER',
+        context: {element?: Element; cached?: Element} = {}
+    ) {
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isRelation(element)
+            return element
+        }
+
+        if (member === 'SELF') {
+            assert.isRelation(context.element)
+            return context.element
+        }
+
+        if (member === 'CONTAINER') {
+            const container = context.element?.container
+            assert.isDefined(container, `${context.element?.Display} has no container`)
+            assert.isRelation(container)
+            return container
+        }
+
+        assert.isArray(member)
+        assert.isString(member[0])
+        assert.isStringOrNumber(member[1])
+
         let relation
         const node = this.getNode(member[0])
 

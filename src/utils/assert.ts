@@ -1,4 +1,7 @@
 import * as check from '#check'
+import Element from '#graph/element'
+import Node from '#graph/node'
+import Relation from '#graph/relation'
 import * as utils from '#utils'
 import {Dayjs} from 'dayjs'
 
@@ -31,12 +34,12 @@ export function isNumber(element: unknown): asserts element is number {
     if (!check.isNumber(element)) throw new Error(`Element "${utils.stringify(element)}" is not a number`)
 }
 
-export function isNumbers(element: unknown[]): asserts element is number[] {
+export function isNumbers(element: unknown): asserts element is number[] {
     isArray(element)
     element.forEach(isNumber)
 }
 
-export function isArray(element: unknown[]): asserts element is Array<unknown> {
+export function isArray(element: unknown): asserts element is Array<unknown> {
     if (!check.isArray(element)) throw new Error(`Element "${utils.stringify(element)}" is not an array`)
 }
 
@@ -51,4 +54,14 @@ export function isName(name: string) {
 
 export function isDate(element: Dayjs) {
     if (!check.isDate(element)) throw new Error(`Element "${element}" is not a date`)
+}
+
+export function isNode(element?: Element): asserts element is Node {
+    isDefined(element, 'Element not defined')
+    if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
+}
+
+export function isRelation(element?: Element): asserts element is Relation {
+    isDefined(element, 'Element not defined')
+    if (!element.isRelation()) throw new Error(`${element.Display} is not a relation`)
 }
