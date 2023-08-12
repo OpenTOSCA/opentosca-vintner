@@ -21,6 +21,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/setup/utils',
+    hae.express(async (req, res, next) => {
+        await Controller.setup.utils(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/orchestrators/enable',
     hae.express(async (req, res, next) => {
         await Controller.orchestrators.enable(req.body)
