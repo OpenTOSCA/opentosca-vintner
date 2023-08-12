@@ -64,6 +64,23 @@ setup
     )
 
 setup
+    .command('utils')
+    .description('install utils (linux is required)')
+    .option('--all [boolean]', 'install all utils')
+    .option('--git [boolean]', 'install Git')
+    .option('--python [boolean]', 'install Python')
+    .option('--xopera [boolean]', 'install xOpera (system-wide)')
+    .option('--unfurl [boolean]', 'install Unfurl (system-wide)')
+    .option('--gcloud [boolean]', 'install gCloud')
+    .option('--terraform [boolean]', 'install Terraform')
+    .option('--ansible [boolean]', 'install Ansible (system-wide)')
+    .action(
+        hae.exit(async options => {
+            console.log(await Controller.setup.utils(options))
+        })
+    )
+
+setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
     .option('--io [boolean]', 'enable read and writes to the filesystem')

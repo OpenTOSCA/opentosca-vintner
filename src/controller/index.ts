@@ -39,6 +39,7 @@ import codeSetup from './setup/code'
 import initSetup from './setup/init'
 import openSetup from './setup/open'
 import pathSetup from './setup/path'
+import utilsSetup from './setup/utils'
 import initTemplate from './template/init'
 import inputsTemplate from './template/inputs'
 import packageTemplate from './template/package'
@@ -107,6 +108,7 @@ const Controller = {
         benchmark: benchmarkSetup,
         path: pathSetup,
         code: codeSetup,
+        utils: utilsSetup,
     },
     template: {
         init: initTemplate,
