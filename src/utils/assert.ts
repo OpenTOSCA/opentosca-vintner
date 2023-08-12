@@ -1,7 +1,14 @@
 import * as check from '#check'
+import Artifact from '#graph/artifact'
 import Element from '#graph/element'
+import Group from '#graph/group'
+import Import from '#graph/import'
+import Input from '#graph/input'
 import Node from '#graph/node'
+import Policy from '#graph/policy'
+import Property from '#graph/property'
 import Relation from '#graph/relation'
+import Type from '#graph/type'
 import * as utils from '#utils'
 import {Dayjs} from 'dayjs'
 
@@ -64,4 +71,39 @@ export function isNode(element?: Element): asserts element is Node {
 export function isRelation(element?: Element): asserts element is Relation {
     isDefined(element, 'Element not defined')
     if (!element.isRelation()) throw new Error(`${element.Display} is not a relation`)
+}
+
+export function isPolicy(element?: Element): asserts element is Policy {
+    isDefined(element, 'Element not defined')
+    if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
+}
+
+export function isGroup(element?: Element): asserts element is Group {
+    isDefined(element, 'Element not defined')
+    if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
+}
+
+export function isImport(element?: Element): asserts element is Import {
+    isDefined(element, 'Element not defined')
+    if (!element.isImport()) throw new Error(`${element.Display} is not a import`)
+}
+
+export function isInput(element?: Element): asserts element is Input {
+    isDefined(element, 'Element not defined')
+    if (!element.isInput()) throw new Error(`${element.Display} is not a input`)
+}
+
+export function isProperty(element?: Element): asserts element is Property {
+    isDefined(element, 'Element not defined')
+    if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
+}
+
+export function isType(element?: Element): asserts element is Type {
+    isDefined(element, 'Element not defined')
+    if (!element.isType()) throw new Error(`${element.Display} is not a type`)
+}
+
+export function isArtifact(element?: Element): asserts element is Artifact {
+    isDefined(element, 'Element not defined')
+    if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
 }
