@@ -35,7 +35,8 @@ export class Options {
 function getResolvingMode(raw: VariabilityOptions) {
     const mode = raw.mode ?? 'strict'
     const map = ResolverModes[mode]
-    if (check.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
+    assert.isDefined(map, `Resolving mode "${mode}" unknown`)
+    return map
 }
 
 class PruningOptions {
@@ -80,17 +81,11 @@ class PruningOptions {
         const raw = serviceTemplate.topology_template?.variability?.options || {}
         this.raw = raw
 
-        // TODO: this
-        /**
-         const propagated = propagate<TPruningOptions>({
-         base: ResolverModes.base.pruning,
-         mode: map.pruning,
-         flag: raw.pruning,
-         options: raw,
-         })
-         **/
+        // Mode
+        const mode = getResolvingMode(this.raw)
 
-        const propagated: Required<TPruningOptions> = {
+        // Base
+        const base: Required<TPruningOptions> = {
             pruning: false,
             consistency_pruning: false,
             semantic_pruning: false,
@@ -123,6 +118,60 @@ class PruningOptions {
             type_consistency_pruning: false,
             type_semantic_pruning: false,
         }
+
+        // Moded
+        const moded = propagate(base, [mode, this.raw])
+
+        // Chain
+        const chain: TPruningOptions[] = []
+
+        // Propagate pruning
+        if (check.isTrue(moded.pruning)) {
+            chain.push({
+                consistency_pruning: true,
+                semantic_pruning: true,
+
+                node_pruning: true,
+                relation_pruning: true,
+                policy_pruning: true,
+                group_pruning: true,
+                artifact_pruning: true,
+                property_pruning: true,
+                type_pruning: true,
+            })
+        }
+
+        // Propagate consistency_pruning
+        if (check.isTrue(moded.consistency_pruning)) {
+            chain.push({
+                node_consistency_pruning: true,
+                relation_consistency_pruning: true,
+                policy_consistency_pruning: true,
+                group_consistency_pruning: true,
+                artifact_consistency_pruning: true,
+                property_consistency_pruning: true,
+                type_consistency_pruning: true,
+            })
+        }
+
+        // Propagate semantic_pruning
+        if (check.isTrue(moded.semantic_pruning)) {
+            chain.push({
+                node_semantic_pruning: true,
+                relation_semantic_pruning: true,
+                policy_semantic_pruning: true,
+                group_semantic_pruning: true,
+                artifact_semantic_pruning: true,
+                property_semantic_pruning: true,
+                type_semantic_pruning: true,
+            })
+        }
+
+        // Merge back original to keep overrides
+        chain.push(this.raw)
+
+        // Propagated
+        const propagated = propagate(moded, chain)
 
         this.pruning = propagated.pruning
         this.consistencyPruning = propagated.consistency_pruning
@@ -200,17 +249,11 @@ class DefaultOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        // TODO: this
-        /**
-        const propagated = propagate<TDefaultOptions>({
-            base: ResolverModes.base.default,
-            mode: map.default,
-            flag: this.raw.default_condition,
-            options: this.raw,
-        })
-            **/
+        // Mode
+        const mode = getResolvingMode(this.raw)
 
-        const propagated: Required<TDefaultOptions> = {
+        // Base
+        const base: Required<TDefaultOptions> = {
             default_condition: false,
             default_consistency_condition: false,
             default_semantic_condition: false,
@@ -245,6 +288,60 @@ class DefaultOptions {
             type_default_consistency_condition: false,
             type_default_semantic_condition: false,
         }
+
+        // Moded
+        const moded = propagate(base, [mode, this.raw])
+
+        // Chain
+        const chain: TDefaultOptions[] = []
+
+        // Propagate default_condition
+        if (check.isTrue(moded.default_condition)) {
+            chain.push({
+                default_consistency_condition: true,
+                default_semantic_condition: true,
+
+                node_default_condition: true,
+                relation_default_condition: true,
+                policy_default_condition: true,
+                group_default_condition: true,
+                artifact_default_condition: true,
+                property_default_condition: true,
+                type_default_condition: true,
+            })
+        }
+
+        // Propagate default_consistency_condition
+        if (check.isTrue(moded.default_consistency_condition)) {
+            chain.push({
+                node_default_consistency_condition: true,
+                relation_default_consistency_condition: true,
+                policy_default_consistency_condition: true,
+                group_default_consistency_condition: true,
+                artifact_default_consistency_condition: true,
+                property_default_consistency_condition: true,
+                type_default_consistency_condition: true,
+            })
+        }
+
+        // Propagate default_semantic_condition
+        if (check.isTrue(moded.default_semantic_condition)) {
+            chain.push({
+                node_default_semantic_condition: true,
+                relation_default_semantic_condition: true,
+                policy_default_semantic_condition: true,
+                group_default_semantic_condition: true,
+                artifact_default_semantic_condition: true,
+                property_default_semantic_condition: true,
+                type_default_semantic_condition: true,
+            })
+        }
+
+        // Merge back original to keep overrides
+        chain.push(this.raw)
+
+        // Propagated
+        const propagated = propagate(moded, chain)
 
         this.defaultCondition = propagated.default_condition
         this.defaultConsistencyCondition = propagated.default_consistency_condition
@@ -304,7 +401,7 @@ class ChecksOptions {
         this.raw.consistency_checks = this.raw.consistency_checks ?? true
         assert.isBoolean(this.raw.consistency_checks)
 
-        const propagated = propagate<TChecksOptions>({
+        const propagated = propagateOld<TChecksOptions>({
             base: {
                 consistency_checks: true,
                 relation_source_consistency_check: true,
@@ -358,7 +455,12 @@ class SolverOptions {
     }
 }
 
-function propagate<T>(data: {base: Required<T>; flag?: boolean; mode?: T; options: T}) {
+function propagate<T>(base: Required<T>, chain: T[]): Required<T> {
+    return _.merge(_.clone(base), ...chain.map(_.clone))
+}
+
+// TODO: remove this
+function propagateOld<T>(data: {base: Required<T>; flag?: boolean; mode?: T; options: T}) {
     let result = _.clone(data.base)
 
     if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
