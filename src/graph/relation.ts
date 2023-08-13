@@ -100,9 +100,29 @@ export default class Relation extends Element {
         )
     }
 
+    private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+
+        const type = this.types[0]
+        const conditions =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types[
+                type.name
+            ]?.conditions
+        if (check.isUndefined(conditions)) return
+
+        return utils.copy(utils.toList(conditions))
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (check.isUndefined(this._defaultCondition)) {
+            const typeSpecificConditions = this.getTypeSpecificDefaultCondition()
+            if (check.isDefined(typeSpecificConditions)) {
+                this._defaultCondition = {and: typeSpecificConditions}
+                return this._defaultCondition
+            }
+
             const conditions: LogicExpression[] = []
 
             const mode = this.getDefaultMode

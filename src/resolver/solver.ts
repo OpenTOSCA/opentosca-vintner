@@ -239,13 +239,7 @@ export default class Solver {
     }
 
     reduceConditions(conditions: LogicExpression[]) {
-        return conditions.reduce<{and: LogicExpression[]}>(
-            (acc, curr) => {
-                acc.and.push(curr)
-                return acc
-            },
-            {and: []}
-        )
+        return {and: conditions}
     }
 
     setPreset(name?: string) {

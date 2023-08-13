@@ -76,6 +76,8 @@ export default class Property extends Element {
         )
     }
 
+    // TODO: get type from type definition being part of the container type ...
+    private _defaultCondition?: LogicExpression
     get defaultCondition() {
         return this.container.presenceCondition
     }

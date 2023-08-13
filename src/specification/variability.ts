@@ -6,6 +6,7 @@ export type VariabilityDefinition = {
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
     options?: VariabilityOptions
+    type_specific_conditions?: TypeSpecificLogicExpressions
 }
 
 export type VariabilityOptions = {
@@ -380,3 +381,17 @@ export type ValueExpression =
       }
 
 export type VariabilityExpression = LogicExpression | ValueExpression
+
+export type TypeSpecificLogicExpressionMap = {
+    [key: string]: {
+        conditions: LogicExpression | LogicExpression[]
+    }
+}
+export type TypeSpecificLogicExpressions = {
+    artifact_types: TypeSpecificLogicExpressionMap
+    data_types: TypeSpecificLogicExpressionMap
+    relationship_types: TypeSpecificLogicExpressionMap
+    node_types: TypeSpecificLogicExpressionMap
+    group_types: TypeSpecificLogicExpressionMap
+    policy_types: TypeSpecificLogicExpressionMap
+}
