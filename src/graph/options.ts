@@ -1,15 +1,16 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {ServiceTemplate} from '#spec/service-template'
 import {ConsistencyOptions, DefaultOptions, PruningOptions, ResolverModes, VariabilityOptions} from '#spec/variability'
 import _ from 'lodash'
 
 export class Options {
-    serviceTemplate: ServiceTemplate
-    raw: VariabilityOptions
+    private readonly serviceTemplate: ServiceTemplate
+    private readonly raw: VariabilityOptions
 
     default: DefaultOptions
     pruning: PruningOptions
-    consistency: ConsistencyOptions
+    consistency: ConsistencyCheckOptions
     solver: SolverOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
@@ -19,6 +20,7 @@ export class Options {
         this.raw = raw
 
         this.solver = new SolverOptions(serviceTemplate)
+        this.consistency = new ConsistencyCheckOptions(serviceTemplate)
 
         // Get resolver mode
         const mode = raw.mode ?? 'strict'
@@ -26,7 +28,7 @@ export class Options {
         if (check.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
 
         // Build default options
-        this.default = propagateOptions<DefaultOptions>({
+        this.default = propagate<DefaultOptions>({
             base: ResolverModes.base.default,
             mode: map.default,
             flag: raw.default_condition,
@@ -34,15 +36,40 @@ export class Options {
         })
 
         // Build pruning options
-        this.pruning = propagateOptions<PruningOptions>({
+        this.pruning = propagate<PruningOptions>({
             base: ResolverModes.base.pruning,
             mode: map.pruning,
             flag: raw.pruning,
             options: raw,
         })
+    }
+}
 
-        // Build consistency options
-        this.consistency = propagateOptions<ConsistencyOptions>({
+class ConsistencyCheckOptions {
+    private readonly serviceTemplate: ServiceTemplate
+    private readonly raw: VariabilityOptions
+
+    relationSourceConsistencyCheck: boolean
+    relationTargetConsistencyCheck: boolean
+    ambiguousHostingConsistencyCheck: boolean
+    expectedHostingConsistencyCheck: boolean
+    missingArtifactParentConsistencyCheck: boolean
+    ambiguousArtifactConsistencyCheck: boolean
+    missingPropertyParentConsistencyCheck: boolean
+    ambiguousPropertyConsistencyCheck: boolean
+    missingTypeContainerConsistencyCheck: boolean
+    ambiguousTypeConsistencyCheck: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
+
+        const raw = serviceTemplate.topology_template?.variability?.options || {}
+        this.raw = raw
+
+        raw.consistency_checks = raw.consistency_checks ?? true
+        assert.isBoolean(raw.consistency_checks)
+
+        const propagated = propagate<ConsistencyOptions>({
             base: {
                 consistency_checks: true,
                 relation_source_consistency_check: true,
@@ -59,16 +86,27 @@ export class Options {
             flag: raw.consistency_checks,
             options: raw,
         })
+
+        this.relationSourceConsistencyCheck = propagated.relation_source_consistency_check
+        this.relationTargetConsistencyCheck = propagated.relation_target_consistency_check
+        this.ambiguousHostingConsistencyCheck = propagated.ambiguous_hosting_consistency_check
+        this.expectedHostingConsistencyCheck = propagated.expected_hosting_consistency_check
+        this.missingArtifactParentConsistencyCheck = propagated.missing_artifact_parent_consistency_check
+        this.ambiguousArtifactConsistencyCheck = propagated.ambiguous_artifact_consistency_check
+        this.missingPropertyParentConsistencyCheck = propagated.missing_property_parent_consistency_check
+        this.ambiguousPropertyConsistencyCheck = propagated.ambiguous_property_consistency_check
+        this.missingTypeContainerConsistencyCheck = propagated.missing_type_container_consistency_check
+        this.ambiguousTypeConsistencyCheck = propagated.ambiguous_type_consistency_check
     }
 }
 
 class SolverOptions {
-    serviceTemplate: ServiceTemplate
-    raw: VariabilityOptions
+    private readonly serviceTemplate: ServiceTemplate
+    private readonly raw: VariabilityOptions
 
-    isMin: boolean
-    isMax: boolean
-    isEnabled: boolean
+    min: boolean
+    max: boolean
+    enabled: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -76,19 +114,18 @@ class SolverOptions {
         const raw = serviceTemplate.topology_template?.variability?.options || {}
         this.raw = raw
 
-        // Build optimization options
         const optimization = raw.optimization ?? 'min'
         if (check.isDefined(optimization) && !check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
 
-        this.isEnabled = optimization !== false
-        this.isMax = optimization === 'max'
-        this.isMin = optimization === true || optimization === 'min'
+        this.enabled = optimization !== false
+        this.max = optimization === 'max'
+        this.min = optimization === true || optimization === 'min'
     }
 }
 
-function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; options: T}) {
+function propagate<T>(data: {base: Required<T>; flag?: boolean; mode?: T; options: T}) {
     let result = _.clone(data.base)
 
     if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
