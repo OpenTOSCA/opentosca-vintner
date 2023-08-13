@@ -209,6 +209,9 @@ export default class Graph {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
 
+            if (nodeName === 'SELF') throw new Error(`Node must not be named "SELF"`)
+            if (nodeName === 'CONTAINER') throw new Error(`Node must not be named "CONTAINER"`)
+
             const node = new Node({name: nodeName, raw: nodeTemplate})
             node.graph = this
 
