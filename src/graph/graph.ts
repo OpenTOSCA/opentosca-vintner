@@ -1,25 +1,21 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
+import {Options} from '#graph/options'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {
     ArtifactPropertyPresenceArguments,
-    ConsistencyOptions,
-    DefaultOptions,
     GroupPropertyPresenceArguments,
     GroupTypePresenceArguments,
     NodePropertyPresenceArguments,
     NodeTypePresenceArguments,
     PolicyPropertyPresenceArguments,
     PolicyTypePresenceArguments,
-    PruningOptions,
     RelationPropertyPresenceArguments,
     RelationTypePresenceArguments,
-    ResolverModes,
-    SolverOptions,
     VariabilityPointList,
     VariabilityPointMap,
 } from '#spec/variability'
@@ -46,12 +42,7 @@ type Context = {element?: Element; cached?: Element}
 
 export default class Graph {
     serviceTemplate: ServiceTemplate
-    options: {
-        default: DefaultOptions
-        pruning: PruningOptions
-        solver: SolverOptions
-        consistency: ConsistencyOptions
-    } = {default: {}, pruning: {}, solver: {}, consistency: {}}
+    options: Options
 
     elements: Element[] = []
 
@@ -90,7 +81,7 @@ export default class Graph {
             throw new Error('Unsupported TOSCA definitions version')
 
         // Options
-        this.buildOptions()
+        this.options = new Options(this.serviceTemplate)
 
         // Inputs
         this.buildInputs()
@@ -119,58 +110,6 @@ export default class Graph {
             ...this.artifacts,
             ...this.imports,
         ]
-    }
-
-    private buildOptions() {
-        // Get user-defined options
-        const options = this.serviceTemplate.topology_template?.variability?.options || {}
-
-        // Get resolver mode
-        const mode = options.mode ?? 'strict'
-        const map = ResolverModes[mode]
-        if (check.isUndefined(map)) throw new Error(`Resolving mode "${mode}" unknown`)
-
-        // Build default options
-        this.options.default = utils.propagateOptions<DefaultOptions>({
-            base: ResolverModes.base.default,
-            mode: map.default,
-            flag: options.default_condition,
-            options,
-        })
-
-        // Build pruning options
-        this.options.pruning = utils.propagateOptions<PruningOptions>({
-            base: ResolverModes.base.pruning,
-            mode: map.pruning,
-            flag: options.pruning,
-            options,
-        })
-
-        // Build optimization options
-        const optimization = options.optimization
-        if (check.isDefined(optimization) && !check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
-            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
-        }
-        this.options.solver = {optimization: optimization ?? 'min'}
-
-        // Build consistency options
-        this.options.consistency = utils.propagateOptions<ConsistencyOptions>({
-            base: {
-                consistency_checks: true,
-                relation_source_consistency_check: true,
-                relation_target_consistency_check: true,
-                ambiguous_hosting_consistency_check: true,
-                expected_hosting_consistency_check: true,
-                missing_artifact_parent_consistency_check: true,
-                ambiguous_artifact_consistency_check: true,
-                missing_property_parent_consistency_check: true,
-                ambiguous_property_consistency_check: true,
-                missing_type_container_consistency_check: true,
-                ambiguous_type_consistency_check: true,
-            },
-            flag: options.consistency_checks,
-            options,
-        })
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {

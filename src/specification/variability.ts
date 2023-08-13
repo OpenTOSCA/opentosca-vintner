@@ -11,8 +11,6 @@ export type VariabilityDefinition = {
 
 export type VariabilityOptions = {
     mode?: ResolvingMode
-    consistency_condition?: boolean // TODO: implement this; mode => consistency, semantic => <element>_(default|pruning)_condition?
-    semantic_condition?: boolean // TODO: implement this
 } & DefaultOptions &
     PruningOptions &
     ConsistencyOptions &
@@ -35,10 +33,11 @@ export type NodeDefaultConditionMode =
     | 'incoming-artifact'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
-// TODO: durchstich
-// TODO: refactor them in multi level options?
 export type DefaultOptions = {
     default_condition?: boolean
+    default_consistency_condition?: boolean
+    default_semantic_condition?: boolean
+
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
     node_default_consistency_condition?: boolean
@@ -72,13 +71,36 @@ export type DefaultOptions = {
 
 export type PruningOptions = {
     pruning?: boolean
+    consistency_pruning?: boolean
+    semantic_pruning?: boolean
+
     node_pruning?: boolean
+    node_consistency_pruning?: boolean
+    node_semantic_pruning?: boolean
+
     relation_pruning?: boolean
+    relation_consistency_pruning?: boolean
+    relation_semantic_pruning?: boolean
+
     policy_pruning?: boolean
+    policy_consistency_pruning?: boolean
+    policy_semantic_pruning?: boolean
+
     group_pruning?: boolean
+    group_consistency_pruning?: boolean
+    group_semantic_pruning?: boolean
+
     artifact_pruning?: boolean
+    artifact_consistency_pruning?: boolean
+    artifact_semantic_pruning?: boolean
+
     property_pruning?: boolean
+    property_consistency_pruning?: boolean
+    property_semantic_pruning?: boolean
+
     type_pruning?: boolean
+    type_consistency_pruning?: boolean
+    type_semantic_pruning?: boolean
 }
 
 export type ConsistencyOptions = {
@@ -96,151 +118,27 @@ export type ConsistencyOptions = {
 }
 
 export const ResolverModes = {
-    strict: {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
-    },
+    strict: {},
     'consistent-strict': {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: true,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
+        default_condition: true,
+        default_consistency_condition: true,
+        default_semantic_condition: false,
     },
     'consistent-loose': {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: true,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: true,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: false,
-        },
+        pruning: true,
+        consistency_pruning: true,
+        semantic_pruning: false,
     },
     default: {
-        default: {
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
+        default_condition: true,
     },
     'default-loose': {
-        default: {
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            pruning: true,
-            node_pruning: false,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        },
+        pruning: true,
+        consistency_pruning: true,
+        semantic_pruning: false,
     },
     loose: {
-        default: {
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            pruning: true,
-            node_pruning: true,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        },
-    },
-    base: {
-        default: {
-            default_condition: false,
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        },
-        pruning: {
-            pruning: false,
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
+        pruning: true,
     },
 }
 

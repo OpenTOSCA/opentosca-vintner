@@ -1,6 +1,5 @@
 import * as check from '#check'
 import day from '#utils/day'
-import _ from 'lodash'
 import process from 'process'
 
 export function mapIsEmpty<K, V>(map: Map<K, V>) {
@@ -136,23 +135,6 @@ export function toFixed(value: number) {
 
 export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
-}
-
-export function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; options: T}) {
-    let result = _.clone(data.base)
-
-    if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
-
-    if (check.isDefined(data.flag)) {
-        // @ts-ignore
-        for (const key of Object.keys(data.base)) {
-            // @ts-ignore
-            result[key] = data.flag
-        }
-    }
-
-    result = _.merge(result, _.clone(data.options))
-    return result
 }
 
 export function sumObjects(objects: {[key: string]: number}[]) {
