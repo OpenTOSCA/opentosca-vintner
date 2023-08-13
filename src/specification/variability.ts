@@ -11,6 +11,8 @@ export type VariabilityDefinition = {
 
 export type VariabilityOptions = {
     mode?: ResolvingMode
+    consistency_condition?: boolean // TODO: implement this; mode => consistency, semantic => <element>_(default|pruning)_condition?
+    semantic_condition?: boolean // TODO: implement this
 } & DefaultOptions &
     PruningOptions &
     ConsistencyOptions &
@@ -22,7 +24,7 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-// In realty, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
+// In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
 export type NodeDefaultConditionMode =
     | 'source'
     | 'incoming'
@@ -33,17 +35,39 @@ export type NodeDefaultConditionMode =
     | 'incoming-artifact'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
+// TODO: durchstich
+// TODO: refactor them in multi level options?
 export type DefaultOptions = {
     default_condition?: boolean
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
+    node_default_consistency_condition?: boolean
+    node_default_semantic_condition?: boolean
+
     relation_default_condition?: boolean
     relation_default_condition_mode?: RelationDefaultConditionMode
+    relation_default_consistency_condition?: boolean
+    relation_default_semantic_condition?: boolean
+
     policy_default_condition?: boolean
+    policy_default_consistency_condition?: boolean
+    policy_default_semantic_condition?: boolean
+
     group_default_condition?: boolean
+    group_default_consistency_condition?: boolean
+    group_default_semantic_condition?: boolean
+
     artifact_default_condition?: boolean
+    artifact_default_consistency_condition?: boolean
+    artifact_default_semantic_condition?: boolean
+
     property_default_condition?: boolean
+    property_default_consistency_condition?: boolean
+    property_default_semantic_condition?: boolean
+
     type_default_condition?: boolean
+    type_default_consistency_condition?: boolean
+    type_default_semantic_condition?: boolean
 }
 
 export type PruningOptions = {
@@ -382,16 +406,20 @@ export type ValueExpression =
 
 export type VariabilityExpression = LogicExpression | ValueExpression
 
+export type ConditionsWrapper = {
+    conditions: LogicExpression | LogicExpression[]
+    consistency?: boolean
+    semantic?: boolean
+}
+
 export type TypeSpecificLogicExpressionMap = {
-    [key: string]: {
-        conditions: LogicExpression | LogicExpression[]
-    }
+    [key: string]: ConditionsWrapper
 }
 export type TypeSpecificLogicExpressions = {
-    artifact_types: TypeSpecificLogicExpressionMap
-    data_types: TypeSpecificLogicExpressionMap
-    relationship_types: TypeSpecificLogicExpressionMap
-    node_types: TypeSpecificLogicExpressionMap
-    group_types: TypeSpecificLogicExpressionMap
-    policy_types: TypeSpecificLogicExpressionMap
+    artifact_types?: TypeSpecificLogicExpressionMap
+    data_types?: TypeSpecificLogicExpressionMap
+    relationship_types?: TypeSpecificLogicExpressionMap
+    node_types?: TypeSpecificLogicExpressionMap
+    group_types?: TypeSpecificLogicExpressionMap
+    policy_types?: TypeSpecificLogicExpressionMap
 }

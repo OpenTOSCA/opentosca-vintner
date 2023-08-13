@@ -193,16 +193,15 @@ _This is an experimental feature._
 
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-| Element                      | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
-|------------------------------|--------|-------------------|------------------|---------|---------------|-----------|
-| Node with Incoming Relations | false  | false             | false            | default | default       | pruning   |
-| Node with Artifacts          | false  | false             | false            | default | default       | pruning   |
-| Relation                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Property                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Artifact                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Type                         | false  | default           | pruning          | default | pruning       | pruning   |
-| Group                        | false  | false             | false            | default | pruning       | pruning   |
-| Policy                       | false  | false             | false            | default | pruning       | pruning   |
+| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
+|----------|--------|-------------------|------------------|---------|---------------|-----------|
+| Node     | false  | false             | false            | default | default       | pruning   |
+| Relation | false  | default           | pruning          | default | pruning       | pruning   |
+| Property | false  | default           | pruning          | default | pruning       | pruning   |
+| Artifact | false  | default           | pruning          | default | pruning       | pruning   |
+| Type     | false  | default           | pruning          | default | pruning       | pruning   |
+| Group    | false  | false             | false            | default | pruning       | pruning   |
+| Policy   | false  | false             | false            | default | pruning       | pruning   |
 
 
 ## Default Conditions

@@ -106,7 +106,7 @@ export default class Relation extends Element {
 
         const type = this.types[0]
         const conditions =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types[
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types?.[
                 type.name
             ]?.conditions
         if (check.isUndefined(conditions)) return

@@ -74,6 +74,11 @@ topology_template:
         options:
             mode: loose
 
+        type_specific_conditions:
+            node_types:
+                scenario.monitor:
+                    conditions: {host_presence: SELF}
+
     node_templates:
         web_shop:
             type: scenario.web_shop
@@ -108,7 +113,6 @@ topology_template:
 
         monitor:
             type: scenario.monitor
-            conditions: {logic_expression: is_cloud}
             properties:
                 interval: 15 sec
             artifacts:

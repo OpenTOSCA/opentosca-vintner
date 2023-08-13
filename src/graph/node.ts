@@ -1,6 +1,7 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
-import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
+import {ConditionsWrapper, LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -91,76 +92,93 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
-        // Not supported when conditional types are used
+    private getTypeSpecificCondition(): ConditionsWrapper | undefined {
+        // Conditional types are not supported
         if (this.types.length > 1) return
 
         const type = this.types[0]
-        const conditions =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types[type.name]
-                ?.conditions
-        if (check.isUndefined(conditions)) return
 
-        return utils.copy(utils.toList(conditions))
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[type.name]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+
+        return utils.copy(tsc)
     }
 
+    private getElementSpecificCondition(): ConditionsWrapper | undefined {
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'host') {
+                return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
+            }
+
+            if (it === 'source') {
+                return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'incoming') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'incomingnaive') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'artifact') {
+                return conditions.push(this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'artifactnaive') {
+                return conditions.push(
+                    this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
+
+        return {conditions, consistency: false, semantic: true}
+    }
+
+    private isConditionAllowed(wrapper?: ConditionsWrapper) {
+        if (check.isUndefined(wrapper)) return false
+
+        // TODO: have a ConditionsWrapper class to prevent default value assignment at different places ...
+        const isConsistency = wrapper.consistency ?? false
+        const isConsistencyAllowed = this.graph.options.default.node_default_consistency_condition ?? false
+        const isSemantic = wrapper.semantic ?? true
+        const isSemanticAllowed = this.graph.options.default.node_default_semantic_condition ?? true
+
+        return true
+        // TODO: enable this again
+        // return (isConsistency && isConsistencyAllowed) || (isSemantic && isSemanticAllowed)
+    }
+
+    // TODO: implement this pattern everywhere
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (check.isUndefined(this._defaultCondition)) {
-            const typeSpecificConditions = this.getTypeSpecificDefaultCondition()
-            if (check.isDefined(typeSpecificConditions)) {
-                this._defaultCondition = {and: typeSpecificConditions}
-                return this._defaultCondition
-            }
+            const candidates = [this.getTypeSpecificCondition(), this.getElementSpecificCondition()]
+            const selected = candidates.find(it => this.isConditionAllowed(it))
+            assert.isDefined(selected, `${this.Display} has no default condition`)
 
-            const conditions: LogicExpression[] = []
-
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'host') {
-                    return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
-                }
-
-                if (it === 'source') {
-                    return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
-                }
-
-                if (it === 'incoming') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'incomingnaive') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'artifact') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'artifactnaive') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
-
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
-
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
+            selected.conditions = utils.toList(selected.conditions)
+            if (selected.conditions.length === 1) {
+                this._defaultCondition = selected.conditions[0]
             } else {
-                this._defaultCondition = {and: conditions}
+                this._defaultCondition = {and: selected.conditions}
             }
         }
-
         return this._defaultCondition
     }
 
