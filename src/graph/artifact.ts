@@ -38,19 +38,13 @@ export default class Artifact extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.artifact_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.artifact_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.artifact_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.artifact_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactPruning
     }
 
     get defaultCondition() {

@@ -61,19 +61,16 @@ export default class Property extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.default.property_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.property_default_condition
-        )
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultCondition
+        // TODO: fix this
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultCondition)
     }
 
     get pruningEnabled() {
-        return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.pruning.property_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.property_pruning
-        )
+        if (!check.isObject(this.raw) || check.isArray(this.raw)) return this.graph.options.pruning.propertyPruning
+        // TODO: fix this
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyPruning)
     }
 
     // TODO: get type from type definition being part of the container type ...

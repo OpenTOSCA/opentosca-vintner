@@ -35,11 +35,11 @@ export default class Policy extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.policy_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.policy_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.policyPruning
     }
 
     private _defaultCondition?: LogicExpression

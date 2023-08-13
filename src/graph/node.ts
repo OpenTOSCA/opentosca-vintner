@@ -59,21 +59,15 @@ export default class Node extends Element {
     }
 
     get getDefaultMode(): NodeDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.node_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.node_default_condition_mode ??
-            'incoming-artifact'
-        )
+        return this.raw.default_condition_mode ?? this.graph.options.default.nodeDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     get hasHost() {
@@ -155,9 +149,9 @@ export default class Node extends Element {
 
         // TODO: have a ConditionsWrapper class to prevent default value assignment at different places ...
         const isConsistency = wrapper.consistency ?? false
-        const isConsistencyAllowed = this.graph.options.default.node_default_consistency_condition ?? false
+        const isConsistencyAllowed = this.graph.options.default.nodeDefaultConsistencyCondition ?? false
         const isSemantic = wrapper.semantic ?? true
-        const isSemanticAllowed = this.graph.options.default.node_default_semantic_condition ?? true
+        const isSemanticAllowed = this.graph.options.default.nodeDefaultSemanticCondition ?? true
 
         return true
         // TODO: enable this again

@@ -48,19 +48,13 @@ export default class Type extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.type_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.type_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.type_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.type_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.typePruning
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.typePruning)
     }
 
     get defaultCondition() {

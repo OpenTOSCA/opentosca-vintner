@@ -13,7 +13,7 @@ export type VariabilityOptions = {
     mode?: ResolvingMode
 } & DefaultOptions &
     PruningOptions &
-    ConsistencyOptions &
+    ChecksOptions &
     SolverOptions
 
 export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
@@ -103,7 +103,7 @@ export type PruningOptions = {
     type_semantic_pruning?: boolean
 }
 
-export type ConsistencyOptions = {
+export type ChecksOptions = {
     consistency_checks?: boolean
     relation_source_consistency_check?: boolean
     relation_target_consistency_check?: boolean

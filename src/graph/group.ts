@@ -38,11 +38,11 @@ export default class Group extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.group_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.groupDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.group_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.groupPruning
     }
 
     private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {

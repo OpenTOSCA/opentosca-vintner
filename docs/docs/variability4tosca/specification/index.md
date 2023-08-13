@@ -158,9 +158,9 @@ The following options are used to configure the pruning of elements.
 | artifact_pruning                          | false     | Boolean                                   | false         | Enable pruning of artifacts.                                                                      |
 | property_pruning                          | false     | Boolean                                   | false         | Enable pruning of properties.                                                                     |
 
-### Consistency Check Options
+### Checks Options
 
-The following options are used to configure consistency checks.
+The following options are used to configure checks.
 
 | Keyname                                   | Mandatory | Type      | Default | Description                                                                     |
 |-------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|

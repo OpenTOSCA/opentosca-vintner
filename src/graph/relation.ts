@@ -75,29 +75,18 @@ export default class Relation extends Element {
     }
 
     get getDefaultMode(): RelationDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.relation_default_condition_mode ??
-            'source-target'
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConditionMode
+        return this.raw.default_condition_mode ?? this.graph.options.default.relationDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.relation_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationPruning
     }
 
     private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
