@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
 import {ConditionsWrapper, LogicExpression} from '#spec/variability'
@@ -97,12 +98,31 @@ export default abstract class Element {
         const semantic =
             (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
 
-        // return true
-        // TODO: enable this again
         return (wrapper.consistency && consistency) || (wrapper.semantic && semantic)
     }
 
-    abstract defaultCondition: LogicExpression
+    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+        return undefined
+    }
+
+    abstract getElementSpecificCondition(): ConditionsWrapper | undefined
+
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (check.isUndefined(this._defaultCondition)) {
+            const candidates = [this.getTypeSpecificCondition(), this.getElementSpecificCondition()]
+            const selected = candidates.find(it => this.isConditionAllowed(it))
+            assert.isDefined(selected, `${this.Display} has no default condition`)
+
+            selected.conditions = utils.toList(selected.conditions)
+            if (selected.conditions.length === 1) {
+                this._defaultCondition = selected.conditions[0]
+            } else {
+                this._defaultCondition = {and: selected.conditions}
+            }
+        }
+        return this._defaultCondition
+    }
 
     defaultAlternative = false
     abstract defaultAlternativeCondition?: LogicExpression

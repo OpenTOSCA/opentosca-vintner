@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {GroupTemplate} from '#spec/group-template'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
@@ -61,32 +62,30 @@ export default class Group extends Element {
         return this.graph.options.pruning.groupSemanticPruning
     }
 
-    private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
+    getTypeSpecificCondition() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
 
         const type = this.types[0]
-        const conditions =
+        const tsc =
             this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.group_types?.[
                 type.name
-            ]?.conditions
-        if (check.isUndefined(conditions)) return
+            ]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
 
-        return utils.copy(utils.toList(conditions))
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+        return utils.copy(tsc)
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const typeSpecificConditions = this.getTypeSpecificDefaultCondition()
-            if (check.isDefined(typeSpecificConditions)) {
-                this._defaultCondition = {and: typeSpecificConditions}
-                return this._defaultCondition
-            }
-
-            this._defaultCondition = {has_present_member: this.toscaId, _cached_element: this}
+    getElementSpecificCondition() {
+        const conditions = {has_present_member: this.toscaId, _cached_element: this}
+        return {
+            conditions,
+            consistency: false,
+            semantic: true,
         }
-        return this._defaultCondition
     }
 
     private _presenceCondition?: LogicExpression

@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
@@ -65,6 +66,27 @@ export default class Artifact extends Element {
 
     get defaultCondition() {
         return this.container.presenceCondition
+    }
+
+    // TODO: introduce artifact_type_presence?
+    getTypeSpecificCondition() {
+        const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
+        assert.isString(type)
+
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[type]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+
+        return utils.copy(tsc)
+    }
+
+    getElementSpecificCondition() {
+        const conditions = this.container.presenceCondition
+        return {conditions, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

@@ -26,7 +26,12 @@ export default class Import extends Element {
 
     readonly defaultEnabled = false
     readonly pruningEnabled = false
-    readonly defaultCondition = true
+
+    getElementSpecificCondition() {
+        // TODO: which consistency?
+        // TODO: which semantic?
+        return {conditions: true, consistency: true, semantic: true}
+    }
 
     readonly defaultConsistencyCondition = true
     readonly defaultSemanticCondition = true

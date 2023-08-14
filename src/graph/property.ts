@@ -89,10 +89,11 @@ export default class Property extends Element {
         return this.graph.options.pruning.propertySemanticPruning
     }
 
-    // TODO: get type from type definition being part of the container type ...
-    private _defaultCondition?: LogicExpression
-    get defaultCondition() {
-        return this.container.presenceCondition
+    // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
+
+    getElementSpecificCondition() {
+        const conditions = this.container.presenceCondition
+        return {conditions, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

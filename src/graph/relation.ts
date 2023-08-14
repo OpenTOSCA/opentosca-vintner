@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {bratanize} from '#graph/utils'
 import {RequirementAssignment} from '#spec/node-template'
@@ -105,52 +106,41 @@ export default class Relation extends Element {
         return this.graph.options.pruning.relationSemanticPruning
     }
 
-    private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
+    getTypeSpecificCondition() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
 
         const type = this.types[0]
-        const conditions =
+        const tsc =
             this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types?.[
                 type.name
-            ]?.conditions
-        if (check.isUndefined(conditions)) return
+            ]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
 
-        return utils.copy(utils.toList(conditions))
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+
+        return utils.copy(tsc)
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const typeSpecificConditions = this.getTypeSpecificDefaultCondition()
-            if (check.isDefined(typeSpecificConditions)) {
-                this._defaultCondition = {and: typeSpecificConditions}
-                return this._defaultCondition
+    getElementSpecificCondition() {
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'source') {
+                return conditions.push(this.source.presenceCondition)
+            }
+            if (it === 'target') {
+                return conditions.push(this.target.presenceCondition)
             }
 
-            const conditions: LogicExpression[] = []
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
 
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'source') {
-                    return conditions.push(this.source.presenceCondition)
-                }
-                if (it === 'target') {
-                    return conditions.push(this.target.presenceCondition)
-                }
-
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
-
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
-
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
-            } else {
-                this._defaultCondition = {and: conditions}
-            }
-        }
-        return this._defaultCondition
+        // TODO. which consistency or semantic to chose
+        return {conditions, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

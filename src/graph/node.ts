@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
-import {ConditionsWrapper, LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
+import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -86,7 +86,8 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    private getTypeSpecificCondition(): ConditionsWrapper | undefined {
+    // TODO: DRY
+    getTypeSpecificCondition() {
         // Conditional types are not supported
         if (this.types.length > 1) return
 
@@ -103,7 +104,7 @@ export default class Node extends Element {
         return utils.copy(tsc)
     }
 
-    private getElementSpecificCondition(): ConditionsWrapper | undefined {
+    getElementSpecificCondition() {
         const conditions: LogicExpression[] = []
 
         const mode = this.getDefaultMode
@@ -166,26 +167,9 @@ export default class Node extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
-    // TODO: implement this pattern everywhere
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const candidates = [this.getTypeSpecificCondition(), this.getElementSpecificCondition()]
-            const selected = candidates.find(it => this.isConditionAllowed(it))
-            assert.isDefined(selected, `${this.Display} has no default condition`)
-
-            selected.conditions = utils.toList(selected.conditions)
-            if (selected.conditions.length === 1) {
-                this._defaultCondition = selected.conditions[0]
-            } else {
-                this._defaultCondition = {and: selected.conditions}
-            }
-        }
-        return this._defaultCondition
-    }
-
     readonly defaultAlternativeCondition = undefined
 
+    // TODO: cant this be simplified?
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))

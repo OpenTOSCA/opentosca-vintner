@@ -73,12 +73,16 @@ export default class Type extends Element {
         return this.graph.options.pruning.typeSemanticPruning
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
+    getElementSpecificCondition() {
+        const conditions = this.container.presenceCondition
+        return {
+            conditions,
+            consistency: true,
+            semantic: false,
+        }
     }
 
     private _presenceCondition?: LogicExpression
-
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
 

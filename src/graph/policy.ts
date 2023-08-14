@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {PolicyTemplate} from '#spec/policy-template'
 import {LogicExpression} from '#spec/variability'
@@ -58,42 +59,41 @@ export default class Policy extends Element {
         return this.graph.options.pruning.policySemanticPruning
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition))
-            this._defaultCondition = {has_present_target: this.toscaId, _cached_element: this}
-        return this._defaultCondition
+    getElementSpecificCondition() {
+        const conditions = {has_present_target: this.toscaId, _cached_element: this}
+        return {
+            conditions,
+            consistency: false,
+            semantic: true,
+        }
     }
 
-    readonly defaultAlternativeCondition = undefined
-
-    private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
+    getTypeSpecificCondition() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
 
         const type = this.types[0]
-        const conditions =
+        const tsc =
             this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.policy_types?.[
                 type.name
-            ]?.conditions
-        if (check.isUndefined(conditions)) return
+            ]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
 
-        return utils.copy(utils.toList(conditions))
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+        return utils.copy(tsc)
     }
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition)) {
-            const typeSpecificConditions = this.getTypeSpecificDefaultCondition()
-            if (check.isDefined(typeSpecificConditions)) {
-                this._defaultCondition = {and: typeSpecificConditions}
-                return this._defaultCondition
-            }
-
             this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
         }
         return this._presenceCondition
     }
+
+    readonly defaultAlternativeCondition = undefined
 
     getTypeCondition(type: Type): LogicExpression {
         return {policy_type_presence: [this.toscaId, type.index], _cached_element: type}
