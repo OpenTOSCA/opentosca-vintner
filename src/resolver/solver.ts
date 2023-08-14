@@ -205,7 +205,6 @@ export default class Solver {
             conditions = [element.defaultAlternativeCondition]
         }
 
-        // TODO: how to check that type-specific condition is applied if its consistent/ semantic (else use element-generic condition)
         // Add default condition if requested
         if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
             conditions.unshift(element.defaultCondition)

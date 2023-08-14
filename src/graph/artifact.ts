@@ -47,6 +47,22 @@ export default class Artifact extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.artifactPruning
     }
 
+    get defaultConsistencyCondition() {
+        return this.graph.options.default.artifactDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.graph.options.default.artifactDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.graph.options.pruning.artifactConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.graph.options.pruning.artifactSemanticPruning
+    }
+
     get defaultCondition() {
         return this.container.presenceCondition
     }

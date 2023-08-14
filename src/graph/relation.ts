@@ -89,6 +89,22 @@ export default class Relation extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.relationPruning
     }
 
+    get defaultConsistencyCondition() {
+        return this.graph.options.default.relationDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.graph.options.default.relationDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.graph.options.pruning.relationConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.graph.options.pruning.relationSemanticPruning
+    }
+
     private getTypeSpecificDefaultCondition(): LogicExpression[] | undefined {
         // Not supported when conditional types are used
         if (this.types.length > 1) return

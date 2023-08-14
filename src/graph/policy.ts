@@ -42,6 +42,22 @@ export default class Policy extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.policyPruning
     }
 
+    get defaultConsistencyCondition() {
+        return this.graph.options.default.policyDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.graph.options.default.policyDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.graph.options.pruning.policyConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.graph.options.pruning.policySemanticPruning
+    }
+
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (check.isUndefined(this._defaultCondition))

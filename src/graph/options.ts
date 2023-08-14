@@ -319,8 +319,6 @@ class PruningOptions {
     }
 }
 
-// TODO: remove most "false" defaults?
-
 class ChecksOptions {
     private readonly serviceTemplate: ServiceTemplate
     private readonly raw: VariabilityOptions

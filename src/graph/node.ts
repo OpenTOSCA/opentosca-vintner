@@ -144,18 +144,23 @@ export default class Node extends Element {
         return {conditions, consistency: false, semantic: true}
     }
 
-    private isConditionAllowed(wrapper?: ConditionsWrapper) {
-        if (check.isUndefined(wrapper)) return false
+    // TODO: raw.default_condition
+    // TODO: raw.pruning
 
-        // TODO: have a ConditionsWrapper class to prevent default value assignment at different places ...
-        const isConsistency = wrapper.consistency ?? false
-        const isConsistencyAllowed = this.graph.options.default.nodeDefaultConsistencyCondition ?? false
-        const isSemantic = wrapper.semantic ?? true
-        const isSemanticAllowed = this.graph.options.default.nodeDefaultSemanticCondition ?? true
+    get defaultConsistencyCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultConsistencyCondition
+    }
 
-        return true
-        // TODO: enable this again
-        // return (isConsistency && isConsistencyAllowed) || (isSemantic && isSemanticAllowed)
+    get defaultSemanticCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.nodeConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
     // TODO: implement this pattern everywhere

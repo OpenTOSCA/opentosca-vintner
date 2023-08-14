@@ -73,6 +73,22 @@ export default class Property extends Element {
         return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyPruning)
     }
 
+    get defaultConsistencyCondition() {
+        return this.graph.options.default.propertyDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.graph.options.default.propertyDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.graph.options.pruning.propertyConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.graph.options.pruning.propertySemanticPruning
+    }
+
     // TODO: get type from type definition being part of the container type ...
     private _defaultCondition?: LogicExpression
     get defaultCondition() {

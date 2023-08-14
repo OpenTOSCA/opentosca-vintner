@@ -25,6 +25,11 @@ export default class Input extends Element {
     readonly pruningEnabled = false
     readonly defaultCondition = true
 
+    readonly defaultConsistencyCondition = true
+    readonly defaultSemanticCondition = true
+    readonly consistencyPruning = true
+    readonly semanticPruning = true
+
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))

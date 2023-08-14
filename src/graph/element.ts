@@ -1,6 +1,6 @@
 import * as check from '#check'
 import Import from '#graph/import'
-import {LogicExpression} from '#spec/variability'
+import {ConditionsWrapper, LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Graph from './graph'
@@ -76,6 +76,31 @@ export default abstract class Element {
     }
 
     abstract presenceCondition: LogicExpression
+
+    abstract defaultConsistencyCondition: boolean
+    abstract defaultSemanticCondition: boolean
+    abstract consistencyPruning: boolean
+    abstract semanticPruning: boolean
+    isConditionAllowed(wrapper?: ConditionsWrapper) {
+        if (check.isUndefined(wrapper)) return false
+
+        // TODO: have a ConditionsWrapper class to prevent default value assignment at different places?
+        // TODO. why is this false; since semantic is true
+        wrapper.consistency = wrapper.consistency ?? false
+        // TODO: why is this true; since type-specific will be most likely semantic
+        wrapper.semantic = wrapper.semantic ?? true
+
+        const consistency =
+            (this.defaultConsistencyCondition && this.defaultEnabled) ||
+            (this.consistencyPruning && this.pruningEnabled)
+
+        const semantic =
+            (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
+
+        // return true
+        // TODO: enable this again
+        return (wrapper.consistency && consistency) || (wrapper.semantic && semantic)
+    }
 
     abstract defaultCondition: LogicExpression
 

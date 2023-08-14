@@ -57,6 +57,22 @@ export default class Type extends Element {
         return Boolean(this.raw.pruning ?? this.graph.options.pruning.typePruning)
     }
 
+    get defaultConsistencyCondition() {
+        return this.graph.options.default.typeDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.graph.options.default.typeDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.graph.options.pruning.typeConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.graph.options.pruning.typeSemanticPruning
+    }
+
     get defaultCondition() {
         return this.container.presenceCondition
     }
