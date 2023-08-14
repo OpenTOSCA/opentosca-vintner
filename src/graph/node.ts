@@ -144,8 +144,11 @@ export default class Node extends Element {
         return {conditions, consistency: false, semantic: true}
     }
 
-    // TODO: raw.default_condition
-    // TODO: raw.pruning
+    // TODO: respect raw.default_condition everywhere
+    // TODO: respect raw.pruning everywhere
+
+    // TODO. introduce raw.consistency_pruning
+    // TODO. introduce raw.semantic_pruning
 
     get defaultConsistencyCondition() {
         return this.raw.default_condition ?? this.graph.options.default.nodeDefaultConsistencyCondition
