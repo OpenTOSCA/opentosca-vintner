@@ -54,23 +54,27 @@ export default class Type extends Element {
 
     get pruningEnabled() {
         if (check.isString(this.raw)) return this.graph.options.pruning.typePruning
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.typePruning)
+        return this.raw.pruning ?? this.graph.options.pruning.typePruning
     }
 
     get defaultConsistencyCondition() {
-        return this.graph.options.default.typeDefaultConsistencyCondition
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultConsistencyCondition
     }
 
     get defaultSemanticCondition() {
-        return this.graph.options.default.typeDefaultSemanticCondition
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultSemanticCondition
     }
 
     get consistencyPruning() {
-        return this.graph.options.pruning.typeConsistencyPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.graph.options.pruning.typeSemanticPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
     }
 
     getElementSpecificCondition() {
@@ -85,9 +89,7 @@ export default class Type extends Element {
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
-
         if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
-
         return this._presenceCondition
     }
 

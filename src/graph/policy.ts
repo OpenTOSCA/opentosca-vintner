@@ -44,19 +44,19 @@ export default class Policy extends Element {
     }
 
     get defaultConsistencyCondition() {
-        return this.graph.options.default.policyDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultConsistencyCondition
     }
 
     get defaultSemanticCondition() {
-        return this.graph.options.default.policyDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultSemanticCondition
     }
 
     get consistencyPruning() {
-        return this.graph.options.pruning.policyConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.policyConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.graph.options.pruning.policySemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.policySemanticPruning
     }
 
     getElementSpecificCondition() {

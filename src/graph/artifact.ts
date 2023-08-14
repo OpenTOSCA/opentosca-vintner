@@ -49,26 +49,29 @@ export default class Artifact extends Element {
     }
 
     get defaultConsistencyCondition() {
-        return this.graph.options.default.artifactDefaultConsistencyCondition
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultConsistencyCondition
     }
 
     get defaultSemanticCondition() {
-        return this.graph.options.default.artifactDefaultSemanticCondition
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultSemanticCondition
     }
 
     get consistencyPruning() {
-        return this.graph.options.pruning.artifactConsistencyPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.graph.options.pruning.artifactSemanticPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
     get defaultCondition() {
         return this.container.presenceCondition
     }
 
-    // TODO: introduce artifact_type_presence?
     getTypeSpecificCondition() {
         const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
         assert.isString(type)

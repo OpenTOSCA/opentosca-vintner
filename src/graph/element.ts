@@ -85,20 +85,17 @@ export default abstract class Element {
     isConditionAllowed(wrapper?: ConditionsWrapper) {
         if (check.isUndefined(wrapper)) return false
 
-        // TODO: have a ConditionsWrapper class to prevent default value assignment at different places?
-        // TODO. why is this false; since semantic is true
         wrapper.consistency = wrapper.consistency ?? false
-        // TODO: why is this true; since type-specific will be most likely semantic
-        wrapper.semantic = wrapper.semantic ?? true
-
-        const consistency =
+        const consistencyAllowed =
             (this.defaultConsistencyCondition && this.defaultEnabled) ||
             (this.consistencyPruning && this.pruningEnabled)
 
-        const semantic =
+        // Default is "true" since type-specific condition will likely be semantic
+        wrapper.semantic = wrapper.semantic ?? true
+        const semanticAllowed =
             (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
 
-        return (wrapper.consistency && consistency) || (wrapper.semantic && semantic)
+        return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
     }
 
     getTypeSpecificCondition(): ConditionsWrapper | undefined {

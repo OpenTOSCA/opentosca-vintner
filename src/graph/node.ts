@@ -145,12 +145,6 @@ export default class Node extends Element {
         return {conditions, consistency: false, semantic: true}
     }
 
-    // TODO: respect raw.default_condition everywhere
-    // TODO: respect raw.pruning everywhere
-
-    // TODO. introduce raw.consistency_pruning
-    // TODO. introduce raw.semantic_pruning
-
     get defaultConsistencyCondition() {
         return this.raw.default_condition ?? this.graph.options.default.nodeDefaultConsistencyCondition
     }
@@ -169,7 +163,6 @@ export default class Node extends Element {
 
     readonly defaultAlternativeCondition = undefined
 
-    // TODO: cant this be simplified?
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))

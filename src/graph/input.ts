@@ -25,8 +25,6 @@ export default class Input extends Element {
     readonly pruningEnabled = false
 
     getElementSpecificCondition() {
-        // TODO: which consistency?
-        // TODO: which semantic?
         return {conditions: true, consistency: true, semantic: true}
     }
 

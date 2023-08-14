@@ -91,19 +91,23 @@ export default class Relation extends Element {
     }
 
     get defaultConsistencyCondition() {
-        return this.graph.options.default.relationDefaultConsistencyCondition
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultConsistencyCondition
     }
 
     get defaultSemanticCondition() {
-        return this.graph.options.default.relationDefaultSemanticCondition
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultSemanticCondition
     }
 
     get consistencyPruning() {
-        return this.graph.options.pruning.relationConsistencyPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.graph.options.pruning.relationSemanticPruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
     }
 
     getTypeSpecificCondition() {
@@ -139,7 +143,6 @@ export default class Relation extends Element {
             throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
         })
 
-        // TODO. which consistency or semantic to chose
         return {conditions, consistency: true, semantic: false}
     }
 
