@@ -77,9 +77,7 @@ class PruningOptions {
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
-
-        const raw = serviceTemplate.topology_template?.variability?.options || {}
-        this.raw = raw
+        this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
         // Mode
         const mode = getResolvingMode(this.raw)
@@ -119,59 +117,62 @@ class PruningOptions {
             type_semantic_pruning: false,
         }
 
-        // Moded
-        const moded = propagate(base, [mode, this.raw])
-
-        // Chain
-        const chain: TPruningOptions[] = []
+        // Propagated
+        let propagated = propagate(base, [mode, this.raw])
 
         // Propagate pruning
-        if (moded.pruning) {
-            chain.push({
-                consistency_pruning: true,
-                semantic_pruning: true,
+        if (propagated.pruning) {
+            propagated = propagate(propagated, [
+                {
+                    consistency_pruning: true,
+                    semantic_pruning: true,
 
-                node_pruning: true,
-                relation_pruning: true,
-                policy_pruning: true,
-                group_pruning: true,
-                artifact_pruning: true,
-                property_pruning: true,
-                type_pruning: true,
-            })
+                    node_pruning: true,
+                    relation_pruning: true,
+                    policy_pruning: true,
+                    group_pruning: true,
+                    artifact_pruning: true,
+                    property_pruning: true,
+                    type_pruning: true,
+                },
+                this.raw,
+            ])
         }
 
         // Propagate consistency_pruning
-        if (moded.consistency_pruning) {
-            chain.push({
-                node_consistency_pruning: true,
-                relation_consistency_pruning: true,
-                policy_consistency_pruning: true,
-                group_consistency_pruning: true,
-                artifact_consistency_pruning: true,
-                property_consistency_pruning: true,
-                type_consistency_pruning: true,
-            })
+        if (propagated.consistency_pruning) {
+            propagated = propagate(propagated, [
+                {
+                    node_consistency_pruning: true,
+                    relation_consistency_pruning: true,
+                    policy_consistency_pruning: true,
+                    group_consistency_pruning: true,
+                    artifact_consistency_pruning: true,
+                    property_consistency_pruning: true,
+                    type_consistency_pruning: true,
+                },
+                this.raw,
+            ])
         }
 
         // Propagate semantic_pruning
-        if (moded.semantic_pruning) {
-            chain.push({
-                node_semantic_pruning: true,
-                relation_semantic_pruning: true,
-                policy_semantic_pruning: true,
-                group_semantic_pruning: true,
-                artifact_semantic_pruning: true,
-                property_semantic_pruning: true,
-                type_semantic_pruning: true,
-            })
+        if (propagated.semantic_pruning) {
+            propagated = propagate(propagated, [
+                {
+                    node_semantic_pruning: true,
+                    relation_semantic_pruning: true,
+                    policy_semantic_pruning: true,
+                    group_semantic_pruning: true,
+                    artifact_semantic_pruning: true,
+                    property_semantic_pruning: true,
+                    type_semantic_pruning: true,
+                },
+                this.raw,
+            ])
         }
 
         // Merge back original to keep overrides
-        chain.push(this.raw)
-
-        // Propagated
-        const propagated = propagate(moded, chain)
+        propagated = propagate(propagated, [this.raw])
 
         this.pruning = propagated.pruning
         this.consistencyPruning = propagated.consistency_pruning
@@ -289,59 +290,62 @@ class DefaultOptions {
             type_default_semantic_condition: false,
         }
 
-        // Moded
-        const moded = propagate(base, [mode, this.raw])
-
-        // Chain
-        const chain: TDefaultOptions[] = []
+        // Propagated
+        let propagated = propagate(base, [mode, this.raw])
 
         // Propagate default_condition
-        if (moded.default_condition) {
-            chain.push({
-                default_consistency_condition: true,
-                default_semantic_condition: true,
+        if (propagated.default_condition) {
+            propagated = propagate(propagated, [
+                {
+                    default_consistency_condition: true,
+                    default_semantic_condition: true,
 
-                node_default_condition: true,
-                relation_default_condition: true,
-                policy_default_condition: true,
-                group_default_condition: true,
-                artifact_default_condition: true,
-                property_default_condition: true,
-                type_default_condition: true,
-            })
+                    node_default_condition: true,
+                    relation_default_condition: true,
+                    policy_default_condition: true,
+                    group_default_condition: true,
+                    artifact_default_condition: true,
+                    property_default_condition: true,
+                    type_default_condition: true,
+                },
+                this.raw,
+            ])
         }
 
         // Propagate default_consistency_condition
-        if (moded.default_consistency_condition) {
-            chain.push({
-                node_default_consistency_condition: true,
-                relation_default_consistency_condition: true,
-                policy_default_consistency_condition: true,
-                group_default_consistency_condition: true,
-                artifact_default_consistency_condition: true,
-                property_default_consistency_condition: true,
-                type_default_consistency_condition: true,
-            })
+        if (propagated.default_consistency_condition) {
+            propagated = propagate(propagated, [
+                {
+                    node_default_consistency_condition: true,
+                    relation_default_consistency_condition: true,
+                    policy_default_consistency_condition: true,
+                    group_default_consistency_condition: true,
+                    artifact_default_consistency_condition: true,
+                    property_default_consistency_condition: true,
+                    type_default_consistency_condition: true,
+                },
+                this.raw,
+            ])
         }
 
         // Propagate default_semantic_condition
-        if (moded.default_semantic_condition) {
-            chain.push({
-                node_default_semantic_condition: true,
-                relation_default_semantic_condition: true,
-                policy_default_semantic_condition: true,
-                group_default_semantic_condition: true,
-                artifact_default_semantic_condition: true,
-                property_default_semantic_condition: true,
-                type_default_semantic_condition: true,
-            })
+        if (propagated.default_semantic_condition) {
+            propagated = propagate(propagated, [
+                {
+                    node_default_semantic_condition: true,
+                    relation_default_semantic_condition: true,
+                    policy_default_semantic_condition: true,
+                    group_default_semantic_condition: true,
+                    artifact_default_semantic_condition: true,
+                    property_default_semantic_condition: true,
+                    type_default_semantic_condition: true,
+                },
+                this.raw,
+            ])
         }
 
         // Merge back original to keep overrides
-        chain.push(this.raw)
-
-        // Propagated
-        const propagated = propagate(moded, chain)
+        propagated = propagate(propagated, [this.raw])
 
         this.defaultCondition = propagated.default_condition
         this.defaultConsistencyCondition = propagated.default_consistency_condition
@@ -398,9 +402,6 @@ class ChecksOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        this.raw.consistency_checks = this.raw.consistency_checks ?? true
-        assert.isBoolean(this.raw.consistency_checks)
-
         // Base
         const base: Required<TChecksOptions> = {
             consistency_checks: true,
@@ -416,33 +417,30 @@ class ChecksOptions {
             ambiguous_type_consistency_check: true,
         }
 
-        // Moded
-        const moded = propagate(base, [this.raw])
-
-        // Chain
-        const chain: TChecksOptions[] = []
+        // Propagated
+        let propagated = propagate(base, [this.raw])
 
         // Propagate consistency_checks
-        if (!moded.consistency_checks) {
-            chain.push({
-                relation_source_consistency_check: false,
-                relation_target_consistency_check: false,
-                ambiguous_hosting_consistency_check: false,
-                expected_hosting_consistency_check: false,
-                missing_artifact_parent_consistency_check: false,
-                ambiguous_artifact_consistency_check: false,
-                missing_property_parent_consistency_check: false,
-                ambiguous_property_consistency_check: false,
-                missing_type_container_consistency_check: false,
-                ambiguous_type_consistency_check: false,
-            })
+        if (!propagated.consistency_checks) {
+            propagated = propagate(propagated, [
+                {
+                    relation_source_consistency_check: false,
+                    relation_target_consistency_check: false,
+                    ambiguous_hosting_consistency_check: false,
+                    expected_hosting_consistency_check: false,
+                    missing_artifact_parent_consistency_check: false,
+                    ambiguous_artifact_consistency_check: false,
+                    missing_property_parent_consistency_check: false,
+                    ambiguous_property_consistency_check: false,
+                    missing_type_container_consistency_check: false,
+                    ambiguous_type_consistency_check: false,
+                },
+                this.raw,
+            ])
         }
 
-        // Merge back original to keep overrides
-        chain.push(this.raw)
-
         // Propagated
-        const propagated = propagate(moded, chain)
+        propagated = propagate(propagated, [this.raw])
 
         this.relationSourceConsistencyCheck = propagated.relation_source_consistency_check
         this.relationTargetConsistencyCheck = propagated.relation_target_consistency_check
@@ -470,7 +468,7 @@ class SolverOptions {
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
         const optimization = this.raw.optimization ?? 'min'
-        if (check.isDefined(optimization) && !check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+        if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
 
