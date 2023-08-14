@@ -5,10 +5,8 @@ import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
     ResolverModes,
-    ChecksOptions as TChecksOptions,
     VariabilityOptions,
 } from '#spec/variability'
-import _ from 'lodash'
 
 export class Options {
     private readonly serviceTemplate: ServiceTemplate
@@ -327,6 +325,8 @@ class ChecksOptions {
     private readonly serviceTemplate: ServiceTemplate
     private readonly raw: VariabilityOptions
 
+    consistencyChecks: boolean
+
     relationSourceConsistencyCheck: boolean
     relationTargetConsistencyCheck: boolean
     ambiguousHostingConsistencyCheck: boolean
@@ -342,53 +342,41 @@ class ChecksOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        // Base
-        const base: Required<TChecksOptions> = {
-            consistency_checks: true,
-            relation_source_consistency_check: true,
-            relation_target_consistency_check: true,
-            ambiguous_hosting_consistency_check: true,
-            expected_hosting_consistency_check: true,
-            missing_artifact_parent_consistency_check: true,
-            ambiguous_artifact_consistency_check: true,
-            missing_property_parent_consistency_check: true,
-            ambiguous_property_consistency_check: true,
-            missing_type_container_consistency_check: true,
-            ambiguous_type_consistency_check: true,
-        }
+        this.consistencyChecks = this.raw.consistency_checks ?? true
+        assert.isBoolean(this.consistencyChecks)
 
-        // Propagated
-        let propagated = propagate(base, [this.raw])
+        this.relationSourceConsistencyCheck = this.raw.relation_source_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.relationSourceConsistencyCheck)
 
-        // Propagate consistency_checks
-        if (!propagated.consistency_checks) {
-            propagated = propagate(propagated, [
-                {
-                    relation_source_consistency_check: false,
-                    relation_target_consistency_check: false,
-                    ambiguous_hosting_consistency_check: false,
-                    expected_hosting_consistency_check: false,
-                    missing_artifact_parent_consistency_check: false,
-                    ambiguous_artifact_consistency_check: false,
-                    missing_property_parent_consistency_check: false,
-                    ambiguous_property_consistency_check: false,
-                    missing_type_container_consistency_check: false,
-                    ambiguous_type_consistency_check: false,
-                },
-                this.raw,
-            ])
-        }
+        this.relationTargetConsistencyCheck = this.raw.relation_target_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.relationTargetConsistencyCheck)
 
-        this.relationSourceConsistencyCheck = propagated.relation_source_consistency_check
-        this.relationTargetConsistencyCheck = propagated.relation_target_consistency_check
-        this.ambiguousHostingConsistencyCheck = propagated.ambiguous_hosting_consistency_check
-        this.expectedHostingConsistencyCheck = propagated.expected_hosting_consistency_check
-        this.missingArtifactParentConsistencyCheck = propagated.missing_artifact_parent_consistency_check
-        this.ambiguousArtifactConsistencyCheck = propagated.ambiguous_artifact_consistency_check
-        this.missingPropertyParentConsistencyCheck = propagated.missing_property_parent_consistency_check
-        this.ambiguousPropertyConsistencyCheck = propagated.ambiguous_property_consistency_check
-        this.missingTypeContainerConsistencyCheck = propagated.missing_type_container_consistency_check
-        this.ambiguousTypeConsistencyCheck = propagated.ambiguous_type_consistency_check
+        this.ambiguousHostingConsistencyCheck = this.raw.ambiguous_hosting_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.ambiguousHostingConsistencyCheck)
+
+        this.expectedHostingConsistencyCheck = this.raw.expected_hosting_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.expectedHostingConsistencyCheck)
+
+        this.missingArtifactParentConsistencyCheck =
+            this.raw.missing_artifact_parent_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.missingArtifactParentConsistencyCheck)
+
+        this.ambiguousArtifactConsistencyCheck = this.raw.ambiguous_artifact_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.ambiguousArtifactConsistencyCheck)
+
+        this.missingPropertyParentConsistencyCheck =
+            this.raw.missing_property_parent_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.missingPropertyParentConsistencyCheck)
+
+        this.ambiguousPropertyConsistencyCheck = this.raw.ambiguous_property_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.ambiguousPropertyConsistencyCheck)
+
+        this.missingTypeContainerConsistencyCheck =
+            this.raw.missing_type_container_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.missingTypeContainerConsistencyCheck)
+
+        this.ambiguousTypeConsistencyCheck = this.raw.ambiguous_type_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.ambiguousTypeConsistencyCheck)
     }
 }
 
@@ -420,8 +408,4 @@ function getResolvingMode(raw: VariabilityOptions) {
     const map = ResolverModes[mode]
     assert.isDefined(map, `Resolving mode "${mode}" unknown`)
     return map
-}
-
-function propagate<T>(base: Required<T>, chain: T[]): Required<T> {
-    return _.merge(_.clone(base), ...chain.map(_.clone))
 }
