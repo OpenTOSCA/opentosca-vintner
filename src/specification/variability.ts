@@ -115,7 +115,6 @@ export type ChecksOptions = {
     ambiguous_type_consistency_check?: boolean
 }
 
-// TODO: update these
 export const ResolverModes: {[key: string]: VariabilityOptions} = {
     strict: {},
     'consistent-strict': {

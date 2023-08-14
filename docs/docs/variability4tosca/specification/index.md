@@ -130,17 +130,32 @@ _This is an experimental feature._
 
 The following options are used to configure the default conditions of elements.
 
-| Keyname                         | Mandatory | Type                                                                                                  | Default           | Description                                    |
-|---------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|------------------------------------------------|
-| default_condition               | false     | Boolean                                                                                               | false             | Enable all default conditions.                 |
-| node_default_condition          | false     | Boolean                                                                                               | false             | Enable default condition for nodes.            |
-| node_default_condition_mode     | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.     |
-| relation_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for relations.        |
-| relation_default_condition_mode | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations. |
-| policy_default_condition        | false     | Boolean                                                                                               | false             | Enable default condition for policies.         |
-| group_default_condition         | false     | Boolean                                                                                               | false             | Enable default condition for groups.           |
-| artifact_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for artifacts.        |
-| property_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for properties.       |
+| Keyname                                | Mandatory | Type                                                                                                  | Default           | Description                                                         |
+|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|---------------------------------------------------------------------|
+| default_condition                      | false     | Boolean                                                                                               | false             | Enable all default conditions (consistency and semantic).           |
+| node_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for nodes (consistency and semantic).      |
+| node_default_condition_mode            | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.                          |
+| node_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for nodes.                     |
+| node_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                        |
+| relation_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).  |
+| relation_default_condition_mode        | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                      |
+| relation_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default condition for relations.                             |
+| relation_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic consistency condition for relations.        |
+| policy_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).   |
+| policy_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                  |
+| policy_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                     |
+| group_default_condition                | false     | Boolean                                                                                               | false             | Enable default condition for groups (consistency and semantic).     |
+| group_default_consistency_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                    |
+| group_default_semantic_condition       | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                       |
+| artifact_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).  |
+| artifact_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                 |
+| artifact_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                    |
+| property_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic). |
+| property_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for properties.                |
+| property_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for properties.                   |
+| type_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for types (consistency and semantic).      |
+| type_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for types.                     |
+| type_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for types.                        |
 
 ### Pruning Options
 
@@ -148,15 +163,30 @@ _This is an experimental feature._
 
 The following options are used to configure the pruning of elements.
 
-| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
-|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| pruning                                   | false     | Boolean                                   | false         | Enable pruning of all elements.                                                                   |
-| node_pruning                              | false     | Boolean                                   | false         | Enable pruning of nodes.                                                                          |
-| relation_pruning                          | false     | Boolean                                   | false         | Enable pruning of relations.                                                                      |
-| policy_pruning                            | false     | Boolean                                   | false         | Enable pruning of policies.                                                                       |
-| group_pruning                             | false     | Boolean                                   | false         | Enable pruning of groups.                                                                         |
-| artifact_pruning                          | false     | Boolean                                   | false         | Enable pruning of artifacts.                                                                      |
-| property_pruning                          | false     | Boolean                                   | false         | Enable pruning of properties.                                                                     |
+| Keyname                      | Mandatory | Type                                      | Default       | Description                                                 |
+|------------------------------|-----------|-------------------------------------------|---------------|-------------------------------------------------------------|
+| pruning                      | false     | Boolean                                   | false         | Enable pruning of all elements  (consistency and semantic). |
+| node_pruning                 | false     | Boolean                                   | false         | Enable pruning of nodes (consistency and semantic).         |
+| node_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of nodes.                        |
+| node_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of nodes.                           |
+| relation_pruning             | false     | Boolean                                   | false         | Enable pruning of relations (consistency and semantic).     |
+| relation_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of relations.                    |
+| relation_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of relations.                       |
+| policy_pruning               | false     | Boolean                                   | false         | Enable pruning of policies (consistency and semantic).      |
+| policy_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of policies.                     |
+| policy_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of policies.                        |
+| group_pruning                | false     | Boolean                                   | false         | Enable pruning of groups (consistency and semantic).        |
+| group_consistency_pruning    | false     | Boolean                                   | false         | Enable consistency pruning of groups.                       |
+| group_semantic_pruning       | false     | Boolean                                   | false         | Enable semantic pruning of groups.                          |
+| artifact_pruning             | false     | Boolean                                   | false         | Enable pruning of artifacts (consistency and semantic).     |
+| artifact_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of artifacts.                    |
+| artifact_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of artifacts.                       |
+| property_pruning             | false     | Boolean                                   | false         | Enable pruning of properties (consistency and semantic).    |
+| property_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of properties.                   |
+| property_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of properties.                      |
+| type_pruning                 | false     | Boolean                                   | false         | Enable pruning of types (consistency and semantic).         |
+| type_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of types.                        |
+| type_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of types.                           |
 
 ### Checks Options
 
@@ -193,15 +223,11 @@ _This is an experimental feature._
 
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-| Element  | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
-|----------|--------|-------------------|------------------|---------|---------------|-----------|
-| Node     | false  | false             | false            | default | default       | pruning   |
-| Relation | false  | default           | pruning          | default | pruning       | pruning   |
-| Property | false  | default           | pruning          | default | pruning       | pruning   |
-| Artifact | false  | default           | pruning          | default | pruning       | pruning   |
-| Type     | false  | default           | pruning          | default | pruning       | pruning   |
-| Group    | false  | false             | false            | default | pruning       | pruning   |
-| Policy   | false  | false             | false            | default | pruning       | pruning   |
+- `strict`: no default or pruning conditions are enabled
+- `consistent-strict`: all default consistency conditions are enabled
+- `consitent-loose`: consistency pruning is enabled everywhere
+- `default`: all default conditions are enabled (consistency and semantic)
+- `loose`: pruning conditions is enabled everywhere (consistency and semantic)
 
 
 ## Default Conditions
