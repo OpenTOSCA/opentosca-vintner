@@ -126,7 +126,7 @@ class PruningOptions {
         const chain: TPruningOptions[] = []
 
         // Propagate pruning
-        if (check.isTrue(moded.pruning)) {
+        if (moded.pruning) {
             chain.push({
                 consistency_pruning: true,
                 semantic_pruning: true,
@@ -142,7 +142,7 @@ class PruningOptions {
         }
 
         // Propagate consistency_pruning
-        if (check.isTrue(moded.consistency_pruning)) {
+        if (moded.consistency_pruning) {
             chain.push({
                 node_consistency_pruning: true,
                 relation_consistency_pruning: true,
@@ -155,7 +155,7 @@ class PruningOptions {
         }
 
         // Propagate semantic_pruning
-        if (check.isTrue(moded.semantic_pruning)) {
+        if (moded.semantic_pruning) {
             chain.push({
                 node_semantic_pruning: true,
                 relation_semantic_pruning: true,
@@ -296,7 +296,7 @@ class DefaultOptions {
         const chain: TDefaultOptions[] = []
 
         // Propagate default_condition
-        if (check.isTrue(moded.default_condition)) {
+        if (moded.default_condition) {
             chain.push({
                 default_consistency_condition: true,
                 default_semantic_condition: true,
@@ -312,7 +312,7 @@ class DefaultOptions {
         }
 
         // Propagate default_consistency_condition
-        if (check.isTrue(moded.default_consistency_condition)) {
+        if (moded.default_consistency_condition) {
             chain.push({
                 node_default_consistency_condition: true,
                 relation_default_consistency_condition: true,
@@ -325,7 +325,7 @@ class DefaultOptions {
         }
 
         // Propagate default_semantic_condition
-        if (check.isTrue(moded.default_semantic_condition)) {
+        if (moded.default_semantic_condition) {
             chain.push({
                 node_default_semantic_condition: true,
                 relation_default_semantic_condition: true,
@@ -401,23 +401,48 @@ class ChecksOptions {
         this.raw.consistency_checks = this.raw.consistency_checks ?? true
         assert.isBoolean(this.raw.consistency_checks)
 
-        const propagated = propagateOld<TChecksOptions>({
-            base: {
-                consistency_checks: true,
-                relation_source_consistency_check: true,
-                relation_target_consistency_check: true,
-                ambiguous_hosting_consistency_check: true,
-                expected_hosting_consistency_check: true,
-                missing_artifact_parent_consistency_check: true,
-                ambiguous_artifact_consistency_check: true,
-                missing_property_parent_consistency_check: true,
-                ambiguous_property_consistency_check: true,
-                missing_type_container_consistency_check: true,
-                ambiguous_type_consistency_check: true,
-            },
-            flag: this.raw.consistency_checks,
-            options: this.raw,
-        })
+        // Base
+        const base: Required<TChecksOptions> = {
+            consistency_checks: true,
+            relation_source_consistency_check: true,
+            relation_target_consistency_check: true,
+            ambiguous_hosting_consistency_check: true,
+            expected_hosting_consistency_check: true,
+            missing_artifact_parent_consistency_check: true,
+            ambiguous_artifact_consistency_check: true,
+            missing_property_parent_consistency_check: true,
+            ambiguous_property_consistency_check: true,
+            missing_type_container_consistency_check: true,
+            ambiguous_type_consistency_check: true,
+        }
+
+        // Moded
+        const moded = propagate(base, [this.raw])
+
+        // Chain
+        const chain: TChecksOptions[] = []
+
+        // Propagate consistency_checks
+        if (!moded.consistency_checks) {
+            chain.push({
+                relation_source_consistency_check: false,
+                relation_target_consistency_check: false,
+                ambiguous_hosting_consistency_check: false,
+                expected_hosting_consistency_check: false,
+                missing_artifact_parent_consistency_check: false,
+                ambiguous_artifact_consistency_check: false,
+                missing_property_parent_consistency_check: false,
+                ambiguous_property_consistency_check: false,
+                missing_type_container_consistency_check: false,
+                ambiguous_type_consistency_check: false,
+            })
+        }
+
+        // Merge back original to keep overrides
+        chain.push(this.raw)
+
+        // Propagated
+        const propagated = propagate(moded, chain)
 
         this.relationSourceConsistencyCheck = propagated.relation_source_consistency_check
         this.relationTargetConsistencyCheck = propagated.relation_target_consistency_check
@@ -457,22 +482,4 @@ class SolverOptions {
 
 function propagate<T>(base: Required<T>, chain: T[]): Required<T> {
     return _.merge(_.clone(base), ...chain.map(_.clone))
-}
-
-// TODO: remove this
-function propagateOld<T>(data: {base: Required<T>; flag?: boolean; mode?: T; options: T}) {
-    let result = _.clone(data.base)
-
-    if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
-
-    if (check.isDefined(data.flag)) {
-        // @ts-ignore
-        for (const key of Object.keys(data.base)) {
-            // @ts-ignore
-            result[key] = data.flag
-        }
-    }
-
-    result = _.merge(result, _.clone(data.options))
-    return result
 }
