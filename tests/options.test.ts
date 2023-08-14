@@ -9,29 +9,274 @@ describe('options', () => {
             topology_template: {variability: {options: {mode: 'strict'}, inputs: {}}},
         })
 
-        expect(graph.options.default).to.deep.equal({
-            mode: 'strict',
-            default_condition: false,
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
+    })
+
+    it('mode: consistent-strict', () => {
+        const graph = new Graph({
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            topology_template: {variability: {options: {mode: 'consistent-strict'}, inputs: {}}},
         })
 
-        expect(graph.options.pruning).to.deep.equal({
-            mode: 'strict',
-            pruning: false,
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
+        expect(graph.options.default.defaultCondition).to.be.true
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.true
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
+    })
+
+    it('mode: consistent-loose', () => {
+        const graph = new Graph({
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            topology_template: {variability: {options: {mode: 'consistent-loose'}, inputs: {}}},
         })
+
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.true
+
+        expect(graph.options.pruning.nodePruning).to.be.true
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.true
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.true
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.true
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.true
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.true
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.true
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.true
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.true
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.true
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
+    })
+
+    it('mode: default', () => {
+        const graph = new Graph({
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            topology_template: {variability: {options: {mode: 'default'}, inputs: {}}},
+        })
+
+        expect(graph.options.default.defaultCondition).to.be.true
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.true
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('mode: loose', () => {
@@ -40,29 +285,67 @@ describe('options', () => {
             topology_template: {variability: {options: {mode: 'loose'}, inputs: {}}},
         })
 
-        expect(graph.options.default).to.deep.equal({
-            mode: 'loose',
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
 
-        expect(graph.options.pruning).to.deep.equal({
-            mode: 'loose',
-            pruning: true,
-            node_pruning: true,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        })
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.true
+
+        expect(graph.options.pruning.nodePruning).to.be.true
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.relationPruning).to.be.true
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.true
+        expect(graph.options.pruning.relationSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.policyPruning).to.be.true
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.policySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.groupPruning).to.be.true
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.true
+        expect(graph.options.pruning.groupSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.artifactPruning).to.be.true
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.true
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.propertyPruning).to.be.true
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.propertySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.typePruning).to.be.true
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.typeSemanticPruning).to.be.true
     })
 
     it('default_condition: false', () => {
@@ -71,16 +354,67 @@ describe('options', () => {
             topology_template: {variability: {options: {default_condition: false}, inputs: {}}},
         })
 
-        expect(graph.options.default).to.deep.equal({
-            default_condition: false,
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('default_condition: true', () => {
@@ -89,16 +423,67 @@ describe('options', () => {
             topology_template: {variability: {options: {default_condition: true}, inputs: {}}},
         })
 
-        expect(graph.options.default).to.deep.equal({
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        })
+        expect(graph.options.default.defaultCondition).to.be.true
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.true
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('pruning: true', () => {
@@ -107,16 +492,67 @@ describe('options', () => {
             topology_template: {variability: {options: {pruning: true}, inputs: {}}},
         })
 
-        expect(graph.options.pruning).to.deep.equal({
-            pruning: true,
-            node_pruning: true,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.true
+
+        expect(graph.options.pruning.nodePruning).to.be.true
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.relationPruning).to.be.true
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.true
+        expect(graph.options.pruning.relationSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.policyPruning).to.be.true
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.policySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.groupPruning).to.be.true
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.true
+        expect(graph.options.pruning.groupSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.artifactPruning).to.be.true
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.true
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.propertyPruning).to.be.true
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.propertySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.typePruning).to.be.true
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.typeSemanticPruning).to.be.true
     })
 
     it('pruning: false', () => {
@@ -125,16 +561,67 @@ describe('options', () => {
             topology_template: {variability: {options: {pruning: false}, inputs: {}}},
         })
 
-        expect(graph.options.pruning).to.deep.equal({
-            pruning: false,
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('strict override: default_condition true', () => {
@@ -143,36 +630,67 @@ describe('options', () => {
             topology_template: {variability: {options: {mode: 'strict', default_condition: true}, inputs: {}}},
         })
 
-        expect(graph.options.default).to.deep.equal({
-            mode: 'strict',
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        })
-    })
+        expect(graph.options.default.defaultCondition).to.be.true
 
-    it('strict override: default_condition false', () => {
-        const graph = new Graph({
-            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'loose', default_condition: false}, inputs: {}}},
-        })
+        expect(graph.options.default.nodeDefaultCondition).to.be.true
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.true
 
-        expect(graph.options.default).to.deep.equal({
-            mode: 'loose',
-            default_condition: false,
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        })
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('strict override: pruning true', () => {
@@ -181,36 +699,135 @@ describe('options', () => {
             topology_template: {variability: {options: {mode: 'strict', pruning: true}, inputs: {}}},
         })
 
-        expect(graph.options.pruning).to.deep.equal({
-            mode: 'strict',
-            pruning: true,
-            node_pruning: true,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.true
+
+        expect(graph.options.pruning.nodePruning).to.be.true
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.relationPruning).to.be.true
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.true
+        expect(graph.options.pruning.relationSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.policyPruning).to.be.true
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.policySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.groupPruning).to.be.true
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.true
+        expect(graph.options.pruning.groupSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.artifactPruning).to.be.true
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.true
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.true
+
+        expect(graph.options.pruning.propertyPruning).to.be.true
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.true
+        expect(graph.options.pruning.propertySemanticPruning).to.be.true
+
+        expect(graph.options.pruning.typePruning).to.be.true
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.true
+        expect(graph.options.pruning.typeSemanticPruning).to.be.true
     })
 
-    it('strict override: pruning false', () => {
+    it('loose override: pruning false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
             topology_template: {variability: {options: {mode: 'loose', pruning: false}, inputs: {}}},
         })
 
-        expect(graph.options.pruning).to.deep.equal({
-            mode: 'loose',
-            pruning: false,
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        })
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('default_condition override: node_default_condition false', () => {
@@ -221,16 +838,67 @@ describe('options', () => {
             },
         })
 
-        expect(graph.options.default).to.deep.equal({
-            default_condition: true,
-            node_default_condition: false,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        })
+        expect(graph.options.default.defaultCondition).to.be.true
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
     it('default_condition override: node_default_condition true', () => {
@@ -241,15 +909,144 @@ describe('options', () => {
             },
         })
 
-        expect(graph.options.default).to.deep.equal({
-            default_condition: false,
-            node_default_condition: true,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
+        expect(graph.options.default.defaultCondition).to.be.false
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.true
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.relationDefaultCondition).to.be.false
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.policyDefaultCondition).to.be.false
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.groupDefaultCondition).to.be.false
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.false
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.false
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.default.typeDefaultCondition).to.be.false
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
+    })
+
+    it('default_condition, node_default_condition override: node_default_semantic_condition true', () => {
+        const graph = new Graph({
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            topology_template: {
+                variability: {
+                    options: {
+                        default_condition: true,
+                        node_default_condition: false,
+                        node_default_semantic_condition: true,
+                    },
+                    inputs: {},
+                },
+            },
         })
+
+        expect(graph.options.default.defaultCondition).to.be.true
+
+        expect(graph.options.default.nodeDefaultCondition).to.be.false
+        expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
+        expect(graph.options.default.nodeDefaultConsistencyCondition).to.be.false
+        expect(graph.options.default.nodeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.relationDefaultCondition).to.be.true
+        expect(graph.options.default.relationDefaultConditionMode).to.equal('source-target')
+        expect(graph.options.default.relationDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.relationDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.policyDefaultCondition).to.be.true
+        expect(graph.options.default.policyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.policyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.groupDefaultCondition).to.be.true
+        expect(graph.options.default.groupDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.groupDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.artifactDefaultCondition).to.be.true
+        expect(graph.options.default.artifactDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.artifactDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.propertyDefaultCondition).to.be.true
+        expect(graph.options.default.propertyDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.propertyDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.default.typeDefaultCondition).to.be.true
+        expect(graph.options.default.typeDefaultConsistencyCondition).to.be.true
+        expect(graph.options.default.typeDefaultSemanticCondition).to.be.true
+
+        expect(graph.options.pruning.pruning).to.be.false
+
+        expect(graph.options.pruning.nodePruning).to.be.false
+        expect(graph.options.pruning.nodeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.nodeSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.relationPruning).to.be.false
+        expect(graph.options.pruning.relationConsistencyPruning).to.be.false
+        expect(graph.options.pruning.relationSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.policyPruning).to.be.false
+        expect(graph.options.pruning.policyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.policySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.groupPruning).to.be.false
+        expect(graph.options.pruning.groupConsistencyPruning).to.be.false
+        expect(graph.options.pruning.groupSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.artifactPruning).to.be.false
+        expect(graph.options.pruning.artifactConsistencyPruning).to.be.false
+        expect(graph.options.pruning.artifactSemanticPruning).to.be.false
+
+        expect(graph.options.pruning.propertyPruning).to.be.false
+        expect(graph.options.pruning.propertyConsistencyPruning).to.be.false
+        expect(graph.options.pruning.propertySemanticPruning).to.be.false
+
+        expect(graph.options.pruning.typePruning).to.be.false
+        expect(graph.options.pruning.typeConsistencyPruning).to.be.false
+        expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 })

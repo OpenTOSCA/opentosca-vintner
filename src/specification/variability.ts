@@ -35,8 +35,6 @@ export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
     default_condition?: boolean
-    default_consistency_condition?: boolean
-    default_semantic_condition?: boolean
 
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
@@ -117,25 +115,31 @@ export type ChecksOptions = {
     ambiguous_type_consistency_check?: boolean
 }
 
+// TODO: update these
 export const ResolverModes: {[key: string]: VariabilityOptions} = {
     strict: {},
     'consistent-strict': {
         default_condition: true,
-        default_consistency_condition: true,
-        default_semantic_condition: false,
+        node_default_semantic_condition: false,
+        relation_default_semantic_condition: false,
+        policy_default_semantic_condition: false,
+        group_default_semantic_condition: false,
+        artifact_default_semantic_condition: false,
+        property_default_semantic_condition: false,
+        type_default_semantic_condition: false,
     },
     'consistent-loose': {
         pruning: true,
-        consistency_pruning: true,
-        semantic_pruning: false,
+        node_semantic_pruning: false,
+        relation_semantic_pruning: false,
+        policy_semantic_pruning: false,
+        group_semantic_pruning: false,
+        artifact_semantic_pruning: false,
+        property_semantic_pruning: false,
+        type_semantic_pruning: false,
     },
     default: {
         default_condition: true,
-    },
-    'default-loose': {
-        pruning: true,
-        consistency_pruning: true,
-        semantic_pruning: false,
     },
     loose: {
         pruning: true,

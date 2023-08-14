@@ -6,8 +6,6 @@ import {
     RelationDefaultConditionMode,
     ResolverModes,
     ChecksOptions as TChecksOptions,
-    DefaultOptions as TDefaultOptions,
-    PruningOptions as TPruningOptions,
     VariabilityOptions,
 } from '#spec/variability'
 import _ from 'lodash'
@@ -32,189 +30,11 @@ export class Options {
     }
 }
 
-function getResolvingMode(raw: VariabilityOptions) {
-    const mode = raw.mode ?? 'strict'
-    const map = ResolverModes[mode]
-    assert.isDefined(map, `Resolving mode "${mode}" unknown`)
-    return map
-}
-
-class PruningOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
-
-    pruning: boolean
-    consistencyPruning: boolean
-    semanticPruning: boolean
-
-    nodePruning: boolean
-    nodeConsistencyPruning: boolean
-    nodeSemanticPruning: boolean
-
-    relationPruning: boolean
-    relationConsistencyPruning: boolean
-    relationSemanticPruning: boolean
-
-    policyPruning: boolean
-    policyConsistencyPruning: boolean
-    policySemanticPruning: boolean
-
-    groupPruning: boolean
-    groupConsistencyPruning: boolean
-    groupSemanticPruning: boolean
-
-    artifactPruning: boolean
-    artifactConsistencyPruning: boolean
-    artifactSemanticPruning: boolean
-
-    propertyPruning: boolean
-    propertyConsistencyPruning: boolean
-    propertySemanticPruning: boolean
-
-    typePruning: boolean
-    typeConsistencyPruning: boolean
-    typeSemanticPruning: boolean
-
-    constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
-
-        // Mode
-        const mode = getResolvingMode(this.raw)
-
-        // Base
-        const base: Required<TPruningOptions> = {
-            pruning: false,
-            consistency_pruning: false,
-            semantic_pruning: false,
-
-            node_pruning: false,
-            node_consistency_pruning: false,
-            node_semantic_pruning: false,
-
-            relation_pruning: false,
-            relation_consistency_pruning: false,
-            relation_semantic_pruning: false,
-
-            policy_pruning: false,
-            policy_consistency_pruning: false,
-            policy_semantic_pruning: false,
-
-            group_pruning: false,
-            group_consistency_pruning: false,
-            group_semantic_pruning: false,
-
-            artifact_pruning: false,
-            artifact_consistency_pruning: false,
-            artifact_semantic_pruning: false,
-
-            property_pruning: false,
-            property_consistency_pruning: false,
-            property_semantic_pruning: false,
-
-            type_pruning: false,
-            type_consistency_pruning: false,
-            type_semantic_pruning: false,
-        }
-
-        // Propagated
-        let propagated = propagate(base, [mode, this.raw])
-
-        // Propagate pruning
-        if (propagated.pruning) {
-            propagated = propagate(propagated, [
-                {
-                    consistency_pruning: true,
-                    semantic_pruning: true,
-
-                    node_pruning: true,
-                    relation_pruning: true,
-                    policy_pruning: true,
-                    group_pruning: true,
-                    artifact_pruning: true,
-                    property_pruning: true,
-                    type_pruning: true,
-                },
-                this.raw,
-            ])
-        }
-
-        // Propagate consistency_pruning
-        if (propagated.consistency_pruning) {
-            propagated = propagate(propagated, [
-                {
-                    node_consistency_pruning: true,
-                    relation_consistency_pruning: true,
-                    policy_consistency_pruning: true,
-                    group_consistency_pruning: true,
-                    artifact_consistency_pruning: true,
-                    property_consistency_pruning: true,
-                    type_consistency_pruning: true,
-                },
-                this.raw,
-            ])
-        }
-
-        // Propagate semantic_pruning
-        if (propagated.semantic_pruning) {
-            propagated = propagate(propagated, [
-                {
-                    node_semantic_pruning: true,
-                    relation_semantic_pruning: true,
-                    policy_semantic_pruning: true,
-                    group_semantic_pruning: true,
-                    artifact_semantic_pruning: true,
-                    property_semantic_pruning: true,
-                    type_semantic_pruning: true,
-                },
-                this.raw,
-            ])
-        }
-
-        // Merge back original to keep overrides
-        propagated = propagate(propagated, [this.raw])
-
-        this.pruning = propagated.pruning
-        this.consistencyPruning = propagated.consistency_pruning
-        this.semanticPruning = propagated.semantic_pruning
-
-        this.nodePruning = propagated.node_pruning
-        this.nodeConsistencyPruning = propagated.node_consistency_pruning
-        this.nodeSemanticPruning = propagated.node_semantic_pruning
-
-        this.relationPruning = propagated.relation_pruning
-        this.relationConsistencyPruning = propagated.relation_consistency_pruning
-        this.relationSemanticPruning = propagated.relation_semantic_pruning
-
-        this.policyPruning = propagated.policy_pruning
-        this.policyConsistencyPruning = propagated.policy_consistency_pruning
-        this.policySemanticPruning = propagated.policy_semantic_pruning
-
-        this.groupPruning = propagated.group_pruning
-        this.groupConsistencyPruning = propagated.group_consistency_pruning
-        this.groupSemanticPruning = propagated.group_semantic_pruning
-
-        this.artifactPruning = propagated.artifact_pruning
-        this.artifactConsistencyPruning = propagated.artifact_consistency_pruning
-        this.artifactSemanticPruning = propagated.artifact_semantic_pruning
-
-        this.propertyPruning = propagated.property_pruning
-        this.propertyConsistencyPruning = propagated.property_consistency_pruning
-        this.propertySemanticPruning = propagated.property_semantic_pruning
-
-        this.typePruning = propagated.type_pruning
-        this.typeConsistencyPruning = propagated.type_consistency_pruning
-        this.typeSemanticPruning = propagated.type_semantic_pruning
-    }
-}
-
 class DefaultOptions {
     private readonly serviceTemplate: ServiceTemplate
     private readonly raw: VariabilityOptions
 
     defaultCondition: boolean
-    defaultConsistencyCondition: boolean
-    defaultSemanticCondition: boolean
 
     nodeDefaultCondition: boolean
     nodeDefaultConditionMode: NodeDefaultConditionMode
@@ -250,138 +70,258 @@ class DefaultOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        // Mode
         const mode = getResolvingMode(this.raw)
 
-        // Base
-        const base: Required<TDefaultOptions> = {
-            default_condition: false,
-            default_consistency_condition: false,
-            default_semantic_condition: false,
+        this.defaultCondition = this.raw.default_condition ?? mode.default_condition ?? false
+        assert.isBoolean(this.defaultCondition)
 
-            node_default_condition: false,
-            node_default_condition_mode: 'incoming-artifact',
-            node_default_consistency_condition: false,
-            node_default_semantic_condition: false,
+        this.nodeDefaultCondition =
+            this.raw.node_default_condition ?? mode.node_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.nodeDefaultCondition)
 
-            relation_default_condition: false,
-            relation_default_condition_mode: 'source-target',
-            relation_default_consistency_condition: false,
-            relation_default_semantic_condition: false,
+        this.nodeDefaultConditionMode =
+            this.raw.node_default_condition_mode ?? mode.node_default_condition_mode ?? 'incoming-artifact'
+        assert.isString(this.nodeDefaultConditionMode)
 
-            policy_default_condition: false,
-            policy_default_consistency_condition: false,
-            policy_default_semantic_condition: false,
+        this.nodeDefaultConsistencyCondition =
+            this.raw.node_default_consistency_condition ??
+            mode.node_default_consistency_condition ??
+            this.nodeDefaultCondition
+        assert.isBoolean(this.nodeDefaultConsistencyCondition)
 
-            group_default_condition: false,
-            group_default_consistency_condition: false,
-            group_default_semantic_condition: false,
+        this.nodeDefaultSemanticCondition =
+            this.raw.node_default_semantic_condition ??
+            mode.node_default_semantic_condition ??
+            this.nodeDefaultCondition
+        assert.isBoolean(this.nodeDefaultSemanticCondition)
 
-            artifact_default_condition: false,
-            artifact_default_consistency_condition: false,
-            artifact_default_semantic_condition: false,
+        this.relationDefaultCondition =
+            this.raw.relation_default_condition ?? mode.relation_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.relationDefaultCondition)
 
-            property_default_condition: false,
-            property_default_consistency_condition: false,
-            property_default_semantic_condition: false,
+        this.relationDefaultConditionMode =
+            this.raw.relation_default_condition_mode ?? mode.relation_default_condition_mode ?? 'source-target'
+        assert.isString(this.relationDefaultConditionMode)
 
-            type_default_condition: false,
-            type_default_consistency_condition: false,
-            type_default_semantic_condition: false,
-        }
+        this.relationDefaultConsistencyCondition =
+            this.raw.relation_default_consistency_condition ??
+            mode.relation_default_consistency_condition ??
+            this.relationDefaultCondition
+        assert.isBoolean(this.relationDefaultConsistencyCondition)
 
-        // Propagated
-        let propagated = propagate(base, [mode, this.raw])
+        this.relationDefaultSemanticCondition =
+            this.raw.relation_default_semantic_condition ??
+            mode.relation_default_semantic_condition ??
+            this.relationDefaultCondition
+        assert.isBoolean(this.relationDefaultSemanticCondition)
 
-        // Propagate default_condition
-        if (propagated.default_condition) {
-            propagated = propagate(propagated, [
-                {
-                    default_consistency_condition: true,
-                    default_semantic_condition: true,
+        this.policyDefaultCondition =
+            this.raw.policy_default_condition ?? mode.policy_default_condition ?? this.defaultCondition
 
-                    node_default_condition: true,
-                    relation_default_condition: true,
-                    policy_default_condition: true,
-                    group_default_condition: true,
-                    artifact_default_condition: true,
-                    property_default_condition: true,
-                    type_default_condition: true,
-                },
-                this.raw,
-            ])
-        }
+        assert.isBoolean(this.policyDefaultCondition)
 
-        // Propagate default_consistency_condition
-        if (propagated.default_consistency_condition) {
-            propagated = propagate(propagated, [
-                {
-                    node_default_consistency_condition: true,
-                    relation_default_consistency_condition: true,
-                    policy_default_consistency_condition: true,
-                    group_default_consistency_condition: true,
-                    artifact_default_consistency_condition: true,
-                    property_default_consistency_condition: true,
-                    type_default_consistency_condition: true,
-                },
-                this.raw,
-            ])
-        }
+        this.policyDefaultConsistencyCondition =
+            this.raw.policy_default_consistency_condition ??
+            mode.policy_default_consistency_condition ??
+            this.policyDefaultCondition
+        assert.isBoolean(this.policyDefaultConsistencyCondition)
 
-        // Propagate default_semantic_condition
-        if (propagated.default_semantic_condition) {
-            propagated = propagate(propagated, [
-                {
-                    node_default_semantic_condition: true,
-                    relation_default_semantic_condition: true,
-                    policy_default_semantic_condition: true,
-                    group_default_semantic_condition: true,
-                    artifact_default_semantic_condition: true,
-                    property_default_semantic_condition: true,
-                    type_default_semantic_condition: true,
-                },
-                this.raw,
-            ])
-        }
+        this.policyDefaultSemanticCondition =
+            this.raw.policy_default_semantic_condition ??
+            mode.policy_default_semantic_condition ??
+            this.policyDefaultCondition
+        assert.isBoolean(this.policyDefaultSemanticCondition)
 
-        // Merge back original to keep overrides
-        propagated = propagate(propagated, [this.raw])
+        this.groupDefaultCondition =
+            this.raw.group_default_condition ?? mode.group_default_condition ?? this.defaultCondition
 
-        this.defaultCondition = propagated.default_condition
-        this.defaultConsistencyCondition = propagated.default_consistency_condition
-        this.defaultSemanticCondition = propagated.default_semantic_condition
+        assert.isBoolean(this.groupDefaultCondition)
 
-        this.nodeDefaultCondition = propagated.node_default_condition
-        this.nodeDefaultConditionMode = propagated.node_default_condition_mode
-        this.nodeDefaultConsistencyCondition = propagated.node_default_consistency_condition
-        this.nodeDefaultSemanticCondition = propagated.node_default_semantic_condition
+        this.groupDefaultConsistencyCondition =
+            this.raw.group_default_consistency_condition ??
+            mode.group_default_consistency_condition ??
+            this.groupDefaultCondition
+        assert.isBoolean(this.groupDefaultConsistencyCondition)
 
-        this.relationDefaultCondition = propagated.relation_default_condition
-        this.relationDefaultConditionMode = propagated.relation_default_condition_mode
-        this.relationDefaultConsistencyCondition = propagated.relation_default_consistency_condition
-        this.relationDefaultSemanticCondition = propagated.relation_default_semantic_condition
+        this.groupDefaultSemanticCondition =
+            this.raw.group_default_semantic_condition ??
+            mode.group_default_semantic_condition ??
+            this.groupDefaultCondition
+        assert.isBoolean(this.groupDefaultSemanticCondition)
 
-        this.policyDefaultCondition = propagated.policy_default_condition
-        this.policyDefaultConsistencyCondition = propagated.policy_default_consistency_condition
-        this.policyDefaultSemanticCondition = propagated.policy_default_semantic_condition
+        this.artifactDefaultCondition =
+            this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
 
-        this.groupDefaultCondition = propagated.group_default_condition
-        this.groupDefaultConsistencyCondition = propagated.group_default_consistency_condition
-        this.groupDefaultSemanticCondition = propagated.group_default_semantic_condition
+        assert.isBoolean(this.artifactDefaultCondition)
 
-        this.artifactDefaultCondition = propagated.artifact_default_condition
-        this.artifactDefaultConsistencyCondition = propagated.artifact_default_consistency_condition
-        this.artifactDefaultSemanticCondition = propagated.artifact_default_semantic_condition
+        this.artifactDefaultConsistencyCondition =
+            this.raw.artifact_default_consistency_condition ??
+            mode.artifact_default_consistency_condition ??
+            this.artifactDefaultCondition
+        assert.isBoolean(this.artifactDefaultConsistencyCondition)
 
-        this.propertyDefaultCondition = propagated.property_default_condition
-        this.propertyDefaultConsistencyCondition = propagated.property_default_consistency_condition
-        this.propertyDefaultSemanticCondition = propagated.property_default_semantic_condition
+        this.artifactDefaultSemanticCondition =
+            this.raw.artifact_default_semantic_condition ??
+            mode.artifact_default_semantic_condition ??
+            this.artifactDefaultCondition
+        assert.isBoolean(this.artifactDefaultSemanticCondition)
 
-        this.typeDefaultCondition = propagated.type_default_condition
-        this.typeDefaultConsistencyCondition = propagated.type_default_consistency_condition
-        this.typeDefaultSemanticCondition = propagated.type_default_semantic_condition
+        this.propertyDefaultCondition =
+            this.raw.property_default_condition ?? mode.property_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.propertyDefaultCondition)
+
+        this.propertyDefaultConsistencyCondition =
+            this.raw.property_default_consistency_condition ??
+            mode.property_default_consistency_condition ??
+            this.propertyDefaultCondition
+        assert.isBoolean(this.propertyDefaultConsistencyCondition)
+
+        this.propertyDefaultSemanticCondition =
+            this.raw.property_default_semantic_condition ??
+            mode.property_default_semantic_condition ??
+            this.propertyDefaultCondition
+        assert.isBoolean(this.propertyDefaultSemanticCondition)
+
+        this.typeDefaultCondition =
+            this.raw.type_default_condition ?? mode.type_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.typeDefaultCondition)
+
+        this.typeDefaultConsistencyCondition =
+            this.raw.type_default_consistency_condition ??
+            mode.type_default_consistency_condition ??
+            this.typeDefaultCondition
+        assert.isBoolean(this.typeDefaultConsistencyCondition)
+
+        this.typeDefaultSemanticCondition =
+            this.raw.type_default_semantic_condition ??
+            mode.type_default_semantic_condition ??
+            this.typeDefaultCondition
+        assert.isBoolean(this.typeDefaultSemanticCondition)
     }
 }
+
+class PruningOptions {
+    private readonly serviceTemplate: ServiceTemplate
+    private readonly raw: VariabilityOptions
+
+    pruning: boolean
+
+    nodePruning: boolean
+    nodeConsistencyPruning: boolean
+    nodeSemanticPruning: boolean
+
+    relationPruning: boolean
+    relationConsistencyPruning: boolean
+    relationSemanticPruning: boolean
+
+    policyPruning: boolean
+    policyConsistencyPruning: boolean
+    policySemanticPruning: boolean
+
+    groupPruning: boolean
+    groupConsistencyPruning: boolean
+    groupSemanticPruning: boolean
+
+    artifactPruning: boolean
+    artifactConsistencyPruning: boolean
+    artifactSemanticPruning: boolean
+
+    propertyPruning: boolean
+    propertyConsistencyPruning: boolean
+    propertySemanticPruning: boolean
+
+    typePruning: boolean
+    typeConsistencyPruning: boolean
+    typeSemanticPruning: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
+        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+
+        const mode = getResolvingMode(this.raw)
+
+        this.pruning = this.raw.pruning ?? mode.pruning ?? false
+        assert.isBoolean(this.pruning)
+
+        this.nodePruning = this.raw.node_pruning ?? mode.node_pruning ?? this.pruning
+        assert.isBoolean(this.nodePruning)
+
+        this.nodeConsistencyPruning =
+            this.raw.node_consistency_pruning ?? mode.node_consistency_pruning ?? this.nodePruning
+        assert.isBoolean(this.nodeConsistencyPruning)
+
+        this.nodeSemanticPruning = this.raw.node_semantic_pruning ?? mode.node_semantic_pruning ?? this.nodePruning
+        assert.isBoolean(this.nodeSemanticPruning)
+
+        this.relationPruning = this.raw.relation_pruning ?? mode.relation_pruning ?? this.pruning
+        assert.isBoolean(this.relationPruning)
+
+        this.relationConsistencyPruning =
+            this.raw.relation_consistency_pruning ?? mode.relation_consistency_pruning ?? this.relationPruning
+        assert.isBoolean(this.relationConsistencyPruning)
+
+        this.relationSemanticPruning =
+            this.raw.relation_semantic_pruning ?? mode.relation_semantic_pruning ?? this.relationPruning
+        assert.isBoolean(this.relationSemanticPruning)
+
+        this.policyPruning = this.raw.policy_pruning ?? mode.policy_pruning ?? this.pruning
+        assert.isBoolean(this.policyPruning)
+
+        this.policyConsistencyPruning =
+            this.raw.policy_consistency_pruning ?? mode.policy_consistency_pruning ?? this.policyPruning
+        assert.isBoolean(this.policyConsistencyPruning)
+
+        this.policySemanticPruning =
+            this.raw.policy_semantic_pruning ?? mode.policy_semantic_pruning ?? this.policyPruning
+        assert.isBoolean(this.policySemanticPruning)
+
+        this.groupPruning = this.raw.group_pruning ?? mode.group_pruning ?? this.pruning
+        assert.isBoolean(this.groupPruning)
+
+        this.groupConsistencyPruning =
+            this.raw.group_consistency_pruning ?? mode.group_consistency_pruning ?? this.groupPruning
+        assert.isBoolean(this.groupConsistencyPruning)
+
+        this.groupSemanticPruning = this.raw.group_semantic_pruning ?? mode.group_semantic_pruning ?? this.groupPruning
+
+        assert.isBoolean(this.groupSemanticPruning)
+
+        this.artifactPruning = this.raw.artifact_pruning ?? mode.artifact_pruning ?? this.pruning
+        assert.isBoolean(this.artifactPruning)
+
+        this.artifactConsistencyPruning =
+            this.raw.artifact_consistency_pruning ?? mode.artifact_consistency_pruning ?? this.artifactPruning
+        assert.isBoolean(this.artifactConsistencyPruning)
+
+        this.artifactSemanticPruning =
+            this.raw.artifact_semantic_pruning ?? mode.artifact_semantic_pruning ?? this.artifactPruning
+        assert.isBoolean(this.artifactSemanticPruning)
+
+        this.propertyPruning = this.raw.property_pruning ?? mode.property_pruning ?? this.pruning
+        assert.isBoolean(this.propertyPruning)
+
+        this.propertyConsistencyPruning =
+            this.raw.property_consistency_pruning ?? mode.property_consistency_pruning ?? this.propertyPruning
+
+        assert.isBoolean(this.propertyConsistencyPruning)
+
+        this.propertySemanticPruning =
+            this.raw.property_semantic_pruning ?? mode.property_semantic_pruning ?? this.propertyPruning
+        assert.isBoolean(this.propertySemanticPruning)
+
+        this.typePruning = this.raw.type_pruning ?? mode.type_pruning ?? this.pruning
+        assert.isBoolean(this.typePruning)
+
+        this.typeConsistencyPruning =
+            this.raw.type_consistency_pruning ?? mode.type_consistency_pruning ?? this.typePruning
+        assert.isBoolean(this.typeConsistencyPruning)
+
+        this.typeSemanticPruning = this.raw.type_semantic_pruning ?? mode.type_semantic_pruning ?? this.typePruning
+        assert.isBoolean(this.typeSemanticPruning)
+    }
+}
+
+// TODO: remove most "false" defaults?
 
 class ChecksOptions {
     private readonly serviceTemplate: ServiceTemplate
@@ -439,9 +379,6 @@ class ChecksOptions {
             ])
         }
 
-        // Propagated
-        propagated = propagate(propagated, [this.raw])
-
         this.relationSourceConsistencyCheck = propagated.relation_source_consistency_check
         this.relationTargetConsistencyCheck = propagated.relation_target_consistency_check
         this.ambiguousHostingConsistencyCheck = propagated.ambiguous_hosting_consistency_check
@@ -476,6 +413,13 @@ class SolverOptions {
         this.max = optimization === 'max'
         this.min = optimization === true || optimization === 'min'
     }
+}
+
+function getResolvingMode(raw: VariabilityOptions) {
+    const mode = raw.mode ?? 'strict'
+    const map = ResolverModes[mode]
+    assert.isDefined(map, `Resolving mode "${mode}" unknown`)
+    return map
 }
 
 function propagate<T>(base: Required<T>, chain: T[]): Required<T> {
