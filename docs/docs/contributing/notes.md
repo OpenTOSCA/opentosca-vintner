@@ -180,6 +180,35 @@ If they can not be parsed, they are treated as string.
 
 These environment variables should be used with caution. 
 
+## Lines of Code
+
+Run the following command, to count the lines of code in the `src` folder.
+
+```text linenums="1"
+yarn loc
+```
+
+The following output has been generated on the `main` branch on August 14, 2023.
+
+```text linenums="1"
+     158 text files.
+     155 unique files.                                          
+       3 files ignored.
+
+github.com/AlDanial/cloc v 1.96  T=0.12 s (1288.2 files/s, 83591.5 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+TypeScript                     127           1420            710           7567
+Bourne Shell                    15             45             14            144
+YAML                             7             11              0            105
+EJS                              5              7              0             34
+CSV                              1              0              0              1
+-------------------------------------------------------------------------------
+SUM:                           155           1483            724           7851
+-------------------------------------------------------------------------------
+```
+
 ## Limitations
 
 In the following, we briefly discuss limitations of our prototypical implementation.

@@ -1,4 +1,4 @@
-import {loadAllTests} from './QueryTest'
+import {loadAllTests} from './query-test'
 
 describe('queries', async () => {
     try {
