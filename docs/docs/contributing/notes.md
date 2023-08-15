@@ -188,24 +188,24 @@ Run the following command, to count the lines of code in the `src` folder.
 yarn loc
 ```
 
-The following output has been generated on the `main` branch on August 14, 2023.
+The following output has been generated for the commit `110a38a1951f8d10a234f9d976778b0c3b0c2e8c` on August 15, 2023.
 
 ```text linenums="1"
-     158 text files.
-     155 unique files.                                          
+     159 text files.
+     156 unique files.                                          
        3 files ignored.
 
-github.com/AlDanial/cloc v 1.96  T=0.12 s (1288.2 files/s, 83591.5 lines/s)
+github.com/AlDanial/cloc v 1.96  T=0.16 s (991.7 files/s, 67170.6 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     127           1420            710           7567
+TypeScript                     128           1579            710           7916
 Bourne Shell                    15             45             14            144
 YAML                             7             11              0            105
 EJS                              5              7              0             34
 CSV                              1              0              0              1
 -------------------------------------------------------------------------------
-SUM:                           155           1483            724           7851
+SUM:                           156           1642            724           8200
 -------------------------------------------------------------------------------
 ```
 
