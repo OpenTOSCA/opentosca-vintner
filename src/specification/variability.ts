@@ -107,9 +107,9 @@ export type ChecksOptions = {
     relation_target_consistency_check?: boolean
     ambiguous_hosting_consistency_check?: boolean
     expected_hosting_consistency_check?: boolean
-    missing_artifact_parent_consistency_check?: boolean
+    missing_artifact_container_consistency_check?: boolean
     ambiguous_artifact_consistency_check?: boolean
-    missing_property_parent_consistency_check?: boolean
+    missing_property_container_consistency_check?: boolean
     ambiguous_property_consistency_check?: boolean
     missing_type_container_consistency_check?: boolean
     ambiguous_type_consistency_check?: boolean

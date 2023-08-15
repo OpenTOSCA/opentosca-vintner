@@ -324,9 +324,9 @@ class ChecksOptions {
     relationTargetConsistencyCheck: boolean
     ambiguousHostingConsistencyCheck: boolean
     expectedHostingConsistencyCheck: boolean
-    missingArtifactParentConsistencyCheck: boolean
+    missingArtifactContainerConsistencyCheck: boolean
     ambiguousArtifactConsistencyCheck: boolean
-    missingPropertyParentConsistencyCheck: boolean
+    missingPropertyContainerConsistencyCheck: boolean
     ambiguousPropertyConsistencyCheck: boolean
     missingTypeContainerConsistencyCheck: boolean
     ambiguousTypeConsistencyCheck: boolean
@@ -350,16 +350,16 @@ class ChecksOptions {
         this.expectedHostingConsistencyCheck = this.raw.expected_hosting_consistency_check ?? this.consistencyChecks
         assert.isBoolean(this.expectedHostingConsistencyCheck)
 
-        this.missingArtifactParentConsistencyCheck =
-            this.raw.missing_artifact_parent_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.missingArtifactParentConsistencyCheck)
+        this.missingArtifactContainerConsistencyCheck =
+            this.raw.missing_artifact_container_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.missingArtifactContainerConsistencyCheck)
 
         this.ambiguousArtifactConsistencyCheck = this.raw.ambiguous_artifact_consistency_check ?? this.consistencyChecks
         assert.isBoolean(this.ambiguousArtifactConsistencyCheck)
 
-        this.missingPropertyParentConsistencyCheck =
-            this.raw.missing_property_parent_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.missingPropertyParentConsistencyCheck)
+        this.missingPropertyContainerConsistencyCheck =
+            this.raw.missing_property_container_consistency_check ?? this.consistencyChecks
+        assert.isBoolean(this.missingPropertyContainerConsistencyCheck)
 
         this.ambiguousPropertyConsistencyCheck = this.raw.ambiguous_property_consistency_check ?? this.consistencyChecks
         assert.isBoolean(this.ambiguousPropertyConsistencyCheck)

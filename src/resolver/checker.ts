@@ -54,7 +54,7 @@ export default class Checker {
         }
 
         // Ensure that node of each artifact exists
-        if (this.graph.options.checks.missingArtifactParentConsistencyCheck) {
+        if (this.graph.options.checks.missingArtifactContainerConsistencyCheck) {
             for (const artifact of artifacts) {
                 if (!artifact.container.present) throw new Error(`Container of ${artifact.display} does not exist`)
             }
@@ -72,7 +72,7 @@ export default class Checker {
         }
 
         // Ensure that node of each present property exists
-        if (this.graph.options.checks.missingPropertyParentConsistencyCheck) {
+        if (this.graph.options.checks.missingPropertyContainerConsistencyCheck) {
             for (const property of properties) {
                 if (!property.container.present) {
                     throw new Error(`Container of ${property.display} does not exist`)
