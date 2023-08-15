@@ -49,13 +49,13 @@ Such a topology template is also called variable topology template.
 
 A variability definition defines variability inputs, variability presets, variability expressions, and variability options.
 
-| Keyname     | Mandatory | Type                                | Description                                                             |
-|-------------|-----------|-------------------------------------|-------------------------------------------------------------------------|
-| inputs      | true      | Map(String, VariabilityInput)       | A required map of input parameters used inside variability expressions. |
-| presets     | false     | Map(String, VariabilityPreset)      | An optional map of variability preset definitions.                      |
-| expressions | false     | Map(String, VariabilityExpression)  | An optional map of variability expressions.                             |
-| options     | false     | Map(String, Boolean)                | An optional map of variability options.                       |
-
+| Keyname                    | Mandatory | Type                               | Description                                                             |
+|----------------------------|-----------|------------------------------------|-------------------------------------------------------------------------|
+| inputs                     | true      | Map(String, VariabilityInput)      | A required map of input parameters used inside variability expressions. |
+| presets                    | false     | Map(String, VariabilityPreset)     | An optional map of variability preset definitions.                      |
+| expressions                | false     | Map(String, VariabilityExpression) | An optional map of variability expressions.                             |
+| options                    | false     | Map(String, Boolean)               | An optional map of variability options.                                 |
+| type_specific_conditions   | false     | TypeSpecificDefaultConditions      | An optional definition of type-specific default conditions.             |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
 input `mode` and  two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
@@ -230,36 +230,61 @@ There are several predefined resolving modes which provide different useful comb
 - `loose`: pruning conditions is enabled everywhere (consistency and semantic)
 
 
-## Default Conditions
+## Element-Specific Default Conditions
 
 _This is an experimental feature._
 
-The following default conditions can be assigned to elements.
+The following element-specific default conditions can be assigned to elements.
 
-| Element                                          | Default Conditions                                                                 |
-|--------------------------------------------------|------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (incoming) | Check if any incoming relation is present.                                         |
-| Node Template with Artifacts (artifact)          | Check if any artifact is present.                                                  |
-| Property                                         | Check if the container, e.g., node template or policy, of the property is present. |
-| Relation                                         | Check if the source and target of the relation is present.                         |
-| Policy                                           | Check if the policy has any targets which are present.                             |
-| Group                                            | Check if the group has any members which are present.                              |
-| Artifact                                         | Check if the node template of the artifact is present.                             |
+| Element                                          | Consistency | Semantic | Default Conditions                                                                 |
+|--------------------------------------------------|-------------|----------|------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (incoming) | false       | true     | Check if any incoming relation is present.                                         |
+| Node Template with Artifacts (artifact)          | false       | true     | Check if any artifact is present.                                                  |
+| Property                                         | true        | false    | Check if the container, e.g., node template or policy, of the property is present. |
+| Relation                                         | true        | false    | Check if the source and target of the relation is present.                         |
+| Policy                                           | false       | true     | Check if the policy has any targets which are present.                             |
+| Group                                            | false       | true     | Check if the group has any members which are present.                              |
+| Artifact                                         | true        | false    | Check if the node template of the artifact is present.                             |
+| Root                                             | true        | true     | The default condition of element always holds.                                     |
 
-The default condition of elements not mentioned above always holds. 
-This includes, e.g., node templates without incoming relations or host but also topology template inputs.
+Thereby, we define a consistency condition a condition which targets the consistency of the metamodel, thus, ensuring that the metamodel can be correctly parsed, e.g., a property must have a container.
+In contrast,  a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.
 
 Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.
 
-| Element                                               | Default Conditions                                                             |
-|-------------------------------------------------------|--------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (incomingnaive) | Check if any incoming relation is present using `has_incoming_relation_naive`. |
-| Node Template with Incoming Relations (source)        | Check if any source of any incoming relation is present.                       |
-| Node Template with Host (host)                        | Check if any host is present.                                                  |
-| Node Template with Artifact (artifactnaive)           | Check if any artifact is present using `has_artifact_naive`.                   |
-| Relation (Source)                                     | Check if the source of the relation is present.                                |
-| Relation (Target)                                     | Check if the target of the relation is present.                                |
+| Element                                                | Consistency | Semantic | Default Conditions                                                             |
+|--------------------------------------------------------|-------------|----------|--------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (incomingnaive)  | false       | true     | Check if any incoming relation is present using `has_incoming_relation_naive`. |
+| Node Template with Incoming Relations (source)         | false       | true     | Check if any source of any incoming relation is present.                       |
+| Node Template with Host (host)                         | false       | true     | Check if any host is present.                                                  |
+| Node Template with Artifact (artifactnaive)            | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
+| Relation (Source)                                      | true        | false    | Check if the source of the relation is present.                                |
+| Relation (Target)                                      | true        | false    | Check if the target of the relation is present.                                |
+
+
+## Type-Specific Default Conditions
+
+_This is an experimental feature._
+
+Type-specific default conditions can be defined to override element-specific default conditions.
+A type-specific default condition is defined as follows and are supported for nodes, relations, properties, artifact, groups, and policies.
+
+| Keyname           | Mandatory | Type                                                   | Default                                                                                                  | Description                                         |
+|-------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| conditions        | true      | VariabilityCondition &#124; List(VariabilityCondition) | A variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| consistency       | false     | Boolean                                                | false                                                                                                    | An optional description for the variability preset. |
+| semantic          | false     | Boolean                                                | true                                                                                                     | A required map of input parameter assignments.      |
+
+For example, the node type `scenario.monitor` defines a type-specific semantic default condition checking for the presence of its host.
+
+```yaml linenums="1"
+type_specific_conditions:
+    node_types:
+        scenario.monitor:
+            conditions: {host_presence: SELF}
+            semantic: true
+```
 
 ## Variability Preset
 
@@ -901,6 +926,10 @@ To further support modeling, elements can be pruned by additionally evaluating t
 For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
+
+There are element-specific default conditions and type-specific default conditions. 
+Element-specific default conditions are generic default conditions defined per element. 
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.
 
 ### Optimization
 
