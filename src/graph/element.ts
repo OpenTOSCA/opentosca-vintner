@@ -1,6 +1,7 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
-import {LogicExpression} from '#spec/variability'
+import {ConditionsWrapper, LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Graph from './graph'
@@ -77,7 +78,50 @@ export default abstract class Element {
 
     abstract presenceCondition: LogicExpression
 
-    abstract defaultCondition: LogicExpression
+    abstract defaultConsistencyCondition: boolean
+    abstract defaultSemanticCondition: boolean
+    abstract consistencyPruning: boolean
+    abstract semanticPruning: boolean
+    isConditionAllowed(wrapper?: ConditionsWrapper) {
+        if (check.isUndefined(wrapper)) return false
+
+        wrapper.consistency = wrapper.consistency ?? false
+        const consistencyAllowed =
+            (this.defaultConsistencyCondition && this.defaultEnabled) ||
+            (this.consistencyPruning && this.pruningEnabled)
+
+        // Default is "true" since type-specific condition will likely be semantic
+        wrapper.semantic = wrapper.semantic ?? true
+        const semanticAllowed =
+            (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
+
+        return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
+    }
+
+    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+        return undefined
+    }
+
+    getElementSpecificCondition(): ConditionsWrapper | undefined {
+        return {conditions: true, consistency: true, semantic: true}
+    }
+
+    private _defaultCondition?: LogicExpression
+    get defaultCondition(): LogicExpression {
+        if (check.isUndefined(this._defaultCondition)) {
+            const candidates = [this.getTypeSpecificCondition(), this.getElementSpecificCondition()]
+            const selected = candidates.find(it => this.isConditionAllowed(it))
+            assert.isDefined(selected, `${this.Display} has no default condition`)
+
+            selected.conditions = utils.toList(selected.conditions)
+            if (selected.conditions.length === 1) {
+                this._defaultCondition = selected.conditions[0]
+            } else {
+                this._defaultCondition = {and: selected.conditions}
+            }
+        }
+        return this._defaultCondition
+    }
 
     defaultAlternative = false
     abstract defaultAlternativeCondition?: LogicExpression

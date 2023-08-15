@@ -60,24 +60,47 @@ export default class Property extends Element {
         return [this.container.name, this.name]
     }
 
+    // TODO: fix these ugly "if (!check.isObject(this.raw) || check.isArray(this.raw))" and "Boolean" castings ...
+
     get defaultEnabled() {
-        return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.default.property_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.property_default_condition
-        )
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultCondition
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultCondition)
     }
 
     get pruningEnabled() {
-        return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.pruning.property_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.property_pruning
-        )
+        if (!check.isObject(this.raw) || check.isArray(this.raw)) return this.graph.options.pruning.propertyPruning
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyPruning)
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
+    get defaultConsistencyCondition() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultConsistencyCondition
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultConsistencyCondition)
+    }
+
+    get defaultSemanticCondition() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultSemanticCondition
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultSemanticCondition)
+    }
+
+    get consistencyPruning() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.pruning.propertyConsistencyPruning
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning)
+    }
+
+    get semanticPruning() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.pruning.propertySemanticPruning
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning)
+    }
+
+    // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
+
+    getElementSpecificCondition() {
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
@@ -58,21 +59,15 @@ export default class Node extends Element {
     }
 
     get getDefaultMode(): NodeDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.node_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.node_default_condition_mode ??
-            'incoming-artifact'
-        )
+        return this.raw.default_condition_mode ?? this.graph.options.default.nodeDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     get hasHost() {
@@ -91,58 +86,79 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const conditions: LogicExpression[] = []
+    // TODO: DRY
+    getTypeSpecificCondition() {
+        // Conditional types are not supported
+        if (this.types.length > 1) return
 
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'host') {
-                    return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
-                }
+        const type = this.types[0]
 
-                if (it === 'source') {
-                    return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
-                }
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[type.name]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
 
-                if (it === 'incoming') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
-                    )
-                }
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
 
-                if (it === 'incomingnaive') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
+        return utils.copy(tsc)
+    }
 
-                if (it === 'artifact') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true
-                    )
-                }
+    getElementSpecificCondition() {
+        const conditions: LogicExpression[] = []
 
-                if (it === 'artifactnaive') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
-
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
-
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
-            } else {
-                this._defaultCondition = {and: conditions}
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'host') {
+                return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
             }
-        }
 
-        return this._defaultCondition
+            if (it === 'source') {
+                return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'incoming') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'incomingnaive') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'artifact') {
+                return conditions.push(this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'artifactnaive') {
+                return conditions.push(
+                    this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
+
+        return {conditions, consistency: false, semantic: true}
+    }
+
+    get defaultConsistencyCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.nodeConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
     readonly defaultAlternativeCondition = undefined

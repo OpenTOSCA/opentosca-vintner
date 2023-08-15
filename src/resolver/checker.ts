@@ -16,7 +16,7 @@ export default class Checker {
         const types = this.graph.types.filter(it => it.present)
 
         // Ensure that each relation source exists
-        if (this.graph.options.consistency.relation_source_consistency_check) {
+        if (this.graph.options.checks.relationSourceConsistencyCheck) {
             for (const relation of relations) {
                 if (!relation.source.present)
                     throw new Error(`Relation source "${relation.source.name}" of ${relation.display} does not exist`)
@@ -24,7 +24,7 @@ export default class Checker {
         }
 
         // Ensure that each relation target exists
-        if (this.graph.options.consistency.relation_target_consistency_check) {
+        if (this.graph.options.checks.relationTargetConsistencyCheck) {
             for (const relation of relations) {
                 if (!relation.target.present)
                     throw new Error(`Relation target "${relation.target.name}" of ${relation.display} does not exist`)
@@ -32,7 +32,7 @@ export default class Checker {
         }
 
         // Ensure that every component has at maximum one hosting relation
-        if (this.graph.options.consistency.ambiguous_hosting_consistency_check) {
+        if (this.graph.options.checks.ambiguousHostingConsistencyCheck) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source.name === node.name && relation.isHostedOn() && relation.present
@@ -42,7 +42,7 @@ export default class Checker {
         }
 
         // Ensure that every component that had a hosting relation previously still has one
-        if (this.graph.options.consistency.expected_hosting_consistency_check) {
+        if (this.graph.options.checks.expectedHostingConsistencyCheck) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source.name === node.name && relation.isHostedOn()
@@ -54,14 +54,14 @@ export default class Checker {
         }
 
         // Ensure that node of each artifact exists
-        if (this.graph.options.consistency.missing_artifact_parent_consistency_check) {
+        if (this.graph.options.checks.missingArtifactContainerConsistencyCheck) {
             for (const artifact of artifacts) {
                 if (!artifact.container.present) throw new Error(`Container of ${artifact.display} does not exist`)
             }
         }
 
         // Ensure that artifacts are unique within their node (also considering non-present nodes)
-        if (this.graph.options.consistency.ambiguous_artifact_consistency_check) {
+        if (this.graph.options.checks.ambiguousArtifactConsistencyCheck) {
             for (const node of nodes) {
                 const names = new Set()
                 for (const artifact of artifacts) {
@@ -72,7 +72,7 @@ export default class Checker {
         }
 
         // Ensure that node of each present property exists
-        if (this.graph.options.consistency.missing_property_parent_consistency_check) {
+        if (this.graph.options.checks.missingPropertyContainerConsistencyCheck) {
             for (const property of properties) {
                 if (!property.container.present) {
                     throw new Error(`Container of ${property.display} does not exist`)
@@ -81,7 +81,7 @@ export default class Checker {
         }
 
         // Ensure that each property has maximum one value (also considering non-present nodes)
-        if (this.graph.options.consistency.ambiguous_property_consistency_check) {
+        if (this.graph.options.checks.ambiguousPropertyConsistencyCheck) {
             for (const node of nodes) {
                 const names = new Set()
                 for (const property of node.properties.filter(it => it.present)) {
@@ -92,14 +92,14 @@ export default class Checker {
         }
 
         // Ensure that container of each type exists
-        if (this.graph.options.consistency.missing_type_container_consistency_check) {
+        if (this.graph.options.checks.missingTypeContainerConsistencyCheck) {
             for (const type of types) {
                 if (!type.container.present) throw new Error(`Container of ${type.display} does not exist`)
             }
         }
 
         // Ensure that each node has exactly one type
-        if (this.graph.options.consistency.ambiguous_type_consistency_check) {
+        if (this.graph.options.checks.ambiguousTypeConsistencyCheck) {
             for (const node of nodes) {
                 const names = new Set()
                 const types = node.types.filter(property => property.present)

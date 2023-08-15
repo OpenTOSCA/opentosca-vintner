@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
@@ -38,23 +39,56 @@ export default class Artifact extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.artifact_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.artifact_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.artifact_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.artifact_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactPruning
+    }
+
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
+    }
+
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
     get defaultCondition() {
         return this.container.presenceCondition
+    }
+
+    getTypeSpecificCondition() {
+        const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
+        assert.isString(type)
+
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[type]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+
+        return utils.copy(tsc)
+    }
+
+    getElementSpecificCondition() {
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

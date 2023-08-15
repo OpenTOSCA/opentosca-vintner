@@ -67,7 +67,7 @@ export default class Solver {
         /**
          * Get optimized solution
          */
-        if (this.graph.options.solver.optimization === true || check.isString(this.graph.options.solver.optimization)) {
+        if (this.graph.options.solver.enabled) {
             const nodes = this.graph.nodes.map(it => it.id)
             const weights = this.graph.nodes.map(it => it.weight)
             let optimized
@@ -75,14 +75,14 @@ export default class Solver {
             /**
              * Minimize weight of node templates
              */
-            if (this.graph.options.solver.optimization === true || this.graph.options.solver.optimization === 'min') {
+            if (this.graph.options.solver.min) {
                 optimized = this.minisat.minimizeWeightedSum(solution, nodes, weights)
             }
 
             /**
              * Maximize weight of node templates
              */
-            if (this.graph.options.solver.optimization === 'max') {
+            if (this.graph.options.solver.max) {
                 optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
             }
 
@@ -239,13 +239,7 @@ export default class Solver {
     }
 
     reduceConditions(conditions: LogicExpression[]) {
-        return conditions.reduce<{and: LogicExpression[]}>(
-            (acc, curr) => {
-                acc.and.push(curr)
-                return acc
-            },
-            {and: []}
-        )
+        return {and: conditions}
     }
 
     setPreset(name?: string) {

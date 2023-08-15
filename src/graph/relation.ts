@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {bratanize} from '#graph/utils'
 import {RequirementAssignment} from '#spec/node-template'
@@ -75,57 +76,74 @@ export default class Relation extends Element {
     }
 
     get getDefaultMode(): RelationDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.relation_default_condition_mode ??
-            'source-target'
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConditionMode
+        return this.raw.default_condition_mode ?? this.graph.options.default.relationDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.relation_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationPruning
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const conditions: LogicExpression[] = []
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultConsistencyCondition
+    }
 
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'source') {
-                    return conditions.push(this.source.presenceCondition)
-                }
-                if (it === 'target') {
-                    return conditions.push(this.target.presenceCondition)
-                }
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultSemanticCondition
+    }
 
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
+    }
 
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
+    }
 
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
-            } else {
-                this._defaultCondition = {and: conditions}
+    getTypeSpecificCondition() {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+
+        const type = this.types[0]
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types?.[
+                type.name
+            ]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+
+        return utils.copy(tsc)
+    }
+
+    getElementSpecificCondition() {
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'source') {
+                return conditions.push(this.source.presenceCondition)
             }
-        }
-        return this._defaultCondition
+            if (it === 'target') {
+                return conditions.push(this.target.presenceCondition)
+            }
+
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
+
+        return {conditions, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {PolicyTemplate} from '#spec/policy-template'
 import {LogicExpression} from '#spec/variability'
@@ -35,28 +36,63 @@ export default class Policy extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.policy_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.policy_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.policyPruning
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition))
-            this._defaultCondition = {has_present_target: this.toscaId, _cached_element: this}
-        return this._defaultCondition
+    get defaultConsistencyCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultConsistencyCondition
     }
 
-    readonly defaultAlternativeCondition = undefined
+    get defaultSemanticCondition() {
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.policyConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.pruning ?? this.graph.options.pruning.policySemanticPruning
+    }
+
+    getElementSpecificCondition() {
+        return {
+            conditions: {has_present_target: this.toscaId, _cached_element: this},
+            consistency: false,
+            semantic: true,
+        }
+    }
+
+    getTypeSpecificCondition() {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+
+        const type = this.types[0]
+        const tsc =
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.policy_types?.[
+                type.name
+            ]
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.consistency = tsc.semantic ?? true
+        return utils.copy(tsc)
+    }
 
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
+        if (check.isUndefined(this._presenceCondition)) {
             this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
+        }
         return this._presenceCondition
     }
+
+    readonly defaultAlternativeCondition = undefined
 
     getTypeCondition(type: Type): LogicExpression {
         return {policy_type_presence: [this.toscaId, type.index], _cached_element: type}

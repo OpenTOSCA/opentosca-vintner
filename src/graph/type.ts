@@ -48,32 +48,47 @@ export default class Type extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.type_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.type_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.type_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.type_pruning
-        )
+        if (check.isString(this.raw)) return this.graph.options.pruning.typePruning
+        return this.raw.pruning ?? this.graph.options.pruning.typePruning
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultConsistencyCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultConsistencyCondition
+    }
+
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultSemanticCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultSemanticCondition
+    }
+
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeConsistencyPruning
+        return this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
+    }
+
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeSemanticPruning
+        return this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
+    }
+
+    getElementSpecificCondition() {
+        return {
+            conditions: this.container.presenceCondition,
+            consistency: true,
+            semantic: false,
+        }
     }
 
     private _presenceCondition?: LogicExpression
-
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
-
         if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
-
         return this._presenceCondition
     }
 
