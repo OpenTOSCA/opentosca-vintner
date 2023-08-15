@@ -1932,6 +1932,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#lines-of-code">
+    Lines of Code
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#limitations">
     Limitations
   </a>
@@ -2112,6 +2117,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#environment">
     Environment
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lines-of-code">
+    Lines of Code
   </a>
 </li>
 <li class="md-nav__item">
@@ -2338,6 +2348,43 @@ If they can not be parsed, they are treated as string.</p>
 <li><code>OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}</code></li>
 </ul>
 <p>These environment variables should be used with caution. </p>
+<h2 id="lines-of-code">Lines of Code<a class="headerlink" href="#lines-of-code" title="Permanent link">¶</a></h2>
+<p>Run the following command, to count the lines of code in the <code>src</code> folder.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>yarn loc
+</code></pre></div></td></tr></table></div>
+<p>The following output has been generated on the <code>main</code> branch on August 14, 2023.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>     158 text files.
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>     155 unique files.                                          
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>       3 files ignored.
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>github.com/AlDanial/cloc v 1.96  T=0.12 s (1288.2 files/s, 83591.5 lines/s)
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>-------------------------------------------------------------------------------
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a>Language                     files          blank        comment           code
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a>-------------------------------------------------------------------------------
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a>TypeScript                     127           1420            710           7567
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a>Bourne Shell                    15             45             14            144
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a>YAML                             7             11              0            105
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a>EJS                              5              7              0             34
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a>CSV                              1              0              0              1
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a>-------------------------------------------------------------------------------
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a>SUM:                           155           1483            724           7851
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a>-------------------------------------------------------------------------------
+</code></pre></div></td></tr></table></div>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">¶</a></h2>
 <p>In the following, we briefly discuss limitations of our prototypical implementation.</p>
 <ol>
@@ -2351,7 +2398,7 @@ If they can not be parsed, they are treated as string.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 12, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
 </small>
 </div>
 </article>
