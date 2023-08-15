@@ -313,14 +313,11 @@ export type ConditionsWrapper = {
     semantic?: boolean
 }
 
-export type TypeSpecificLogicExpressionMap = {
-    [key: string]: ConditionsWrapper
-}
 export type TypeSpecificLogicExpressions = {
-    artifact_types?: TypeSpecificLogicExpressionMap
-    data_types?: TypeSpecificLogicExpressionMap
-    relationship_types?: TypeSpecificLogicExpressionMap
-    node_types?: TypeSpecificLogicExpressionMap
-    group_types?: TypeSpecificLogicExpressionMap
-    policy_types?: TypeSpecificLogicExpressionMap
+    artifact_types?: {[key: string]: ConditionsWrapper}
+    data_types?: {[key: string]: ConditionsWrapper}
+    relationship_types?: {[key: string]: ConditionsWrapper}
+    node_types?: {[key: string]: ConditionsWrapper}
+    group_types?: {[key: string]: ConditionsWrapper}
+    policy_types?: {[key: string]: ConditionsWrapper}
 }

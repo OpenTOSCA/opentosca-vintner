@@ -115,7 +115,6 @@ class DefaultOptions {
 
         this.policyDefaultCondition =
             this.raw.policy_default_condition ?? mode.policy_default_condition ?? this.defaultCondition
-
         assert.isBoolean(this.policyDefaultCondition)
 
         this.policyDefaultConsistencyCondition =
@@ -132,7 +131,6 @@ class DefaultOptions {
 
         this.groupDefaultCondition =
             this.raw.group_default_condition ?? mode.group_default_condition ?? this.defaultCondition
-
         assert.isBoolean(this.groupDefaultCondition)
 
         this.groupDefaultConsistencyCondition =
@@ -149,7 +147,6 @@ class DefaultOptions {
 
         this.artifactDefaultCondition =
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
-
         assert.isBoolean(this.artifactDefaultCondition)
 
         this.artifactDefaultConsistencyCondition =
@@ -281,7 +278,6 @@ class PruningOptions {
         assert.isBoolean(this.groupConsistencyPruning)
 
         this.groupSemanticPruning = this.raw.group_semantic_pruning ?? mode.group_semantic_pruning ?? this.groupPruning
-
         assert.isBoolean(this.groupSemanticPruning)
 
         this.artifactPruning = this.raw.artifact_pruning ?? mode.artifact_pruning ?? this.pruning
@@ -300,7 +296,6 @@ class PruningOptions {
 
         this.propertyConsistencyPruning =
             this.raw.property_consistency_pruning ?? mode.property_consistency_pruning ?? this.propertyPruning
-
         assert.isBoolean(this.propertyConsistencyPruning)
 
         this.propertySemanticPruning =
@@ -397,7 +392,7 @@ class SolverOptions {
 
         this.enabled = optimization !== false
         this.max = optimization === 'max'
-        this.min = optimization === true || optimization === 'min'
+        this.min = optimization === 'min' || optimization === true
     }
 }
 

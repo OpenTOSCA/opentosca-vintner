@@ -78,9 +78,8 @@ export default class Type extends Element {
     }
 
     getElementSpecificCondition() {
-        const conditions = this.container.presenceCondition
         return {
-            conditions,
+            conditions: this.container.presenceCondition,
             consistency: true,
             semantic: false,
         }

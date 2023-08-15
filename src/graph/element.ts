@@ -102,7 +102,9 @@ export default abstract class Element {
         return undefined
     }
 
-    abstract getElementSpecificCondition(): ConditionsWrapper | undefined
+    getElementSpecificCondition(): ConditionsWrapper | undefined {
+        return {conditions: true, consistency: true, semantic: true}
+    }
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {

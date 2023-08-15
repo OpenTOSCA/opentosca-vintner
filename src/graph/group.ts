@@ -80,9 +80,8 @@ export default class Group extends Element {
     }
 
     getElementSpecificCondition() {
-        const conditions = {has_present_member: this.toscaId, _cached_element: this}
         return {
-            conditions,
+            conditions: {has_present_member: this.toscaId, _cached_element: this},
             consistency: false,
             semantic: true,
         }

@@ -139,8 +139,8 @@ The following options are used to configure the default conditions of elements.
 | node_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                        |
 | relation_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).  |
 | relation_default_condition_mode        | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                      |
-| relation_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default condition for relations.                             |
-| relation_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic consistency condition for relations.        |
+| relation_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                    |
+| relation_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for relations.                 |
 | policy_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).   |
 | policy_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                  |
 | policy_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                     |
@@ -223,14 +223,20 @@ _This is an experimental feature._
 
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-- `strict`: no default or pruning conditions are enabled
+- `strict`: no default or pruning conditions are enabled at all
 - `consistent-strict`: all default consistency conditions are enabled
-- `consitent-loose`: consistency pruning is enabled everywhere
+- `consitent-loose`: consistency pruning is enabled
 - `default`: all default conditions are enabled (consistency and semantic)
-- `loose`: pruning conditions is enabled everywhere (consistency and semantic)
+- `loose`: pruning is enabled everywhere (consistency and semantic)
 
 
-## Element-Specific Default Conditions
+## Default Conditions
+
+There are element-specific default conditions and type-specific default conditions.
+Element-specific default conditions are generic default conditions defined per element.
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.
+
+### Element-Specific Default Conditions
 
 _This is an experimental feature._
 
@@ -263,18 +269,18 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Relation (Target)                                      | true        | false    | Check if the target of the relation is present.                                |
 
 
-## Type-Specific Default Conditions
+### Type-Specific Default Conditions
 
-_This is an experimental feature._
+_This is an experimental feature. Conditional types conflict with this feature!_
 
-Type-specific default conditions can be defined to override element-specific default conditions.
-A type-specific default condition is defined as follows and are supported for nodes, relations, properties, artifact, groups, and policies.
+Type-specific default conditions can be defined to override element-specific default conditions for specific type.
+A type-specific default condition is defined as follows and is supported for nodes, relations, properties, artifact, groups, and policies.
 
-| Keyname           | Mandatory | Type                                                   | Default                                                                                                  | Description                                         |
-|-------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Keyname           | Mandatory | Type                                                   | Default                                                                                                  | Description                                             |
+|-------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | conditions        | true      | VariabilityCondition &#124; List(VariabilityCondition) | A variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
-| consistency       | false     | Boolean                                                | false                                                                                                    | An optional description for the variability preset. |
-| semantic          | false     | Boolean                                                | true                                                                                                     | A required map of input parameter assignments.      |
+| consistency       | false     | Boolean                                                | false                                                                                                    | Configures the condition to be a consistency condition. |
+| semantic          | false     | Boolean                                                | true                                                                                                     | Configures the condition to be a semantic condition.    |
 
 For example, the node type `scenario.monitor` defines a type-specific semantic default condition checking for the presence of its host.
 

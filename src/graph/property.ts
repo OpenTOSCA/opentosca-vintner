@@ -100,8 +100,7 @@ export default class Property extends Element {
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
     getElementSpecificCondition() {
-        const conditions = this.container.presenceCondition
-        return {conditions, consistency: true, semantic: false}
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression

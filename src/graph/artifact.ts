@@ -77,7 +77,7 @@ export default class Artifact extends Element {
         assert.isString(type)
 
         const tsc =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[type]
+            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[type]
         if (check.isUndefined(tsc)) return
         assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
 
@@ -88,8 +88,7 @@ export default class Artifact extends Element {
     }
 
     getElementSpecificCondition() {
-        const conditions = this.container.presenceCondition
-        return {conditions, consistency: true, semantic: false}
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
     private _presenceCondition?: LogicExpression
