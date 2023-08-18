@@ -215,3 +215,8 @@ This command is also executed during the `release` workflow and, therefore, over
 ```shell linenums="1"
 yarn docs:generate:tests:query
 ```
+
+## Limitations
+
+- Performance is suffering due to the heavy use of plugins.
+- It is not possible to configure which release should be shown in the navigation bar. The latest release is always use which is in general correct.
