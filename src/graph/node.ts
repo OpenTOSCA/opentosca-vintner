@@ -129,6 +129,18 @@ export default class Node extends Element {
                 )
             }
 
+            if (it === 'outgoing') {
+                return conditions.push(
+                    this.isSource ? {has_outgoing_relation: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'outgoingnaive') {
+                return conditions.push(
+                    this.isSource ? {has_outgoing_relation_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
             if (it === 'artifact') {
                 return conditions.push(this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true)
             }

@@ -31,6 +31,8 @@ export type NodeDefaultConditionMode =
     | 'artifact'
     | 'artifactnaive'
     | 'incoming-artifact'
+    | 'outgoing'
+    | 'outgoingnaive'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
@@ -202,6 +204,8 @@ export type LogicExpression =
           has_source?: string | 'SELF' | 'CONTAINER'
           has_incoming_relation?: string | 'SELF' | 'CONTAINER'
           has_incoming_relation_naive?: string | 'SELF' | 'CONTAINER'
+          has_outgoing_relation?: string | 'SELF' | 'CONTAINER'
+          has_outgoing_relation_naive?: string | 'SELF' | 'CONTAINER'
           has_artifact?: string | 'SELF' | 'CONTAINER'
           has_artifact_naive?: string | 'SELF' | 'CONTAINER'
 
