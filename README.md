@@ -13,6 +13,7 @@
 [![Plugins](https://img.shields.io/badge/Orchestrators-xOpera%20%7C%20Unfurl-blueviolet.svg)](https://vintner.opentosca.org)
 [![OpenTOSCA](https://img.shields.io/badge/OpenTOSCA-%E2%9D%A4%EF%B8%8F-ff69b4)](https://opentosca.org)
 [![MiniSat](https://img.shields.io/badge/MiniSat-%E2%9D%A4%EF%B8%8F-ff69b4)](https://github.com/meteor/logic-solver)
+[![Discord](https://img.shields.io/badge/Discord-online-blue)](https://discord.gg/Uz6348Ctmg)
 
 OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
 Preprocessing includes, e.g., the resolving of deployment variability.
