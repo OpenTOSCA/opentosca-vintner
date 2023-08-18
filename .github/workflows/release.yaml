@@ -6,6 +6,7 @@ on:
             - main
             - fix/release-workflow
 
+concurrency: release
 jobs:
     release:
         name: Release
@@ -146,18 +147,7 @@ jobs:
                           console.log("Did not delete tag:", e)
                       }
 
-            - name: (RELEASE) Create Latest Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      await github.git.createRef({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          ref: "refs/tags/latest",
-                          sha: context.sha
-                      })
-
-            - name: (RELEASE) Create Latest Release
+            - name: (RELEASE) Create Latest Release (and Tag)
               run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
