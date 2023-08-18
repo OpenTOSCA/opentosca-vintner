@@ -28,6 +28,23 @@ Branches should be names as follows
 Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
 The commit message should not have a link to the merge request.
 
+## Tags 
+
+A tag must be created for each publication, thesis ...
+Therefore, run the following commands.
+
+```shell linenums="1"
+git tag -s <tag_name> -m <tag_message>
+git push origin <tag_name>
+```
+
+For example, the following commands create and push the tag for the publication "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model".
+
+```shell linenums="1"
+git tag -s publication-stoetzner-2022-vdmm -m "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model"
+git push origin publication-stoetzner-2022-vdmm
+```
+
 
 ## Command Line Interface
 
