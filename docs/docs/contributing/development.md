@@ -38,7 +38,7 @@ git tag -s <tag_name> -m <tag_message>
 git push origin <tag_name>
 ```
 
-For example, the following commands create and push the tag for the publication "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model".
+For example, the following commands create and push the tag for the publication "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" published by Stötzner et al. in 2022.
 
 ```shell linenums="1"
 git tag -s publication-stoetzner-2022-vdmm -m "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model"

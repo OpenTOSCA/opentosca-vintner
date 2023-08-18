@@ -46,7 +46,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
   - [Model of the Motivating Scenario using Unfurl](examples/unfurl-motivation)
   - [Model of the Motivating Scenario using xOpera](examples/xopera-motivation)
-  - [@publication-stoetzner-2022-vdmm](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2022-vdmm-v2)
+  - [@publication-stoetzner-2022-vdmm](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2022-vdmm)
 
 # Haftungsausschluss
 
