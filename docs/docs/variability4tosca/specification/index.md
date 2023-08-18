@@ -259,14 +259,16 @@ In contrast,  a semantic condition targets semantic aspect of elements or the ty
 Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.
 
-| Element                                                | Consistency | Semantic | Default Conditions                                                             |
-|--------------------------------------------------------|-------------|----------|--------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (incomingnaive)  | false       | true     | Check if any incoming relation is present using `has_incoming_relation_naive`. |
-| Node Template with Incoming Relations (source)         | false       | true     | Check if any source of any incoming relation is present.                       |
-| Node Template with Host (host)                         | false       | true     | Check if any host is present.                                                  |
-| Node Template with Artifact (artifactnaive)            | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
-| Relation (Source)                                      | true        | false    | Check if the source of the relation is present.                                |
-| Relation (Target)                                      | true        | false    | Check if the target of the relation is present.                                |
+| Element                                               | Consistency | Semantic | Default Conditions                                                             |
+|-------------------------------------------------------|-------------|----------|--------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (incomingnaive) | false       | true     | Check if any incoming relation is present using `has_incoming_relation_naive`. |
+| Node Template with Incoming Relations (source)        | false       | true     | Check if any source of any incoming relation is present.                       |
+| Node Template with Outgoing Relations (outgoing)      | false       | true     | Check if any outgoing relation is present.                                     |
+| Node Template with Outgoing Relations (outgoingnaive) | false       | true     | Check if any outgoing relation is present using `has_outgoing_relation_naive`. |
+| Node Template with Host (host)                        | false       | true     | Check if any host is present.                                                  |
+| Node Template with Artifact (artifactnaive)           | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
+| Relation (Source)                                     | true        | false    | Check if the source of the relation is present.                                |
+| Relation (Target)                                     | true        | false    | Check if the target of the relation is present.                                |
 
 
 ### Type-Specific Default Conditions
@@ -741,6 +743,8 @@ The following presence operators can be used inside a logic expression.
 | has_source                  | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                                                  |
 | has_incoming_relation       | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                                            |
 | has_incoming_relation_naive | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations. |
+| has_outgoing_relation       | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is source of at least one present outgoing relationship.                                                                                            |
+| has_outgoing_relation_naive | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is source of at least one present outgoing relationship in a naive way that will result in a circle considering the default condition of relations. |
 | has_artifact                | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any artifact of the node template is present.                                                                                                                         |
 | has_artifact_naive          | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
 | relation_presence           | Tuple(Node: String &#124; SELF &#124; CONTAINER, Relation: String &#124; Number)    | Boolean | Returns if relation is present.                                                                                                                                                  |

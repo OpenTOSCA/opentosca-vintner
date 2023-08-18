@@ -452,6 +452,28 @@ export default class Solver {
         }
 
         /**
+         * has_outgoing_relation
+         */
+        if (check.isDefined(expression.has_outgoing_relation)) {
+            const node = this.graph.getNode(expression.has_outgoing_relation, {
+                element,
+                cached,
+            })
+            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.explicitId, it.target.id)))
+        }
+
+        /**
+         * has_outgoing_relation_naive
+         */
+        if (check.isDefined(expression.has_outgoing_relation_naive)) {
+            const node = this.graph.getNode(expression.has_outgoing_relation_naive, {
+                element,
+                cached,
+            })
+            return MiniSat.or(node.outgoing.map(it => it.id))
+        }
+
+        /**
          * has_artifact
          */
         if (check.isDefined(expression.has_artifact)) {
