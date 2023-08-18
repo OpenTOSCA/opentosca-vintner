@@ -100,7 +100,7 @@ jobs:
                           console.log("Did not delete tag:", e)
                       }
 
-            - name: (RELEASE) Create Build Release
+            - name: (RELEASE) Create Build Release (and Tag)
               run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
