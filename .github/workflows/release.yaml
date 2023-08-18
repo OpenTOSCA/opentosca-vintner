@@ -6,6 +6,7 @@ on:
             - main
             - fix/release-workflow
 
+concurrency: release
 jobs:
     release:
         name: Release

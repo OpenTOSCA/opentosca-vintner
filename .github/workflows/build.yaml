@@ -100,17 +100,6 @@ jobs:
                           console.log("Did not delete tag:", e)
                       }
 
-            - name: (RELEASE) Create Build Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      await github.git.createRef({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          ref: `refs/tags/build-${context.sha}`,
-                          sha: context.sha
-                      })
-
             - name: (RELEASE) Create Build Release
               run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
               env:
