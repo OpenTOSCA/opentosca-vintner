@@ -21,22 +21,12 @@ export default class Input extends Element {
         return this.name
     }
 
-    readonly defaultEnabled = false
-    readonly pruningEnabled = false
-
-    readonly defaultConsistencyCondition = true
-    readonly defaultSemanticCondition = true
-    readonly consistencyPruning = true
-    readonly semanticPruning = true
-
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}
         return this._presenceCondition
     }
-
-    readonly defaultAlternativeCondition: undefined
 
     isInput() {
         return true

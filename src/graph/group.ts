@@ -94,8 +94,6 @@ export default class Group extends Element {
         return this._presenceCondition
     }
 
-    readonly defaultAlternativeCondition: undefined
-
     getTypeCondition(type: Type): LogicExpression {
         return {group_type_presence: [this.toscaId, type.index], _cached_element: type}
     }

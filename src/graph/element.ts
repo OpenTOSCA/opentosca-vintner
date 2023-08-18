@@ -78,10 +78,22 @@ export default abstract class Element {
 
     abstract presenceCondition: LogicExpression
 
-    abstract defaultConsistencyCondition: boolean
-    abstract defaultSemanticCondition: boolean
-    abstract consistencyPruning: boolean
-    abstract semanticPruning: boolean
+    get defaultConsistencyCondition() {
+        return true
+    }
+
+    get defaultSemanticCondition() {
+        return true
+    }
+
+    get consistencyPruning() {
+        return true
+    }
+
+    get semanticPruning() {
+        return true
+    }
+
     isConditionAllowed(wrapper?: ConditionsWrapper) {
         if (check.isUndefined(wrapper)) return false
 
@@ -124,10 +136,18 @@ export default abstract class Element {
     }
 
     defaultAlternative = false
-    abstract defaultAlternativeCondition?: LogicExpression
 
-    abstract defaultEnabled: boolean
-    abstract pruningEnabled: boolean
+    get defaultAlternativeCondition(): LogicExpression | undefined {
+        return undefined
+    }
+
+    get defaultEnabled() {
+        return false
+    }
+
+    get pruningEnabled() {
+        return false
+    }
 
     private _graph?: Graph
 

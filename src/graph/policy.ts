@@ -92,8 +92,6 @@ export default class Policy extends Element {
         return this._presenceCondition
     }
 
-    readonly defaultAlternativeCondition = undefined
-
     getTypeCondition(type: Type): LogicExpression {
         return {policy_type_presence: [this.toscaId, type.index], _cached_element: type}
     }

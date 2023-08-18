@@ -173,8 +173,6 @@ export default class Node extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
-    readonly defaultAlternativeCondition = undefined
-
     private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
