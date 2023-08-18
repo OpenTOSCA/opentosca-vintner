@@ -41,7 +41,7 @@ export default class Graph {
 
     _options?: Options
     set options(options: Options) {
-        assert.isUndefined(this._options, 'Options defined')
+        assert.isUndefined(this._options, 'Options already defined')
         this._options = options
     }
 

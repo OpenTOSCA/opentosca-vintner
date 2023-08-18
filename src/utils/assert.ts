@@ -46,8 +46,8 @@ export function isNumbers(element: unknown): asserts element is number[] {
     element.forEach(isNumber)
 }
 
-export function isArray(element: unknown): asserts element is Array<unknown> {
-    if (!check.isArray(element)) throw new Error(`Element "${utils.stringify(element)}" is not an array`)
+export function isArray(element: unknown, msg?: string): asserts element is Array<unknown> {
+    if (!check.isArray(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not an array`)
 }
 
 export function isObject(element: unknown): asserts element is object {

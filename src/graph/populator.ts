@@ -81,7 +81,10 @@ export class Populator {
     }
 
     private populateImports() {
-        for (const [index, definition] of (this.graph.serviceTemplate.imports || []).entries()) {
+        const imports = this.graph.serviceTemplate.imports || []
+        assert.isArray(imports, 'Imports must be an array')
+
+        for (const [index, definition] of imports.entries()) {
             const imp = new Import({index, raw: definition})
             imp.graph = this.graph
             this.graph.imports.push(imp)
@@ -210,7 +213,7 @@ export class Populator {
 
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
         if (check.isString(template)) return
-        if (check.isUndefined(template.type)) throw new Error(`${element.Display} has no type`)
+        assert.isDefined(template.type, `${element.Display} has no type`)
 
         // Collect types
         const types: VariabilityPointList<TypeAssignment> = check.isString(template.type)
@@ -378,13 +381,11 @@ export class Populator {
     }
 
     private populatePolicies() {
-        if (
-            check.isDefined(this.graph.serviceTemplate.topology_template?.policies) &&
-            !check.isArray(this.graph.serviceTemplate.topology_template?.policies)
-        )
-            throw new Error(`Policies must be an array`)
+        const policies = this.graph.serviceTemplate.topology_template?.policies
+        if (check.isUndefined(policies)) return
+        assert.isArray(policies, 'Policies must be an array')
 
-        for (const [index, map] of this.graph.serviceTemplate.topology_template?.policies?.entries() || []) {
+        for (const [index, map] of policies.entries() || []) {
             const [name, template] = utils.firstEntry(map)
             const policy = new Policy({name, raw: template, index})
             policy.graph = this.graph

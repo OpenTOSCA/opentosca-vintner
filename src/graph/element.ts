@@ -132,11 +132,12 @@ export default abstract class Element {
     private _graph?: Graph
 
     set graph(graph) {
+        assert.isUndefined(this._graph, `${this.Display} has already graph assigned`)
         this._graph = graph
     }
 
     get graph() {
-        if (check.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
+        assert.isDefined(this._graph, `${this.Display} has no graph assigned`)
         return this._graph
     }
 
