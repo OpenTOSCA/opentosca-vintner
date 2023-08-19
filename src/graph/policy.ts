@@ -59,7 +59,7 @@ export default class Policy extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.policySemanticPruning
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {
             conditions: {has_present_target: this.toscaId, _cached_element: this},
             consistency: false,

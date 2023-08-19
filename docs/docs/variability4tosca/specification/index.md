@@ -232,15 +232,15 @@ There are several predefined resolving modes which provide different useful comb
 
 ## Default Conditions
 
-There are element-specific default conditions and type-specific default conditions.
-Element-specific default conditions are generic default conditions defined per element.
-However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.
+There are element-generic default conditions and type-specific default conditions.
+Element-generic default conditions are generic default conditions defined per element.
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.
 
-### Element-Specific Default Conditions
+### Element-Generic Default Conditions
 
 _This is an experimental feature._
 
-The following element-specific default conditions can be assigned to elements.
+The following element-generic default conditions can be assigned to elements.
 
 | Element                                          | Consistency | Semantic | Default Conditions                                                                 |
 |--------------------------------------------------|-------------|----------|------------------------------------------------------------------------------------|
@@ -275,7 +275,7 @@ The following default conditions can be chosen instead of the ones introduced ab
 
 _This is an experimental feature. Conditional types conflict with this feature!_
 
-Type-specific default conditions can be defined to override element-specific default conditions for specific type.
+Type-specific default conditions can be defined to override element-generic default conditions for specific type.
 A type-specific default condition is defined as follows and is supported for nodes, relations, properties, artifact, groups, and policies.
 
 | Keyname           | Mandatory | Type                                                   | Default                                                                                                  | Description                                             |
@@ -937,9 +937,9 @@ For example, when evaluating if a property of a node template is present, then e
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
 
-There are element-specific default conditions and type-specific default conditions. 
-Element-specific default conditions are generic default conditions defined per element. 
-However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.
+There are element-generic default conditions and type-specific default conditions. 
+Element-generic default conditions are generic default conditions defined per element. 
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.
 
 ### Optimization
 

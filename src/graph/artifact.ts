@@ -87,7 +87,7 @@ export default class Artifact extends Element {
         return utils.copy(tsc)
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 

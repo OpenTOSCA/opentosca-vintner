@@ -79,7 +79,7 @@ export default class Group extends Element {
         return utils.copy(tsc)
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {
             conditions: {has_present_member: this.toscaId, _cached_element: this},
             consistency: false,

@@ -77,7 +77,7 @@ export default class Type extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {
             conditions: this.container.presenceCondition,
             consistency: true,

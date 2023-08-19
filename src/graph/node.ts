@@ -104,7 +104,7 @@ export default class Node extends Element {
         return utils.copy(tsc)
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         const conditions: LogicExpression[] = []
 
         const mode = this.getDefaultMode
