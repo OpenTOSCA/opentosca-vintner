@@ -116,24 +116,7 @@ export class Populator {
             this.populateRelations(node, nodeTemplate)
 
             // Artifacts
-            if (check.isDefined(nodeTemplate.artifacts)) {
-                if (check.isArray(nodeTemplate.artifacts)) {
-                    for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                        this.populateArtifact(node, artifactMap, artifactIndex)
-                    }
-                } else {
-                    for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
-                        const map: ArtifactDefinitionMap = {}
-                        map[artifactName] = artifactDefinition
-                        this.populateArtifact(node, map)
-                    }
-                }
-                // Ensure that there is only one default artifact per artifact name
-                node.artifactsMap.forEach(artifacts => {
-                    const candidates = artifacts.filter(it => it.defaultAlternative)
-                    if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
-                })
-            }
+            this.populateArtifacts(node, nodeTemplate)
         })
 
         // Ensure that each relationship is used
@@ -144,16 +127,8 @@ export class Populator {
                 throw new Error(`Relation "${relationshipName}" is never used`)
         }
 
-        // Assign ingoing relations to nodes and assign target to relation
-        this.graph.relations.forEach(relation => {
-            const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
-            const target = this.graph.nodesMap.get(targetName)
-            assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
-
-            relation.target = target
-            target.ingoing.push(relation)
-            target.relations.push(relation)
-        })
+        // Link relations
+        this.linkRelations()
     }
 
     private populateRelations(node: Node, template: NodeTemplate) {
@@ -216,6 +191,19 @@ export class Populator {
         })
     }
 
+    private linkRelations() {
+        // Assign ingoing relations to nodes and assign target to relation
+        this.graph.relations.forEach(relation => {
+            const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
+            const target = this.graph.nodesMap.get(targetName)
+            assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
+
+            relation.target = target
+            target.ingoing.push(relation)
+            target.relations.push(relation)
+        })
+    }
+
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
         if (check.isString(template)) return
         assert.isDefined(template.type, `${element.Display} has no type`)
@@ -252,6 +240,27 @@ export class Populator {
         // Ensure that there is only one default type
         if (element.types.filter(it => it.defaultAlternative).length > 1)
             throw new Error(`${element.Display} has multiple default types`)
+    }
+
+    private populateArtifacts(node: Node, nodeTemplate: NodeTemplate) {
+        if (check.isDefined(nodeTemplate.artifacts)) {
+            if (check.isArray(nodeTemplate.artifacts)) {
+                for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
+                    this.populateArtifact(node, artifactMap, artifactIndex)
+                }
+            } else {
+                for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
+                    const map: ArtifactDefinitionMap = {}
+                    map[artifactName] = artifactDefinition
+                    this.populateArtifact(node, map)
+                }
+            }
+            // Ensure that there is only one default artifact per artifact name
+            node.artifactsMap.forEach(artifacts => {
+                const candidates = artifacts.filter(it => it.defaultAlternative)
+                if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
+            })
+        }
     }
 
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
