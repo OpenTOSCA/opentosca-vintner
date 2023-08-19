@@ -301,8 +301,8 @@
 <nav aria-label="Default Conditions" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#element-specific-default-conditions">
-    Element-Specific Default Conditions
+<a class="md-nav__link" href="#element-generic-default-conditions">
+    Element-Generic Default Conditions
   </a>
 </li>
 <li class="md-nav__item">
@@ -2303,8 +2303,8 @@
 <nav aria-label="Default Conditions" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#element-specific-default-conditions">
-    Element-Specific Default Conditions
+<a class="md-nav__link" href="#element-generic-default-conditions">
+    Element-Generic Default Conditions
   </a>
 </li>
 <li class="md-nav__item">
@@ -3276,12 +3276,12 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <li><code>loose</code>: pruning is enabled everywhere (consistency and semantic)</li>
 </ul>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">¶</a></h2>
-<p>There are element-specific default conditions and type-specific default conditions.
-Element-specific default conditions are generic default conditions defined per element.
-However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.</p>
-<h3 id="element-specific-default-conditions">Element-Specific Default Conditions<a class="headerlink" href="#element-specific-default-conditions" title="Permanent link">¶</a></h3>
+<p>There are element-generic default conditions and type-specific default conditions.
+Element-generic default conditions are generic default conditions defined per element.
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.</p>
+<h3 id="element-generic-default-conditions">Element-Generic Default Conditions<a class="headerlink" href="#element-generic-default-conditions" title="Permanent link">¶</a></h3>
 <p><em>This is an experimental feature.</em></p>
-<p>The following element-specific default conditions can be assigned to elements.</p>
+<p>The following element-generic default conditions can be assigned to elements.</p>
 <table>
 <thead>
 <tr>
@@ -3408,7 +3408,7 @@ The following default conditions can be chosen instead of the ones introduced ab
 </table>
 <h3 id="type-specific-default-conditions">Type-Specific Default Conditions<a class="headerlink" href="#type-specific-default-conditions" title="Permanent link">¶</a></h3>
 <p><em>This is an experimental feature. Conditional types conflict with this feature!</em></p>
-<p>Type-specific default conditions can be defined to override element-specific default conditions for specific type.
+<p>Type-specific default conditions can be defined to override element-generic default conditions for specific type.
 A type-specific default condition is defined as follows and is supported for nodes, relations, properties, artifact, groups, and policies.</p>
 <table>
 <thead>
@@ -4875,9 +4875,9 @@ some or all of these consistency steps might be omitted.</p>
 For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.</p>
-<p>There are element-specific default conditions and type-specific default conditions. 
-Element-specific default conditions are generic default conditions defined per element. 
-However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-specific default conditions.</p>
+<p>There are element-generic default conditions and type-specific default conditions. 
+Element-generic default conditions are generic default conditions defined per element. 
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.</p>
 <h3 id="optimization">Optimization<a class="headerlink" href="#optimization" title="Permanent link">¶</a></h3>
 <p><em>This is an experimental feature.</em></p>
 <p>The variability-resolved service template can be optimized regarding minimal weight of node templates. 
@@ -5102,7 +5102,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 18, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 19, 2023</span>
 </small>
 </div>
 </article>
