@@ -60,19 +60,27 @@ export default abstract class Element {
         return utils.toFirstUpperCase(this.display)
     }
 
-    present?: boolean
+    private _present?: boolean
+    set present(present: boolean) {
+        assert.isUndefined(this._present, `${this.Display} has already a presence assigned`)
+        this._present = present
+    }
+
+    get present() {
+        assert.isDefined(this._present, `${this.Display} has no presence assigned`)
+        return this._present
+    }
+
     conditions: LogicExpression[] = []
 
     private _effectiveConditions?: LogicExpression[]
     set effectiveConditions(conditions: LogicExpression[]) {
-        if (check.isDefined(this._effectiveConditions))
-            throw new Error(`${this.Display} has already effective conditions assigned`)
+        assert.isUndefined(this._effectiveConditions, `${this.Display} has already effective conditions assigned`)
         this._effectiveConditions = conditions
     }
 
     get effectiveConditions() {
-        if (check.isUndefined(this._effectiveConditions))
-            throw new Error(`${this.Display} has no effective conditions assigned`)
+        assert.isDefined(this._effectiveConditions, `${this.Display} has no effective conditions assigned`)
         return this._effectiveConditions
     }
 
