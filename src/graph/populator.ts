@@ -12,6 +12,7 @@ import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/pro
 import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {NodeTemplate} from '#spec/node-template'
 import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
@@ -31,8 +32,8 @@ export class Populator {
         // Inputs
         this.populateInputs()
 
-        // Nodes and relations
-        this.populateNodesAndRelations()
+        // Nodes
+        this.populateNodes()
 
         // Groups
         this.populateGroups()
@@ -91,7 +92,7 @@ export class Populator {
         }
     }
 
-    private populateNodesAndRelations() {
+    private populateNodes() {
         this.getFromVariabilityPointMap(this.graph.serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.graph.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
@@ -112,57 +113,7 @@ export class Populator {
             this.populateProperties(node, nodeTemplate)
 
             // Relations
-            for (const [index, map] of nodeTemplate.requirements?.entries() || []) {
-                const [relationName, assignment] = utils.firstEntry(map)
-
-                const relation = new Relation({
-                    name: relationName,
-                    container: node,
-                    raw: assignment,
-                    index,
-                })
-                relation.graph = this.graph
-
-                if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
-                node.outgoingMap.get(relation.name)!.push(relation)
-                node.outgoing.push(relation)
-                node.relations.push(relation)
-                this.graph.relations.push(relation)
-
-                if (!check.isString(assignment)) {
-                    if (check.isString(assignment.relationship)) {
-                        const relationshipTemplate = (this.graph.serviceTemplate.topology_template
-                            ?.relationship_templates || {})[assignment.relationship]
-                        assert.isDefined(
-                            relationshipTemplate,
-                            `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${nodeName}" does not exist!`
-                        )
-
-                        if (this.graph.relationshipsMap.has(assignment.relationship))
-                            throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
-
-                        const relationship = new Relationship({
-                            name: assignment.relationship,
-                            relation,
-                            raw: relationshipTemplate,
-                        })
-                        this.graph.relationshipsMap.set(assignment.relationship, relationship)
-                        relation.relationship = relationship
-
-                        // Type
-                        this.populateTypes(relation, relationshipTemplate)
-
-                        // Properties
-                        this.populateProperties(relation, relationshipTemplate)
-                    }
-
-                    if (check.isObject(assignment.relationship)) {
-                        throw new Error(
-                            `Relation "${relationName}" of node "${nodeName}" contains a relationship template`
-                        )
-                    }
-                }
-            }
+            this.populateRelations(node, nodeTemplate)
 
             // Ensure that there are no multiple outgoing defaults
             node.outgoingMap.forEach(relations => {
@@ -209,6 +160,60 @@ export class Populator {
             target.ingoing.push(relation)
             target.relations.push(relation)
         })
+    }
+
+    private populateRelations(node: Node, template: NodeTemplate) {
+        for (const [index, map] of template.requirements?.entries() || []) {
+            const [relationName, assignment] = utils.firstEntry(map)
+
+            const relation = new Relation({
+                name: relationName,
+                container: node,
+                raw: assignment,
+                index,
+            })
+            relation.graph = this.graph
+
+            if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
+            node.outgoingMap.get(relation.name)!.push(relation)
+            node.outgoing.push(relation)
+            node.relations.push(relation)
+            this.graph.relations.push(relation)
+
+            if (!check.isString(assignment)) {
+                if (check.isString(assignment.relationship)) {
+                    const relationshipTemplate = (this.graph.serviceTemplate.topology_template
+                        ?.relationship_templates || {})[assignment.relationship]
+                    assert.isDefined(
+                        relationshipTemplate,
+                        `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${node.name}" does not exist!`
+                    )
+
+                    if (this.graph.relationshipsMap.has(assignment.relationship))
+                        throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
+
+                    const relationship = new Relationship({
+                        name: assignment.relationship,
+                        relation,
+                        raw: relationshipTemplate,
+                    })
+                    this.graph.relationshipsMap.set(assignment.relationship, relationship)
+                    relation.relationship = relationship
+
+                    // Type
+                    this.populateTypes(relation, relationshipTemplate)
+
+                    // Properties
+                    this.populateProperties(relation, relationshipTemplate)
+                }
+
+                if (check.isObject(assignment.relationship)) {
+                    throw new Error(
+                        `Relation "${relationName}" of node "${node.name}" contains a relationship template`
+                    )
+                }
+            }
+        }
     }
 
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
