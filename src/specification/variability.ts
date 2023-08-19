@@ -168,11 +168,11 @@ export type VariabilityAlternative = {
     conditions?: LogicExpression | LogicExpression[]
     default_alternative?: boolean
     default_condition?: boolean
-    default_consistency_condition?: boolean // TODO
-    default_semantic_condition?: boolean // TODO
+    default_consistency_condition?: boolean
+    default_semantic_condition?: boolean
     pruning?: boolean
-    consistency_pruning?: boolean // TODO
-    semantic_pruning?: boolean // TODO
+    consistency_pruning?: boolean
+    semantic_pruning?: boolean
 }
 
 export type NodeTypePresenceArguments = [node: string, type: string | number]
