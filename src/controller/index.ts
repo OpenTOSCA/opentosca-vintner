@@ -8,7 +8,7 @@ import SetupController from './setup'
 import TemplateController from './template'
 import TemplatesController from './templates'
 
-const Controller = {
+export default {
     info: InfoController,
     instances: InstancesController,
     query: QueryController,
@@ -19,5 +19,3 @@ const Controller = {
     templates: TemplatesController,
     sensors: SensorsController,
 }
-
-export default Controller
