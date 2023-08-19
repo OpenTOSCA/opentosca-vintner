@@ -76,25 +76,37 @@ export default class Property extends Element {
     get defaultConsistencyCondition() {
         if (!check.isObject(this.raw) || check.isArray(this.raw))
             return this.graph.options.default.propertyDefaultConsistencyCondition
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultConsistencyCondition)
+        return Boolean(
+            this.raw.default_consistency_condition ??
+                this.raw.default_condition ??
+                this.graph.options.default.propertyDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
         if (!check.isObject(this.raw) || check.isArray(this.raw))
             return this.graph.options.default.propertyDefaultSemanticCondition
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultSemanticCondition)
+        return Boolean(
+            this.raw.default_semantic_condition ??
+                this.raw.default_condition ??
+                this.graph.options.default.propertyDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
         if (!check.isObject(this.raw) || check.isArray(this.raw))
             return this.graph.options.pruning.propertyConsistencyPruning
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning)
+        return Boolean(
+            this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning
+        )
     }
 
     get semanticPruning() {
         if (!check.isObject(this.raw) || check.isArray(this.raw))
             return this.graph.options.pruning.propertySemanticPruning
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning)
+        return Boolean(
+            this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning
+        )
     }
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...

@@ -46,19 +46,27 @@ export default class Group extends Element {
     }
 
     get defaultConsistencyCondition() {
-        return this.raw.default_condition ?? this.graph.options.default.groupDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.groupDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
-        return this.raw.default_condition ?? this.graph.options.default.groupDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.groupDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
-        return this.raw.pruning ?? this.graph.options.pruning.groupConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.groupConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.raw.pruning ?? this.graph.options.pruning.groupSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.groupSemanticPruning
     }
 
     getTypeSpecificConditionWrapper() {

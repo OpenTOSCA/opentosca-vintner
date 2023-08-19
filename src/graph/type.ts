@@ -58,22 +58,30 @@ export default class Type extends Element {
 
     get defaultConsistencyCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.typeDefaultConsistencyCondition
-        return this.raw.default_condition ?? this.graph.options.default.typeDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.typeDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.typeDefaultSemanticCondition
-        return this.raw.default_condition ?? this.graph.options.default.typeDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.typeDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.typeConsistencyPruning
-        return this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
     }
 
     get semanticPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.typeSemanticPruning
-        return this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
     }
 
     getElementGenericCondition() {

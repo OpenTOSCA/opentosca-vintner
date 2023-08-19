@@ -91,22 +91,30 @@ export default class Relation extends Element {
 
     get defaultConsistencyCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConsistencyCondition
-        return this.raw.default_condition ?? this.graph.options.default.relationDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.relationDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.relationDefaultSemanticCondition
-        return this.raw.default_condition ?? this.graph.options.default.relationDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.relationDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.relationConsistencyPruning
-        return this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
     }
 
     get semanticPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.relationSemanticPruning
-        return this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
     }
 
     getTypeSpecificConditionWrapper() {

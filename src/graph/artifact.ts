@@ -50,22 +50,30 @@ export default class Artifact extends Element {
 
     get defaultConsistencyCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultConsistencyCondition
-        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.artifactDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
         if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultSemanticCondition
-        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.artifactDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.artifactConsistencyPruning
-        return this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
     }
 
     get semanticPruning() {
         if (check.isString(this.raw)) return this.graph.options.pruning.artifactSemanticPruning
-        return this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
     get defaultCondition() {
