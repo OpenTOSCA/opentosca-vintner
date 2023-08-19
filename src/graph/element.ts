@@ -125,7 +125,6 @@ export default abstract class Element {
         return undefined
     }
 
-    // TODO: DRY
     getTypeSpecificCondition(): ConditionsWrapper | undefined {
         const tsc = this.getTypeSpecificConditionWrapper()
         if (check.isUndefined(tsc)) return
