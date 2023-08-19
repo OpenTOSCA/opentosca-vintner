@@ -1,5 +1,6 @@
 :root > * {
     --md-typeset-a-color: var(--md-accent-fg-color);
+    --md-default-fg-color: black;
 }
 
 /**
