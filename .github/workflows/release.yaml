@@ -129,17 +129,15 @@ jobs:
             ###################################################
 
             - name: (RELEASE) Delete Latest Release
-              run: gh release delete latest -y || true
+              run: gh release delete latest --cleanup-tag --yes || true
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             # TODO: also at build pipeline
-            - name: (RELEASE) Delete Latest Tag
-              run: |
-                  git push --delete origin latest || true
-                  git tag --delete latest || true
+            - name: (RELEASE) Delete Latest Tag (Local)
+              run: git tag --delete latest || true
 
-            - name: (RELEASE) Create Latest Release (and Tag)
+            - name: (RELEASE) Create Latest Release
               run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
