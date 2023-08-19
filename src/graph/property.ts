@@ -103,7 +103,6 @@ export default class Property extends Element {
         return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = this.container.getPropertyCondition(this)
@@ -111,7 +110,6 @@ export default class Property extends Element {
     }
 
     // Check if no other property having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression {
         if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = bratanize(

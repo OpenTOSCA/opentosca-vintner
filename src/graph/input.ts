@@ -21,7 +21,6 @@ export default class Input extends Element {
         return this.name
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {input_presence: this.toscaId, _cached_element: this}

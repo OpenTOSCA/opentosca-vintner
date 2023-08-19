@@ -85,7 +85,6 @@ export default class Type extends Element {
         }
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
         if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
@@ -93,7 +92,6 @@ export default class Type extends Element {
     }
 
     // Check if no other type is present
-    private _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression {
         if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = bratanize(this.container.types.filter(it => it !== this))

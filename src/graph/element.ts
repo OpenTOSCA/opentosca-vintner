@@ -86,6 +86,7 @@ export default abstract class Element {
         return this._effectiveConditions
     }
 
+    protected _presenceCondition?: LogicExpression
     abstract presenceCondition: LogicExpression
 
     get defaultConsistencyCondition() {
@@ -159,6 +160,7 @@ export default abstract class Element {
 
     defaultAlternative = false
 
+    protected _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression | undefined {
         return undefined
     }

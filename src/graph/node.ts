@@ -163,7 +163,6 @@ export default class Node extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}

@@ -84,7 +84,6 @@ export default class Artifact extends Element {
         return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {artifact_presence: this.toscaId, _cached_element: this}
@@ -92,7 +91,6 @@ export default class Artifact extends Element {
     }
 
     // Check if no other artifact having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
     get defaultAlternativeCondition(): LogicExpression {
         if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = bratanize(

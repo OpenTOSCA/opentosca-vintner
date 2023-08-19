@@ -24,7 +24,6 @@ export default class Import extends Element {
         return this.index
     }
 
-    private _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {
         if (check.isUndefined(this._presenceCondition))
             this._presenceCondition = {import_presence: this.toscaId, _cached_element: this}
