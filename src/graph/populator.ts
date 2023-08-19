@@ -115,12 +115,6 @@ export class Populator {
             // Relations
             this.populateRelations(node, nodeTemplate)
 
-            // Ensure that there are no multiple outgoing defaults
-            node.outgoingMap.forEach(relations => {
-                const candidates = relations.filter(it => it.defaultAlternative)
-                if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
-            })
-
             // Artifacts
             if (check.isDefined(nodeTemplate.artifacts)) {
                 if (check.isArray(nodeTemplate.artifacts)) {
@@ -214,6 +208,12 @@ export class Populator {
                 }
             }
         }
+
+        // Ensure that there are no multiple outgoing defaults
+        node.outgoingMap.forEach(relations => {
+            const candidates = relations.filter(it => it.defaultAlternative)
+            if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
+        })
     }
 
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
