@@ -133,7 +133,6 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # TODO: also at build pipeline
             - name: (RELEASE) Delete Latest Tag (Local)
               run: git tag --delete latest || true
 

@@ -82,23 +82,12 @@ jobs:
             ###################################################
 
             - name: (RELEASE) Delete Build Release
-              run: gh release delete build-${GITHUB_SHA} || true
+              run: gh release delete build-${GITHUB_SHA} --cleanup-tag --yes || true
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (RELEASE) Delete Build Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      try {
-                          await github.git.deleteRef({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              ref: `tags/build-${context.sha}`
-                          })
-                      } catch (e) {
-                          console.log("Did not delete tag:", e)
-                      }
+            - name: (RELEASE) Delete Latest Tag (Local)
+              run: git tag --delete build-${GITHUB_SHA} || true
 
             - name: (RELEASE) Create Build Release (and Tag)
               run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
