@@ -85,10 +85,8 @@ export default class Type extends Element {
         }
     }
 
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
-        if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return this.container.getTypeCondition(this)
     }
 
     // Check if no other type is present

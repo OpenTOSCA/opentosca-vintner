@@ -86,8 +86,12 @@ export default abstract class Element {
         return this._effectiveConditions
     }
 
+    abstract constructPresenceCondition(): LogicExpression
     protected _presenceCondition?: LogicExpression
-    abstract presenceCondition: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.constructPresenceCondition()
+        return this._presenceCondition
+    }
 
     get defaultConsistencyCondition() {
         return true

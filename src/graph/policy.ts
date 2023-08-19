@@ -75,11 +75,8 @@ export default class Policy extends Element {
         ]
     }
 
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition)) {
-            this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
-        }
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return {policy_presence: this.toscaId, _cached_element: this}
     }
 
     getTypeCondition(type: Type): LogicExpression {

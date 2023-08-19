@@ -135,10 +135,8 @@ export default class Relation extends Element {
         return {conditions, consistency: true, semantic: false}
     }
 
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return {relation_presence: this.toscaId, _cached_element: this}
     }
 
     // Check if no other relation having the same name is present
