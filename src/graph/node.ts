@@ -148,19 +148,27 @@ export default class Node extends Element {
     }
 
     get defaultConsistencyCondition() {
-        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.nodeDefaultConsistencyCondition
+        )
     }
 
     get defaultSemanticCondition() {
-        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.nodeDefaultSemanticCondition
+        )
     }
 
     get consistencyPruning() {
-        return this.raw.pruning ?? this.graph.options.pruning.nodeConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.nodeConsistencyPruning
     }
 
     get semanticPruning() {
-        return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
     constructPresenceCondition() {
