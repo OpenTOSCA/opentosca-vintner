@@ -38,7 +38,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
   - [Model of the Motivating Scenario](examples/unfurl-artifacts)
   - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
-  - [@publication-stoetzner-2022-vdmm-v2](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2022-vdmm-v2)
+  - [@publication-stoetzner-2023-vdmm-v2](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2)
 
 <a id="stoetzner-2022-vdmm"/></a>
 - **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**

@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import {GroupTemplate} from '#spec/group-template'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
@@ -62,24 +61,16 @@ export default class Group extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.groupSemanticPruning
     }
 
-    getTypeSpecificCondition() {
+    getTypeSpecificConditionWrapper() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
-
         const type = this.types[0]
-        const tsc =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.group_types?.[
-                type.name
-            ]
-        if (check.isUndefined(tsc)) return
-        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
-
-        tsc.consistency = tsc.consistency ?? false
-        tsc.consistency = tsc.semantic ?? true
-        return utils.copy(tsc)
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.group_types?.[
+            type.name
+        ]
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {
             conditions: {has_present_member: this.toscaId, _cached_element: this},
             consistency: false,
@@ -87,14 +78,9 @@ export default class Group extends Element {
         }
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return {group_presence: this.toscaId, _cached_element: this}
     }
-
-    readonly defaultAlternativeCondition: undefined
 
     getTypeCondition(type: Type): LogicExpression {
         return {group_type_presence: [this.toscaId, type.index], _cached_element: type}

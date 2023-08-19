@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
@@ -86,25 +85,16 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    // TODO: DRY
-    getTypeSpecificCondition() {
+    getTypeSpecificConditionWrapper() {
         // Conditional types are not supported
         if (this.types.length > 1) return
-
         const type = this.types[0]
-
-        const tsc =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[type.name]
-        if (check.isUndefined(tsc)) return
-        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
-
-        tsc.consistency = tsc.consistency ?? false
-        tsc.consistency = tsc.semantic ?? true
-
-        return utils.copy(tsc)
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[
+            type.name
+        ]
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         const conditions: LogicExpression[] = []
 
         const mode = this.getDefaultMode
@@ -173,13 +163,8 @@ export default class Node extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
     }
 
-    readonly defaultAlternativeCondition = undefined
-
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return {node_presence: this.toscaId, _cached_element: this}
     }
 
     getTypeCondition(type: Type): LogicExpression {

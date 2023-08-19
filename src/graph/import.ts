@@ -1,6 +1,5 @@
 import * as check from '#check'
 import {ImportDefinition} from '#spec/import-definition'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 
@@ -24,22 +23,9 @@ export default class Import extends Element {
         return this.index
     }
 
-    readonly defaultEnabled = false
-    readonly pruningEnabled = false
-
-    readonly defaultConsistencyCondition = true
-    readonly defaultSemanticCondition = true
-    readonly consistencyPruning = true
-    readonly semanticPruning = true
-
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {import_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return {import_presence: this.toscaId, _cached_element: this}
     }
-
-    readonly defaultAlternativeCondition: undefined
 
     isImport() {
         return true

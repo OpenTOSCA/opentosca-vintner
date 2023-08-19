@@ -35,6 +35,8 @@ export default abstract class Element {
         return this._id
     }
 
+    abstract toscaId: any
+
     get explicitId() {
         return 'explicit.' + this.id
     }
@@ -60,28 +62,53 @@ export default abstract class Element {
         return utils.toFirstUpperCase(this.display)
     }
 
-    present?: boolean
+    private _present?: boolean
+    set present(present: boolean) {
+        assert.isUndefined(this._present, `${this.Display} has already a presence assigned`)
+        this._present = present
+    }
+
+    get present() {
+        assert.isDefined(this._present, `${this.Display} has no presence assigned`)
+        return this._present
+    }
+
     conditions: LogicExpression[] = []
 
     private _effectiveConditions?: LogicExpression[]
     set effectiveConditions(conditions: LogicExpression[]) {
-        if (check.isDefined(this._effectiveConditions))
-            throw new Error(`${this.Display} has already effective conditions assigned`)
+        assert.isUndefined(this._effectiveConditions, `${this.Display} has already effective conditions assigned`)
         this._effectiveConditions = conditions
     }
 
     get effectiveConditions() {
-        if (check.isUndefined(this._effectiveConditions))
-            throw new Error(`${this.Display} has no effective conditions assigned`)
+        assert.isDefined(this._effectiveConditions, `${this.Display} has no effective conditions assigned`)
         return this._effectiveConditions
     }
 
-    abstract presenceCondition: LogicExpression
+    abstract constructPresenceCondition(): LogicExpression
+    protected _presenceCondition?: LogicExpression
+    get presenceCondition(): LogicExpression {
+        if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.constructPresenceCondition()
+        return this._presenceCondition
+    }
 
-    abstract defaultConsistencyCondition: boolean
-    abstract defaultSemanticCondition: boolean
-    abstract consistencyPruning: boolean
-    abstract semanticPruning: boolean
+    get defaultConsistencyCondition() {
+        return true
+    }
+
+    get defaultSemanticCondition() {
+        return true
+    }
+
+    get consistencyPruning() {
+        return true
+    }
+
+    get semanticPruning() {
+        return true
+    }
+
     isConditionAllowed(wrapper?: ConditionsWrapper) {
         if (check.isUndefined(wrapper)) return false
 
@@ -98,18 +125,29 @@ export default abstract class Element {
         return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
     }
 
-    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+    getTypeSpecificConditionWrapper(): ConditionsWrapper | undefined {
         return undefined
     }
 
-    getElementSpecificCondition(): ConditionsWrapper | undefined {
+    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+        const tsc = this.getTypeSpecificConditionWrapper()
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.semantic = tsc.semantic ?? true
+
+        return utils.copy(tsc)
+    }
+
+    getElementGenericCondition(): ConditionsWrapper | undefined {
         return {conditions: true, consistency: true, semantic: true}
     }
 
     private _defaultCondition?: LogicExpression
     get defaultCondition(): LogicExpression {
         if (check.isUndefined(this._defaultCondition)) {
-            const candidates = [this.getTypeSpecificCondition(), this.getElementSpecificCondition()]
+            const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
             const selected = candidates.find(it => this.isConditionAllowed(it))
             assert.isDefined(selected, `${this.Display} has no default condition`)
 
@@ -124,19 +162,37 @@ export default abstract class Element {
     }
 
     defaultAlternative = false
-    abstract defaultAlternativeCondition?: LogicExpression
 
-    abstract defaultEnabled: boolean
-    abstract pruningEnabled: boolean
+    constructDefaultAlternativeCondition(): LogicExpression | undefined {
+        return undefined
+    }
+
+    protected _defaultAlternativeCondition?: LogicExpression
+
+    get defaultAlternativeCondition(): LogicExpression | undefined {
+        if (!this.defaultAlternative) return
+        if (check.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = this.constructDefaultAlternativeCondition()
+        return this._defaultAlternativeCondition
+    }
+
+    get defaultEnabled() {
+        return false
+    }
+
+    get pruningEnabled() {
+        return false
+    }
 
     private _graph?: Graph
 
     set graph(graph) {
+        assert.isUndefined(this._graph, `${this.Display} has already graph assigned`)
         this._graph = graph
     }
 
     get graph() {
-        if (check.isUndefined(this._graph)) throw new Error(`${this.Display} has no graph assigned`)
+        assert.isDefined(this._graph, `${this.Display} has no graph assigned`)
         return this._graph
     }
 

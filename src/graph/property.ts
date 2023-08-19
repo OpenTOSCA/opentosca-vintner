@@ -99,25 +99,17 @@ export default class Property extends Element {
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = this.container.getPropertyCondition(this)
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return this.container.getPropertyCondition(this)
     }
 
     // Check if no other property having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.container.propertiesMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
     }
 
     isProperty() {

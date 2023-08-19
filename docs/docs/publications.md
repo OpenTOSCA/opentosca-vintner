@@ -19,7 +19,7 @@ This document contains a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/unfurl-artifacts/stats', 'Models of the Complexity Evaluation') }}
-- {{ tag_link('publication-stoetzner-2022-vdmm-v2') }}
+- {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
 
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
 

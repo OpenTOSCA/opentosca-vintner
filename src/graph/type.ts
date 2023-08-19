@@ -5,7 +5,6 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import Element from './element'
@@ -77,7 +76,7 @@ export default class Type extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
     }
 
-    getElementSpecificCondition() {
+    getElementGenericCondition() {
         return {
             conditions: this.container.presenceCondition,
             consistency: true,
@@ -85,19 +84,13 @@ export default class Type extends Element {
         }
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
-        if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return this.container.getTypeCondition(this)
     }
 
     // Check if no other type is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(this.container.types.filter(it => it !== this))
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.types.filter(it => it !== this))
     }
 
     isType() {
