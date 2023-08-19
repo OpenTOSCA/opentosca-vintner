@@ -140,12 +140,8 @@ export default class Relation extends Element {
     }
 
     // Check if no other relation having the same name is present
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.source.outgoingMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
     }
 
     getTypeCondition(type: Type): LogicExpression {

@@ -88,14 +88,9 @@ export default class Artifact extends Element {
         return {artifact_presence: this.toscaId, _cached_element: this}
     }
 
-    // TODO: dry?
     // Check if no other artifact having the same name is present
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.container.artifactsMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition(): LogicExpression {
+        return bratanize(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
     }
 
     getPropertyCondition(property: Property): LogicExpression {

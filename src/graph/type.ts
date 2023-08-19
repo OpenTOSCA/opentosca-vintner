@@ -5,7 +5,6 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import Element from './element'
@@ -90,10 +89,8 @@ export default class Type extends Element {
     }
 
     // Check if no other type is present
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(this.container.types.filter(it => it !== this))
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.types.filter(it => it !== this))
     }
 
     isType() {

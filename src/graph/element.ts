@@ -163,9 +163,17 @@ export default abstract class Element {
 
     defaultAlternative = false
 
-    protected _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression | undefined {
+    constructDefaultAlternativeCondition(): LogicExpression | undefined {
         return undefined
+    }
+
+    protected _defaultAlternativeCondition?: LogicExpression
+
+    get defaultAlternativeCondition(): LogicExpression | undefined {
+        if (!this.defaultAlternative) return
+        if (check.isUndefined(this._defaultAlternativeCondition))
+            this._defaultAlternativeCondition = this.constructDefaultAlternativeCondition()
+        return this._defaultAlternativeCondition
     }
 
     get defaultEnabled() {

@@ -108,12 +108,8 @@ export default class Property extends Element {
     }
 
     // Check if no other property having the same name is present
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.container.propertiesMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
     }
 
     isProperty() {
