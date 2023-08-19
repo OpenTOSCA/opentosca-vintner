@@ -120,8 +120,20 @@ export default abstract class Element {
         return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
     }
 
-    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+    getTypeSpecificConditionWrapper(): ConditionsWrapper | undefined {
         return undefined
+    }
+
+    // TODO: DRY
+    getTypeSpecificCondition(): ConditionsWrapper | undefined {
+        const tsc = this.getTypeSpecificConditionWrapper()
+        if (check.isUndefined(tsc)) return
+        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
+
+        tsc.consistency = tsc.consistency ?? false
+        tsc.semantic = tsc.semantic ?? true
+
+        return utils.copy(tsc)
     }
 
     getElementGenericCondition(): ConditionsWrapper | undefined {

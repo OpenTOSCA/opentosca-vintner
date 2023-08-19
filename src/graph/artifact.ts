@@ -72,19 +72,12 @@ export default class Artifact extends Element {
         return this.container.presenceCondition
     }
 
-    getTypeSpecificCondition() {
+    getTypeSpecificConditionWrapper() {
         const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
         assert.isString(type)
-
-        const tsc =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[type]
-        if (check.isUndefined(tsc)) return
-        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
-
-        tsc.consistency = tsc.consistency ?? false
-        tsc.consistency = tsc.semantic ?? true
-
-        return utils.copy(tsc)
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[
+            type
+        ]
     }
 
     getElementGenericCondition() {

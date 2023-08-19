@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import {bratanize} from '#graph/utils'
 import {RequirementAssignment} from '#spec/node-template'
@@ -110,22 +109,12 @@ export default class Relation extends Element {
         return this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
     }
 
-    getTypeSpecificCondition() {
+    getTypeSpecificConditionWrapper() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
-
         const type = this.types[0]
-        const tsc =
-            this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.relationship_types?.[
-                type.name
-            ]
-        if (check.isUndefined(tsc)) return
-        assert.isDefined(tsc.conditions, `${this.Display} holds type-specific condition without any condition`)
-
-        tsc.consistency = tsc.consistency ?? false
-        tsc.consistency = tsc.semantic ?? true
-
-        return utils.copy(tsc)
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions
+            ?.relationship_types?.[type.name]
     }
 
     getElementGenericCondition() {
