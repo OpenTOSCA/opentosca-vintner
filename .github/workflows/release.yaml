@@ -129,25 +129,14 @@ jobs:
             ###################################################
 
             - name: (RELEASE) Delete Latest Release
-              run: gh release delete latest || true
+              run: gh release delete latest --cleanup-tag --yes || true
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (RELEASE) Delete Latest Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      try {
-                          await github.git.deleteRef({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              ref: "tags/latest"
-                          })
-                      } catch (e) {
-                          console.log("Did not delete tag:", e)
-                      }
+            - name: (RELEASE) Delete Latest Tag (Local)
+              run: git tag --delete latest || true
 
-            - name: (RELEASE) Create Latest Release (and Tag)
+            - name: (RELEASE) Create Latest Release
               run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
