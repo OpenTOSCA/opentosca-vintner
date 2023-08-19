@@ -3619,6 +3619,18 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>default_condition_mode</td>
 <td>false</td>
 <td>source | relation | host | source-host | relation-host</td>
@@ -3629,6 +3641,18 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
 <td>weight</td>
@@ -3677,10 +3701,34 @@ These conditions must hold otherwise the respective relationship is not present.
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>pruning</td>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
@@ -3729,6 +3777,18 @@ These conditions must hold otherwise the respective relationship is not present.
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>default_condition_mode</td>
 <td>false</td>
 <td>source-target | source | target</td>
@@ -3739,6 +3799,18 @@ These conditions must hold otherwise the respective relationship is not present.
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
@@ -3845,10 +3917,34 @@ However, this only applies if the property assignment is wrapped as the followin
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>pruning</td>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
@@ -3922,6 +4018,18 @@ A variability group is always absent and, thus, always removed when resolving va
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
 </tbody>
 </table>
 <p>For example, the following group <code>example_group</code> is a conditional group which is only present if assigned conditions hold.</p>
@@ -3983,10 +4091,34 @@ A policy can also hold conditional types and properties.</p>
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>pruning</td>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
@@ -4090,10 +4222,34 @@ An artifact can also hold conditional properties.</p>
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 <tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
 <td>pruning</td>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the pruning for this element. This overrides variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
@@ -4130,18 +4286,6 @@ These conditions must hold otherwise the respective input is not present.</p>
 <td>false</td>
 <td>VariabilityCondition | List(VariabilityCondition)</td>
 <td>An optional variability condition. If a list is given, then the conditions are combined using the <em>and</em> operation.</td>
-</tr>
-<tr>
-<td>default_condition</td>
-<td>false</td>
-<td>Boolean</td>
-<td>Enable the default condition for this element. This overrides the variability options of the variable topology template. <em>This is an experimental feature.</em></td>
-</tr>
-<tr>
-<td>pruning</td>
-<td>false</td>
-<td>Boolean</td>
-<td>Enable the pruning for this element. This overrides variability options of the variable topology template. <em>This is an experimental feature.</em></td>
 </tr>
 </tbody>
 </table>
