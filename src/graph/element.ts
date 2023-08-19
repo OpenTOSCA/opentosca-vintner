@@ -35,6 +35,8 @@ export default abstract class Element {
         return this._id
     }
 
+    abstract toscaId: any
+
     get explicitId() {
         return 'explicit.' + this.id
     }
