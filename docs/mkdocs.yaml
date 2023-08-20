@@ -10,8 +10,8 @@ theme:
     custom_dir: overrides
     icon:
         repo: octicons/mark-github-16
-        logo: octicons/terminal-24
-    favicon: assets/images/octicons-terminal-24.svg
+        logo: assets/images/vintner-logo-bold
+    favicon: assets/images/vintner-logo-bold.svg
     font:
         text: Inter
         code: ui-monospace
@@ -22,6 +22,7 @@ theme:
         - navigation.tabs.sticky
         - navigation.instant
         - navigation.tracking
+        - navigation.footer
         # - navigation.expand
         # - navigation.indexes
         - content.code.annotate
