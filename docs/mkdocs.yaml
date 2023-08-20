@@ -10,8 +10,8 @@ theme:
     custom_dir: overrides
     icon:
         repo: octicons/mark-github-16
-        logo: assets/images/vintner-orange-outline-square
-    favicon: assets/images/vintner/vintner-orange-outline-square.svg
+        logo: assets/images/vintner-logo-bold
+    favicon: assets/images/vintner-logo-bold.svg
     font:
         text: Inter
         code: ui-monospace
