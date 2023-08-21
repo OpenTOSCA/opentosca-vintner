@@ -1,2 +1,4 @@
 name: 'Operator "valid_values" Evaluates to "true"'
-description: Assigns "true" to the property "value" of the node "container" since the parameter is a valid value.
+description: |
+    - The "valid_values" operator evaluates the expression.
+    - Assigns "true" to the property "value" of the node "container" since the parameter is a valid value.

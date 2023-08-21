@@ -1,0 +1,5 @@
+description: |
+    - Under the condition, "host_presence" function checks if the hosts of the given two nodes is present or not.
+    - node_one is present since true is assigned as the condition.
+    - node_two is absent since false is assigned as the condition.
+    - Container is present since the "host_presence" function returns true for host_one in the condition.

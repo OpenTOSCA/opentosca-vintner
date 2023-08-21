@@ -1,2 +1,4 @@
 name: 'Operator "min_length" Evaluates to "true" (Greater)'
-description: Assigns "true" to the property "value" of the node "container" since the parameter "hallo" has more than 4 characters.
+description: |
+    - The "min_length" operator evaluates the expression.
+    - Assigns "true" to the property "value" of the node "container" since the parameter "hallo" has more than 4 characters.

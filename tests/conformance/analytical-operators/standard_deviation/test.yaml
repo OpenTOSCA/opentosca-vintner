@@ -1,1 +1,2 @@
 name: 'Operator "standard_deviation"'
+description: Assigns the value of the expression which is to find the Standard deviation of all the given numbers using "standard_deviation" function to the property "value" of the node "container".

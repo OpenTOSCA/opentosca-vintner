@@ -1,2 +1,4 @@
 name: 'Operator "length" Evaluates to "false"'
-description: Assigns "false" to the property "value" of the node "container" since the parameter has not expected length.
+description: |
+    - The "length" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the parameter has not expected length.

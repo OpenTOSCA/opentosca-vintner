@@ -1,1 +1,2 @@
 name: 'Operator "variance"'
+description: Assigns the value of the expression which is to find the Variance of all the given numbers using "variance" function to the property "value" of the node "container".

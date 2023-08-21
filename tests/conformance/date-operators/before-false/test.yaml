@@ -1,0 +1,3 @@
+description: |
+    - The "before" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the first date is after the second date.

@@ -1,2 +1,2 @@
 name: 'Operator "concat"'
-description: Assigns the value of the intrinsic function to the property "value" of the node "container".
+description: Assigns the value of the The function "token" which is to Split the given string "hello world" by ' ' and returns "world" specified by the provided index 1, to the property "value" of the node "container".

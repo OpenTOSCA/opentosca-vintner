@@ -1,1 +1,2 @@
 name: 'Operator "polynomial_regression"'
+description: Assigns the value of the expression which is to find the polynomial regression of all the given numbers using "polynomial_regression" function to the property "value" of the node "container".

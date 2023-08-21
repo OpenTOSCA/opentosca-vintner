@@ -1,0 +1,7 @@
+description: |
+    - The function "token" Splits the given string "hello world" by ' ' and returns "world" specified by the provided index 1.
+    - The function "equal" checks if the two strings are equal and returns true.
+    - The function "node_presence" checks if node_one is present and returns true.
+    - The function "and" checks if both the values are true or not.
+    - The condition is finally assigned true and hence container is present.
+    - node_one is present since the condition is assigned true.

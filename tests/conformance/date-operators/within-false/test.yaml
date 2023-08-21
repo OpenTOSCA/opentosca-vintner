@@ -1,0 +1,3 @@
+description: |
+    - The "within" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the date is not within the given range of dates.

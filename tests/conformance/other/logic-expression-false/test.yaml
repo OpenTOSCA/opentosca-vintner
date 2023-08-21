@@ -1,0 +1,5 @@
+description: |
+    - Under the expression "name", the function "node_presence" checks if node_one is present or not.
+    - node_one is absent since false is assigned as the condition.
+    - the function "logic_expression" returns false which is the value of expression "name".
+    - hence the container is absent since false is returned as condition.

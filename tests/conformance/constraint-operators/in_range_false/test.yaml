@@ -1,2 +1,4 @@
 name: 'Operator "in_range" Evaluates to "false"'
-description: Assigns "false" to the property "value" of the node "container" since the parameter is not in range.
+description: |
+    - The "in_range" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the parameter is not in range.

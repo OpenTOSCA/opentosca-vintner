@@ -1,0 +1,4 @@
+description: |
+    - under the condition, the function "input_presence" checks if input in present or not.
+    - The input is present since true is assigned as condition.
+    - The container is present since the function "input_presence" returns true.

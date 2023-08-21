@@ -1,2 +1,4 @@
 name: 'Operator "min_length" Evaluates to "false" (Less)'
-description: Assigns "false" to the property "value" of the node "container" since the parameter "hallo" has less than 4 characters.
+description: |
+    - The "min_length" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the parameter "hallo" has less than 4 characters.

@@ -1,1 +1,2 @@
 name: 'Operator "sum"'
+description: Assigns the value of the expression which is to find the Sum of all the given numbers using "sum" function to the property "value" of the node "container".

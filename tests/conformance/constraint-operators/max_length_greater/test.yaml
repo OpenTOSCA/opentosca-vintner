@@ -1,2 +1,4 @@
 name: 'Operator "max_length" Evaluates to "false" (Greater)'
-description: Assigns "false" to the property "value" of the node "container" since the parameter "hallo" has more than 4 characters.
+description: |
+    - The "max_length" operator evaluates the expression.
+    - Assigns "false" to the property "value" of the node "container" since the parameter "hallo" has more than 4 characters.
