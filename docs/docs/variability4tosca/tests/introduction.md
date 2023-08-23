@@ -247,36 +247,41 @@ processing.
 | 222 | [pruning-lima-pruning](./test-pruning-lima-pruning.md) |
 | 223 | [pruning-mike-default](./test-pruning-mike-default.md) |
 | 224 | [pruning-mike-pruning](./test-pruning-mike-pruning.md) |
-| 225 | [pruning-pruning](./test-pruning-pruning.md) |
-| 226 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
-| 227 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
-| 228 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
-| 229 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
-| 230 | [Relation Pruning](./test-pruning-relation.md) |
-| 231 | [relationships-conditional](./test-relationships-conditional.md) |
-| 232 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 233 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 234 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 235 | [relationships-type-specific](./test-relationships-type-specific.md) |
-| 236 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 237 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 238 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 239 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 240 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
-| 241 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
-| 242 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 243 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
-| 244 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
-| 245 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
-| 246 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
-| 247 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
-| 248 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
-| 249 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
-| 250 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
-| 251 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
-| 252 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
-| 253 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
-| 254 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
+| 225 | [pruning-outgoing-relation-absent](./test-pruning-outgoing-relation-absent.md) |
+| 226 | [pruning-outgoing-relation-present](./test-pruning-outgoing-relation-present.md) |
+| 227 | [pruning-outgoing-target-absent](./test-pruning-outgoing-target-absent.md) |
+| 228 | [pruning-outgoing-target-present](./test-pruning-outgoing-target-present.md) |
+| 229 | [pruning-outgoingnaive-target-present](./test-pruning-outgoingnaive-target-present.md) |
+| 230 | [pruning-pruning](./test-pruning-pruning.md) |
+| 231 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
+| 232 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
+| 233 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
+| 234 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
+| 235 | [Relation Pruning](./test-pruning-relation.md) |
+| 236 | [relationships-conditional](./test-relationships-conditional.md) |
+| 237 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 238 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 239 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 240 | [relationships-type-specific](./test-relationships-type-specific.md) |
+| 241 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 242 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 243 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 244 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 245 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 246 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 247 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 248 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
+| 249 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
+| 250 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
+| 251 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
+| 252 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
+| 253 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
+| 254 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 255 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
+| 256 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
+| 257 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
+| 258 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
+| 259 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
 
 
 --8<-- "vacd.md"

@@ -19,6 +19,7 @@ topology_template:
       relation_default_condition_mode: source-target
       relation_pruning: true
       type_default_condition: true
+      expected_incoming_relation_semantic_check: false
   node_templates:
     node_one:
       type: node_one

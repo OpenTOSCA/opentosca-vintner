@@ -35,21 +35,9 @@ export default class Checker {
         if (this.graph.options.checks.ambiguousHostingConsistencyCheck) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
-                    relation => relation.source.name === node.name && relation.isHostedOn() && relation.present
+                    it => it.source.name === node.name && it.isHostedOn() && it.present
                 )
                 if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
-            }
-        }
-
-        // Ensure that every component that had a hosting relation previously still has one
-        if (this.graph.options.checks.expectedHostingConsistencyCheck) {
-            for (const node of nodes) {
-                const relations = node.outgoing.filter(
-                    relation => relation.source.name === node.name && relation.isHostedOn()
-                )
-
-                if (relations.length !== 0 && !relations.some(relation => relation.present))
-                    throw new Error(`${node.Display} requires a hosting relation`)
             }
         }
 
@@ -102,12 +90,40 @@ export default class Checker {
         if (this.graph.options.checks.ambiguousTypeConsistencyCheck) {
             for (const node of nodes) {
                 const names = new Set()
-                const types = node.types.filter(property => property.present)
+                const types = node.types.filter(it => it.present)
                 if (utils.isEmpty(types)) throw new Error(`${node.Display} has no type`)
                 for (const type of types) {
                     if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
                     names.add(type.name)
                 }
+            }
+        }
+
+        // Ensure that every component that had a hosting relation previously still has one
+        if (this.graph.options.checks.expectedHostingSemanticCheck) {
+            for (const node of nodes) {
+                const relations = node.outgoing.filter(
+                    relation => relation.source.name === node.name && relation.isHostedOn()
+                )
+
+                if (relations.length !== 0 && !relations.some(it => it.present))
+                    throw new Error(`${node.Display} expected to have a hosting relation`)
+            }
+        }
+
+        // Ensure that every component that had an incoming relation previously still has one
+        if (this.graph.options.checks.expectedIncomingRelationSemanticCheck) {
+            for (const node of nodes) {
+                if (node.ingoing.length !== 0 && !node.ingoing.some(it => it.present))
+                    throw new Error(`${node.Display} expected to have an incoming relation`)
+            }
+        }
+
+        // Ensure that every component that had a deployment artifact previously still has one
+        if (this.graph.options.checks.expectedArtifactSemanticCheck) {
+            for (const node of nodes) {
+                if (node.artifacts.length !== 0 && !node.artifacts.some(it => it.present))
+                    throw new Error(`${node.Display} expected to have an deployment artifact`)
             }
         }
     }

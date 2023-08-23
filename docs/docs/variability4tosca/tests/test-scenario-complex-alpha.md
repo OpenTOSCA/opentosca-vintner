@@ -18,6 +18,7 @@ topology_template:
       mode: loose
       node_default_condition: false
       node_pruning: false
+      expected_incoming_relation_semantic_check: false
   node_templates:
     node_one:
       type: node_one

@@ -70,12 +70,6 @@ topology_template:
                 - database:
                       node: dev_database
 
-        gcp:
-            type: gcp.provider
-            properties:
-                region: {get_input: gcp_region}
-                service_account_file: {get_input: gcp_service_account_file}
-
         dev_runtime:
             type: node.runtime
             requirements:

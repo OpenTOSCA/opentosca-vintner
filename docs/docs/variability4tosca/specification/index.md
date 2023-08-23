@@ -188,19 +188,23 @@ The following options are used to configure the pruning of elements.
 
 The following options are used to configure checks.
 
-| Keyname                                        | Mandatory | Type      | Default | Description                                                                     |
-|------------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| consistency_checks                             | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| relation_source_consistency_check              | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
-| relation_target_consistency_check              | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
-| ambiguous_hosting_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
-| expected_hosting_consistency_check             | false     | Boolean   | true    | Enable the consistency check regarding an expected present hosting relation.    |
-| missing_artifact_container_consistency_check   | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
-| ambiguous_artifact_consistency_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
-| missing_property_container_consistency_check   | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
-| ambiguous_property_consistency_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
-| missing_type_container_consistency_check       | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
-| ambiguous_type_consistency_check               | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| Keyname                                      | Mandatory | Type      | Default | Description                                                                     |
+|----------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
+| checks                                       | false     | Boolean   | true    | Enable all checks.                                                              |
+| consistency_checks                           | false     | Boolean   | true    | Enable all consistency checks.                                                  |
+| semantic_checks                              | false     | Boolean   | true    | Enable all semantic checks.                                                     |
+| relation_source_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
+| relation_target_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
+| ambiguous_hosting_consistency_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
+| missing_artifact_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
+| ambiguous_artifact_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
+| missing_property_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
+| ambiguous_property_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
+| missing_type_container_consistency_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
+| ambiguous_type_consistency_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| expected_hosting_semantic_check              | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_semantic_check    | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_semantic_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
 
 ### Optimization Options
 
