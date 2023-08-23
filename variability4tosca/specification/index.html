@@ -3255,11 +3255,25 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </thead>
 <tbody>
 <tr>
+<td>checks</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable all checks.</td>
+</tr>
+<tr>
 <td>consistency_checks</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable all consistency checks.</td>
+</tr>
+<tr>
+<td>semantic_checks</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable all semantic checks.</td>
 </tr>
 <tr>
 <td>relation_source_consistency_check</td>
@@ -3281,13 +3295,6 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding at maximum one present hosting relation.</td>
-</tr>
-<tr>
-<td>expected_hosting_consistency_check</td>
-<td>false</td>
-<td>Boolean</td>
-<td>true</td>
-<td>Enable the consistency check regarding an expected present hosting relation.</td>
 </tr>
 <tr>
 <td>missing_artifact_container_consistency_check</td>
@@ -3330,6 +3337,27 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>ture</td>
 <td>Enable the consistency check regarding exactly one present type per container.</td>
+</tr>
+<tr>
+<td>expected_hosting_semantic_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the semantic check regarding an expected present hosting relation.</td>
+</tr>
+<tr>
+<td>expected_incoming_relation_semantic_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the semantic check regarding an expected incoming relation.</td>
+</tr>
+<tr>
+<td>expected_artifact_semantic_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the semantic check regarding an expected artifact.</td>
 </tr>
 </tbody>
 </table>
@@ -5337,7 +5365,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 19, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 23, 2023</span>
 </small>
 </div>
 </article>
