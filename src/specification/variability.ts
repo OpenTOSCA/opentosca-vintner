@@ -103,18 +103,23 @@ export type PruningOptions = {
     type_semantic_pruning?: boolean
 }
 
+// TODO: doc changes
 export type ChecksOptions = {
+    checks?: boolean // TODO
     consistency_checks?: boolean
     relation_source_consistency_check?: boolean
     relation_target_consistency_check?: boolean
     ambiguous_hosting_consistency_check?: boolean
-    expected_hosting_consistency_check?: boolean
     missing_artifact_container_consistency_check?: boolean
     ambiguous_artifact_consistency_check?: boolean
     missing_property_container_consistency_check?: boolean
     ambiguous_property_consistency_check?: boolean
     missing_type_container_consistency_check?: boolean
     ambiguous_type_consistency_check?: boolean
+    semantic_checks?: boolean // TODO
+    expected_hosting_semantic_check?: boolean // TODO: this is now semantic ...
+    expected_incoming_relation_semantic_check?: boolean // TODO
+    expected_artifact_semantic_check?: boolean // TODO
 }
 
 export const ResolverModes: {[key: string]: VariabilityOptions} = {

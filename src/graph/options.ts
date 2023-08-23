@@ -318,12 +318,12 @@ class ChecksOptions {
     private readonly serviceTemplate: ServiceTemplate
     private readonly raw: VariabilityOptions
 
-    consistencyChecks: boolean
+    checks: boolean
 
+    consistencyChecks: boolean
     relationSourceConsistencyCheck: boolean
     relationTargetConsistencyCheck: boolean
     ambiguousHostingConsistencyCheck: boolean
-    expectedHostingConsistencyCheck: boolean
     missingArtifactContainerConsistencyCheck: boolean
     ambiguousArtifactConsistencyCheck: boolean
     missingPropertyContainerConsistencyCheck: boolean
@@ -331,9 +331,17 @@ class ChecksOptions {
     missingTypeContainerConsistencyCheck: boolean
     ambiguousTypeConsistencyCheck: boolean
 
+    semanticChecks: boolean
+    expectedHostingSemanticCheck: boolean
+    expectedIncomingRelationSemanticCheck: boolean
+    expectedArtifactSemanticCheck: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
+
+        this.checks = this.raw.checks ?? true
+        assert.isBoolean(this.checks)
 
         this.consistencyChecks = this.raw.consistency_checks ?? true
         assert.isBoolean(this.consistencyChecks)
@@ -346,9 +354,6 @@ class ChecksOptions {
 
         this.ambiguousHostingConsistencyCheck = this.raw.ambiguous_hosting_consistency_check ?? this.consistencyChecks
         assert.isBoolean(this.ambiguousHostingConsistencyCheck)
-
-        this.expectedHostingConsistencyCheck = this.raw.expected_hosting_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.expectedHostingConsistencyCheck)
 
         this.missingArtifactContainerConsistencyCheck =
             this.raw.missing_artifact_container_consistency_check ?? this.consistencyChecks
@@ -370,6 +375,19 @@ class ChecksOptions {
 
         this.ambiguousTypeConsistencyCheck = this.raw.ambiguous_type_consistency_check ?? this.consistencyChecks
         assert.isBoolean(this.ambiguousTypeConsistencyCheck)
+
+        this.semanticChecks = this.raw.semantic_checks ?? this.checks
+        assert.isBoolean(this.semanticChecks)
+
+        this.expectedHostingSemanticCheck = this.raw.expected_hosting_semantic_check ?? this.semanticChecks
+        assert.isBoolean(this.expectedHostingSemanticCheck)
+
+        this.expectedIncomingRelationSemanticCheck =
+            this.raw.expected_incoming_relation_semantic_check ?? this.semanticChecks
+        assert.isBoolean(this.expectedIncomingRelationSemanticCheck)
+
+        this.expectedArtifactSemanticCheck = this.raw.expected_artifact_semantic_check ?? this.semanticChecks
+        assert.isBoolean(this.expectedArtifactSemanticCheck)
     }
 }
 
