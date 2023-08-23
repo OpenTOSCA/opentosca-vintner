@@ -103,7 +103,6 @@ export type PruningOptions = {
     type_semantic_pruning?: boolean
 }
 
-// TODO: doc changes
 export type ChecksOptions = {
     checks?: boolean // TODO
     consistency_checks?: boolean
