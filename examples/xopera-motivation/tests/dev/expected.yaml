@@ -83,13 +83,6 @@ topology_template:
             artifacts:
                 artifact_file: files/application.tar.gz
 
-        gcp:
-            type: gcp.provider
-            properties:
-                project: {get_input: gcp_project}
-                region: {get_input: gcp_region}
-                service_account_file: {get_input: gcp_service_account_file}
-
         dev_runtime:
             type: node.runtime
             requirements:

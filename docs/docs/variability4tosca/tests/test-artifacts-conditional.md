@@ -13,6 +13,7 @@ topology_template:
   variability:
     options:
       type_default_condition: true
+      expected_artifact_semantic_check: false
   node_templates:
     node_one:
       type: node

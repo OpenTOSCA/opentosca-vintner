@@ -104,17 +104,21 @@ export type PruningOptions = {
 }
 
 export type ChecksOptions = {
+    checks?: boolean
     consistency_checks?: boolean
     relation_source_consistency_check?: boolean
     relation_target_consistency_check?: boolean
     ambiguous_hosting_consistency_check?: boolean
-    expected_hosting_consistency_check?: boolean
     missing_artifact_container_consistency_check?: boolean
     ambiguous_artifact_consistency_check?: boolean
     missing_property_container_consistency_check?: boolean
     ambiguous_property_consistency_check?: boolean
     missing_type_container_consistency_check?: boolean
     ambiguous_type_consistency_check?: boolean
+    semantic_checks?: boolean
+    expected_hosting_semantic_check?: boolean
+    expected_incoming_relation_semantic_check?: boolean
+    expected_artifact_semantic_check?: boolean
 }
 
 export const ResolverModes: {[key: string]: VariabilityOptions} = {
