@@ -53,6 +53,10 @@ topology_template:
             requirements:
                 - host:
                       node: compute_localhost
+            artifacts:
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/shop.xz
 
         compute_localhost:
             type: compute.localhost

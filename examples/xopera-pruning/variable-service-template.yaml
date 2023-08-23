@@ -105,6 +105,10 @@ topology_template:
                 - database:
                       node: database
                       conditions: {logic_expression: is_prod}
+            artifacts:
+                - artifact:
+                      type: tosca.artifacts.File
+                      file: files/shop.xz
 
         database:
             type: scenario.database

@@ -55,6 +55,10 @@ topology_template:
                       node: compute_vm
                 - database:
                       node: database
+            artifacts:
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/shop.xz
 
         database:
             type: scenario.database
