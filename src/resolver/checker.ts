@@ -111,7 +111,6 @@ export default class Checker {
             }
         }
 
-        // TODO: test
         // Ensure that every component that had an incoming relation previously still has one
         if (this.graph.options.checks.expectedIncomingRelationSemanticCheck) {
             for (const node of nodes) {
@@ -120,7 +119,6 @@ export default class Checker {
             }
         }
 
-        // TODO: test
         // Ensure that every component that had a deployment artifact previously still has one
         if (this.graph.options.checks.expectedArtifactSemanticCheck) {
             for (const node of nodes) {
