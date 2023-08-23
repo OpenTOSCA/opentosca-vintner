@@ -1,0 +1,2 @@
+description: |
+    - the node is absent since false is assigned as the condition.

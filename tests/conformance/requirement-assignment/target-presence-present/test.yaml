@@ -1,0 +1,5 @@
+description: |  
+    - "relation_presence" function checks if the reqirement of "relation_one" of node_one is fulfilled or not and assigns true or false as condition accorndingly.
+    - "target_presence" checks if target node is present or not.
+    - since true is assigned as condition for target node_two, hence requirement is fulfilled and true is assigned as condition for container.
+    - container is present.

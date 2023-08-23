@@ -1,0 +1,3 @@
+description: |
+    - "node_property_presence" function checks if the property_one of the node is present or not.
+    - Since the property of the property_node has false assigned as the condition, the container is not present.

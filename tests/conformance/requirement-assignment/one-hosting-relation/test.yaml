@@ -1,0 +1,5 @@
+description: |
+    - under the requirements of node one, first host is present since true is assigned as condition.
+    - second host with node three is absent since false is assigned as condition.
+    - node two is present since requirement is fulfilled.
+    - node three is present since true is default condition.

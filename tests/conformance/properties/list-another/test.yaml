@@ -1,0 +1,3 @@
+description: |
+    - under node_one, key_one with value "value_one_one" is absent since false is assigned as the condition.
+    - under node_one, key_one with values in the list "value_one_two" and "value_one_three" is present since true is the default condition.

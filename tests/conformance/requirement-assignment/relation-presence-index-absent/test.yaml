@@ -1,0 +1,3 @@
+description: |
+    - "relation_presence" function checks if the reqirement at zero index of node_one is fulfilled or not and assigns true or false as condition accorndingly.
+    - since false is assigned as condition of relation_one, container is absent.

@@ -1,0 +1,3 @@
+description: |
+    - under the requirement of node "two_two" the condition default_alternative is true.
+    - node "two" and "three" is present since default condition is true.

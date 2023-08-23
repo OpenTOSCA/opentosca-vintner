@@ -1,0 +1,15 @@
+description: |
+    - under node_one, key_one with value "value_one_one" is absent since false is assigned as the condition.
+    - under node_one, key_one with value "value_one_two" is present since true is the default condition.
+    - under node_one, key_two and key_three are present since true is the default condition.
+    - under node_one, key_four with value "value_four" is present since true is assigned as the condition.
+    - under artifact_one, property_artifact_one_one with value "value_artifact_one_one" is absent since false is assigned as the condition.
+    - under artifact_one, property_artifact_one_one with value "value_artifact_one_two" is present since true is assigned as the condition.
+    - under relation_one, key_one with value "value_one_one" is absent since false is assigned as the condition.
+    - under relation_one, key_one with value "value_one_two" is present since true is the default condition.
+    - under relation_one, key_two and key_three are present since true is the default condition.
+    - under relation_one, key_four with value "value_four" is present since true is assigned as the condition.
+    - under group_one, property_group_one_one with value "value_group_one_one" is absent since false is assigned as the condition.
+    - under group_one, property_group_one_one with value "value_group_one_two" is present since true is assigned as the condition.
+    - under policy_one, property_policy_one_one with value "value_policy_one_one" is absent since false is assigned as the condition.
+    - under group_one, property_policy_one_one with value "value_policy_one_one" is present since true is assigned as the condition.

@@ -10,6 +10,7 @@ topology_template:
         node_one:
             type: node_one
             default_condition: true
+        
 
         node_two:
             type: node_two

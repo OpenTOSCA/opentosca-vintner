@@ -1,0 +1,4 @@
+description: |
+    - node "one" is absent since false is assigned as the condition.
+    - node "two" is present since requiremnt is fulfilled.
+    - node "three" is present since true is assigned as default condition.

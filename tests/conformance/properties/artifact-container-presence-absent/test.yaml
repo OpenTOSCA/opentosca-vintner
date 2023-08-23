@@ -1,0 +1,4 @@
+description: |
+    - under the condition, the function "container_presence" checks if conatainer is present or not.
+    - "container_presence" returns false since the artifact_one has condition as false.
+    - Hence the value 69 is not assigned to property_one.

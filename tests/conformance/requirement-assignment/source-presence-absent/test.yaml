@@ -1,0 +1,5 @@
+description: |  
+    - "relation_presence" function checks if the reqirement of "relation_one" of node_one is fulfilled or not and assigns true or false as condition accorndingly.
+    - "source_presence" checks if source is present or not.
+    - since false is assigned as condition for source, hence requirement is not fulfilled and false is assigned as condition for container.
+    - container is absent.

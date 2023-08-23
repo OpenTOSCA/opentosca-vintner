@@ -1,0 +1,6 @@
+description: |
+    - under node_one, key_one with value "value_one_one" is absent since false is assigned as the condition.
+    - under node_one, key_one with value "value_one_two" is absent since false is assigned as the condition.
+    - under node_one, key_one with value "value_one_three" is present since true is assigned as the default_alternative.
+    - under node_two, key_two with value "value_two_one" is absent since false is assigned as the condition.
+    - under node_two, key_two with value "value_two_two" is present since true is assigned as the condition.

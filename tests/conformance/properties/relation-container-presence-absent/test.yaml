@@ -1,0 +1,3 @@
+description: |
+    - function "container_presence" checks if the container is present or not.
+    - unser the requirement, since false is assigned as the condition, the container is not present.

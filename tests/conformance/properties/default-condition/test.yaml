@@ -1,0 +1,2 @@
+description: |
+    - under node_one, key_one with value "value_one" is absent since false is assigned as the condition.

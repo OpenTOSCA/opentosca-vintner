@@ -1,0 +1,4 @@
+description: |
+    = The function "some_key" assign the value "some_value" to key_one.
+    - key_one is present with this value since true is the default condition.
+    - key_one is absent with "value_one_one" value since false is assigned as the condition.
