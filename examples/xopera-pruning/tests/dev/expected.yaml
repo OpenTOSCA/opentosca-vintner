@@ -46,13 +46,17 @@ topology_template:
             type: string
 
     node_templates:
-        web_shop:
-            type: scenario.web_shop
+        shop:
+            type: scenario.shop
             properties:
                 storage: false
             requirements:
                 - host:
                       node: compute_localhost
+            artifacts:
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/shop.xz
 
         compute_localhost:
             type: compute.localhost

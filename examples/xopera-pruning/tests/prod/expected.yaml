@@ -46,8 +46,8 @@ topology_template:
             type: string
 
     node_templates:
-        web_shop:
-            type: scenario.web_shop
+        shop:
+            type: scenario.shop
             properties:
                 storage: true
             requirements:
@@ -55,6 +55,10 @@ topology_template:
                       node: compute_vm
                 - database:
                       node: database
+            artifacts:
+                artifact:
+                    type: tosca.artifacts.File
+                    file: files/shop.xz
 
         database:
             type: scenario.database
