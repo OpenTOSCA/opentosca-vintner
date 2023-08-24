@@ -931,7 +931,7 @@ The element is present if all conditions hold.
 
 ### Conduct Checks
 
-To conduct the following consistency and semantic checks, conduct the following steps:
+To conduct the consistency and semantic checks, conduct the following steps:
 
 1. Ensure that each relation source of a present relation is present.
 1. Ensure that each relation target of a present relation is present.
