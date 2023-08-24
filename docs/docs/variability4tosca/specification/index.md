@@ -929,25 +929,26 @@ To check if an element is present, check that all assigned conditions hold:
 
 The element is present if all conditions hold.
 
-### Check Consistency
+### Conduct Checks
 
-To check the consistency, conduct the following steps:
+To conduct the consistency and semantic checks, conduct the following steps:
 
 1. Ensure that each relation source of a present relation is present.
 1. Ensure that each relation target of a present relation is present.
 1. Ensure that every present node has at maximum one present hosting relation.
-1. Ensure that every present node has a present hosting relation if the node had at least one conditional relation in the variable
-   service template.
 1. Ensure that the node of each present artifact is present.
 1. Ensure that present artifacts have unique names within their node.
 1. Ensure that the node of each present property is present.
 1. Ensure that present properties have unique names within their node.
 1. Ensure that the container of each present type is present.
 1. Ensure that each present type container has exactly one present type.
+1. Ensure that every present node has a present hosting relation if the node had at least one conditional relation in the variable
+1. Ensure that every present node has a present incoming relation if the node had at least one incoming relation in the variable service template.
+1. Ensure that every present node has a present deployment artifact if the node had at least one deployment artifact in the variable service template.
 
 Since the derived variability-resolved service template might be further processed, e.g. by
 [topology completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank},
-some or all of these consistency steps might be omitted.
+some or all of these checks might be omitted.
 
 ### Pruning Elements
 
