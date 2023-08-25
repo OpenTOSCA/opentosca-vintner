@@ -49,30 +49,31 @@ topology_template:
         inputs:
             mode:
                 type: string
-            public:
+            large:
                 type: boolean
-                default: true
+                default: false
 
         presets:
-            dev:
+            demo:
                 inputs:
-                    mode: dev
+                    mode: demo
 
-            prod:
+            cloud:
                 inputs:
-                    mode: prod
+                    mode: cloud
 
-            prod-private:
+            cloud-large:
                 inputs:
-                    mode: prod
-                    public: false
+                    mode: cloud
+                    large: true
 
         expressions:
-            is_dev: {equal: [{variability_input: mode}, dev]}
-            is_prod: {equal: [{variability_input: mode}, prod]}
+            is_demo: {equal: [{variability_input: mode}, demo]}
+            is_cloud: {equal: [{variability_input: mode}, cloud]}
 
-            is_public: {variability_input: public}
-            is_not_public: {not: {logic_expression: is_public}}
+            is_large: {variability_input: large}
+            is_medium: {not: {logic_expression: is_large}}
+
         options:
             mode: loose
 
@@ -89,22 +90,22 @@ topology_template:
             properties:
                 - storage:
                       value: false
-                      conditions: {logic_expression: is_dev}
+                      conditions: {logic_expression: is_demo}
                 - storage:
                       value: true
-                      conditions: {logic_expression: is_prod}
+                      conditions: {logic_expression: is_cloud}
             requirements:
                 - host:
                       node: compute_localhost
-                      conditions: {logic_expression: is_dev}
+                      conditions: {logic_expression: is_demo}
 
                 - host:
                       node: compute_vm
-                      conditions: {logic_expression: is_prod}
+                      conditions: {logic_expression: is_cloud}
 
                 - database:
                       node: database
-                      conditions: {logic_expression: is_prod}
+                      conditions: {logic_expression: is_cloud}
             artifacts:
                 - artifact:
                       type: tosca.artifacts.File
@@ -140,12 +141,18 @@ topology_template:
                 - ports: [80, 3000]
                 - name: {concat: ['compute-vm-', {get_input: instance}]}
                 - image: Ubuntu 20.04
+
+                - tier:
+                      value: medium
+                      conditions: {logic_expression: is_medium}
+                - tier:
+                      value: large
+                      conditions: {logic_expression: is_large}
+
+                # TODO: drop this in favor of tier
                 - flavor: m1.medium
 
-                # TODO: public and private ...
-                - network:
-                      value: {get_input: compute_vm_network}
-                      conditions: {variability_input: public}
+                - network: {get_input: compute_vm_network}
                 - security_groups: {get_input: compute_vm_security_groups}
                 - key_name: {get_input: compute_vm_key_name}
                 - ssh_user: {get_input: compute_vm_ssh_user}
