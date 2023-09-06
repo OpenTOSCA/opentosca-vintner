@@ -11,4 +11,5 @@ if which opera &>/dev/null; then
     exit 0
 fi
 
-pip install opera==0.6.9
+# pyyaml 5.3.1 is required, see https://github.com/yaml/pyyaml/issues/724#issuecomment-1638587228
+pip install pyyaml==5.3.1 opera==0.6.9
