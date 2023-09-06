@@ -89,9 +89,6 @@ jobs:
             - name: (BUILD) Build Project
               run: yarn build
 
-            - name: (BUILD) Set Version
-              run: sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
-
             - name: (BUILD) Setup Packaging Cache
               uses: actions/cache@v3
               with:
