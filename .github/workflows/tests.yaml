@@ -40,7 +40,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: pip install opera==0.6.9
+              run: pip install pyyaml==5.3.1 opera==0.6.9
 
             ###################################################
             #
