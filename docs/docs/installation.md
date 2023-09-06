@@ -7,9 +7,27 @@ tags:
 
 In this document, we describe ways to install `vintner`.
 
+## NPM 
+
+`vintner` can be installed using `npm`.
+Ensure, that `npm bin -g` is in your `$PATH`.
+
+```shell linenums="1"
+npm install --global can2x
+```
+
+## Yarn
+
+`vintner` can be installed using `yarn`.
+Ensure, that `yarn global bin` is in your `$PATH`.
+
+```shell linenums="1"
+yarn global add opentosca-vintner
+```
+
 ## Script
 
-The simplest way to install `vintner` is to run the installation script. 
+`vintner` can be installed using our installation script. 
 The script currently supports only Linux x64 and arm64.
 For the remaining supported platforms and architectures, see the manual installation.
 
