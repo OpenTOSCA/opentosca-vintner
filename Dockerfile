@@ -14,7 +14,6 @@ RUN yarn test
 
 # Build
 RUN yarn build
-RUN sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
 RUN yarn package
 
 # Docs
