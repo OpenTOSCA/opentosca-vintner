@@ -10,3 +10,6 @@ vintner instances undeploy --instance artifacts
 
 # Cleanup
 vintner setup clean --force
+
+# Remove vintner
+sudo npm uninstall -g opentosca-vintner
