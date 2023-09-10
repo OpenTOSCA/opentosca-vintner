@@ -150,5 +150,5 @@ Thus, the raw logs can be also accessed [here](./logs.txt){target=_blank} withou
 ## Publication
 
 This guide is part of our paper accepted at the main track of the CoopIS 2023.
-Also, this guide is further extended by our demonstration paper submitted at the demo track also submitted at the CoopIS 2023.
+Also, this guide is further extended by our demonstration paper submitted at the demo track also at the CoopIS 2023.
 Also check our other [publications](../../../publications.md){target=_blank}.
