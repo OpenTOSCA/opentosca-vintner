@@ -1,6 +1,6 @@
 # OpenTOSCA Vintner
 
-> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) for the publication submitted at _CoopIS 2023_. Additional links are [below](#user-content-publication-stoetzner-2023-vdmm-v2).
+> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) with video for the publication and demo paper for the _CoopIS 2023_. Additional links are [below](#user-content-publication-stoetzner-2023-vdmm-v2).
 
 [![Release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Night](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml/badge.svg)](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml)
@@ -33,10 +33,21 @@ This repository holds the following specifications and profiles.
 
 This repository holds the step-by-step guides of the following publications.
 
+<a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
+- **Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability**
+  - CoopIS 2023
+  - _Currently under Review_
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts)
+  - [Demo Video](TODO: video)
+  - [Model of the Motivating Scenario](examples/unfurl-artifacts)
+  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878)(Relevant steps start with "UNFURL-ARTIFACTS")
+  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
+  - [@publication-stoetzner-2023-vdmm-v2-demo](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2-demo)
+
 <a id="publication-stoetzner-2023-vdmm-v2"></a>
 - **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
   - CoopIS 2023
-  - _Currently under Review_
+  - _Accepted_
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
   - [Model of the Motivating Scenario](examples/unfurl-artifacts)
   - [Models of the Complexity Evaluation](examples/unfurl-artifacts/stats)
