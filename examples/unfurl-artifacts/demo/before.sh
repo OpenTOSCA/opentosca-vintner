@@ -5,4 +5,5 @@ set -e
 cd "$(dirname "$0")"
 cd ../
 
+# Cleanup
 vintner setup clean --force
