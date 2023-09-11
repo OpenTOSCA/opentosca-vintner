@@ -13,7 +13,7 @@ In this document, we describe ways to install `vintner`.
 Ensure, that `npm bin -g` is in your `$PATH`.
 
 ```shell linenums="1"
-npm install --global can2x
+npm install --global opentosca-vintner
 ```
 
 ## Yarn
