@@ -1,7 +1,7 @@
 # OpenTOSCA Vintner
 
 > Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) of our publication accepted at the _CoopIS 2023_. Additional links are [below](#user-content-publication-stoetzner-2023-vdmm-v2).
-> Also, check out the [video](https://youtu.be/6szIGJPuCsU) of our demo paper submitted at _CoopIS 2023_ which is extending our already accepted _CoopIS 2023_ paper. Additional links are [below]#user-content-publication-stoetzner-2023-vdmm-v2-demo)
+> Also, check out the [video](https://youtu.be/6szIGJPuCsU) of our demo paper submitted at _CoopIS 2023_ which is extending our already accepted _CoopIS 2023_ paper. Additional links are [below](#user-content-publication-stoetzner-2023-vdmm-v2-demo)
 
 [![Release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Night](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml/badge.svg)](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml)
@@ -41,7 +41,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts)
   - [Demo Video](https://youtu.be/6szIGJPuCsU)
   - [Model of the Motivating Scenario](examples/unfurl-artifacts)
-  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878)(Relevant steps start with "UNFURL-ARTIFACTS")
+  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant steps start with "UNFURL-ARTIFACTS")
   - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
   - [@publication-stoetzner-2023-vdmm-v2-demo](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2-demo)
 
