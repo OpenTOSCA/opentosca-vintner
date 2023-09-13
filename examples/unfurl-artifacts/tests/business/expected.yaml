@@ -57,8 +57,10 @@ topology_template:
                 region: {get_input: gcp_region}
                 auto_scaling: {get_property: [gcp_runtime, auto_scaling]}
             requirements:
-                - host: gcp_runtime
-                - database: gcp_database
+                - host:
+                      node: gcp_runtime
+                - database:
+                      node: gcp_database
 
             artifacts:
                 artifact:
