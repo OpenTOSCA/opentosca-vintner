@@ -8,7 +8,11 @@ tags:
 
 # Conditional Deployment Artifacts and Conditional Properties
 
-> TODO: add demo video
+<div class="video-wrap">
+  <div class="video-container">
+<iframe src="https://www.youtube.com/embed/6szIGJPuCsU?si=zlqebXF3O5yE4sAP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+ </div>
+</div>
 
 In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of the shopping application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
 The motivating scenario is a simple shopping application that consists of a shop component and a database. 

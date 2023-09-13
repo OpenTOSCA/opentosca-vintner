@@ -34,6 +34,7 @@ extra_css:
     - assets/stylesheets/typeset.css
     - assets/stylesheets/asciinema-player.css
     - assets/stylesheets/print.css
+    - assets/stylesheets/video.css
 
 extra_javascript:
     - assets/javascripts/tablesort.min.js

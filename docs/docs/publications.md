@@ -12,11 +12,11 @@ This document contains a list of selected publications.
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
-> _Currently under Review_
+> _Submitted_
 
 - CoopIS 2023
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
-- [Demo Video](TODO: video)
+- [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
 - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878)(Relevant Steps start with "UNFURL-ARTIFACTS")
 - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
