@@ -343,7 +343,7 @@ class ChecksOptions {
         this.checks = this.raw.checks ?? true
         assert.isBoolean(this.checks)
 
-        this.consistencyChecks = this.raw.consistency_checks ?? true
+        this.consistencyChecks = this.raw.consistency_checks ?? this.checks
         assert.isBoolean(this.consistencyChecks)
 
         this.relationSourceConsistencyCheck = this.raw.relation_source_consistency_check ?? this.consistencyChecks
