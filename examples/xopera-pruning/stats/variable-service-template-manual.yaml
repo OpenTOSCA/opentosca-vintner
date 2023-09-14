@@ -65,10 +65,10 @@ topology_template:
             properties:
                 - tier:
                       value: medium
-                      conditions: {and:[{logic_expression: is_static}, {logic_expression: is_medium}]}
+                      conditions: {and: [{logic_expression: is_static}, {logic_expression: is_medium}]}
                 - tier:
                       value: large
-                      conditions: {and:[{logic_expression: is_static}, {logic_expression: is_large}]}
+                      conditions: {and: [{logic_expression: is_static}, {logic_expression: is_large}]}
                 - image:
                       value: Ubuntu
                       conditions: {logic_expression: is_static}
