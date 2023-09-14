@@ -1,0 +1,1 @@
+{{ redirect("https://discord.gg/Uz6348Ctmg") }}

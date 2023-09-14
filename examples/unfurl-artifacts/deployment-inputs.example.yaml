@@ -1,5 +1,3 @@
-language: EN
-
 db_password: password
 
 gcp_credentials: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json

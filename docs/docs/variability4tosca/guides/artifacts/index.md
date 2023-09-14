@@ -137,8 +137,16 @@ vintner instances delete --instance artifacts
 vintner setup clean --force
 ```
 
+## Logs
+
+This deployment is also executed in our integration pipeline which is executed one a week. 
+The logs of the corresponding GitHub action job run can be accessed either [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878){target=_blank}.
+Relevant steps start with "UNFURL-ARTIFACTS".
+However, a GitHub account is required to access these logs. 
+Thus, the raw logs can be also accessed [here](./logs.txt){target=_blank} without requiring an GitHub account.
 
 ## Publication
 
-This guide is part of our submission to CoopIS 2023 which is currently under review.
+This guide is part of our paper accepted at the main track of the CoopIS 2023.
+Also, this guide is further extended by our demonstration paper submitted at the demo track also at the CoopIS 2023.
 Also check our other [publications](../../../publications.md){target=_blank}.

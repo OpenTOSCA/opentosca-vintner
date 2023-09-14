@@ -1,0 +1,1 @@
+{{ redirect("https://github.com/opentosca/opentosca-vintner") }}

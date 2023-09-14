@@ -1,0 +1,1 @@
+{{ redirect("/variability4tosca/guides/artifacts") }}
