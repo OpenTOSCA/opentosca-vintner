@@ -16,7 +16,6 @@ This document contains a list of selected publications.
 
 - CoopIS 2023 Demo
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
-- [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
 - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878){target=_blank} (Relevant Steps start with "UNFURL-ARTIFACTS")
 - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt){target=_blank}
