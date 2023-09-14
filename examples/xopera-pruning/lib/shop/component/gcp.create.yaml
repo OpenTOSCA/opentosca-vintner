@@ -1,0 +1,36 @@
+---
+- name: Create GCP Node Application
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ gcp_service_account_file }} --project {{ gcp_project }}'
+
+      - name: Create working directory
+        tempfile:
+            state: directory
+        register: tempdir_info
+
+      - name: Extract deployment artifact in working directory
+        unarchive:
+            src: '{{ artifact_archive }}'
+            dest: '{{ tempdir_info.path }}'
+
+      # https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
+      - name: Configure app yaml
+        template:
+            src: app.yaml.j2
+            dest: '{{ tempdir_info.path }}/app.yaml'
+
+      # https://cloud.google.com/sdk/gcloud/reference/app/deploy
+      - name: Create App
+        shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
+
+      - name: Describe App
+        shell: 'gcloud app browse --service {{ application_name }}'
+        register: browse_command
+
+      - name: Set Address
+        set_stats:
+            data:
+                public_address: '{{ browse_command.stdout }}'

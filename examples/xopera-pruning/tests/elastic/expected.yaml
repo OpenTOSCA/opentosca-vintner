@@ -1,0 +1,88 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/shop/types.yaml
+    - lib/gcp/types.yaml
+    - lib/os/types.yaml
+
+topology_template:
+    inputs:
+        id:
+            type: string
+
+        database_password:
+            type: string
+            default: password
+
+        gcp_region:
+            type: string
+            default: /home/stoetzms/opera/stoetzms-387808-2ec1cf865c76.json
+
+        gcp_service_account_file:
+            type: string
+            default: stoetzms-387808
+
+        gcp_project:
+            type: string
+            default: europe-west3
+
+        gcp_auto_scaling:
+            type: boolean
+            default: true
+
+    node_templates:
+        shop:
+            type: shop.component
+            properties:
+                DB_NAME: shop
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: database_password}
+                DB_DIALECT: mysql
+                DB_ADDRESS: {get_attribute: [gcp_dbms, public_address]}
+
+                ssh_user: {get_input: os_compute_ssh_user}
+                ssh_key_file: {get_input: os_compute_ssh_key_file}
+
+                gcp_region: {get_input: gcp_region}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+                gcp_project: {get_input: gcp_project}
+                gcp_auto_scaling: {get_input: gcp_auto_scaling}
+            requirements:
+                - host:
+                      node: gcp_runtime
+                - database:
+                      node: gcp_database
+
+        gcp_runtime:
+            type: gcp.runtime
+            properties:
+                auto_scaling: {get_input: gcp_auto_scaling}
+            requirements:
+                - host: gcp_dbms
+
+        gcp_database:
+            type: gcp.database
+            properties:
+                database_name: shop
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.dbms
+            properties:
+                instance_name: shop
+                root_password: {get_input: database_password}
+                authorized_networks: 0.0.0.0/0
+
+                backups: true
+                database_version: MySQL5_7
+                availability_type: REGIONAL
+            requirements:
+                - host: gcp_cloud
+
+        gcp_cloud:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}
+                project: {get_input: gcp_project}

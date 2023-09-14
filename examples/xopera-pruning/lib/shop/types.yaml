@@ -1,0 +1,126 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    shop.component:
+        derived_from: tosca.nodes.Root
+        properties:
+            application_name:
+                type: string
+
+            application_directory:
+                type: string
+                required: false
+                default: {concat: ['/var/lib/node-applications/', {get_property: [SELF, application_name]}]}
+
+            artifact_binary:
+                type: string
+                default: {get_artifact: [SELF, binary]}
+
+            artifact_archive:
+                type: string
+                default: {get_artifact: [SELF, archive]}
+
+            vm_ssh_user:
+                type: string
+
+            vm_ssh_key_file:
+                type: string
+
+            gcp_service_account_file:
+                type: string
+
+            gcp_region:
+                type: string
+
+            gcp_project:
+                type: string
+
+            gcp_auto_scaling:
+                type: boolean
+
+        attributes:
+            public_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+            - database:
+                  capability: tosca.capabilities.Endpoint.Database
+                  relationship: tosca.relationships.ConnectsTo
+
+        artifacts:
+            binary:
+                # TODO: binary
+                path: component/files/binary.tar.gz
+            archive:
+                # TODO: archive
+                path: component/files/archive.tar.gz
+
+        interfaces:
+            Standard:
+                inputs:
+                    env_type:
+                        type: string
+                        value: {get_property: [SELF, host, env_type]}
+
+                    application_name:
+                        type: string
+                        value: {get_property: [SELF, application_name]}
+
+                    application_directory:
+                        type: string
+                        value: {get_property: [SELF, application_directory]}
+
+                    artifact_binary:
+                        type: string
+                        default: {get_property: [SELF, artifact_binary]}
+
+                    artifact_archive:
+                        type: string
+                        default: {get_property: [SELF, artifact_archive]}
+
+                    application_environment:
+                        type: string
+                        default: {get_property: [SELF, application_environment]}
+
+                    ssh_user:
+                        type: string
+                        value: {get_property: [SELF, vm_ssh_user]}
+
+                    ssh_key_file:
+                        type: string
+                        value: {get_property: [SELF, vm_ssh_key_file]}
+
+                    gcp_service_account_file:
+                        type: string
+                        value: {get_property: [SELF, gcp_service_account_file]}
+
+                    gcp_region:
+                        type: string
+                        value: {get_property: [SELF, gcp_region]}
+
+                    gcp_project:
+                        type: string
+                        value: {get_property: [SELF, gcp_project]}
+
+                    gcp_auto_scaling:
+                        type: boolean
+                        value: {get_property: [SELF, gcp_auto_scaling]}
+
+                operations:
+                    create:
+                        implementation:
+                            primary: component/create.yaml
+                            dependencies:
+                                - component/files/app.yaml.j2
+                                - component/gcp.create.yaml
+                                - component/os.create.yaml
+                    delete:
+                        implementation:
+                            primary: component/delete.yaml
+                            dependencies:
+                                - component/gcp.delete.yaml
+                                - component/os.delete.yaml

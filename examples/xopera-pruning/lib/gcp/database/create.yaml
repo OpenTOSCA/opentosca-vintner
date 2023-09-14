@@ -1,0 +1,15 @@
+---
+- name: Create GCP Cloud SQL Database
+  hosts: all
+  gather_facts: false
+  tasks:
+      - name: active service account
+        shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project }}'
+
+      # https://cloud.google.com/sql/docs/mysql/create-manage-databases
+      - name: Create Database
+        shell: 'gcloud sql databases create {{ database_name }} --instance {{ instance_name }}'
+        register: create_command
+        failed_when:
+            - "'Created database' not in create_command.stderr"
+            - "'database exists' not in create_command.stderr"
