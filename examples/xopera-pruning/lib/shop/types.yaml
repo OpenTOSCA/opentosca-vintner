@@ -16,9 +16,9 @@ node_types:
                 type: string
                 default: {get_artifact: [SELF, binary]}
 
-            artifact_archive:
+            artifact_source:
                 type: string
-                default: {get_artifact: [SELF, archive]}
+                default: {get_artifact: [SELF, source]}
 
             vm_ssh_user:
                 type: string
@@ -54,10 +54,10 @@ node_types:
         artifacts:
             binary:
                 # TODO: binary
-                path: component/files/binary.tar.gz
-            archive:
-                # TODO: archive
-                path: component/files/archive.tar.gz
+                path: component/files/component.binary.xz
+            source:
+                # TODO: source
+                path: component/files/component.source.tar.gz
 
         interfaces:
             Standard:
@@ -78,9 +78,9 @@ node_types:
                         type: string
                         default: {get_property: [SELF, artifact_binary]}
 
-                    artifact_archive:
+                    artifact_source:
                         type: string
-                        default: {get_property: [SELF, artifact_archive]}
+                        default: {get_property: [SELF, artifact_source]}
 
                     application_environment:
                         type: string

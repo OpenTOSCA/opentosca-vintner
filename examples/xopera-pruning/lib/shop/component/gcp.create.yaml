@@ -13,7 +13,7 @@
 
       - name: Extract deployment artifact in working directory
         unarchive:
-            src: '{{ artifact_archive }}'
+            src: '{{ artifact_source }}'
             dest: '{{ tempdir_info.path }}'
 
       # https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
