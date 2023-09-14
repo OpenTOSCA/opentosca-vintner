@@ -7,4 +7,4 @@
         shell: 'gcloud auth activate-service-account --key-file {{ gcp_service_account_file }} --project {{ gcp_project }}'
 
       - name: Create App
-        shell: 'gcloud app services delete {{ application_name }} --quiet'
+        shell: 'gcloud app services delete shop --quiet'

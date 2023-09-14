@@ -8,18 +8,18 @@
   tasks:
       - name: Create working directory
         file:
-            path: '/var/lib/{{ service_name }}'
+            path: '/var/lib/shop'
             state: directory
 
       - name: Copy binary
         unarchive:
             src: '{{ artifact_binary }}'
-            dest: '/var/lib/{{ service_name}}'
+            dest: '/var/lib/shop'
             mode: a+x
 
       - name: create .env file
         copy:
-            dest: '{{ application_directory }}/.env'
+            dest: '/var/lib/shop/.env'
             content: |
                 PORT=3000
                 INTERFACE="::"
@@ -32,7 +32,7 @@
 
       - name: Create systemd service
         copy:
-            dest: '/etc/systemd/system/{{ service_name }}.service'
+            dest: '/etc/systemd/system/shop.service'
             content: |
                 [Unit]
                 Description=Scenario Application Instance %i
@@ -41,21 +41,21 @@
                 [Service]
                 Type=simple
                 Restart=always
-                WorkingDirectory=/var/lib/{{ service_name }}
-                ExecStart=/var/lib/{{ service_name }}/application
-                Environment=/var/lib/{{ service_name }}/.env
+                WorkingDirectory=/var/lib/shop
+                ExecStart=/var/lib/shop/application
+                EnvironmentFile=/var/lib/shop/.env
 
                 [Install]
                 WantedBy=multi-user.target
 
       - name: Enable systemd service
         systemd:
-            name: '{{service_name}}'
+            name: shop
             state: stopped
             enabled: true
             daemon_reload: true
 
       - name: Start systemd service
         systemd:
-            name: '{{service_name}}'
+            name: shop
             state: started

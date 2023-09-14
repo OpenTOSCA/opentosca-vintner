@@ -40,15 +40,15 @@
       - name: Set attributes
         set_stats:
             data:
-                private_address: '{{ server_info.server.addresses[network][0].addr }}'
-                public_address: '{{ server_info.server.addresses[network][0].addr }}'
+                private_address: '{{ server_info.server.addresses[network][1].addr }}'
+                public_address: '{{ server_info.server.addresses[network][1].addr }}'
                 id: '{{ server_info.server.id }}'
 
       - name: Create temporary inventory for ssh wait
         add_host:
             name: server
             groups: vms
-            ansible_host: '{{ server_info.server.addresses[network][0].addr }}'
+            ansible_host: '{{ server_info.server.addresses[network][1].addr }}'
             ansible_user: '{{ ssh_user }}'
             ansible_ssh_private_key_file: '{{ ssh_key_file }}'
             ansible_ssh_common_args: >
@@ -64,4 +64,4 @@
         wait_for_connection:
             delay: 10
             sleep: 5
-            timeout: 300
+            timeout: 30

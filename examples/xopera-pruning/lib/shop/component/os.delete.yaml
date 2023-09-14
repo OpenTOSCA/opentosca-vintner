@@ -8,17 +8,17 @@
   tasks:
       - name: Stop systemd service
         systemd:
-            name: '{{service_name}}'
+            name: shop
             state: stopped
 
       - name: Delete working directory
         file:
-            path: '/var/lib/{{ service_name }}'
+            path: '/var/lib/shop'
             state: absent
 
       - name: Delete systemd service
         file:
-            path: '/etc/systemd/system/{{ service_name }}.service'
+            path: '/etc/systemd/system/shop.service'
             state: absent
 
       - name: Reload daemon
