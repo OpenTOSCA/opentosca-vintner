@@ -24,13 +24,4 @@
 
       # https://cloud.google.com/sdk/gcloud/reference/app/deploy
       - name: Create App
-        shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
-
-      - name: Describe App
-        shell: 'gcloud app browse --service {{ application_name }}'
-        register: browse_command
-
-      - name: Set Address
-        set_stats:
-            data:
-                public_address: '{{ browse_command.stdout }}'
+        shell: 'gcloud app deploy {{ tempdir_info.path }}'

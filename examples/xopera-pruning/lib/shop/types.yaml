@@ -7,6 +7,21 @@ node_types:
             application_name:
                 type: string
 
+            DB_DIALECT:
+                type: string
+
+            DB_NAME:
+                type: string
+
+            DB_USERNAME:
+                type: string
+
+            DB_PASSWORD:
+                type: string
+
+            DB_ADDRESS:
+                type: string
+
             application_directory:
                 type: string
                 required: false
@@ -38,10 +53,6 @@ node_types:
             gcp_auto_scaling:
                 type: boolean
 
-        attributes:
-            public_address:
-                type: string
-
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -53,11 +64,11 @@ node_types:
 
         artifacts:
             binary:
-                # TODO: binary
-                path: component/files/component.binary.xz
+                type: tosca.artifacts.File
+                file: component/files/component.binary.xz
             source:
-                # TODO: source
-                path: component/files/component.source.tar.gz
+                type: tosca.artifacts.File
+                file: component/files/component.source.xz
 
         interfaces:
             Standard:
@@ -70,6 +81,26 @@ node_types:
                         type: string
                         value: {get_property: [SELF, application_name]}
 
+                    DB_DIALECT:
+                        type: string
+                        value: {get_property: [SELF, DB_DIALECT]}
+
+                    DB_NAME:
+                        type: string
+                        value: {get_property: [SELF, DB_NAME]}
+
+                    DB_USERNAME:
+                        type: string
+                        value: {get_property: [SELF, DB_USERNAME]}
+
+                    DB_PASSWORD:
+                        type: string
+                        value: {get_property: [SELF, DB_PASSWORD]}
+
+                    DB_ADDRESS:
+                        type: string
+                        value: {get_property: [SELF, DB_ADDRESS]}
+
                     application_directory:
                         type: string
                         value: {get_property: [SELF, application_directory]}
@@ -81,10 +112,6 @@ node_types:
                     artifact_source:
                         type: string
                         default: {get_property: [SELF, artifact_source]}
-
-                    application_environment:
-                        type: string
-                        default: {get_property: [SELF, application_environment]}
 
                     ssh_user:
                         type: string

@@ -28,6 +28,12 @@ node_types:
             database_version:
                 type: string
 
+            availability_type:
+                type: string # TODO: implement
+
+            backups:
+                type: boolean # TODO: implement
+
             root_password:
                 type: string
 
@@ -45,6 +51,10 @@ node_types:
             project:
                 type: string
                 default: {get_property: [SELF, host, project]}
+
+            public_address:
+                type: string
+                default: {get_attribute: [SELF, host, public_address]}
 
         attributes:
             public_address:
@@ -74,6 +84,14 @@ node_types:
                     database_version:
                         type: string
                         value: {get_property: [SELF, database_version]}
+
+                    availability_type:
+                        type: string
+                        value: {get_property: [SELF, availability_type]}
+
+                    backups:
+                        type: boolean
+                        value: {get_property: [SELF, backups]}
 
                     root_password:
                         type: string
@@ -111,6 +129,7 @@ node_types:
 
             instance_name:
                 type: string
+                default: {get_property: [SELF, host, instance_name]}
 
             public_address:
                 type: string
@@ -170,6 +189,10 @@ node_types:
             env_type:
                 type: string
                 default: gcp
+
+            auto_scaling:
+                type: boolean
+                default: true
 
             region:
                 type: string

@@ -7,6 +7,7 @@ imports:
 
 topology_template:
     inputs:
+        # TODO: what is this for?
         id:
             type: string
 
@@ -17,76 +18,61 @@ topology_template:
         os_compute_network:
             type: string
             default: public-belwue-v6only
-            conditions: {logic_expression: is_static}
 
         os_compute_security_groups:
             type: string
             default: default
-            conditions: {logic_expression: is_static}
 
         os_compute_key_name:
             type: string
             default: default
-            conditions: {logic_expression: is_static}
 
         os_compute_ssh_user:
             type: string
             default: ubuntu
-            conditions: {logic_expression: is_static}
 
         os_compute_ssh_key_file:
             type: string
-            default: c
-            conditions: {logic_expression: is_static}
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
             default: Mannheim
-            conditions: {logic_expression: is_static}
 
         os_auth_type:
             type: string
             default: v3applicationcredential
-            conditions: {logic_expression: is_static}
 
         os_auth_url:
             type: string
             default: https://idm02.bw-cloud.org:5000/v3
-            conditions: {logic_expression: is_static}
 
         os_identity_api_version:
             type: string
             default: '3'
-            conditions: {logic_expression: is_static}
 
         os_interface:
             type: string
             default: public
-            conditions: {logic_expression: is_static}
 
         os_application_credential_id:
             type: string
             default: e584f2d0bdc2467a9901264c3e1b4bd7
-            conditions: {logic_expression: is_static}
 
         os_application_credential_secret:
             type: string
-            conditions: {logic_expression: is_static}
 
         gcp_region:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
-            conditions: {logic_expression: is_elastic}
+            default: europe-west3
 
         gcp_service_account_file:
             type: string
-            default: stoetzms-387808
-            conditions: {logic_expression: is_elastic}
+            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
-            default: europe-west3
-            conditions: {logic_expression: is_elastic}
+            default: stoetzms-387808
 
         gcp_auto_scaling:
             type: boolean
@@ -130,6 +116,8 @@ topology_template:
         shop:
             type: shop.component
             properties:
+                - application_name: shop
+
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
@@ -148,15 +136,18 @@ topology_template:
 
                 - DB_ADDRESS:
                       conditions: {logic_expression: is_elastic}
-                      value: {get_attribute: [gcp_dbms, public_address]}
+                      value: {get_attribute: [gcp_database, public_address]}
 
-                - ssh_user: {get_input: os_compute_ssh_user}
-                - ssh_key_file: {get_input: os_compute_ssh_key_file}
+                - vm_ssh_user: {get_input: os_compute_ssh_user}
+                - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
 
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
                 - gcp_project: {get_input: gcp_project}
+
+                # TODO: this
                 - gcp_auto_scaling: {get_input: gcp_auto_scaling}
+
             requirements:
                 - host:
                       node: os_compute
@@ -177,7 +168,7 @@ topology_template:
         os_database:
             type: os.database
             properties:
-                name: shop
+                database_name: shop
             requirements:
                 - host: os_compute
 
@@ -189,12 +180,14 @@ topology_template:
 
                 - image: Ubuntu 22.04
 
-                - tier:
-                      value: medium
+                # tier
+                - flavor:
+                      value: m1.medium
                       conditions: {logic_expression: is_medium}
 
-                - tier:
-                      value: large
+                # tier
+                - flavor:
+                      value: m1.large
                       conditions: {logic_expression: is_large}
 
                 - network: {get_input: os_compute_network}
@@ -241,7 +234,7 @@ topology_template:
                 - backups: true
 
                 # variant
-                - database_version: MySQL5_7
+                - database_version: MYSQL_5_7
 
                 # high availability
                 - availability_type: REGIONAL
