@@ -54,3 +54,12 @@ def define_env(env):
     });
 </script>
 """ % {"id": 'asciinema-player-' + cast, "url": '/assets/casts/' + cast + '.cast'}
+
+
+    @env.macro
+    def redirect(url):
+        return """
+<meta http-equiv="refresh" content="0; URL=%(url)s" />
+
+Redirecting to "%(url)s" ...
+""" % {"url": url}

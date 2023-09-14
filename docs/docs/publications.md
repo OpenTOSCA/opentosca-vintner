@@ -14,12 +14,12 @@ This document contains a list of selected publications.
 
 > _Submitted_
 
-- CoopIS 2023
+- CoopIS 2023 Demo
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
-- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant Steps start with "UNFURL-ARTIFACTS")
-- [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
+- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878){target=_blank} (Relevant Steps start with "UNFURL-ARTIFACTS")
+- [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2-demo') }}
 
 
@@ -34,7 +34,7 @@ This document contains a list of selected publications.
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
 
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
-
+d
 > Stötzner, Miles, Steffen Becker, Uwe Breitenbücher, Kálmán Képes, and Frank Leymann. 2022. "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" Algorithms 15, no. 10: 382. [https://doi.org/10.3390/a15100382](https://doi.org/10.3390/a15100382){target=_blank}
 
 - Algorithms 2022
