@@ -130,7 +130,7 @@ topology_template:
 
                 - DB_ADDRESS:
                       conditions: {logic_expression: is_elastic}
-                      value: {get_attribute: [gcp_database, public_address]}
+                      value: {get_attribute: [gcp_dbms, public_address]}
 
                 - vm_ssh_user: {get_input: os_compute_ssh_user}
                 - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
@@ -139,7 +139,6 @@ topology_template:
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
                 - gcp_project: {get_input: gcp_project}
 
-                # TODO: this
                 - gcp_auto_scaling: {get_input: gcp_auto_scaling}
 
             requirements:

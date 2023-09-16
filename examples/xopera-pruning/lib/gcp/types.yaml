@@ -29,10 +29,10 @@ node_types:
                 type: string
 
             availability_type:
-                type: string # TODO: implement
+                type: string
 
             backups:
-                type: boolean # TODO: implement
+                type: boolean
 
             root_password:
                 type: string
@@ -51,10 +51,6 @@ node_types:
             project:
                 type: string
                 default: {get_property: [SELF, host, project]}
-
-            public_address:
-                type: string
-                default: {get_attribute: [SELF, host, public_address]}
 
         attributes:
             public_address:
