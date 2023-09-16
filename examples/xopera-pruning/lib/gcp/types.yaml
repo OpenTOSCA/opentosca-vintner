@@ -143,6 +143,11 @@ node_types:
                 type: string
                 default: {get_property: [SELF, host, project]}
 
+        attributes:
+            public_address:
+                type: string
+                default: { get_attribute: [SELF, host, public_address] }
+
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database
