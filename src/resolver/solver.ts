@@ -295,7 +295,7 @@ export default class Solver {
 
     getPreset(name: string) {
         const set: InputAssignmentPreset | undefined = (this.options?.presets || {})[name]
-        assert.isDefined(set, `Did not find variability set "${name}"`)
+        assert.isDefined(set, `Did not find variability preset "${name}"`)
         return set
     }
 
