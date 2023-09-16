@@ -1,6 +1,0 @@
----
-- import_playbook: gcp.delete.yaml
-  when: env_type == "gcp"
-
-- import_playbook: os.delete.yaml
-  when: env_type == "os"
