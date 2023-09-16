@@ -146,7 +146,7 @@ node_types:
         attributes:
             public_address:
                 type: string
-                default: { get_attribute: [SELF, host, public_address] }
+                default: {get_attribute: [SELF, host, public_address]}
 
         capabilities:
             database:

@@ -58,7 +58,6 @@ topology_template:
         gcp_auto_scaling:
             type: boolean
 
-
     node_templates:
         shop:
             type: shop.component
