@@ -9,24 +9,24 @@ We use the following setup as working environment during development.
 
 ## Node.js
 
-We are using [Node.js](https://nodejs.org){target=_blank} version `16.14.0`.
+We are using [Node.js](https://nodejs.org){target=_blank} version `18.15.0`.
 To install node, use [nvm](https://github.com/nvm-sh/nvm){target=_blank} or [nvm-windows](https://github.com/coreybutler/nvm-windows){target=_blank}.
 
 ```shell linenums="1"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source ~/.bashrc
 
-nvm install v16.14.0
-nvm use 16.14.0
+nvm install 18.15.0
+nvm use 18.15.0
 ```
 
 ## Yarn 
 
-We are using [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en){target=_blank}.
+We are using [Yarn 2 (Modern)](https://yarnpkg.com/){target=_blank}.
 Install it as follows.
 
 ```shell linenums="1"
-npm install --global yarn
+corepack enable
 ```
 
 ## Repository
@@ -39,7 +39,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-yarn --frozen-lockfile
+yarn --immutable
 ```
 
 ## Large Files

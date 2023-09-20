@@ -185,7 +185,7 @@ These environment variables should be used with caution.
 Run the following command, to count the lines of code in the `src` folder.
 
 ```text linenums="1"
-yarn loc
+cloc src
 ```
 
 The following output has been generated for the commit `110a38a1951f8d10a234f9d976778b0c3b0c2e8c` on August 15, 2023.
