@@ -1749,12 +1749,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cloc@npm:^1.96.0-cloc":
-  version: 1.96.0-cloc
-  resolution: "cloc@npm:1.96.0-cloc"
+"cloc@npm:^1.98.0-cloc":
+  version: 1.98.0-cloc
+  resolution: "cloc@npm:1.98.0-cloc"
   bin:
     cloc: lib/cloc
-  checksum: 62ebc307c28a6b712edd17e6ee8ba6bde62a27caaa15551f81509b38c2b9fcc8efe527a7ad24fd0ba2d1eedb43b453644e7674982317d1fcb6b57c56259bbd40
+  checksum: d589d894a82d8ece48b1cd83814dce47d01ea48a2bbfed709a372a9ece4dbaea24ef4be2733cd35596beaadc7d33a060746615137e4646a2b415d5621d810374
   languageName: node
   linkType: hard
 
@@ -5350,7 +5350,7 @@ __metadata:
     axios: 0.27.2
     chai: ^4.3.7
     chai-datetime: ^1.8.0
-    cloc: ^1.96.0-cloc
+    cloc: ^1.98.0-cloc
     commander: ^10.0.1
     cors: ^2.8.5
     cross-env: ^7.0.3
