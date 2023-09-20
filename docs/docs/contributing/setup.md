@@ -22,11 +22,11 @@ nvm use 18.15.0
 
 ## Yarn 
 
-We are using [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en){target=_blank}.
+We are using [Yarn 2 (Modern)](https://yarnpkg.com/){target=_blank}.
 Install it as follows.
 
 ```shell linenums="1"
-npm install --global yarn
+corepack enable
 ```
 
 ## Repository
@@ -39,7 +39,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-yarn --frozen-lockfile
+yarn --immutable
 ```
 
 ## Large Files

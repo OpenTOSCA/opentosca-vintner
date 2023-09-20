@@ -16,13 +16,22 @@ Ensure, that `npm bin -g` is in your `$PATH`.
 npm install --global opentosca-vintner
 ```
 
-## Yarn
+## Yarn v1
 
-`vintner` can be installed using `yarn`.
+`vintner` can be installed using `yarn` (classic).
 Ensure, that `yarn global bin` is in your `$PATH`.
 
 ```shell linenums="1"
 yarn global add opentosca-vintner
+```
+
+## Yarn v2
+
+`vintner` can be installed using `yarn` (modern).
+However, this will not install `vintner` permanently but only temporary.
+
+```shell linenums="1"
+yarn dlx opentosca-vintner
 ```
 
 ## Script

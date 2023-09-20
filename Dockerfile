@@ -3,7 +3,7 @@ FROM node:18.15.0-bullseye
 # Setup
 WORKDIR /app
 COPY . .
-RUN yarn --frozen-lockfile
+RUN yarn --immutable
 
 # Test
 RUN yarn lint:check

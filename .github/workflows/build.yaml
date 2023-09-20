@@ -28,7 +28,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: rm -rf node_modules && yarn --frozen-lockfile
+              run: rm -rf node_modules && yarn --immutable
 
             ###################################################
             #

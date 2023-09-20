@@ -166,5 +166,6 @@
         "puml:down": "cd docs && docker-compose down",
         "large:check": "bash cmds/check-large-files.sh",
         "loc": "cloc src"
-    }
+    },
+    "packageManager": "yarn@3.6.3"
 }
