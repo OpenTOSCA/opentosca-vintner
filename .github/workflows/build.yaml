@@ -24,7 +24,7 @@ jobs:
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 18.15.0
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
