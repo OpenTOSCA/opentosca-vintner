@@ -1,0 +1,18 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        source:
+            type: source
+            conditions:
+                - {and: [true, true], _generated: true}
+            requirements:
+                - relation:
+                      node: target
+                      conditions:
+                          - {and: [{node_presence: source}, {node_presence: target}], _generated: true}
+
+        target:
+            type: target
+            conditions:
+                - {and: [{has_incoming_relations: target}, true], _generated: true}
