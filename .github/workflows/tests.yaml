@@ -27,11 +27,11 @@ jobs:
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 18.15.0
                   cache: yarn
 
             - name: (PREPARE) Install Node Modules
-              run: rm -rf node_modules && yarn --frozen-lockfile
+              run: rm -rf node_modules && yarn --immutable
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -40,7 +40,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: pip install opera==0.6.9
+              run: pip install pyyaml==5.3.1 opera==0.6.9
 
             ###################################################
             #
@@ -74,9 +74,6 @@ jobs:
 
             - name: (BUILD) Build Project
               run: yarn build
-
-            - name: (BUILD) Set Version
-              run: sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
 
             - name: (BUILD) Setup Packaging Cache
               uses: actions/cache@v3

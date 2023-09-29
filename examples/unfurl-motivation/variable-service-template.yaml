@@ -135,6 +135,7 @@ topology_template:
 
         gcp:
             type: gcp.provider
+            conditions: {logic_expression: is_prod}
             properties:
                 region: {get_input: gcp_region}
                 service_account_file: {get_input: gcp_service_account_file}

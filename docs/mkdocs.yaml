@@ -10,8 +10,8 @@ theme:
     custom_dir: overrides
     icon:
         repo: octicons/mark-github-16
-        logo: octicons/terminal-24
-    favicon: assets/images/octicons-terminal-24.svg
+        logo: assets/images/vintner-logo-bold
+    favicon: assets/images/vintner-logo-bold.svg
     font:
         text: Inter
         code: ui-monospace
@@ -22,8 +22,10 @@ theme:
         - navigation.tabs.sticky
         - navigation.instant
         - navigation.tracking
+        - navigation.footer
         # - navigation.expand
         # - navigation.indexes
+        - content.code.copy
         - content.code.annotate
         - toc.follow
         - navigation.sections
@@ -33,6 +35,7 @@ extra_css:
     - assets/stylesheets/typeset.css
     - assets/stylesheets/asciinema-player.css
     - assets/stylesheets/print.css
+    - assets/stylesheets/video.css
 
 extra_javascript:
     - assets/javascripts/tablesort.min.js
@@ -67,6 +70,7 @@ markdown_extensions:
     - pymdownx.emoji:
           emoji_index: !!python/name:materialx.emoji.twemoji
           emoji_generator: !!python/name:materialx.emoji.to_svg
+
 plugins:
     - search
     - tags:
@@ -80,6 +84,7 @@ plugins:
     - include_dir_to_nav
     - git-revision-date-localized:
           enabled: !ENV [MKDCOS_REVISION_ENABLED, true]
+          strict: false
     - build_plantuml:
           #render: 'local'
           #bin_path: 'cmds/puml/plantuml'
@@ -101,6 +106,7 @@ nav:
           - interface.md
           - dependencies.md
           - GitHub: https://github.com/opentosca/opentosca-vintner
+          - Discord: https://discord.gg/Uz6348Ctmg
 
     - Specifications:
           - Variability4TOSCA:
@@ -114,7 +120,6 @@ nav:
                 - Guides:
                       - variability4tosca/guides/artifacts
                       - variability4tosca/guides/pipes-and-filters
-                      - variability4tosca/guides/pruning
           - Queries4TOSCA:
                 - queries4tosca/getting-started.md
                 - queries4tosca/specification.md
@@ -138,5 +143,6 @@ nav:
           - resources.md
           - publications.md
           - about-us
+          - Legal Notice: https://www.uni-stuttgart.de/impressum
           - faq.md
           - tags.md

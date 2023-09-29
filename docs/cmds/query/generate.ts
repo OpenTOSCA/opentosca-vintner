@@ -1,10 +1,10 @@
 import * as files from '#files'
 import * as path from 'path'
-import {loadAllTests} from '../../../tests/query/QueryTest'
+import {loadAllTests} from '../../../tests/query/query-test'
 
 async function main() {
     const documentationDirectory = path.join('docs', 'docs', 'queries4tosca', 'tests')
-    files.removeDirectory(documentationDirectory)
+    files.deleteDirectory(documentationDirectory)
     files.createDirectory(documentationDirectory)
 
     const tests = loadAllTests()

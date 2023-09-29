@@ -4,7 +4,10 @@ import Graph from '#graph/graph'
 import Enricher from '#resolver/enricher'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
+import * as utils from '#utils'
 import * as featureIDE from '#utils/feature-ide'
+import * as _ from 'lodash'
+import * as process from 'process'
 import Checker from './checker'
 import Solver from './solver'
 import Transformer from './transformer'
@@ -12,6 +15,7 @@ import Transformer from './transformer'
 export default {
     resolve,
     loadInputs,
+    loadPresets,
 }
 
 export type ResolveOptions = {
@@ -62,7 +66,22 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
 }
 
 async function loadInputs(file?: string) {
-    if (check.isUndefined(file)) return {}
-    if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
-    return files.loadYAML<InputAssignmentMap>(file)
+    const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')
+
+    if (check.isDefined(file)) {
+        if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
+        _.merge(inputs, files.loadYAML<InputAssignmentMap>(file))
+    }
+
+    return inputs
+}
+
+function loadPresets(presets: string[] = []): string[] {
+    if (utils.isEmpty(presets)) {
+        const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
+        if (!check.isDefined(entry)) return []
+        if (!check.isDefined(entry[1])) return []
+        return utils.looseParse(entry[1])
+    }
+    return presets
 }

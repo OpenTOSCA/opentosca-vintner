@@ -35,27 +35,56 @@ export default class Policy extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.policy_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.policyDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.policy_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.policyPruning
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition))
-            this._defaultCondition = {has_present_target: this.toscaId, _cached_element: this}
-        return this._defaultCondition
+    get defaultConsistencyCondition() {
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.policyDefaultConsistencyCondition
+        )
     }
 
-    readonly defaultAlternativeCondition = undefined
+    get defaultSemanticCondition() {
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.policyDefaultSemanticCondition
+        )
+    }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {policy_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    get consistencyPruning() {
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.policyConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.policySemanticPruning
+    }
+
+    getElementGenericCondition() {
+        return {
+            conditions: {has_present_target: this.toscaId, _cached_element: this},
+            consistency: false,
+            semantic: true,
+        }
+    }
+
+    getTypeSpecificConditionWrapper() {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+        const type = this.types[0]
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.policy_types?.[
+            type.name
+        ]
+    }
+
+    constructPresenceCondition() {
+        return {policy_presence: this.toscaId, _cached_element: this}
     }
 
     getTypeCondition(type: Type): LogicExpression {

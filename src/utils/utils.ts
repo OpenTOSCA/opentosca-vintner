@@ -1,6 +1,6 @@
 import * as check from '#check'
 import day from '#utils/day'
-import _ from 'lodash'
+import process from 'process'
 
 export function mapIsEmpty<K, V>(map: Map<K, V>) {
     return map.size === 0
@@ -137,23 +137,6 @@ export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
-export function propagateOptions<T>(data: {base: T; flag?: boolean; mode?: T; options: T}) {
-    let result = _.clone(data.base)
-
-    if (check.isDefined(data.mode)) result = _.merge(result, _.clone(data.mode))
-
-    if (check.isDefined(data.flag)) {
-        // @ts-ignore
-        for (const key of Object.keys(data.base)) {
-            // @ts-ignore
-            result[key] = data.flag
-        }
-    }
-
-    result = _.merge(result, _.clone(data.options))
-    return result
-}
-
 export function sumObjects(objects: {[key: string]: number}[]) {
     return objects.reduce((a, b) => {
         for (const key in b) {
@@ -161,5 +144,26 @@ export function sumObjects(objects: {[key: string]: number}[]) {
             if (b.hasOwnProperty(key)) a[key] = (a[key] || 0) + b[key]
         }
         return a
+    }, {})
+}
+
+export function looseParse(value: any) {
+    try {
+        return JSON.parse(value)
+    } catch (e) {
+        return value
+    }
+}
+
+export function getPrefixedEnv(prefix: string) {
+    return Object.entries(process.env).reduce<{[key: string]: any}>((acc, [key, value]) => {
+        if (!check.isDefined(value)) return acc
+        if (!key.startsWith(prefix)) return acc
+
+        const name = key.slice(prefix.length).toLowerCase()
+        const parsed = looseParse(value)
+
+        acc[name] = parsed
+        return acc
     }, {})
 }

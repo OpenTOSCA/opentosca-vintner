@@ -1,16 +1,8 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import Group from '#graph/group'
-import Import from '#graph/import'
-import Input from '#graph/input'
-import Node from '#graph/node'
-import Policy from '#graph/policy'
 import Property from '#graph/property'
-import Relation from '#graph/relation'
-import Type from '#graph/type'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {
     InputAssignmentPreset,
@@ -27,7 +19,7 @@ import regression from 'regression'
 import stats from 'stats-lite'
 
 type ExpressionContext = {
-    element?: Element
+    element: Element
 }
 
 export default class Solver {
@@ -75,7 +67,7 @@ export default class Solver {
         /**
          * Get optimized solution
          */
-        if (this.graph.options.solver.optimization === true || check.isString(this.graph.options.solver.optimization)) {
+        if (this.graph.options.solver.enabled) {
             const nodes = this.graph.nodes.map(it => it.id)
             const weights = this.graph.nodes.map(it => it.weight)
             let optimized
@@ -83,14 +75,14 @@ export default class Solver {
             /**
              * Minimize weight of node templates
              */
-            if (this.graph.options.solver.optimization === true || this.graph.options.solver.optimization === 'min') {
+            if (this.graph.options.solver.min) {
                 optimized = this.minisat.minimizeWeightedSum(solution, nodes, weights)
             }
 
             /**
              * Maximize weight of node templates
              */
-            if (this.graph.options.solver.optimization === 'max') {
+            if (this.graph.options.solver.max) {
                 optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
             }
 
@@ -229,13 +221,7 @@ export default class Solver {
     }
 
     reduceConditions(conditions: LogicExpression[]) {
-        return conditions.reduce<{and: LogicExpression[]}>(
-            (acc, curr) => {
-                acc.and.push(curr)
-                return acc
-            },
-            {and: []}
-        )
+        return {and: conditions}
     }
 
     setPreset(name?: string) {
@@ -276,7 +262,10 @@ export default class Solver {
             definition.default_expression,
             `Variability input "${name}" has no value nor default (expression) assigned`
         )
-        value = this.evaluateValueExpression(definition.default_expression, {})
+        value = this.evaluateValueExpression(definition.default_expression, {
+            // TODO: this is bad
+            element: undefined as any,
+        })
         assert.isDefined(value, `Did not find variability input "${name}"`)
         this.setInput(name, value)
         return value
@@ -288,11 +277,12 @@ export default class Solver {
 
     getPreset(name: string) {
         const set: InputAssignmentPreset | undefined = (this.options?.presets || {})[name]
-        assert.isDefined(set, `Did not find variability set "${name}"`)
+        assert.isDefined(set, `Did not find variability preset "${name}"`)
         return set
     }
 
     getLogicExpression(name: string) {
+        assert.isString(name)
         const condition: VariabilityExpression | undefined = (this.options?.expressions || {})[name]
         assert.isDefined(condition, `Did not find logic expression "${name}"`)
         return condition as LogicExpression
@@ -309,13 +299,18 @@ export default class Solver {
         if (check.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
 
         /**
+         * Just for easier access
+         */
+        const element = context.element
+        const cached = expression._cached_element
+
+        /**
          * logic_expression
          * The expression is first transformed and then added as a separate clause, thus, can be referenced by its name
          */
         if (check.isDefined(expression.logic_expression)) {
             // Find referenced expression
             const name = expression.logic_expression
-            assert.isString(name)
             const found = this.getLogicExpression(name)
 
             // Found expression is in this case actually a value expression
@@ -387,19 +382,10 @@ export default class Solver {
          * node_presence
          */
         if (check.isDefined(expression.node_presence)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.node_presence
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.node_presence, {
+                element,
+                cached,
+            })
             return node.id
         }
 
@@ -407,30 +393,10 @@ export default class Solver {
          * host_presence
          */
         if (check.isDefined(expression.host_presence)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.host_presence
-                assert.isString(name)
-
-                if (name === 'SELF') {
-                    if (check.isUndefined(context.element))
-                        throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
-
-                    if (!context.element.isNode())
-                        throw new Error(`Using "SELF" with "host_presence" is only valid inside a node`)
-
-                    node = context.element
-                } else {
-                    node = this.graph.getNode(name)
-                }
-            }
-
+            const node = this.graph.getNode(expression.host_presence, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.outgoing.filter(it => it.isHostedOn()).map(it => it.target.id))
         }
 
@@ -438,19 +404,10 @@ export default class Solver {
          * has_source
          */
         if (check.isDefined(expression.has_source)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.has_source
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.has_source, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.ingoing.map(it => it.source.id))
         }
 
@@ -458,19 +415,10 @@ export default class Solver {
          * has_incoming_relation
          */
         if (check.isDefined(expression.has_incoming_relation)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.has_incoming_relation
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.has_incoming_relation, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.explicitId, it.source.id)))
         }
 
@@ -478,39 +426,43 @@ export default class Solver {
          * has_incoming_relation_naive
          */
         if (check.isDefined(expression.has_incoming_relation_naive)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.has_incoming_relation
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.has_incoming_relation_naive, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.ingoing.map(it => it.id))
+        }
+
+        /**
+         * has_outgoing_relation
+         */
+        if (check.isDefined(expression.has_outgoing_relation)) {
+            const node = this.graph.getNode(expression.has_outgoing_relation, {
+                element,
+                cached,
+            })
+            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.explicitId, it.target.id)))
+        }
+
+        /**
+         * has_outgoing_relation_naive
+         */
+        if (check.isDefined(expression.has_outgoing_relation_naive)) {
+            const node = this.graph.getNode(expression.has_outgoing_relation_naive, {
+                element,
+                cached,
+            })
+            return MiniSat.or(node.outgoing.map(it => it.id))
         }
 
         /**
          * has_artifact
          */
         if (check.isDefined(expression.has_artifact)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.has_artifact
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.has_artifact, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.artifacts.map(it => it.explicitId))
         }
 
@@ -518,19 +470,10 @@ export default class Solver {
          * has_artifact_naive
          */
         if (check.isDefined(expression.has_artifact_naive)) {
-            let node: Node | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isNode()) throw new Error(`${element.Display} is not a node`)
-                node = element
-            }
-
-            if (check.isUndefined(node)) {
-                const name = expression.has_artifact_naive
-                assert.isString(name)
-                node = this.graph.getNode(name)
-            }
-
+            const node = this.graph.getNode(expression.has_artifact_naive, {
+                element,
+                cached,
+            })
             return MiniSat.or(node.artifacts.map(it => it.id))
         }
 
@@ -538,24 +481,7 @@ export default class Solver {
          * relation_presence
          */
         if (check.isDefined(expression.relation_presence)) {
-            let relation: Relation | undefined
-
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isRelation()) throw new Error(`${element.Display} is not a relation`)
-                relation = element
-            }
-
-            if (check.isUndefined(relation)) {
-                const node = expression.relation_presence[0]
-                assert.isString(node)
-
-                const id = expression.relation_presence[1]
-                assert.isStringOrNumber(id)
-
-                relation = this.graph.getRelation([node, id])
-            }
-
+            const relation = this.graph.getRelation(expression.relation_presence)
             return relation.id
         }
 
@@ -563,65 +489,31 @@ export default class Solver {
          * source_presence
          */
         if (check.isDefined(expression.source_presence)) {
-            const element = expression.source_presence
-            assert.isString(element)
-            if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "source_presence" but received "${element}"`)
-            if (check.isUndefined(context.element))
-                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
-            if (!context.element.isRelation()) throw new Error(`"source_presence" is only valid inside a relation`)
-
-            return context.element.source.id
+            const relation = this.graph.getRelation(expression.source_presence, {element, cached})
+            return relation.source.id
         }
 
         /**
          * target_presence
          */
         if (check.isDefined(expression.target_presence)) {
-            const element = expression.target_presence
-            assert.isString(element)
-            if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "target_presence" but received "${element}"`)
-            if (check.isUndefined(context.element))
-                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
-            if (!context.element.isRelation()) throw new Error(`"target_presence" is only valid inside a relation`)
-
-            return context.element.target.id
+            const relation = this.graph.getRelation(expression.target_presence, {element, cached})
+            return relation.target.id
         }
 
         /**
          * container_presence
          */
         if (check.isDefined(expression.container_presence)) {
-            const element = expression.container_presence
-            assert.isString(element)
-            if (element !== 'SELF')
-                throw new Error(`"SELF" is the only valid value for "container_presence" but received "${element}"`)
-            if (check.isUndefined(context.element))
-                throw new Error(`Context of condition "${utils.pretty(expression)}" does not hold an element`)
-            if (!context.element.isProperty() && !context.element.isArtifact())
-                throw new Error(`"container_presence" is only valid inside a property or artifact`)
-
-            return context.element.container.id
+            const container = this.graph.getContainer(context.element)
+            return container.id
         }
 
         /**
          * policy_presence
          */
         if (check.isDefined(expression.policy_presence)) {
-            let policy: Policy | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
-                policy = element
-            }
-
-            if (check.isUndefined(policy)) {
-                const name = expression.policy_presence
-                assert.isStringOrNumber(name)
-                policy = this.graph.getPolicy(name)
-            }
-
+            const policy = this.graph.getPolicy(expression.policy_presence, {element, cached})
             return policy.id
         }
 
@@ -629,18 +521,7 @@ export default class Solver {
          * has_present_target
          */
         if (check.isDefined(expression.has_present_target)) {
-            let policy: Policy | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isPolicy()) throw new Error(`${element.Display} is not a policy`)
-                policy = element
-            }
-
-            if (check.isUndefined(policy)) {
-                const name = expression.has_present_target
-                assert.isStringOrNumber(name)
-                policy = this.graph.getPolicy(name)
-            }
+            const policy = this.graph.getPolicy(expression.has_present_target, {element, cached})
 
             return MiniSat.or(
                 policy.targets.map(it => {
@@ -657,19 +538,7 @@ export default class Solver {
          * group_presence
          */
         if (check.isDefined(expression.group_presence)) {
-            let group: Group | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
-                group = element
-            }
-
-            if (check.isUndefined(group)) {
-                const name = expression.group_presence
-                assert.isString(name)
-                group = this.graph.getGroup(name)
-            }
-
+            const group = this.graph.getGroup(expression.group_presence, {element, cached})
             return group.id
         }
 
@@ -677,19 +546,7 @@ export default class Solver {
          * has_present_member
          */
         if (check.isDefined(expression.has_present_member)) {
-            let group: Group | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isGroup()) throw new Error(`${element.Display} is not a group`)
-                group = element
-            }
-
-            if (check.isUndefined(group)) {
-                const name = expression.has_present_member
-                assert.isString(name)
-                group = this.graph.getGroup(name)
-            }
-
+            const group = this.graph.getGroup(expression.has_present_member, {element, cached})
             return MiniSat.or(group.members.map(it => it.id))
         }
 
@@ -697,19 +554,7 @@ export default class Solver {
          * artifact_presence
          */
         if (check.isDefined(expression.artifact_presence)) {
-            let artifact: Artifact | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
-                artifact = element
-            }
-
-            if (check.isUndefined(artifact)) {
-                assert.isString(expression.artifact_presence[0])
-                assert.isStringOrNumber(expression.artifact_presence[1])
-                artifact = this.graph.getArtifact(expression.artifact_presence)
-            }
-
+            const artifact = this.graph.getArtifact(expression.artifact_presence, {element, cached})
             return artifact.id
         }
 
@@ -717,19 +562,7 @@ export default class Solver {
          * node_property_presence
          */
         if (check.isDefined(expression.node_property_presence)) {
-            let property: Property | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
-                property = element
-            }
-
-            if (check.isUndefined(property)) {
-                assert.isString(expression.node_property_presence[0])
-                assert.isStringOrNumber(expression.node_property_presence[1])
-                property = this.graph.getNodeProperty(expression.node_property_presence)
-            }
-
+            const property = this.graph.getNodeProperty(expression.node_property_presence, {element, cached})
             return property.id
         }
 
@@ -737,20 +570,7 @@ export default class Solver {
          * relation_property_presence
          */
         if (check.isDefined(expression.relation_property_presence)) {
-            let property: Property | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
-                property = element
-            }
-
-            if (check.isUndefined(property)) {
-                assert.isString(expression.relation_property_presence[0])
-                assert.isStringOrNumber(expression.relation_property_presence[1])
-                assert.isStringOrNumber(expression.relation_property_presence[2])
-                property = this.graph.getRelationProperty(expression.relation_property_presence)
-            }
-
+            const property = this.graph.getRelationProperty(expression.relation_property_presence, {element, cached})
             return property.id
         }
 
@@ -758,19 +578,7 @@ export default class Solver {
          * group_property_presence
          */
         if (check.isDefined(expression.group_property_presence)) {
-            let property: Property | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
-                property = element
-            }
-
-            if (check.isUndefined(property)) {
-                assert.isString(expression.group_property_presence[0])
-                assert.isStringOrNumber(expression.group_property_presence[1])
-                property = this.graph.getGroupProperty(expression.group_property_presence)
-            }
-
+            const property = this.graph.getGroupProperty(expression.group_property_presence, {element, cached})
             return property.id
         }
 
@@ -778,19 +586,7 @@ export default class Solver {
          * policy_property_presence
          */
         if (check.isDefined(expression.policy_property_presence)) {
-            let property: Property | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
-                property = element
-            }
-
-            if (check.isUndefined(property)) {
-                assert.isStringOrNumber(expression.policy_property_presence[0])
-                assert.isStringOrNumber(expression.policy_property_presence[1])
-                property = this.graph.getPolicyProperty(expression.policy_property_presence)
-            }
-
+            const property = this.graph.getPolicyProperty(expression.policy_property_presence, {element, cached})
             return property.id
         }
 
@@ -798,20 +594,7 @@ export default class Solver {
          * artifact_property_presence
          */
         if (check.isDefined(expression.artifact_property_presence)) {
-            let property: Property | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isProperty()) throw new Error(`${element.Display} is not a property`)
-                property = element
-            }
-
-            if (check.isUndefined(property)) {
-                assert.isString(expression.artifact_property_presence[0])
-                assert.isStringOrNumber(expression.artifact_property_presence[1])
-                assert.isStringOrNumber(expression.artifact_property_presence[2])
-                property = this.graph.getArtifactProperty(expression.artifact_property_presence)
-            }
-
+            const property = this.graph.getArtifactProperty(expression.artifact_property_presence, {element, cached})
             return property.id
         }
 
@@ -819,19 +602,7 @@ export default class Solver {
          * input_presence
          */
         if (check.isDefined(expression.input_presence)) {
-            let input: Input | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isInput()) throw new Error(`${element.Display} is not an input`)
-                input = element
-            }
-
-            if (check.isUndefined(input)) {
-                const name = expression.input_presence
-                assert.isString(name)
-                input = this.graph.getInput(name)
-            }
-
+            const input = this.graph.getInput(expression.input_presence, {element, cached})
             return input.id
         }
 
@@ -839,19 +610,7 @@ export default class Solver {
          * import_presence
          */
         if (check.isDefined(expression.import_presence)) {
-            let imp: Import | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isImport()) throw new Error(`${element.Display} is not an import`)
-                imp = element
-            }
-
-            if (check.isUndefined(imp)) {
-                const index = expression.import_presence
-                assert.isNumber(index)
-                imp = this.graph.getImport(index)
-            }
-
+            const imp = this.graph.getImport(expression.import_presence, {element, cached})
             return imp.id
         }
 
@@ -859,19 +618,7 @@ export default class Solver {
          * node_type_presence
          */
         if (check.isDefined(expression.node_type_presence)) {
-            let type: Type | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
-                type = element
-            }
-
-            if (check.isUndefined(type)) {
-                assert.isString(expression.node_type_presence[0])
-                assert.isStringOrNumber(expression.node_type_presence[1])
-                type = this.graph.getNodeType(expression.node_type_presence)
-            }
-
+            const type = this.graph.getNodeType(expression.node_type_presence, {element, cached})
             return type.id
         }
 
@@ -879,19 +626,7 @@ export default class Solver {
          * relation_type_presence
          */
         if (check.isDefined(expression.relation_type_presence)) {
-            let type: Type | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
-                type = element
-            }
-
-            if (check.isUndefined(type)) {
-                assert.isString(expression.relation_type_presence[0])
-                assert.isStringOrNumber(expression.relation_type_presence[1])
-                type = this.graph.getRelationType(expression.relation_type_presence)
-            }
-
+            const type = this.graph.getRelationType(expression.relation_type_presence, {element, cached})
             return type.id
         }
 
@@ -899,19 +634,7 @@ export default class Solver {
          * group_type_presence
          */
         if (check.isDefined(expression.group_type_presence)) {
-            let type: Type | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
-                type = element
-            }
-
-            if (check.isUndefined(type)) {
-                assert.isString(expression.group_type_presence[0])
-                assert.isStringOrNumber(expression.group_type_presence[1])
-                type = this.graph.getGroupType(expression.group_type_presence)
-            }
-
+            const type = this.graph.getGroupType(expression.group_type_presence, {element, cached})
             return type.id
         }
 
@@ -919,19 +642,7 @@ export default class Solver {
          * policy_type_presence
          */
         if (check.isDefined(expression.policy_type_presence)) {
-            let type: Type | undefined
-            if (check.isDefined(expression._cached_element)) {
-                const element = expression._cached_element
-                if (!element.isType()) throw new Error(`${element.Display} is not a type`)
-                type = element
-            }
-
-            if (check.isUndefined(type)) {
-                assert.isString(expression.policy_type_presence[0])
-                assert.isStringOrNumber(expression.policy_type_presence[1])
-                type = this.graph.getPolicyType(expression.policy_type_presence)
-            }
-
+            const type = this.graph.getPolicyType(expression.policy_type_presence, {element, cached})
             return type.id
         }
 

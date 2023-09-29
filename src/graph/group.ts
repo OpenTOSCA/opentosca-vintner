@@ -38,28 +38,57 @@ export default class Group extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.group_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.groupDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.group_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.groupPruning
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition))
-            this._defaultCondition = {has_present_member: this.toscaId, _cached_element: this}
-        return this._defaultCondition
+    get defaultConsistencyCondition() {
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.groupDefaultConsistencyCondition
+        )
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {group_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    get defaultSemanticCondition() {
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.groupDefaultSemanticCondition
+        )
     }
 
-    readonly defaultAlternativeCondition: undefined
+    get consistencyPruning() {
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.groupConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.groupSemanticPruning
+    }
+
+    getTypeSpecificConditionWrapper() {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+        const type = this.types[0]
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.group_types?.[
+            type.name
+        ]
+    }
+
+    getElementGenericCondition() {
+        return {
+            conditions: {has_present_member: this.toscaId, _cached_element: this},
+            consistency: false,
+            semantic: true,
+        }
+    }
+
+    constructPresenceCondition() {
+        return {group_presence: this.toscaId, _cached_element: this}
+    }
 
     getTypeCondition(type: Type): LogicExpression {
         return {group_type_presence: [this.toscaId, type.index], _cached_element: type}

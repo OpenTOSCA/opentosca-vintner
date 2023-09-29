@@ -49,13 +49,13 @@ Such a topology template is also called variable topology template.
 
 A variability definition defines variability inputs, variability presets, variability expressions, and variability options.
 
-| Keyname     | Mandatory | Type                                | Description                                                             |
-|-------------|-----------|-------------------------------------|-------------------------------------------------------------------------|
-| inputs      | true      | Map(String, VariabilityInput)       | A required map of input parameters used inside variability expressions. |
-| presets     | false     | Map(String, VariabilityPreset)      | An optional map of variability preset definitions.                      |
-| expressions | false     | Map(String, VariabilityExpression)  | An optional map of variability expressions.                             |
-| options     | false     | Map(String, Boolean)                | An optional map of variability options.                       |
-
+| Keyname                    | Mandatory | Type                               | Description                                                             |
+|----------------------------|-----------|------------------------------------|-------------------------------------------------------------------------|
+| inputs                     | true      | Map(String, VariabilityInput)      | A required map of input parameters used inside variability expressions. |
+| presets                    | false     | Map(String, VariabilityPreset)     | An optional map of variability preset definitions.                      |
+| expressions                | false     | Map(String, VariabilityExpression) | An optional map of variability expressions.                             |
+| options                    | false     | Map(String, Boolean)               | An optional map of variability options.                                 |
+| type_specific_conditions   | false     | TypeSpecificDefaultConditions      | An optional definition of type-specific default conditions.             |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
 input `mode` and  two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
@@ -126,55 +126,85 @@ The following options are general options.
 
 ### Default Condition Options
 
-_This is an experimental feature._
-
 The following options are used to configure the default conditions of elements.
 
-| Keyname                         | Mandatory | Type                                                                                                  | Default           | Description                                    |
-|---------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|------------------------------------------------|
-| default_condition               | false     | Boolean                                                                                               | false             | Enable all default conditions.                 |
-| node_default_condition          | false     | Boolean                                                                                               | false             | Enable default condition for nodes.            |
-| node_default_condition_mode     | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.     |
-| relation_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for relations.        |
-| relation_default_condition_mode | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations. |
-| policy_default_condition        | false     | Boolean                                                                                               | false             | Enable default condition for policies.         |
-| group_default_condition         | false     | Boolean                                                                                               | false             | Enable default condition for groups.           |
-| artifact_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for artifacts.        |
-| property_default_condition      | false     | Boolean                                                                                               | false             | Enable default condition for properties.       |
+| Keyname                                | Mandatory | Type                                                                                                  | Default           | Description                                                         |
+|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|---------------------------------------------------------------------|
+| default_condition                      | false     | Boolean                                                                                               | false             | Enable all default conditions (consistency and semantic).           |
+| node_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for nodes (consistency and semantic).      |
+| node_default_condition_mode            | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.                          |
+| node_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for nodes.                     |
+| node_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                        |
+| relation_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).  |
+| relation_default_condition_mode        | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                      |
+| relation_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                    |
+| relation_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for relations.                 |
+| policy_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).   |
+| policy_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                  |
+| policy_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                     |
+| group_default_condition                | false     | Boolean                                                                                               | false             | Enable default condition for groups (consistency and semantic).     |
+| group_default_consistency_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                    |
+| group_default_semantic_condition       | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                       |
+| artifact_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).  |
+| artifact_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                 |
+| artifact_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                    |
+| property_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic). |
+| property_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for properties.                |
+| property_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for properties.                   |
+| type_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for types (consistency and semantic).      |
+| type_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for types.                     |
+| type_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for types.                        |
 
 ### Pruning Options
 
-_This is an experimental feature._
-
 The following options are used to configure the pruning of elements.
 
-| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
-|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| pruning                                   | false     | Boolean                                   | false         | Enable pruning of all elements.                                                                   |
-| node_pruning                              | false     | Boolean                                   | false         | Enable pruning of nodes.                                                                          |
-| relation_pruning                          | false     | Boolean                                   | false         | Enable pruning of relations.                                                                      |
-| policy_pruning                            | false     | Boolean                                   | false         | Enable pruning of policies.                                                                       |
-| group_pruning                             | false     | Boolean                                   | false         | Enable pruning of groups.                                                                         |
-| artifact_pruning                          | false     | Boolean                                   | false         | Enable pruning of artifacts.                                                                      |
-| property_pruning                          | false     | Boolean                                   | false         | Enable pruning of properties.                                                                     |
+| Keyname                      | Mandatory | Type                                      | Default       | Description                                                 |
+|------------------------------|-----------|-------------------------------------------|---------------|-------------------------------------------------------------|
+| pruning                      | false     | Boolean                                   | false         | Enable pruning of all elements  (consistency and semantic). |
+| node_pruning                 | false     | Boolean                                   | false         | Enable pruning of nodes (consistency and semantic).         |
+| node_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of nodes.                        |
+| node_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of nodes.                           |
+| relation_pruning             | false     | Boolean                                   | false         | Enable pruning of relations (consistency and semantic).     |
+| relation_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of relations.                    |
+| relation_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of relations.                       |
+| policy_pruning               | false     | Boolean                                   | false         | Enable pruning of policies (consistency and semantic).      |
+| policy_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of policies.                     |
+| policy_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of policies.                        |
+| group_pruning                | false     | Boolean                                   | false         | Enable pruning of groups (consistency and semantic).        |
+| group_consistency_pruning    | false     | Boolean                                   | false         | Enable consistency pruning of groups.                       |
+| group_semantic_pruning       | false     | Boolean                                   | false         | Enable semantic pruning of groups.                          |
+| artifact_pruning             | false     | Boolean                                   | false         | Enable pruning of artifacts (consistency and semantic).     |
+| artifact_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of artifacts.                    |
+| artifact_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of artifacts.                       |
+| property_pruning             | false     | Boolean                                   | false         | Enable pruning of properties (consistency and semantic).    |
+| property_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of properties.                   |
+| property_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of properties.                      |
+| type_pruning                 | false     | Boolean                                   | false         | Enable pruning of types (consistency and semantic).         |
+| type_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of types.                        |
+| type_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of types.                           |
 
-### Consistency Check Options
+### Checks Options
 
-The following options are used to configure consistency checks.
+The following options are used to configure checks.
 
-| Keyname                                   | Mandatory | Type      | Default | Description                                                                     |
-|-------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| consistency_checks                        | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| relation_source_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
-| relation_target_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
-| ambiguous_hosting_consistency_check       | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
-| expected_hosting_consistency_check        | false     | Boolean   | true    | Enable the consistency check regarding an expected present hosting relation.    |
-| missing_artifact_parent_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present nodes for artifacts.             |
-| ambiguous_artifact_consistency_check      | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
-| missing_property_parent_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present nodes of properties.             |
-| ambiguous_property_consistency_check      | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
-| missing_type_container_consistency_check  | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
-| ambiguous_type_consistency_check          | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| Keyname                                      | Mandatory | Type      | Default | Description                                                                     |
+|----------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
+| checks                                       | false     | Boolean   | true    | Enable all checks.                                                              |
+| consistency_checks                           | false     | Boolean   | true    | Enable all consistency checks.                                                  |
+| semantic_checks                              | false     | Boolean   | true    | Enable all semantic checks.                                                     |
+| relation_source_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
+| relation_target_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
+| ambiguous_hosting_consistency_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
+| missing_artifact_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
+| ambiguous_artifact_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
+| missing_property_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
+| ambiguous_property_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
+| missing_type_container_consistency_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
+| ambiguous_type_consistency_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| expected_hosting_semantic_check              | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_semantic_check    | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_semantic_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
 
 ### Optimization Options
 
@@ -193,48 +223,74 @@ _This is an experimental feature._
 
 There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-| Element                      | Strict | Consistent-Strict | Consistent-Loose | Default | Default-Loose | Loose     | 
-|------------------------------|--------|-------------------|------------------|---------|---------------|-----------|
-| Node with Incoming Relations | false  | false             | false            | default | default       | pruning   |
-| Node with Artifacts          | false  | false             | false            | default | default       | pruning   |
-| Relation                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Property                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Artifact                     | false  | default           | pruning          | default | pruning       | pruning   |
-| Type                         | false  | default           | pruning          | default | pruning       | pruning   |
-| Group                        | false  | false             | false            | default | pruning       | pruning   |
-| Policy                       | false  | false             | false            | default | pruning       | pruning   |
+- `strict`: no default or pruning conditions are enabled at all
+- `consistent-strict`: all default consistency conditions are enabled
+- `consitent-loose`: consistency pruning is enabled
+- `default`: all default conditions are enabled (consistency and semantic)
+- `loose`: pruning is enabled everywhere (consistency and semantic)
 
 
 ## Default Conditions
 
-_This is an experimental feature._
+There are element-generic default conditions and type-specific default conditions.
+Element-generic default conditions are generic default conditions defined per element.
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.
 
-The following default conditions can be assigned to elements.
+### Element-Generic Default Conditions
 
-| Element                                          | Default Conditions                                                                 |
-|--------------------------------------------------|------------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (incoming) | Check if any incoming relation is present.                                         |
-| Node Template with Artifacts (artifact)          | Check if any artifact is present.                                                  |
-| Property                                         | Check if the container, e.g., node template or policy, of the property is present. |
-| Relation                                         | Check if the source and target of the relation is present.                         |
-| Policy                                           | Check if the policy has any targets which are present.                             |
-| Group                                            | Check if the group has any members which are present.                              |
-| Artifact                                         | Check if the node template of the artifact is present.                             |
+The following element-generic default conditions can be assigned to elements.
 
-The default condition of elements not mentioned above always holds. 
-This includes, e.g., node templates without incoming relations or host but also topology template inputs.
+| Element                                          | Consistency | Semantic | Default Conditions                                                                 |
+|--------------------------------------------------|-------------|----------|------------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (incoming) | false       | true     | Check if any incoming relation is present.                                         |
+| Node Template with Artifacts (artifact)          | false       | true     | Check if any artifact is present.                                                  |
+| Property                                         | true        | false    | Check if the container, e.g., node template or policy, of the property is present. |
+| Relation                                         | true        | false    | Check if the source and target of the relation is present.                         |
+| Policy                                           | false       | true     | Check if the policy has any targets which are present.                             |
+| Group                                            | false       | true     | Check if the group has any members which are present.                              |
+| Artifact                                         | true        | false    | Check if the node template of the artifact is present.                             |
+| Root                                             | true        | true     | The default condition of element always holds.                                     |
+
+Thereby, we define a consistency condition a condition which targets the consistency of the metamodel, thus, ensuring that the metamodel can be correctly parsed, e.g., a property must have a container.
+In contrast,  a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.
 
 Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.
 
-| Element                                               | Default Conditions                                                             |
-|-------------------------------------------------------|--------------------------------------------------------------------------------|
-| Node Template with Incoming Relations (incomingnaive) | Check if any incoming relation is present using `has_incoming_relation_naive`. |
-| Node Template with Incoming Relations (source)        | Check if any source of any incoming relation is present.                       |
-| Node Template with Host (host)                        | Check if any host is present.                                                  |
-| Node Template with Artifact (artifactnaive)           | Check if any artifact is present using `has_artifact_naive`.                   |
-| Relation (Source)                                     | Check if the source of the relation is present.                                |
-| Relation (Target)                                     | Check if the target of the relation is present.                                |
+| Element                                               | Consistency | Semantic | Default Conditions                                                             |
+|-------------------------------------------------------|-------------|----------|--------------------------------------------------------------------------------|
+| Node Template with Incoming Relations (incomingnaive) | false       | true     | Check if any incoming relation is present using `has_incoming_relation_naive`. |
+| Node Template with Incoming Relations (source)        | false       | true     | Check if any source of any incoming relation is present.                       |
+| Node Template with Outgoing Relations (outgoing)      | false       | true     | Check if any outgoing relation is present.                                     |
+| Node Template with Outgoing Relations (outgoingnaive) | false       | true     | Check if any outgoing relation is present using `has_outgoing_relation_naive`. |
+| Node Template with Host (host)                        | false       | true     | Check if any host is present.                                                  |
+| Node Template with Artifact (artifactnaive)           | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
+| Relation (Source)                                     | true        | false    | Check if the source of the relation is present.                                |
+| Relation (Target)                                     | true        | false    | Check if the target of the relation is present.                                |
+
+
+### Type-Specific Default Conditions
+
+_Conditional types conflict with this feature!_
+
+Type-specific default conditions can be defined to override element-generic default conditions for specific type.
+A type-specific default condition is defined as follows and is supported for nodes, relations, properties, artifact, groups, and policies.
+
+| Keyname           | Mandatory | Type                                                   | Default                                                                                                  | Description                                             |
+|-------------------|-----------|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| conditions        | true      | VariabilityCondition &#124; List(VariabilityCondition) | A variability condition. If a list is given, then the conditions are combined using the _and_ operation. |
+| consistency       | false     | Boolean                                                | false                                                                                                    | Configures the condition to be a consistency condition. |
+| semantic          | false     | Boolean                                                | true                                                                                                     | Configures the condition to be a semantic condition.    |
+
+For example, the node type `scenario.monitor` defines a type-specific semantic default condition checking for the presence of its host.
+
+```yaml linenums="1"
+type_specific_conditions:
+    node_types:
+        scenario.monitor:
+            conditions: {host_presence: SELF}
+            semantic: true
+```
 
 ## Variability Preset
 
@@ -321,16 +377,20 @@ A node template is a conditional element, thus, variability conditions and other
 These conditions must hold otherwise the respective node template is not present.
 A node template can also hold conditional types, artifact, and properties.
 
-| Keyname                | Mandatory | Type                                                                                 | Description                                                                                                                                                          |
-|------------------------|-----------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type                   | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                  |
-| conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                   |
-| artifacts              | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                   | 
-| properties             | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. | 
-| default_condition      | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._          |
-| default_condition_mode | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element. _This is an experimental feature._                                                                                 |
-| pruning                | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                    |
-| weight                 | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                     |
+| Keyname                       | Mandatory | Type                                                                                 | Description                                                                                                                                                                                                              |
+|-------------------------------|-----------|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type                          | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                                                                      |
+| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                                                       |
+| artifacts                     | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                                                                       | 
+| properties                    | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                                                    | 
+| default_condition             | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                               |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.  |
+| default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                                      |
+| pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                         |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                            |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                      |
+| weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                                                                         |
 
 For example, the following node template has a variability condition assigned.
 
@@ -349,9 +409,12 @@ These conditions must hold otherwise the respective relationship is not present.
 |----------------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                |
 | default_alternative  | false     | Boolean                                                | Declare the type as default. This overwrites assigned conditions. There must be only one default assignment.                                      |                                                                                                       |
-| default_condition    | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                                                                                                                  |
-| pruning              | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
-
+| default_condition    | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                                                                                                  |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| pruning              | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                               |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 For example, the following node template `database` has a conditional type switching between a development and production database.
 
@@ -373,9 +436,13 @@ These conditions must hold otherwise the respective relationship is not present.
 |------------------------|-----------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | conditions             | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.            |
 | default_alternative    | false     | Boolean                                                | Declare the requirement assignment as default. This overwrites assigned conditions. There must be only one default assignment. |                                                                                                       |
-| default_condition      | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                    |
-| default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this element. _This is an experimental feature._|
-| pruning                | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                              |
+| default_condition      | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                    |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| default_condition_mode | false     | source-target &#124; source &#124; target              | Configure the default condition for this element. |
+| pruning                | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                              |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                               |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 For example, the following requirement assignment `host` has a variability condition assigned.
 
@@ -424,8 +491,12 @@ However, this only applies if the property assignment is wrapped as the followin
 | expression            | false     | ValueExpression                                        | A value expressions which is evaluated and used as value.                                                                |
 | conditions            | false     | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.       |
 | default_alternative   | false     | Boolean                                                | Declare the value as default. This overwrites assigned conditions. There must be only one default assignment.            |                                                                                                       |
-| default_condition     | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
-| pruning               | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._           |
+| default_condition     | false     | Boolean                                                | Enable the default condition for this element. This overrides the variability options of the variable topology template. |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| pruning               | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template.           |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                               |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 These keywords are used to detect if a property assignment is wrapped. 
 Thus, if any of these keywords must be used as value for property, then this property must be wrapped.
@@ -464,7 +535,9 @@ A variability group is always absent and, thus, always removed when resolving va
 | members                     | false        | List(String &#124; Tuple(String, String) &#124; Tuple(String, Number))     | An optional list of node templates names or requirement assignment names/ index of a node template.                                                                  |
 | conditions                  | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                   |
 | properties                  | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                    |
+| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                    |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                               |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 For example, the following group `example_group` is a conditional group which is only present if assigned conditions hold.
 
@@ -497,8 +570,12 @@ A policy can also hold conditional types and properties.
 | type              | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                   |
 | conditions        | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                    |
 | properties        | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property. |
-| default_condition | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                              |
-| pruning           | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._                                                        |
+| default_condition | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                              |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| pruning           | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                        |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                               |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 For example, the following policy template `anticollocation` has the variability condition `is_prod` assigned.
 Depending on the presence of this policy, the node templates `wordpress` and `mysql` _must not_ be hosted on the same server, e.g., during production.
@@ -543,13 +620,17 @@ An (deployment) artifact is a conditional element, thus, variability conditions 
 These conditions must hold otherwise the respective artifact is not present.
 An artifact can also hold conditional properties.
 
-| Keyname             | Mandatory | Type                                                                         | Description                                                                                                                                                             |
-|---------------------|-----------|------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| conditions          | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                      |
-| default_alternative | false        | Boolean                                                                      | Declare the value as default. This overwrites assigned conditions. There must be only one default artifact.                                                             |                                                                                                       |
-| properties      | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.   |
-| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._             |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template. _This is an experimental feature._                           |
+| Keyname             | Mandatory | Type                                                                         | Description                                                                                                                                                                              |
+|---------------------|-----------|------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions          | false        | VariabilityCondition &#124; List(VariabilityCondition)                       | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                       |
+| default_alternative | false        | Boolean                                                                      | Declare the value as default. This overwrites assigned conditions. There must be only one default artifact.                                                                              |                                                                                                       |
+| properties      | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                    |
+| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                 |
+| default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                        |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 
 For example, the following node template `my_node` has two artifacts `artifact_a` and `artifact_b` assigned which are both conditional.
 
@@ -571,8 +652,6 @@ These conditions must hold otherwise the respective input is not present.
 | Keyname    | Mandatory | Type                                                                       | Description                                                                                                                                                 |
 |------------|-----------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | conditions | false        | VariabilityCondition &#124; List(VariabilityCondition) | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                          |
-| default_condition           | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template. _This is an experimental feature._ |
-| pruning                     | false     | Boolean                                                                              | Enable the pruning for this element. This overrides variability options of the variable topology template. _This is an experimental feature._              |
 
 For example, the topology template input has a variability condition assigned.
 
@@ -680,26 +759,28 @@ The following presence operators can be used inside a logic expression.
 | variability_input           | String                                                                              | Any     | Returns the value of a variability input.                                                                                                                                        |
 | logic_expression            | String                                                                              | Boolean | Returns the value of the Logic Expression.                                                                                                                                       |
 | value_expression            | String                                                                              | Any     | Returns the value of the Value Expression.                                                                                                                                       |
-| node_presence               | Node: String                                                                        | Boolean | Returns if node is present.                                                                                                                                                      |
-| host_presence               | Node: String &#124; SELF                                                            | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.                     |
-| has_source                  | Node: String                                                                        | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                                                  |
-| has_incoming_relation       | Node: String                                                                        | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                                            |
-| has_incoming_relation_naive | Node: String                                                                        | Boolean | Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations. |
-| has_artifact                | Node: String                                                                        | Boolean | Returns if any artifact of the node template is present.                                                                                                                         |
-| has_artifact_naive          | Node: String                                                                        | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
-| relation_presence           | Tuple(Node: String, Relation: String &#124; Number)                                 | Boolean | Returns if relation is present.                                                                                                                                                  |
-| artifact_presence           | Tuple(Node: String, Artifact: String &#124; Number)                                 | Boolean | Returns if artifact is present.                                                                                                                                                  |
+| node_presence               | Node: String &#124; CONTAINER                                                       | Boolean | Returns if node is present.                                                                                                                                                      |
+| host_presence               | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any host of the node is present. Note, an error will be thrown later when consistency is checked if there are multiple hosting relations present.                     |
+| has_source                  | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any source of any incoming relation of the node template is present.                                                                                                  |
+| has_incoming_relation       | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is target of at least one present incoming relationship.                                                                                            |
+| has_incoming_relation_naive | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is target of at least one present incoming relationship in a naive way that will result in a circle considering the default condition of relations. |
+| has_outgoing_relation       | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is source of at least one present outgoing relationship.                                                                                            |
+| has_outgoing_relation_naive | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if the node template is source of at least one present outgoing relationship in a naive way that will result in a circle considering the default condition of relations. |
+| has_artifact                | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any artifact of the node template is present.                                                                                                                         |
+| has_artifact_naive          | Node: String &#124; SELF &#124; CONTAINER                                           | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
+| relation_presence           | Tuple(Node: String &#124; SELF &#124; CONTAINER, Relation: String &#124; Number)    | Boolean | Returns if relation is present.                                                                                                                                                  |
+| artifact_presence           | Tuple(Node: String &#124; SELF &#124; CONTAINER, Artifact: String &#124; Number)    | Boolean | Returns if artifact is present.                                                                                                                                                  |
 | policy_presence             | Policy: String &#124; Number                                                        | Boolean | Returns if policy is present.                                                                                                                                                    |
 | group_presence              | Group: String                                                                       | Boolean | Returns if group is present.                                                                                                                                                     |
 | input_presence              | Input: String                                                                       | Boolean | Returns if input is present.                                                                                                                                                     |
-| source_presence             | SELF                                                                                | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
-| target_presence             | SELF                                                                                | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
-| has_present_target          | String &#124; Number                                                                | Boolean | Returns if any target of the given policy is present.                                                                                                                            |
-| has_present_member          | String                                                                              | Boolean | Returns if any member of the given group is present.                                                                                                                             |
+| source_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
+| target_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
+| has_present_target          | Policy: String &#124; Number &#124; SELF &#124; CONTAINER                           | Boolean | Returns if any target of the given policy is present.                                                                                                                            |
+| has_present_member          | Group: String &#124; SELF &#124; CONTAINER                                          | Boolean | Returns if any member of the given group is present.                                                                                                                             |
 | node_type_presence          | Tuple(Node: String, Type: String &#124; Number)                                     | Boolean | Returns if type of node is present.                                                                                                                                              |
 | relation_type_presence      | Triple(Node: String, Relation: String &#124; Number, Type: String &#124; Number)    | Boolean | Returns if type of relation is present.                                                                                                                                          |
-| group_type_presence         | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if type of group is present.                                                                                                                                             |
-| policy_type_presence        | Tuple(String, String &#124; Number)                                                 | Boolean | Returns if type of policy is present.                                                                                                                                            |
+| group_type_presence         | Tuple(Group: String, Type: String &#124; Number)                                    | Boolean | Returns if type of group is present.                                                                                                                                             |
+| policy_type_presence        | Tuple(Group: String, Type: String &#124; Number)                                    | Boolean | Returns if type of policy is present.                                                                                                                                            |
 | node_property_presence      | Tuple(Node: String, Property: String &#124; Number)                                 | Boolean | Returns if property of node is present.                                                                                                                                          |
 | relation_property_presence  | Tuple(Node: String, Relation: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of relation is present.                                                                                                                                      |
 | group_property_presence     | Tuple(Group: String, Property: String &#124; Number)                                | Boolean | Returns if property of group is present.                                                                                                                                         |
@@ -843,39 +924,42 @@ To check if an element is present, check that all assigned conditions hold:
 1. Collect all conditions which are assigned to the element via `conditions`.
 1. Collect all conditions which are assigned to variability groups via `conditions` which the element is member of.
 1. (Optional) Assign default conditions if no conditions have been collected yet.
-1. (_Experimental_) (Optional) Assign pruning conditions.
+1. (Optional) Assign pruning conditions.
 1. Evaluate assigned conditions.
 
 The element is present if all conditions hold.
 
-### Check Consistency
+### Conduct Checks
 
-To check the consistency, conduct the following steps:
+To conduct the consistency and semantic checks, conduct the following steps:
 
 1. Ensure that each relation source of a present relation is present.
 1. Ensure that each relation target of a present relation is present.
 1. Ensure that every present node has at maximum one present hosting relation.
-1. Ensure that every present node has a present hosting relation if the node had at least one conditional relation in the variable
-   service template.
 1. Ensure that the node of each present artifact is present.
 1. Ensure that present artifacts have unique names within their node.
 1. Ensure that the node of each present property is present.
 1. Ensure that present properties have unique names within their node.
 1. Ensure that the container of each present type is present.
 1. Ensure that each present type container has exactly one present type.
+1. Ensure that every present node has a present hosting relation if the node had at least one conditional relation in the variable
+1. Ensure that every present node has a present incoming relation if the node had at least one incoming relation in the variable service template.
+1. Ensure that every present node has a present deployment artifact if the node had at least one deployment artifact in the variable service template.
 
 Since the derived variability-resolved service template might be further processed, e.g. by
 [topology completion](https://cs.emis.de/LNI/Proceedings/Proceedings232/247.pdf){target=_blank},
-some or all of these consistency steps might be omitted.
+some or all of these checks might be omitted.
 
 ### Pruning Elements
-
-_This is an experimental feature._
 
 To further support modeling, elements can be pruned by additionally evaluating the respective default condition before evaluating assigned conditions.
 For example, when evaluating if a property of a node template is present, then evaluate first if respective node template is present and then assigned conditions.
 Such pruning propagates through the whole topology.
 For example, the properties of a relationship template used in a requirement assignment of a node template which is not present are also not present.
+
+There are element-generic default conditions and type-specific default conditions. 
+Element-generic default conditions are generic default conditions defined per element. 
+However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.
 
 ### Optimization
 

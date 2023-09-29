@@ -6,13 +6,14 @@ export type VariabilityDefinition = {
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
     options?: VariabilityOptions
+    type_specific_conditions?: TypeSpecificLogicExpressions
 }
 
 export type VariabilityOptions = {
     mode?: ResolvingMode
 } & DefaultOptions &
     PruningOptions &
-    ConsistencyOptions &
+    ChecksOptions &
     SolverOptions
 
 export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
@@ -21,7 +22,7 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
 }
 
-// In realty, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
+// In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
 export type NodeDefaultConditionMode =
     | 'source'
     | 'incoming'
@@ -30,192 +31,123 @@ export type NodeDefaultConditionMode =
     | 'artifact'
     | 'artifactnaive'
     | 'incoming-artifact'
+    | 'outgoing'
+    | 'outgoingnaive'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 
 export type DefaultOptions = {
     default_condition?: boolean
+
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
+    node_default_consistency_condition?: boolean
+    node_default_semantic_condition?: boolean
+
     relation_default_condition?: boolean
     relation_default_condition_mode?: RelationDefaultConditionMode
+    relation_default_consistency_condition?: boolean
+    relation_default_semantic_condition?: boolean
+
     policy_default_condition?: boolean
+    policy_default_consistency_condition?: boolean
+    policy_default_semantic_condition?: boolean
+
     group_default_condition?: boolean
+    group_default_consistency_condition?: boolean
+    group_default_semantic_condition?: boolean
+
     artifact_default_condition?: boolean
+    artifact_default_consistency_condition?: boolean
+    artifact_default_semantic_condition?: boolean
+
     property_default_condition?: boolean
+    property_default_consistency_condition?: boolean
+    property_default_semantic_condition?: boolean
+
     type_default_condition?: boolean
+    type_default_consistency_condition?: boolean
+    type_default_semantic_condition?: boolean
 }
 
 export type PruningOptions = {
     pruning?: boolean
+    consistency_pruning?: boolean
+    semantic_pruning?: boolean
+
     node_pruning?: boolean
+    node_consistency_pruning?: boolean
+    node_semantic_pruning?: boolean
+
     relation_pruning?: boolean
+    relation_consistency_pruning?: boolean
+    relation_semantic_pruning?: boolean
+
     policy_pruning?: boolean
+    policy_consistency_pruning?: boolean
+    policy_semantic_pruning?: boolean
+
     group_pruning?: boolean
+    group_consistency_pruning?: boolean
+    group_semantic_pruning?: boolean
+
     artifact_pruning?: boolean
+    artifact_consistency_pruning?: boolean
+    artifact_semantic_pruning?: boolean
+
     property_pruning?: boolean
+    property_consistency_pruning?: boolean
+    property_semantic_pruning?: boolean
+
     type_pruning?: boolean
+    type_consistency_pruning?: boolean
+    type_semantic_pruning?: boolean
 }
 
-export type ConsistencyOptions = {
+export type ChecksOptions = {
+    checks?: boolean
     consistency_checks?: boolean
     relation_source_consistency_check?: boolean
     relation_target_consistency_check?: boolean
     ambiguous_hosting_consistency_check?: boolean
-    expected_hosting_consistency_check?: boolean
-    missing_artifact_parent_consistency_check?: boolean
+    missing_artifact_container_consistency_check?: boolean
     ambiguous_artifact_consistency_check?: boolean
-    missing_property_parent_consistency_check?: boolean
+    missing_property_container_consistency_check?: boolean
     ambiguous_property_consistency_check?: boolean
     missing_type_container_consistency_check?: boolean
     ambiguous_type_consistency_check?: boolean
+    semantic_checks?: boolean
+    expected_hosting_semantic_check?: boolean
+    expected_incoming_relation_semantic_check?: boolean
+    expected_artifact_semantic_check?: boolean
 }
 
-export const ResolverModes = {
-    strict: {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
-    },
+export const ResolverModes: {[key: string]: VariabilityOptions} = {
+    strict: {},
     'consistent-strict': {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: true,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
+        default_condition: true,
+        node_default_semantic_condition: false,
+        relation_default_semantic_condition: false,
+        policy_default_semantic_condition: false,
+        group_default_semantic_condition: false,
+        artifact_default_semantic_condition: false,
+        property_default_semantic_condition: false,
+        type_default_semantic_condition: false,
     },
     'consistent-loose': {
-        default: {
-            node_default_condition: false,
-            relation_default_condition: true,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: true,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: false,
-        },
+        pruning: true,
+        node_semantic_pruning: false,
+        relation_semantic_pruning: false,
+        policy_semantic_pruning: false,
+        group_semantic_pruning: false,
+        artifact_semantic_pruning: false,
+        property_semantic_pruning: false,
+        type_semantic_pruning: false,
     },
     default: {
-        default: {
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
-    },
-    'default-loose': {
-        default: {
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            pruning: true,
-            node_pruning: false,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        },
+        default_condition: true,
     },
     loose: {
-        default: {
-            default_condition: true,
-            node_default_condition: true,
-            relation_default_condition: true,
-            policy_default_condition: true,
-            group_default_condition: true,
-            artifact_default_condition: true,
-            property_default_condition: true,
-            type_default_condition: true,
-        },
-        pruning: {
-            pruning: true,
-            node_pruning: true,
-            relation_pruning: true,
-            policy_pruning: true,
-            group_pruning: true,
-            artifact_pruning: true,
-            property_pruning: true,
-            type_pruning: true,
-        },
-    },
-    base: {
-        default: {
-            default_condition: false,
-            node_default_condition: false,
-            relation_default_condition: false,
-            policy_default_condition: false,
-            group_default_condition: false,
-            artifact_default_condition: false,
-            property_default_condition: false,
-            type_default_condition: false,
-        },
-        pruning: {
-            pruning: false,
-            node_pruning: false,
-            relation_pruning: false,
-            policy_pruning: false,
-            group_pruning: false,
-            artifact_pruning: false,
-            property_pruning: false,
-            type_pruning: false,
-        },
+        pruning: true,
     },
 }
 
@@ -240,7 +172,11 @@ export type VariabilityAlternative = {
     conditions?: LogicExpression | LogicExpression[]
     default_alternative?: boolean
     default_condition?: boolean
+    default_consistency_condition?: boolean
+    default_semantic_condition?: boolean
     pruning?: boolean
+    consistency_pruning?: boolean
+    semantic_pruning?: boolean
 }
 
 export type NodeTypePresenceArguments = [node: string, type: string | number]
@@ -271,18 +207,20 @@ export type LogicExpression =
           policy_type_presence?: PolicyTypePresenceArguments
 
           // Node functions
-          node_presence?: string
-          host_presence?: string
-          has_source?: string
-          has_incoming_relation?: string
-          has_incoming_relation_naive?: string
-          has_artifact?: string
-          has_artifact_naive?: string
+          node_presence?: string | 'CONTAINER'
+          host_presence?: string | 'SELF' | 'CONTAINER'
+          has_source?: string | 'SELF' | 'CONTAINER'
+          has_incoming_relation?: string | 'SELF' | 'CONTAINER'
+          has_incoming_relation_naive?: string | 'SELF' | 'CONTAINER'
+          has_outgoing_relation?: string | 'SELF' | 'CONTAINER'
+          has_outgoing_relation_naive?: string | 'SELF' | 'CONTAINER'
+          has_artifact?: string | 'SELF' | 'CONTAINER'
+          has_artifact_naive?: string | 'SELF' | 'CONTAINER'
 
           // Relation functions
-          relation_presence?: [node: string, relation: string | number]
-          source_presence?: 'SELF'
-          target_presence?: 'SELF'
+          relation_presence?: [node: string | 'SELF' | 'CONTAINER', relation: string | number]
+          source_presence?: 'SELF' | 'CONTAINER'
+          target_presence?: 'SELF' | 'CONTAINER'
 
           // Property functions
           node_property_presence?: NodePropertyPresenceArguments
@@ -299,8 +237,8 @@ export type LogicExpression =
           has_present_target?: string | number
 
           // Group functions
-          group_presence?: string
-          has_present_member?: string
+          group_presence?: string | 'SELF' | 'CONTAINER'
+          has_present_member?: string | 'SELF' | 'CONTAINER'
 
           // Input functions
           input_presence?: string
@@ -380,3 +318,18 @@ export type ValueExpression =
       }
 
 export type VariabilityExpression = LogicExpression | ValueExpression
+
+export type ConditionsWrapper = {
+    conditions: LogicExpression | LogicExpression[]
+    consistency?: boolean
+    semantic?: boolean
+}
+
+export type TypeSpecificLogicExpressions = {
+    artifact_types?: {[key: string]: ConditionsWrapper}
+    data_types?: {[key: string]: ConditionsWrapper}
+    relationship_types?: {[key: string]: ConditionsWrapper}
+    node_types?: {[key: string]: ConditionsWrapper}
+    group_types?: {[key: string]: ConditionsWrapper}
+    policy_types?: {[key: string]: ConditionsWrapper}
+}

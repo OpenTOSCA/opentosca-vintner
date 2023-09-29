@@ -15,7 +15,15 @@ resolvers.post(
 resolvers.post(
     '/setup/clean',
     hae.express(async (req, res, next) => {
-        await Controller.setup.clean()
+        await Controller.setup.clean(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/setup/utils',
+    hae.express(async (req, res, next) => {
+        await Controller.setup.utils(req.body)
         res.json({})
     })
 )

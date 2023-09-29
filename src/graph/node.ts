@@ -58,21 +58,15 @@ export default class Node extends Element {
     }
 
     get getDefaultMode(): NodeDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.node_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.node_default_condition_mode ??
-            'incoming-artifact'
-        )
+        return this.raw.default_condition_mode ?? this.graph.options.default.nodeDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return this.raw.default_condition ?? Boolean(this.graph.options.default.node_default_condition)
+        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return this.raw.pruning ?? Boolean(this.graph.options.pruning.node_pruning)
+        return this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     get hasHost() {
@@ -91,67 +85,94 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const conditions: LogicExpression[] = []
-
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'host') {
-                    return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
-                }
-
-                if (it === 'source') {
-                    return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
-                }
-
-                if (it === 'incoming') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'incomingnaive') {
-                    return conditions.push(
-                        this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'artifact') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                if (it === 'artifactnaive') {
-                    return conditions.push(
-                        this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
-                    )
-                }
-
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
-
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
-
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
-            } else {
-                this._defaultCondition = {and: conditions}
-            }
-        }
-
-        return this._defaultCondition
+    getTypeSpecificConditionWrapper() {
+        // Conditional types are not supported
+        if (this.types.length > 1) return
+        const type = this.types[0]
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[
+            type.name
+        ]
     }
 
-    readonly defaultAlternativeCondition = undefined
+    getElementGenericCondition() {
+        const conditions: LogicExpression[] = []
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {node_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'host') {
+                return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
+            }
+
+            if (it === 'source') {
+                return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'incoming') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'incomingnaive') {
+                return conditions.push(
+                    this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'outgoing') {
+                return conditions.push(
+                    this.isSource ? {has_outgoing_relation: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'outgoingnaive') {
+                return conditions.push(
+                    this.isSource ? {has_outgoing_relation_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            if (it === 'artifact') {
+                return conditions.push(this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true)
+            }
+
+            if (it === 'artifactnaive') {
+                return conditions.push(
+                    this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
+                )
+            }
+
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
+
+        return {conditions, consistency: false, semantic: true}
+    }
+
+    get defaultConsistencyCondition() {
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.nodeDefaultConsistencyCondition
+        )
+    }
+
+    get defaultSemanticCondition() {
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.nodeDefaultSemanticCondition
+        )
+    }
+
+    get consistencyPruning() {
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.nodeConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.nodeSemanticPruning
+    }
+
+    constructPresenceCondition() {
+        return {node_presence: this.toscaId, _cached_element: this}
     }
 
     getTypeCondition(type: Type): LogicExpression {

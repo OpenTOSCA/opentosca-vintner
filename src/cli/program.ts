@@ -29,9 +29,10 @@ setup
 setup
     .command('clean')
     .description('cleans up the filesystem')
+    .option('--force [boolean]', 'force clean up')
     .action(
-        hae.exit(async () => {
-            await Controller.setup.clean()
+        hae.exit(async options => {
+            await Controller.setup.clean(options)
         })
     )
 
@@ -59,6 +60,23 @@ setup
     .action(
         hae.exit(async () => {
             console.log(await Controller.setup.path())
+        })
+    )
+
+setup
+    .command('utils')
+    .description('install utils (linux is required)')
+    .option('--all [boolean]', 'install all utils')
+    .option('--git [boolean]', 'install Git')
+    .option('--python [boolean]', 'install Python')
+    .option('--xopera [boolean]', 'install xOpera (system-wide)')
+    .option('--unfurl [boolean]', 'install Unfurl (system-wide)')
+    .option('--gcloud [boolean]', 'install gCloud')
+    .option('--terraform [boolean]', 'install Terraform')
+    .option('--ansible [boolean]', 'install Ansible (system-wide)')
+    .action(
+        hae.exit(async options => {
+            console.log(await Controller.setup.utils(options))
         })
     )
 
@@ -260,8 +278,11 @@ template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
-    .option('--presets [strings...]', 'names of variability presets', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .option('--presets [strings...]', 'names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
+    )
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
@@ -413,6 +434,15 @@ templates
         })
     )
 
+templates
+    .command('clean')
+    .description('removes all templates')
+    .action(
+        hae.exit(async options => {
+            await Controller.templates.clean(options)
+        })
+    )
+
 const instances = program.command('instances').description('handles instances')
 
 instances
@@ -481,8 +511,11 @@ instances
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--presets [string...]', 'names of variability presets', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML])')
+    .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
+    )
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
@@ -504,7 +537,7 @@ instances
     .command('deploy')
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
@@ -527,7 +560,7 @@ instances
     .command('update')
     .description('update instance')
     .requiredOption('--instance <string>', 'instance name')
-    .option('--inputs [string]', 'path to the deployment inputs')
+    .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
@@ -564,6 +597,15 @@ instances
     .action(
         hae.exit(async options => {
             await Controller.instances.delete(options)
+        })
+    )
+
+instances
+    .command('clean')
+    .description('deletes all instances')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.clean(options)
         })
     )
 

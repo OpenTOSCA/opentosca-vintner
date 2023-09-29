@@ -5,7 +5,6 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import Element from './element'
@@ -48,41 +47,58 @@ export default class Type extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.type_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.type_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.typeDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.type_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.type_pruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.typePruning
+        return this.raw.pruning ?? this.graph.options.pruning.typePruning
+    }
+
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.typeDefaultConsistencyCondition
         )
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.typeDefaultSemanticCondition
+        )
     }
 
-    private _presenceCondition?: LogicExpression
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
+    }
 
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition)) this._presenceCondition = this.container.getTypeCondition(this)
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.typeSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
+    }
 
-        if (check.isUndefined(this._presenceCondition)) throw new Error(`${this.Display} has no presence condition`)
+    getElementGenericCondition() {
+        return {
+            conditions: this.container.presenceCondition,
+            consistency: true,
+            semantic: false,
+        }
+    }
 
-        return this._presenceCondition
+    constructPresenceCondition() {
+        return this.container.getTypeCondition(this)
     }
 
     // Check if no other type is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(this.container.types.filter(it => it !== this))
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.types.filter(it => it !== this))
     }
 
     isType() {

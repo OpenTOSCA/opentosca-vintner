@@ -15,6 +15,7 @@ topology_template:
       node_default_condition: false
       relation_pruning: true
       type_default_condition: true
+      expected_incoming_relation_semantic_check: false
   node_templates:
     node_one:
       type: node_one

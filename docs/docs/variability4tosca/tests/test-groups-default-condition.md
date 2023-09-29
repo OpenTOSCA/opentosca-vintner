@@ -14,6 +14,7 @@ topology_template:
     options:
       group_default_condition: true
       type_default_condition: true
+      expected_incoming_relation_semantic_check: false
   groups:
     group_one:
       type: variability.groups.ConditionalMembers

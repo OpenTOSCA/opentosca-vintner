@@ -120,6 +120,35 @@ submit sensor data used for adapting the instance
 | instance |  true  | string | instance name |
 | inputs |  true  | InputAssignmentMap | sensor data |
 
+## vintner instances clean
+
+deletes all instances
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances clean 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/instances/clean
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/clean")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/clean")
+    ```
+
 ## vintner instances code
 
 opens the instance directory in visual studio code
@@ -249,7 +278,7 @@ deploys instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| inputs |  false  | string | path to the deployment inputs |
+| inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | verbose |  false  | boolean | verbose |
 
 ## vintner instances info
@@ -465,8 +494,8 @@ resolves variability
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| presets |  false  | string... | names of variability presets (default: []) |
-| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+| presets |  false  | string... | names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
+| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}) |
 
 ## vintner instances swap
 
@@ -618,7 +647,7 @@ update instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
-| inputs |  false  | string | path to the deployment inputs |
+| inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | verbose |  false  | boolean | verbose |
 
 ## vintner orchestrators enable
@@ -1000,6 +1029,10 @@ cleans up the filesystem
     requests.post(SERVER_ADDRESS + "/setup/clean")
     ```
 
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| force |  false  | boolean | force clean up |
+
 ## vintner setup code
 
 opens the home directory in visual studio code
@@ -1348,8 +1381,8 @@ resolves variability
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
-| presets |  false  | strings... | names of variability presets (default: []) |
-| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+| presets |  false  | strings... | names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
+| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>) |
 | output |  true  | string | path of the output |
 
 ## vintner template stats
@@ -1469,6 +1502,35 @@ unpackages a CSAR
 | template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
 
+## vintner templates clean
+
+removes all templates
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner templates clean 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/templates/clean
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/templates/clean")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/templates/clean")
+    ```
+
 ## vintner templates code
 
 opens the template directory in visual studio code
@@ -1562,8 +1624,8 @@ imports a new template
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
 | path |  true  | string | path or link to the CSAR |
-| git-repository |  false  | string | git repository to clone |
-| git-checkout |  false  | string | git checkout to checkout after cloning |
+| git-repository |  false  | string | git repository |
+| git-checkout |  false  | string | git checkout |
 
 ## vintner templates inspect
 

@@ -4,6 +4,7 @@ import * as files from '#files'
 import Plugins from '#plugins'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
+import * as utils from '#utils'
 import _ from 'lodash'
 import * as path from 'path'
 import {Template} from './templates'
@@ -23,6 +24,10 @@ export class Instances {
 
     static getInstancesDirectory() {
         return path.join(config.home, 'instances')
+    }
+
+    static isEmpty() {
+        return utils.isEmpty(files.listDirectories(Instances.getInstancesDirectory()))
     }
 }
 
@@ -62,7 +67,7 @@ export class Instance {
     }
 
     delete() {
-        files.removeDirectory(this.getInstanceDirectory())
+        files.deleteDirectory(this.getInstanceDirectory())
         return this
     }
 
@@ -139,8 +144,12 @@ export class Instance {
         return template
     }
 
-    setServiceInputs(path: string, time: number) {
-        files.copy(path, this.getServiceInputs(time))
+    setServiceInputs(time: number, path?: string) {
+        const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_')
+        if (check.isDefined(path)) _.merge(inputs, files.loadYAML(path))
+        if (utils.isEmpty(inputs)) return this
+
+        files.storeYAML(this.getServiceInputs(time), inputs)
         this.setInfo({...this.loadInfo(), service_inputs_timestamp: time})
         return this
     }

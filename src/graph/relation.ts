@@ -75,74 +75,81 @@ export default class Relation extends Element {
     }
 
     get getDefaultMode(): RelationDefaultConditionMode {
-        return (
-            (check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition_mode
-                : this.raw.default_condition_mode) ??
-            this.graph.options.default.relation_default_condition_mode ??
-            'source-target'
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConditionMode
+        return this.raw.default_condition_mode ?? this.graph.options.default.relationDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.relation_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.relation_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.relationDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.relation_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.relation_pruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationPruning
+        return this.raw.pruning ?? this.graph.options.pruning.relationPruning
+    }
+
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.relationDefaultConsistencyCondition
         )
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultCondition)) {
-            const conditions: LogicExpression[] = []
-
-            const mode = this.getDefaultMode
-            mode.split('-').forEach(it => {
-                if (it === 'source') {
-                    return conditions.push(this.source.presenceCondition)
-                }
-                if (it === 'target') {
-                    return conditions.push(this.target.presenceCondition)
-                }
-
-                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
-            })
-
-            if (utils.isEmpty(conditions)) throw new Error(`${this.Display} has no default condition`)
-
-            if (conditions.length === 1) {
-                this._defaultCondition = conditions[0]
-            } else {
-                this._defaultCondition = {and: conditions}
-            }
-        }
-        return this._defaultCondition
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.relationDefaultSemanticCondition
+        )
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {relation_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
+    }
+
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.relationSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
+    }
+
+    getTypeSpecificConditionWrapper() {
+        // Not supported when conditional types are used
+        if (this.types.length > 1) return
+        const type = this.types[0]
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions
+            ?.relationship_types?.[type.name]
+    }
+
+    getElementGenericCondition() {
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (it === 'source') {
+                return conditions.push(this.source.presenceCondition)
+            }
+            if (it === 'target') {
+                return conditions.push(this.target.presenceCondition)
+            }
+
+            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+        })
+
+        return {conditions, consistency: true, semantic: false}
+    }
+
+    constructPresenceCondition() {
+        return {relation_presence: this.toscaId, _cached_element: this}
     }
 
     // Check if no other relation having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.source.outgoingMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
     }
 
     getTypeCondition(type: Type): LogicExpression {

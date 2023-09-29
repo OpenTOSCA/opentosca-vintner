@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
@@ -38,40 +39,66 @@ export default class Artifact extends Element {
     }
 
     get defaultEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.default.artifact_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.artifact_default_condition
-        )
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultCondition
+        return this.raw.default_condition ?? this.graph.options.default.artifactDefaultCondition
     }
 
     get pruningEnabled() {
-        return Boolean(
-            check.isString(this.raw)
-                ? this.graph.options.pruning.artifact_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.artifact_pruning
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactPruning
+        return this.raw.pruning ?? this.graph.options.pruning.artifactPruning
+    }
+
+    get defaultConsistencyCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultConsistencyCondition
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.artifactDefaultConsistencyCondition
         )
+    }
+
+    get defaultSemanticCondition() {
+        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultSemanticCondition
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.artifactDefaultSemanticCondition
+        )
+    }
+
+    get consistencyPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactConsistencyPruning
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
+    }
+
+    get semanticPruning() {
+        if (check.isString(this.raw)) return this.graph.options.pruning.artifactSemanticPruning
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
     get defaultCondition() {
         return this.container.presenceCondition
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = {artifact_presence: this.toscaId, _cached_element: this}
-        return this._presenceCondition
+    getTypeSpecificConditionWrapper() {
+        const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
+        assert.isString(type)
+        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[
+            type
+        ]
+    }
+
+    getElementGenericCondition() {
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
+    }
+
+    constructPresenceCondition() {
+        return {artifact_presence: this.toscaId, _cached_element: this}
     }
 
     // Check if no other artifact having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.container.artifactsMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition(): LogicExpression {
+        return bratanize(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
     }
 
     getPropertyCondition(property: Property): LogicExpression {

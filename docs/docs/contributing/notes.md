@@ -156,19 +156,6 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 git update-index --chmod=+x <path to file>
 ```
 
-
-## Install gcloud CLI
-
-Install gcloud on Ubunutu, as described in [https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb](https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb){target=_blank}.
-
-```shell linenums="1"
-sudo apt-get update
-sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo
-echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-sudo apt-get update && sudo apt-get install google-cloud-cli
-```
-
 ## Naming Convention
 
 Types should be named according to the following pattern.
@@ -181,6 +168,46 @@ word     = ("a" ... "z" | "A" ... "Z")[word]
 *        = word
 ```
 
+## Environment
+
+All environment variables are prefixed by `OPENTOSCA_VINTNER_`.
+When the following environment variables are read, they are tried to be parsed as JSON.
+If they can not be parsed, they are treated as string.
+
+- `OPENTOSCA_VINTNER_VARIABILITY_PRESETS`
+- `OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}`
+- `OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}`
+
+These environment variables should be used with caution. 
+
+## Lines of Code
+
+Run the following command, to count the lines of code in the `src` folder.
+
+```text linenums="1"
+cloc src
+```
+
+The following output has been generated for the commit `110a38a1951f8d10a234f9d976778b0c3b0c2e8c` on August 15, 2023.
+
+```text linenums="1"
+     159 text files.
+     156 unique files.                                          
+       3 files ignored.
+
+github.com/AlDanial/cloc v 1.96  T=0.16 s (991.7 files/s, 67170.6 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+TypeScript                     128           1579            710           7916
+Bourne Shell                    15             45             14            144
+YAML                             7             11              0            105
+EJS                              5              7              0             34
+CSV                              1              0              0              1
+-------------------------------------------------------------------------------
+SUM:                           156           1642            724           8200
+-------------------------------------------------------------------------------
+```
 
 ## Limitations
 

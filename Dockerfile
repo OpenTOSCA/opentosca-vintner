@@ -1,9 +1,9 @@
-FROM node:16-bullseye
+FROM node:18.15.0-bullseye
 
 # Setup
 WORKDIR /app
 COPY . .
-RUN yarn --frozen-lockfile
+RUN yarn --immutable
 
 # Test
 RUN yarn lint:check
@@ -14,7 +14,6 @@ RUN yarn test
 
 # Build
 RUN yarn build
-RUN sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
 RUN yarn package
 
 # Docs

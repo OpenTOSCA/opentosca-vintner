@@ -24,11 +24,11 @@ jobs:
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 18.15.0
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: rm -rf node_modules && yarn --frozen-lockfile
+              run: rm -rf node_modules && yarn --immutable
 
             ###################################################
             #
@@ -41,9 +41,6 @@ jobs:
 
             - name: (BUILD) Build Project
               run: yarn build
-
-            - name: (BUILD) Set Version
-              run: sed -i "s/__VERSION__/${GITHUB_SHA}/" build/cli/config.js
 
             - name: (BUILD) Setup Packaging Cache
               uses: actions/cache@v3
@@ -82,36 +79,14 @@ jobs:
             ###################################################
 
             - name: (RELEASE) Delete Build Release
-              run: gh release delete build-${GITHUB_SHA} || true
+              run: gh release delete build-${GITHUB_SHA} --cleanup-tag --yes || true
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (RELEASE) Delete Build Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      try {
-                          await github.git.deleteRef({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              ref: `tags/build-${context.sha}`
-                          })
-                      } catch (e) {
-                          console.log("Did not delete tag:", e)
-                      }
+            - name: (RELEASE) Delete Latest Tag (Local)
+              run: git tag --delete build-${GITHUB_SHA} || true
 
-            - name: (RELEASE) Create Build Tag
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      await github.git.createRef({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          ref: `refs/tags/build-${context.sha}`,
-                          sha: context.sha
-                      })
-
-            - name: (RELEASE) Create Build Release
+            - name: (RELEASE) Create Build Release (and Tag)
               run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

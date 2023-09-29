@@ -60,41 +60,68 @@ export default class Property extends Element {
         return [this.container.name, this.name]
     }
 
+    // TODO: fix these ugly "if (!check.isObject(this.raw) || check.isArray(this.raw))" and "Boolean" castings ...
+
     get defaultEnabled() {
-        return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.default.property_default_condition
-                : this.raw.default_condition ?? this.graph.options.default.property_default_condition
-        )
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultCondition
+        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultCondition)
     }
 
     get pruningEnabled() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw)) return this.graph.options.pruning.propertyPruning
+        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyPruning)
+    }
+
+    get defaultConsistencyCondition() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultConsistencyCondition
         return Boolean(
-            !check.isObject(this.raw) || check.isArray(this.raw)
-                ? this.graph.options.pruning.property_pruning
-                : this.raw.pruning ?? this.graph.options.pruning.property_pruning
+            this.raw.default_consistency_condition ??
+                this.raw.default_condition ??
+                this.graph.options.default.propertyDefaultConsistencyCondition
         )
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
+    get defaultSemanticCondition() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.default.propertyDefaultSemanticCondition
+        return Boolean(
+            this.raw.default_semantic_condition ??
+                this.raw.default_condition ??
+                this.graph.options.default.propertyDefaultSemanticCondition
+        )
     }
 
-    private _presenceCondition?: LogicExpression
-    get presenceCondition(): LogicExpression {
-        if (check.isUndefined(this._presenceCondition))
-            this._presenceCondition = this.container.getPropertyCondition(this)
-        return this._presenceCondition
+    get consistencyPruning() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.pruning.propertyConsistencyPruning
+        return Boolean(
+            this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning
+        )
+    }
+
+    get semanticPruning() {
+        if (!check.isObject(this.raw) || check.isArray(this.raw))
+            return this.graph.options.pruning.propertySemanticPruning
+        return Boolean(
+            this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning
+        )
+    }
+
+    // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
+
+    getElementGenericCondition() {
+        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
+    }
+
+    constructPresenceCondition() {
+        return this.container.getPropertyCondition(this)
     }
 
     // Check if no other property having the same name is present
-    private _defaultAlternativeCondition?: LogicExpression
-    get defaultAlternativeCondition(): LogicExpression {
-        if (check.isUndefined(this._defaultAlternativeCondition))
-            this._defaultAlternativeCondition = bratanize(
-                this.container.propertiesMap.get(this.name)!.filter(it => it !== this)
-            )
-        return this._defaultAlternativeCondition
+    constructDefaultAlternativeCondition() {
+        return bratanize(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
     }
 
     isProperty() {

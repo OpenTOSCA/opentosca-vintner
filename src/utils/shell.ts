@@ -1,4 +1,6 @@
+import * as assert from '#assert'
 import * as check from '#check'
+import * as files from '#files'
 import * as utils from '#utils'
 import death from '#utils/death'
 import wsl from '#utils/wsl'
@@ -20,6 +22,18 @@ export class Shell {
     resolve(file: string) {
         if (this.wsl) return wsl.win2wsl(file)
         return path.resolve(file)
+    }
+
+    async script(options: {file?: string; content?: string}) {
+        if (check.isDefined(options.content)) {
+            options.file = files.temporary()
+            files.storeFile(options.file, options.content)
+        }
+        assert.isDefined(options.file, 'File is not defined')
+        const resolved = this.resolve(options.file)
+
+        await this.execute(['chmod', '+x', resolved])
+        await this.execute(['sudo', resolved])
     }
 
     async execute(parts: string[], options: {cwd?: string} = {}) {

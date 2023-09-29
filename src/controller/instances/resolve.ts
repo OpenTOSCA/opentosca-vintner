@@ -18,7 +18,7 @@ export default async function (options: InstanceResolveOptions) {
         const result = await Resolver.resolve({
             template: instance.loadVariableServiceTemplate(),
             inputs: await Resolver.loadInputs(options.inputs),
-            presets: options.presets,
+            presets: Resolver.loadPresets(options.presets),
         })
 
         // Store used variability inputs
