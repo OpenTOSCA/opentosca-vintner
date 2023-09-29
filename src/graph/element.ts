@@ -17,6 +17,8 @@ export default abstract class Element {
     abstract readonly type: string
     abstract readonly name: string
 
+    readonly raw: any
+
     readonly index?: number
     readonly container?: Element
 

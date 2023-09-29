@@ -21,10 +21,7 @@ export default class Transformer {
     }
 
     private transformElements() {
-        this.graph.elements.forEach(it => {
-            // TODO: clean
-            // this.clean(it.raw)
-        })
+        this.graph.elements.forEach(it => this.clean(it.raw))
     }
 
     private clean(raw: VariabilityAlternative & {default_condition_mode?: string}) {
