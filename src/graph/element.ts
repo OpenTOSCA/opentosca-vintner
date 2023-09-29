@@ -77,17 +77,6 @@ export default abstract class Element {
 
     conditions: LogicExpression[] = []
 
-    private _effectiveConditions?: LogicExpression[]
-    set effectiveConditions(conditions: LogicExpression[]) {
-        assert.isUndefined(this._effectiveConditions, `${this.Display} has already effective conditions assigned`)
-        this._effectiveConditions = conditions
-    }
-
-    get effectiveConditions() {
-        assert.isDefined(this._effectiveConditions, `${this.Display} has no effective conditions assigned`)
-        return this._effectiveConditions
-    }
-
     abstract constructPresenceCondition(): LogicExpression
     protected _presenceCondition?: LogicExpression
     get presenceCondition(): LogicExpression {

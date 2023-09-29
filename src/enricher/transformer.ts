@@ -1,7 +1,9 @@
 import * as check from '#check'
 import Graph from '#graph/graph'
+import {GroupTemplateMap} from '#spec/group-template'
 import {TopologyTemplate} from '#spec/topology-template'
 import {VariabilityAlternative} from '#spec/variability'
+import * as utils from '#utils'
 
 export default class Transformer {
     private readonly graph: Graph
@@ -13,14 +15,32 @@ export default class Transformer {
     }
 
     run() {
-        // Transform elements
-        this.transformElements()
+        // Clean elements from pruning options
+        this.cleanElements()
 
-        // Transform variability definition
-        this.transformVariabilityDefinition()
+        // Remove variability groups
+        this.removeVariabilityGroups()
+
+        // Clean variability definition from pruning options
+        this.cleanVariabilityDefinition()
     }
 
-    private transformElements() {
+    private removeVariabilityGroups() {
+        if (check.isDefined(this.topology.groups)) {
+            this.topology.groups = this.graph.groups
+                .filter(it => !it.variability)
+                .reduce<GroupTemplateMap>((map, group) => {
+                    map[group.name] = group.raw
+                    return map
+                }, {})
+
+            if (utils.isEmpty(this.topology.groups)) {
+                delete this.topology.groups
+            }
+        }
+    }
+
+    private cleanElements() {
         this.graph.elements.forEach(it => this.clean(it.raw))
     }
 
@@ -33,9 +53,11 @@ export default class Transformer {
         delete raw.pruning
         delete raw.consistency_pruning
         delete raw.semantic_pruning
+
+        delete raw.default_alternative
     }
 
-    private transformVariabilityDefinition() {
+    private cleanVariabilityDefinition() {
         if (check.isUndefined(this.topology.variability)) return
 
         // Delete type-specific conditions variability definition

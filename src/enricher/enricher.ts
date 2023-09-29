@@ -1,6 +1,7 @@
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
+import {generatify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
@@ -20,8 +21,6 @@ export default class Enricher {
         for (const element of this.graph.elements) this.enrichConditions(element)
     }
 
-    // TODO: enrich
-
     enrichConditions(element: Element) {
         // Collect assigned conditions
         let conditions: LogicExpression[] = [...element.conditions]
@@ -30,28 +29,17 @@ export default class Enricher {
         }
         conditions = utils.filterNotNull(conditions)
 
-        // Add explicit conditions of a relation separately as own variable into the sat solver.
-        // Explicit conditions are referenced by has_incoming_relation and has_artifact.
-        if (element.isRelation() || element.isArtifact()) {
-            // TODO: we just lost original conditions
-            if (!utils.isEmpty(conditions)) conditions = [element.explicitId]
-        }
-
-        // TODO: this is faulty since default_alternative must be removed?
         // Add condition that checks if no other bratan is present
         if (element.defaultAlternative) {
             if (check.isUndefined(element.defaultAlternativeCondition))
                 throw new Error(`${element.Display} has no default alternative condition`)
-            conditions = [element.defaultAlternativeCondition]
+            conditions = [generatify(element.defaultAlternativeCondition)]
         }
 
         // Add default condition if requested
         if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
-            conditions.unshift(element.defaultCondition)
+            conditions.unshift(generatify(element.defaultCondition))
         }
-
-        // TODO: store them in originalConditions
-        // TODO: drop effectiveConditions
 
         // Store enriched conditions
         element.conditions = conditions

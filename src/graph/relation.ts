@@ -1,5 +1,5 @@
 import * as check from '#check'
-import {bratanize} from '#graph/utils'
+import {bratify} from '#graph/utils'
 import {RequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
@@ -149,7 +149,7 @@ export default class Relation extends Element {
 
     // Check if no other relation having the same name is present
     constructDefaultAlternativeCondition() {
-        return bratanize(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
+        return bratify(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
     }
 
     getTypeCondition(type: Type): LogicExpression {

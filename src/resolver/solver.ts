@@ -3,6 +3,7 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
+import {andify} from '#graph/utils'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {
     InputAssignmentPreset,
@@ -178,9 +179,8 @@ export default class Solver {
     }
 
     transformConditions(element: Element) {
-        // TODO: drop this
         // Collect assigned conditions
-        const conditions: LogicExpression[] = [...element.conditions]
+        const conditions: LogicExpression[] = utils.toList(element.conditions)
 
         // Add explicit conditions of a relation separately as own variable into the sat solver.
         // Explicit conditions are referenced by has_incoming_relation and has_artifact.
@@ -192,7 +192,15 @@ export default class Solver {
                 this.minisat.require(
                     MiniSat.equiv(
                         element.explicitId,
-                        this.transformLogicExpression(this.reduceConditions(conditions), {element})
+                        this.transformLogicExpression(
+                            andify(
+                                conditions.filter(it => {
+                                    if (check.isObject(it)) return !it._generated
+                                    return true
+                                })
+                            ),
+                            {element}
+                        )
                     )
                 )
             }
@@ -217,14 +225,10 @@ export default class Solver {
         }
 
         // Normalize conditions to a single 'and' condition
-        const condition = this.reduceConditions(conditions)
+        const condition = andify(conditions)
 
         // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
-    }
-
-    reduceConditions(conditions: LogicExpression[]) {
-        return {and: conditions}
     }
 
     setPreset(name?: string) {
