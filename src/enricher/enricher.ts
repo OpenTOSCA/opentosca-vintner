@@ -20,6 +20,8 @@ export default class Enricher {
         for (const element of this.graph.elements) this.enrichConditions(element)
     }
 
+    // TODO: enrich
+
     enrichConditions(element: Element) {
         // Collect assigned conditions
         let conditions: LogicExpression[] = [...element.conditions]

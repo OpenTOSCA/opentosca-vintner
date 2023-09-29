@@ -39,6 +39,12 @@ export default class Solver {
     constructor(graph: Graph) {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
+
+        // TODO: do not allow pruning
+
+        // Variability groups are not allowed since they must be resolved by the Conditions Enricher
+        if (check.isDefined(this.graph.groups.find(it => it.variability)))
+            throw new Error(`Variability groups are not allowed`)
     }
 
     /**
@@ -172,9 +178,6 @@ export default class Solver {
     }
 
     transformConditions(element: Element) {
-        // Variability group are never present
-        if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
-
         // TODO: drop this
         // Collect assigned conditions
         const conditions: LogicExpression[] = [...element.conditions]
