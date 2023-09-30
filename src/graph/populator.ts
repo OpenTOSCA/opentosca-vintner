@@ -11,7 +11,7 @@ import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {ArtifactDefinitionList, ArtifactDefinitionMap, ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
 import {
     ConditionalPropertyAssignmentValue,
@@ -298,7 +298,14 @@ export class Populator {
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
-        const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
+        // Normalize
+        // TODO: is this dirty?
+        const normalized: ExtendedArtifactDefinition = check.isString(artifactDefinition)
+            ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
+            : artifactDefinition
+        map[artifactName] = normalized
+
+        const artifact = new Artifact({name: artifactName, raw: normalized, container: node, index})
         artifact.graph = this.graph
 
         this.populateProperties(artifact, artifactDefinition)

@@ -1,0 +1,14 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            mode: loose
+    node_templates:
+        node:
+            type: node
+            artifacts:
+                - artifact_one: file_one
+                - artifact_one:
+                      file: file_one
+                      default: true
