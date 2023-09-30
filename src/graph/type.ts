@@ -20,6 +20,7 @@ export default class Type extends Element {
     readonly type = 'type'
     readonly name: string
     readonly raw: TypeAssignment | string
+
     readonly index: number
     readonly container: TypeContainer
 

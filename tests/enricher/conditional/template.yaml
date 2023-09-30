@@ -7,15 +7,15 @@ topology_template:
 
     node_templates:
         source:
-            type:
-                - source:
-                      conditions: null
+            type: source
             conditions: {equal: [value, value]}
             requirements:
-                - relation:
-                      node: target
+                - relation: target
 
         target:
-            type:
-                - target:
-                      conditions: null
+            type: target
+            properties:
+                key: value
+            artifacts:
+                artifact:
+                    file: /some/artifact
