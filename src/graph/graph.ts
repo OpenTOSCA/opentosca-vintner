@@ -75,7 +75,7 @@ export default class Graph {
 
     imports: Import[] = []
 
-    constructor(serviceTemplate: ServiceTemplate) {
+    constructor(serviceTemplate: ServiceTemplate, normalize = true) {
         this.serviceTemplate = serviceTemplate
 
         if (
@@ -86,7 +86,7 @@ export default class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        new Populator(this).run()
+        new Populator(this, normalize).run()
     }
 
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {

@@ -76,26 +76,24 @@ topology_template:
                 gcp_project: {get_input: gcp_project}
                 gcp_region: {get_input: gcp_region}
             requirements:
-                - host:
-                      node: dev_runtime
-                - database:
-                      node: dev_database
+                - host: dev_runtime
+                - database: dev_database
             artifacts:
-                artifact_file: files/application.tar.gz
+                artifact_file:
+                    type: tosca.artifacts.File
+                    file: files/application.tar.gz
 
         dev_runtime:
             type: node.runtime
             requirements:
-                - host:
-                      node: private_vm
+                - host: private_vm
 
         dev_database:
             type: sqlite.db
             properties:
                 database_name: {concat: [{get_input: release}, '-', db]}
             requirements:
-                - host:
-                      node: private_vm
+                - host: private_vm
 
         private_vm:
             type: openstack.vm
@@ -110,8 +108,7 @@ topology_template:
                 ssh_user: {get_input: private_vm_ssh_user}
                 ssh_key_file: {get_input: private_vm_ssh_key_file}
             requirements:
-                - host:
-                      node: openstack
+                - host: openstack
 
         openstack:
             type: openstack.provider

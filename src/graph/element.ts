@@ -17,6 +17,8 @@ export default abstract class Element {
     abstract readonly type: string
     abstract readonly name: string
 
+    readonly raw: any
+
     readonly index?: number
     readonly container?: Element
 
@@ -37,8 +39,8 @@ export default abstract class Element {
 
     abstract toscaId: any
 
-    get explicitId() {
-        return 'explicit.' + this.id
+    get manualId() {
+        return 'manual.' + this.id
     }
 
     private _display?: string
@@ -74,17 +76,6 @@ export default abstract class Element {
     }
 
     conditions: LogicExpression[] = []
-
-    private _effectiveConditions?: LogicExpression[]
-    set effectiveConditions(conditions: LogicExpression[]) {
-        assert.isUndefined(this._effectiveConditions, `${this.Display} has already effective conditions assigned`)
-        this._effectiveConditions = conditions
-    }
-
-    get effectiveConditions() {
-        assert.isDefined(this._effectiveConditions, `${this.Display} has no effective conditions assigned`)
-        return this._effectiveConditions
-    }
 
     abstract constructPresenceCondition(): LogicExpression
     protected _presenceCondition?: LogicExpression

@@ -15,5 +15,4 @@ topology_template:
             properties:
                 content: 'First Textfile has been selected!'
             requirements:
-                - host:
-                      node: localhost
+                - host: localhost

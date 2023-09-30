@@ -76,18 +76,17 @@ topology_template:
                 gcp_project: {get_input: gcp_project}
                 gcp_region: {get_input: gcp_region}
             requirements:
-                - host:
-                      node: prod_runtime
-                - database:
-                      node: prod_database
+                - host: prod_runtime
+                - database: prod_database
             artifacts:
-                artifact_file: files/application.tar.gz
+                artifact_file:
+                    type: tosca.artifacts.File
+                    file: files/application.tar.gz
 
         prod_runtime:
             type: gcp.appengine.engine
             requirements:
-                - host:
-                      node: gcp
+                - host: gcp
 
         prod_database:
             type: gcp.sql.db
@@ -96,8 +95,7 @@ topology_template:
                 instance_name: {get_property: [SELF, host, instance_name]}
                 public_address: {get_attribute: [SELF, host, public_address]}
             requirements:
-                - host:
-                      node: gcp_dbms
+                - host: gcp_dbms
 
         gcp_dbms:
             type: gcp.sql.dbms
@@ -106,8 +104,7 @@ topology_template:
                 root_password: {get_input: root_password}
                 authorized_networks: '0.0.0.0/0'
             requirements:
-                - host:
-                      node: gcp
+                - host: gcp
 
         gcp:
             type: gcp.provider

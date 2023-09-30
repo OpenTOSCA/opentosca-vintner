@@ -257,6 +257,9 @@ export type LogicExpression =
           _cached_element?: Element
           _visited?: boolean
           _id?: string
+
+          // Generated
+          _generated?: boolean
       }
     | string
     | boolean

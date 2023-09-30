@@ -3,7 +3,7 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
-import {bratanize} from '#graph/utils'
+import {bratify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
@@ -98,7 +98,7 @@ export default class Artifact extends Element {
 
     // Check if no other artifact having the same name is present
     constructDefaultAlternativeCondition(): LogicExpression {
-        return bratanize(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
+        return bratify(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
     }
 
     getPropertyCondition(property: Property): LogicExpression {

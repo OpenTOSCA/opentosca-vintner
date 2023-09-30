@@ -58,11 +58,16 @@ export default class Transformer {
 
     private clean(raw: any) {
         delete raw.conditions
-        delete raw.default_alternative
-        delete raw.pruning
-        delete raw.default_condition
-        delete raw.default_condition_mode
         delete raw.weight
+
+        delete raw.default_condition
+        delete raw.default_consistency_condition
+        delete raw.default_semantic_condition
+        delete raw.default_condition_mode
+
+        delete raw.pruning
+        delete raw.consistency_pruning
+        delete raw.semantic_pruning
     }
 
     private transformNodes() {
@@ -87,7 +92,15 @@ export default class Transformer {
                             if (!check.isString(assignment)) this.clean(assignment)
 
                             const map: RequirementAssignmentMap = {}
-                            map[relation.name] = assignment
+
+                            // Minimize
+                            // TODO: is this dirty?
+                            map[relation.name] =
+                                !check.isString(assignment) &&
+                                Object.keys(assignment).length === 1 &&
+                                Object.keys(assignment)[0] === 'node'
+                                    ? assignment.node
+                                    : assignment
                             return map
                         })
                     if (utils.isEmpty(template.requirements)) delete template.requirements
@@ -254,6 +267,16 @@ export default class Transformer {
                 .map(it => {
                     const definition = it.raw
                     this.clean(definition)
+
+                    // Minimize
+                    // TODO: is this dirty?
+                    if (
+                        !check.isString(definition) &&
+                        Object.keys(definition).length === 1 &&
+                        Object.keys(definition)[0] === 'file'
+                    )
+                        return definition.file
+
                     return definition
                 })
 

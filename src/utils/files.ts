@@ -114,6 +114,7 @@ export function toYAML(obj: any, options?: yaml.DumpOptions) {
         obj,
         _.merge(
             {
+                noRefs: true,
                 styles: {
                     '!!null': 'empty',
                 },

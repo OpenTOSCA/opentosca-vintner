@@ -1,4 +1,5 @@
 import * as check from '#check'
+import Enricher from '#enricher'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
@@ -32,7 +33,10 @@ async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
-    // Generate graph
+    // Enrich conditions
+    await Enricher.enrich({template: options.template})
+
+    // Create graph
     const graph = new Graph(options.template)
 
     // Create solver

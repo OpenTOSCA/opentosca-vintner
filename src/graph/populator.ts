@@ -11,18 +11,24 @@ import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {ArtifactDefinitionList, ArtifactDefinitionMap, ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
-import {PropertyAssignmentValue} from '#spec/property-assignments'
+import {
+    ConditionalPropertyAssignmentValue,
+    PropertyAssignmentListEntry,
+    PropertyAssignmentValue,
+} from '#spec/property-assignments'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
 
 export class Populator {
     graph: Graph
+    normalize: boolean
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, normalize = true) {
         this.graph = graph
+        this.normalize = normalize
     }
 
     run() {
@@ -82,11 +88,19 @@ export class Populator {
     }
 
     private populateImports() {
-        const imports = this.graph.serviceTemplate.imports || []
-        assert.isArray(imports, 'Imports must be an array')
+        if (check.isUndefined(this.graph.serviceTemplate.imports)) return
+        assert.isArray(this.graph.serviceTemplate.imports, 'Imports must be an array')
 
-        for (const [index, definition] of imports.entries()) {
-            const imp = new Import({index, raw: definition})
+        for (const [index, definition] of this.graph.serviceTemplate.imports.entries()) {
+            // Normalize
+            // TODO: this is dirty
+            let normalized
+            if (this.normalize) {
+                normalized = check.isString(definition) ? {file: definition} : definition
+                this.graph.serviceTemplate.imports[index] = normalized
+            }
+
+            const imp = new Import({index, raw: normalized ?? definition})
             imp.graph = this.graph
             this.graph.imports.push(imp)
         }
@@ -132,13 +146,23 @@ export class Populator {
     }
 
     private populateRelations(node: Node, template: NodeTemplate) {
-        for (const [index, map] of template.requirements?.entries() || []) {
+        if (check.isUndefined(template.requirements)) return
+
+        for (const [index, map] of template.requirements.entries()) {
             const [relationName, assignment] = utils.firstEntry(map)
+
+            // Normalize
+            // TODO: this is dirty
+            let normalized
+            if (this.normalize) {
+                normalized = check.isString(assignment) ? {node: assignment} : assignment
+                map[relationName] = normalized
+            }
 
             const relation = new Relation({
                 name: relationName,
                 container: node,
-                raw: assignment,
+                raw: normalized ?? assignment,
                 index,
             })
             relation.graph = this.graph
@@ -178,7 +202,7 @@ export class Populator {
 
                 if (check.isObject(assignment.relationship)) {
                     throw new Error(
-                        `Relation "${relationName}" of node "${node.name}" contains a relationship template`
+                        `Relation "${relationName}" of node "${node.name}" contains a relationship template which is currently not supported`
                     )
                 }
             }
@@ -240,6 +264,14 @@ export class Populator {
         // Ensure that there is only one default type
         if (element.types.filter(it => it.defaultAlternative).length > 1)
             throw new Error(`${element.Display} has multiple default types`)
+
+        // Normalize
+        // TODO: this is dirty
+        if (this.normalize) {
+            if (!check.isArray(template.type)) {
+                template.type = types
+            }
+        }
     }
 
     private populateArtifacts(node: Node, nodeTemplate: NodeTemplate) {
@@ -249,10 +281,22 @@ export class Populator {
                     this.populateArtifact(node, artifactMap, artifactIndex)
                 }
             } else {
-                for (const [artifactName, artifactDefinition] of Object.entries(nodeTemplate.artifacts)) {
+                const artifacts = Object.entries(nodeTemplate.artifacts)
+                for (const [artifactName, artifactDefinition] of artifacts) {
                     const map: ArtifactDefinitionMap = {}
                     map[artifactName] = artifactDefinition
                     this.populateArtifact(node, map)
+                }
+
+                // Normalize
+                // TODO: this is dirty
+                if (this.normalize) {
+                    node.raw.artifacts = artifacts.reduce<ArtifactDefinitionList>((acc, [name, definition]) => {
+                        const map: ArtifactDefinitionMap = {}
+                        map[name] = definition
+                        acc.push(map)
+                        return acc
+                    }, [])
                 }
             }
             // Ensure that there is only one default artifact per artifact name
@@ -266,7 +310,25 @@ export class Populator {
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
-        const artifact = new Artifact({name: artifactName, raw: artifactDefinition, container: node, index})
+        if (check.isObject(artifactDefinition) && check.isUndefined(artifactDefinition.type))
+            artifactDefinition.type = 'tosca.artifacts.File'
+
+        // Normalize
+        // TODO: this is dirty
+        let normalized: ExtendedArtifactDefinition | undefined
+        if (this.normalize) {
+            normalized = check.isString(artifactDefinition)
+                ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
+                : artifactDefinition
+            map[artifactName] = normalized
+        }
+
+        const artifact = new Artifact({
+            name: artifactName,
+            raw: normalized ?? artifactDefinition,
+            container: node,
+            index,
+        })
         artifact.graph = this.graph
 
         this.populateProperties(artifact, artifactDefinition)
@@ -297,14 +359,23 @@ export class Populator {
                         (check.isUndefined(propertyAssignment.value) &&
                             check.isUndefined(propertyAssignment.expression))
                     ) {
+                        // This just works since we do not allow "value" as a keyword in a property assignment value
+                        const value = propertyAssignment as PropertyAssignmentValue
+                        // Normalize
+                        // TODO: this is dirty
+                        let normalized
+                        if (this.normalize) {
+                            normalized = {value}
+                            template.properties[propertyIndex][propertyName] = normalized
+                        }
+
                         property = new Property({
                             name: propertyName,
                             container: element,
-                            // This just works since we do not allow "value" as a keyword in a property assignment value
-                            value: propertyAssignment as PropertyAssignmentValue,
+                            value,
                             default: false,
                             index: propertyIndex,
-                            raw: propertyAssignment,
+                            raw: normalized ?? propertyAssignment,
                         })
                     } else {
                         // Property is conditional
@@ -330,13 +401,33 @@ export class Populator {
                 }
             } else {
                 // Properties is a Property Assignment Map
-                for (const [propertyName, propertyAssignment] of Object.entries(template.properties || {})) {
+                const properties = Object.entries(template.properties || {})
+
+                // Normalize
+                // TODO: this is dirty
+                if (this.normalize) {
+                    template.properties = []
+                }
+
+                for (const [propertyName, propertyAssignment] of properties) {
+                    // Normalize
+                    // TODO: this is dirty
+                    let normalized: ConditionalPropertyAssignmentValue | undefined
+                    if (this.normalize) {
+                        normalized = {value: propertyAssignment}
+
+                        const map: PropertyAssignmentListEntry = {}
+                        map[propertyName] = normalized
+                        assert.isArray(template.properties)
+                        template.properties.push(map)
+                    }
+
                     const property = new Property({
                         name: propertyName,
                         container: element,
                         value: propertyAssignment,
                         default: false,
-                        raw: propertyAssignment,
+                        raw: normalized ?? propertyAssignment,
                     })
                     property.graph = this.graph
 

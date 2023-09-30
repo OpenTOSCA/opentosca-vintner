@@ -5,8 +5,7 @@ topology_template:
         one:
             type: one
             requirements:
-                - host:
-                      node: two
+                - host: two
 
         two:
             type: two

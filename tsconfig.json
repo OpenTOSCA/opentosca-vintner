@@ -13,6 +13,8 @@
             "#repository/*": ["src/repository/*"],
             "#resolver/*": ["src/resolver/*"],
             "#resolver": ["src/resolver"],
+            "#enricher/*": ["src/enricher/*"],
+            "#enricher": ["src/enricher"],
             "#plugins/*": ["src/plugins/*"],
             "#plugins": ["src/plugins"],
             "#spec/*": ["src/specification/*"],

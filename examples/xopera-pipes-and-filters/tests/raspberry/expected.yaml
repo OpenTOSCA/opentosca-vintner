@@ -64,8 +64,7 @@ topology_template:
             requirements:
                 - input: queue_input
                 - output: queue_output
-                - host:
-                      node: compute_raspberry
+                - host: compute_raspberry
             artifacts:
                 binary:
                     type: tosca.artifacts.File

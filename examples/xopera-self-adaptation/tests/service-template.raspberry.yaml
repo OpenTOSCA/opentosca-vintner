@@ -73,8 +73,7 @@ topology_template:
             requirements:
                 - input: queue_input
                 - output: queue_output
-                - host:
-                      node: compute_raspberry
+                - host: compute_raspberry
             artifacts:
                 binary:
                     type: tosca.artifacts.File
@@ -114,5 +113,4 @@ topology_template:
                 version: {get_input: vintner_version}
                 disable_submission: true
             requirements:
-                - host:
-                      node: compute_raspberry
+                - host: compute_raspberry
