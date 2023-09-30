@@ -2,6 +2,7 @@ import Graph from '#/graph/graph'
 import {Query} from '#/query/query'
 import * as check from '#check'
 import {ServiceTemplate} from '#spec/service-template'
+import Queue from '#utils/queue'
 import {PredicateExpression} from './types'
 
 /**
@@ -69,25 +70,5 @@ export class BfsGraph extends Graph {
             }
         }
         return [...visited]
-    }
-}
-
-class Queue<T> {
-    private items: T[] = []
-
-    add(item: T) {
-        this.items.push(item)
-    }
-
-    pop(): T | undefined {
-        return this.items.shift()
-    }
-
-    peek(): T {
-        return this.items[0]
-    }
-
-    isEmpty(): boolean {
-        return this.items.length == 0
     }
 }
