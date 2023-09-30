@@ -298,6 +298,9 @@ export class Populator {
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
+        if (check.isObject(artifactDefinition) && check.isUndefined(artifactDefinition.type))
+            artifactDefinition.type = 'tosca.artifacts.File'
+
         // Normalize
         // TODO: is this dirty?
         const normalized: ExtendedArtifactDefinition = check.isString(artifactDefinition)

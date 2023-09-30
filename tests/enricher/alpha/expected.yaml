@@ -19,5 +19,5 @@ topology_template:
                       type: tosca.artifacts.File
                       file: file_one
                       conditions:
-                          - {not: {and: [artifact_presence: [node, 0]]}, _generated: true}
                           - {node_presence: node, _generated: true}
+                          - {not: {or: [artifact_presence: [node, 0]]}, _generated: true}

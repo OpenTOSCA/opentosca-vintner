@@ -79,7 +79,9 @@ topology_template:
                 - host: dev_runtime
                 - database: dev_database
             artifacts:
-                artifact_file: files/application.tar.gz
+                artifact_file:
+                    type: tosca.artifacts.File
+                    file: files/application.tar.gz
 
         dev_runtime:
             type: node.runtime

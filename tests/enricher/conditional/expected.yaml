@@ -37,6 +37,7 @@ topology_template:
                           - {node_presence: target, _generated: true}
             artifacts:
                 - artifact:
+                      type: tosca.artifacts.File
                       file: /some/artifact
                       conditions:
                           - {node_presence: target, _generated: true}
