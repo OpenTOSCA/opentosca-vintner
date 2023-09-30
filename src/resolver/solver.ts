@@ -182,16 +182,16 @@ export default class Solver {
         // Collect assigned conditions
         const conditions: LogicExpression[] = utils.toList(element.conditions)
 
-        // Add explicit conditions of a relation separately as own variable into the sat solver.
-        // Explicit conditions are referenced by has_incoming_relation and has_artifact.
+        // Add manual conditions of a relation separately as own variable into the sat solver.
+        // Manual conditions are referenced by has_incoming_relation and has_artifact.
         if (element.isRelation() || element.isArtifact()) {
-            // Optimization if explicit conditions are empty, thus, "true" is fallback
+            // Optimization if manual conditions are empty, thus, "true" is fallback
             if (utils.isEmpty(conditions)) {
-                this.minisat.require(element.explicitId)
+                this.minisat.require(element.manualId)
             } else {
                 this.minisat.require(
                     MiniSat.equiv(
-                        element.explicitId,
+                        element.manualId,
                         this.transformLogicExpression(
                             andify(
                                 conditions.filter(it => {
@@ -210,7 +210,7 @@ export default class Solver {
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
 
         // Optimization if there is only one condition assigned
-        // TODO: optimize wrt relations having explicit conditions variable assigned
+        // TODO: optimize wrt relations having manual conditions variable assigned
         if (conditions.length === 1) {
             // If the only assigned condition is "true", then the element is present
             if (conditions[0] === true) return this.minisat.require(element.id)
@@ -426,7 +426,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.explicitId, it.source.id)))
+            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.manualId, it.source.id)))
         }
 
         /**
@@ -448,7 +448,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.explicitId, it.target.id)))
+            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.manualId, it.target.id)))
         }
 
         /**
@@ -470,7 +470,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.artifacts.map(it => it.explicitId))
+            return MiniSat.or(node.artifacts.map(it => it.manualId))
         }
 
         /**

@@ -39,8 +39,8 @@ export default abstract class Element {
 
     abstract toscaId: any
 
-    get explicitId() {
-        return 'explicit.' + this.id
+    get manualId() {
+        return 'manual.' + this.id
     }
 
     private _display?: string
