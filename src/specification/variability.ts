@@ -190,8 +190,6 @@ export type GroupPropertyPresenceArguments = [group: string, property: string | 
 export type PolicyPropertyPresenceArguments = [policy: string | number, property: string | number]
 export type ArtifactPropertyPresenceArguments = [node: string, artifact: string | number, property: string | number]
 
-export type GeneratedLogicExpression = LogicExpression & {_generated: true}
-
 export type LogicExpression =
     | {
           // Boolean operators
