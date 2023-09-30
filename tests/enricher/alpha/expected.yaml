@@ -8,7 +8,7 @@ topology_template:
                       conditions:
                           - {node_presence: node, _generated: true}
             conditions:
-                - {and: [true, {has_artifact: node}], _generated: true}
+                - {has_artifact: node, _generated: true}
             artifacts:
                 - artifact_one:
                       type: tosca.artifacts.File

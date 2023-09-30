@@ -99,49 +99,51 @@ export default class Node extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (it === 'host') {
-                return conditions.push(this.hasHost ? {host_presence: 'SELF', _cached_element: this} : true)
+            if (
+                ![
+                    'host',
+                    'source',
+                    'incoming',
+                    'incomingnaive',
+                    'outgoing',
+                    'outgoingnaive',
+                    'artifact',
+                    'artifactnaive',
+                ].includes(it)
+            )
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'host' && this.hasHost) {
+                return conditions.push({host_presence: 'SELF', _cached_element: this})
             }
 
-            if (it === 'source') {
-                return conditions.push(this.isSource ? {has_source: this.toscaId, _cached_element: this} : true)
+            if (it === 'source' && this.isSource) {
+                return conditions.push({has_source: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'incoming') {
-                return conditions.push(
-                    this.isTarget ? {has_incoming_relation: this.toscaId, _cached_element: this} : true
-                )
+            if (it === 'incoming' && this.isTarget) {
+                return conditions.push({has_incoming_relation: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'incomingnaive') {
-                return conditions.push(
-                    this.isTarget ? {has_incoming_relation_naive: this.toscaId, _cached_element: this} : true
-                )
+            if (it === 'incomingnaive' && this.isTarget) {
+                return conditions.push({has_incoming_relation_naive: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'outgoing') {
-                return conditions.push(
-                    this.isSource ? {has_outgoing_relation: this.toscaId, _cached_element: this} : true
-                )
+            if (it === 'outgoing' && this.isSource) {
+                return conditions.push({has_outgoing_relation: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'outgoingnaive') {
-                return conditions.push(
-                    this.isSource ? {has_outgoing_relation_naive: this.toscaId, _cached_element: this} : true
-                )
+            if (it === 'outgoingnaive' && this.isSource) {
+                return conditions.push({has_outgoing_relation_naive: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'artifact') {
-                return conditions.push(this.hasArtifact ? {has_artifact: this.toscaId, _cached_element: this} : true)
+            if (it === 'artifact' && this.hasArtifact) {
+                return conditions.push({has_artifact: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'artifactnaive') {
-                return conditions.push(
-                    this.hasArtifact ? {has_artifact_naive: this.toscaId, _cached_element: this} : true
-                )
+            if (it === 'artifactnaive' && this.hasArtifact) {
+                return conditions.push({has_artifact_naive: this.toscaId, _cached_element: this})
             }
-
-            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
         })
 
         return {conditions, consistency: false, semantic: true}

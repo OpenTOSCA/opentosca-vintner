@@ -130,14 +130,15 @@ export default class Relation extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
+            if (!['source', 'target'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
             if (it === 'source') {
                 return conditions.push(this.source.presenceCondition)
             }
             if (it === 'target') {
                 return conditions.push(this.target.presenceCondition)
             }
-
-            throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
         })
 
         return {conditions, consistency: true, semantic: false}

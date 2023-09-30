@@ -8,7 +8,7 @@ topology_template:
                       conditions:
                           - {node_presence: source, _generated: true}
             conditions:
-                - {and: [true, true], _generated: true}
+                - {and: [], _generated: true}
                 - {equal: [value, value]}
             requirements:
                 - relation:
