@@ -1,5 +1,4 @@
 import * as assert from '#assert'
-import * as check from '#check'
 import * as files from '#files'
 
 export type TemplatePackageOptions = {
@@ -9,6 +8,6 @@ export type TemplatePackageOptions = {
 
 export default async function (options: TemplatePackageOptions) {
     assert.isDefined(options.template, 'Template not defined')
-    if (check.isUndefined(options.output)) throw new Error(`Output not defined`)
+    assert.isDefined(options.output, 'Output not defined')
     await files.createArchive(options.template, options.output)
 }

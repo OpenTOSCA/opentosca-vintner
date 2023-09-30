@@ -1,5 +1,4 @@
 import * as assert from '#assert'
-import * as check from '#check'
 import * as files from '#files'
 
 export type TemplateUnpackageOptions = {
@@ -9,7 +8,7 @@ export type TemplateUnpackageOptions = {
 
 export default async function (options: TemplateUnpackageOptions) {
     assert.isDefined(options.template, 'Template not defined')
-    if (check.isUndefined(options.output)) throw new Error(`Output not defined`)
+    assert.isDefined(options.output, 'Output not defined')
 
     if (files.isFile(options.template)) {
         await files.extractArchive(options.template, options.output)
