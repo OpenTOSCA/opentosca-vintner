@@ -1,6 +1,7 @@
 import Graph from '#/graph/graph'
 import {Query} from '#/query/query'
 import * as check from '#check'
+import {ServiceTemplate} from '#spec/service-template'
 import {PredicateExpression} from './types'
 
 /**
@@ -9,6 +10,10 @@ import {PredicateExpression} from './types'
  */
 export class BfsGraph extends Graph {
     private readonly resolver = new Query()
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate, false)
+    }
 
     /**
      * Returns a set of neighboring nodes for the given node, given that their relationship fulfills the predicate

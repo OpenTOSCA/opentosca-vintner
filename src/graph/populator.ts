@@ -24,9 +24,11 @@ import * as utils from '#utils'
 
 export class Populator {
     graph: Graph
+    normalize: boolean
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, normalize = true) {
         this.graph = graph
+        this.normalize = normalize
     }
 
     run() {
@@ -91,11 +93,14 @@ export class Populator {
 
         for (const [index, definition] of this.graph.serviceTemplate.imports.entries()) {
             // Normalize
-            // TODO: is this dirty?
-            const noramlized = check.isString(definition) ? {file: definition} : definition
-            this.graph.serviceTemplate.imports[index] = noramlized
+            // TODO: this is dirty
+            let normalized
+            if (this.normalize) {
+                normalized = check.isString(definition) ? {file: definition} : definition
+                this.graph.serviceTemplate.imports[index] = normalized
+            }
 
-            const imp = new Import({index, raw: noramlized})
+            const imp = new Import({index, raw: normalized ?? definition})
             imp.graph = this.graph
             this.graph.imports.push(imp)
         }
@@ -147,14 +152,17 @@ export class Populator {
             const [relationName, assignment] = utils.firstEntry(map)
 
             // Normalize
-            // TODO: is this dirty?
-            const normalized = check.isString(assignment) ? {node: assignment} : assignment
-            map[relationName] = normalized
+            // TODO: this is dirty
+            let normalized
+            if (this.normalize) {
+                normalized = check.isString(assignment) ? {node: assignment} : assignment
+                map[relationName] = normalized
+            }
 
             const relation = new Relation({
                 name: relationName,
                 container: node,
-                raw: normalized,
+                raw: normalized ?? assignment,
                 index,
             })
             relation.graph = this.graph
@@ -258,9 +266,11 @@ export class Populator {
             throw new Error(`${element.Display} has multiple default types`)
 
         // Normalize
-        // TODO: is this dirty?
-        if (!check.isArray(template.type)) {
-            template.type = types
+        // TODO: this is dirty
+        if (this.normalize) {
+            if (!check.isArray(template.type)) {
+                template.type = types
+            }
         }
     }
 
@@ -279,13 +289,15 @@ export class Populator {
                 }
 
                 // Normalize
-                // TODO: is this dirty?
-                node.raw.artifacts = artifacts.reduce<ArtifactDefinitionList>((acc, [name, definition]) => {
-                    const map: ArtifactDefinitionMap = {}
-                    map[name] = definition
-                    acc.push(map)
-                    return acc
-                }, [])
+                // TODO: this is dirty
+                if (this.normalize) {
+                    node.raw.artifacts = artifacts.reduce<ArtifactDefinitionList>((acc, [name, definition]) => {
+                        const map: ArtifactDefinitionMap = {}
+                        map[name] = definition
+                        acc.push(map)
+                        return acc
+                    }, [])
+                }
             }
             // Ensure that there is only one default artifact per artifact name
             node.artifactsMap.forEach(artifacts => {
@@ -302,13 +314,21 @@ export class Populator {
             artifactDefinition.type = 'tosca.artifacts.File'
 
         // Normalize
-        // TODO: is this dirty?
-        const normalized: ExtendedArtifactDefinition = check.isString(artifactDefinition)
-            ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
-            : artifactDefinition
-        map[artifactName] = normalized
+        // TODO: this is dirty
+        let normalized: ExtendedArtifactDefinition | undefined
+        if (this.normalize) {
+            normalized = check.isString(artifactDefinition)
+                ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
+                : artifactDefinition
+            map[artifactName] = normalized
+        }
 
-        const artifact = new Artifact({name: artifactName, raw: normalized, container: node, index})
+        const artifact = new Artifact({
+            name: artifactName,
+            raw: normalized ?? artifactDefinition,
+            container: node,
+            index,
+        })
         artifact.graph = this.graph
 
         this.populateProperties(artifact, artifactDefinition)
@@ -342,9 +362,12 @@ export class Populator {
                         // This just works since we do not allow "value" as a keyword in a property assignment value
                         const value = propertyAssignment as PropertyAssignmentValue
                         // Normalize
-                        // TODO: is this dirty?
-                        const normalized = {value}
-                        template.properties[propertyIndex][propertyName] = normalized
+                        // TODO: this is dirty
+                        let normalized
+                        if (this.normalize) {
+                            normalized = {value}
+                            template.properties[propertyIndex][propertyName] = normalized
+                        }
 
                         property = new Property({
                             name: propertyName,
@@ -352,7 +375,7 @@ export class Populator {
                             value,
                             default: false,
                             index: propertyIndex,
-                            raw: normalized,
+                            raw: normalized ?? propertyAssignment,
                         })
                     } else {
                         // Property is conditional
@@ -381,24 +404,30 @@ export class Populator {
                 const properties = Object.entries(template.properties || {})
 
                 // Normalize
-                // TODO: is this dirty?
-                template.properties = []
+                // TODO: this is dirty
+                if (this.normalize) {
+                    template.properties = []
+                }
 
                 for (const [propertyName, propertyAssignment] of properties) {
                     // Normalize
-                    // TODO: is this dirty?
-                    const normalized: ConditionalPropertyAssignmentValue = {value: propertyAssignment}
+                    // TODO: this is dirty
+                    let normalized: ConditionalPropertyAssignmentValue | undefined
+                    if (this.normalize) {
+                        normalized = {value: propertyAssignment}
 
-                    const map: PropertyAssignmentListEntry = {}
-                    map[propertyName] = normalized
-                    template.properties.push(map)
+                        const map: PropertyAssignmentListEntry = {}
+                        map[propertyName] = normalized
+                        assert.isArray(template.properties)
+                        template.properties.push(map)
+                    }
 
                     const property = new Property({
                         name: propertyName,
                         container: element,
                         value: propertyAssignment,
                         default: false,
-                        raw: normalized,
+                        raw: normalized ?? propertyAssignment,
                     })
                     property.graph = this.graph
 
