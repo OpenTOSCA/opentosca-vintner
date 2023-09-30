@@ -64,6 +64,8 @@ export class Populator {
         ]
     }
 
+    // TODO: require normalization
+
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (check.isUndefined(data)) return []
         if (check.isArray(data)) return data
@@ -99,6 +101,7 @@ export class Populator {
     }
 
     private populateNodes() {
+        // TODO: document that this is possible
         this.getFromVariabilityPointMap(this.graph.serviceTemplate.topology_template?.node_templates).forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.graph.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
@@ -213,7 +216,6 @@ export class Populator {
     }
 
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
-        if (check.isString(template)) return
         assert.isDefined(template.type, `${element.Display} has no type`)
 
         // Collect types
@@ -248,14 +250,6 @@ export class Populator {
         // Ensure that there is only one default type
         if (element.types.filter(it => it.defaultAlternative).length > 1)
             throw new Error(`${element.Display} has multiple default types`)
-
-        // Normalize
-        // TODO: this is dirty
-        if (this.normalize) {
-            if (!check.isArray(template.type)) {
-                template.type = types
-            }
-        }
     }
 
     private populateArtifacts(node: Node, nodeTemplate: NodeTemplate) {

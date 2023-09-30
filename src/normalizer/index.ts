@@ -1,8 +1,14 @@
+import * as assert from '#assert'
 import * as check from '#check'
+import {PropertyContainerTemplate} from '#graph/property'
+import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
-import {NodeTemplate} from '#spec/node-template'
+import {GroupTemplateMap} from '#spec/group-template'
+import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {ServiceTemplate} from '#spec/service-template'
-import {VariabilityPointMap} from '#spec/variability'
+import {InputDefinitionMap} from '#spec/topology-template'
+import {TypeAssignment} from '#spec/type-assignment'
+import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Normalizer {
@@ -16,12 +22,33 @@ export default class Normalizer {
         // Imports
         this.extendImports()
 
+        // Inputs
+        this.extendInputs()
+
         // Nodes
         this.extendNodes()
 
-        // TODO: extend types everywhere
+        // Policies
+        this.extendPolicies()
 
-        // TODO: extend properties everywhere
+        // Groups
+        this.extendGroups()
+
+        // Relationship
+        this.extendRelationships()
+    }
+
+    // TODO: transform to list where possible
+
+    private extendInputs() {
+        if (check.isUndefined(this.serviceTemplate.topology_template?.inputs)) return
+
+        this.serviceTemplate.topology_template!.inputs = this.getFromVariabilityPointMap(
+            this.serviceTemplate.topology_template!.inputs
+        ).reduce<InputDefinitionMap[]>((list, map) => {
+            list.push(map)
+            return list
+        }, [])
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
@@ -34,24 +61,92 @@ export default class Normalizer {
         })
     }
 
+    private extendProperties(template: PropertyContainerTemplate) {
+        // TODO: extend
+    }
+
+    private extendRelationships() {
+        Object.entries(this.serviceTemplate.topology_template?.relationship_templates || {}).forEach(it => {
+            const template = it[1]
+            this.extendTypes(template)
+            this.extendProperties(template)
+        })
+    }
+
+    private extendGroups() {
+        if (check.isUndefined(this.serviceTemplate.topology_template?.groups)) return
+
+        this.serviceTemplate.topology_template!.groups = this.getFromVariabilityPointMap(
+            this.serviceTemplate.topology_template!.groups
+        ).reduce<GroupTemplateMap[]>((list, map) => {
+            const template = utils.firstValue(map)
+            this.extendTypes(template)
+            this.extendProperties(template)
+
+            list.push(map)
+            return list
+        }, [])
+    }
+
+    private extendPolicies() {
+        const policies = this.serviceTemplate.topology_template?.policies
+        if (check.isUndefined(policies)) return
+        assert.isArray(policies, 'Policies must be an array')
+        policies.forEach(it => {
+            const template = utils.firstValue(it)
+            this.extendTypes(template)
+            this.extendProperties(template)
+        })
+    }
+
+    private extendTypes(template: TypeContainerTemplate) {
+        assert.isDefined(template.type, `${utils.stringify(template)} has no type`)
+
+        if (check.isArray(template.type)) return
+
+        // Collect types
+        const types: VariabilityPointList<TypeAssignment> = check.isString(template.type)
+            ? [
+                  (() => {
+                      const map: {[name: string]: TypeAssignment} = {}
+                      map[template.type] = {}
+                      return map
+                  })(),
+              ]
+            : template.type
+
+        template.type = types
+    }
+
     private extendImports() {
         if (check.isUndefined(this.serviceTemplate.imports)) return
         this.serviceTemplate.imports = this.serviceTemplate.imports.map(it => (check.isString(it) ? {file: it} : it))
     }
 
     private extendNodes() {
-        this.getFromVariabilityPointMap(this.serviceTemplate.topology_template?.node_templates).forEach(map => {
-            const [nodeName, nodeTemplate] = utils.firstEntry(map)
+        if (check.isUndefined(this.serviceTemplate.topology_template?.node_templates)) return
 
-            // TODO: extend types
-            // TODO: extend properties
+        this.serviceTemplate.topology_template!.node_templates = this.getFromVariabilityPointMap(
+            this.serviceTemplate.topology_template!.node_templates
+        ).reduce<NodeTemplateMap[]>((list, map) => {
+            // Template
+            const template = utils.firstValue(map)
+
+            // Types
+            this.extendTypes(template)
+
+            // Properties
+            this.extendProperties(template)
 
             // Relations
-            this.extendRelations(nodeTemplate)
+            this.extendRelations(template)
 
             // Artifacts
-            this.extendArtifacts(nodeTemplate)
-        })
+            this.extendArtifacts(template)
+
+            list.push(map)
+            return list
+        }, [])
     }
 
     private extendRelations(template: NodeTemplate) {
@@ -67,33 +162,21 @@ export default class Normalizer {
 
         if (!check.isArray(template.artifacts)) {
             const artifacts = Object.entries(template.artifacts)
-            for (const [artifactName, artifactDefinition] of artifacts) {
-                const map: ArtifactDefinitionMap = {}
-                map[artifactName] = artifactDefinition
-                this.extendArtifact(map)
-            }
-
-            template.artifacts = artifacts.reduce<ArtifactDefinitionList>((acc, [name, definition]) => {
+            template.artifacts = artifacts.reduce<ArtifactDefinitionList>((list, [name, definition]) => {
                 const map: ArtifactDefinitionMap = {}
                 map[name] = definition
-                acc.push(map)
-                return acc
+                list.push(map)
+                return list
             }, [])
         }
 
-        if (check.isArray(template.artifacts)) {
-            template.artifacts.forEach(it => this.extendArtifact(it))
-        }
+        template.artifacts.forEach(it => this.extendArtifact(it))
     }
 
     private extendArtifact(map: ArtifactDefinitionMap) {
-        const [artifactName, artifactDefinition] = utils.firstEntry(map)
-
-        if (check.isObject(artifactDefinition) && check.isUndefined(artifactDefinition.type))
-            artifactDefinition.type = 'tosca.artifacts.File'
-
-        map[artifactName] = check.isString(artifactDefinition)
-            ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
-            : artifactDefinition
+        const [name, template] = utils.firstEntry(map)
+        if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
+        if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
+        this.extendProperties(template)
     }
 }
