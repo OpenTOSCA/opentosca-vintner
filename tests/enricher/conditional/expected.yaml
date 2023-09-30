@@ -31,10 +31,10 @@ topology_template:
             conditions:
                 - {and: [{has_incoming_relation: target}, {has_artifact: target}], _generated: true}
             properties:
-                key:
-                    value: value
-                    conditions:
-                        - {node_presence: target, _generated: true}
+                - key:
+                      value: value
+                      conditions:
+                          - {node_presence: target, _generated: true}
             artifacts:
                 - artifact:
                       file: /some/artifact

@@ -65,16 +65,13 @@ topology_template:
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
-                - host:
-                      node: prod_runtime
-                - database:
-                      node: prod_database
+                - host: prod_runtime
+                - database: prod_database
 
         prod_runtime:
             type: gcp.appengine.engine
             requirements:
-                - host:
-                      node: gcp
+                - host: gcp
 
         prod_database:
             type: gcp.sql.db
@@ -82,8 +79,7 @@ topology_template:
                 user: {eval: '.::.requirements::[.name=host]::.target::user'}
                 password: {eval: '.::.requirements::[.name=host]::.target::password'}
             requirements:
-                - host:
-                      node: prod_dbms
+                - host: prod_dbms
 
         prod_dbms:
             type: gcp.sql.dbms
@@ -91,8 +87,7 @@ topology_template:
                 instance_name: {concat: [{get_input: release}, '-', dbms]}
                 password: {get_input: db_password}
             requirements:
-                - host:
-                      node: gcp
+                - host: gcp
 
         gcp:
             type: gcp.provider

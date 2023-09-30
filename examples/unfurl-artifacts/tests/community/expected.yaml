@@ -4,15 +4,15 @@ imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
 
-    - file: lib/shop_app.yaml
+    - lib/shop_app.yaml
 
-    - file: lib/node_runtime.yaml
-    - file: lib/sqlite.yaml
-    - file: lib/os_vm.yaml
+    - lib/node_runtime.yaml
+    - lib/sqlite.yaml
+    - lib/os_vm.yaml
 
-    - file: lib/gcp_runtime.yaml
-    - file: lib/gcp_database.yaml
-    - file: lib/gcp_dbms.yaml
+    - lib/gcp_runtime.yaml
+    - lib/gcp_database.yaml
+    - lib/gcp_dbms.yaml
 
 topology_template:
     inputs:
@@ -78,10 +78,8 @@ topology_template:
                 ssh_user: {get_input: ssh_user}
                 ssh_key_file: {get_input: ssh_key_file}
             requirements:
-                - host:
-                      node: os_runtime
-                - database:
-                      node: os_database
+                - host: os_runtime
+                - database: os_database
             artifacts:
                 artifact:
                     type: tosca.artifacts.File

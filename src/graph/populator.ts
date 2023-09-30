@@ -13,7 +13,11 @@ import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
-import {PropertyAssignmentValue} from '#spec/property-assignments'
+import {
+    ConditionalPropertyAssignmentValue,
+    PropertyAssignmentListEntry,
+    PropertyAssignmentValue,
+} from '#spec/property-assignments'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
@@ -338,7 +342,7 @@ export class Populator {
                             value,
                             default: false,
                             index: propertyIndex,
-                            raw: propertyAssignment,
+                            raw: normalized,
                         })
                     } else {
                         // Property is conditional
@@ -364,11 +368,20 @@ export class Populator {
                 }
             } else {
                 // Properties is a Property Assignment Map
-                for (const [propertyName, propertyAssignment] of Object.entries(template.properties || {})) {
+                const properties = Object.entries(template.properties || {})
+
+                // Normalize
+                // TODO: is this dirty?
+                template.properties = []
+
+                for (const [propertyName, propertyAssignment] of properties) {
                     // Normalize
                     // TODO: is this dirty?
-                    const normalized = {value: propertyAssignment}
-                    template.properties[propertyName] = normalized
+                    const normalized: ConditionalPropertyAssignmentValue = {value: propertyAssignment}
+
+                    const map: PropertyAssignmentListEntry = {}
+                    map[propertyName] = normalized
+                    template.properties.push(map)
 
                     const property = new Property({
                         name: propertyName,
