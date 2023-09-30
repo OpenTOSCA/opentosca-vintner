@@ -13,22 +13,16 @@ import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
-import {
-    ConditionalPropertyAssignmentValue,
-    PropertyAssignmentListEntry,
-    PropertyAssignmentValue,
-} from '#spec/property-assignments'
+import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
 import * as utils from '#utils'
 
 export class Populator {
     graph: Graph
-    normalize: boolean
 
-    constructor(graph: Graph, normalize = true) {
+    constructor(graph: Graph) {
         this.graph = graph
-        this.normalize = normalize
     }
 
     run() {
@@ -64,7 +58,7 @@ export class Populator {
         ]
     }
 
-    // TODO: require normalization
+    // TODO: require normalization? but then query does not work anymore ... why even
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
         if (check.isUndefined(data)) return []
@@ -296,7 +290,7 @@ export class Populator {
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
         if (check.isString(template)) return
 
-        if (check.isObject(template.properties)) {
+        if (check.isDefined(template.properties)) {
             // Properties is a Property Assignment List
             if (check.isArray(template.properties)) {
                 for (const [propertyIndex, propertyAssignmentListEntry] of template.properties.entries()) {
@@ -315,13 +309,6 @@ export class Populator {
                     ) {
                         // This just works since we do not allow "value" as a keyword in a property assignment value
                         const value = propertyAssignment as PropertyAssignmentValue
-                        // Normalize
-                        // TODO: this is dirty
-                        let normalized
-                        if (this.normalize) {
-                            normalized = {value}
-                            template.properties[propertyIndex][propertyName] = normalized
-                        }
 
                         property = new Property({
                             name: propertyName,
@@ -329,7 +316,7 @@ export class Populator {
                             value,
                             default: false,
                             index: propertyIndex,
-                            raw: normalized ?? propertyAssignment,
+                            raw: propertyAssignment,
                         })
                     } else {
                         // Property is conditional
@@ -356,32 +343,13 @@ export class Populator {
             } else {
                 // Properties is a Property Assignment Map
                 const properties = Object.entries(template.properties || {})
-
-                // Normalize
-                // TODO: this is dirty
-                if (this.normalize) {
-                    template.properties = []
-                }
-
                 for (const [propertyName, propertyAssignment] of properties) {
-                    // Normalize
-                    // TODO: this is dirty
-                    let normalized: ConditionalPropertyAssignmentValue | undefined
-                    if (this.normalize) {
-                        normalized = {value: propertyAssignment}
-
-                        const map: PropertyAssignmentListEntry = {}
-                        map[propertyName] = normalized
-                        assert.isArray(template.properties)
-                        template.properties.push(map)
-                    }
-
                     const property = new Property({
                         name: propertyName,
                         container: element,
                         value: propertyAssignment,
                         default: false,
-                        raw: normalized ?? propertyAssignment,
+                        raw: propertyAssignment,
                     })
                     property.graph = this.graph
 

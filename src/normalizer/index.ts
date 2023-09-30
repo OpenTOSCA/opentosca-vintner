@@ -5,6 +5,7 @@ import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {PropertyAssignmentList, PropertyAssignmentListEntry, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
@@ -17,6 +18,8 @@ export default class Normalizer {
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
     }
+
+    // TODO: require index everywhere?
 
     extend() {
         // Imports
@@ -37,8 +40,6 @@ export default class Normalizer {
         // Relationship
         this.extendRelationships()
     }
-
-    // TODO: transform to list where possible
 
     private extendInputs() {
         if (check.isUndefined(this.serviceTemplate.topology_template?.inputs)) return
@@ -62,7 +63,37 @@ export default class Normalizer {
     }
 
     private extendProperties(template: PropertyContainerTemplate) {
-        // TODO: extend
+        assert.isObject(template)
+        if (check.isUndefined(template.properties)) return
+
+        if (!check.isArray(template.properties)) {
+            template.properties = Object.entries(template.properties).reduce<PropertyAssignmentList>(
+                (list, [name, value]) => {
+                    const map: PropertyAssignmentListEntry = {}
+                    map[name] = {value}
+                    list.push(map)
+                    return list
+                },
+                []
+            )
+        }
+
+        template.properties.forEach(it => {
+            const [propertyName, propertyAssignment] = utils.firstEntry(it)
+
+            if (
+                check.isString(propertyAssignment) ||
+                check.isNumber(propertyAssignment) ||
+                check.isBoolean(propertyAssignment) ||
+                check.isArray(propertyAssignment) ||
+                (check.isUndefined(propertyAssignment.value) && check.isUndefined(propertyAssignment.expression))
+            ) {
+                // This just works since we do not allow "value" as a keyword in a property assignment value
+                const value = propertyAssignment as PropertyAssignmentValue
+
+                it[propertyName] = {value}
+            }
+        })
     }
 
     private extendRelationships() {
@@ -177,6 +208,6 @@ export default class Normalizer {
         const [name, template] = utils.firstEntry(map)
         if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
         if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
-        this.extendProperties(template)
+        this.extendProperties(map[name])
     }
 }

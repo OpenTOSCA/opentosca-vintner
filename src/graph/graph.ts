@@ -86,7 +86,7 @@ export default class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        new Populator(this, normalize).run()
+        new Populator(this).run()
     }
 
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {

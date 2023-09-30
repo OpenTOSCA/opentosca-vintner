@@ -2,22 +2,22 @@ tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
     node_templates:
-        node:
-            type:
-                - node:
-                      conditions:
-                          - {node_presence: node, _generated: true}
-            conditions:
-                - {has_artifact: node, _generated: true}
-            artifacts:
-                - artifact_one:
-                      type: tosca.artifacts.File
-                      file: file_one
-                      conditions:
-                          - {node_presence: node, _generated: true}
-                - artifact_one:
-                      type: tosca.artifacts.File
-                      file: file_one
-                      conditions:
-                          - {node_presence: node, _generated: true}
-                          - {not: {or: [artifact_presence: [node, 0]]}, _generated: true}
+        - node:
+              type:
+                  - node:
+                        conditions:
+                            - {node_presence: node, _generated: true}
+              conditions:
+                  - {has_artifact: node, _generated: true}
+              artifacts:
+                  - artifact_one:
+                        type: tosca.artifacts.File
+                        file: file_one
+                        conditions:
+                            - {node_presence: node, _generated: true}
+                  - artifact_one:
+                        type: tosca.artifacts.File
+                        file: file_one
+                        conditions:
+                            - {node_presence: node, _generated: true}
+                            - {not: {or: [artifact_presence: [node, 0]]}, _generated: true}
