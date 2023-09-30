@@ -1,19 +1,23 @@
 import Enricher from '#enricher/enricher'
 import Transformer from '#enricher/transformer'
 import Graph from '#graph/graph'
+import Normalizer from '#normalizer'
 import {ServiceTemplate} from '#spec/service-template'
 
 export default {enrich}
 
-export type EnrichOptions = {
+type EnrichOptions = {
     template: ServiceTemplate
 }
 
-export type EnrichResult = {
+type EnrichResult = {
     template: ServiceTemplate
 }
 
 async function enrich(options: EnrichOptions): Promise<EnrichResult> {
+    // Extend graph
+    new Normalizer(options.template).extend()
+
     // Generate graph
     const graph = new Graph(options.template)
 

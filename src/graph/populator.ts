@@ -11,7 +11,7 @@ import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionList, ArtifactDefinitionMap, ExtendedArtifactDefinition} from '#spec/artifact-definitions'
+import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
 import {
     ConditionalPropertyAssignmentValue,
@@ -92,15 +92,7 @@ export class Populator {
         assert.isArray(this.graph.serviceTemplate.imports, 'Imports must be an array')
 
         for (const [index, definition] of this.graph.serviceTemplate.imports.entries()) {
-            // Normalize
-            // TODO: this is dirty
-            let normalized
-            if (this.normalize) {
-                normalized = check.isString(definition) ? {file: definition} : definition
-                this.graph.serviceTemplate.imports[index] = normalized
-            }
-
-            const imp = new Import({index, raw: normalized ?? definition})
+            const imp = new Import({index, raw: definition})
             imp.graph = this.graph
             this.graph.imports.push(imp)
         }
@@ -151,18 +143,10 @@ export class Populator {
         for (const [index, map] of template.requirements.entries()) {
             const [relationName, assignment] = utils.firstEntry(map)
 
-            // Normalize
-            // TODO: this is dirty
-            let normalized
-            if (this.normalize) {
-                normalized = check.isString(assignment) ? {node: assignment} : assignment
-                map[relationName] = normalized
-            }
-
             const relation = new Relation({
                 name: relationName,
                 container: node,
-                raw: normalized ?? assignment,
+                raw: assignment,
                 index,
             })
             relation.graph = this.graph
@@ -287,17 +271,6 @@ export class Populator {
                     map[artifactName] = artifactDefinition
                     this.populateArtifact(node, map)
                 }
-
-                // Normalize
-                // TODO: this is dirty
-                if (this.normalize) {
-                    node.raw.artifacts = artifacts.reduce<ArtifactDefinitionList>((acc, [name, definition]) => {
-                        const map: ArtifactDefinitionMap = {}
-                        map[name] = definition
-                        acc.push(map)
-                        return acc
-                    }, [])
-                }
             }
             // Ensure that there is only one default artifact per artifact name
             node.artifactsMap.forEach(artifacts => {
@@ -310,22 +283,9 @@ export class Populator {
     private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
         const [artifactName, artifactDefinition] = utils.firstEntry(map)
 
-        if (check.isObject(artifactDefinition) && check.isUndefined(artifactDefinition.type))
-            artifactDefinition.type = 'tosca.artifacts.File'
-
-        // Normalize
-        // TODO: this is dirty
-        let normalized: ExtendedArtifactDefinition | undefined
-        if (this.normalize) {
-            normalized = check.isString(artifactDefinition)
-                ? {file: artifactDefinition, type: 'tosca.artifacts.File'}
-                : artifactDefinition
-            map[artifactName] = normalized
-        }
-
         const artifact = new Artifact({
             name: artifactName,
-            raw: normalized ?? artifactDefinition,
+            raw: artifactDefinition,
             container: node,
             index,
         })
