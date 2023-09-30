@@ -92,7 +92,15 @@ export default class Transformer {
                             if (!check.isString(assignment)) this.clean(assignment)
 
                             const map: RequirementAssignmentMap = {}
-                            map[relation.name] = assignment
+
+                            // Minimize
+                            // TODO: is this dirty?
+                            map[relation.name] =
+                                !check.isString(assignment) &&
+                                Object.keys(assignment).length === 1 &&
+                                Object.keys(assignment)[0] === 'node'
+                                    ? assignment.node
+                                    : assignment
                             return map
                         })
                     if (utils.isEmpty(template.requirements)) delete template.requirements
@@ -259,6 +267,16 @@ export default class Transformer {
                 .map(it => {
                     const definition = it.raw
                     this.clean(definition)
+
+                    // Minimize
+                    // TODO: is this dirty?
+                    if (
+                        !check.isString(definition) &&
+                        Object.keys(definition).length === 1 &&
+                        Object.keys(definition)[0] === 'file'
+                    )
+                        return definition.file
+
                     return definition
                 })
 
