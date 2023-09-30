@@ -1,5 +1,5 @@
 import * as check from '#check'
-import {bratanize} from '#graph/utils'
+import {bratify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
@@ -121,7 +121,7 @@ export default class Property extends Element {
 
     // Check if no other property having the same name is present
     constructDefaultAlternativeCondition() {
-        return bratanize(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+        return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
     }
 
     isProperty() {

@@ -37,12 +37,12 @@ topology_template:
             conditions: false
         - relation_three:
             node: node_four
-            default: true
+            default_alternative: true
       artifacts:
         - artifact_one: file_one
         - artifact_one:
             file: file_one
-            default: true
+            default_alternative: true
     node_three:
       type: node_three
     node_four:

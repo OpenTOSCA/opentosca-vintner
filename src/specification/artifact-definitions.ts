@@ -5,12 +5,13 @@
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {VariabilityAlternative} from '#spec/variability'
 
-export type ArtifactDefinition =
-    | string
-    | ({
-          type: string
-          properties?: PropertyAssignmentMap | PropertyAssignmentList
-      } & VariabilityAlternative)
+export type ArtifactDefinition = string | ExtendedArtifactDefinition
+
+export type ExtendedArtifactDefinition = {
+    type: string
+    file: string
+    properties?: PropertyAssignmentMap | PropertyAssignmentList
+} & VariabilityAlternative
 
 export type ArtifactDefinitionMap = {[key: string]: ArtifactDefinition}
 

@@ -275,6 +275,19 @@ template
     )
 
 template
+    .command('enrich')
+    .description('enrich conditions')
+    .requiredOption('--template <string>', 'path to variable service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.enrich(options)
+        })
+    )
+
+// TODO: instances enrich
+
+template
     .command('resolve')
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')

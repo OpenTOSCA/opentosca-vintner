@@ -1,5 +1,4 @@
 import * as assert from '#assert'
-import * as check from '#check'
 import * as files from '#files'
 import Resolver from '#resolver'
 import {ServiceTemplate} from '#spec/service-template'
@@ -13,7 +12,7 @@ export type TemplateResolveOptions = {
 
 export default async function (options: TemplateResolveOptions) {
     assert.isDefined(options.template, 'Template not defined')
-    if (check.isUndefined(options.output)) throw new Error(`Output not defined`)
+    assert.isDefined(options.output, 'Output not defined')
     const inputs = await Resolver.loadInputs(options.inputs)
     const presets = Resolver.loadPresets(options.presets)
     const template = files.loadYAML<ServiceTemplate>(options.template)

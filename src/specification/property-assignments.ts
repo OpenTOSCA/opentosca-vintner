@@ -15,9 +15,10 @@ export type PropertyAssignmentValue =
     | PropertyAssignmentValue[]
     | {[key: string]: PropertyAssignmentValue}
 
-export type PropertyAssignmentList = {
+export type PropertyAssignmentList = PropertyAssignmentListEntry[]
+export type PropertyAssignmentListEntry = {
     [key: string]: ConditionalPropertyAssignmentValue
-}[]
+}
 
 export type ConditionalPropertyAssignmentValue = {
     value?: PropertyAssignmentValue

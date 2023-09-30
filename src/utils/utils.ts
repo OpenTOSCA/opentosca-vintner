@@ -25,7 +25,7 @@ export function groupBy<T>(elements: T[], by: (element: T) => string) {
 export function toList<T>(data: T | T[] | undefined): T[] {
     if (check.isUndefined(data)) return []
     if (Array.isArray(data)) return data
-    return [data]
+    return filterNotNull([data])
 }
 
 export function firstValue<V>(map: {[key: string]: V}): V {

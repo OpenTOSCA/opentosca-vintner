@@ -1,5 +1,5 @@
 import * as check from '#check'
-import {bratanize} from '#graph/utils'
+import {bratify} from '#graph/utils'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
@@ -20,6 +20,7 @@ export default class Type extends Element {
     readonly type = 'type'
     readonly name: string
     readonly raw: TypeAssignment | string
+
     readonly index: number
     readonly container: TypeContainer
 
@@ -98,7 +99,7 @@ export default class Type extends Element {
 
     // Check if no other type is present
     constructDefaultAlternativeCondition() {
-        return bratanize(this.container.types.filter(it => it !== this))
+        return bratify(this.container.types.filter(it => it !== this))
     }
 
     isType() {

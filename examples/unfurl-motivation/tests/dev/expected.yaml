@@ -65,24 +65,20 @@ topology_template:
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
-                - host:
-                      node: dev_runtime
-                - database:
-                      node: dev_database
+                - host: dev_runtime
+                - database: dev_database
 
         dev_runtime:
             type: node.runtime
             requirements:
-                - host:
-                      node: dev_vm
+                - host: dev_vm
 
         dev_database:
             type: sqlite.db
             properties:
                 database_name: {concat: [{get_input: release}, '-', db]}
             requirements:
-                - host:
-                      node: dev_vm
+                - host: dev_vm
 
         dev_vm:
             type: openstack.vm
@@ -95,8 +91,7 @@ topology_template:
                 ssh_user: {get_input: vm_ssh_user}
                 ssh_key_file: {get_input: vm_ssh_key_file}
             requirements:
-                - host:
-                      node: os
+                - host: os
 
         os:
             type: openstack.provider

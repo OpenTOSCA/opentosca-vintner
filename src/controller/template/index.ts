@@ -1,3 +1,4 @@
+import _enrich from './enrich'
 import _init from './init'
 import _inputs from './inputs'
 import _package from './package'
@@ -13,6 +14,7 @@ export default {
     package: _package,
     unpackage: _unpackage,
     resolve: _resolve,
+    enrich: _enrich,
     query: _query,
     test: _test,
     inputs: _inputs,

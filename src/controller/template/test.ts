@@ -44,8 +44,6 @@ export default async function (options: TemplateTestOptions) {
         console.log(`Running test "${test.name}"`)
         await runTest(test.dir, options.path)
     }
-
-    console.log('Tests run successful')
 }
 
 async function runTest(dir: string, vstdir: string) {

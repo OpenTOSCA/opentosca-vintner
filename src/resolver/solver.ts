@@ -3,6 +3,7 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
+import {andify} from '#graph/utils'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {
     InputAssignmentPreset,
@@ -39,6 +40,12 @@ export default class Solver {
     constructor(graph: Graph) {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
+
+        // TODO: do not allow pruning
+
+        // Variability groups are not allowed since they must be resolved by the Conditions Enricher
+        if (check.isDefined(this.graph.groups.find(it => it.variability)))
+            throw new Error(`Variability groups are not allowed`)
     }
 
     /**
@@ -172,49 +179,38 @@ export default class Solver {
     }
 
     transformConditions(element: Element) {
-        // Variability group are never present
-        if (element.isGroup() && element.variability) return this.minisat.require(MiniSat.not(element.id))
-
         // Collect assigned conditions
-        let conditions: LogicExpression[] = [...element.conditions]
-        if (element.isNode() || element.isRelation()) {
-            element.groups.filter(group => group.variability).forEach(group => conditions.push(...group.conditions))
-        }
-        conditions = utils.filterNotNull(conditions)
+        const conditions: LogicExpression[] = utils.toList(element.conditions)
 
-        // Add explicit conditions of a relation separately as own variable into the sat solver.
-        // Explicit conditions are referenced by has_incoming_relation and has_artifact.
+        // Add manual conditions of a relation separately as own variable into the sat solver.
+        // Manual conditions are referenced by has_incoming_relation and has_artifact.
         if (element.isRelation() || element.isArtifact()) {
+            // Optimization if manual conditions are empty, thus, "true" is fallback
             if (utils.isEmpty(conditions)) {
-                this.minisat.require(element.explicitId)
+                this.minisat.require(element.manualId)
             } else {
                 this.minisat.require(
                     MiniSat.equiv(
-                        element.explicitId,
-                        this.transformLogicExpression(this.reduceConditions(conditions), {element})
+                        element.manualId,
+                        this.transformLogicExpression(
+                            andify(
+                                conditions.filter(it => {
+                                    if (check.isObject(it)) return !it._generated
+                                    return true
+                                })
+                            ),
+                            {element}
+                        )
                     )
                 )
-                conditions = [element.explicitId]
             }
-        }
-
-        // Add condition that checks if no other bratan is present
-        if (element.defaultAlternative) {
-            if (check.isUndefined(element.defaultAlternativeCondition))
-                throw new Error(`${element.Display} has no default alternative condition`)
-            conditions = [element.defaultAlternativeCondition]
-        }
-
-        // Add default condition if requested
-        if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
-            conditions.unshift(element.defaultCondition)
         }
 
         // If there are no conditions assigned, then the element is present
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
 
         // Optimization if there is only one condition assigned
-        // TODO: optimize wrt relations having explicit conditions variable assigned
+        // TODO: optimize wrt relations having manual conditions variable assigned
         if (conditions.length === 1) {
             // If the only assigned condition is "true", then the element is present
             if (conditions[0] === true) return this.minisat.require(element.id)
@@ -229,17 +225,10 @@ export default class Solver {
         }
 
         // Normalize conditions to a single 'and' condition
-        const condition = this.reduceConditions(conditions)
-
-        // Store effective conditions for transparency
-        element.effectiveConditions = conditions
+        const condition = andify(conditions)
 
         // Add conditions to MiniSat
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
-    }
-
-    reduceConditions(conditions: LogicExpression[]) {
-        return {and: conditions}
     }
 
     setPreset(name?: string) {
@@ -437,7 +426,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.explicitId, it.source.id)))
+            return MiniSat.or(node.ingoing.map(it => MiniSat.and(it.manualId, it.source.id)))
         }
 
         /**
@@ -459,7 +448,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.explicitId, it.target.id)))
+            return MiniSat.or(node.outgoing.map(it => MiniSat.and(it.manualId, it.target.id)))
         }
 
         /**
@@ -481,7 +470,7 @@ export default class Solver {
                 element,
                 cached,
             })
-            return MiniSat.or(node.artifacts.map(it => it.explicitId))
+            return MiniSat.or(node.artifacts.map(it => it.manualId))
         }
 
         /**
