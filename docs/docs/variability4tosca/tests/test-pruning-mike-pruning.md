@@ -73,7 +73,6 @@ topology_template:
     ananother:
       type: ananother
       requirements:
-        - ananother:
-            node: another
+        - ananother: another
 ```
 

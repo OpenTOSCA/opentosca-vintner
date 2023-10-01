@@ -5,11 +5,11 @@ import {ServiceTemplate} from '#spec/service-template'
 
 export default {enrich}
 
-export type EnrichOptions = {
+type EnrichOptions = {
     template: ServiceTemplate
 }
 
-export type EnrichResult = {
+type EnrichResult = {
     template: ServiceTemplate
 }
 

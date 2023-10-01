@@ -47,8 +47,7 @@ topology_template:
     node_one:
       type: node_one
       requirements:
-        - relation_one:
-            node: node_two
+        - relation_one: node_two
     node_two:
       type: node_two
 ```

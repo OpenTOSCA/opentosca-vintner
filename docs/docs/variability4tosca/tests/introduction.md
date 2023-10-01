@@ -170,118 +170,119 @@ processing.
 | 145 | [Get Variability Expression](./test-other-value-expression.md) |
 | 146 | [Get Variability Input](./test-other-variability-input.md) |
 | 147 | [other-version](./test-other-version.md) |
-| 148 | [policies-conditional](./test-policies-conditional.md) |
-| 149 | [policies-default-condition](./test-policies-default-condition.md) |
-| 150 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
-| 151 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
-| 152 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
-| 153 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
-| 154 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
-| 155 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
-| 156 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
-| 157 | [policies-policy-presence-absent](./test-policies-policy-presence-absent.md) |
-| 158 | [policies-policy-presence-present](./test-policies-policy-presence-present.md) |
-| 159 | [Policy Pruning](./test-policies-prune.md) |
-| 160 | [properties-artifact-container-presence-absent](./test-properties-artifact-container-presence-absent.md) |
-| 161 | [properties-artifact-container-presence-present](./test-properties-artifact-container-presence-present.md) |
-| 162 | [properties-conditional](./test-properties-conditional.md) |
-| 163 | [properties-default-alternative](./test-properties-default-alternative.md) |
-| 164 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
-| 165 | [properties-default-condition](./test-properties-default-condition.md) |
-| 166 | [properties-expression](./test-properties-expression.md) |
-| 167 | [properties-list](./test-properties-list.md) |
-| 168 | [properties-list-another](./test-properties-list-another.md) |
-| 169 | [properties-map](./test-properties-map.md) |
-| 170 | [properties-map-another](./test-properties-map-another.md) |
-| 171 | [properties-node-container-presence-absent](./test-properties-node-container-presence-absent.md) |
-| 172 | [properties-node-container-presence-present](./test-properties-node-container-presence-present.md) |
-| 173 | [properties-node-node-presence-CONTAINER-absent](./test-properties-node-node-presence-CONTAINER-absent.md) |
-| 174 | [properties-node-node-presence-CONTAINER-present](./test-properties-node-node-presence-CONTAINER-present.md) |
-| 175 | [properties-node-property-presence-number-absent](./test-properties-node-property-presence-number-absent.md) |
-| 176 | [properties-node-property-presence-number-present](./test-properties-node-property-presence-number-present.md) |
-| 177 | [properties-node-property-presence-string-absent](./test-properties-node-property-presence-string-absent.md) |
-| 178 | [properties-node-property-presence-string-present](./test-properties-node-property-presence-string-present.md) |
-| 179 | [properties-properties](./test-properties-properties.md) |
-| 180 | [properties-relation-container-presence-absent](./test-properties-relation-container-presence-absent.md) |
-| 181 | [properties-relation-container-presence-present](./test-properties-relation-container-presence-present.md) |
-| 182 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
-| 183 | [properties-throw-missing-property-container](./test-properties-throw-missing-property-container.md) |
-| 184 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
-| 185 | [pruning-alpha-default](./test-pruning-alpha-default.md) |
-| 186 | [pruning-alpha-default-naive](./test-pruning-alpha-default-naive.md) |
-| 187 | [pruning-alpha-pruning](./test-pruning-alpha-pruning.md) |
-| 188 | [pruning-artifact-default-alpha](./test-pruning-artifact-default-alpha.md) |
-| 189 | [pruning-artifact-default-bravo](./test-pruning-artifact-default-bravo.md) |
-| 190 | [pruning-artifact-default-charlie](./test-pruning-artifact-default-charlie.md) |
-| 191 | [pruning-artifact-default-delta](./test-pruning-artifact-default-delta.md) |
-| 192 | [pruning-artifact-default-naive](./test-pruning-artifact-default-naive.md) |
-| 193 | [pruning-bravo-default](./test-pruning-bravo-default.md) |
-| 194 | [pruning-bravo-pruning](./test-pruning-bravo-pruning.md) |
-| 195 | [pruning-charlie-default](./test-pruning-charlie-default.md) |
-| 196 | [pruning-charlie-pruning](./test-pruning-charlie-pruning.md) |
-| 197 | [pruning-delta-default](./test-pruning-delta-default.md) |
-| 198 | [pruning-delta-pruning](./test-pruning-delta-pruning.md) |
-| 199 | [pruning-echo-default](./test-pruning-echo-default.md) |
-| 200 | [pruning-echo-pruning](./test-pruning-echo-pruning.md) |
-| 201 | [pruning-foxtrott-default](./test-pruning-foxtrott-default.md) |
-| 202 | [pruning-foxtrott-pruning](./test-pruning-foxtrott-pruning.md) |
-| 203 | [pruning-hotel-default](./test-pruning-hotel-default.md) |
-| 204 | [pruning-hotel-pruning](./test-pruning-hotel-pruning.md) |
-| 205 | [pruning-incoming-artifact-pruning-alpha](./test-pruning-incoming-artifact-pruning-alpha.md) |
-| 206 | [pruning-incoming-artifact-pruning-bravo](./test-pruning-incoming-artifact-pruning-bravo.md) |
-| 207 | [pruning-incoming-artifact-pruning-charlie](./test-pruning-incoming-artifact-pruning-charlie.md) |
-| 208 | [pruning-incoming-artifact-pruning-delta](./test-pruning-incoming-artifact-pruning-delta.md) |
-| 209 | [pruning-incoming-artifact-pruning-echo](./test-pruning-incoming-artifact-pruning-echo.md) |
-| 210 | [pruning-incoming-artifact-pruning-foxtrott](./test-pruning-incoming-artifact-pruning-foxtrott.md) |
-| 211 | [pruning-incoming-artifact-pruning-golf](./test-pruning-incoming-artifact-pruning-golf.md) |
-| 212 | [pruning-incoming-artifact-pruning-hotel](./test-pruning-incoming-artifact-pruning-hotel.md) |
-| 213 | [pruning-incoming-artifact-pruning-naive-alpha](./test-pruning-incoming-artifact-pruning-naive-alpha.md) |
-| 214 | [pruning-incoming-artifact-pruning-naive-bravo](./test-pruning-incoming-artifact-pruning-naive-bravo.md) |
-| 215 | [pruning-india-default](./test-pruning-india-default.md) |
-| 216 | [pruning-india-pruning](./test-pruning-india-pruning.md) |
-| 217 | [pruning-juliett-default](./test-pruning-juliett-default.md) |
-| 218 | [pruning-juliett-pruning](./test-pruning-juliett-pruning.md) |
-| 219 | [pruning-kilo-default](./test-pruning-kilo-default.md) |
-| 220 | [pruning-kilo-pruning](./test-pruning-kilo-pruning.md) |
-| 221 | [pruning-lima-default](./test-pruning-lima-default.md) |
-| 222 | [pruning-lima-pruning](./test-pruning-lima-pruning.md) |
-| 223 | [pruning-mike-default](./test-pruning-mike-default.md) |
-| 224 | [pruning-mike-pruning](./test-pruning-mike-pruning.md) |
-| 225 | [pruning-outgoing-relation-absent](./test-pruning-outgoing-relation-absent.md) |
-| 226 | [pruning-outgoing-relation-present](./test-pruning-outgoing-relation-present.md) |
-| 227 | [pruning-outgoing-target-absent](./test-pruning-outgoing-target-absent.md) |
-| 228 | [pruning-outgoing-target-present](./test-pruning-outgoing-target-present.md) |
-| 229 | [pruning-outgoingnaive-target-present](./test-pruning-outgoingnaive-target-present.md) |
-| 230 | [pruning-pruning](./test-pruning-pruning.md) |
-| 231 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
-| 232 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
-| 233 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
-| 234 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
-| 235 | [Relation Pruning](./test-pruning-relation.md) |
-| 236 | [relationships-conditional](./test-relationships-conditional.md) |
-| 237 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
-| 238 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
-| 239 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
-| 240 | [relationships-type-specific](./test-relationships-type-specific.md) |
-| 241 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
-| 242 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
-| 243 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
-| 244 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
-| 245 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
-| 246 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
-| 247 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
-| 248 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
-| 249 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
-| 250 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
-| 251 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
-| 252 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
-| 253 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
-| 254 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
-| 255 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
-| 256 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
-| 257 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
-| 258 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
-| 259 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
+| 148 | [other-weight](./test-other-weight.md) |
+| 149 | [policies-conditional](./test-policies-conditional.md) |
+| 150 | [policies-default-condition](./test-policies-default-condition.md) |
+| 151 | [policies-default-condition-nothing](./test-policies-default-condition-nothing.md) |
+| 152 | [Policy Targets Absent Members](./test-policies-has-present-target-absent-members.md) |
+| 153 | [Policy Targets Absent Nodes](./test-policies-has-present-target-absent-nodes.md) |
+| 154 | [Policy Has No Targets](./test-policies-has-present-target-no-targets.md) |
+| 155 | [Policy Targets Present Member](./test-policies-has-present-target-present-member.md) |
+| 156 | [Policy Targets One Present Node](./test-policies-has-present-target-present-node.md) |
+| 157 | [Policy Targets Present Nodes](./test-policies-has-present-target-present-nodes.md) |
+| 158 | [policies-policy-presence-absent](./test-policies-policy-presence-absent.md) |
+| 159 | [policies-policy-presence-present](./test-policies-policy-presence-present.md) |
+| 160 | [Policy Pruning](./test-policies-prune.md) |
+| 161 | [properties-artifact-container-presence-absent](./test-properties-artifact-container-presence-absent.md) |
+| 162 | [properties-artifact-container-presence-present](./test-properties-artifact-container-presence-present.md) |
+| 163 | [properties-conditional](./test-properties-conditional.md) |
+| 164 | [properties-default-alternative](./test-properties-default-alternative.md) |
+| 165 | [properties-default-alternative-false](./test-properties-default-alternative-false.md) |
+| 166 | [properties-default-condition](./test-properties-default-condition.md) |
+| 167 | [properties-expression](./test-properties-expression.md) |
+| 168 | [properties-list](./test-properties-list.md) |
+| 169 | [properties-list-another](./test-properties-list-another.md) |
+| 170 | [properties-map](./test-properties-map.md) |
+| 171 | [properties-map-another](./test-properties-map-another.md) |
+| 172 | [properties-node-container-presence-absent](./test-properties-node-container-presence-absent.md) |
+| 173 | [properties-node-container-presence-present](./test-properties-node-container-presence-present.md) |
+| 174 | [properties-node-node-presence-CONTAINER-absent](./test-properties-node-node-presence-CONTAINER-absent.md) |
+| 175 | [properties-node-node-presence-CONTAINER-present](./test-properties-node-node-presence-CONTAINER-present.md) |
+| 176 | [properties-node-property-presence-number-absent](./test-properties-node-property-presence-number-absent.md) |
+| 177 | [properties-node-property-presence-number-present](./test-properties-node-property-presence-number-present.md) |
+| 178 | [properties-node-property-presence-string-absent](./test-properties-node-property-presence-string-absent.md) |
+| 179 | [properties-node-property-presence-string-present](./test-properties-node-property-presence-string-present.md) |
+| 180 | [properties-properties](./test-properties-properties.md) |
+| 181 | [properties-relation-container-presence-absent](./test-properties-relation-container-presence-absent.md) |
+| 182 | [properties-relation-container-presence-present](./test-properties-relation-container-presence-present.md) |
+| 183 | [properties-throw-ambiguous-property](./test-properties-throw-ambiguous-property.md) |
+| 184 | [properties-throw-missing-property-container](./test-properties-throw-missing-property-container.md) |
+| 185 | [properties-throw-multiple-default](./test-properties-throw-multiple-default.md) |
+| 186 | [pruning-alpha-default](./test-pruning-alpha-default.md) |
+| 187 | [pruning-alpha-default-naive](./test-pruning-alpha-default-naive.md) |
+| 188 | [pruning-alpha-pruning](./test-pruning-alpha-pruning.md) |
+| 189 | [pruning-artifact-default-alpha](./test-pruning-artifact-default-alpha.md) |
+| 190 | [pruning-artifact-default-bravo](./test-pruning-artifact-default-bravo.md) |
+| 191 | [pruning-artifact-default-charlie](./test-pruning-artifact-default-charlie.md) |
+| 192 | [pruning-artifact-default-delta](./test-pruning-artifact-default-delta.md) |
+| 193 | [pruning-artifact-default-naive](./test-pruning-artifact-default-naive.md) |
+| 194 | [pruning-bravo-default](./test-pruning-bravo-default.md) |
+| 195 | [pruning-bravo-pruning](./test-pruning-bravo-pruning.md) |
+| 196 | [pruning-charlie-default](./test-pruning-charlie-default.md) |
+| 197 | [pruning-charlie-pruning](./test-pruning-charlie-pruning.md) |
+| 198 | [pruning-delta-default](./test-pruning-delta-default.md) |
+| 199 | [pruning-delta-pruning](./test-pruning-delta-pruning.md) |
+| 200 | [pruning-echo-default](./test-pruning-echo-default.md) |
+| 201 | [pruning-echo-pruning](./test-pruning-echo-pruning.md) |
+| 202 | [pruning-foxtrott-default](./test-pruning-foxtrott-default.md) |
+| 203 | [pruning-foxtrott-pruning](./test-pruning-foxtrott-pruning.md) |
+| 204 | [pruning-hotel-default](./test-pruning-hotel-default.md) |
+| 205 | [pruning-hotel-pruning](./test-pruning-hotel-pruning.md) |
+| 206 | [pruning-incoming-artifact-pruning-alpha](./test-pruning-incoming-artifact-pruning-alpha.md) |
+| 207 | [pruning-incoming-artifact-pruning-bravo](./test-pruning-incoming-artifact-pruning-bravo.md) |
+| 208 | [pruning-incoming-artifact-pruning-charlie](./test-pruning-incoming-artifact-pruning-charlie.md) |
+| 209 | [pruning-incoming-artifact-pruning-delta](./test-pruning-incoming-artifact-pruning-delta.md) |
+| 210 | [pruning-incoming-artifact-pruning-echo](./test-pruning-incoming-artifact-pruning-echo.md) |
+| 211 | [pruning-incoming-artifact-pruning-foxtrott](./test-pruning-incoming-artifact-pruning-foxtrott.md) |
+| 212 | [pruning-incoming-artifact-pruning-golf](./test-pruning-incoming-artifact-pruning-golf.md) |
+| 213 | [pruning-incoming-artifact-pruning-hotel](./test-pruning-incoming-artifact-pruning-hotel.md) |
+| 214 | [pruning-incoming-artifact-pruning-naive-alpha](./test-pruning-incoming-artifact-pruning-naive-alpha.md) |
+| 215 | [pruning-incoming-artifact-pruning-naive-bravo](./test-pruning-incoming-artifact-pruning-naive-bravo.md) |
+| 216 | [pruning-india-default](./test-pruning-india-default.md) |
+| 217 | [pruning-india-pruning](./test-pruning-india-pruning.md) |
+| 218 | [pruning-juliett-default](./test-pruning-juliett-default.md) |
+| 219 | [pruning-juliett-pruning](./test-pruning-juliett-pruning.md) |
+| 220 | [pruning-kilo-default](./test-pruning-kilo-default.md) |
+| 221 | [pruning-kilo-pruning](./test-pruning-kilo-pruning.md) |
+| 222 | [pruning-lima-default](./test-pruning-lima-default.md) |
+| 223 | [pruning-lima-pruning](./test-pruning-lima-pruning.md) |
+| 224 | [pruning-mike-default](./test-pruning-mike-default.md) |
+| 225 | [pruning-mike-pruning](./test-pruning-mike-pruning.md) |
+| 226 | [pruning-outgoing-relation-absent](./test-pruning-outgoing-relation-absent.md) |
+| 227 | [pruning-outgoing-relation-present](./test-pruning-outgoing-relation-present.md) |
+| 228 | [pruning-outgoing-target-absent](./test-pruning-outgoing-target-absent.md) |
+| 229 | [pruning-outgoing-target-present](./test-pruning-outgoing-target-present.md) |
+| 230 | [pruning-outgoingnaive-target-present](./test-pruning-outgoingnaive-target-present.md) |
+| 231 | [pruning-pruning](./test-pruning-pruning.md) |
+| 232 | [pruning-pruning-false-false](./test-pruning-pruning-false-false.md) |
+| 233 | [pruning-pruning-false-true](./test-pruning-pruning-false-true.md) |
+| 234 | [pruning-pruning-true-false](./test-pruning-pruning-true-false.md) |
+| 235 | [pruning-pruning-true-true](./test-pruning-pruning-true-true.md) |
+| 236 | [Relation Pruning](./test-pruning-relation.md) |
+| 237 | [relationships-conditional](./test-relationships-conditional.md) |
+| 238 | [relationships-throw-multiple](./test-relationships-throw-multiple.md) |
+| 239 | [relationships-throw-undefined](./test-relationships-throw-undefined.md) |
+| 240 | [relationships-throw-unused](./test-relationships-throw-unused.md) |
+| 241 | [relationships-type-specific](./test-relationships-type-specific.md) |
+| 242 | [requirement-assignment-conditional](./test-requirement-assignment-conditional.md) |
+| 243 | [requirement-assignment-default-alternative](./test-requirement-assignment-default-alternative.md) |
+| 244 | [requirement-assignment-default-alternative-false](./test-requirement-assignment-default-alternative-false.md) |
+| 245 | [requirement-assignment-default-condition](./test-requirement-assignment-default-condition.md) |
+| 246 | [requirement-assignment-default-condition-throw-source](./test-requirement-assignment-default-condition-throw-source.md) |
+| 247 | [requirement-assignment-default-condition-throw-target](./test-requirement-assignment-default-condition-throw-target.md) |
+| 248 | [requirement-assignment-one-hosting-relation](./test-requirement-assignment-one-hosting-relation.md) |
+| 249 | [requirement-assignment-relation-presence-index-absent](./test-requirement-assignment-relation-presence-index-absent.md) |
+| 250 | [requirement-assignment-relation-presence-name-absent](./test-requirement-assignment-relation-presence-name-absent.md) |
+| 251 | [requirement-assignment-source-presence-absent](./test-requirement-assignment-source-presence-absent.md) |
+| 252 | [requirement-assignment-source-presence-present](./test-requirement-assignment-source-presence-present.md) |
+| 253 | [requirement-assignment-target-presence-absent](./test-requirement-assignment-target-presence-absent.md) |
+| 254 | [requirement-assignment-target-presence-present](./test-requirement-assignment-target-presence-present.md) |
+| 255 | [requirement-assignment-throw-multiple-defaults](./test-requirement-assignment-throw-multiple-defaults.md) |
+| 256 | [Scenario "Alpha"](./test-scenario-complex-alpha.md) |
+| 257 | [scenario-worker-agent-false](./test-scenario-worker-agent-false.md) |
+| 258 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
+| 259 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
+| 260 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
 
 
 --8<-- "vacd.md"

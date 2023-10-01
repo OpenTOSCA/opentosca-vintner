@@ -49,8 +49,7 @@ topology_template:
     source:
       type: source
       requirements:
-        - relation:
-            node: target
+        - relation: target
     target:
       type: target
 ```

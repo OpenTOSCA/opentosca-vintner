@@ -4,52 +4,45 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
 import {bratify} from '#graph/utils'
-import {ArtifactDefinition} from '#spec/artifact-definitions'
+import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Artifact extends Element {
     readonly type = 'artifact'
     readonly name: string
-    readonly raw: ArtifactDefinition
-    readonly index?: number
+    readonly raw: ExtendedArtifactDefinition
+    readonly index: number
     readonly container: Node
 
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
 
-    constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
+    constructor(data: {name: string; raw: ExtendedArtifactDefinition; container: Node; index: number}) {
         super()
+        assert.isString(data.raw.type)
 
         this.name = data.name
         this.raw = data.raw
         this.index = data.index
         this.container = data.container
-        this.conditions = check.isString(data.raw)
-            ? []
-            : check.isDefined(data.raw.default_alternative)
-            ? [false]
-            : utils.toList(data.raw.conditions)
-        this.defaultAlternative = (check.isString(data.raw) ? false : data.raw.default_alternative) || false
+        this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
+        this.defaultAlternative = data.raw.default_alternative ?? false
     }
 
     get toscaId(): [string, string | number] {
-        if (check.isDefined(this.index)) return [this.container.name, this.index]
-        return [this.container.name, this.name]
+        return [this.container.name, this.index]
     }
 
     get defaultEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultCondition
         return this.raw.default_condition ?? this.graph.options.default.artifactDefaultCondition
     }
 
     get pruningEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.artifactPruning
         return this.raw.pruning ?? this.graph.options.pruning.artifactPruning
     }
 
     get defaultConsistencyCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultConsistencyCondition
         return (
             this.raw.default_consistency_condition ??
             this.raw.default_condition ??
@@ -58,7 +51,6 @@ export default class Artifact extends Element {
     }
 
     get defaultSemanticCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.artifactDefaultSemanticCondition
         return (
             this.raw.default_semantic_condition ??
             this.raw.default_condition ??
@@ -67,12 +59,10 @@ export default class Artifact extends Element {
     }
 
     get consistencyPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.artifactConsistencyPruning
         return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactConsistencyPruning
     }
 
     get semanticPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.artifactSemanticPruning
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
@@ -81,10 +71,8 @@ export default class Artifact extends Element {
     }
 
     getTypeSpecificConditionWrapper() {
-        const type = check.isString(this.raw) ? 'tosca.artifacts.File' : this.raw.type ?? 'tosca.artifacts.File'
-        assert.isString(type)
         return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[
-            type
+            this.raw.type
         ]
     }
 

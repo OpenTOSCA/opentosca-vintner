@@ -2,42 +2,42 @@ tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
     node_templates:
-        source:
-            type:
-                - source:
-                      conditions:
-                          - {node_presence: source, _generated: true}
-            conditions:
-                - {and: [true, true], _generated: true}
-                - {equal: [value, value]}
-            requirements:
-                - relation:
-                      node: target
-                      conditions:
-                          - {
-                                and:
-                                    [
-                                        {node_presence: source, _generated: true},
-                                        {node_presence: target, _generated: true},
-                                    ],
-                                _generated: true,
-                            }
+        - source:
+              type:
+                  - source:
+                        conditions:
+                            - {node_presence: source, _generated: true}
+              conditions:
+                  - {and: [], _generated: true}
+                  - {equal: [value, value]}
+              requirements:
+                  - relation:
+                        node: target
+                        conditions:
+                            - {
+                                  and:
+                                      [
+                                          {node_presence: source, _generated: true},
+                                          {node_presence: target, _generated: true},
+                                      ],
+                                  _generated: true,
+                              }
 
-        target:
-            type:
-                - target:
-                      conditions:
-                          - {node_presence: target, _generated: true}
-            conditions:
-                - {and: [{has_incoming_relation: target}, {has_artifact: target}], _generated: true}
-            properties:
-                - key:
-                      value: value
-                      conditions:
-                          - {node_presence: target, _generated: true}
-            artifacts:
-                - artifact:
-                      type: tosca.artifacts.File
-                      file: /some/artifact
-                      conditions:
-                          - {node_presence: target, _generated: true}
+        - target:
+              type:
+                  - target:
+                        conditions:
+                            - {node_presence: target, _generated: true}
+              conditions:
+                  - {and: [{has_incoming_relation: target}, {has_artifact: target}], _generated: true}
+              properties:
+                  - key:
+                        value: value
+                        conditions:
+                            - {node_presence: target, _generated: true}
+              artifacts:
+                  - artifact:
+                        type: tosca.artifacts.File
+                        file: /some/artifact
+                        conditions:
+                            - {node_presence: target, _generated: true}

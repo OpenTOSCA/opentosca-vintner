@@ -60,8 +60,7 @@ topology_template:
     tource:
       type: tource
       requirements:
-        - relation:
-            node: container
+        - relation: container
     container:
       type: container_type
       artifacts:

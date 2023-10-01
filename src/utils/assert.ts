@@ -37,21 +37,21 @@ export function isStatement(boolean: boolean, msg: string) {
     if (!boolean) throw new Error(msg)
 }
 
-export function isNumber(element: unknown): asserts element is number {
-    if (!check.isNumber(element)) throw new Error(`Element "${utils.stringify(element)}" is not a number`)
+export function isNumber(element: unknown, msg?: string): asserts element is number {
+    if (!check.isNumber(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not a number`)
 }
 
 export function isNumbers(element: unknown): asserts element is number[] {
     isArray(element)
-    element.forEach(isNumber)
+    element.forEach(it => isNumber(it))
 }
 
 export function isArray(element: unknown, msg?: string): asserts element is Array<unknown> {
     if (!check.isArray(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not an array`)
 }
 
-export function isObject(element: unknown): asserts element is object {
-    if (!check.isObject(element)) throw new Error(`Element "${utils.stringify(element)}" is not an object`)
+export function isObject(element: unknown, msg?: string): asserts element is object {
+    if (!check.isObject(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not an object`)
 }
 
 export function isName(name: string) {

@@ -3,6 +3,7 @@ import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
 import {Populator} from '#graph/populator'
+import Normalizer from '#normalizer'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
     ArtifactPropertyPresenceArguments,
@@ -75,7 +76,7 @@ export default class Graph {
 
     imports: Import[] = []
 
-    constructor(serviceTemplate: ServiceTemplate, normalize = true) {
+    constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
 
         if (
@@ -86,7 +87,9 @@ export default class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        new Populator(this, normalize).run()
+        new Normalizer(serviceTemplate).run()
+
+        new Populator(this).run()
     }
 
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {

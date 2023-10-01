@@ -150,7 +150,7 @@ export function getParentNode(context: string): string {
     return context.split('.')[context.split('.').indexOf('node_templates') + 1]
 }
 
-function resolvePath(obj: any, path: string): any {
+function resolvePath(obj: any, path: string) {
     return path.split('.').reduce(function (prev, curr) {
         return prev ? prev[curr] : null
     }, obj)

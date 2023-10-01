@@ -4,9 +4,9 @@
  */
 import {LogicExpression} from '#spec/variability'
 
-export type ImportDefinition =
-    | string
-    | {
-          file: string
-          conditions?: LogicExpression | LogicExpression[]
-      }
+export type ImportDefinition = string | ExtendedImportDefinition
+
+export type ExtendedImportDefinition = {
+    file: string
+    conditions?: LogicExpression | LogicExpression[]
+}

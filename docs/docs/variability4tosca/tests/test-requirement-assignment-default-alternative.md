@@ -44,8 +44,7 @@ topology_template:
     one:
       type: one
       requirements:
-        - two_two:
-            node: two
+        - two_two: two
     two:
       type: two
       requirements:

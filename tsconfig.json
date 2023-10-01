@@ -15,6 +15,8 @@
             "#resolver": ["src/resolver"],
             "#enricher/*": ["src/enricher/*"],
             "#enricher": ["src/enricher"],
+            "#normalizer/*": ["src/normalizer/*"],
+            "#normalizer": ["src/normalizer"],
             "#plugins/*": ["src/plugins/*"],
             "#plugins": ["src/plugins"],
             "#spec/*": ["src/specification/*"],

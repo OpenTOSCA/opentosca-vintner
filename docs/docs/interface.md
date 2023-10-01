@@ -1095,6 +1095,87 @@ returns the path to the home directory
     ```
 
 
+## vintner setup utils
+
+install utils (linux is required)
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup utils 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/utils
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/utils")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/utils")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| all |  false  | boolean | install all utils |
+| git |  false  | boolean | install Git |
+| python |  false  | boolean | install Python |
+| xopera |  false  | boolean | install xOpera (system-wide) |
+| unfurl |  false  | boolean | install Unfurl (system-wide) |
+| gcloud |  false  | boolean | install gCloud |
+| terraform |  false  | boolean | install Terraform |
+| ansible |  false  | boolean | install Ansible (system-wide) |
+
+## vintner template enrich
+
+enrich conditions
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template enrich --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/enrich
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/enrich", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/enrich", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to variable service template |
+| output |  true  | string | path of the output |
+
 ## vintner template init
 
 initializes a CSAR
@@ -1179,6 +1260,47 @@ read and transforms inputs
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
+| output |  true  | string | path of the output |
+
+## vintner template normalize
+
+normalize service template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template normalize --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/template/normalize
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/normalize", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/normalize", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
 
 ## vintner template package

@@ -102,6 +102,7 @@ topology_template:
             relationship: relation_one
       artifacts:
         artifact_one:
+          type: tosca.artifacts.File
           properties:
             property_artifact_one_one: value_artifact_one_two
     node_two:

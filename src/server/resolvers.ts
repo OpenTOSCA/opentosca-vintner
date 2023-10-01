@@ -109,6 +109,22 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/enrich',
+    hae.express(async (req, res, next) => {
+        await Controller.template.enrich(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/template/normalize',
+    hae.express(async (req, res, next) => {
+        await Controller.template.normalize(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/template/inputs',
     hae.express(async (req, res, next) => {
         await Controller.template.inputs(req.body)

@@ -981,15 +981,15 @@ This has some implication on managing elements which we are discussing in the fo
 
 As an overview, the following table shows the collections that are used in TOSCA and the ones which are used in Variability4TOSCA.
 
-| Element    | TOSCA  | Variability4TOSCA  |
-|------------|--------|--------------------|
-| Inputs     | Map    | Map, List          |
-| Nodes      | Map    | Map                |
-| Relations  | List   | List               |
-| Properties | Map    | Map, List          |
-| Policies   | List   | List               |
-| Groups     | Map    | Map, List          |
-| Artifacts  | Map    | Map, List          |
+| Element    | TOSCA  | Variability4TOSCA |
+|------------|--------|-------------------|
+| Inputs     | Map    | Map, List         |
+| Nodes      | Map    | Map, List         |
+| Relations  | List   | List              |
+| Properties | Map    | Map, List         |
+| Policies   | List   | List              |
+| Groups     | Map    | Map, List         |
+| Artifacts  | Map    | Map, List         |
 
 ### Element Uniqueness
 

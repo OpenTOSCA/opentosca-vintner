@@ -27,5 +27,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-Container of artifact "artifact_one" of node "node_one" does not exist
+Container of artifact "artifact_one@0" of node "node_one" does not exist
 ```

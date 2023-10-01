@@ -6,7 +6,6 @@ import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import Element from './element'
 import Group from './group'
 import Node from './node'
@@ -19,12 +18,12 @@ export type TypeContainerTemplate = NodeTemplate | RelationshipTemplate | Policy
 export default class Type extends Element {
     readonly type = 'type'
     readonly name: string
-    readonly raw: TypeAssignment | string
+    readonly raw: TypeAssignment
 
     readonly index: number
     readonly container: TypeContainer
 
-    constructor(data: {name: string; container: TypeContainer; index: number; raw: TypeAssignment | string}) {
+    constructor(data: {name: string; container: TypeContainer; index: number; raw: TypeAssignment}) {
         super()
 
         this.name = data.name
@@ -32,33 +31,25 @@ export default class Type extends Element {
         this.index = data.index
         this.container = data.container
 
-        this.conditions = check.isString(data.raw)
-            ? []
-            : check.isDefined(data.raw.default_alternative)
-            ? [false]
-            : utils.toList(data.raw.conditions)
-        this.defaultAlternative = check.isString(data.raw) ? false : data.raw.default_alternative || false
+        this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
+        this.defaultAlternative = data.raw.default_alternative ?? false
     }
 
     get toscaId() {
-        if (check.isUndefined(this.index)) throw new UnexpectedError()
         if (check.isString(this.container.toscaId)) return [this.container.toscaId, this.index]
         if (check.isNumber(this.container.toscaId)) return [this.container.toscaId, this.index]
         return [...this.container.toscaId, this.index]
     }
 
     get defaultEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultCondition
         return this.raw.default_condition ?? this.graph.options.default.typeDefaultCondition
     }
 
     get pruningEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.typePruning
         return this.raw.pruning ?? this.graph.options.pruning.typePruning
     }
 
     get defaultConsistencyCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultConsistencyCondition
         return (
             this.raw.default_consistency_condition ??
             this.raw.default_condition ??
@@ -67,7 +58,6 @@ export default class Type extends Element {
     }
 
     get defaultSemanticCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.typeDefaultSemanticCondition
         return (
             this.raw.default_semantic_condition ??
             this.raw.default_condition ??
@@ -76,12 +66,10 @@ export default class Type extends Element {
     }
 
     get consistencyPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.typeConsistencyPruning
         return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeConsistencyPruning
     }
 
     get semanticPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.typeSemanticPruning
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.typeSemanticPruning
     }
 
