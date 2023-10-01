@@ -1,19 +1,19 @@
 import * as assert from '#assert'
-import Enricher from '#enricher'
 import * as files from '#files'
+import Normalizer from '#normalizer'
 import {ServiceTemplate} from '#spec/service-template'
 
-export type TemplateEnrichOptions = {
+export type TemplateNormalizeOptions = {
     template: string
     presets?: string[]
     inputs?: string
     output: string
 }
 
-export default async function (options: TemplateEnrichOptions) {
+export default async function (options: TemplateNormalizeOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isDefined(options.output, 'Output not defined')
     const template = files.loadYAML<ServiceTemplate>(options.template)
-    const result = await Enricher.enrich({template})
-    files.storeYAML(options.output, result.template)
+    new Normalizer(template).run()
+    files.storeYAML(options.output, template)
 }

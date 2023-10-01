@@ -1,6 +1,7 @@
 import _enrich from './enrich'
 import _init from './init'
 import _inputs from './inputs'
+import _normalize from './normalize'
 import _package from './package'
 import PUMLController from './puml'
 import _query from './query'
@@ -20,4 +21,5 @@ export default {
     inputs: _inputs,
     stats: _stats,
     puml: PUMLController,
+    normalize: _normalize,
 }

@@ -1,4 +1,4 @@
-import * as check from '#check'
+import * as assert from '#assert'
 import {GroupTemplate} from '#spec/group-template'
 import {TOSCA_GROUP_TYPES} from '#spec/group-type'
 import {LogicExpression} from '#spec/variability'
@@ -17,7 +17,7 @@ export default class Group extends Element {
     readonly members: (Node | Relation)[] = []
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
-    readonly variability: boolean
+    readonly variability: boolean = false
     readonly types: Type[] = []
     readonly typesMap: Map<String, Type[]> = new Map()
 
@@ -27,10 +27,17 @@ export default class Group extends Element {
         this.name = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-        this.variability =
-            check.isString(this.raw.type) &&
-            (this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
-                this.raw.type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS)
+
+        // Note, variability groups can not have conditional types
+        assert.isArray(this.raw.type)
+        const type = utils.firstKey(this.raw.type[0])
+        if (
+            type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
+            type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS
+        ) {
+            if (this.raw.type.length !== 1) throw new Error(`TODO`)
+            this.variability = true
+        }
     }
 
     get toscaId() {
