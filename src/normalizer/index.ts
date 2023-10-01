@@ -19,8 +19,6 @@ export default class Normalizer {
         this.serviceTemplate = serviceTemplate
     }
 
-    // TODO: require index everywhere?
-
     run() {
         // Imports
         this.extendImports()
