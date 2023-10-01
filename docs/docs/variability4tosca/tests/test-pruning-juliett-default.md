@@ -62,7 +62,6 @@ topology_template:
     another:
       type: another
       requirements:
-        - another:
-            node: target
+        - another: target
 ```
 

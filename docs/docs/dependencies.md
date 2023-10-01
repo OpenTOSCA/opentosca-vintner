@@ -153,7 +153,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 137  | [on-finished](https://github.com/jshttp/on-finished){target=_blank} | 2.4.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 138  | [once](https://github.com/isaacs/once){target=_blank} | 1.4.0 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
 | 139  | [open](https://github.com/sindresorhus/open){target=_blank} | 7.4.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
-| 140  | [opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner){target=_blank} | 0.1.3 |  [Apache-2.0](https://choosealicense.com/licenses/apache-2.0){target=_blank} |
+| 140  | [opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner){target=_blank} | 0.1.4 |  [Apache-2.0](https://choosealicense.com/licenses/apache-2.0){target=_blank} |
 | 141  | [os-tmpdir](https://github.com/sindresorhus/os-tmpdir){target=_blank} | 1.0.2 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 142  | [papaparse](https://github.com/mholt/PapaParse){target=_blank} | 5.4.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 143  | [parseurl](https://github.com/pillarjs/parseurl){target=_blank} | 1.3.3 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |

@@ -38,6 +38,7 @@ topology_template:
       type: container
       artifacts:
         artifact_one:
+          type: tosca.artifacts.File
           file: path
           properties:
             property_one: 69

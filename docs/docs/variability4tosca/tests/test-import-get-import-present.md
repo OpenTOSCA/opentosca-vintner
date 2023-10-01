@@ -32,7 +32,7 @@ The following variability-resolved service template is expected.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
-  - file: some_file
+  - some_file
 topology_template:
   node_templates:
     container:
