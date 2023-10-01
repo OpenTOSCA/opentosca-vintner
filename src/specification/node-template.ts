@@ -33,11 +33,11 @@ export type AttributeAssignment = string
 
 export type RequirementAssignmentList = RequirementAssignmentMap[]
 export type RequirementAssignmentMap = {[key: string]: RequirementAssignment}
-export type RequirementAssignment =
-    | string
-    | ({
-          node: string
-          relationship?: string
-      } & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode})
+export type RequirementAssignment = string | ExtendedRequirementAssignment
+
+export type ExtendedRequirementAssignment = {
+    node: string
+    relationship?: string
+} & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode}
 
 export type CapabilityAssignmentMap = {[key: string]: string}

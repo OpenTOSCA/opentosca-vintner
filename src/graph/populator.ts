@@ -79,6 +79,8 @@ export class Populator {
         assert.isArray(imports, 'Imports not normalized')
 
         for (const [index, raw] of imports.entries()) {
+            assert.isObject(raw, `Import with index ${index} not normalized`)
+
             const imp = new Import({index, raw})
             imp.graph = this.graph
             this.graph.imports.push(imp)
@@ -267,11 +269,7 @@ export class Populator {
 
             const property = new Property({
                 name,
-                conditions: check.isDefined(raw.default_alternative) ? [false] : utils.toList(raw.conditions),
-                default: raw.default_alternative ?? false,
                 container: element,
-                value: raw.value,
-                expression: raw.expression,
                 index,
                 raw,
             })

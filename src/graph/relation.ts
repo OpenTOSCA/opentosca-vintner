@@ -1,6 +1,6 @@
 import * as check from '#check'
 import {bratify} from '#graph/utils'
-import {RequirementAssignment} from '#spec/node-template'
+import {ExtendedRequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
@@ -14,7 +14,7 @@ import Type from './type'
 export default class Relation extends Element {
     readonly type = 'relation'
     readonly name: string
-    readonly raw: RequirementAssignment
+    readonly raw: ExtendedRequirementAssignment
     readonly index: number
     readonly container: Node
 
@@ -52,7 +52,7 @@ export default class Relation extends Element {
     readonly types: Type[] = []
     readonly typesMap: Map<String, Type[]> = new Map()
 
-    constructor(data: {name: string; raw: RequirementAssignment; container: Node; index: number}) {
+    constructor(data: {name: string; raw: ExtendedRequirementAssignment; container: Node; index: number}) {
         super()
 
         this.name = data.name
@@ -61,36 +61,27 @@ export default class Relation extends Element {
         this.container = data.container
 
         this.source = data.container
-        this.conditions = check.isString(data.raw)
-            ? []
-            : check.isDefined(data.raw.default_alternative)
-            ? [false]
-            : utils.toList(data.raw.conditions)
-        this.defaultAlternative = check.isString(data.raw) ? false : data.raw.default_alternative || false
+        this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
+        this.defaultAlternative = data.raw.default_alternative ?? false
     }
 
     get toscaId(): [string, string | number] {
-        if (check.isDefined(this.index)) return [this.source.name, this.index]
-        return [this.source.name, this.name]
+        return [this.source.name, this.index]
     }
 
     get getDefaultMode(): RelationDefaultConditionMode {
-        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConditionMode
         return this.raw.default_condition_mode ?? this.graph.options.default.relationDefaultConditionMode
     }
 
     get defaultEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultCondition
         return this.raw.default_condition ?? this.graph.options.default.relationDefaultCondition
     }
 
     get pruningEnabled() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.relationPruning
         return this.raw.pruning ?? this.graph.options.pruning.relationPruning
     }
 
     get defaultConsistencyCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultConsistencyCondition
         return (
             this.raw.default_consistency_condition ??
             this.raw.default_condition ??
@@ -99,7 +90,6 @@ export default class Relation extends Element {
     }
 
     get defaultSemanticCondition() {
-        if (check.isString(this.raw)) return this.graph.options.default.relationDefaultSemanticCondition
         return (
             this.raw.default_semantic_condition ??
             this.raw.default_condition ??
@@ -108,12 +98,10 @@ export default class Relation extends Element {
     }
 
     get consistencyPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.relationConsistencyPruning
         return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationConsistencyPruning
     }
 
     get semanticPruning() {
-        if (check.isString(this.raw)) return this.graph.options.pruning.relationSemanticPruning
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
     }
 

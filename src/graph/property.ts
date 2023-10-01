@@ -6,7 +6,8 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
-import {LogicExpression, ValueExpression} from '#spec/variability'
+import {ValueExpression} from '#spec/variability'
+import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
 import Group from './group'
@@ -25,8 +26,8 @@ export type PropertyContainerTemplate =
 export default class Property extends Element {
     readonly name: string
     readonly type = 'property'
-    readonly raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
-    readonly index?: number
+    readonly raw: ConditionalPropertyAssignmentValue
+    readonly index: number
     readonly container: PropertyContainer
 
     value?: PropertyAssignmentValue
@@ -34,13 +35,9 @@ export default class Property extends Element {
 
     constructor(data: {
         name: string
-        raw: ConditionalPropertyAssignmentValue | PropertyAssignmentValue
+        raw: ConditionalPropertyAssignmentValue
         container: PropertyContainer
-        index?: number
-        value?: PropertyAssignmentValue
-        expression?: ValueExpression
-        default: boolean
-        conditions?: LogicExpression[]
+        index: number
     }) {
         super()
 
@@ -49,64 +46,46 @@ export default class Property extends Element {
         this.index = data.index
         this.container = data.container
 
-        this.value = data.value
-        this.expression = data.expression
-        this.defaultAlternative = data.default
-        this.conditions = data.conditions || []
+        this.value = data.raw.value
+        this.expression = data.raw.expression
+        this.defaultAlternative = data.raw.default_alternative ?? false
+        this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
     }
 
     get toscaId(): [string, string | number] {
-        if (check.isDefined(this.index)) return [this.container.name, this.index]
-        return [this.container.name, this.name]
+        return [this.container.name, this.index]
     }
 
-    // TODO: fix these ugly "if (!check.isObject(this.raw) || check.isArray(this.raw))" and "Boolean" castings ...
-
     get defaultEnabled() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw))
-            return this.graph.options.default.propertyDefaultCondition
-        return Boolean(this.raw.default_condition ?? this.graph.options.default.propertyDefaultCondition)
+        return this.raw.default_condition ?? this.graph.options.default.propertyDefaultCondition
     }
 
     get pruningEnabled() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw)) return this.graph.options.pruning.propertyPruning
-        return Boolean(this.raw.pruning ?? this.graph.options.pruning.propertyPruning)
+        return this.raw.pruning ?? this.graph.options.pruning.propertyPruning
     }
 
     get defaultConsistencyCondition() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw))
-            return this.graph.options.default.propertyDefaultConsistencyCondition
-        return Boolean(
+        return (
             this.raw.default_consistency_condition ??
-                this.raw.default_condition ??
-                this.graph.options.default.propertyDefaultConsistencyCondition
+            this.raw.default_condition ??
+            this.graph.options.default.propertyDefaultConsistencyCondition
         )
     }
 
     get defaultSemanticCondition() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw))
-            return this.graph.options.default.propertyDefaultSemanticCondition
-        return Boolean(
+        return (
             this.raw.default_semantic_condition ??
-                this.raw.default_condition ??
-                this.graph.options.default.propertyDefaultSemanticCondition
+            this.raw.default_condition ??
+            this.graph.options.default.propertyDefaultSemanticCondition
         )
     }
 
     get consistencyPruning() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw))
-            return this.graph.options.pruning.propertyConsistencyPruning
-        return Boolean(
-            this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning
-        )
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertyConsistencyPruning
     }
 
     get semanticPruning() {
-        if (!check.isObject(this.raw) || check.isArray(this.raw))
-            return this.graph.options.pruning.propertySemanticPruning
-        return Boolean(
-            this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning
-        )
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.propertySemanticPruning
     }
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
