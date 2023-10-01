@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
@@ -43,13 +44,15 @@ export default class Node extends Element {
                 this.weight = data.raw.weight ? 1 : 0
             }
 
-            if (check.isNumber(data.raw.weight)) {
-                if (data.raw.weight < 0)
-                    throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
-                this.weight = data.raw.weight
-            }
+            assert.isNumber(
+                data.raw.weight,
+                `Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`
+            )
 
-            throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
+            if (data.raw.weight < 0)
+                throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
+
+            this.weight = data.raw.weight
         }
     }
 
