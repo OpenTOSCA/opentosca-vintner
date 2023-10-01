@@ -231,6 +231,7 @@ export class Populator {
 
         for (const [index, map] of nodeTemplate.artifacts.entries()) {
             const [name, raw] = utils.firstEntry(map)
+            assert.isObject(raw, `Artifact "${name}" of ${node.display} not normalized`)
 
             const artifact = new Artifact({
                 name,
