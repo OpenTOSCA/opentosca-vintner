@@ -48,8 +48,8 @@ export default class Property extends Element {
 
         this.value = data.raw.value
         this.expression = data.raw.expression
-        this.defaultAlternative = data.raw.default_alternative ?? false
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
+        this.defaultAlternative = data.raw.default_alternative ?? false
     }
 
     get toscaId(): [string, string | number] {
