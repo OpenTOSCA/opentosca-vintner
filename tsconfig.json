@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node16/tsconfig.json",
+    "extends": "@tsconfig/node18/tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
@@ -32,7 +32,8 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": false,
         "useUnknownInCatchVariables": false,
-        "sourceMap": true
+        "sourceMap": true,
+        "downlevelIteration": true
     },
     "include": ["src", "tests", "docs/cmds"],
     "exclude": ["node_modules"]
