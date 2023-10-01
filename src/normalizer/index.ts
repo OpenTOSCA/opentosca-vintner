@@ -88,7 +88,6 @@ export default class Normalizer {
             ) {
                 // This just works since we do not allow "value" as a keyword in a property assignment value
                 const value = propertyAssignment as PropertyAssignmentValue
-
                 it[propertyName] = {value}
             }
         })

@@ -35,7 +35,8 @@ export default class Group extends Element {
             type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_ROOT ||
             type === TOSCA_GROUP_TYPES.VARIABILITY_GROUPS_CONDITIONAL_MEMBERS
         ) {
-            if (this.raw.type.length !== 1) throw new Error(`TODO`)
+            if (this.raw.type.length !== 1)
+                throw new Error(`${this.Display} is a variability group but has conditional types`)
             this.variability = true
         }
     }

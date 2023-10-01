@@ -5,8 +5,6 @@ import {ServiceTemplate} from '#spec/service-template'
 
 export type TemplateNormalizeOptions = {
     template: string
-    presets?: string[]
-    inputs?: string
     output: string
 }
 

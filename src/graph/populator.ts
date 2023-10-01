@@ -54,8 +54,6 @@ export class Populator {
         ]
     }
 
-    // TODO: utilize normalization in graph (elements) itself
-
     private populateInputs() {
         const inputs = this.graph.serviceTemplate.topology_template?.inputs
         if (check.isUndefined(inputs)) return
