@@ -11,11 +11,7 @@ import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
-import {PropertyAssignmentValue} from '#spec/property-assignments'
-import {TypeAssignment} from '#spec/type-assignment'
-import {VariabilityPointList} from '#spec/variability'
 import * as utils from '#utils'
 
 export class Populator {
@@ -58,7 +54,7 @@ export class Populator {
         ]
     }
 
-    // TODO: utilize normalization
+    // TODO: utilize normalization in graph (elements) itself
 
     private populateInputs() {
         const inputs = this.graph.serviceTemplate.topology_template?.inputs
@@ -66,10 +62,10 @@ export class Populator {
         assert.isArray(inputs, 'Inputs not normalized')
 
         inputs.forEach(map => {
-            const [name, definition] = utils.firstEntry(map)
+            const [name, raw] = utils.firstEntry(map)
             if (this.graph.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
-            const input = new Input({name, raw: definition})
+            const input = new Input({name, raw})
             input.graph = this.graph
 
             this.graph.inputs.push(input)
@@ -82,43 +78,42 @@ export class Populator {
         if (check.isUndefined(imports)) return
         assert.isArray(imports, 'Imports not normalized')
 
-        for (const [index, definition] of imports.entries()) {
-            const imp = new Import({index, raw: definition})
+        for (const [index, raw] of imports.entries()) {
+            const imp = new Import({index, raw})
             imp.graph = this.graph
             this.graph.imports.push(imp)
         }
     }
 
-    // TODO: document that node can be list
     private populateNodes() {
         const nodes = this.graph.serviceTemplate.topology_template?.node_templates
         if (check.isUndefined(nodes)) return
         assert.isArray(nodes, 'Node templates not normalized')
 
         nodes.forEach(map => {
-            const [nodeName, nodeTemplate] = utils.firstEntry(map)
-            if (this.graph.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
+            const [name, raw] = utils.firstEntry(map)
+            if (this.graph.nodesMap.has(name)) throw new Error(`Node "${name}" defined multiple times`)
 
-            if (nodeName === 'SELF') throw new Error(`Node must not be named "SELF"`)
-            if (nodeName === 'CONTAINER') throw new Error(`Node must not be named "CONTAINER"`)
+            if (name === 'SELF') throw new Error(`Node must not be named "SELF"`)
+            if (name === 'CONTAINER') throw new Error(`Node must not be named "CONTAINER"`)
 
-            const node = new Node({name: nodeName, raw: nodeTemplate})
+            const node = new Node({name, raw})
             node.graph = this.graph
 
             this.graph.nodes.push(node)
-            this.graph.nodesMap.set(nodeName, node)
+            this.graph.nodesMap.set(name, node)
 
             // Type
-            this.populateTypes(node, nodeTemplate)
+            this.populateTypes(node, raw)
 
             // Properties
-            this.populateProperties(node, nodeTemplate)
+            this.populateProperties(node, raw)
 
             // Relations
-            this.populateRelations(node, nodeTemplate)
+            this.populateRelations(node, raw)
 
             // Artifacts
-            this.populateArtifacts(node, nodeTemplate)
+            this.populateArtifacts(node, raw)
         })
 
         // Ensure that each relationship is used
@@ -129,76 +124,6 @@ export class Populator {
                 throw new Error(`Relation "${relationshipName}" is never used`)
         }
 
-        // Link relations
-        this.linkRelations()
-    }
-
-    private populateRelations(node: Node, template: NodeTemplate) {
-        if (check.isUndefined(template.requirements)) return
-        assert.isArray(template.requirements, `Requirements assignments of node "${node.name} must be an array`)
-
-        for (const [index, map] of template.requirements.entries()) {
-            const [relationName, assignment] = utils.firstEntry(map)
-            assert.isObject(
-                assignment,
-                `Requirement assignment "${relationName}" of node "${node.name}" not normalized`
-            )
-
-            const relation = new Relation({
-                name: relationName,
-                container: node,
-                raw: assignment,
-                index,
-            })
-            relation.graph = this.graph
-
-            if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
-            node.outgoingMap.get(relation.name)!.push(relation)
-            node.outgoing.push(relation)
-            node.relations.push(relation)
-            this.graph.relations.push(relation)
-
-            if (check.isString(assignment.relationship)) {
-                const relationshipTemplate = (this.graph.serviceTemplate.topology_template?.relationship_templates ||
-                    {})[assignment.relationship]
-                assert.isDefined(
-                    relationshipTemplate,
-                    `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${node.name}" does not exist!`
-                )
-
-                if (this.graph.relationshipsMap.has(assignment.relationship))
-                    throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
-
-                const relationship = new Relationship({
-                    name: assignment.relationship,
-                    relation,
-                    raw: relationshipTemplate,
-                })
-                this.graph.relationshipsMap.set(assignment.relationship, relationship)
-                relation.relationship = relationship
-
-                // Type
-                this.populateTypes(relation, relationshipTemplate)
-
-                // Properties
-                this.populateProperties(relation, relationshipTemplate)
-            }
-
-            if (check.isObject(assignment.relationship)) {
-                throw new Error(
-                    `Relation "${relationName}" of node "${node.name}" contains a relationship template which is currently not supported`
-                )
-            }
-        }
-
-        // Ensure that there are no multiple outgoing defaults
-        node.outgoingMap.forEach(relations => {
-            const candidates = relations.filter(it => it.defaultAlternative)
-            if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
-        })
-    }
-
-    private linkRelations() {
         // Assign ingoing relations to nodes and assign target to relation
         this.graph.relations.forEach(relation => {
             const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
@@ -211,29 +136,81 @@ export class Populator {
         })
     }
 
+    private populateRelations(node: Node, template: NodeTemplate) {
+        if (check.isUndefined(template.requirements)) return
+        assert.isArray(template.requirements, `Requirements assignments of "${node.display} must be an array`)
+
+        for (const [index, map] of template.requirements.entries()) {
+            const [name, raw] = utils.firstEntry(map)
+            assert.isObject(raw, `Requirement assignment "${name}" of "${node.display}" not normalized`)
+
+            if (check.isObject(raw.relationship)) {
+                throw new Error(
+                    `Relation "${name}" of "${node.display}" contains a relationship template which is currently not supported`
+                )
+            }
+
+            const relation = new Relation({
+                name,
+                container: node,
+                raw,
+                index,
+            })
+            relation.graph = this.graph
+
+            if (!node.outgoingMap.has(relation.name)) node.outgoingMap.set(relation.name, [])
+            node.outgoingMap.get(relation.name)!.push(relation)
+            node.outgoing.push(relation)
+            node.relations.push(relation)
+            this.graph.relations.push(relation)
+
+            if (check.isString(raw.relationship)) {
+                const relationshipTemplate = (this.graph.serviceTemplate.topology_template?.relationship_templates ||
+                    {})[raw.relationship]
+                assert.isDefined(
+                    relationshipTemplate,
+                    `Relationship "${raw.relationship}" of relation "${name}" of ${node.display} does not exist!`
+                )
+
+                if (this.graph.relationshipsMap.has(raw.relationship))
+                    throw new Error(`Relation "${raw.relationship}" is used multiple times`)
+
+                const relationship = new Relationship({
+                    name: raw.relationship,
+                    relation,
+                    raw: relationshipTemplate,
+                })
+                this.graph.relationshipsMap.set(raw.relationship, relationship)
+                relation.relationship = relationship
+
+                // Type
+                this.populateTypes(relation, relationshipTemplate)
+
+                // Properties
+                this.populateProperties(relation, relationshipTemplate)
+            }
+        }
+
+        // Ensure that there are no multiple outgoing defaults
+        node.outgoingMap.forEach(relations => {
+            const candidates = relations.filter(it => it.defaultAlternative)
+            if (candidates.length > 1) throw new Error(`${relations[0].Display} has multiple defaults`)
+        })
+    }
+
     private populateTypes(element: TypeContainer, template: TypeContainerTemplate) {
         assert.isDefined(template.type, `${element.Display} has no type`)
-
-        // Collect types
-        const types: VariabilityPointList<TypeAssignment> = check.isString(template.type)
-            ? [
-                  (() => {
-                      const map: {[name: string]: TypeAssignment} = {}
-                      map[template.type] = {}
-                      return map
-                  })(),
-              ]
-            : template.type
+        assert.isArray(template.type, `Types of ${element.display} not normalized`)
 
         // Create types
-        for (const [index, map] of types.entries()) {
-            const [name, assignment] = utils.firstEntry(map)
+        for (const [index, map] of template.type.entries()) {
+            const [name, raw] = utils.firstEntry(map)
 
             const type = new Type({
                 name,
                 container: element,
-                index: index,
-                raw: assignment,
+                index,
+                raw,
             })
             type.graph = this.graph
             this.graph.types.push(type)
@@ -249,118 +226,60 @@ export class Populator {
     }
 
     private populateArtifacts(node: Node, nodeTemplate: NodeTemplate) {
-        if (check.isDefined(nodeTemplate.artifacts)) {
-            if (check.isArray(nodeTemplate.artifacts)) {
-                for (const [artifactIndex, artifactMap] of nodeTemplate.artifacts.entries()) {
-                    this.populateArtifact(node, artifactMap, artifactIndex)
-                }
-            } else {
-                const artifacts = Object.entries(nodeTemplate.artifacts)
-                for (const [artifactName, artifactDefinition] of artifacts) {
-                    const map: ArtifactDefinitionMap = {}
-                    map[artifactName] = artifactDefinition
-                    this.populateArtifact(node, map)
-                }
-            }
-            // Ensure that there is only one default artifact per artifact name
-            node.artifactsMap.forEach(artifacts => {
-                const candidates = artifacts.filter(it => it.defaultAlternative)
-                if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
+        if (check.isUndefined(nodeTemplate.artifacts)) return
+        assert.isArray(nodeTemplate.artifacts, `Artifacts of ${node.display} not normalized`)
+
+        for (const [index, map] of nodeTemplate.artifacts.entries()) {
+            const [name, raw] = utils.firstEntry(map)
+
+            const artifact = new Artifact({
+                name,
+                raw,
+                container: node,
+                index,
             })
+            artifact.graph = this.graph
+
+            this.populateProperties(artifact, raw)
+
+            if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
+            node.artifactsMap.get(artifact.name)!.push(artifact)
+            node.artifacts.push(artifact)
+            this.graph.artifacts.push(artifact)
         }
-    }
 
-    private populateArtifact(node: Node, map: ArtifactDefinitionMap, index?: number) {
-        const [artifactName, artifactDefinition] = utils.firstEntry(map)
-
-        const artifact = new Artifact({
-            name: artifactName,
-            raw: artifactDefinition,
-            container: node,
-            index,
+        // Ensure that there is only one default artifact per artifact name
+        node.artifactsMap.forEach(artifacts => {
+            const candidates = artifacts.filter(it => it.defaultAlternative)
+            if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
         })
-        artifact.graph = this.graph
-
-        this.populateProperties(artifact, artifactDefinition)
-
-        if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])
-        node.artifactsMap.get(artifact.name)!.push(artifact)
-        node.artifacts.push(artifact)
-        this.graph.artifacts.push(artifact)
     }
 
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
-        if (check.isString(template)) return
+        assert.isObject(template, `${element.Display} not normalized`)
+        if (check.isUndefined(template.properties)) return
 
-        if (check.isDefined(template.properties)) {
-            // Properties is a Property Assignment List
-            if (check.isArray(template.properties)) {
-                for (const [propertyIndex, propertyAssignmentListEntry] of template.properties.entries()) {
-                    const [propertyName, propertyAssignment] = utils.firstEntry(propertyAssignmentListEntry)
+        assert.isArray(template.properties, `Properties of ${element.display} not normalized`)
 
-                    let property: Property
+        for (const [index, entry] of template.properties.entries()) {
+            const [name, raw] = utils.firstEntry(entry)
 
-                    // Property is not conditional
-                    if (
-                        check.isString(propertyAssignment) ||
-                        check.isNumber(propertyAssignment) ||
-                        check.isBoolean(propertyAssignment) ||
-                        check.isArray(propertyAssignment) ||
-                        (check.isUndefined(propertyAssignment.value) &&
-                            check.isUndefined(propertyAssignment.expression))
-                    ) {
-                        // This just works since we do not allow "value" as a keyword in a property assignment value
-                        const value = propertyAssignment as PropertyAssignmentValue
+            const property = new Property({
+                name,
+                conditions: check.isDefined(raw.default_alternative) ? [false] : utils.toList(raw.conditions),
+                default: raw.default_alternative ?? false,
+                container: element,
+                value: raw.value,
+                expression: raw.expression,
+                index,
+                raw,
+            })
 
-                        property = new Property({
-                            name: propertyName,
-                            container: element,
-                            value,
-                            default: false,
-                            index: propertyIndex,
-                            raw: propertyAssignment,
-                        })
-                    } else {
-                        // Property is conditional
-                        property = new Property({
-                            name: propertyName,
-                            conditions: check.isDefined(propertyAssignment.default_alternative)
-                                ? [false]
-                                : utils.toList(propertyAssignment.conditions),
-                            default: propertyAssignment.default_alternative ?? false,
-                            container: element,
-                            value: propertyAssignment.value,
-                            expression: propertyAssignment.expression,
-                            index: propertyIndex,
-                            raw: propertyAssignment,
-                        })
-                    }
-
-                    property.graph = this.graph
-                    if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
-                    element.propertiesMap.get(propertyName)!.push(property)
-                    element.properties.push(property)
-                    this.graph.properties.push(property)
-                }
-            } else {
-                // Properties is a Property Assignment Map
-                const properties = Object.entries(template.properties || {})
-                for (const [propertyName, propertyAssignment] of properties) {
-                    const property = new Property({
-                        name: propertyName,
-                        container: element,
-                        value: propertyAssignment,
-                        default: false,
-                        raw: propertyAssignment,
-                    })
-                    property.graph = this.graph
-
-                    if (!element.propertiesMap.has(propertyName)) element.propertiesMap.set(propertyName, [])
-                    element.propertiesMap.get(propertyName)!.push(property)
-                    element.properties.push(property)
-                    this.graph.properties.push(property)
-                }
-            }
+            property.graph = this.graph
+            if (!element.propertiesMap.has(name)) element.propertiesMap.set(name, [])
+            element.propertiesMap.get(name)!.push(property)
+            element.properties.push(property)
+            this.graph.properties.push(property)
         }
 
         // Ensure that there is only one default property per property name
@@ -385,16 +304,16 @@ export class Populator {
         assert.isArray(groups, 'Groups not normalized')
 
         groups.forEach(map => {
-            const [name, template] = utils.firstEntry(map)
+            const [name, raw] = utils.firstEntry(map)
             if (this.graph.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
 
-            const group = new Group({name, raw: template})
+            const group = new Group({name, raw})
             group.graph = this.graph
 
             this.graph.groups.push(group)
             this.graph.groupsMap.set(name, group)
 
-            template.members.forEach(member => {
+            raw.members.forEach(member => {
                 let element: Node | Relation | undefined
 
                 if (check.isString(member)) element = this.graph.getNode(member)
@@ -406,10 +325,10 @@ export class Populator {
             })
 
             // Type
-            this.populateTypes(group, template)
+            this.populateTypes(group, raw)
 
             // Properties
-            this.populateProperties(group, template)
+            this.populateProperties(group, raw)
         })
     }
 
@@ -418,16 +337,16 @@ export class Populator {
         if (check.isUndefined(policies)) return
         assert.isArray(policies, 'Policies not normalized')
 
-        for (const [index, map] of policies.entries() || []) {
-            const [name, template] = utils.firstEntry(map)
-            const policy = new Policy({name, raw: template, index})
+        for (const [index, map] of policies.entries()) {
+            const [name, raw] = utils.firstEntry(map)
+            const policy = new Policy({name, raw, index})
             policy.graph = this.graph
 
             if (!this.graph.policiesMap.has(name)) this.graph.policiesMap.set(name, [])
             this.graph.policiesMap.get(name)!.push(policy)
             this.graph.policies.push(policy)
 
-            template.targets?.forEach(target => {
+            raw.targets?.forEach(target => {
                 const node = this.graph.nodesMap.get(target)
                 if (check.isDefined(node)) {
                     return policy.targets.push(node)
@@ -442,10 +361,10 @@ export class Populator {
             })
 
             // Type
-            this.populateTypes(policy, template)
+            this.populateTypes(policy, raw)
 
             // Properties
-            this.populateProperties(policy, template)
+            this.populateProperties(policy, raw)
         }
     }
 }

@@ -12,13 +12,13 @@ export default class Artifact extends Element {
     readonly type = 'artifact'
     readonly name: string
     readonly raw: ArtifactDefinition
-    readonly index?: number
+    readonly index: number
     readonly container: Node
 
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
 
-    constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index?: number}) {
+    constructor(data: {name: string; raw: ArtifactDefinition; container: Node; index: number}) {
         super()
 
         this.name = data.name
