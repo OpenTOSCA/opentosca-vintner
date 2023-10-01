@@ -1,4 +1,4 @@
-import {BfsGraph} from '#/query/bfs-graph'
+import {QueryGraph} from '#/query/graph'
 import {getTemplates} from '#/query/utils'
 import * as check from '#check'
 import * as files from '#files'
@@ -26,7 +26,7 @@ export type QueryResult = Object
  */
 export class Query {
     // Abstract representation of the relationships between node templates. Used to evaluate MATCH clauses
-    private graph: BfsGraph | undefined
+    private graph: QueryGraph | undefined
     private currentTemplate: ServiceTemplate | undefined
     private source = ''
     // Since YAML doesn't have the concept of a parent, we need to store the keys separately so we can query for object names
@@ -168,7 +168,7 @@ export class Query {
      * @private
      */
     private evaluateMatch(data: ServiceTemplate, expression: MatchExpression): {[name: string]: NodeTemplateMap} {
-        this.graph = new BfsGraph(data)
+        this.graph = new QueryGraph(data)
         this.currentKeys = Object.keys(data.topology_template?.node_templates || [])
         let paths = new Set<string[]>()
         // initialize our starting nodes by checking the condition
@@ -222,8 +222,8 @@ export class Query {
             for (const n of targets || []) {
                 if (
                     !nodePredicate ||
-                    (this.graph?.getNode(n)?.raw &&
-                        this.evaluatePredicate(n, this.graph?.getNode(n)?.raw || {}, nodePredicate))
+                    (this.graph?.getNode(n)?.data &&
+                        this.evaluatePredicate(n, this.graph?.getNode(n)?.data || {}, nodePredicate))
                 ) {
                     newPaths.add(p.concat(n))
                 }
