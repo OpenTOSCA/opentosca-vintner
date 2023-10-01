@@ -21,7 +21,7 @@ export default class Normalizer {
 
     // TODO: require index everywhere?
 
-    extend() {
+    run() {
         // Imports
         this.extendImports()
 

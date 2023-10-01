@@ -50,8 +50,8 @@ export function isArray(element: unknown, msg?: string): asserts element is Arra
     if (!check.isArray(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not an array`)
 }
 
-export function isObject(element: unknown): asserts element is object {
-    if (!check.isObject(element)) throw new Error(`Element "${utils.stringify(element)}" is not an object`)
+export function isObject(element: unknown, msg?: string): asserts element is object {
+    if (!check.isObject(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not an object`)
 }
 
 export function isName(name: string) {

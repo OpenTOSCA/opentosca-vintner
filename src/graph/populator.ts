@@ -15,7 +15,7 @@ import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {NodeTemplate} from '#spec/node-template'
 import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {TypeAssignment} from '#spec/type-assignment'
-import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
+import {VariabilityPointList} from '#spec/variability'
 import * as utils from '#utils'
 
 export class Populator {
@@ -58,20 +58,14 @@ export class Populator {
         ]
     }
 
-    // TODO: require normalization? but then query does not work anymore ... why even
-
-    private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
-        if (check.isUndefined(data)) return []
-        if (check.isArray(data)) return data
-        return Object.entries(data).map(([name, template]) => {
-            const map: {[name: string]: T} = {}
-            map[name] = template
-            return map
-        })
-    }
+    // TODO: utilize normalization
 
     private populateInputs() {
-        this.getFromVariabilityPointMap(this.graph.serviceTemplate.topology_template?.inputs).forEach(map => {
+        const inputs = this.graph.serviceTemplate.topology_template?.inputs
+        if (check.isUndefined(inputs)) return
+        assert.isArray(inputs, 'Inputs not normalized')
+
+        inputs.forEach(map => {
             const [name, definition] = utils.firstEntry(map)
             if (this.graph.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
@@ -84,19 +78,24 @@ export class Populator {
     }
 
     private populateImports() {
-        if (check.isUndefined(this.graph.serviceTemplate.imports)) return
-        assert.isArray(this.graph.serviceTemplate.imports, 'Imports must be an array')
+        const imports = this.graph.serviceTemplate.imports
+        if (check.isUndefined(imports)) return
+        assert.isArray(imports, 'Imports not normalized')
 
-        for (const [index, definition] of this.graph.serviceTemplate.imports.entries()) {
+        for (const [index, definition] of imports.entries()) {
             const imp = new Import({index, raw: definition})
             imp.graph = this.graph
             this.graph.imports.push(imp)
         }
     }
 
+    // TODO: document that node can be list
     private populateNodes() {
-        // TODO: document that this is possible
-        this.getFromVariabilityPointMap(this.graph.serviceTemplate.topology_template?.node_templates).forEach(map => {
+        const nodes = this.graph.serviceTemplate.topology_template?.node_templates
+        if (check.isUndefined(nodes)) return
+        assert.isArray(nodes, 'Node templates not normalized')
+
+        nodes.forEach(map => {
             const [nodeName, nodeTemplate] = utils.firstEntry(map)
             if (this.graph.nodesMap.has(nodeName)) throw new Error(`Node "${nodeName}" defined multiple times`)
 
@@ -136,9 +135,14 @@ export class Populator {
 
     private populateRelations(node: Node, template: NodeTemplate) {
         if (check.isUndefined(template.requirements)) return
+        assert.isArray(template.requirements, `Requirements assignments of node "${node.name} must be an array`)
 
         for (const [index, map] of template.requirements.entries()) {
             const [relationName, assignment] = utils.firstEntry(map)
+            assert.isObject(
+                assignment,
+                `Requirement assignment "${relationName}" of node "${node.name}" not normalized`
+            )
 
             const relation = new Relation({
                 name: relationName,
@@ -154,38 +158,36 @@ export class Populator {
             node.relations.push(relation)
             this.graph.relations.push(relation)
 
-            if (!check.isString(assignment)) {
-                if (check.isString(assignment.relationship)) {
-                    const relationshipTemplate = (this.graph.serviceTemplate.topology_template
-                        ?.relationship_templates || {})[assignment.relationship]
-                    assert.isDefined(
-                        relationshipTemplate,
-                        `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${node.name}" does not exist!`
-                    )
+            if (check.isString(assignment.relationship)) {
+                const relationshipTemplate = (this.graph.serviceTemplate.topology_template?.relationship_templates ||
+                    {})[assignment.relationship]
+                assert.isDefined(
+                    relationshipTemplate,
+                    `Relationship "${assignment.relationship}" of relation "${relationName}" of node "${node.name}" does not exist!`
+                )
 
-                    if (this.graph.relationshipsMap.has(assignment.relationship))
-                        throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
+                if (this.graph.relationshipsMap.has(assignment.relationship))
+                    throw new Error(`Relation "${assignment.relationship}" is used multiple times`)
 
-                    const relationship = new Relationship({
-                        name: assignment.relationship,
-                        relation,
-                        raw: relationshipTemplate,
-                    })
-                    this.graph.relationshipsMap.set(assignment.relationship, relationship)
-                    relation.relationship = relationship
+                const relationship = new Relationship({
+                    name: assignment.relationship,
+                    relation,
+                    raw: relationshipTemplate,
+                })
+                this.graph.relationshipsMap.set(assignment.relationship, relationship)
+                relation.relationship = relationship
 
-                    // Type
-                    this.populateTypes(relation, relationshipTemplate)
+                // Type
+                this.populateTypes(relation, relationshipTemplate)
 
-                    // Properties
-                    this.populateProperties(relation, relationshipTemplate)
-                }
+                // Properties
+                this.populateProperties(relation, relationshipTemplate)
+            }
 
-                if (check.isObject(assignment.relationship)) {
-                    throw new Error(
-                        `Relation "${relationName}" of node "${node.name}" contains a relationship template which is currently not supported`
-                    )
-                }
+            if (check.isObject(assignment.relationship)) {
+                throw new Error(
+                    `Relation "${relationName}" of node "${node.name}" contains a relationship template which is currently not supported`
+                )
             }
         }
 
@@ -378,7 +380,11 @@ export class Populator {
     }
 
     private populateGroups() {
-        this.getFromVariabilityPointMap(this.graph.serviceTemplate.topology_template?.groups).forEach(map => {
+        const groups = this.graph.serviceTemplate.topology_template?.groups
+        if (check.isUndefined(groups)) return
+        assert.isArray(groups, 'Groups not normalized')
+
+        groups.forEach(map => {
             const [name, template] = utils.firstEntry(map)
             if (this.graph.groupsMap.has(name)) throw new Error(`Group "${name}" defined multiple times`)
 
@@ -410,7 +416,7 @@ export class Populator {
     private populatePolicies() {
         const policies = this.graph.serviceTemplate.topology_template?.policies
         if (check.isUndefined(policies)) return
-        assert.isArray(policies, 'Policies must be an array')
+        assert.isArray(policies, 'Policies not normalized')
 
         for (const [index, map] of policies.entries() || []) {
             const [name, template] = utils.firstEntry(map)
