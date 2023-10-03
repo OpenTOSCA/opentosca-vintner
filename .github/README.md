@@ -77,7 +77,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 
 ## Keywords 
 
-OpenTOSCA, Vintner, TOSCA, Variability4TSOCA, variability, deployment, orchestration, management
+OpenTOSCA, Vintner, TOSCA, Variability4TOSCA, variability, deployment, orchestration, management
 
 ## Acknowledgements
 
