@@ -296,8 +296,6 @@ template
         })
     )
 
-// TODO: instances enrich
-
 template
     .command('resolve')
     .description('resolves variability')

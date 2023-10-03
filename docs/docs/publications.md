@@ -12,7 +12,7 @@ This document contains a list of selected publications.
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
-> _Submitted_
+> _Accepted_
 
 - CoopIS 2023 Demo
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}

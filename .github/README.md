@@ -36,7 +36,7 @@ This repository holds the step-by-step guides of the following publications.
 <a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
 - **Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability**
   - CoopIS 2023 Demo
-  - _Currently under Review_
+  - _Accepted_
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts)
   - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
   - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant steps start with "UNFURL-ARTIFACTS")
