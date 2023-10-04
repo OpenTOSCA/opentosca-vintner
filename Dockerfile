@@ -54,7 +54,7 @@ RUN ./scripts/install-xopera.sh
 
 # Install vintner
 #COPY --from=build /app/dist/vintner /bin/vintner
-COPY /dist/vintner-linux-x64 /bin/vintner
+COPY ./dist/vintner-linux-x64 /bin/vintner
 ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
 RUN vintner setup init
 
