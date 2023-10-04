@@ -90,3 +90,23 @@ jobs:
               run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            ###################################################
+            #
+            # Docker
+            #
+            ###################################################
+
+            - name: (DOCKER) Log in to the Container registry
+              uses: docker/login-action@v3.0.0
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: (DOCKER) Build and push Docker image
+              uses: docker/build-push-action@v5.0.0
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ github.repository }}:${{ github.sha }}
