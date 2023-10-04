@@ -83,7 +83,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (RELEASE) Delete Latest Tag (Local)
+            - name: (RELEASE) Delete Build Tag (Local)
               run: git tag --delete build-${GITHUB_SHA} || true
 
             - name: (RELEASE) Create Build Release (and Tag)
@@ -100,7 +100,7 @@ jobs:
             - name: (DOCKER) Log in to the Container registry
               uses: docker/login-action@v3.0.0
               with:
-                  registry: ${{ env.REGISTRY }}
+                  registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -109,4 +109,4 @@ jobs:
               with:
                   context: .
                   push: true
-                  tags: ${{ github.repository }}:${{ github.sha }}
+                  tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
