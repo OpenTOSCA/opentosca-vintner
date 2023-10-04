@@ -25,14 +25,14 @@ Then, you can configure Vintner to use xOpera.
 
 ```shell linenums="1"
 vintner setup utils --xopera
-vintner orchestrators init xopera
+vintner orchestrators init xopera --no-venv
 vintner orchestrators enable --orchestrator xopera
 ```
 
 If you have installed xOpera in WSL and run Vintner on Windows, then configure Vintner in the follwoing way.
 
 ```shell linenums="1"
-vintner orchestrators init xopera-wsl
+vintner orchestrators init xopera-wsl --no-venv
 vintner orchestrators enable --orchestrator xopera-wsl
 ```
 
@@ -49,14 +49,14 @@ vintner setup utils --unfurl
 Then, you can configure Vintner to use Unfurl.
 
 ```shell linenums="1"
-vintner orchestrators init unfurl
+vintner orchestrators init unfurl --no-venv
 vintner orchestrators enable --orchestrator unfurl
 ```
 
 If you have installed Unfurl in WSL and run Vintner on Windows, then configure Vintner in the following way.
 
 ```shell linenums="1"
-vintner orchestrators init unfurl-wsl
+vintner orchestrators init unfurl-wsl --no-venv
 vintner orchestrators enable --orchestrator unfurl-wsl
 ```
 

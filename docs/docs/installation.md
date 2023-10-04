@@ -34,6 +34,57 @@ However, this will not install `vintner` permanently but only temporary.
 yarn dlx opentosca-vintner
 ```
 
+## Docker 
+
+```shell linenums="1"
+mkdir vintner
+cd vintner
+
+mkdir data
+mkdir shared
+```
+
+```shell linenums="1"
+docker run --detach --rm --interactive --tty \\
+  --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \\
+  --volume ./data:/vintner/data \\
+  --volume ./shared:/vintner/shared  \\
+  --name vintner \\
+  opentosca/opentosca-vintner:latest
+```
+
+```shell linenums="1"
+docker exec -it vintner --version
+```
+
+```shell linenums="1"
+alias vintner="docker exec -it vintner vintner"
+```
+
+```shell linenums="1"
+docker stop vintner
+```
+
+```shell linenums="1"
+docker exec -it vintner terraform login
+```
+
+```shell linenums="1"
+docker exec -it vintner vintner init xopera --no-venv 
+docker exec -it vintner vintner enable --orchestrator xopera
+```
+
+```shell linenums="1"
+docker exec -it vintner vintner init unfurl --no-venv
+docker exec -it vintner vintner enable --orchestrator unfurl
+```
+
+
+```shell linenums="1"
+docker exec -it vintner /bin/sh
+```
+
+
 ## Script
 
 `vintner` can be installed using our installation script. 

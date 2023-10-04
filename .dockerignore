@@ -2,3 +2,9 @@ node_modules
 Dockerfile
 docs/site
 docs/__pycache__
+
+build
+build-docs
+.nyc_output
+coverage
+dist

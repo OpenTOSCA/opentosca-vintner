@@ -1,0 +1,8 @@
+{
+    "name": "vintner",
+    "pkg": {
+        "targets": ["node18-linux-x64"],
+        "outputPath": "dist",
+        "assets": "build/assets/**/*"
+    }
+}
