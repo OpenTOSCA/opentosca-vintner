@@ -95,8 +95,8 @@ jobs:
               with:
                   context: .
                   tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
-                  cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
-                  cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+                  cache-from: type=gha,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
+                  cache-to: type=gha,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
 
             ###################################################
             #
