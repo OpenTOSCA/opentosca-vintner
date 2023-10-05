@@ -90,7 +90,7 @@ jobs:
             #
             ###################################################
 
-            - name: Set up Docker Buildx
+            - name: (DOCKER) Set up Docker Buildx
               uses: docker/setup-buildx-action@v3.0.0
 
             - name: (DOCKER) Log in to the container registry
