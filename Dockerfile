@@ -1,8 +1,14 @@
-FROM ubuntu:22.04
+###################################################
+#
+# Base Image
+#
+###################################################
+
+FROM ubuntu:22.04 as base
 
 # Labels
 LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
-LABEL org.opencontainers.image.description="OpenTOSCA Vintner"
+LABEL org.opencontainers.image.description="OpenTOSCA Vintner (Base Image)"
 LABEL org.opencontainers.image.licenses=Apache-2.0
 
 # Working directory
@@ -39,6 +45,20 @@ RUN ./scripts/install-unfurl.sh
 
 # Install xOpera
 RUN ./scripts/install-xopera.sh
+
+
+###################################################
+#
+# Run Stage
+#
+###################################################
+
+FROM base as run
+
+# Labels
+LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
+LABEL org.opencontainers.image.description="OpenTOSCA Vintner"
+LABEL org.opencontainers.image.licenses=Apache-2.0
 
 # Install vintner
 COPY ./dist/vintner-linux-x64 /bin/vintner
