@@ -14,11 +14,11 @@ LABEL org.opencontainers.image.licenses=Apache-2.0
 # Working directory
 WORKDIR /vintner
 
-# Install sudo
-RUN apt-get update -y && apt-get install sudo -y
+# Install helpful tools
+RUN apt-get update -y && apt-get install sudo unzip tree nano -y
 
 # Installation scripts
-COPY src/assets/scripts ./scripts
+COPY --chmod=+x src/assets/scripts ./scripts
 
 # Install wget
 RUN ./scripts/install-wget.sh
@@ -76,5 +76,5 @@ RUN vintner orchestrators enable --orchestrator xopera
 COPY ./examples ./examples
 
 # Entrypoint
-COPY docker-entrypoint.sh .
+COPY --chmod=+x docker-entrypoint.sh .
 ENTRYPOINT /vintner/docker-entrypoint.sh
