@@ -36,6 +36,14 @@ yarn dlx opentosca-vintner
 
 ## Docker 
 
+`vintner` can be installed using Docker. 
+However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.
+
+
+### Starting the Container
+
+To run `vintner` via docker, first create some directories for the persisting data.
+
 ```shell linenums="1"
 mkdir vintner
 cd vintner
@@ -44,41 +52,83 @@ mkdir data
 mkdir shared
 ```
 
+Then, we can start the container.
+
 ```shell linenums="1"
 docker run --detach --rm --interactive --tty \\
   --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \\
   --volume ./data:/vintner/data \\
   --volume ./shared:/vintner/shared  \\
   --name vintner \\
-  opentosca/opentosca-vintner:latest
+  ghcr.io/opentosca/opentosca-vintner:latest
 ```
 
+There are three important directories inside the container. 
+
+- `/vintner/data` holds all data written by Vintner
+- `/vintner/shared` should be used to share data between the host and the container, e.g., CSARs or GCP credentials
+- `/vintner/examples` holds the examples directory of the repository
+
+
+### Executing a Command
+
+The container will run in the background. 
+`vintner` is executed as follows.
+
 ```shell linenums="1"
-docker exec -it vintner --version
+docker exec -it vintner vintner --version
 ```
+
+On Linux, it is also possible to set an alias. 
+By doing so, `vintner` is directly available as command in the terminal on the docker host.
 
 ```shell linenums="1"
 alias vintner="docker exec -it vintner vintner"
 ```
 
+### xOpera
+
+If you intend to use xOpera, run the following command. 
+Note, xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+
 ```shell linenums="1"
-docker stop vintner
+docker exec -it vintner vintner enable --orchestrator xopera
 ```
+
+### Unfurl
+
+If you intend to use Unfurl, run the following command.
+Note, Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+
+```shell linenums="1"
+docker exec -it vintner vintner enable --orchestrator unfurl
+```
+
+### Terraform
+
+If you are using Terraform, you must log into your Terraform account.
+You can do this interactively as follows.
+Note, this login is not persistent.
 
 ```shell linenums="1"
 docker exec -it vintner terraform login
 ```
 
-```shell linenums="1"
-docker exec -it vintner vintner init xopera --no-venv 
-docker exec -it vintner vintner enable --orchestrator xopera
-```
+### Stopping the Container
+
+To stop the container, run the following command.
+Ensure to only stop Vintner, once Vintner is idle. 
+Otherwise, data and deployments will be corrupted.
 
 ```shell linenums="1"
-docker exec -it vintner vintner init unfurl --no-venv
-docker exec -it vintner vintner enable --orchestrator unfurl
+docker stop vintner
 ```
 
+
+### Debugging the Container
+
+In case you need to debug something inside the container or perform any administrative tasks, you can exec into the container as follows. 
+This will start a shell inside the container.
 
 ```shell linenums="1"
 docker exec -it vintner /bin/sh

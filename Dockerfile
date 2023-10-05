@@ -1,15 +1,4 @@
-# Build stage
-#FROM node:18.15.0-bullseye as build
-#WORKDIR /app
-#COPY . .
-#RUN yarn --immutable
-#RUN yarn test
-#RUN yarn build
-#RUN yarn pkg --config .pkgrc.linux-x64.json build/cli/index.js
-
-
-# Run stage
-FROM ubuntu:22.04 as run
+FROM ubuntu:22.04
 
 # Labels
 LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
@@ -34,7 +23,7 @@ RUN ./scripts/install-git.sh
 RUN git config --global user.email vintner@opentosca.org
 RUN git config --global user.name vintner
 
-# Install python
+# Install Python
 RUN ./scripts/install-python.sh
 
 # Install Ansible
@@ -53,7 +42,6 @@ RUN ./scripts/install-unfurl.sh
 RUN ./scripts/install-xopera.sh
 
 # Install vintner
-#COPY --from=build /app/dist/vintner /bin/vintner
 COPY ./dist/vintner-linux-x64 /bin/vintner
 ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
 RUN vintner setup init
