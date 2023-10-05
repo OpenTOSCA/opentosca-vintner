@@ -172,3 +172,23 @@ jobs:
 
             - name: (DOCS) Build and Deploy Docs
               run: yarn docs:deploy
+
+            ###################################################
+            #
+            # Docker
+            #
+            ###################################################
+
+            - name: (DOCKER) Log in to the container registry
+              uses: docker/login-action@v3.0.0
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: (DOCKER) Build and push Docker image
+              uses: docker/build-push-action@v5.0.0
+              with:
+                  context: .
+                  push: true
+                  tags: ghcr.io/opentosca/opentosca-vintner:latest
