@@ -39,6 +39,14 @@ yarn dlx opentosca-vintner
 `vintner` can be installed using Docker. 
 However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.
 
+### GitHub Container Registry 
+
+We are using the GitHub Container Registry, see https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner.
+To pull the latest image, run the following command: 
+
+```shell linenums="1"
+docker pull ghcr.io/opentosca/opentosca-vintner:latest
+```
 
 ### Starting the Container
 

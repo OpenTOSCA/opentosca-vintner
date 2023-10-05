@@ -12,7 +12,6 @@ WORKDIR /vintner
 RUN apt-get update -y && apt-get install sudo -y
 
 # Installation scripts
-RUN mkdir ./scripts
 COPY src/assets/scripts ./scripts
 
 # Install wget
@@ -52,6 +51,9 @@ RUN vintner orchestrators init unfurl --no-venv
 # Configure xOpera
 RUN vintner orchestrators init xopera --no-venv
 RUN vintner orchestrators enable --orchestrator xopera
+
+# Copy examples
+COPY ./examples ./examples
 
 # Entrypoint
 COPY docker-entrypoint.sh .
