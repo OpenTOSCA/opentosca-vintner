@@ -90,13 +90,16 @@ jobs:
             #
             ###################################################
 
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3.0.0
+
             - name: (DOCKER) Build Docker image
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
                   tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
-                  cache-from: type=gha,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
-                  cache-to: type=gha,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+                  cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
+                  cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
 
             ###################################################
             #
