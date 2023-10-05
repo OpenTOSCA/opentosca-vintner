@@ -63,12 +63,12 @@ mkdir shared
 Then, we can start the container.
 
 ```shell linenums="1"
-docker run --detach --rm --interactive --tty \\
-  --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \\
-  --volume ./data:/vintner/data \\
-  --volume ./shared:/vintner/shared  \\
-  --name vintner \\
-  ghcr.io/opentosca/opentosca-vintner:latest
+docker run --detach --rm --interactive --tty \
+  --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \
+  --volume ${PWD}/data:/vintner/data \
+  --volume ${PWD}./shared:/vintner/shared  \
+  --name vintner \
+  ghcr.io/opentosca/opentosca-vintner:06792e4447078d250e748ba316a552b566e7011f
 ```
 
 There are three important directories inside the container. 
