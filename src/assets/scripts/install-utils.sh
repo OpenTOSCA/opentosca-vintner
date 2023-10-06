@@ -6,5 +6,5 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-sudo apt-get update -y
-sudo apt-get install sudo unzip git curl wget nano tree -y
+apt-get update -y
+apt-get install sudo unzip git curl wget nano tree -y
