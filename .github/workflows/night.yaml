@@ -56,7 +56,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: ./src/assets/scripts/install-xopera.sh
+              run: sudo ./src/assets/scripts/install-xopera.sh
 
             - name: (PREPARE) Cache Unfurl
               uses: actions/cache@v3
@@ -65,7 +65,7 @@ jobs:
                   key: unfurl-home
 
             - name: (PREPARE) Install Unfurl
-              run: ./src/assets/scripts/install-unfurl.sh
+              run: sudo ./src/assets/scripts/install-unfurl.sh
 
             ###################################################
             #

@@ -48,7 +48,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Install xOpera
-              run: ./src/assets/scripts/install-xopera.sh
+              run: sudo ./src/assets/scripts/install-xopera.sh
 
             ###################################################
             #
