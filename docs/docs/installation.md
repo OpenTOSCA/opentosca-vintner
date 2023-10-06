@@ -112,16 +112,6 @@ Note, Unfurl is already installed inside the container and Vintner is already co
 docker exec -it vintner vintner enable --orchestrator unfurl
 ```
 
-### Terraform
-
-If you are using Terraform, you must log into your Terraform account.
-You can do this interactively as follows.
-Note, this login is not persistent.
-
-```shell linenums="1"
-docker exec -it vintner terraform login
-```
-
 ### Stopping the Container
 
 To stop the container, run the following command.
