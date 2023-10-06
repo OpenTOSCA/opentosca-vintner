@@ -2080,34 +2080,34 @@ For more information see <a href="../interface/" target="_blank">Interface</a>.<
 <p>You can install xOpera using the following command.
 This will install xOpera v0.6.9 system-wide using pip.
 For a manual installation see <a href="https://xlab-si.github.io/xopera-docs/02-cli.html#installation" target="_blank">the documentation</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>utils<span class="w"> </span>--xopera
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--xopera
 </code></pre></div></td></tr></table></div>
 <p>Then, you can configure Vintner to use xOpera.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>utils<span class="w"> </span>--xopera
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--xopera
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera<span class="w"> </span>--no-venv
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
 </code></pre></div></td></tr></table></div>
 <p>If you have installed xOpera in WSL and run Vintner on Windows, then configure Vintner in the follwoing way.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera-wsl
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera-wsl<span class="w"> </span>--no-venv
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera-wsl
 </code></pre></div></td></tr></table></div>
 <h2 id="unfurl">Unfurl<a class="headerlink" href="#unfurl" title="Permanent link">¶</a></h2>
 <p>You can install Unfurl using the following command.
 This will install Unfurl v0.7.1 system-wide using pip.
 For a manual installation see <a href="https://docs.unfurl.run/README.html#installation" target="_blank">the documentation</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>utils<span class="w"> </span>--unfurl
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--unfurl
 </code></pre></div></td></tr></table></div>
 <p>Then, you can configure Vintner to use Unfurl.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl
+<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl<span class="w"> </span>--no-venv
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
 </code></pre></div></td></tr></table></div>
 <p>If you have installed Unfurl in WSL and run Vintner on Windows, then configure Vintner in the following way.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl-wsl
+<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl-wsl<span class="w"> </span>--no-venv
 <a id="__codelineno-5-2" name="__codelineno-5-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl-wsl
 </code></pre></div></td></tr></table></div>
 <h2 id="integrated-features">Integrated Features<a class="headerlink" href="#integrated-features" title="Permanent link">¶</a></h2>
@@ -2162,7 +2162,7 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 12, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 6, 2023</span>
 </small>
 </div>
 </article>
