@@ -11,4 +11,4 @@ if which openstack &>/dev/null; then
     exit 0
 fi
 
-pip install openstacksdk=1.0.0 python-openstackclient==6.0.0
+pip install openstacksdk==1.0.0 python-openstackclient==6.0.0
