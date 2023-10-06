@@ -49,27 +49,6 @@ jobs:
               env:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
-            - name: (PREPARE) Setup Terraform
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      if (!process.env.TERRAFORM_API_TOKEN) throw 'TERRAFORM_TOKEN undefined'
-                      const fs = require('fs')
-                      const path = require('path')
-                      const dir = path.resolve(process.env.HOME, '.terraform.d')
-                      const file = path.resolve(dir, 'credentials.tfrc.json')
-                      const content = JSON.stringify({
-                          "credentials": {
-                            "app.terraform.io": {
-                                "token": process.env.TERRAFORM_API_TOKEN
-                            }
-                          }
-                      }, null, 4)
-                      fs.mkdirSync(dir)
-                      fs.writeFileSync(file, content)
-              env:
-                  TERRAFORM_API_TOKEN: ${{ secrets.TERRAFORM_API_TOKEN }}
-
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
               with:
