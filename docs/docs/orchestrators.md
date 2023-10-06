@@ -18,21 +18,21 @@ This will install xOpera v0.6.9 system-wide using pip.
 For a manual installation see [the documentation](https://xlab-si.github.io/xopera-docs/02-cli.html#installation){target=_blank}.
 
 ```shell linenums="1"
-vintner setup utils --xopera
+vintner setup install --xopera
 ```
 
 Then, you can configure Vintner to use xOpera.
 
 ```shell linenums="1"
-vintner setup utils --xopera
-vintner orchestrators init xopera
+vintner setup install --xopera
+vintner orchestrators init xopera --no-venv
 vintner orchestrators enable --orchestrator xopera
 ```
 
 If you have installed xOpera in WSL and run Vintner on Windows, then configure Vintner in the follwoing way.
 
 ```shell linenums="1"
-vintner orchestrators init xopera-wsl
+vintner orchestrators init xopera-wsl --no-venv
 vintner orchestrators enable --orchestrator xopera-wsl
 ```
 
@@ -43,20 +43,20 @@ This will install Unfurl v0.7.1 system-wide using pip.
 For a manual installation see [the documentation](https://docs.unfurl.run/README.html#installation){target=_blank}.
 
 ```shell linenums="1"
-vintner setup utils --unfurl
+vintner setup install --unfurl
 ```
 
 Then, you can configure Vintner to use Unfurl.
 
 ```shell linenums="1"
-vintner orchestrators init unfurl
+vintner orchestrators init unfurl --no-venv
 vintner orchestrators enable --orchestrator unfurl
 ```
 
 If you have installed Unfurl in WSL and run Vintner on Windows, then configure Vintner in the following way.
 
 ```shell linenums="1"
-vintner orchestrators init unfurl-wsl
+vintner orchestrators init unfurl-wsl --no-venv
 vintner orchestrators enable --orchestrator unfurl-wsl
 ```
 

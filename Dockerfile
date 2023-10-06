@@ -1,33 +1,79 @@
-FROM node:18.15.0-bullseye
+###################################################
+#
+# Base Image
+#
+###################################################
 
-# Setup
-WORKDIR /app
-COPY . .
-RUN yarn --immutable
+FROM ubuntu:22.04 as base
 
-# Test
-RUN yarn lint:check
-RUN yarn style:check
-RUN yarn dependencies:check
-RUN yarn puccini:check
-RUN yarn test
+# Labels
+LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
+LABEL org.opencontainers.image.description="OpenTOSCA Vintner (Base Image)"
+LABEL org.opencontainers.image.licenses=Apache-2.0
 
-# Build
-RUN yarn build
-RUN yarn package
+# Working directory
+WORKDIR /vintner
 
-# Docs
-RUN apt-get update -y \
-    && apt-get install --no-install-recommends python3=3.9.2-3 python3-pip=20.3.4-4+deb11u1 graphviz -y \
-    && apt-get clean  \
-    && rm -rf /var/lib/apt/lists/*
-RUN yarn docs:install
-RUN yarn docs:build:commands
-RUN yarn docs:generate:dependencies
-RUN yarn docs:generate:interface
-RUN yarn docs:generate:tests:variability
-RUN yarn docs:generate:tests:query
-RUN yarn docs:generate:sofdcar
-RUN yarn docs:generate:puml
+# Installation scripts
+COPY --chmod=+x src/assets/scripts ./scripts
 
-RUN yarn docs:build
+# Install utils
+RUN ./scripts/install-utils.sh
+
+# Configure git
+RUN git config --global user.email vintner@opentosca.org
+RUN git config --global user.name vintner
+
+# Install Python
+RUN ./scripts/install-python.sh
+
+# Install OpenStack CLI
+RUN ./scripts/install-openstack.sh
+
+# Install Ansible
+RUN ./scripts/install-ansible.sh
+
+# Install Terraform
+RUN ./scripts/install-terraform.sh
+
+# Install GCP CLI
+RUN ./scripts/install-gcloud.sh
+
+# Install Unfurl
+RUN ./scripts/install-unfurl.sh
+
+# Install xOpera
+RUN ./scripts/install-xopera.sh
+
+
+###################################################
+#
+# Run Image
+#
+###################################################
+
+FROM base as run
+
+# Labels
+LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
+LABEL org.opencontainers.image.description="OpenTOSCA Vintner"
+LABEL org.opencontainers.image.licenses=Apache-2.0
+
+# Install vintner
+COPY ./dist/vintner-linux-x64 /bin/vintner
+ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
+RUN vintner setup init
+
+# Configure Unfurl
+RUN vintner orchestrators init unfurl --no-venv
+
+# Configure xOpera
+RUN vintner orchestrators init xopera --no-venv
+RUN vintner orchestrators enable --orchestrator xopera
+
+# Copy examples
+COPY ./examples ./examples
+
+# Entrypoint
+COPY --chmod=+x docker-entrypoint.sh .
+ENTRYPOINT /vintner/docker-entrypoint.sh

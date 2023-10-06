@@ -80,12 +80,6 @@ To run the tests, use
 yarn test
 ```
 
-To run the tests inside docker, use
-
-```shell linenums="1"
-yarn test:docker
-```
-
 On pushes to the `main` branch these tests are executed.
 
 ## Lint

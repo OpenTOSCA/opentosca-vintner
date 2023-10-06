@@ -64,19 +64,20 @@ setup
     )
 
 setup
-    .command('utils')
-    .description('install utils (linux is required)')
+    .command('install')
+    .description('install utils (Linux is required)')
     .option('--all [boolean]', 'install all utils')
-    .option('--git [boolean]', 'install Git')
+    .option('--utils [boolean]', 'install sudo, unzip, git, curl, wget, nano, and tree')
     .option('--python [boolean]', 'install Python')
     .option('--xopera [boolean]', 'install xOpera (system-wide)')
     .option('--unfurl [boolean]', 'install Unfurl (system-wide)')
-    .option('--gcloud [boolean]', 'install gCloud')
+    .option('--gcloud [boolean]', 'install GCloud CLI')
+    .option('--openstack [boolean]', 'install OpenStack CLI')
     .option('--terraform [boolean]', 'install Terraform')
     .option('--ansible [boolean]', 'install Ansible (system-wide)')
     .action(
         hae.exit(async options => {
-            console.log(await Controller.setup.utils(options))
+            console.log(await Controller.setup.install(options))
         })
     )
 

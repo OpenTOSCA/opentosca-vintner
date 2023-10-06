@@ -3,29 +3,33 @@ import {Shell} from '#shell'
 import wsl from '#utils/wsl'
 import path from 'path'
 
-export type SetupUtilsOptions = {
+export type SetupInstallOptions = {
     all?: boolean
-    git?: boolean
+    utils?: boolean
     python?: boolean
     xopera?: boolean
     unfurl?: boolean
     gcloud?: boolean
+    openstack?: boolean
     terraform?: boolean
     ansible?: boolean
 }
 
-export default async function (options: SetupUtilsOptions) {
+export default async function (options: SetupInstallOptions) {
     // Ensure that platform is supported
     const platform = wsl.wsl ? 'wsl' : process.platform
-    if (platform !== 'linux' && platform !== 'wsl') throw new Error(`This command only supports linux`)
+    if (platform !== 'linux' && platform !== 'wsl') throw new Error(`This command only supports Linux`)
 
     // Shell
     const shell = new Shell()
 
+    // Ensure apt is installed
+    await shell.execute(['which apt &>/dev/null'])
+
     // Install git
-    if (options.all || options.git) {
-        console.log('Installing Git')
-        await install(shell, 'install-git.sh')
+    if (options.all || options.utils) {
+        console.log('Installing utils')
+        await install(shell, 'install-utils.sh')
     }
 
     // Install Python
@@ -46,10 +50,16 @@ export default async function (options: SetupUtilsOptions) {
         await install(shell, 'install-unfurl.sh')
     }
 
-    // Install gCloud
+    // Install GCloud CLI
     if (options.all || options.gcloud) {
-        console.log('Installing gCloud')
+        console.log('Installing GCloud CLI')
         await install(shell, 'install-gcloud.sh')
+    }
+
+    // Install OpenStack CLI
+    if (options.all || options.openstack) {
+        console.log('Installing OpenStack CLI')
+        await install(shell, 'install-openstack.sh')
     }
 
     // Install Terraform

@@ -1095,14 +1095,14 @@ returns the path to the home directory
     ```
 
 
-## vintner setup utils
+## vintner setup install
 
 install utils (linux is required)
 
 
 === "CLI"
     ```shell linenums="1"
-    vintner setup utils 
+    vintner setup install 
     ```
 
 === "cURL"

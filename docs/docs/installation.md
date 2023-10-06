@@ -34,6 +34,108 @@ However, this will not install `vintner` permanently but only temporary.
 yarn dlx opentosca-vintner
 ```
 
+## Docker 
+
+`vintner` can be installed using Docker. 
+However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.
+
+### GitHub Container Registry 
+
+We are using the GitHub Container Registry, see https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner.
+To pull the latest image, run the following command: 
+
+```shell linenums="1"
+docker pull ghcr.io/opentosca/opentosca-vintner:latest
+```
+
+### Starting the Container
+
+To run `vintner` via docker, first create some directories for the persisting data.
+
+```shell linenums="1"
+mkdir vintner
+cd vintner
+
+mkdir data
+mkdir shared
+```
+
+Then, we can start the container.
+This will start the container in the background. 
+Also, the host network is used to enable, e.g., ipv6 support.
+
+```shell linenums="1"
+docker run --detach --rm \
+  --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \
+  --volume ${PWD}/data:/vintner/data \
+  --volume ${PWD}./shared:/vintner/shared  \
+  --network host \
+  --name vintner \
+  ghcr.io/opentosca/opentosca-vintner:latest
+```
+
+There are three important directories inside the container. 
+
+- `/vintner/data` holds all data written by Vintner
+- `/vintner/shared` should be used to share data between the host and the container, e.g., CSARs or GCP credentials
+- `/vintner/examples` holds the examples directory of the repository
+
+
+### Executing a Command
+
+The container will run in the background. 
+`vintner` is executed as follows.
+
+```shell linenums="1"
+docker exec -it vintner vintner --version
+```
+
+On Linux, it is also possible to set an alias. 
+By doing so, `vintner` is directly available as command in the terminal on the docker host.
+
+```shell linenums="1"
+alias vintner="docker exec -it vintner vintner"
+```
+
+### xOpera
+
+If you intend to use xOpera, run the following command. 
+Note, xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+
+```shell linenums="1"
+docker exec -it vintner vintner enable --orchestrator xopera
+```
+
+### Unfurl
+
+If you intend to use Unfurl, run the following command.
+Note, Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+
+```shell linenums="1"
+docker exec -it vintner vintner enable --orchestrator unfurl
+```
+
+### Stopping the Container
+
+To stop the container, run the following command.
+Ensure to only stop Vintner, once Vintner is idle. 
+Otherwise, data and deployments will be corrupted.
+
+```shell linenums="1"
+docker stop vintner
+```
+
+
+### Debugging the Container
+
+In case you need to debug something inside the container or perform any administrative tasks, you can exec into the container as follows. 
+This will start a shell inside the container.
+
+```shell linenums="1"
+docker exec -it vintner /bin/bash
+```
+
+
 ## Script
 
 `vintner` can be installed using our installation script. 
