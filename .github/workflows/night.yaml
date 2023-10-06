@@ -65,7 +65,9 @@ jobs:
                   key: unfurl-home
 
             - name: (PREPARE) Install Unfurl
-              run: sudo ./src/assets/scripts/install-unfurl.sh
+              run: |
+                  pip install unfurl==0.7.1
+                  yes | unfurl home --init
 
             ###################################################
             #
