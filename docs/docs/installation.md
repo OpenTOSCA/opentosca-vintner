@@ -61,14 +61,17 @@ mkdir shared
 ```
 
 Then, we can start the container.
+This will start the container in the background. 
+Also, the host network is used to enable, e.g., ipv6 support.
 
 ```shell linenums="1"
-docker run --detach --rm --interactive --tty \
+docker run --detach --rm \
   --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \
   --volume ${PWD}/data:/vintner/data \
   --volume ${PWD}./shared:/vintner/shared  \
+  --network host \
   --name vintner \
-  ghcr.io/opentosca/opentosca-vintner:06792e4447078d250e748ba316a552b566e7011f
+  ghcr.io/opentosca/opentosca-vintner:latest
 ```
 
 There are three important directories inside the container. 
@@ -129,7 +132,7 @@ In case you need to debug something inside the container or perform any administ
 This will start a shell inside the container.
 
 ```shell linenums="1"
-docker exec -it vintner /bin/sh
+docker exec -it vintner /bin/bash
 ```
 
 

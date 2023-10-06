@@ -14,22 +14,21 @@ LABEL org.opencontainers.image.licenses=Apache-2.0
 # Working directory
 WORKDIR /vintner
 
-# Install helpful tools
-RUN apt-get update -y && apt-get install sudo unzip tree nano -y
-
 # Installation scripts
 COPY --chmod=+x src/assets/scripts ./scripts
 
-# Install wget
-RUN ./scripts/install-wget.sh
+# Install utils
+RUN ./scripts/install-utils.sh
 
-# Install git
-RUN ./scripts/install-git.sh
+# Configure git
 RUN git config --global user.email vintner@opentosca.org
 RUN git config --global user.name vintner
 
 # Install Python
 RUN ./scripts/install-python.sh
+
+# Install OpenStack CLI
+RUN ./scripts/install-openstack.sh
 
 # Install Ansible
 RUN ./scripts/install-ansible.sh

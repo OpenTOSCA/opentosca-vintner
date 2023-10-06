@@ -23,7 +23,7 @@ resolvers.post(
 resolvers.post(
     '/setup/utils',
     hae.express(async (req, res, next) => {
-        await Controller.setup.utils(req.body)
+        await Controller.setup.install(req.body)
         res.json({})
     })
 )

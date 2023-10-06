@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 MODE=${1:-cli}
@@ -12,7 +12,7 @@ $VINTNER setup init
 #
 ###################################################
 
-if [ "$MODE" = "cli" ]; then
+if [[ "$MODE" = "cli" ]]; then
   echo "The container is kept busy so that it can run detached in the background.
 
 Vintner can be used in the following way:
@@ -37,7 +37,7 @@ fi
 #
 ###################################################
 
-if [ "$MODE" = "server" ]; then
+if [[ "$MODE" = "server" ]]; then
   $VINTNER server start
 fi
 
@@ -48,5 +48,5 @@ fi
 #
 ###################################################
 
-echo mode \""$MODE"\" is unknown
+echo "mode \"$MODE\" is unknown"
 exit 1

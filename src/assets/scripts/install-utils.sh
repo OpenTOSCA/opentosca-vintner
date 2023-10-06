@@ -6,11 +6,5 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-if which wget &>/dev/null; then
-    echo "\"wget\" already installed"
-    exit 0
-fi
-
 sudo apt-get update -y
-sudo apt-get install wget -y
-
+sudo apt-get install sudo unzip git curl wget nano tree -y
