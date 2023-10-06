@@ -34,7 +34,7 @@ You need to fulfill the following requirements to follow this step-by-step tutor
 - Gcloud CLI installed on your machine
 - Git installed on your machine
 - [Unfurl](https://github.com/onecommons/unfurl){target=_blank} installed on your machine
-- Terraform installed (and authenticated) on your machine
+- Terraform installed on your machine
 
 ## Preparation
 
