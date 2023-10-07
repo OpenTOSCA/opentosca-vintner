@@ -62,14 +62,6 @@ LABEL org.opencontainers.image.licenses=Apache-2.0
 # Install vintner
 COPY ./dist/vintner-linux-x64 /bin/vintner
 ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
-RUN vintner setup init
-
-# Configure Unfurl
-RUN vintner orchestrators init unfurl --no-venv
-
-# Configure xOpera
-RUN vintner orchestrators init xopera --no-venv
-RUN vintner orchestrators enable --orchestrator xopera
 
 # Copy examples
 COPY ./examples ./examples
