@@ -1,6 +1,7 @@
 ---
 tags:
 - Vintner
+- Docker
 ---
 
 # Installation
@@ -41,7 +42,7 @@ However, the provided Docker Image is about 3GB large since it contains tools, s
 
 ### GitHub Container Registry 
 
-We are using the GitHub Container Registry, see https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner.
+We are using the {{ link('https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner', 'GitHub Container Registry') }}.
 To pull the latest image, run the following command: 
 
 ```shell linenums="1"
@@ -66,9 +67,8 @@ Also, the host network is used to enable, e.g., ipv6 support.
 
 ```shell linenums="1"
 docker run --detach --rm \
-  --env OPENTOSCA_VINTNER_HOME_DIR=/vintner/data \
   --volume ${PWD}/data:/vintner/data \
-  --volume ${PWD}./shared:/vintner/shared  \
+  --volume ${PWD}/shared:/vintner/shared  \
   --network host \
   --name vintner \
   ghcr.io/opentosca/opentosca-vintner:latest
@@ -95,15 +95,17 @@ By doing so, `vintner` is directly available as command in the terminal on the d
 
 ```shell linenums="1"
 alias vintner="docker exec -it vintner vintner"
+vintner --version
 ```
 
 ### xOpera
 
 If you intend to use xOpera, run the following command. 
 Note, xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+By default, xOpera is already enabled.
 
 ```shell linenums="1"
-docker exec -it vintner vintner enable --orchestrator xopera
+docker exec -it vintner vintner orchestrators enable --orchestrator xopera
 ```
 
 ### Unfurl
@@ -112,7 +114,7 @@ If you intend to use Unfurl, run the following command.
 Note, Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
 
 ```shell linenums="1"
-docker exec -it vintner vintner enable --orchestrator unfurl
+docker exec -it vintner vintner orchestrators enable --orchestrator unfurl
 ```
 
 ### Stopping the Container
@@ -123,6 +125,14 @@ Otherwise, data and deployments will be corrupted.
 
 ```shell linenums="1"
 docker stop vintner
+```
+
+### Watching the Log of the Container
+
+To watch the logs of the container, run the following command.
+
+```shell linenums="1"
+docker logs -f vintner
 ```
 
 

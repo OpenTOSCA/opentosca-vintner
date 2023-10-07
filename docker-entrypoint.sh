@@ -1,10 +1,40 @@
 #!/bin/bash
 set -e
 
-MODE=${1:-cli}
-VINTNER=/bin/vintner
+###################################################
+#
+# Variables
+#
+###################################################
 
-$VINTNER setup init
+VINTNER_MODE=${1:-cli}
+VINTNER=/bin/vintner
+VINTNER_INIT=/vintner/data/.init
+
+
+###################################################
+#
+# Init setup (only once)
+#
+###################################################
+
+if [[ ! -f $VINTNER_INIT ]]; then
+  # Init setup
+  echo "Init setup"
+  $VINTNER setup init
+
+  # Configure Unfurl
+  echo "Configure Unfurl"
+  $VINTNER orchestrators init unfurl --no-venv
+
+  # Configure and enable xOpera
+  echo "Configure and enable xOpera"
+  $VINTNER orchestrators init xopera --no-venv
+  $VINTNER orchestrators enable --orchestrator xopera
+
+  date > $VINTNER_INIT
+fi
+
 
 ###################################################
 #
@@ -12,7 +42,7 @@ $VINTNER setup init
 #
 ###################################################
 
-if [[ "$MODE" = "cli" ]]; then
+if [[ "$VINTNER_MODE" = "cli" ]]; then
   echo "The container is kept busy so that it can run detached in the background.
 
 Vintner can be used in the following way:
@@ -37,7 +67,7 @@ fi
 #
 ###################################################
 
-if [[ "$MODE" = "server" ]]; then
+if [[ "$VINTNER_MODE" = "server" ]]; then
   $VINTNER server start
 fi
 
@@ -48,5 +78,5 @@ fi
 #
 ###################################################
 
-echo "mode \"$MODE\" is unknown"
+echo "mode \"$VINTNER_MODE\" is unknown"
 exit 1
