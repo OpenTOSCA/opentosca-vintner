@@ -15,4 +15,5 @@ topology_template:
             properties:
                 content: 'Second Textfile has been selected!'
             requirements:
-                - host: localhost
+                - host:
+                      node: localhost
