@@ -41,6 +41,10 @@ export class xOperaPlugin implements OrchestratorPlugin {
         this.shell = new Shell(config.wsl)
     }
 
+    async attest() {
+        await this.shell.execute([this.binary, '--version'])
+    }
+
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,

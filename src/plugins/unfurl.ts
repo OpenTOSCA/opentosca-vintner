@@ -1,3 +1,4 @@
+import * as check from '#check'
 import * as files from '#files'
 import {OrchestratorOperationOptions, OrchestratorPlugin} from '#plugins/types'
 import {Instance} from '#repository/instances'
@@ -30,6 +31,10 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         this.shell = new Shell(config.wsl)
     }
 
+    async attest() {
+        await this.shell.execute([this.getBinary(), 'version'])
+    }
+
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
         files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))
@@ -57,12 +62,12 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         await this.shell.execute(command)
     }
 
-    getBinary(instance: Instance) {
+    getBinary(instance?: Instance) {
         return utils.joinNotNull(
             [
                 this.config.venv ? `cd ${this.config.dir}` : undefined,
                 this.config.venv ? '. .venv/bin/activate' : undefined,
-                `cd ${this.shell.resolve(instance.getDataDirectory())}`,
+                check.isDefined(instance) ? `cd ${this.shell.resolve(instance.getDataDirectory())}` : undefined,
                 'unfurl',
             ],
             ' && '

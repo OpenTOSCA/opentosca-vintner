@@ -173,6 +173,16 @@ orchestrators
         })
     )
 
+orchestrators
+    .command('attest')
+    .description('attests an orchestrator plugin')
+    .requiredOption('--orchestrator <string>', 'orchestrator plugin')
+    .action(
+        hae.exit(async options => {
+            await Controller.orchestrators.attest(options)
+        })
+    )
+
 const initOrchestrators = orchestrators.command('init').description('initializes an orchestrator plugin')
 
 initOrchestrators

@@ -19,10 +19,10 @@ function setConfig(config: OrchestratorsConfig) {
     files.storeYAML(configPath, config)
 }
 
-function getOrchestrator() {
+function getOrchestrator(orchestrator?: string) {
     const config = loadConfig()
 
-    switch (config.enabled) {
+    switch (orchestrator ?? config.enabled) {
         case 'xopera':
             assert.isDefined(config.xOpera, 'xOpera is enabled but no config was found')
             return new xOperaPlugin({...config.xOpera, wsl: false})
