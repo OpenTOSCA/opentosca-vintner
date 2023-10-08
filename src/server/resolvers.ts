@@ -210,6 +210,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/instances/validate',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.validate(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/instances/deploy',
     hae.express(async (req, res, next) => {
         await Controller.instances.undeploy(req.body)

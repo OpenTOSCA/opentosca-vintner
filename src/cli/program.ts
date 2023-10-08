@@ -556,6 +556,17 @@ instances
     )
 
 instances
+    .command('validate')
+    .description('validates variability-resolved service template')
+    .requiredOption('--instance <string>', 'instance name')
+    .option('--verbose [boolean]', 'verbose')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.validate(options)
+        })
+    )
+
+instances
     .command('inspect')
     .description('inspects variability-resolved service template')
     .requiredOption('--instance <string>', 'instance name')

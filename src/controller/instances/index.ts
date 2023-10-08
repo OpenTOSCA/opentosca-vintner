@@ -15,12 +15,14 @@ import _swap from './swap'
 import _unadapt from './unadapt'
 import _undeploy from './undeploy'
 import _update from './update'
+import _validate from './validate'
 
 export default {
     init: _init,
     delete: _delete,
     deploy: _deploy,
     inspect: _inspect,
+    validate: _validate,
     list: _list,
     open: _open,
     code: _code,
