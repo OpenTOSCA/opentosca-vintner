@@ -579,6 +579,17 @@ instances
     )
 
 instances
+    .command('outputs')
+    .description('outputs instance outputs')
+    .requiredOption('--instance <string>', 'instance name')
+    .option('--verbose [boolean]', 'verbose')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.outputs(options)
+        })
+    )
+
+instances
     .command('continue')
     .description('continue instance (deployment)')
     .requiredOption('--instance <string>', 'instance name')

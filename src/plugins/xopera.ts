@@ -58,6 +58,12 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute(command)
     }
 
+    async outputs(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [this.binary, 'outputs', '--instance-path', this.shell.resolve(instance.getDataDirectory())]
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
+    }
+
     async continue(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,
