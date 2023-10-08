@@ -45,6 +45,19 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute([this.binary, '--version'])
     }
 
+    async validate(instance: Instance, options?: OrchestratorOperationOptions) {
+        const command = [
+            this.binary,
+            'validate',
+            this.shell.resolve(instance.getServiceTemplate()),
+            '--instance-path',
+            this.shell.resolve(instance.getDataDirectory()),
+        ]
+        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
+        if (options?.verbose) command.push('--verbose')
+        await this.shell.execute(command)
+    }
+
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         const command = [
             this.binary,

@@ -35,6 +35,10 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         await this.shell.execute([this.getBinary(), 'version'])
     }
 
+    async validate(instance: Instance, options?: OrchestratorOperationOptions) {
+        return Promise.reject('Not Implemented')
+    }
+
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         await this.shell.execute([this.getBinary(instance), 'init', '--empty', '.'])
         files.storeYAML(this.getEnsemblePath(instance), this.getEnsemble(instance))

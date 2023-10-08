@@ -24,9 +24,14 @@ vintner setup install --xopera
 Then, you can configure Vintner to use xOpera.
 
 ```shell linenums="1"
-vintner setup install --xopera
 vintner orchestrators init xopera --no-venv
 vintner orchestrators enable --orchestrator xopera
+```
+
+To attest that Vintner can correctly use xOpera, run the following command. 
+
+```shell linenums="1"
+vintner orchestrators attest --orchestrator xopera
 ```
 
 If you have installed xOpera in WSL and run Vintner on Windows, then configure Vintner in the follwoing way.
@@ -35,6 +40,13 @@ If you have installed xOpera in WSL and run Vintner on Windows, then configure V
 vintner orchestrators init xopera-wsl --no-venv
 vintner orchestrators enable --orchestrator xopera-wsl
 ```
+
+To attest that Vintner can correctly use xOpera in WSL, run the following command.
+
+```shell linenums="1"
+vintner orchestrators attest --orchestrator xopera-wsl
+```
+
 
 ## Unfurl
 
@@ -53,6 +65,12 @@ vintner orchestrators init unfurl --no-venv
 vintner orchestrators enable --orchestrator unfurl
 ```
 
+To attest that Vintner can correctly use Unfurl, run the following command.
+
+```shell linenums="1"
+vintner orchestrators attest --orchestrator unfurl
+```
+
 If you have installed Unfurl in WSL and run Vintner on Windows, then configure Vintner in the following way.
 
 ```shell linenums="1"
@@ -60,18 +78,26 @@ vintner orchestrators init unfurl-wsl --no-venv
 vintner orchestrators enable --orchestrator unfurl-wsl
 ```
 
+To attest that Vintner can correctly use Unfurl, run the following command.
+
+```shell linenums="1"
+vintner orchestrators attest --orchestrator unfurl-wsl
+```
+
 ## Integrated Features
 
 The following table describes which feature of the orchestrators are integrated. 
 The orchestrators provide more features than we integrated, thus, checkout [TOSSS](https://tosss.opentosca.org){target=_blank}.
 
-| Feature                         | xOpera | Unfurl |
-|---------------------------------|-------| --- |
-| Deploy a service template       | :material-check: | :material-check: |
-| Continue a service template     | :material-check: | :material-close: | 
-| Update a service template       | :material-check: | :material-close: | 
-| Undeploy a service template     | :material-check: |:material-check: |
-| Access Node Instance Attributes | :material-check: | :material-close: |
+| Feature                         | xOpera | Unfurl                |
+|---------------------------------|-------|-----------------------|
+| Validate a service template     | :material-check: | :material-close:      |
+| Deploy a service template       | :material-check: | :material-check:      |
+| Get service template outputs    | :material-check: | :material-close: |
+| Continue a service template     | :material-check: | :material-close:      | 
+| Update a service template       | :material-check: | :material-close:      | 
+| Undeploy a service template     | :material-check: | :material-check:      |
+| Access Node Instance Attributes | :material-check: | :material-close:      |
 
 
 ## Known Limitations 

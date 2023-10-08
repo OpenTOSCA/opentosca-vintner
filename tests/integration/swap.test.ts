@@ -56,6 +56,7 @@ if (!integrationTestsEnabled) {
 
             // Check that can be deployed
             await Controller.instances.resolve({instance: instanceName})
+            await Controller.instances.validate({instance: instanceName})
             await Controller.instances.deploy({instance: instanceName})
 
             // Swap template
@@ -69,6 +70,7 @@ if (!integrationTestsEnabled) {
 
             // Check that instance can be updated
             await Controller.instances.resolve({instance: instanceName})
+            await Controller.instances.validate({instance: instanceName})
             await Controller.instances.update({instance: instanceName})
         }).timeout(15 * 1000)
 

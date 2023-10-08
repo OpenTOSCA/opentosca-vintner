@@ -442,6 +442,45 @@ opens template directory in a file browser
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 
+## vintner instances outputs
+
+outputs instance outputs
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances outputs --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/outputs
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/outputs", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/outputs", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| verbose |  false  | boolean | verbose |
+
 ## vintner instances path
 
 returns the path to the instance directory
@@ -649,6 +688,83 @@ update instance
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | verbose |  false  | boolean | verbose |
+
+## vintner instances validate
+
+validates variability-resolved service template
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances validate --instance ${INSTANCE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/validate
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/validate", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/validate", json={
+		"instance": INSTANCE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| verbose |  false  | boolean | verbose |
+
+## vintner orchestrators attest
+
+attests an orchestrator plugin
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner orchestrators attest --orchestrator ${ORCHESTRATOR}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"orchestrator": "${ORCHESTRATOR}"}' \
+            ${SERVER_ADDRESS}/orchestrators/attest
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/orchestrators/attest", {
+		orchestrator: ORCHESTRATOR
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/orchestrators/attest", json={
+		"orchestrator": ORCHESTRATOR
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| orchestrator |  true  | string | orchestrator plugin |
 
 ## vintner orchestrators enable
 
@@ -1073,6 +1189,47 @@ initialises the filesystem
     requests.post(SERVER_ADDRESS + "/setup/init")
     ```
 
+## vintner setup install
+
+install utils (Linux is required)
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup install 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/install
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/install")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/install")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| all |  false  | boolean | install all utils |
+| utils |  false  | boolean | install sudo, unzip, git, curl, wget, nano, and tree |
+| python |  false  | boolean | install Python |
+| xopera |  false  | boolean | install xOpera (system-wide) |
+| unfurl |  false  | boolean | install Unfurl (system-wide) |
+| gcloud |  false  | boolean | install GCloud CLI |
+| openstack |  false  | boolean | install OpenStack CLI |
+| terraform |  false  | boolean | install Terraform |
+| ansible |  false  | boolean | install Ansible (system-wide) |
+
 ## vintner setup open
 
 opens the home directory
@@ -1094,46 +1251,6 @@ returns the path to the home directory
     vintner setup path 
     ```
 
-
-## vintner setup install
-
-install utils (linux is required)
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner setup install 
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            ${SERVER_ADDRESS}/setup/utils
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/setup/utils")
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/setup/utils")
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| all |  false  | boolean | install all utils |
-| git |  false  | boolean | install Git |
-| python |  false  | boolean | install Python |
-| xopera |  false  | boolean | install xOpera (system-wide) |
-| unfurl |  false  | boolean | install Unfurl (system-wide) |
-| gcloud |  false  | boolean | install gCloud |
-| terraform |  false  | boolean | install Terraform |
-| ansible |  false  | boolean | install Ansible (system-wide) |
 
 ## vintner template enrich
 

@@ -136,6 +136,7 @@ resolvers.post(
     '/template/inputs',
     hae.express(async (req, res, next) => {
         await Controller.template.inputs(req.body)
+        res.json({})
     })
 )
 
@@ -143,6 +144,7 @@ resolvers.post(
     '/template/puml/topology',
     hae.express(async (req, res, next) => {
         await Controller.template.puml.topology(req.body)
+        res.json({})
     })
 )
 
@@ -150,6 +152,7 @@ resolvers.post(
     '/template/puml/types',
     hae.express(async (req, res, next) => {
         await Controller.template.puml.types(req.body)
+        res.json({})
     })
 )
 
@@ -205,6 +208,14 @@ resolvers.post(
     '/instances/resolve',
     hae.express(async (req, res, next) => {
         await Controller.instances.resolve(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/validate',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.validate(req.body)
         res.json({})
     })
 )
