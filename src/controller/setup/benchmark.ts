@@ -50,7 +50,7 @@ export default async function (options: BenchmarkOptions) {
                     inputs: {mode: 'present'},
                 })
 
-                if (io) storeYAML(output, result)
+                if (io) storeYAML(output, result.template)
 
                 const end = process.hrtime(start)
                 const duration = utils.hrtime2ms(end)
@@ -186,8 +186,8 @@ export function benchmark2markdown(results: BenchmarkResults, options: Benchmark
 
         data.push('')
         data.push('File Measurements')
-        data.push('| Seed |  File Size | File Lines | ')
-        data.push('| --- | --- | --- |')
+        data.push('| Test | Seed |  File Size | File Lines | ')
+        data.push('| --- | --- | --- | --- |')
 
         results
             .filter(it => it.IO)
