@@ -162,7 +162,6 @@ jobs:
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
                   vintner instances init --instance artifacts --template artifacts
                   vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
-                  vintner instances validate --instance artifacts
 
                   echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
