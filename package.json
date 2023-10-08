@@ -133,7 +133,7 @@
         "test:all": "cross-env ENABLE_INTEGRATION_TESTS=true yarn test:local",
         "test:local": "nyc mocha \"tests/**/*.ts\"",
         "test:integration": "cross-env ENABLE_INTEGRATION_TESTS=true nyc mocha \"tests/integration/**/*.ts\"",
-        "benchmark": "yarn cli setup benchmark --latex --markdown",
+        "benchmark": "yarn cli setup benchmark --latex --markdown --io",
         "server:start": "node -r dotenv/config -r ts-node/register -r tsconfig-paths/register src/cli/index.ts server start",
         "server:serve": "nodemon -r dotenv/config -r tsconfig-paths/register --ext \"ts,json\" src/cli/index.ts server start",
         "docs:install": "cd docs && pip install -r requirements.txt",

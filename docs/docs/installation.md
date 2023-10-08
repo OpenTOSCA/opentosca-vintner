@@ -127,7 +127,7 @@ Otherwise, data and deployments will be corrupted.
 docker stop vintner
 ```
 
-### Watching the Log of the Container
+### Watching the Logs of the Container
 
 To watch the logs of the container, run the following command.
 
