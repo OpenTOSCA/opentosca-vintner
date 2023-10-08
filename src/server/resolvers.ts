@@ -226,6 +226,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/instances/outputs',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.undeploy(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/instances/continue',
     hae.express(async (req, res, next) => {
         await Controller.instances.undeploy(req.body)
