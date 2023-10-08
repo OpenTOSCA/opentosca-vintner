@@ -9,6 +9,7 @@ import _init from './init'
 import _inspect from './inspect'
 import _list from './list'
 import _open from './open'
+import _outputs from './outputs'
 import _path from './path'
 import _resolve from './resolve'
 import _swap from './swap'
@@ -20,6 +21,7 @@ export default {
     init: _init,
     delete: _delete,
     deploy: _deploy,
+    outputs: _outputs,
     inspect: _inspect,
     list: _list,
     open: _open,
