@@ -50,7 +50,6 @@ if (!integrationTestsEnabled) {
                 instance: instanceName,
                 inputs: path.join(templateDirectory, 'variability-inputs.example.yaml'),
             })
-            await Controller.instances.validate({instance: instanceName})
 
             // Assert that variability-resolved service template and variability inputs are as expected
             expect(instance.loadServiceTemplate()).to.deep.equal(firstTemplate)
@@ -66,7 +65,6 @@ if (!integrationTestsEnabled) {
                 instance: instanceName,
                 inputs: {mode: 'second'},
             })
-            await Controller.instances.validate({instance: instanceName})
 
             // Wait until adaptation finished
             await utils.sleep(5 * 1000)
@@ -81,7 +79,6 @@ if (!integrationTestsEnabled) {
                     instance: instanceName,
                     inputs: {mode: value},
                 })
-                await Controller.instances.validate({instance: instanceName})
             }
 
             // Wait until everything is adapted

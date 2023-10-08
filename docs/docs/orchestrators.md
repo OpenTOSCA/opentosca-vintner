@@ -78,7 +78,7 @@ vintner orchestrators init unfurl-wsl --no-venv
 vintner orchestrators enable --orchestrator unfurl-wsl
 ```
 
-To attest that Vintner can correctly use xOpera, run the following command.
+To attest that Vintner can correctly use Unfurl, run the following command.
 
 ```shell linenums="1"
 vintner orchestrators attest --orchestrator unfurl-wsl
