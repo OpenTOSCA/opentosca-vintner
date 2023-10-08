@@ -132,6 +132,7 @@ jobs:
                   vintner templates import --template motivation --path examples/xopera-motivation
                   vintner instances init --instance motivation --template motivation
                   vintner instances resolve --instance motivation --presets prod
+                  vintner instances validate --instance motivation
 
                   cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
                   sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
@@ -161,6 +162,7 @@ jobs:
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
                   vintner instances init --instance artifacts --template artifacts
                   vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+                  vintner instances validate --instance artifacts
 
                   echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
