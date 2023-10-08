@@ -112,7 +112,7 @@ export async function loadXML<T>(file: string) {
 export function toYAML(obj: any, options?: yaml.DumpOptions) {
     return yaml.dump(
         obj,
-        _.merge(
+        _.merge<yaml.DumpOptions, yaml.DumpOptions | undefined>(
             {
                 noRefs: true,
                 styles: {

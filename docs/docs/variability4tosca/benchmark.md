@@ -19,13 +19,13 @@ Thus, generated and resolved service templates are not read or stored to the fil
 
 | Test | Seed   | Templates | Median     | Median per Template |
 |------|--------|-----------|------------|---------------------|
-| 1    | 10     | 40        | 8.070 ms   | 0.202 ms            |
-| 2    | 250    | 1,000     | 66.200 ms  | 0.066 ms            |
-| 3    | 500    | 2,000     | 116.922 ms | 0.058 ms            |
-| 4    | 1,000  | 4,000     | 221.332 ms | 0.055 ms            |
-| 5    | 2,500  | 10,000    | 572.155 ms | 0.057 ms            |
-| 6    | 5,000  | 20,000    | 1.169 s    | 0.058 ms            |
-| 7    | 10,000 | 40,000    | 2.443 s    | 0.061 ms            |
+| 1    | 10     | 40        | 7.977 ms   | 0.199 ms            |
+| 2    | 250    | 1,000     | 66.491 ms  | 0.066 ms            |
+| 3    | 500    | 2,000     | 118.496 ms | 0.059 ms            |
+| 4    | 1,000  | 4,000     | 221.834 ms | 0.055 ms            |
+| 5    | 2,500  | 10,000    | 569.105 ms | 0.057 ms            |
+| 6    | 5,000  | 20,000    | 1.161 s    | 0.058 ms            |
+| 7    | 10,000 | 40,000    | 2.446 s    | 0.061 ms            |
 
 ## Tests with Filesystem
 
@@ -34,13 +34,14 @@ Thus, generated and resolved service templates are also read and stored to the f
 
 | Test | Seed   | Templates | Median     | Median per Template |
 |------|--------|-----------|------------|---------------------|
-| 1    | 10     | 40        | 17.764 ms  | 0.444 ms            |
-| 2    | 250    | 1,000     | 84.839 ms  | 0.085 ms            |
-| 3    | 500    | 2,000     | 149.005 ms | 0.075 ms            |
-| 4    | 1,000  | 4,000     | 282.342 ms | 0.071 ms            |
-| 5    | 2,500  | 10,000    | 696.080 ms | 0.070 ms            |
-| 6    | 5,000  | 20,000    | 1.399 s    | 0.070 ms            |
+| 1    | 10     | 40        | 19.455 ms  | 0.486 ms            |
+| 2    | 250    | 1,000     | 85.688 ms  | 0.086 ms            |
+| 3    | 500    | 2,000     | 150.985 ms | 0.075 ms            |
+| 4    | 1,000  | 4,000     | 283.774 ms | 0.071 ms            |
+| 5    | 2,500  | 10,000    | 698.729 ms | 0.070 ms            |
+| 6    | 5,000  | 20,000    | 1.410 s    | 0.070 ms            |
 | 7    | 10,000 | 40,000    | 2.880 s    | 0.072 ms            |
+
 
 ## File Measurements
 
@@ -56,14 +57,15 @@ The written variable service templates have the following measurements.
 | 6    | 5,000  | 5.175 mb  | 155,012    |
 | 7    | 10,000 | 10.370 mb | 310,012    |
 
+
 ## Computing Resources
 
 The following computing resources have been used for the benchmark.
 
 | Resource          | Value                                       |
 |-------------------|---------------------------------------------|
-| Date              | 2023-04-19                                  | 
-| OpenTOSCA Vintner | bb58a6134cde8e37d602a0aa24b62082fcc14962    |
+| Date              | 2023-10-08                                  | 
+| OpenTOSCA Vintner | 5de5700e5d63240325bc720459e0eb11b3e4c642    |
 | Operating System  | Windows 11                                  |
 | Processor         | Intel Core i7-12700KF                       |
 | Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22       |
@@ -78,7 +80,7 @@ For more information see [Interface](../interface.md#vintner-setup-benchmark){ta
 Feel free to open a merge request, if your benchmarking results are better.
 
 ```shell linenums="1"
-vintner setup benchmark
+vintner setup benchmark --markdown --io
 ```
 
 ## Service Template Under Test

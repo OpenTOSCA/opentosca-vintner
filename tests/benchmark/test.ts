@@ -6,7 +6,7 @@ import * as path from 'path'
 
 describe('benchmark', () => {
     it('run', async () => {
-        await benchmark({seeds: [2], runs: 1})
+        await benchmark({seeds: [2], runs: 10, io: true})
     })
 
     it('generate service template', () => {

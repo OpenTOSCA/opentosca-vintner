@@ -1,4 +1,5 @@
-import {countLines, getSize, loadYAML, storeYAML, temporary} from '#files'
+import * as crypto from '#crypto'
+import * as files from '#files'
 import Resolver from '#resolver'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
@@ -38,26 +39,32 @@ export default async function (options: BenchmarkOptions) {
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
-                const input = temporary(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input.yaml`)
-                const output = temporary(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output.yaml`)
+                const input = files.temporary(
+                    `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input_${crypto.generateNonce()}.yaml`
+                )
+                const output = files.temporary(
+                    `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output_${crypto.generateNonce()}.yaml`
+                )
 
                 const start = process.hrtime()
 
-                if (io) storeYAML(input, serviceTemplate)
+                if (io) files.storeYAML(input, serviceTemplate)
 
                 const result = await Resolver.resolve({
-                    template: io ? loadYAML<ServiceTemplate>(input) : serviceTemplate,
+                    template: io ? files.loadYAML<ServiceTemplate>(input) : serviceTemplate,
                     inputs: {mode: 'present'},
                 })
 
-                if (io) storeYAML(output, result.template)
+                if (io) files.storeYAML(output, result.template)
 
                 const end = process.hrtime(start)
                 const duration = utils.hrtime2ms(end)
 
                 if (io) {
-                    size = getSize(input)
-                    lines = countLines(input)
+                    size = files.getSize(input)
+                    lines = files.countLines(input)
+                    await files.deleteFile(input)
+                    await files.deleteFile(output)
                 }
 
                 console.log(`Finished`, {io, seed, run, duration})
