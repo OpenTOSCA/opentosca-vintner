@@ -29,6 +29,7 @@ export type OrchestratorOperationOptions = {
 }
 
 export interface OrchestratorPlugin {
+    attest: () => Promise<void>
     deploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     continue: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     update: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>

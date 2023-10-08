@@ -37,6 +37,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/orchestrators/attest',
+    hae.express(async (req, res, next) => {
+        await Controller.orchestrators.attest(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/orchestrators/init/xopera',
     hae.express(async (req, res, next) => {
         await Controller.orchestrators.initxOpera(req.body)
