@@ -84,6 +84,7 @@
         "@types/papaparse": "^5.3.7",
         "@types/regression": "^2.0.2",
         "@types/semver": "^7.3.13",
+        "@types/source-map-support": "^0.5.8",
         "@types/stats-lite": "^2.2.0",
         "@types/uuid": "^9.0.1",
         "@types/xml2js": "^0.4.11",
