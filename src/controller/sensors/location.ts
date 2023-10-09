@@ -1,8 +1,8 @@
 import {human2cron, prefix, SensorBaseOptions, submit} from '#controller/sensors/utils'
+import std from '#std'
 import death from '#utils/death'
 import hae from '#utils/hae'
 import axios from 'axios'
-import console from 'console'
 import cron from 'node-cron'
 
 export type SensorLocationOptions = SensorBaseOptions & {template: string}
@@ -28,7 +28,7 @@ export default async function (options: SensorLocationOptions) {
             },
             options.template
         )
-        console.log(inputs)
+        std.log(inputs)
 
         if (options.disableSubmission) return
         await submit(options, inputs)

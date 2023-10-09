@@ -4,9 +4,9 @@ import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
 import * as files from '#files'
 import {UnfurlNativeDefaults, UnfurlWSLDefaults} from '#plugins/unfurl'
 import {xOperaNativeDefaults, xOperaWSLDefaults} from '#plugins/xopera'
+import std from '#std'
 import hae from '#utils/hae'
 import {Command, Option} from 'commander'
-import console from 'console'
 
 export const program = new Command()
 
@@ -59,7 +59,7 @@ setup
     .description('returns the path to the home directory')
     .action(
         hae.exit(async () => {
-            console.log(await Controller.setup.path())
+            std.out(await Controller.setup.path())
         })
     )
 
@@ -77,7 +77,7 @@ setup
     .option('--ansible [boolean]', 'install Ansible (system-wide)')
     .action(
         hae.exit(async options => {
-            console.log(await Controller.setup.install(options))
+            std.out(await Controller.setup.install(options))
         })
     )
 
@@ -97,9 +97,9 @@ setup
     .action(
         hae.exit(async options => {
             const results = await Controller.setup.benchmark(options)
-            console.table(results)
-            if (options.markdown) console.log('\n', benchmark2markdown(results, options))
-            if (options.latex) console.log('\n', benchmark2latex(results, options))
+            std.table(results)
+            if (options.markdown) std.out('\n', benchmark2markdown(results, options))
+            if (options.latex) std.out('\n', benchmark2latex(results, options))
         })
     )
 
@@ -243,8 +243,8 @@ program
     .action(
         hae.exit(async options => {
             const result = await Controller.query.run(options)
-            if (options.format === 'yaml') console.log(files.toYAML(result))
-            if (options.format === 'json') console.log(files.toJSON(result))
+            if (options.format === 'yaml') std.out(files.toYAML(result))
+            if (options.format === 'json') std.out(files.toJSON(result))
         })
     )
 
@@ -341,7 +341,7 @@ template
     .action(
         hae.exit(async options => {
             const result = await Controller.template.stats(options)
-            console.log(result)
+            std.out(result)
         })
     )
 
@@ -399,7 +399,7 @@ templates
     .action(
         hae.exit(async () => {
             const templates = await Controller.templates.list()
-            console.log(templates.map(template => template.getName()).join('\n'))
+            std.out(templates.map(template => template.getName()).join('\n'))
         })
     )
 
@@ -442,7 +442,7 @@ templates
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            console.log(await Controller.templates.path(options))
+            std.out(await Controller.templates.path(options))
         })
     )
 
@@ -453,7 +453,7 @@ templates
     .action(
         hae.exit(async options => {
             const template = await Controller.templates.inspect(options)
-            console.log(files.toYAML(template))
+            std.out(files.toYAML(template))
         })
     )
 
@@ -484,7 +484,7 @@ instances
     .action(
         hae.exit(async () => {
             const instances = await Controller.instances.list()
-            console.log(instances.map(instance => instance.getName()).join('\n'))
+            std.out(instances.map(instance => instance.getName()).join('\n'))
         })
     )
 
@@ -506,7 +506,7 @@ instances
     .action(
         hae.exit(async options => {
             const info = await Controller.instances.info(options)
-            console.log(files.toYAML(info))
+            std.out(files.toYAML(info))
         })
     )
 
@@ -536,7 +536,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .action(
         hae.exit(async options => {
-            console.log(await Controller.instances.path(options))
+            std.out(await Controller.instances.path(options))
         })
     )
 
@@ -573,7 +573,7 @@ instances
     .action(
         hae.exit(async options => {
             const template = await Controller.instances.inspect(options)
-            console.log(files.toYAML(template))
+            std.out(files.toYAML(template))
         })
     )
 

@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
 
@@ -12,7 +13,7 @@ export type TemplatePUMLTopologyOptions = {
 
 export default async function (options: TemplatePUMLTopologyOptions) {
     assert.isDefined(options.path, 'Path not defined')
-    console.log(`Handling file "${path.resolve(options.path)}"`)
+    std.log(`Handling file "${path.resolve(options.path)}"`)
 
     const output = options.output ?? options.path.replace(/(\.yaml|\.yml)/, '.topology.puml')
     if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
@@ -25,7 +26,7 @@ export default async function (options: TemplatePUMLTopologyOptions) {
         utils,
     })
 
-    console.log(`Writing file "${path.resolve(output)}" if changed`)
+    std.log(`Writing file "${path.resolve(output)}" if changed`)
     files.storeFile(output, plot, {onlyIfChanged: true})
 }
 

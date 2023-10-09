@@ -1,7 +1,7 @@
+import std from '#std'
 import death from '#utils/death'
 import hae from '#utils/hae'
 import bodyParser from 'body-parser'
-import console from 'console'
 import cors from 'cors'
 import type {ErrorRequestHandler} from 'express'
 import express from 'express'
@@ -35,7 +35,7 @@ export default {
          * Error Handler
          */
         const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-            console.log(error.stack)
+            std.log(error.stack)
             return res.status(error.status || 500).json({error: error.msg || error.message || error})
         }
         expressServer.use(errorHandler)

@@ -1,6 +1,7 @@
 import Graph from '#graph/graph'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import * as yaml from 'js-yaml'
 
 describe('minisat', () => {
@@ -32,5 +33,5 @@ topology_template:
 
 function play(template: string) {
     const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate))
-    console.log(solver.solveAll())
+    std.log(solver.solveAll())
 }

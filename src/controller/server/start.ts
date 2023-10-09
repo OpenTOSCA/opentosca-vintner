@@ -1,4 +1,5 @@
 import server from '#/server'
+import std from '#std'
 
 export type ServerStartOptions = {
     port: number
@@ -7,6 +8,6 @@ export type ServerStartOptions = {
 
 export default async function ({port, host}: ServerStartOptions) {
     server.create().listen({port, host}, (): void => {
-        console.log(`Server is now running on http://${host}:${port}`)
+        std.log(`Server is now running on http://${host}:${port}`)
     })
 }

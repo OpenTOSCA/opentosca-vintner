@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
+import std from '#std'
 import * as utils from '#utils'
 import death from '#utils/death'
 import wsl from '#utils/wsl'
@@ -40,7 +41,7 @@ export class Shell {
         return new Promise((resolve, reject) => {
             const command = parts.join(' ')
 
-            console.log(
+            std.log(
                 utils.joinNotNull([
                     'Executing',
                     this.wsl ? 'on WSL' : 'locally',
@@ -51,13 +52,13 @@ export class Shell {
 
             let child: ChildProcessByStdio<stream.Writable, null, null>
             if (this.wsl) {
-                child = spawn('wsl', {stdio: ['pipe', process.stdout, process.stdout], cwd: options.cwd})
+                child = spawn('wsl', {stdio: ['pipe', process.stderr, process.stderr], cwd: options.cwd})
                 child.stdin.write(command)
                 child.stdin.end()
             } else {
                 child = spawn(command, {
                     shell: true,
-                    stdio: ['pipe', process.stdout, process.stdout],
+                    stdio: ['pipe', process.stderr, process.stderr],
                     cwd: options.cwd,
                 })
             }
@@ -69,12 +70,12 @@ export class Shell {
             })
 
             child.on('error', error => {
-                console.log(error.message)
+                std.log(error.message)
                 reject(error)
             })
 
             child.on('close', code => {
-                console.log(`Command exited with code ${code}`)
+                std.log(`Command exited with code ${code}`)
 
                 if (code === 0) {
                     resolve(code)

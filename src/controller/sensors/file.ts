@@ -1,9 +1,9 @@
 import {human2cron, SensorBaseOptions, submit} from '#controller/sensors/utils'
 import * as files from '#files'
 import {InputAssignmentMap} from '#spec/topology-template'
+import std from '#std'
 import death from '#utils/death'
 import hae from '#utils/hae'
-import console from 'console'
 import cron from 'node-cron'
 
 export type SensorFileOptions = SensorBaseOptions & {file: string; disableWatch?: boolean}
@@ -11,7 +11,7 @@ export type SensorFileOptions = SensorBaseOptions & {file: string; disableWatch?
 export default async function (options: SensorFileOptions) {
     async function handle() {
         const inputs = files.loadYAML<InputAssignmentMap>(options.file)
-        console.log(inputs)
+        std.log(inputs)
 
         if (options.disableSubmission) return
         await submit(options, inputs)

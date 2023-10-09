@@ -1,9 +1,9 @@
 import * as check from '#check'
 import {SensorBaseOptions, human2cron, prefix, submit} from '#controller/sensors/utils'
+import std from '#std'
 import * as utils from '#utils'
 import death from '#utils/death'
 import hae from '#utils/hae'
-import console from 'console'
 import cron from 'node-cron'
 import si from 'systeminformation'
 
@@ -111,7 +111,7 @@ class SensorCompute {
 
     async handle(data: SensorComputeData) {
         const inputs = prefix(data, this.options.template)
-        console.log(inputs)
+        std.log(inputs)
 
         if (this.options.disableSubmission) return
         await submit(this.options, inputs)

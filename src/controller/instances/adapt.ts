@@ -3,6 +3,7 @@ import Controller from '#controller'
 import {Instance} from '#repository/instances'
 import Resolver from '#resolver'
 import {InputAssignmentMap} from '#spec/topology-template'
+import std from '#std'
 import * as utils from '#utils'
 import {emitter, events} from '#utils/emitter'
 import hae from '#utils/hae'
@@ -21,7 +22,7 @@ type InstancesAdaptationOptions = {instance: string; inputs: InputAssignmentMap}
  * Monitor: Collect sensor data and trigger adaptation
  */
 export default async function (options: InstancesAdaptationOptions) {
-    console.log(options)
+    std.log(options)
     if (stopped[options.instance]) return
 
     if (queue[options.instance]) return queue[options.instance]!.push(options.inputs)
@@ -81,9 +82,9 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
              * Note, that current service template might have failed components, e.g, when the previous deployment did not succeed
              */
             const diff = jsonDiff.diffString(instance.loadServiceTemplate(), result.template)
-            if (!diff) return console.log('There is no difference between the previous and adapted service templates.')
-            console.log('The previous and adapted service templates differs as follows')
-            console.log(diff)
+            if (!diff) return std.log('There is no difference between the previous and adapted service templates.')
+            std.log('The previous and adapted service templates differs as follows')
+            std.log(diff)
 
             /**
              * Analyze and Execute: Update deployment

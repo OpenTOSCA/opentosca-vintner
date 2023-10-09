@@ -1,6 +1,7 @@
 import * as files from '#files'
 import {Instance} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import * as utils from '#utils'
 import {expect} from 'chai'
 import {before} from 'mocha'
@@ -9,8 +10,8 @@ import Controller from '../../src/controller'
 import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
-    console.log()
-    console.warn('Skipping integration tests')
+    std.log()
+    std.log('Skipping integration tests')
 } else {
     describe('adaptation', () => {
         before(async () => {

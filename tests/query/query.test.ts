@@ -1,3 +1,4 @@
+import std from '#std'
 import {loadAllTests} from './query-test'
 
 describe('queries', async () => {
@@ -6,7 +7,7 @@ describe('queries', async () => {
             it(test.id, test.toTest())
         }
     } catch (e) {
-        console.log(e)
+        std.log(e)
         process.exit(1)
     }
 })
