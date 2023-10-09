@@ -308,4 +308,52 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/info/about',
+    hae.express(async (req, res, next) => {
+        const about = await Controller.info.about()
+        res.json({about})
+    })
+)
+
+resolvers.post(
+    '/info/license',
+    hae.express(async (req, res, next) => {
+        const license = await Controller.info.license()
+        res.json({license})
+    })
+)
+
+resolvers.post(
+    '/info/author',
+    hae.express(async (req, res, next) => {
+        const author = await Controller.info.author()
+        res.json({author})
+    })
+)
+
+resolvers.post(
+    '/info/contact',
+    hae.express(async (req, res, next) => {
+        const docs = await Controller.info.docs()
+        res.json({docs})
+    })
+)
+
+resolvers.post(
+    '/info/repo',
+    hae.express(async (req, res, next) => {
+        const repo = await Controller.info.repo()
+        res.json({repo})
+    })
+)
+
+resolvers.post(
+    '/info/dependencies',
+    hae.express(async (req, res, next) => {
+        const dependencies = await Controller.info.dependencies()
+        res.json({dependencies})
+    })
+)
+
 export default resolvers

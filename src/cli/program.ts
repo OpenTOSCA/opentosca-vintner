@@ -6,6 +6,7 @@ import {UnfurlNativeDefaults, UnfurlWSLDefaults} from '#plugins/unfurl'
 import {xOperaNativeDefaults, xOperaWSLDefaults} from '#plugins/xopera'
 import std from '#std'
 import hae from '#utils/hae'
+import open from '#utils/open'
 import {Command, Option} from 'commander'
 
 export const program = new Command()
@@ -109,7 +110,7 @@ info.command('about')
     .description('general information')
     .action(
         hae.exit(async options => {
-            await Controller.info.about()
+            std.out(await Controller.info.about())
         })
     )
 
@@ -117,7 +118,7 @@ info.command('license')
     .description('license of vintner')
     .action(
         hae.exit(async options => {
-            await Controller.info.license()
+            std.out(await Controller.info.license())
         })
     )
 
@@ -125,7 +126,8 @@ info.command('author')
     .description('open author')
     .action(
         hae.exit(async options => {
-            await Controller.info.author()
+            const url = await Controller.info.author()
+            await open.url(url)
         })
     )
 
@@ -133,7 +135,8 @@ info.command('contact')
     .description('contact us')
     .action(
         hae.exit(async options => {
-            await Controller.info.contact()
+            const url = await Controller.info.contact()
+            await open.url(url)
         })
     )
 
@@ -141,7 +144,8 @@ info.command('docs')
     .description('open documentation')
     .action(
         hae.exit(async options => {
-            await Controller.info.docs()
+            const url = await Controller.info.docs()
+            await open.url(url)
         })
     )
 
@@ -149,7 +153,8 @@ info.command('repo')
     .description('open repository')
     .action(
         hae.exit(async options => {
-            await Controller.info.repo()
+            const url = await Controller.info.repo()
+            await open.url(url)
         })
     )
 
@@ -157,7 +162,7 @@ info.command('dependencies')
     .description('dependencies used to implement vintner')
     .action(
         hae.exit(async options => {
-            await Controller.info.dependencies()
+            std.out(await Controller.info.dependencies())
         })
     )
 
