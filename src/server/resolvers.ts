@@ -29,6 +29,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/setup/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.setup.path()
+        res.json({path})
+    })
+)
+
+resolvers.post(
     '/orchestrators/enable',
     hae.express(async (req, res, next) => {
         await Controller.orchestrators.enable(req.body)
@@ -173,6 +181,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/templates/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.templates.path(req.body)
+        res.json({path})
+    })
+)
+
+resolvers.post(
     '/templates/inspect',
     hae.express(async (req, res, next) => {
         const template = await Controller.templates.inspect(req.body)
@@ -201,6 +217,14 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         await Controller.instances.init(req.body)
         res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.instances.path(req.body)
+        res.json({path})
     })
 )
 

@@ -19,6 +19,7 @@ async function main() {
     const data: CommandInformation[] = []
     run(program, [])
 
+    // Server-only commands must be added manually
     data.push({
         commands: ['instances', 'adapt'],
         usage: 'vintner instances adapt',
@@ -94,7 +95,7 @@ async function main() {
 }
 
 function isCLIOnly(commands: string[]) {
-    return ['server', 'sensors'].includes(commands[0]) || ['open', 'path', 'code'].includes(commands[1])
+    return ['server', 'sensors'].includes(commands[0]) || ['open', 'code'].includes(commands[1])
 }
 
 main()

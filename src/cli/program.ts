@@ -596,7 +596,7 @@ instances
 
 instances
     .command('outputs')
-    .description('outputs instance outputs')
+    .description('returns instance outputs')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
     .action(
