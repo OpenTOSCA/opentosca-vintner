@@ -2,8 +2,8 @@ import * as check from '#check'
 import * as files from '#files'
 import {Instance} from '#repository/instances'
 import {Shell} from '#shell'
+import std from '#std'
 import * as utils from '#utils'
-import console from 'console'
 import _ from 'lodash'
 import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
 
@@ -105,15 +105,15 @@ export class xOperaPlugin implements OrchestratorPlugin {
             if (options?.verbose) command.push('--verbose')
             await this.shell.execute(command)
         } catch (e) {
-            console.log(e)
+            std.log(e)
         } finally {
-            console.log('Will try to hotfix https://github.com/xlab-si/xopera-opera/issues/262')
+            std.log('Will try to hotfix https://github.com/xlab-si/xopera-opera/issues/262')
 
             // Add lost public_address back to node instance
             // This is a hotfix for https://github.com/xlab-si/xopera-opera/issues/262 and is not reliable
             for (const [node, nodeAttributes] of Object.entries(attributes)) {
                 if (check.isString(nodeAttributes.attributes.public_address)) {
-                    console.log(`Node "${node}" has public address "${nodeAttributes.attributes.public_address}"`)
+                    std.log(`Node "${node}" has public address "${nodeAttributes.attributes.public_address}"`)
                     const nodePath = this.getNodeInstance(instance, node)
                     if (files.isFile(nodePath)) {
                         const nodeInstance = files.loadYAML<xOperaInstance>(nodePath)

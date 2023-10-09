@@ -17,6 +17,24 @@ general information
     vintner info about 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/about
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/about")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/about")
+    ```
 
 ## vintner info author
 
@@ -28,6 +46,24 @@ open author
     vintner info author 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/author
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/author")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/author")
+    ```
 
 ## vintner info contact
 
@@ -39,6 +75,24 @@ contact us
     vintner info contact 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/contact
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/contact")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/contact")
+    ```
 
 ## vintner info dependencies
 
@@ -50,6 +104,24 @@ dependencies used to implement vintner
     vintner info dependencies 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/dependencies
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/dependencies")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/dependencies")
+    ```
 
 ## vintner info docs
 
@@ -61,6 +133,24 @@ open documentation
     vintner info docs 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/docs
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/docs")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/docs")
+    ```
 
 ## vintner info license
 
@@ -72,6 +162,24 @@ license of vintner
     vintner info license 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/license
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/license")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/license")
+    ```
 
 ## vintner info repo
 
@@ -83,6 +191,24 @@ open repository
     vintner info repo 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/info/repo
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/info/repo")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/info/repo")
+    ```
 
 ## vintner instances adapt
 
@@ -444,7 +570,7 @@ opens template directory in a file browser
 
 ## vintner instances outputs
 
-outputs instance outputs
+returns instance outputs
 
 
 === "CLI"
@@ -491,6 +617,29 @@ returns the path to the instance directory
     vintner instances path --instance ${INSTANCE}
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}"}' \
+            ${SERVER_ADDRESS}/instances/path
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/path", {
+		instance: INSTANCE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/path", json={
+		"instance": INSTANCE
+    })
+    ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
@@ -1251,6 +1400,24 @@ returns the path to the home directory
     vintner setup path 
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/path
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/path")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/path")
+    ```
 
 ## vintner template enrich
 
@@ -1958,6 +2125,29 @@ returns the path to the template directory
     vintner templates path --template ${TEMPLATE}
     ```
 
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/templates/path
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/templates/path", {
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/templates/path", json={
+		"template": TEMPLATE
+    })
+    ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |

@@ -1,5 +1,6 @@
 import {VariabilityTestGroup} from '#controller/template/test'
 import * as files from '#files'
+import std from '#std'
 import path from 'path'
 import {runGroups} from '../utils'
 
@@ -17,7 +18,7 @@ describe('conformance', async () => {
 
         runGroups(groups)
     } catch (e) {
-        console.log(e)
+        std.log(e)
         process.exit(1)
     }
 })

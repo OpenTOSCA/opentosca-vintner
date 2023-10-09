@@ -4,6 +4,7 @@
  * At the same time the documentation page is generated.
  */
 import * as files from '#files'
+import std from '#std'
 import * as path from 'path'
 import * as utils from './utils'
 
@@ -14,7 +15,7 @@ async function main() {
      * Read current dependencies
      */
     const dependencies = await utils.gatherFromLicenseChecker()
-    console.log('Current dependencies retrieved. There are ', dependencies.length, ' Entries')
+    std.log('Current dependencies retrieved. There are ', dependencies.length, ' Entries')
 
     /**
      * Remove older version if a newer version with the same license exists
@@ -24,7 +25,7 @@ async function main() {
     /**
      * Write list to file
      */
-    console.log('Store CSV')
+    std.log('Store CSV')
     utils.storeData(dependencies, CSV_FILE)
 
     /**
@@ -35,7 +36,7 @@ async function main() {
         {data: dependencies, licenses: utils.LICENSES},
         path.join('docs', 'docs', 'dependencies.md')
     )
-    console.log('Documentation page generated')
+    std.log('Documentation page generated')
 }
 
 main()

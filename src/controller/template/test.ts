@@ -2,8 +2,8 @@ import * as check from '#check'
 import Controller from '#controller'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import * as utils from '#utils'
-import * as console from 'console'
 import jsonDiff from 'json-diff'
 import path from 'path'
 
@@ -41,7 +41,7 @@ export default async function (options: TemplateTestOptions) {
     const effectiveTests = onlyTests.length ? onlyTests : nonDisabledTests
 
     for (const test of effectiveTests) {
-        console.log(`Running test "${test.name}"`)
+        std.log(`Running test "${test.name}"`)
         await runTest(test.dir, options.path)
     }
 }
@@ -75,8 +75,8 @@ async function runTest(dir: string, vstdir: string) {
 
         const diff = jsonDiff.diffString(expected, result)
         if (diff) {
-            console.log('Resolving failed')
-            console.log(diff)
+            std.log('Resolving failed')
+            std.log(diff)
         }
     }
 }

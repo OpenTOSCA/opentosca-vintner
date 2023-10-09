@@ -1,3 +1,4 @@
+import std from '#std'
 import {execSync} from 'child_process'
 import * as fs from 'fs'
 import * as licenseChecker from 'license-checker'
@@ -73,9 +74,9 @@ export function readLatestList(path: string): DependencyList {
     let data: DependencyList = []
     if (fs.existsSync(path)) {
         data = Papa.parse<Dependency>(fs.readFileSync(path, 'utf8'), {skipEmptyLines: true, header: true}).data
-        console.log('Latest list read. It has ', data.length, ' Entries')
+        std.log('Latest list read. It has ', data.length, ' Entries')
     } else {
-        console.log('No file for dependencies found. A new one will be created later')
+        std.log('No file for dependencies found. A new one will be created later')
     }
     return data
 }
@@ -85,7 +86,7 @@ export function readLatestList(path: string): DependencyList {
  */
 export function storeData(data: DependencyList, file: string): void {
     fs.writeFileSync(file, Papa.unparse(data))
-    console.log('File ', file, ' written')
+    std.log('File ', file, ' written')
 }
 
 /**
@@ -110,7 +111,7 @@ export function removeDependencyVersionsWithSameLicense(data: DependencyList): v
 
             // Third condition of lower version number implicit because of sorting
             if (successorEntry.name == entry.name && successorEntry.license == entry.license) {
-                console.log(
+                std.log(
                     'Removing',
                     successorEntry.name,
                     '@',
@@ -137,6 +138,6 @@ export function formatSourceCodeUrl(url: string): string {
     if (url.startsWith('git+')) return url.slice(4)
     if (url.startsWith('git@')) return url.replace(':', '/').replace('git@', 'https://')
 
-    console.log(`Unsupported source code url ${url}`)
+    std.log(`Unsupported source code url ${url}`)
     return url
 }

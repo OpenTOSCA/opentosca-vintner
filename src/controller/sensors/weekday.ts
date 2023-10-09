@@ -1,10 +1,10 @@
 import * as check from '#check'
 import {human2cron, SensorBaseOptions, submit} from '#controller/sensors/utils'
 import {InputAssignmentMap} from '#spec/topology-template'
+import std from '#std'
 import day from '#utils/day'
 import death from '#utils/death'
 import hae from '#utils/hae'
-import console from 'console'
 import cron from 'node-cron'
 
 export type SensorWeekdayOptions = SensorBaseOptions & {start?: string}
@@ -20,7 +20,7 @@ export default async function (options: SensorWeekdayOptions) {
 
     async function handle() {
         const inputs: InputAssignmentMap = {weekday: week[index]}
-        console.log(inputs)
+        std.log(inputs)
 
         if (options.disableSubmission) return
         await submit(options, inputs)
