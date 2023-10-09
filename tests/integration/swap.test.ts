@@ -2,14 +2,15 @@ import Controller from '#controller'
 import * as files from '#files'
 import {Instance} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import {expect} from 'chai'
 import {before} from 'mocha'
 import path from 'path'
 import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
-    console.log()
-    console.warn('Skipping integration tests')
+    std.log()
+    std.log('Skipping integration tests')
 } else {
     describe('swap', () => {
         before(async () => {

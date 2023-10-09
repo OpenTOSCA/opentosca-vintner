@@ -29,6 +29,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/setup/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.setup.path()
+        res.json({path})
+    })
+)
+
+resolvers.post(
     '/orchestrators/enable',
     hae.express(async (req, res, next) => {
         await Controller.orchestrators.enable(req.body)
@@ -173,6 +181,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/templates/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.templates.path(req.body)
+        res.json({path})
+    })
+)
+
+resolvers.post(
     '/templates/inspect',
     hae.express(async (req, res, next) => {
         const template = await Controller.templates.inspect(req.body)
@@ -201,6 +217,14 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         await Controller.instances.init(req.body)
         res.json({})
+    })
+)
+
+resolvers.post(
+    '/instances/path',
+    hae.express(async (req, res, next) => {
+        const path = await Controller.instances.path(req.body)
+        res.json({path})
     })
 )
 
@@ -305,6 +329,54 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         const info = await Controller.instances.info(req.body)
         res.json(info)
+    })
+)
+
+resolvers.post(
+    '/info/about',
+    hae.express(async (req, res, next) => {
+        const about = await Controller.info.about()
+        res.json({about})
+    })
+)
+
+resolvers.post(
+    '/info/license',
+    hae.express(async (req, res, next) => {
+        const license = await Controller.info.license()
+        res.json({license})
+    })
+)
+
+resolvers.post(
+    '/info/author',
+    hae.express(async (req, res, next) => {
+        const author = await Controller.info.author()
+        res.json({author})
+    })
+)
+
+resolvers.post(
+    '/info/contact',
+    hae.express(async (req, res, next) => {
+        const docs = await Controller.info.docs()
+        res.json({docs})
+    })
+)
+
+resolvers.post(
+    '/info/repo',
+    hae.express(async (req, res, next) => {
+        const repo = await Controller.info.repo()
+        res.json({repo})
+    })
+)
+
+resolvers.post(
+    '/info/dependencies',
+    hae.express(async (req, res, next) => {
+        const dependencies = await Controller.info.dependencies()
+        res.json({dependencies})
     })
 )
 

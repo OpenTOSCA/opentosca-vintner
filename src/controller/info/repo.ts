@@ -1,7 +1,7 @@
-import open from '#utils/open'
+import std from '#std'
 
 export default async function () {
     const url = 'https://github.com/OpenTOSCA/opentosca-vintner'
-    console.log(url)
-    await open.url(url)
+    std.log(url)
+    return url
 }

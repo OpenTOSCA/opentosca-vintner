@@ -1,7 +1,5 @@
-import console from 'console'
-
 export default async function () {
-    console.log(`
+    return `
  $$$$$$\\                             $$$$$$$$\\  $$$$$$\\   $$$$$$\\   $$$$$$\\   $$$$$$\\        $$\\    $$\\ $$$$$$\\            $$\\                                   
 $$  __$$\\                            \\__$$  __|$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\       $$ |   $$ |\\_$$  _|           $$ |                                  
 $$ /  $$ | $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$ |   $$ /  $$ |$$ /  \\__|$$ /  \\__|$$ /  $$ |      $$ |   $$ |  $$ |  $$$$$$$\\ $$$$$$\\   $$$$$$$\\   $$$$$$\\   $$$$$$\\  
@@ -27,5 +25,5 @@ Haftungsausschluss: Dies ist ein Forschungsprototyp. Die Haftung für entgangene
 
 Disclaimer of Warranty: Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
 
-Acknowledgements: This project is developed for the purpose of research by the Institute of Software Engineering (ISTE) and the Institute of Architecture of Application Systems (IAAS) of the University of Stuttgart, Germany. The development is partially funded by the German Federal Ministry for Economic Affairs and Climate Action (BMWK) as part of the Software-Defined Car (SofDCar) project (19S21002).`)
+Acknowledgements: This project is developed for the purpose of research by the Institute of Software Engineering (ISTE) and the Institute of Architecture of Application Systems (IAAS) of the University of Stuttgart, Germany. The development is partially funded by the German Federal Ministry for Economic Affairs and Climate Action (BMWK) as part of the Software-Defined Car (SofDCar) project (19S21002).`
 }

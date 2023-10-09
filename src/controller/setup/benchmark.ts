@@ -2,6 +2,7 @@ import * as crypto from '#crypto'
 import * as files from '#files'
 import Resolver from '#resolver'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import std from '#std'
 import * as utils from '#utils'
 
 type BenchmarkOptions = {
@@ -24,7 +25,7 @@ export type BenchmarkResult = {
 export type BenchmarkResults = BenchmarkResult[]
 
 export default async function (options: BenchmarkOptions) {
-    console.log('Running benchmark with following options', options)
+    std.log('Running benchmark with following options', options)
 
     const results: BenchmarkResults = []
     for (const io of options.io ? [false, true] : [false]) {
@@ -34,7 +35,7 @@ export default async function (options: BenchmarkOptions) {
             let lines
 
             for (let run = 0; run < options.runs; run++) {
-                console.log(`Running `, {io, seed, run})
+                std.log(`Running `, {io, seed, run})
 
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
@@ -67,7 +68,7 @@ export default async function (options: BenchmarkOptions) {
                     await files.deleteFile(output)
                 }
 
-                console.log(`Finished`, {io, seed, run, duration})
+                std.log(`Finished`, {io, seed, run, duration})
 
                 measurements.push(duration)
             }

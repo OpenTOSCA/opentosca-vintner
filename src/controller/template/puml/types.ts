@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
 
@@ -13,7 +14,7 @@ export type TemplatePUMLTypesOptions = {
 
 export default async function (options: TemplatePUMLTypesOptions) {
     assert.isDefined(options.path, 'Path not defined')
-    console.log(`Handling file "${path.resolve(options.path)}"`)
+    std.log(`Handling file "${path.resolve(options.path)}"`)
 
     const outputDir = options.output ?? files.getDirectory(options.path)
     files.assertDirectory(outputDir)
@@ -38,7 +39,7 @@ export default async function (options: TemplatePUMLTypesOptions) {
         )
         if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 
-        console.log(`Writing file "${output}" if changed`)
+        std.log(`Writing file "${output}" if changed`)
         files.storeFile(output, plot, {onlyIfChanged: true})
     }
 }
