@@ -859,6 +859,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/source-map-support@npm:^0.5.8":
+  version: 0.5.8
+  resolution: "@types/source-map-support@npm:0.5.8"
+  dependencies:
+    source-map: ^0.6.0
+  checksum: 333d77b70fd793de066572aa1c7d988ac351e6591b860db8df05bdb2ad40ee2aa1a31d66c3c0d019137d72fb7b806dfc55c2b47958d1599e775e1d37dc1f736d
+  languageName: node
+  linkType: hard
+
 "@types/stats-lite@npm:^2.2.0":
   version: 2.2.0
   resolution: "@types/stats-lite@npm:2.2.0"
@@ -5347,6 +5356,7 @@ __metadata:
     "@types/papaparse": ^5.3.7
     "@types/regression": ^2.0.2
     "@types/semver": ^7.3.13
+    "@types/source-map-support": ^0.5.8
     "@types/stats-lite": ^2.2.0
     "@types/uuid": ^9.0.1
     "@types/xml2js": ^0.4.11
