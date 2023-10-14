@@ -1,3 +1,4 @@
+import Enricher from '#enricher'
 import Graph from '#graph/graph'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
@@ -5,8 +6,8 @@ import std from '#std'
 import * as yaml from 'js-yaml'
 
 describe('minisat', () => {
-    it('play', () => {
-        play(
+    it('play', async () => {
+        await play(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -14,24 +15,32 @@ topology_template:
     variability:
         options:
             node_default_condition: true
+            node_default_condition_mode: incomingnaive
+            
+     
             relation_default_condition: true
+            relation_default_condition_mode: source-target
 
+            type_default_condition: true
     node_templates:
-        node_one:
-            type: node_one
-
-        node_two:
-            type: node_two
-            conditions: {not: {node_presence: node_one}}
+        source:
+            type: source
             requirements:
-                - relation_one: node_one
+                - relation:
+                      node: target
+
+        target:
+            type: target
 
         `
         )
     })
 })
 
-function play(template: string) {
-    const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate))
+async function play(data: string) {
+    const template = yaml.load(data) as ServiceTemplate
+    await Enricher.enrich({template})
+
+    const solver = new Solver(new Graph(template))
     std.log(solver.solveAll())
 }
