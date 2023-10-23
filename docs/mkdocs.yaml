@@ -10,8 +10,8 @@ theme:
     custom_dir: overrides
     icon:
         repo: octicons/mark-github-16
-        logo: assets/images/vintner-logo-bold
-    favicon: assets/images/vintner-logo-bold.svg
+        logo: assets/images/vintner-icon-bold
+    favicon: assets/images/vintner-icon-bold.svg
     font:
         text: Inter
         code: ui-monospace
@@ -140,6 +140,7 @@ nav:
 
     - More Information:
           - OpenTOSCA: https://www.opentosca.org
+          - branding.md
           - resources.md
           - publications.md
           - about-us
