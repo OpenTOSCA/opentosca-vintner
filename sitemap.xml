@@ -1051,6 +1051,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-other-throw-not-unique/</loc>
+         <lastmod>2023-10-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-other-token/</loc>
          <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>

@@ -5,12 +5,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
-<link href="https://vintner.opentosca.org/variability4tosca/tests/test-other-value-expression/" rel="canonical"/>
-<link href="../test-other-token/" rel="prev"/>
-<link href="../test-other-variability-input/" rel="next"/>
+<link href="https://vintner.opentosca.org/variability4tosca/tests/test-other-throw-not-unique/" rel="canonical"/>
+<link href="../test-other-throw-SELF/" rel="prev"/>
+<link href="../test-other-token/" rel="next"/>
 <link href="../../../assets/images/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
-<title>Get Variability Expression - OpenTOSCA Vintner</title>
+<title>other-throw-not-unique - OpenTOSCA Vintner</title>
 <link href="../../../assets/stylesheets/main.eebd395e.min.css" rel="stylesheet"/>
 <link href="../../../assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -32,7 +32,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#get-variability-expression">
+<a class="md-skip" href="#other-throw-not-unique">
           Skip to content
         </a>
 </div>
@@ -107,7 +107,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Get Variability Expression
+              other-throw-not-unique
             
           </span>
 </div>
@@ -1049,24 +1049,14 @@
         other-throw-SELF
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-other-throw-not-unique/">
-        other-throw-not-unique
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-other-token/">
-        Operator "concat"
-      </a>
-</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          Get Variability Expression
+          other-throw-not-unique
           <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
-        Get Variability Expression
+        other-throw-not-unique
       </a>
 <nav aria-label="Table of Contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -1075,22 +1065,27 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#description">
-    Description
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#variable-service-template">
     Variable Service Template
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#variability-resolved-service-template">
-    Variability-Resolved Service Template
+<a class="md-nav__link" href="#expected-error">
+    Expected Error
   </a>
 </li>
 </ul>
 </nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-token/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-value-expression/">
+        Get Variability Expression
+      </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../test-other-variability-input/">
@@ -2046,18 +2041,13 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#description">
-    Description
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#variable-service-template">
     Variable Service Template
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#variability-resolved-service-template">
-    Variability-Resolved Service Template
+<a class="md-nav__link" href="#expected-error">
+    Expected Error
   </a>
 </li>
 </ul>
@@ -2067,9 +2057,7 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="get-variability-expression">Get Variability Expression<a class="headerlink" href="#get-variability-expression" title="Permanent link">¶</a></h1>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">¶</a></h2>
-<p>Assigns "Miles" to the variable "value" of the node "container" since the variability expression "name" resolves to "Miles".</p>
+<h1 id="other-throw-not-unique">other-throw-not-unique<a class="headerlink" href="#other-throw-not-unique" title="Permanent link">¶</a></h1>
 <h2 id="variable-service-template">Variable Service Template<a class="headerlink" href="#variable-service-template" title="Permanent link">¶</a></h2>
 <p>The variability of the following variable service template shall be resolved.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -2083,41 +2071,53 @@
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0</span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">topology_template</span><span class="p">:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">variability</span><span class="p">:</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">expressions</span><span class="p">:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Miles</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loose</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">container</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">value</span><span class="p">:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">            </span><span class="nt">expression</span><span class="p">:</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">              </span><span class="nt">value_expression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">one</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">        </span><span class="nt">not</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">          </span><span class="nt">node_presence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one_host</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">one_host</span><span class="p">:</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one_host</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="nt">two</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">        </span><span class="nt">not</span><span class="p">:</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">          </span><span class="nt">node_presence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two_host</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">    </span><span class="nt">two_host</span><span class="p">:</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two_host</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="variability-resolved-service-template">Variability-Resolved Service Template<a class="headerlink" href="#variability-resolved-service-template" title="Permanent link">¶</a></h2>
-<p>The following variability-resolved service template is expected.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span>
-<span class="normal"><a href="#__codelineno-1-4">4</a></span>
-<span class="normal"><a href="#__codelineno-1-5">5</a></span>
-<span class="normal"><a href="#__codelineno-1-6">6</a></span>
-<span class="normal"><a href="#__codelineno-1-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_simple_yaml_1_3</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nt">topology_template</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nt">container</span><span class="p">:</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">      </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Miles</span>
+<h2 id="expected-error">Expected Error<a class="headerlink" href="#expected-error" title="Permanent link">¶</a></h2>
+<p>The following error is expected to be thrown, when resolving variability.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>The result is ambiguous
 </code></pre></div></td></tr></table></div>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 26, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 24, 2023</span>
 </small>
 </div>
 </article>
@@ -2126,7 +2126,7 @@
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label='Previous: Operator "concat"' class="md-footer__link md-footer__link--prev" href="../test-other-token/" rel="prev">
+<a aria-label="Previous: other-throw-SELF" class="md-footer__link md-footer__link--prev" href="../test-other-throw-SELF/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
 </div>
@@ -2135,17 +2135,17 @@
                 Previous
               </span>
 <div class="md-ellipsis">
-                Operator "concat"
+                other-throw-SELF
               </div>
 </div>
 </a>
-<a aria-label="Next: Get Variability Input" class="md-footer__link md-footer__link--next" href="../test-other-variability-input/" rel="next">
+<a aria-label='Next: Operator "concat"' class="md-footer__link md-footer__link--next" href="../test-other-token/" rel="next">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 Next
               </span>
 <div class="md-ellipsis">
-                Get Variability Input
+                Operator "concat"
               </div>
 </div>
 <div class="md-footer__button md-icon">
