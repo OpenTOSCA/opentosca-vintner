@@ -8,7 +8,7 @@ tags:
 
 This document contains a list of selected publications.
 
-[//]: # (Using MDPI and ACS Style)
+[//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
@@ -25,17 +25,19 @@ This document contains a list of selected publications.
 
 ## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
 
-> _Accepted_
+> Stötzner, M., Breitenbücher, U., Pesl, R. D., & Becker, S. (2024, October). Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies. Cooperative Information Systems, 61–78. doi:10.1007/978-3-031-46846-9_4
 
 - CoopIS 2023
+- [https://doi.org/10.1007/978-3-031-46846-9_4](https://doi.org/10.1007/978-3-031-46846-9_4){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/unfurl-artifacts/stats', 'Models of the Complexity Evaluation') }}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
 
+
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
 
-> Stötzner, Miles, Steffen Becker, Uwe Breitenbücher, Kálmán Képes, and Frank Leymann. 2022. "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" Algorithms 15, no. 10: 382. [https://doi.org/10.3390/a15100382](https://doi.org/10.3390/a15100382){target=_blank}
+> Stötzner, M., Becker, S., Breitenbücher, U., Kálmán, K., & Leymann, F. (2022). Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model. Algorithms, 15(10), 382. doi:10.3390/a15100382
 
 - Algorithms 2022
 - [https://doi.org/10.3390/a15100382](https://doi.org/10.3390/a15100382){target=_blank}
