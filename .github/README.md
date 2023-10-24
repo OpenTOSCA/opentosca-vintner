@@ -39,6 +39,7 @@ This repository holds the step-by-step guides of the following publications.
   - CoopIS 2023 Demo
   - _Accepted_
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts)
+  - [Demo Video](https://youtu.be/6szIGJPuCsU)
   - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
   - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant steps start with "UNFURL-ARTIFACTS")
   - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
