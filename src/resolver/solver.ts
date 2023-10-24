@@ -113,7 +113,7 @@ export default class Solver {
          */
         if (this.graph.options.solver.unique) {
             this.minisat.forbid(this.result.formula)
-            if (check.isDefined(this.minisat.solve())) throw new Error(`There exists a second result`)
+            if (check.isDefined(this.minisat.solve())) throw new Error(`The result is ambiguous`)
         }
 
         /**
