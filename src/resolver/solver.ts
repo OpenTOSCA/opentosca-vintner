@@ -28,10 +28,13 @@ export default class Solver {
     private readonly options?: VariabilityDefinition
 
     readonly minisat = new MiniSat.Solver()
-    private result?: Record<string, boolean>
+    private result?: {
+        map: Record<string, boolean>
+        formula: MiniSat.Formula
+    }
 
     // Some operations on MiniSat cannot be undone
-    private processed = false
+    private solved = false
     private transformed = false
 
     private inputs: InputAssignmentMap = {}
@@ -60,21 +63,21 @@ export default class Solver {
     }
 
     run() {
-        if (this.processed) throw new Error(`Has been already solved`)
-        this.processed = true
+        if (this.solved) throw new Error(`Has been already solved`)
+        this.solved = true
 
         this.transform()
 
         /**
-         * Get initial solution
+         * Get initial result
          */
         const solution = this.minisat.solve()
         if (check.isUndefined(solution)) throw new Error(`Could not solve`)
 
         /**
-         * Get optimized solution
+         * Get optimized result
          */
-        if (this.graph.options.solver.enabled) {
+        if (this.graph.options.solver.optimize) {
             const nodes = this.graph.nodes.map(it => it.id)
             const weights = this.graph.nodes.map(it => it.weight)
             let optimized
@@ -94,16 +97,30 @@ export default class Solver {
             }
 
             if (check.isUndefined(optimized)) throw new Error(`Could not optimize`)
-            this.result = optimized.getMap()
+            this.result = {
+                map: optimized.getMap(),
+                formula: optimized.getFormula(),
+            }
         } else {
-            this.result = solution.getMap()
+            this.result = {
+                map: solution.getMap(),
+                formula: solution.getFormula(),
+            }
+        }
+
+        /**
+         * Check if there are multiple possible solutions (e.g., with the same weight)
+         */
+        if (this.graph.options.solver.unique) {
+            this.minisat.forbid(this.result.formula)
+            if (check.isDefined(this.minisat.solve())) throw new Error(`There exists a second result`)
         }
 
         /**
          * Assign presence to elements
          */
         for (const element of this.graph.elements) {
-            const present = this.result[element.id]
+            const present = this.result.map[element.id]
             if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
             element.present = present
         }
@@ -120,12 +137,12 @@ export default class Solver {
         /**
          * Return result
          */
-        return this.result
+        return this.result.map
     }
 
     solveAll() {
-        if (this.processed) throw new Error(`Has been already solved`)
-        this.processed = true
+        if (this.solved) throw new Error(`Has been already solved`)
+        this.solved = true
 
         this.transform()
 
