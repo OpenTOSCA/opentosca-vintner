@@ -48,7 +48,7 @@ This repository holds the step-by-step guides of the following publications.
 <a id="publication-stoetzner-2023-vdmm-v2"></a>
 - **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
   - CoopIS 2023
-  - _Accepted_
+  - https://doi.org/10.1007/978-3-031-46846-9_4
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
   - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
   - [Models of the Complexity Evaluation](../examples/unfurl-artifacts/stats)
