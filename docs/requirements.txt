@@ -1,6 +1,7 @@
 asciinema==2.0.2
 pyyaml_env_tag==0.1
 mkdocs-material==9.1.21
+mkdocs-material-extensions==1.1
 mkdocs-macros-plugin==0.7.0
 mkdocs-glightbox==0.1.6
 mkdocs-bibtex==2.8.3
