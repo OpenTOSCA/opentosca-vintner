@@ -206,15 +206,16 @@ The following options are used to configure checks.
 | expected_incoming_relation_semantic_check    | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
 | expected_artifact_semantic_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
 
-### Optimization Options
+### Solver Options
 
 _This is an experimental feature._
 
-The following options are used to configure the optimization.
+The following options are used to configure the solver.
 
-| Keyname                                   | Mandatory | Type                                      | Default       | Description                                                                                       |
-|-------------------------------------------|-----------|-------------------------------------------|---------------|---------------------------------------------------------------------------------------------------|
-| optimization                              | false     | Boolean &#124; min &#124; max             | min           | Configure optimization.                                                                           | 
+| Keyname      | Mandatory | Type                          | Default | Description                        |
+|--------------|-----------|-------------------------------|---------|------------------------------------|
+| optimization | false     | Boolean &#124; min &#124; max | min     | Configure optimization.            | 
+| unique       | false     | Boolean                       | true    | Enable check for unique results.   | 
 
 
 ### Resolving Modes

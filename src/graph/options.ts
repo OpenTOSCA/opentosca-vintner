@@ -397,7 +397,8 @@ class SolverOptions {
 
     min: boolean
     max: boolean
-    enabled: boolean
+    optimize: boolean
+    unique: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -408,9 +409,12 @@ class SolverOptions {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
 
-        this.enabled = optimization !== false
+        this.optimize = optimization !== false
         this.max = optimization === 'max'
         this.min = optimization === 'min' || optimization === true
+
+        this.unique = this.raw.unique ?? true
+        assert.isBoolean(this.unique)
     }
 }
 

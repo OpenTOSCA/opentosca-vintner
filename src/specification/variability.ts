@@ -20,6 +20,7 @@ export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' 
 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
+    unique?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho

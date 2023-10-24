@@ -14,23 +14,26 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     variability:
         options:
-            node_default_condition: true
-            node_default_condition_mode: incomingnaive
-            
-     
-            relation_default_condition: true
-            relation_default_condition_mode: source-target
+            mode: loose
 
-            type_default_condition: true
     node_templates:
-        source:
-            type: source
+        one:
+            type: one
+            conditions: {not: {node_presence: two}}
             requirements:
-                - relation:
-                      node: target
+                - host: one_host
 
-        target:
-            type: target
+        one_host:
+            type: one_host
+
+        two:
+            type: two
+            conditions: {not: {node_presence: one}}
+            requirements:
+                - host: two_host
+
+        two_host:
+            type: two_host
 
         `
         )
