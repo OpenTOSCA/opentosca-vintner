@@ -14,7 +14,7 @@ tags:
  </div>
 </div>
 
-In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of the shopping application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
+In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of a web shop application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
 The motivating scenario is a simple shopping application that consists of a shop component and a database. 
 Thereby, we take the role of a SaaS provider which offers different pricing plans to his customers.
 Furthermore, there are two different deployment artifacts: the community deployment artifact and the enterprise deployment artifact.
@@ -153,6 +153,6 @@ Thus, the raw logs can be also accessed [here](./logs.txt){target=_blank} withou
 
 ## Publication
 
-This guide is part of our paper accepted at the main track of the CoopIS 2023.
-Also, this guide is further extended by our demonstration paper submitted at the demo track also at the CoopIS 2023.
+This guide is part of our [research paper](../../../publications.md#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies){target=_blank} published at the main track of the CoopIS 2023.
+Also, this guide is further extended by our [demonstration paper](../../../publications.md#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability){target=_blank} which was  accepted at the demo track at the CoopIS 2023.
 Also check our other [publications](../../../publications.md){target=_blank}.

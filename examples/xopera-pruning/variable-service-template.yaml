@@ -1,0 +1,227 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - lib/shop/types.yaml
+    - lib/gcp/types.yaml
+    - lib/os/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        os_compute_network:
+            type: string
+
+        os_compute_security_groups:
+            type: string
+
+        os_compute_key_name:
+            type: string
+
+        os_compute_ssh_user:
+            type: string
+
+        os_compute_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
+
+        gcp_auto_scaling:
+            type: boolean
+
+    variability:
+        inputs:
+            static:
+                type: boolean
+                default: true
+
+            large:
+                type: boolean
+                default: false
+
+        presets:
+            static:
+                inputs:
+                    static: true
+
+            static-large:
+                inputs:
+                    static: true
+                    large: true
+
+            elastic:
+                inputs:
+                    static: false
+
+        expressions:
+            is_static: {equal: [{variability_input: static}, true]}
+            is_elastic: {equal: [{variability_input: static}, false]}
+
+            is_large: {variability_input: large}
+            is_medium: {not: {logic_expression: is_large}}
+
+        options:
+            mode: loose
+
+    node_templates:
+        shop:
+            type: shop.component
+            properties:
+                - DB_NAME: shop
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: database_password}
+
+                - DB_DIALECT:
+                      conditions: {logic_expression: is_static}
+                      value: sqlite
+
+                - DB_DIALECT:
+                      conditions: {logic_expression: is_elastic}
+                      value: mysql
+
+                - DB_ADDRESS:
+                      conditions: {logic_expression: is_static}
+                      value: {get_property: [os_database, public_address]}
+
+                - DB_ADDRESS:
+                      conditions: {logic_expression: is_elastic}
+                      value: {get_attribute: [SELF, database, public_address]}
+
+                - vm_ssh_user: {get_input: os_compute_ssh_user}
+                - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
+
+                - gcp_region: {get_input: gcp_region}
+                - gcp_service_account_file: {get_input: gcp_service_account_file}
+                - gcp_project: {get_input: gcp_project}
+
+                - gcp_auto_scaling: {get_input: gcp_auto_scaling}
+
+            requirements:
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_elastic}
+
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_static}
+
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_elastic}
+
+        os_database:
+            type: os.database
+            properties:
+                database_name: shop
+                public_address: /var/lib/sqlite-databases/shop.db
+            requirements:
+                - host: os_compute
+
+        os_compute:
+            type: os.compute
+            properties:
+                - ports: [80, 3000]
+                - name: shop
+
+                - image: Ubuntu 22.04
+
+                # tier
+                - flavor:
+                      value: m1.medium
+                      conditions: {logic_expression: is_medium}
+
+                # tier
+                - flavor:
+                      value: m1.large
+                      conditions: {logic_expression: is_large}
+
+                - network: {get_input: os_compute_network}
+                - security_groups: {get_input: os_compute_security_groups}
+                - key_name: {get_input: os_compute_key_name}
+                - ssh_user: {get_input: os_compute_ssh_user}
+                - ssh_key_file: {get_input: os_compute_ssh_key_file}
+            requirements:
+                - host: os_cloud
+
+        os_cloud:
+            type: os.provider
+            properties:
+                region_name: {get_input: os_region_name}
+                auth_type: {get_input: os_auth_type}
+                auth_url: {get_input: os_auth_url}
+                identity_api_version: {get_input: os_identity_api_version}
+                interface: {get_input: os_interface}
+                application_credential_id: {get_input: os_application_credential_id}
+                application_credential_secret: {get_input: os_application_credential_secret}
+
+        gcp_runtime:
+            type: gcp.runtime
+            properties:
+                auto_scaling: {get_input: gcp_auto_scaling}
+            requirements:
+                - host: gcp_dbms
+
+        gcp_database:
+            type: gcp.database
+            properties:
+                database_name: shop
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.dbms
+            properties:
+                - instance_name: shop
+                - root_password: {get_input: database_password}
+                - authorized_networks: 0.0.0.0/0
+
+                # backups
+                - backups: true
+
+                # variant
+                - database_version: MYSQL_5_7
+
+                # high availability
+                - availability_type: REGIONAL
+            requirements:
+                - host: gcp_cloud
+
+        gcp_cloud:
+            type: gcp.provider
+            properties:
+                region: {get_input: gcp_region}
+                service_account_file: {get_input: gcp_service_account_file}
+                project: {get_input: gcp_project}
