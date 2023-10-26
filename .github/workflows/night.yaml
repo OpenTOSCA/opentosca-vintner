@@ -147,6 +147,35 @@ jobs:
 
             ###################################################
             #
+            # xOpera Pruning
+            #
+            ###################################################
+
+            - name: (XOPERA-PRUNING) Deploy the elastic variant of xopera-pruning on GCP
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera --no-venv
+                  vintner orchestrators enable --orchestrator xopera
+
+                  vintner templates import --template pruning --path examples/xopera-pruning
+                  vintner instances init --instance pruning --template pruning
+                  vintner instances resolve --instance pruning --presets elastic
+                  vintner instances validate --instance pruning
+
+                  echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/xopera-pruning/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance pruning --inputs examples/xopera-pruning/deployment-inputs.ignored.yaml
+
+            - name: (XOPERA-PRUNING) Test the elastic variant of xopera-pruning on GCP
+              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (XOPERA-PRUNING) Undeploy the elastic variant of xopera-pruning on GCP
+              run: vintner instances undeploy --instance pruning
+              if: always()
+
+            ###################################################
+            #
             # Unfurl Artifacts
             #
             ###################################################

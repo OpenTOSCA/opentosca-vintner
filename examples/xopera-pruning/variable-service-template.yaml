@@ -9,54 +9,70 @@ topology_template:
     inputs:
         database_password:
             type: string
+            default: password
 
         os_compute_network:
             type: string
+            default: public-belwue-v6only
 
         os_compute_security_groups:
             type: string
+            default: default
 
         os_compute_key_name:
             type: string
+            default: default
 
         os_compute_ssh_user:
             type: string
+            default: ubuntu
 
         os_compute_ssh_key_file:
             type: string
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
+            default: Mannheim
 
         os_auth_type:
             type: string
+            default: v3applicationcredential
 
         os_auth_url:
             type: string
+            default: https://idm02.bw-cloud.org:5000/v3
 
         os_identity_api_version:
             type: string
+            default: '3'
 
         os_interface:
             type: string
+            default: public
 
         os_application_credential_id:
             type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
 
         os_application_credential_secret:
             type: string
 
         gcp_region:
             type: string
+            default: europe-west3
 
         gcp_service_account_file:
             type: string
+            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
+            default: stoetzms-387808
 
         gcp_auto_scaling:
             type: boolean
+            default: true
 
     variability:
         inputs:
