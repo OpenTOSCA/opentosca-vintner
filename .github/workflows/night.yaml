@@ -65,11 +65,10 @@ jobs:
                   key: unfurl-home
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
-            # TODO: enable this
-            #- name: (PREPARE) Install Unfurl
-            #  run: |
-            #      pip install unfurl==0.7.1
-            #      yes | unfurl home --init
+            - name: (PREPARE) Install Unfurl
+              run: |
+                  pip install unfurl==0.7.1
+                  yes | unfurl home --init
 
             ###################################################
             #
@@ -116,7 +115,34 @@ jobs:
             - name: (VINTNER) Test resolver
               run: vintner setup benchmark --seeds 10 250
 
-            # TODO: move this down
+            ###################################################
+            #
+            # xOpera Motivation
+            #
+            ###################################################
+            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera --no-venv
+                  vintner orchestrators enable --orchestrator xopera
+
+                  vintner templates import --template motivation --path examples/xopera-motivation
+                  vintner instances init --instance motivation --template motivation
+                  vintner instances resolve --instance motivation --presets prod
+                  vintner instances validate --instance motivation
+
+                  cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+
+            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
+              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
+              run: vintner instances undeploy --instance motivation
+              if: always()
 
             ###################################################
             #
@@ -145,35 +171,6 @@ jobs:
 
             - name: (XOPERA-PRUNING) Undeploy the elastic variant of xopera-pruning on GCP
               run: vintner instances undeploy --instance pruning
-              if: always()
-
-            ###################################################
-            #
-            # xOpera Motivation
-            #
-            ###################################################
-            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera --no-venv
-                  vintner orchestrators enable --orchestrator xopera
-
-                  vintner templates import --template motivation --path examples/xopera-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets prod
-                  vintner instances validate --instance motivation
-
-                  cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
-
-            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
-              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
-
-            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
-              run: vintner instances undeploy --instance motivation
               if: always()
 
             ###################################################
