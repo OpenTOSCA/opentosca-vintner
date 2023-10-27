@@ -1,7 +1,5 @@
 # OpenTOSCA Vintner
 
-> Check out the [step-by-step guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) of our publication accepted at the _CoopIS 2023_. [See more](#user-content-publication-stoetzner-2023-vdmm-v2).
-
 [![Release](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/opentosca/opentosca-vintner/actions/workflows/release.yaml)
 [![Night](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml/badge.svg)](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml)
 [![Codacy Quality Badge](https://app.codacy.com/project/badge/Grade/acec5103cf9b4f1bb1fa25bc5a99076d)](https://app.codacy.com/gh/OpenTOSCA/opentosca-vintner/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
@@ -33,6 +31,15 @@ This repository holds the following specifications and profiles.
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
 This repository holds the step-by-step guides of the following publications.
+
+<a id="publication-stoetzner-2023-pruning"></a>
+- **Enhancing Deployment Variability Management by Pruning Elements in Deployment Models**
+  - UCC 2023
+  - _Accepted_
+  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/pruning)
+  - [Model of the Motivating Scenario](../examples/xopera-pruning)
+  - [Models of the Complexity Evaluation](../examples/xopera-pruning/stats)
+  - [@publication-stoetzner-2023-pruning](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-pruning)
 
 <a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
 - **Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability**

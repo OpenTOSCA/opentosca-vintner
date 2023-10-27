@@ -86,7 +86,7 @@ topology_template:
 
         os_application_credential_id:
             type: string
-            default: e584f2d0bdc2467a9901264c3e1b4bd7
+            default: 3f538f1823bd484e8238b2433de2f21a
             conditions: {logic_expression: is_community}
 
         os_application_credential_secret:

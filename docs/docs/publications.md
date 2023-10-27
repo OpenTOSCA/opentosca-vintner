@@ -10,6 +10,14 @@ This document contains a list of selected publications.
 
 [//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 
+## Enhancing Deployment Variability Management by Pruning Elements in Deployment Models
+- UCC 2023
+- _Accepted_
+- [Step-by-Step Guide](variability4tosca/guides/pruning/index.md){target=_blank}
+- {{ repo_link('examples/xopera-pruning', 'Model of the Motivating Scenario') }}
+- {{ repo_link('examples/xopera-pruning/stats', 'Models of the Complexity Evaluation') }}
+- {{ tag_link('publication-stoetzner-2023-pruning') }}
+
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
 > _Accepted_
