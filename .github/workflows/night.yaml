@@ -8,7 +8,7 @@ on:
         - cron: '20 4 * * 2'
     push:
         branches:
-            - fix/night-workflow
+            - fix-night-workflow
 
 concurrency: night
 jobs:
