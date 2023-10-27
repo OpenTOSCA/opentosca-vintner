@@ -124,6 +124,9 @@ vintner instances delete --instance pruning
 vintner setup clean --force
 ```
 
+## Complexity Analysis
+
+The models for our complexity analysis can be found {{ repo_link('examples/xopera-pruning/stats', 'here') }}.
 
 ## Publication
 

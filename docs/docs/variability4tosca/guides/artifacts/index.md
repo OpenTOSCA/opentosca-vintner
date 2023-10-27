@@ -143,6 +143,11 @@ vintner instances delete --instance artifacts
 vintner setup clean --force
 ```
 
+
+## Complexity Analysis
+
+The models for our complexity analysis can be found {{ repo_link('examples/unfurl-artifacts/stats', 'here') }}.
+
 ## Logs
 
 This deployment is also executed in our integration pipeline which is executed one a week. 
