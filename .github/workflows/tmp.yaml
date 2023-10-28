@@ -1,7 +1,7 @@
 # GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
 # See https://github.com/actions/runner-images/issues/668
 
-name: Night
+name: tmp
 on:
     workflow_dispatch:
     schedule:
@@ -10,12 +10,18 @@ on:
         branches:
             - fix-night-workflow
 
-concurrency: night
+concurrency: tmp
 jobs:
     night:
-        name: Night
+        name: tmp
         runs-on: ubuntu-22.04
         steps:
+            - name: Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.x
+                  cache: pip
+
             - name: List
               run: ansible-galaxy collection list
 
@@ -27,7 +33,7 @@ jobs:
                   git config --global user.email "you@example.com"
                   git config --global user.name "Your Name"
 
-            - name: Install Unfurl
+            - name: Unfurl
               run: pip install unfurl==0.7.1
 
             - name: Init Unfurl Home
