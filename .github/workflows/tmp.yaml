@@ -17,9 +17,13 @@ jobs:
         runs-on: ubuntu-22.04
         steps:
             - name: List
-              run: |
-                  ansible-galaxy collection list
+              run: ansible-galaxy collection list
 
             - name: Install
-              run: |
-                  ansible-galaxy collection install ansible.utils community.docker kubernetes.core
+              run: ansible-galaxy collection install ansible.utils community.docker kubernetes.core
+
+            - name: Install Unfurl
+              run: pip install unfurl==0.7.1
+
+            - name: Init Unfurl Home
+              run: unfurl home --init
