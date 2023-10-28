@@ -1,4 +1,7 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli instances continue --instance artifacts
+# Load configuration
+source configuration.sh
+
+$VINTNER instances continue --instance ${TEMPLATE_NAME}

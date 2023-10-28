@@ -16,10 +16,6 @@ imports:
 
 topology_template:
     inputs:
-        language:
-            type: string
-            default: EN
-
         db_password:
             type: string
             default: password

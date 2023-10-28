@@ -1,4 +1,7 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli setup clean --force
+# Load configuration
+source configuration.sh
+
+$VINTNER setup clean --force

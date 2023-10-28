@@ -1,10 +1,13 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli instances delete --instance artifacts
-yarn cli templates delete --template artifacts
+# Load configuration
+source configuration.sh
 
-yarn cli templates import --template artifacts --path examples/unfurl-artifacts
-yarn cli instances init --instance artifacts --template artifacts
-yarn cli instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
-yarn cli instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+$VINTNER instances delete --instance ${TEMPLATE_NAME}
+$VINTNER templates delete --template ${TEMPLATE_NAME}
+
+$VINTNER templates import --template ${TEMPLATE_NAME}  --path ${TEMPLATE_DIR}
+$VINTNER instances init --instance ${TEMPLATE_NAME}  --template ${TEMPLATE_NAME}
+$VINTNER instances resolve --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/tests/${DEPLOYMENT_VARIANT}/inputs.yaml
+$VINTNER instances deploy --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/deployment-inputs.ignored.yaml
