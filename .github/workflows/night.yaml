@@ -7,9 +7,9 @@ on:
     schedule:
         - cron: '20 4 * * 2'
     # TODO: enable this
-    #push:
-    #branches:
-    #  - fix-night-workflow
+    push:
+        branches:
+            - fix-night-workflow
 
 concurrency: night
 jobs:
@@ -53,7 +53,7 @@ jobs:
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
               with:
-                  python-version: 3.x
+                  python-version: 3.10.13
                   cache: pip
 
             - name: (PREPARE) Install xOpera
