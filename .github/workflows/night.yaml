@@ -68,6 +68,7 @@ jobs:
             - name: (PREPARE) Install Unfurl
               run: |
                   pip install unfurl==0.7.1
+                  ansible-galaxy collection install ansible.utils community.docker kubernetes.core
                   yes | unfurl home --init
 
             ###################################################
