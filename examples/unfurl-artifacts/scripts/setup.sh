@@ -1,8 +1,9 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli setup clean --force
+# Load configuration
+source configuration.sh
 
-yarn cli setup init
-yarn cli orchestrators init unfurl
-yarn cli orchestrators enable --orchestrator unfurl
+$VINTNER cli setup init
+$VINTNER cli orchestrators init unfurl --no-env
+$VINTNER cli orchestrators enable --orchestrator unfurl

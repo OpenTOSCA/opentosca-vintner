@@ -41,10 +41,6 @@ topology_template:
             relation_default_condition: true
 
     inputs:
-        language:
-            type: string
-            default: EN
-
         db_password:
             type: string
             default: password
