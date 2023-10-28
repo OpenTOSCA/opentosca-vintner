@@ -1,0 +1,25 @@
+# GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
+# See https://github.com/actions/runner-images/issues/668
+
+name: Night
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '20 4 * * 2'
+    push:
+        branches:
+            - fix-night-workflow
+
+concurrency: night
+jobs:
+    night:
+        name: Night
+        runs-on: ubuntu-22.04
+        steps:
+            - name: List
+              run: |
+                  ansible-galaxy collection list
+
+            - name: Install
+              run: |
+                  ansible-galaxy collection install ansible.utils community.docker kubernetes.core
