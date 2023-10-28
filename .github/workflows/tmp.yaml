@@ -22,6 +22,11 @@ jobs:
             - name: Install
               run: ansible-galaxy collection install ansible.utils community.docker kubernetes.core
 
+            - name: git
+              run: |
+                  git config --global user.email "you@example.com"
+                  git config --global user.name "Your Name"
+
             - name: Install Unfurl
               run: pip install unfurl==0.7.1
 
