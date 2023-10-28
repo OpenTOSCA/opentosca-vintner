@@ -4,7 +4,7 @@ on:
     push:
         branches:
             - main
-            - fix/release-workflow
+            - fix-release-workflow
 
 concurrency: release
 jobs:
