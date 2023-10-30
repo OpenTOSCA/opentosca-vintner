@@ -139,7 +139,7 @@ jobs:
                   vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
 
             - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
-              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
               run: vintner instances undeploy --instance motivation
@@ -168,7 +168,7 @@ jobs:
                   vintner instances deploy --instance pruning --inputs examples/xopera-pruning/deployment-inputs.ignored.yaml
 
             - name: (XOPERA-PRUNING) Test the elastic variant of xopera-pruning on GCP
-              run: curl https://application-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (XOPERA-PRUNING) Undeploy the elastic variant of xopera-pruning on GCP
               run: vintner instances undeploy --instance pruning
@@ -196,7 +196,7 @@ jobs:
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
 
             - name: (UNFURL-ARTIFACTS) Test the enterprise plan of unfurl-artifacts on GCP
-              run: curl https://shop-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
               run: vintner instances undeploy --instance artifacts
