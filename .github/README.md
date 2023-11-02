@@ -39,6 +39,9 @@ This repository holds the step-by-step guides of the following publications.
   - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/pruning)
   - [Model of the Motivating Scenario](../examples/xopera-pruning)
   - [Models of the Complexity Evaluation](../examples/xopera-pruning/stats)
+  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6677267360/job/18147105860) (Relevant steps start with "XOPERA-PRUNING")
+  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/pruning/logs.txt) (Relevant steps start with "XOPERA-PRUNING")
+  - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10050261)
   - [@publication-stoetzner-2023-pruning](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-pruning)
 
 <a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
@@ -49,7 +52,7 @@ This repository holds the step-by-step guides of the following publications.
   - [Demo Video](https://youtu.be/6szIGJPuCsU)
   - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
   - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant steps start with "UNFURL-ARTIFACTS")
-  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt)
+  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt) (Relevant Steps start with "UNFURL-ARTIFACTS")
   - [@publication-stoetzner-2023-vdmm-v2-demo](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2-demo)
 
 <a id="publication-stoetzner-2023-vdmm-v2"></a>

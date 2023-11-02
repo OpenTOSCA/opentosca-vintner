@@ -128,6 +128,18 @@ vintner setup clean --force
 
 The models for our complexity analysis can be found {{ repo_link('examples/xopera-pruning/stats', 'here') }}.
 
+## Logs
+
+This deployment is also executed in our integration pipeline which is executed once a week.
+The logs of the corresponding GitHub action job run can be accessed either [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6677267360/job/18147105860){target=_blank}.
+Relevant steps start with "XOPERA-PRUNING".
+Note, a GitHub account is required to access these logs.
+The raw logs can be also accessed [here](./logs.txt){target=_blank} without requiring an GitHub account.
+
+## Zenodo
+
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10050261){target=_blank}.
+
 ## Publication
 
 This guide is part of our [paper](../../../publications.md#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models){target=_blank} accepted at the UCC 2023.
