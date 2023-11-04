@@ -1556,6 +1556,39 @@ returns the path to the home directory
     requests.post(SERVER_ADDRESS + "/setup/path")
     ```
 
+## vintner setup reset
+
+resets the filesystem
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup reset 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/reset
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/reset")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/reset")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| force |  false  | boolean | force clean up |
+
 ## vintner template enrich
 
 enrich conditions
@@ -2257,6 +2290,8 @@ imports a new template
 | path |  true  | string | path or link to the CSAR |
 | git-repository |  false  | string | git repository |
 | git-checkout |  false  | string | git checkout |
+| signature |  false  |  | path to the signature (default: template + ".asc") |
+| key |  false  |  | key name to verify the signature |
 
 ## vintner templates inspect
 
