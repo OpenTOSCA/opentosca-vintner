@@ -380,4 +380,52 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/utils/nonce',
+    hae.express(async (req, res, next) => {
+        const nonce = await Controller.utils.nonce(req.body)
+        res.json({nonce})
+    })
+)
+
+resolvers.post(
+    '/utils/key',
+    hae.express(async (req, res, next) => {
+        await Controller.utils.key(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/list',
+    hae.express(async (req, res, next) => {
+        const keys = await Controller.keystore.list()
+        res.json({keys: keys.map(it => it.getName())})
+    })
+)
+
+resolvers.post(
+    '/keystore/import',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.import(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/delete',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.delete(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/clean',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.clean(req.body)
+        res.json({})
+    })
+)
+
 export default resolvers

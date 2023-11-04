@@ -944,44 +944,6 @@ deletes a key
 | --- | --- | --- | --- |
 | key |  true  | string | key name |
 
-## vintner keystore generate
-
-generates a key
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner keystore generate --key ${KEY}
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            --data '{"key": "${KEY}"}' \
-            ${SERVER_ADDRESS}/keystore/generate
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/keystore/generate", {
-		key: KEY
-    })
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/keystore/generate", json={
-		"key": KEY
-    })
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| key |  true  | string | key name (must match /^[a-z\-]+$/) |
-
 ## vintner keystore import
 
 imports a key
@@ -2415,3 +2377,70 @@ returns the path to the template directory
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
+
+## vintner utils key
+
+generates a key
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils key --key ${KEY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"key": "${KEY}"}' \
+            ${SERVER_ADDRESS}/utils/key
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/key", {
+		key: KEY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/key", json={
+		"key": KEY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| key |  true  | string | key name (must match /^[a-z\-]+$/) |
+
+## vintner utils nonce
+
+generates a nonce
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils nonce 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/utils/nonce
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/nonce")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/nonce")
+    ```
