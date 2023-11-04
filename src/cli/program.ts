@@ -765,8 +765,6 @@ sensors
         })
     )
 
-// TODO: keystore
-
 const keystore = program.command('keystore').description('manages keys for signing and verifying CSARs')
 
 keystore
@@ -791,16 +789,6 @@ keystore
     )
 
 keystore
-    .command('generate')
-    .description('generates a key')
-    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
-    .action(
-        hae.exit(async options => {
-            await Controller.keystore.generate(options)
-        })
-    )
-
-keystore
     .command('delete')
     .description('deletes a key')
     .requiredOption('--key <string>', 'key name')
@@ -816,5 +804,27 @@ keystore
     .action(
         hae.exit(async options => {
             await Controller.keystore.clean(options)
+        })
+    )
+
+const utils = program.command('utils').description('some utilities')
+
+utils
+    .command('nonce')
+    .description('generates a nonce')
+    .action(
+        hae.exit(async options => {
+            const password = await Controller.utils.nonce(options)
+            std.out(password)
+        })
+    )
+
+utils
+    .command('key')
+    .description('generates a key')
+    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
+    .action(
+        hae.exit(async options => {
+            await Controller.utils.key(options)
         })
     )

@@ -8,6 +8,7 @@ import ServerController from './server'
 import SetupController from './setup'
 import TemplateController from './template'
 import TemplatesController from './templates'
+import UtilsController from './utils'
 
 export default {
     info: InfoController,
@@ -20,4 +21,5 @@ export default {
     templates: TemplatesController,
     sensors: SensorsController,
     keystore: KeystoreController,
+    utils: UtilsController,
 }

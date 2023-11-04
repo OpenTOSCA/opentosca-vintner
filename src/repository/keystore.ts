@@ -48,8 +48,4 @@ export class Key {
         await files.deleteFile(this.getFile())
         return this
     }
-
-    generate() {
-        // TODO: generate
-    }
 }
