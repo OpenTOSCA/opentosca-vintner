@@ -58,11 +58,11 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: sudo ./src/assets/scripts/install-xopera.sh
 
-            - name: (PREPARE) Cache Unfurl
-              uses: actions/cache@v3
-              with:
-                  path: /home/runner/.unfurl_home
-                  key: unfurl-home
+            #- name: (PREPARE) Cache Unfurl
+            #  uses: actions/cache@v3
+            #  with:
+            #      path: /home/runner/.unfurl_home
+            #      key: unfurl-home
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
             - name: (PREPARE) Install Unfurl
