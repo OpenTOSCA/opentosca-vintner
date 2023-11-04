@@ -21,6 +21,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/setup/reset',
+    hae.express(async (req, res, next) => {
+        await Controller.setup.reset(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/setup/utils',
     hae.express(async (req, res, next) => {
         await Controller.setup.install(req.body)

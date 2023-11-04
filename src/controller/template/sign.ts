@@ -4,7 +4,7 @@ import * as files from '#files'
 
 export type TemplateSignOptions = {
     template: string
-    output: string
+    output?: string
     key: string
 }
 

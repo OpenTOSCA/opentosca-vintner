@@ -20,8 +20,7 @@ export async function initSetup() {
     // TODO: set vintner home to not nuke local setups
 
     // Setup filesystem
-    await Controller.setup.clean({force: true})
-    await Controller.setup.init()
+    await Controller.setup.reset({force: true})
 
     // Setup xOpera
     if (insideWorkflow) {

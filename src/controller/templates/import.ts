@@ -2,7 +2,14 @@ import * as assert from '#assert'
 import {Template} from '#repository/templates'
 import lock from '#utils/lock'
 
-export type TemplatesCreateOptions = {template: string; path: string; gitRepository?: string; gitCheckout?: string}
+export type TemplatesCreateOptions = {
+    template: string
+    path: string
+    gitRepository?: string
+    gitCheckout?: string
+    signature?: string
+    key?: string
+}
 
 export default async function (options: TemplatesCreateOptions) {
     const template = new Template(options.template)

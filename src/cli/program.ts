@@ -38,6 +38,16 @@ setup
     )
 
 setup
+    .command('reset')
+    .description('resets the filesystem')
+    .option('--force [boolean]', 'force clean up')
+    .action(
+        hae.exit(async options => {
+            await Controller.setup.reset(options)
+        })
+    )
+
+setup
     .command('open')
     .description('opens the home directory')
     .action(
@@ -439,6 +449,8 @@ templates
     .requiredOption('--path <string>', 'path or link to the CSAR')
     .option('--git-repository [string]', 'git repository')
     .option('--git-checkout [string]', 'git checkout')
+    .option('--signature', 'path to the signature (default: template + ".asc")')
+    .option('--key', 'key name to verify the signature')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
