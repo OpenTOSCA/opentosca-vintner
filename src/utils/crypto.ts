@@ -62,3 +62,29 @@ export async function verify(data: {
 export function generateNonce() {
     return uuid4()
 }
+
+export function generateKey(): Promise<{public: string; private: string}> {
+    return new Promise((resolve, reject) => {
+        crypto.generateKeyPair(
+            'rsa',
+            {
+                modulusLength: 4096,
+                publicKeyEncoding: {
+                    type: 'spki',
+                    format: 'pem',
+                },
+                privateKeyEncoding: {
+                    type: 'pkcs8',
+                    format: 'pem',
+                },
+            },
+            (error, publicKey, privateKey) => {
+                if (check.isDefined(error)) return reject(error)
+                return resolve({
+                    public: publicKey,
+                    private: privateKey,
+                })
+            }
+        )
+    })
+}
