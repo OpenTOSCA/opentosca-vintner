@@ -371,6 +371,30 @@ template
         })
     )
 
+template
+    .command('sign')
+    .description('signs a CSAR')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--output <string>', 'path of the output (default: template path + ".asc" )')
+    .requiredOption('--key <string>', 'path of the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.sign(options)
+        })
+    )
+
+template
+    .command('verify')
+    .description('verify a CSAR')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--signature <string>', 'path of the signature (default: template path + ".asc" )')
+    .requiredOption('--key <string>', 'path of the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.verify(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 const pumlTopology = puml
@@ -388,7 +412,7 @@ const pumlTypes = puml
     .command('types')
     .description('plot types as PlantUML (each entity types is plotted separately)')
     .requiredOption('--path <string>', 'path to service template')
-    .option('--output [string]', 'path of the output directory (default: the directory of the service template')
+    .option('--output [string]', 'path of the output directory (default: the directory of the service template)')
     .option('--types [string...]', 'entity types to consider, e.g., "node_types" (default: Every defined entity type)')
     .action(
         hae.exit(async options => {
