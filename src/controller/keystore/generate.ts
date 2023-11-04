@@ -1,11 +1,17 @@
+import * as assert from '#assert'
 import {Key} from '#repository/keystore'
-
-export type KeysInspectOptions = {template: string}
-
-// TODO: but this also separately as own utils command ...
+export type KeysInspectOptions = {key: string; output: string}
 
 export default async function (options: KeysInspectOptions) {
-    const key = new Key(options.template)
-    if (key.exists()) throw new Error(`Key "${options.template}" already exists`)
+    assert.isDefined(options.key, 'Key not defined')
+    assert.isName(options.key)
+
+    const key = new Key(options.key)
+    if (key.exists()) throw new Error(`Key "${options.key}" already exists`)
+
+    // TODO: use output
+
     return key.generate()
 }
+
+// TODO: this does generate a keypair?!

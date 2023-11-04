@@ -513,7 +513,7 @@ instances
     .action(
         hae.exit(async () => {
             const instances = await Controller.instances.list()
-            std.out(instances.map(instance => instance.getName()).join('\n'))
+            std.out(instances.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -766,3 +766,55 @@ sensors
     )
 
 // TODO: keystore
+
+const keystore = program.command('keystore').description('manages keys for signing and verifying CSARs')
+
+keystore
+    .command('list')
+    .description('lists all keys')
+    .action(
+        hae.exit(async options => {
+            const keys = await Controller.keystore.list()
+            std.out(keys.map(it => it.getName()).join('\n'))
+        })
+    )
+
+keystore
+    .command('import')
+    .description('imports a key')
+    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
+    .requiredOption('--file <string>', 'path to the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.import(options)
+        })
+    )
+
+keystore
+    .command('generate')
+    .description('generates a key')
+    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.generate(options)
+        })
+    )
+
+keystore
+    .command('delete')
+    .description('deletes a key')
+    .requiredOption('--key <string>', 'key name')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.delete(options)
+        })
+    )
+
+keystore
+    .command('clean')
+    .description('cleans all keys')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.clean(options)
+        })
+    )

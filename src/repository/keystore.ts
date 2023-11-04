@@ -36,8 +36,8 @@ export class Key {
         return files.exists(this.getFile())
     }
 
-    import(options: {path: string}) {
-        files.copy(options.path, this.getFile())
+    import(options: {file: string}) {
+        files.copy(options.file, this.getFile())
     }
 
     load() {

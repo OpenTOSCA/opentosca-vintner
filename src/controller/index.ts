@@ -1,5 +1,6 @@
 import InfoController from './info'
 import InstancesController from './instances'
+import KeystoreController from './keystore'
 import OrchestratorsController from './orchestrators'
 import QueryController from './query'
 import SensorsController from './sensors'
@@ -18,4 +19,5 @@ export default {
     template: TemplateController,
     templates: TemplatesController,
     sensors: SensorsController,
+    keystore: KeystoreController,
 }
