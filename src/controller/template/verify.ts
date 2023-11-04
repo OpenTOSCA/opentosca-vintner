@@ -15,7 +15,10 @@ export default async function (options: TemplateVerifyOptions) {
     options.signature = options.signature ?? crypto.signatureFile(options.template)
     assert.isDefined(options.signature, 'Signature not defined')
 
-    const key = files.loadFile(options.key)
-    const verified = await crypto.verify({file: options.template, key, signature: options.signature})
+    const verified = await crypto.verify({
+        file: options.template,
+        key: files.loadFile(options.key),
+        signature: files.loadFile(options.signature),
+    })
     if (!verified) throw new Error(`Signature not valid`)
 }
