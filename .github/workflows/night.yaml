@@ -66,10 +66,10 @@ jobs:
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
             - name: (PREPARE) Install Unfurl
-              run: pip install unfurl==0.7.1
+              run: pip install unfurl==0.9.1
 
-            - name: (PREPARE) Set up Unfurl
-              run: yes | unfurl home --init
+            # - name: (PREPARE) Set up Unfurl
+            #   run: yes | unfurl home --init
 
             ###################################################
             #
