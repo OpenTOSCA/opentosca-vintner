@@ -55,21 +55,23 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
-            - name: (PREPARE) Install xOpera
-              run: sudo ./src/assets/scripts/install-xopera.sh
+            - name: (PREPARE) Cache Unfurl
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/.opera
+                  key: xopera
 
-            #- name: (PREPARE) Cache Unfurl
-            #  uses: actions/cache@v3
-            #  with:
-            #      path: /home/runner/.unfurl_home
-            #      key: unfurl-home
+            - name: (PREPARE) Install xOpera
+              run: |
+                  mkdir /home/runner/.opera
+                  cd /home/runner/.opera
+                  python3 -m venv .venv && . .venv/bin/activate
+                  pip install --upgrade pip
+                  pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
             - name: (PREPARE) Install Unfurl
               run: pip install unfurl==0.9.1
-
-            # - name: (PREPARE) Set up Unfurl
-            #   run: yes | unfurl home --init
 
             ###################################################
             #
@@ -118,6 +120,66 @@ jobs:
 
             ###################################################
             #
+            # xOpera Motivation
+            #
+            ###################################################
+            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+                  vintner templates import --template motivation --path examples/xopera-motivation
+                  vintner instances init --instance motivation --template motivation
+                  vintner instances resolve --instance motivation --presets prod
+                  vintner instances validate --instance motivation
+
+                  cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+
+            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
+              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
+              run: vintner instances undeploy --instance motivation
+              if: always()
+
+            ###################################################
+            #
+            # xOpera Pruning
+            #
+            ###################################################
+
+            - name: (XOPERA-PRUNING) Deploy the elastic variant of xopera-pruning on GCP
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+                  vintner templates import --template pruning --path examples/xopera-pruning
+                  vintner instances init --instance pruning --template pruning
+                  vintner instances resolve --instance pruning --presets elastic
+                  vintner instances validate --instance pruning
+
+                  echo "gcp_service_account_file: $(pwd)/gcp-credentials.json" > examples/xopera-pruning/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance pruning --inputs examples/xopera-pruning/deployment-inputs.ignored.yaml
+
+            - name: (XOPERA-PRUNING) Test the elastic variant of xopera-pruning on GCP
+              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (XOPERA-PRUNING) Undeploy the elastic variant of xopera-pruning on GCP
+              run: vintner instances undeploy --instance pruning
+              if: always()
+
+            ###################################################
+            #
             # Unfurl Artifacts
             #
             ###################################################
@@ -129,6 +191,7 @@ jobs:
 
                   vintner orchestrators init unfurl --no-venv
                   vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
 
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
                   vintner instances init --instance artifacts --template artifacts
