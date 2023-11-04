@@ -80,7 +80,7 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
     // Write file only if changed, e.g., to prevent updating the file mtime
     if (options?.onlyIfChanged) {
         if (exists(file)) {
-            if (crypto.checksum(data) == crypto.checksum(loadFile(file))) {
+            if (crypto.checksum({content: data}) == crypto.checksum({content: loadFile(file)})) {
                 return
             }
         }

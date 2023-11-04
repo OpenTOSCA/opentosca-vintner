@@ -38,6 +38,16 @@ setup
     )
 
 setup
+    .command('reset')
+    .description('resets the filesystem')
+    .option('--force [boolean]', 'force clean up')
+    .action(
+        hae.exit(async options => {
+            await Controller.setup.reset(options)
+        })
+    )
+
+setup
     .command('open')
     .description('opens the home directory')
     .action(
@@ -371,6 +381,30 @@ template
         })
     )
 
+template
+    .command('sign')
+    .description('signs a CSAR')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--output <string>', 'path of the output (default: template path + ".asc" )')
+    .requiredOption('--key <string>', 'path of the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.sign(options)
+        })
+    )
+
+template
+    .command('verify')
+    .description('verify a CSAR')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--signature <string>', 'path of the signature (default: template path + ".asc" )')
+    .requiredOption('--key <string>', 'path of the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.verify(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 const pumlTopology = puml
@@ -388,7 +422,7 @@ const pumlTypes = puml
     .command('types')
     .description('plot types as PlantUML (each entity types is plotted separately)')
     .requiredOption('--path <string>', 'path to service template')
-    .option('--output [string]', 'path of the output directory (default: the directory of the service template')
+    .option('--output [string]', 'path of the output directory (default: the directory of the service template)')
     .option('--types [string...]', 'entity types to consider, e.g., "node_types" (default: Every defined entity type)')
     .action(
         hae.exit(async options => {
@@ -415,6 +449,8 @@ templates
     .requiredOption('--path <string>', 'path or link to the CSAR')
     .option('--git-repository [string]', 'git repository')
     .option('--git-checkout [string]', 'git checkout')
+    .option('--signature', 'path to the signature (default: template + ".asc")')
+    .option('--key', 'key name to verify the signature')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
@@ -489,7 +525,7 @@ instances
     .action(
         hae.exit(async () => {
             const instances = await Controller.instances.list()
-            std.out(instances.map(instance => instance.getName()).join('\n'))
+            std.out(instances.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -738,5 +774,69 @@ sensors
     .action(
         hae.exit(async options => {
             await Controller.sensors.file(options)
+        })
+    )
+
+const keystore = program.command('keystore').description('manages keys for signing and verifying CSARs')
+
+keystore
+    .command('list')
+    .description('lists all keys')
+    .action(
+        hae.exit(async options => {
+            const keys = await Controller.keystore.list()
+            std.out(keys.map(it => it.getName()).join('\n'))
+        })
+    )
+
+keystore
+    .command('import')
+    .description('imports a key')
+    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
+    .requiredOption('--file <string>', 'path to the key')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.import(options)
+        })
+    )
+
+keystore
+    .command('delete')
+    .description('deletes a key')
+    .requiredOption('--key <string>', 'key name')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.delete(options)
+        })
+    )
+
+keystore
+    .command('clean')
+    .description('cleans all keys')
+    .action(
+        hae.exit(async options => {
+            await Controller.keystore.clean(options)
+        })
+    )
+
+const utils = program.command('utils').description('some utilities')
+
+utils
+    .command('nonce')
+    .description('generates a nonce')
+    .action(
+        hae.exit(async options => {
+            const password = await Controller.utils.nonce(options)
+            std.out(password)
+        })
+    )
+
+utils
+    .command('key')
+    .description('generates a key')
+    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
+    .action(
+        hae.exit(async options => {
+            await Controller.utils.key(options)
         })
     )

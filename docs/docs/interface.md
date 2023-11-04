@@ -877,6 +877,143 @@ validates variability-resolved service template
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
 
+## vintner keystore clean
+
+cleans all keys
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner keystore clean 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/keystore/clean
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/keystore/clean")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/keystore/clean")
+    ```
+
+## vintner keystore delete
+
+deletes a key
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner keystore delete --key ${KEY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"key": "${KEY}"}' \
+            ${SERVER_ADDRESS}/keystore/delete
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/keystore/delete", {
+		key: KEY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/keystore/delete", json={
+		"key": KEY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| key |  true  | string | key name |
+
+## vintner keystore import
+
+imports a key
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner keystore import --key ${KEY} --file ${FILE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"key": "${KEY}", "file": "${FILE}"}' \
+            ${SERVER_ADDRESS}/keystore/import
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/keystore/import", {
+		key: KEY,
+		file: FILE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/keystore/import", json={
+		"key": KEY,
+		"file": FILE
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| key |  true  | string | key name (must match /^[a-z\-]+$/) |
+| file |  true  | string | path to the key |
+
+## vintner keystore list
+
+lists all keys
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner keystore list 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/keystore/list
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/keystore/list")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/keystore/list")
+    ```
+
 ## vintner orchestrators attest
 
 attests an orchestrator plugin
@@ -1419,6 +1556,39 @@ returns the path to the home directory
     requests.post(SERVER_ADDRESS + "/setup/path")
     ```
 
+## vintner setup reset
+
+resets the filesystem
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner setup reset 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/setup/reset
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/setup/reset")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/setup/reset")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| force |  false  | boolean | force clean up |
+
 ## vintner template enrich
 
 enrich conditions
@@ -1704,7 +1874,7 @@ plot types as PlantUML (each entity types is plotted separately)
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to service template |
-| output |  false  | string | path of the output directory (default: the directory of the service template |
+| output |  false  | string | path of the output directory (default: the directory of the service template) |
 | types |  false  | string... | entity types to consider, e.g., "node_types" (default: Every defined entity type) |
 
 ## vintner template query
@@ -1790,6 +1960,50 @@ resolves variability
 | presets |  false  | strings... | names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>) |
 | output |  true  | string | path of the output |
+
+## vintner template sign
+
+signs a CSAR
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template sign --template ${TEMPLATE} --output ${OUTPUT} --key ${KEY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}", "key": "${KEY}"}' \
+            ${SERVER_ADDRESS}/template/sign
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/sign", {
+		template: TEMPLATE,
+		output: OUTPUT,
+		key: KEY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/sign", json={
+		"template": TEMPLATE,
+		"output": OUTPUT,
+		"key": KEY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to service template |
+| output |  true  | string | path of the output (default: template path + ".asc" ) |
+| key |  true  | string | path of the key |
 
 ## vintner template stats
 
@@ -1907,6 +2121,50 @@ unpackages a CSAR
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
+
+## vintner template verify
+
+verify a CSAR
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template verify --template ${TEMPLATE} --signature ${SIGNATURE} --key ${KEY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "signature": "${SIGNATURE}", "key": "${KEY}"}' \
+            ${SERVER_ADDRESS}/template/verify
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/verify", {
+		template: TEMPLATE,
+		signature: SIGNATURE,
+		key: KEY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/verify", json={
+		"template": TEMPLATE,
+		"signature": SIGNATURE,
+		"key": KEY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to service template |
+| signature |  true  | string | path of the signature (default: template path + ".asc" ) |
+| key |  true  | string | path of the key |
 
 ## vintner templates clean
 
@@ -2032,6 +2290,8 @@ imports a new template
 | path |  true  | string | path or link to the CSAR |
 | git-repository |  false  | string | git repository |
 | git-checkout |  false  | string | git checkout |
+| signature |  false  |  | path to the signature (default: template + ".asc") |
+| key |  false  |  | key name to verify the signature |
 
 ## vintner templates inspect
 
@@ -2152,3 +2412,70 @@ returns the path to the template directory
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
+
+## vintner utils key
+
+generates a key
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils key --key ${KEY}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"key": "${KEY}"}' \
+            ${SERVER_ADDRESS}/utils/key
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/key", {
+		key: KEY
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/key", json={
+		"key": KEY
+    })
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| key |  true  | string | key name (must match /^[a-z\-]+$/) |
+
+## vintner utils nonce
+
+generates a nonce
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils nonce 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/utils/nonce
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/nonce")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/nonce")
+    ```

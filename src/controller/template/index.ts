@@ -6,9 +6,11 @@ import _package from './package'
 import PUMLController from './puml'
 import _query from './query'
 import _resolve from './resolve'
+import _sign from './sign'
 import _stats from './stats'
 import _test from './test'
 import _unpackage from './unpackage'
+import _verify from './verify'
 
 export default {
     init: _init,
@@ -22,4 +24,6 @@ export default {
     stats: _stats,
     puml: PUMLController,
     normalize: _normalize,
+    sign: _sign,
+    verify: _verify,
 }

@@ -5,6 +5,7 @@ import _init from './init'
 import _install from './install'
 import _open from './open'
 import _path from './path'
+import _reset from './reset'
 
 export default {
     clean: _clean,
@@ -14,4 +15,5 @@ export default {
     path: _path,
     code: _code,
     install: _install,
+    reset: _reset,
 }

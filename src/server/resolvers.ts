@@ -21,6 +21,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/setup/reset',
+    hae.express(async (req, res, next) => {
+        await Controller.setup.reset(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/setup/utils',
     hae.express(async (req, res, next) => {
         await Controller.setup.install(req.body)
@@ -377,6 +385,54 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         const dependencies = await Controller.info.dependencies()
         res.json({dependencies})
+    })
+)
+
+resolvers.post(
+    '/utils/nonce',
+    hae.express(async (req, res, next) => {
+        const nonce = await Controller.utils.nonce(req.body)
+        res.json({nonce})
+    })
+)
+
+resolvers.post(
+    '/utils/key',
+    hae.express(async (req, res, next) => {
+        await Controller.utils.key(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/list',
+    hae.express(async (req, res, next) => {
+        const keys = await Controller.keystore.list()
+        res.json({keys: keys.map(it => it.getName())})
+    })
+)
+
+resolvers.post(
+    '/keystore/import',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.import(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/delete',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.delete(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/keystore/clean',
+    hae.express(async (req, res, next) => {
+        await Controller.keystore.clean(req.body)
+        res.json({})
     })
 )
 
