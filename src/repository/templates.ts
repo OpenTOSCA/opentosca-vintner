@@ -72,10 +72,13 @@ export class Template {
         if (files.isFile(options.path)) {
             if (check.isDefined(options.key)) {
                 options.signature = options.signature ?? crypto.signatureFile(options.path)
+                const key = new Key(options.key)
+                if (!key.exists()) throw new Error(`Key "${key.getName()}" does not exist`)
+
                 await Controller.template.verify({
                     template: options.path,
                     signature: options.signature,
-                    key: new Key(options.key).getFile(),
+                    key: key.getFile(),
                 })
             }
             await files.extractArchive(options.path, this.getTemplateDirectory())
