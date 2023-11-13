@@ -55,21 +55,23 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
-            - name: (PREPARE) Install xOpera
-              run: sudo ./src/assets/scripts/install-xopera.sh
-
             - name: (PREPARE) Cache Unfurl
               uses: actions/cache@v3
               with:
-                  path: /home/runner/.unfurl_home
-                  key: unfurl-home
+                  path: /home/runner/.opera
+                  key: xopera
+
+            - name: (PREPARE) Install xOpera
+              run: |
+                  mkdir /home/runner/.opera
+                  cd /home/runner/.opera
+                  python3 -m venv .venv && . .venv/bin/activate
+                  pip install --upgrade pip
+                  pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
             - name: (PREPARE) Install Unfurl
-              run: pip install unfurl==0.7.1
-
-            - name: (PREPARE) Set up Unfurl
-              run: yes | unfurl home --init
+              run: pip install unfurl==0.9.1
 
             ###################################################
             #
@@ -126,8 +128,9 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --no-venv
+                  vintner orchestrators init xopera --dir /home/runner/.opera
                   vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
 
                   vintner templates import --template motivation --path examples/xopera-motivation
                   vintner instances init --instance motivation --template motivation
@@ -156,8 +159,9 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --no-venv
+                  vintner orchestrators init xopera --dir /home/runner/.opera
                   vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
 
                   vintner templates import --template pruning --path examples/xopera-pruning
                   vintner instances init --instance pruning --template pruning
@@ -187,6 +191,7 @@ jobs:
 
                   vintner orchestrators init unfurl --no-venv
                   vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
 
                   vintner templates import --template artifacts --path examples/unfurl-artifacts
                   vintner instances init --instance artifacts --template artifacts

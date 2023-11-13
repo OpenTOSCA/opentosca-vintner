@@ -11,5 +11,4 @@ if which unfurl &>/dev/null; then
     exit 0
 fi
 
-pip install unfurl==0.7.1
-yes | unfurl home --init
+pip install unfurl==0.9.1

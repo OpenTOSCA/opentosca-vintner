@@ -51,7 +51,7 @@ vintner orchestrators attest --orchestrator xopera-wsl
 ## Unfurl
 
 You can install Unfurl using the following command.
-This will install Unfurl v0.7.1 system-wide using pip.
+This will install Unfurl v0.9.1 system-wide using pip.
 For a manual installation see [the documentation](https://docs.unfurl.run/README.html#installation){target=_blank}.
 
 ```shell linenums="1"
