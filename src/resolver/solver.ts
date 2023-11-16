@@ -61,16 +61,18 @@ export default class Solver {
 
         for (const element of this.graph.elements) this.transformConditions(element)
 
-        // TODO: is this the correct place to do this
+        // TODO: is this the correct place to do this? do this in Enricher and introduce service_template.variability.constraints?
         /**
          * Require hosting relation.
-         * This prevents, e.g., the unexpected removal of the hosting stack
+         * This prevents, e.g., the unexpected removal of the hosting stack.
          */
         for (const node of this.graph.nodes.filter(it => it.hasHost)) {
-            this.minisat.require(
-                // TODO: dont use OR if only one hosting relation
-                MiniSat.implies(node.id, MiniSat.or(node.outgoing.filter(it => it.isHostedOn()).map(it => it.id)))
-            )
+            const hostings = node.outgoing.filter(it => it.isHostedOn())
+            if (hostings.length === 1) {
+                MiniSat.implies(node.id, hostings[0].id)
+            } else {
+                this.minisat.require(MiniSat.implies(node.id, MiniSat.or(hostings.map(it => it.id))))
+            }
         }
     }
 
