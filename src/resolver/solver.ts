@@ -68,11 +68,8 @@ export default class Solver {
          */
         for (const node of this.graph.nodes.filter(it => it.hasHost)) {
             const hostings = node.outgoing.filter(it => it.isHostedOn())
-            if (hostings.length === 1) {
-                MiniSat.implies(node.id, hostings[0].id)
-            } else {
-                this.minisat.require(MiniSat.implies(node.id, MiniSat.or(hostings.map(it => it.id))))
-            }
+            const consequence = hostings.length === 1 ? hostings[0].id : MiniSat.or(hostings.map(it => it.id))
+            this.minisat.require(MiniSat.implies(node.id, consequence))
         }
     }
 
