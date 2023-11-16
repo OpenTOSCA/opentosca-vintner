@@ -60,6 +60,18 @@ export default class Solver {
         this.transformed = true
 
         for (const element of this.graph.elements) this.transformConditions(element)
+
+        // TODO: is this the correct place to do this
+        /**
+         * Require hosting relation.
+         * This prevents, e.g., the unexpected removal of the hosting stack
+         */
+        for (const node of this.graph.nodes.filter(it => it.hasHost)) {
+            this.minisat.require(
+                // TODO: dont use OR if only one hosting relation
+                MiniSat.implies(node.id, MiniSat.or(node.outgoing.filter(it => it.isHostedOn()).map(it => it.id)))
+            )
+        }
     }
 
     run() {
