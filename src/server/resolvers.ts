@@ -439,7 +439,7 @@ resolvers.post(
 resolvers.post(
     '/store/content',
     hae.express(async (req, res, next) => {
-        const content = await Controller.store.read(req.body)
+        const content = await Controller.store.content(req.body)
         res.json({content})
     })
 )
