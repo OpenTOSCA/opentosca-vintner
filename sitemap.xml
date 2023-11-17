@@ -1351,6 +1351,26 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-pruning-consumed-false/</loc>
+         <lastmod>2023-11-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-pruning-consumed-throw/</loc>
+         <lastmod>2023-11-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-pruning-consumed-undefined/</loc>
+         <lastmod>2023-11-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-pruning-consumed/</loc>
+         <lastmod>2023-11-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-pruning-delta-default/</loc>
          <lastmod>2023-11-17</lastmod>
          <changefreq>daily</changefreq>

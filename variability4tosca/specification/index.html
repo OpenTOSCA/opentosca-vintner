@@ -1655,6 +1655,26 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-consumed-false/">
+        pruning-consumed-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-consumed-throw/">
+        pruning-consumed-throw
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-consumed-undefined/">
+        pruning-consumed-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-pruning-consumed/">
+        pruning-consumed
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-pruning-delta-default/">
         pruning-delta-default
       </a>
@@ -3308,84 +3328,84 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable all semantic checks.</td>
 </tr>
 <tr>
-<td>relation_source_consistency_check</td>
+<td>relation_source_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding present relation sources.</td>
 </tr>
 <tr>
-<td>relation_target_consistency_check</td>
+<td>relation_target_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding present relation targets.</td>
 </tr>
 <tr>
-<td>ambiguous_hosting_consistency_check</td>
+<td>ambiguous_hosting_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding at maximum one present hosting relation.</td>
 </tr>
 <tr>
-<td>missing_artifact_container_consistency_check</td>
+<td>missing_artifact_container_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding present container of artifacts.</td>
 </tr>
 <tr>
-<td>ambiguous_artifact_consistency_check</td>
+<td>ambiguous_artifact_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding ambiguous present artifacts.</td>
 </tr>
 <tr>
-<td>missing_property_container_consistency_check</td>
+<td>missing_property_container_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding present container of properties.</td>
 </tr>
 <tr>
-<td>ambiguous_property_consistency_check</td>
+<td>ambiguous_property_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding ambiguous present properties.</td>
 </tr>
 <tr>
-<td>missing_type_container_consistency_check</td>
+<td>missing_type_container_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the consistency check regarding present containers of types.</td>
 </tr>
 <tr>
-<td>ambiguous_type_consistency_check</td>
+<td>ambiguous_type_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>ture</td>
 <td>Enable the consistency check regarding exactly one present type per container.</td>
 </tr>
 <tr>
-<td>expected_hosting_semantic_check</td>
+<td>expected_hosting_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the semantic check regarding an expected present hosting relation.</td>
 </tr>
 <tr>
-<td>expected_incoming_relation_semantic_check</td>
+<td>expected_incoming_relation_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Enable the semantic check regarding an expected incoming relation.</td>
 </tr>
 <tr>
-<td>expected_artifact_semantic_check</td>
+<td>expected_artifact_check</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
@@ -3424,6 +3444,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tbody>
 </table>
 <h3 id="constraints-options">Constraints Options<a class="headerlink" href="#constraints-options" title="Permanent link">¶</a></h3>
+<p><em>This is an experimental feature.</em></p>
 <p>The following options are used to configure constraints.</p>
 <table>
 <thead>
@@ -3856,6 +3877,12 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>false</td>
 <td>source | relation | host | source-host | relation-host</td>
 <td>Configure the default condition for this element.</td>
+</tr>
+<tr>
+<td>consumed</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Configure if node is consumed, e.g., by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.</td>
 </tr>
 <tr>
 <td>pruning</td>
