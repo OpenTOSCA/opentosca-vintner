@@ -159,6 +159,18 @@ export default class Solver {
         for (const element of this.graph.elements) this.transformConditions(element)
 
         /**
+         * Transform constraints
+         */
+        for (const constraint of this.graph.serviceTemplate.topology_template?.variability?.constraints ?? []) {
+            this.minisat.require(
+                this.transformLogicExpression(constraint, {
+                    // TODO: this is bad
+                    element: undefined as any,
+                })
+            )
+        }
+
+        /**
          * Ensure that each relation source exists
          */
         if (this.graph.options.constraints.relationSource) {

@@ -5,6 +5,7 @@ export type VariabilityDefinition = {
     inputs: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
+    constraints?: LogicExpression[]
     options?: VariabilityOptions
     type_specific_conditions?: TypeSpecificLogicExpressions
 }
@@ -174,6 +175,7 @@ export type InputAssignmentPreset = {
     inputs: InputAssignmentMap
 }
 
+export type VariabilityExpressionList = VariabilityExpression[]
 export type VariabilityExpressionMap = {[key: string]: VariabilityExpression}
 
 export type VariabilityPointMap<T> =
