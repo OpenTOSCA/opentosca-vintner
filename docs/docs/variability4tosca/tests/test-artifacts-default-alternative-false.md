@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      expected_artifact_semantic_check: false
+      expected_artifact_check: false
   node_templates:
     node_one:
       type: node

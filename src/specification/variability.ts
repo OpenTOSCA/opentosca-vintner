@@ -119,20 +119,20 @@ export type ChecksOptions = {
     checks?: boolean
 
     consistency_checks?: boolean
-    relation_source_consistency_check?: boolean
-    relation_target_consistency_check?: boolean
-    ambiguous_hosting_consistency_check?: boolean
-    missing_artifact_container_consistency_check?: boolean
-    ambiguous_artifact_consistency_check?: boolean
-    missing_property_container_consistency_check?: boolean
-    ambiguous_property_consistency_check?: boolean
-    missing_type_container_consistency_check?: boolean
-    ambiguous_type_consistency_check?: boolean
+    relation_source_check?: boolean
+    relation_target_check?: boolean
+    ambiguous_hosting_check?: boolean
+    missing_artifact_container_check?: boolean
+    ambiguous_artifact_check?: boolean
+    missing_property_container_check?: boolean
+    ambiguous_property_check?: boolean
+    missing_type_container_check?: boolean
+    ambiguous_type_check?: boolean
 
     semantic_checks?: boolean
-    expected_hosting_semantic_check?: boolean
-    expected_incoming_relation_semantic_check?: boolean
-    expected_artifact_semantic_check?: boolean
+    expected_hosting_check?: boolean
+    expected_incoming_relation_check?: boolean
+    expected_artifact_check?: boolean
 
     consumed_check?: boolean
 }

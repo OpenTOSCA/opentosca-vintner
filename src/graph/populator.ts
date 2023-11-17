@@ -54,7 +54,7 @@ export class Populator {
         ]
 
         // Ensure that at least one node template is consumed if "incoming-host" is used
-        if (this.graph.options.checks.consumedCheck) {
+        if (this.graph.options.checks.consumed) {
             if (
                 this.graph.options.default.nodeDefaultConditionMode.includes('incoming') &&
                 this.graph.options.default.nodeDefaultConditionMode.includes('host')
