@@ -16,6 +16,7 @@ export class Options {
     pruning: PruningOptions
     checks: ChecksOptions
     solver: SolverOptions
+    constraints: ConstraintsOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -25,6 +26,7 @@ export class Options {
         this.pruning = new PruningOptions(serviceTemplate)
         this.checks = new ChecksOptions(serviceTemplate)
         this.solver = new SolverOptions(serviceTemplate)
+        this.constraints = new ConstraintsOptions(serviceTemplate)
     }
 }
 
@@ -415,6 +417,47 @@ class SolverOptions {
 
         this.unique = this.raw.unique ?? true
         assert.isBoolean(this.unique)
+    }
+}
+
+class ConstraintsOptions {
+    private readonly serviceTemplate: ServiceTemplate
+    private readonly raw: VariabilityOptions
+
+    constraints: boolean
+
+    relationSourceConstraint: boolean
+    relationTargetConstraint: boolean
+    artifactContainerConstraint: boolean
+    propertyContainerConstraint: boolean
+    typeContainerConstraint: boolean
+    hostingStackConstraint: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
+        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+
+        // TODO: set this by default to true (check backwards compatibility first)
+        this.constraints = this.raw.constraints ?? false
+        assert.isBoolean(this.constraints)
+
+        this.relationSourceConstraint = this.raw.relation_source_constraint ?? this.constraints
+        assert.isBoolean(this.relationSourceConstraint)
+
+        this.relationTargetConstraint = this.raw.relation_target_constraint ?? this.constraints
+        assert.isBoolean(this.relationTargetConstraint)
+
+        this.artifactContainerConstraint = this.raw.artifact_container_constraint ?? this.constraints
+        assert.isBoolean(this.artifactContainerConstraint)
+
+        this.propertyContainerConstraint = this.raw.property_container_constraint ?? this.constraints
+        assert.isBoolean(this.propertyContainerConstraint)
+
+        this.typeContainerConstraint = this.raw.type_container_constraint ?? this.constraints
+        assert.isBoolean(this.typeContainerConstraint)
+
+        this.hostingStackConstraint = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
+        assert.isBoolean(this.hostingStackConstraint)
     }
 }
 

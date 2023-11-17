@@ -15,26 +15,29 @@ topology_template:
     variability:
         options:
             mode: loose
+            node_default_condition_mode: incoming-host
 
     node_templates:
-        one:
-            type: one
-            conditions: {not: {node_presence: two}}
+        agent:
+            type: agent
             requirements:
-                - host: one_host
+                - host: vm
 
-        one_host:
-            type: one_host
-
-        two:
-            type: two
-            conditions: {not: {node_presence: one}}
+        worker:
+            type: worker
+            pruning: false
+            #conditions: false
             requirements:
-                - host: two_host
+                - host:
+                      node: vm
 
-        two_host:
-            type: two_host
+        vm:
+            type: vm
+            requirements:
+                - host: hypervisor
 
+        hypervisor:
+            type: hypervisor
         `
         )
     })

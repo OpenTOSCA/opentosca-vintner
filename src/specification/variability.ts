@@ -14,13 +14,24 @@ export type VariabilityOptions = {
 } & DefaultOptions &
     PruningOptions &
     ChecksOptions &
-    SolverOptions
+    SolverOptions &
+    ConstraintsOptions
 
 export type ResolvingMode = 'strict' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
     unique?: boolean
+}
+
+export type ConstraintsOptions = {
+    constraints?: boolean
+    relation_source_constraint?: boolean
+    relation_target_constraint?: boolean
+    artifact_container_constraint?: boolean
+    property_container_constraint?: boolean
+    type_container_constraint?: boolean
+    hosting_stack_constraint?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
