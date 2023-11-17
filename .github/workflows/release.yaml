@@ -201,8 +201,16 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
-                  push: true
                   load: true
+                  tags: ghcr.io/opentosca/opentosca-vintner:latest
+                  cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
+                  cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (DOCKER) Push Docker image
+              uses: docker/build-push-action@v5.0.0
+              with:
+                  context: .
+                  push: true
                   tags: ghcr.io/opentosca/opentosca-vintner:latest
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
                   cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
