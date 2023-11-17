@@ -59,6 +59,7 @@ export default class Transformer {
     private clean(raw: any) {
         delete raw.conditions
         delete raw.weight
+        delete raw.consumed
 
         delete raw.default_condition
         delete raw.default_consistency_condition

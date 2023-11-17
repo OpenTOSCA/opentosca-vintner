@@ -52,6 +52,19 @@ export class Populator {
             ...this.graph.artifacts,
             ...this.graph.imports,
         ]
+
+        // Ensure that at least one node template is consumed if "incoming-host" is used
+        if (this.graph.options.checks.consumedCheck) {
+            if (
+                this.graph.options.default.nodeDefaultConditionMode.includes('incoming') &&
+                this.graph.options.default.nodeDefaultConditionMode.includes('host')
+            ) {
+                if (check.isUndefined(this.graph.nodes.find(it => it.consumed)))
+                    throw new Error(
+                        `Node default condition mode "incoming-host" requires at least one consumed node template`
+                    )
+            }
+        }
     }
 
     private populateInputs() {

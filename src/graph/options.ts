@@ -338,6 +338,8 @@ class ChecksOptions {
     expectedIncomingRelationSemanticCheck: boolean
     expectedArtifactSemanticCheck: boolean
 
+    consumedCheck: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
@@ -390,6 +392,9 @@ class ChecksOptions {
 
         this.expectedArtifactSemanticCheck = this.raw.expected_artifact_semantic_check ?? this.semanticChecks
         assert.isBoolean(this.expectedArtifactSemanticCheck)
+
+        this.consumedCheck = this.raw.consumed_check ?? this.checks
+        assert.isBoolean(this.consumedCheck)
     }
 }
 
