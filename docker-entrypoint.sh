@@ -48,7 +48,7 @@ if [[ "$VINTNER_MODE" = "cli" ]]; then
 Vintner can be used in the following way:
     docker exec -it vintner vintner --version
 
-If you make use of Terraform, then you need to log into your account the following way:
+If you need to log into Terraform, then you can log into your account the following way:
     docker exec -it vintner terraform login
 
 If you are running on Linux, then you can set an alias to natively use \"vintner\" on the host, e.g., \"vintner --version\"
