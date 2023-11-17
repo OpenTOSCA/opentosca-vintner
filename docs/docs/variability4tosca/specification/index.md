@@ -218,6 +218,21 @@ The following options are used to configure the solver.
 | unique       | false     | Boolean                       | true    | Enable check for unique results.   | 
 
 
+### Constraints Options
+
+The following options are used to configure constraints.
+
+| Keyname                         | Mandatory | Type      | Default | Description                                                      |
+|---------------------------------|-----------|-----------|---------|------------------------------------------------------------------|
+| constraints                     | false     | Boolean   | false   | Enable all constraints.                                          |
+| relation_source_constraint      | false     | Boolean   | false   | Enable the constraint regarding present relation sources.        |
+| relation_target_constraint      | false     | Boolean   | false   | Enable the constraint regarding present relation targets.        |
+| artifact_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of artifacts.  |
+| property_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of properties. |
+| type_container_constraint       | false     | Boolean   | false   | Enable the constraint regarding present containers of types.     |
+| hosting_stack_constraint        | false     | Boolean   | true    | Enable the constraint regarding present hosting stack.           |
+
+
 ### Resolving Modes
 
 _This is an experimental feature._

@@ -24,7 +24,6 @@ export type SolverOptions = {
     unique?: boolean
 }
 
-// TODO: document
 export type ConstraintsOptions = {
     constraints?: boolean
     relation_source_constraint?: boolean
