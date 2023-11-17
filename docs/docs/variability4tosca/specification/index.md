@@ -188,11 +188,11 @@ The following options are used to configure the pruning of elements.
 
 The following options are used to configure checks.
 
-| Keyname                                      | Mandatory | Type      | Default | Description                                                                     |
-|----------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| checks                                       | false     | Boolean   | true    | Enable all checks.                                                              |
-| consistency_checks                           | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| semantic_checks                              | false     | Boolean   | true    | Enable all semantic checks.                                                     |
+| Keyname                          | Mandatory | Type      | Default | Description                                                                     |
+|----------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
+| checks                           | false     | Boolean   | true    | Enable all checks.                                                              |
+| consistency_checks               | false     | Boolean   | true    | Enable all consistency checks.                                                  |
+| semantic_checks                  | false     | Boolean   | true    | Enable all semantic checks.                                                     |
 | relation_source_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
 | relation_target_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
 | ambiguous_hosting_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
@@ -202,9 +202,9 @@ The following options are used to configure checks.
 | ambiguous_property_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
 | missing_type_container_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
 | ambiguous_type_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
-| expected_hosting_check              | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
-| expected_incoming_relation_check    | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
-| expected_artifact_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
+| expected_hosting_check           | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_check | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_check          | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
 
 ### Solver Options
 
@@ -219,6 +219,8 @@ The following options are used to configure the solver.
 
 
 ### Constraints Options
+
+_This is an experimental feature._
 
 The following options are used to configure constraints.
 
