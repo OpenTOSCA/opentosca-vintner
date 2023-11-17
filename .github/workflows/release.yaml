@@ -173,6 +173,14 @@ jobs:
             - name: (DOCS) Build and Deploy Docs
               run: yarn docs:deploy
 
+            - name: (RELEASE) Archive docs
+              run: tar -czvf docs.tar.gz -C docs/site/ .
+
+            - name: (RELEASE) Upload docs to release
+              run: gh release upload latest docs.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             ###################################################
             #
             # Docker
@@ -202,6 +210,6 @@ jobs:
               run: docker save ghcr.io/opentosca/opentosca-vintner:latest | gzip > docker-image.tar.gz
 
             - name: (RELEASE) Upload Docker image to release
-              run: gh release upload "Latest Release" docker-image.tar.gz
+              run: gh release upload latest docker-image.tar.gz
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
