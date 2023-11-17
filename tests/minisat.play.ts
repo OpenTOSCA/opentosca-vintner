@@ -25,8 +25,7 @@ topology_template:
 
         worker:
             type: worker
-            pruning: false
-            #conditions: false
+            consumed: true
             requirements:
                 - host:
                       node: vm

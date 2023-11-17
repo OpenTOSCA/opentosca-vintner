@@ -322,21 +322,23 @@ class ChecksOptions {
 
     checks: boolean
 
-    consistencyChecks: boolean
-    relationSourceConsistencyCheck: boolean
-    relationTargetConsistencyCheck: boolean
-    ambiguousHostingConsistencyCheck: boolean
-    missingArtifactContainerConsistencyCheck: boolean
-    ambiguousArtifactConsistencyCheck: boolean
-    missingPropertyContainerConsistencyCheck: boolean
-    ambiguousPropertyConsistencyCheck: boolean
-    missingTypeContainerConsistencyCheck: boolean
-    ambiguousTypeConsistencyCheck: boolean
+    consistency: boolean
+    relationSource: boolean
+    relationTarget: boolean
+    ambiguousHosting: boolean
+    missingArtifactContainer: boolean
+    ambiguousArtifact: boolean
+    missingPropertyContainer: boolean
+    ambiguousProperty: boolean
+    missingTypeContainer: boolean
+    ambiguousType: boolean
 
-    semanticChecks: boolean
-    expectedHostingSemanticCheck: boolean
-    expectedIncomingRelationSemanticCheck: boolean
-    expectedArtifactSemanticCheck: boolean
+    semantic: boolean
+    expectedHosting: boolean
+    expectedIncomingRelation: boolean
+    expectedArtifact: boolean
+
+    consumed: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -345,51 +347,50 @@ class ChecksOptions {
         this.checks = this.raw.checks ?? true
         assert.isBoolean(this.checks)
 
-        this.consistencyChecks = this.raw.consistency_checks ?? this.checks
-        assert.isBoolean(this.consistencyChecks)
+        this.consistency = this.raw.consistency_checks ?? this.checks
+        assert.isBoolean(this.consistency)
 
-        this.relationSourceConsistencyCheck = this.raw.relation_source_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.relationSourceConsistencyCheck)
+        this.relationSource = this.raw.relation_source_check ?? this.consistency
+        assert.isBoolean(this.relationSource)
 
-        this.relationTargetConsistencyCheck = this.raw.relation_target_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.relationTargetConsistencyCheck)
+        this.relationTarget = this.raw.relation_target_check ?? this.consistency
+        assert.isBoolean(this.relationTarget)
 
-        this.ambiguousHostingConsistencyCheck = this.raw.ambiguous_hosting_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.ambiguousHostingConsistencyCheck)
+        this.ambiguousHosting = this.raw.ambiguous_hosting_check ?? this.consistency
+        assert.isBoolean(this.ambiguousHosting)
 
-        this.missingArtifactContainerConsistencyCheck =
-            this.raw.missing_artifact_container_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.missingArtifactContainerConsistencyCheck)
+        this.missingArtifactContainer = this.raw.missing_artifact_container_check ?? this.consistency
+        assert.isBoolean(this.missingArtifactContainer)
 
-        this.ambiguousArtifactConsistencyCheck = this.raw.ambiguous_artifact_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.ambiguousArtifactConsistencyCheck)
+        this.ambiguousArtifact = this.raw.ambiguous_artifact_check ?? this.consistency
+        assert.isBoolean(this.ambiguousArtifact)
 
-        this.missingPropertyContainerConsistencyCheck =
-            this.raw.missing_property_container_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.missingPropertyContainerConsistencyCheck)
+        this.missingPropertyContainer = this.raw.missing_property_container_check ?? this.consistency
+        assert.isBoolean(this.missingPropertyContainer)
 
-        this.ambiguousPropertyConsistencyCheck = this.raw.ambiguous_property_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.ambiguousPropertyConsistencyCheck)
+        this.ambiguousProperty = this.raw.ambiguous_property_check ?? this.consistency
+        assert.isBoolean(this.ambiguousProperty)
 
-        this.missingTypeContainerConsistencyCheck =
-            this.raw.missing_type_container_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.missingTypeContainerConsistencyCheck)
+        this.missingTypeContainer = this.raw.missing_type_container_check ?? this.consistency
+        assert.isBoolean(this.missingTypeContainer)
 
-        this.ambiguousTypeConsistencyCheck = this.raw.ambiguous_type_consistency_check ?? this.consistencyChecks
-        assert.isBoolean(this.ambiguousTypeConsistencyCheck)
+        this.ambiguousType = this.raw.ambiguous_type_check ?? this.consistency
+        assert.isBoolean(this.ambiguousType)
 
-        this.semanticChecks = this.raw.semantic_checks ?? this.checks
-        assert.isBoolean(this.semanticChecks)
+        this.semantic = this.raw.semantic_checks ?? this.checks
+        assert.isBoolean(this.semantic)
 
-        this.expectedHostingSemanticCheck = this.raw.expected_hosting_semantic_check ?? this.semanticChecks
-        assert.isBoolean(this.expectedHostingSemanticCheck)
+        this.expectedHosting = this.raw.expected_hosting_check ?? this.semantic
+        assert.isBoolean(this.expectedHosting)
 
-        this.expectedIncomingRelationSemanticCheck =
-            this.raw.expected_incoming_relation_semantic_check ?? this.semanticChecks
-        assert.isBoolean(this.expectedIncomingRelationSemanticCheck)
+        this.expectedIncomingRelation = this.raw.expected_incoming_relation_check ?? this.semantic
+        assert.isBoolean(this.expectedIncomingRelation)
 
-        this.expectedArtifactSemanticCheck = this.raw.expected_artifact_semantic_check ?? this.semanticChecks
-        assert.isBoolean(this.expectedArtifactSemanticCheck)
+        this.expectedArtifact = this.raw.expected_artifact_check ?? this.semantic
+        assert.isBoolean(this.expectedArtifact)
+
+        this.consumed = this.raw.consumed_check ?? this.checks
+        assert.isBoolean(this.consumed)
     }
 }
 
@@ -426,12 +427,12 @@ class ConstraintsOptions {
 
     constraints: boolean
 
-    relationSourceConstraint: boolean
-    relationTargetConstraint: boolean
-    artifactContainerConstraint: boolean
-    propertyContainerConstraint: boolean
-    typeContainerConstraint: boolean
-    hostingStackConstraint: boolean
+    relationSource: boolean
+    relationTarget: boolean
+    artifactContainer: boolean
+    propertyContainer: boolean
+    typeContainer: boolean
+    hostingStack: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -441,23 +442,23 @@ class ConstraintsOptions {
         this.constraints = this.raw.constraints ?? false
         assert.isBoolean(this.constraints)
 
-        this.relationSourceConstraint = this.raw.relation_source_constraint ?? this.constraints
-        assert.isBoolean(this.relationSourceConstraint)
+        this.relationSource = this.raw.relation_source_constraint ?? this.constraints
+        assert.isBoolean(this.relationSource)
 
-        this.relationTargetConstraint = this.raw.relation_target_constraint ?? this.constraints
-        assert.isBoolean(this.relationTargetConstraint)
+        this.relationTarget = this.raw.relation_target_constraint ?? this.constraints
+        assert.isBoolean(this.relationTarget)
 
-        this.artifactContainerConstraint = this.raw.artifact_container_constraint ?? this.constraints
-        assert.isBoolean(this.artifactContainerConstraint)
+        this.artifactContainer = this.raw.artifact_container_constraint ?? this.constraints
+        assert.isBoolean(this.artifactContainer)
 
-        this.propertyContainerConstraint = this.raw.property_container_constraint ?? this.constraints
-        assert.isBoolean(this.propertyContainerConstraint)
+        this.propertyContainer = this.raw.property_container_constraint ?? this.constraints
+        assert.isBoolean(this.propertyContainer)
 
-        this.typeContainerConstraint = this.raw.type_container_constraint ?? this.constraints
-        assert.isBoolean(this.typeContainerConstraint)
+        this.typeContainer = this.raw.type_container_constraint ?? this.constraints
+        assert.isBoolean(this.typeContainer)
 
-        this.hostingStackConstraint = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
-        assert.isBoolean(this.hostingStackConstraint)
+        this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
+        assert.isBoolean(this.hostingStack)
     }
 }
 

@@ -188,23 +188,23 @@ The following options are used to configure the pruning of elements.
 
 The following options are used to configure checks.
 
-| Keyname                                      | Mandatory | Type      | Default | Description                                                                     |
-|----------------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| checks                                       | false     | Boolean   | true    | Enable all checks.                                                              |
-| consistency_checks                           | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| semantic_checks                              | false     | Boolean   | true    | Enable all semantic checks.                                                     |
-| relation_source_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
-| relation_target_consistency_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
-| ambiguous_hosting_consistency_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
-| missing_artifact_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
-| ambiguous_artifact_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
-| missing_property_container_consistency_check | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
-| ambiguous_property_consistency_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
-| missing_type_container_consistency_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
-| ambiguous_type_consistency_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
-| expected_hosting_semantic_check              | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
-| expected_incoming_relation_semantic_check    | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
-| expected_artifact_semantic_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
+| Keyname                          | Mandatory | Type      | Default | Description                                                                     |
+|----------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
+| checks                           | false     | Boolean   | true    | Enable all checks.                                                              |
+| consistency_checks               | false     | Boolean   | true    | Enable all consistency checks.                                                  |
+| semantic_checks                  | false     | Boolean   | true    | Enable all semantic checks.                                                     |
+| relation_source_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
+| relation_target_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
+| ambiguous_hosting_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
+| missing_artifact_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
+| ambiguous_artifact_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
+| missing_property_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
+| ambiguous_property_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
+| missing_type_container_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
+| ambiguous_type_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| expected_hosting_check           | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_check | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_check          | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
 
 ### Solver Options
 
@@ -219,6 +219,8 @@ The following options are used to configure the solver.
 
 
 ### Constraints Options
+
+_This is an experimental feature._
 
 The following options are used to configure constraints.
 
@@ -393,20 +395,21 @@ A node template is a conditional element, thus, variability conditions and other
 These conditions must hold otherwise the respective node template is not present.
 A node template can also hold conditional types, artifact, and properties.
 
-| Keyname                       | Mandatory | Type                                                                                 | Description                                                                                                                                                                                                              |
-|-------------------------------|-----------|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type                          | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                                                                      |
-| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                                                       |
-| artifacts                     | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                                                                       | 
-| properties                    | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                                                    | 
-| default_condition             | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                               |
+| Keyname                       | Mandatory | Type                                                                                 | Description                                                                                                                                                                              |
+|-------------------------------|-----------|--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type                          | true      | String &#124; List(Map(String, TypeAssignment))                                      | The type or a list of conditional type assignments.                                                                                                                                      |
+| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                               | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                       |
+| artifacts                     | false     | Map(String, Artifact) &#124; List(Map(String, Artifact){single})                     | An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.                                                       | 
+| properties                    | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                    | 
+| default_condition             | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                 |
 | default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
-| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.  |
-| default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                                      |
-| pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                         |
-| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                            |
-| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                      |
-| weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                                                                         |
+| default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                                        |
+| consumed                      | false     | Boolean                                                                              | Configure if node is consumed, e.g., by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.                                       |
+| pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
+| consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
+| semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
+| weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                                         |
 
 For example, the following node template has a variability condition assigned.
 

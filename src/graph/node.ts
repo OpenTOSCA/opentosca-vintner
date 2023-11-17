@@ -60,16 +60,25 @@ export default class Node extends Element {
         return this.name
     }
 
+    get consumed() {
+        if (check.isDefined(this.raw.consumed)) {
+            assert.isBoolean(this.raw.consumed)
+            return this.raw.consumed
+        }
+    }
+
     get getDefaultMode(): NodeDefaultConditionMode {
         return this.raw.default_condition_mode ?? this.graph.options.default.nodeDefaultConditionMode
     }
 
     get defaultEnabled() {
-        return this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
+        return check.isTrue(this.consumed)
+            ? false
+            : this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return this.raw.pruning ?? this.graph.options.pruning.nodePruning
+        return check.isTrue(this.consumed) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     get hasHost() {

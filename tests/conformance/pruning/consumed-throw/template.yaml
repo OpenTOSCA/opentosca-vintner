@@ -4,20 +4,25 @@ topology_template:
     variability:
         options:
             node_default_condition: true
-            node_default_condition_mode: outgoingnaive
+            node_default_condition_mode: incoming-host
 
             relation_default_condition: true
             relation_default_condition_mode: source-target
 
             type_default_condition: true
 
-            expected_incoming_relation_check: false
     node_templates:
-        source:
-            type: source
+        worker:
+            type: worker
             requirements:
-                - relation:
-                      node: target
+                - host:
+                      node: vm
 
-        target:
-            type: target
+        vm:
+            type: vm
+            requirements:
+                - host:
+                      node: hypervisor
+
+        hypervisor:
+            type: hypervisor

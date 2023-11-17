@@ -16,7 +16,7 @@ export default class Checker {
         const types = this.graph.types.filter(it => it.present)
 
         // Ensure that each relation source exists
-        if (this.graph.options.checks.relationSourceConsistencyCheck) {
+        if (this.graph.options.checks.relationSource) {
             for (const relation of relations) {
                 if (!relation.source.present)
                     throw new Error(`Relation source "${relation.source.name}" of ${relation.display} does not exist`)
@@ -24,7 +24,7 @@ export default class Checker {
         }
 
         // Ensure that each relation target exists
-        if (this.graph.options.checks.relationTargetConsistencyCheck) {
+        if (this.graph.options.checks.relationTarget) {
             for (const relation of relations) {
                 if (!relation.target.present)
                     throw new Error(`Relation target "${relation.target.name}" of ${relation.display} does not exist`)
@@ -32,14 +32,14 @@ export default class Checker {
         }
 
         // Ensure that node of each artifact exists
-        if (this.graph.options.checks.missingArtifactContainerConsistencyCheck) {
+        if (this.graph.options.checks.missingArtifactContainer) {
             for (const artifact of artifacts) {
                 if (!artifact.container.present) throw new Error(`Container of ${artifact.display} does not exist`)
             }
         }
 
         // Ensure that artifacts are unique within their node (also considering non-present nodes)
-        if (this.graph.options.checks.ambiguousArtifactConsistencyCheck) {
+        if (this.graph.options.checks.ambiguousArtifact) {
             for (const node of nodes) {
                 const names = new Set()
                 for (const artifact of artifacts) {
@@ -50,7 +50,7 @@ export default class Checker {
         }
 
         // Ensure that node of each present property exists
-        if (this.graph.options.checks.missingPropertyContainerConsistencyCheck) {
+        if (this.graph.options.checks.missingPropertyContainer) {
             for (const property of properties) {
                 if (!property.container.present) {
                     throw new Error(`Container of ${property.display} does not exist`)
@@ -59,7 +59,7 @@ export default class Checker {
         }
 
         // Ensure that each property has maximum one value (also considering non-present nodes)
-        if (this.graph.options.checks.ambiguousPropertyConsistencyCheck) {
+        if (this.graph.options.checks.ambiguousProperty) {
             for (const node of nodes) {
                 const names = new Set()
                 for (const property of node.properties.filter(it => it.present)) {
@@ -70,14 +70,14 @@ export default class Checker {
         }
 
         // Ensure that container of each type exists
-        if (this.graph.options.checks.missingTypeContainerConsistencyCheck) {
+        if (this.graph.options.checks.missingTypeContainer) {
             for (const type of types) {
                 if (!type.container.present) throw new Error(`Container of ${type.display} does not exist`)
             }
         }
 
         // Ensure that each node has exactly one type
-        if (this.graph.options.checks.ambiguousTypeConsistencyCheck) {
+        if (this.graph.options.checks.ambiguousType) {
             for (const node of nodes) {
                 const names = new Set()
                 const types = node.types.filter(it => it.present)
@@ -90,7 +90,7 @@ export default class Checker {
         }
 
         // Ensure that every component has at maximum one hosting relation
-        if (this.graph.options.checks.ambiguousHostingConsistencyCheck) {
+        if (this.graph.options.checks.ambiguousHosting) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     it => it.source.name === node.name && it.isHostedOn() && it.present
@@ -100,7 +100,7 @@ export default class Checker {
         }
 
         // Ensure that every component that had a hosting relation previously still has one
-        if (this.graph.options.checks.expectedHostingSemanticCheck) {
+        if (this.graph.options.checks.expectedHosting) {
             for (const node of nodes) {
                 const relations = node.outgoing.filter(
                     relation => relation.source.name === node.name && relation.isHostedOn()
@@ -112,7 +112,7 @@ export default class Checker {
         }
 
         // Ensure that every component that had an incoming relation previously still has one
-        if (this.graph.options.checks.expectedIncomingRelationSemanticCheck) {
+        if (this.graph.options.checks.expectedIncomingRelation) {
             for (const node of nodes) {
                 if (node.ingoing.length !== 0 && !node.ingoing.some(it => it.present))
                     throw new Error(`${node.Display} expected to have an incoming relation`)
@@ -120,7 +120,7 @@ export default class Checker {
         }
 
         // Ensure that every component that had a deployment artifact previously still has one
-        if (this.graph.options.checks.expectedArtifactSemanticCheck) {
+        if (this.graph.options.checks.expectedArtifact) {
             for (const node of nodes) {
                 if (node.artifacts.length !== 0 && !node.artifacts.some(it => it.present))
                     throw new Error(`${node.Display} expected to have an deployment artifact`)

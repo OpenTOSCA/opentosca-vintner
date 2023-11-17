@@ -161,7 +161,7 @@ export default class Solver {
         /**
          * Ensure that each relation source exists
          */
-        if (this.graph.options.constraints.relationSourceConstraint) {
+        if (this.graph.options.constraints.relationSource) {
             for (const relation of this.graph.relations) {
                 this.minisat.require(MiniSat.implies(relation.id, relation.target.id))
             }
@@ -170,7 +170,7 @@ export default class Solver {
         /**
          * Ensure that each relation target exists
          */
-        if (this.graph.options.constraints.relationTargetConstraint) {
+        if (this.graph.options.constraints.relationTarget) {
             for (const relation of this.graph.relations) {
                 this.minisat.require(MiniSat.implies(relation.id, relation.source.id))
             }
@@ -181,7 +181,7 @@ export default class Solver {
         /**
          * Ensure that each artifact container exists
          */
-        if (this.graph.options.constraints.artifactContainerConstraint) {
+        if (this.graph.options.constraints.artifactContainer) {
             for (const artifact of this.graph.artifacts)
                 this.minisat.require(MiniSat.implies(artifact.id, artifact.container.id))
         }
@@ -189,7 +189,7 @@ export default class Solver {
         /**
          * Ensure that each property container exists
          */
-        if (this.graph.options.constraints.propertyContainerConstraint) {
+        if (this.graph.options.constraints.propertyContainer) {
             for (const property of this.graph.properties)
                 this.minisat.require(MiniSat.implies(property.id, property.container.id))
         }
@@ -199,7 +199,7 @@ export default class Solver {
         /**
          * Ensure that each type container exists
          */
-        if (this.graph.options.constraints.typeContainerConstraint) {
+        if (this.graph.options.constraints.typeContainer) {
             for (const type of this.graph.types) this.minisat.require(MiniSat.implies(type.id, type.container.id))
         }
         // TODO: Ensure that each node has exactly one type
@@ -208,7 +208,7 @@ export default class Solver {
          * Ensure that hosting stack exists
          * This prevents, e.g., the unexpected removal of the hosting stack.
          */
-        if (this.graph.options.constraints.hostingStackConstraint) {
+        if (this.graph.options.constraints.hostingStack) {
             for (const node of this.graph.nodes.filter(it => it.hasHost)) {
                 const hostings = node.outgoing.filter(it => it.isHostedOn())
                 const consequence = hostings.length === 1 ? hostings[0].id : MiniSat.xor(hostings.map(it => it.id))
