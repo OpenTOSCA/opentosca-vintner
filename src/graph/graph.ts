@@ -9,6 +9,7 @@ import {
     ArtifactPropertyPresenceArguments,
     GroupPropertyPresenceArguments,
     GroupTypePresenceArguments,
+    LogicExpression,
     NodePropertyPresenceArguments,
     NodeTypePresenceArguments,
     PolicyPropertyPresenceArguments,
@@ -75,6 +76,8 @@ export default class Graph {
     artifacts: Artifact[] = []
 
     imports: Import[] = []
+
+    constraints: LogicExpression[] = []
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
