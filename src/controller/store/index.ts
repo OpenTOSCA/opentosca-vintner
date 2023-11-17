@@ -1,4 +1,5 @@
 import _clean from './clean'
+import _content from './content'
 import _delete from './delete'
 import _import from './import'
 import _list from './list'
@@ -8,4 +9,5 @@ export default {
     import: _import,
     clean: _clean,
     list: _list,
+    content: _content,
 }

@@ -802,6 +802,17 @@ store
     )
 
 store
+    .command('content')
+    .description('shows content of entry')
+    .requiredOption('--name <string>', 'name')
+    .action(
+        hae.exit(async options => {
+            const content = await Controller.store.content(options)
+            std.out(content)
+        })
+    )
+
+store
     .command('delete')
     .description('deletes an entry')
     .requiredOption('--name <string>', 'name')

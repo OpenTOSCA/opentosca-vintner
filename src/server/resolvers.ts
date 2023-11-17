@@ -436,4 +436,12 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/store/content',
+    hae.express(async (req, res, next) => {
+        const content = await Controller.store.read(req.body)
+        res.json({content})
+    })
+)
+
 export default resolvers
