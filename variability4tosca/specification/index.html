@@ -372,6 +372,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#constraints-options">
+    Constraints Options
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#resolving-modes">
     Resolving Modes
   </a>
@@ -935,8 +940,18 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-consistency-throw-hosting-relation-missing-constraint/">
+        consistency-throw-hosting-relation-missing-constraint
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-consistency-throw-hosting-relation-missing/">
         consistency-throw-hosting-relation-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-consistency-throw-multiple-hosting-relations-constraint/">
+        consistency-throw-multiple-hosting-relations-constraint
       </a>
 </li>
 <li class="md-nav__item">
@@ -1277,6 +1292,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-nodes-host-presence-true-false/">
         nodes-host-presence-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-nodes-host-presence-true-true-constraint/">
+        nodes-host-presence-true-true-constraint
       </a>
 </li>
 <li class="md-nav__item">
@@ -2389,6 +2409,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#constraints-options">
+    Constraints Options
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#resolving-modes">
     Resolving Modes
   </a>
@@ -3395,6 +3420,70 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>true</td>
 <td>Enable check for unique results.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constraints-options">Constraints Options<a class="headerlink" href="#constraints-options" title="Permanent link">¶</a></h3>
+<p>The following options are used to configure constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Keyname</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constraints</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable all constraints.</td>
+</tr>
+<tr>
+<td>relation_source_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present relation sources.</td>
+</tr>
+<tr>
+<td>relation_target_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present relation targets.</td>
+</tr>
+<tr>
+<td>artifact_container_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present container of artifacts.</td>
+</tr>
+<tr>
+<td>property_container_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present container of properties.</td>
+</tr>
+<tr>
+<td>type_container_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present containers of types.</td>
+</tr>
+<tr>
+<td>hosting_stack_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the constraint regarding present hosting stack.</td>
 </tr>
 </tbody>
 </table>
@@ -5378,7 +5467,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 17, 2023</span>
 </small>
 </div>
 </article>
