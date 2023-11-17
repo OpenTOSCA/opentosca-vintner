@@ -3,9 +3,9 @@ import * as crypto from '#crypto'
 import * as files from '#files'
 import path from 'path'
 
-export type KeysInspectOptions = {key?: string; output?: string}
+export type KeysOptions = {key?: string; output?: string}
 
-export default async function (options: KeysInspectOptions) {
+export default async function (options: KeysOptions) {
     assert.isDefined(options.key, 'Key not defined')
     assert.isName(options.key)
 

@@ -192,7 +192,7 @@ We ensure, that only the licenses [0BSD](https://choosealicense.com/licenses/0bs
 | 176  | [string_decoder](https://github.com/nodejs/string_decoder){target=_blank} | 1.3.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 177  | [supports-color](https://github.com/chalk/supports-color){target=_blank} | 7.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 178  | [sync-directory](https://github.com/hoperyy/sync-directory){target=_blank} | 6.0.4 |  [ISC](https://choosealicense.com/licenses/isc){target=_blank} |
-| 179  | [systeminformation](https://github.com/sebhildebrandt/systeminformation){target=_blank} | 5.17.12 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
+| 179  | [systeminformation](https://github.com/sebhildebrandt/systeminformation){target=_blank} | 5.21.8 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 180  | [tar-stream](https://github.com/mafintosh/tar-stream){target=_blank} | 2.2.0 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 181  | [tmp](https://github.com/raszi/node-tmp){target=_blank} | 0.0.33 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |
 | 182  | [to-regex-range](https://github.com/micromatch/to-regex-range){target=_blank} | 5.0.1 |  [MIT](https://choosealicense.com/licenses/mit){target=_blank} |

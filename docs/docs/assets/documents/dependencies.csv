@@ -177,7 +177,7 @@ statuses,2.0.1,MIT,https://github.com/jshttp/statuses
 string_decoder,1.3.0,MIT,https://github.com/nodejs/string_decoder
 supports-color,7.2.0,MIT,https://github.com/chalk/supports-color
 sync-directory,6.0.4,ISC,https://github.com/hoperyy/sync-directory
-systeminformation,5.17.12,MIT,https://github.com/sebhildebrandt/systeminformation
+systeminformation,5.21.8,MIT,https://github.com/sebhildebrandt/systeminformation
 tar-stream,2.2.0,MIT,https://github.com/mafintosh/tar-stream
 tmp,0.0.33,MIT,https://github.com/raszi/node-tmp
 to-regex-range,5.0.1,MIT,https://github.com/micromatch/to-regex-range

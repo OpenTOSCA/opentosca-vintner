@@ -30,7 +30,7 @@ describe('crypto', () => {
     it('import', async () => {
         await Controller.setup.reset({force: true})
 
-        await Controller.keystore.import({key: 'public', file: key.public})
+        await Controller.store.import({name: 'public', file: key.public})
         await Controller.templates.import({
             template: 'template',
             path: template,
