@@ -31,16 +31,6 @@ export default class Checker {
             }
         }
 
-        // Ensure that every component has at maximum one hosting relation
-        if (this.graph.options.checks.ambiguousHostingConsistencyCheck) {
-            for (const node of nodes) {
-                const relations = node.outgoing.filter(
-                    it => it.source.name === node.name && it.isHostedOn() && it.present
-                )
-                if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
-            }
-        }
-
         // Ensure that node of each artifact exists
         if (this.graph.options.checks.missingArtifactContainerConsistencyCheck) {
             for (const artifact of artifacts) {
@@ -96,6 +86,16 @@ export default class Checker {
                     if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
                     names.add(type.name)
                 }
+            }
+        }
+
+        // Ensure that every component has at maximum one hosting relation
+        if (this.graph.options.checks.ambiguousHostingConsistencyCheck) {
+            for (const node of nodes) {
+                const relations = node.outgoing.filter(
+                    it => it.source.name === node.name && it.isHostedOn() && it.present
+                )
+                if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
         }
 

@@ -5,7 +5,6 @@ topology_template:
         options:
             relation_pruning: true
             type_default_condition: true
-            constraints: false
     node_templates:
         container:
             type: container
