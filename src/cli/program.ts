@@ -450,7 +450,7 @@ templates
     .option('--git-repository [string]', 'git repository')
     .option('--git-checkout [string]', 'git checkout')
     .option('--signature', 'path to the signature (default: template + ".asc")')
-    .option('--key', 'key name to verify the signature')
+    .option('--key', 'storage entry name to verify the signature')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
@@ -777,45 +777,46 @@ sensors
         })
     )
 
-const keystore = program.command('keystore').description('manages keys for signing and verifying CSARs')
+const store = program.command('store').description('manages files, parameters, configs, values ...')
 
-keystore
+store
     .command('list')
-    .description('lists all keys')
+    .description('lists all entries')
     .action(
         hae.exit(async options => {
-            const keys = await Controller.keystore.list()
-            std.out(keys.map(it => it.getName()).join('\n'))
+            const entries = await Controller.store.list()
+            std.out(entries.map(it => it.getName()).join('\n'))
         })
     )
 
-keystore
+store
     .command('import')
-    .description('imports a key')
-    .requiredOption('--key <string>', 'key name (must match /^[a-z\\-]+$/)')
-    .requiredOption('--file <string>', 'path to the key')
+    .description('imports an entry')
+    .requiredOption('--name <string>', 'name (must match /^[a-z\\-]+$/)')
+    .option('--file <string>', 'path to a file')
+    .option('--content <string>', 'content to import')
     .action(
         hae.exit(async options => {
-            await Controller.keystore.import(options)
+            await Controller.store.import(options)
         })
     )
 
-keystore
+store
     .command('delete')
-    .description('deletes a key')
-    .requiredOption('--key <string>', 'key name')
+    .description('deletes an entry')
+    .requiredOption('--name <string>', 'name')
     .action(
         hae.exit(async options => {
-            await Controller.keystore.delete(options)
+            await Controller.store.delete(options)
         })
     )
 
-keystore
+store
     .command('clean')
-    .description('cleans all keys')
+    .description('cleans all entries')
     .action(
         hae.exit(async options => {
-            await Controller.keystore.clean(options)
+            await Controller.store.clean(options)
         })
     )
 

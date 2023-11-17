@@ -1,7 +1,7 @@
 import * as crypto from '#crypto'
 
-export type PasswordOptions = {}
+export type NonceOptions = {}
 
-export default async function (options: PasswordOptions) {
+export default async function (options: NonceOptions) {
     return crypto.generateNonce()
 }

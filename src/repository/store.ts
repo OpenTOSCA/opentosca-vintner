@@ -3,21 +3,21 @@ import * as files from '#files'
 import * as utils from '#utils'
 import path from 'path'
 
-export class Keystore {
+export class Store {
     static all() {
-        return files.listDirectories(Keystore.getKeystoreDirectory()).map(name => new Key(name))
+        return files.listDirectories(Store.getDirectory()).map(name => new Entry(name))
     }
 
-    static getKeystoreDirectory() {
-        return path.join(config.home, 'keystore')
+    static getDirectory() {
+        return path.join(config.home, 'store')
     }
 
     static isEmpty() {
-        return utils.isEmpty(files.listDirectories(Keystore.getKeystoreDirectory()))
+        return utils.isEmpty(files.listDirectories(Store.getDirectory()))
     }
 }
 
-export class Key {
+export class Entry {
     private readonly _name: string
 
     constructor(name: string) {
@@ -29,7 +29,7 @@ export class Key {
     }
 
     getFile() {
-        return path.join(Keystore.getKeystoreDirectory(), this.getName())
+        return path.join(Store.getDirectory(), this.getName())
     }
 
     exists() {
@@ -38,6 +38,10 @@ export class Key {
 
     import(options: {file: string}) {
         files.copy(options.file, this.getFile())
+    }
+
+    store(content: string) {
+        files.storeFile(this.getFile(), content)
     }
 
     load() {
