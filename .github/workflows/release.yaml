@@ -134,7 +134,7 @@ jobs:
               run: git tag --delete latest || true
 
             - name: (RELEASE) Create Latest Release
-              run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
+              run: gh release create latest -t "Latest Release" --target ${GITHUB_SHA} -n "This is the latest release of this project" ./dist/* README.md LICENSE
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -197,7 +197,7 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (DOCKER) Build and push Docker image
+            - name: (DOCKER) Build Docker image
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
