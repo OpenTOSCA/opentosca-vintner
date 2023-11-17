@@ -197,3 +197,11 @@ jobs:
                   tags: ghcr.io/opentosca/opentosca-vintner:latest
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
                   cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (RELEASE) Save docker image as tar ball
+              run: docker save ghcr.io/opentosca/opentosca-vintner:latest | gzip > docker-image.tar.gz
+
+            - name: (RELEASE) Upload Docker image to release
+              run: gh release upload "Latest Release" docker-image.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
