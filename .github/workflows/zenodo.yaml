@@ -48,15 +48,12 @@ jobs:
 
             - name: (ZENODO) Download files
               run: |
-                  mkdir -p cd /tmp/opentosca-vintner-zenodo-files
+                  gh release download latest --dir /tmp/opentosca-vintner-zenodo-files
+                  gh release download latest --dir /tmp/opentosca-vintner-zenodo-files --archive=zip
+                  gh release download latest --dir /tmp/opentosca-vintner-zenodo-files --archive=tar.gz
+
                   cd /tmp/opentosca-vintner-zenodo-files
-
-                  gh release download latest
-
-                  gh release download latest --archive=zip
                   mv opentosca-vintner-latest.zip opentosca-vintner.zip
-
-                  gh release download latest --archive=tar.gz
                   mv opentosca-vintner-latest.tar.gz opentosca-vintner.tar.gz
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
