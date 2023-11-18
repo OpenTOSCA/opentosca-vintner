@@ -23,30 +23,30 @@ def create_version(id):
     r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(id) + '/actions/newversion', params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
-
     print('Version created')
-    version = r.json()
+    return r.json()
 
-    # Delete all existing files
+def delete_files(version, file):
+    print(log_line)
+    print('Deleting existing files')
     if 'files' in version:
-        print('Deleting existing files')
         for file in version['files']:
-            print('Deleting file ' + file['filename'])
-            r = requests.delete(file['links']['self'], params={'access_token': access_token})
-            print(r.status_code)
-            print(r.content)
-            print('File deleted')
+            delete_file(version, file)
 
-    # Set new publish date
-    set_metadata(version)
 
-    return version
+def delete_file(version, file):
+    print(log_line)
+    print('Deleting file ' + file['filename'])
+    r = requests.delete(file['links']['self'], params={'access_token': access_token})
+    print(r.status_code)
+    print(r.content)
+    print('File deleted')
 
 
 def publish_version(version):
     print(log_line)
     print('Publishing version ' + str(version['id']))
-    r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(version['id']) + '/actions/publish', params={'access_token': access_token})
+    r = requests.post(version['links']['publish'], params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Version published')
@@ -77,7 +77,7 @@ def set_metadata(version):
          }
     headers = {"Content-Type": "application/json"}
 
-    r = requests.put(zenodo_url + '/api/deposit/depositions/' + str(version['id']), data=json.dumps(data), headers=headers, params={'access_token': access_token})
+    r = requests.put(version['links']['self']), data=json.dumps(data), headers=headers, params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Metadata set')
@@ -107,12 +107,20 @@ def upload_file(version, file):
     print(r.json())
     print('File uploaded')
 
+
 def current_date():
     return datetime.datetime.now().isoformat()[0:10]
 
 
-print('Publishing new Zenodo release')
-version = create_version(original_id)
-upload_files(version)
-publish_version(version)
-print('Zenodo relase published')
+def main():
+    print('Publishing new Zenodo release')
+
+    version = create_version(original_id)
+    delete_files(version)
+    set_metadata(version)
+    upload_files(version)
+    publish_version(version)
+
+    print('Zenodo relase published')
+
+main()
