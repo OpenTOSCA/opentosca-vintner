@@ -29,7 +29,7 @@ def create_version(id):
 def get_version(deposition):
     print(log_line)
     print('Fetching version')
-    r = requests.get(deposition['links']['latest_draft'])
+    r = requests.get(deposition['links']['latest_draft'], params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Fetched')
