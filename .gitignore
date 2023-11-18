@@ -4,6 +4,7 @@
 #
 *.ignored.yaml
 *.ignored.env
+tmp
 
 # IDE
 .idea
