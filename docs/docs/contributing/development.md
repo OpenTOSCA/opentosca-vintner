@@ -192,6 +192,7 @@ yarn release:npm
 
 ## Zenodo
 
-There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner.
-
-// TODO: describe workflow
+There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner: [https://doi.org/10.5281/zenodo.10155277](https://doi.org/10.5281/zenodo.10155277){target=_blank}
+To publish a new version, run the Zenodo workflow on GitHub. 
+This workflow will create a draft of a new version based on the latest GitHub release. 
+The version must be manually published on Zenodo.
