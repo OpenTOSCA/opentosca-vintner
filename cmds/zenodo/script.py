@@ -77,7 +77,7 @@ def set_metadata(version):
          }
     headers = {"Content-Type": "application/json"}
 
-    r = requests.put(version['links']['self']), data=json.dumps(data), headers=headers, params={'access_token': access_token})
+    r = requests.put(version['links']['self'], data=json.dumps(data), headers=headers, params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Metadata set')
