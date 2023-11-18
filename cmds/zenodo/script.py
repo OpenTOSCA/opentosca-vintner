@@ -26,6 +26,15 @@ def create_version(id):
     print('Version created')
     return r.json()
 
+def get_version(deposition):
+    print(log_line)
+    print('Fetching version')
+    r = requests.get(deposition['links']['latest_draft'])
+    print(r.status_code)
+    print(r.json())
+    print('Fetched')
+    return r.json()
+
 def delete_files(version):
     print(log_line)
     print('Deleting existing files')
@@ -115,7 +124,8 @@ def current_date():
 def main():
     print('Publishing new Zenodo release')
 
-    version = create_version(original_id)
+    deposition = create_version(original_id)
+    version = get_version(deposition)
     delete_files(version)
     set_metadata(version)
     upload_files(version)
