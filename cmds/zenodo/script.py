@@ -17,7 +17,6 @@ if access_token is None:
 if vintner_version is None:
     raise Exception('ZENODO_ACCESS_TOKEN not defined')
 
-
 def create_version(id):
     print(log_line)
     print('Creating a new version')
@@ -43,7 +42,6 @@ def delete_files(version):
         for file in version['files']:
             delete_file(version, file)
 
-
 def delete_file(version, file):
     print(log_line)
     print('Deleting file ' + file['filename'])
@@ -52,7 +50,6 @@ def delete_file(version, file):
     print(r.content)
     print('File deleted')
 
-
 def publish_version(version):
     print(log_line)
     print('Publishing version ' + str(version['id']))
@@ -60,7 +57,6 @@ def publish_version(version):
     print(r.status_code)
     print(r.json())
     print('Version published')
-
 
 def set_metadata(version):
     print(log_line)
@@ -92,7 +88,6 @@ def set_metadata(version):
     print(r.json())
     print('Metadata set')
 
-
 def upload_files(version):
     print(log_line)
     print('Uploading files')
@@ -100,7 +95,6 @@ def upload_files(version):
     for file in files:
         upload_file(version, file)
     print('Files uploaded')
-
 
 def upload_file(version, file):
     print(log_line)
@@ -117,10 +111,8 @@ def upload_file(version, file):
     print(r.json())
     print('File uploaded')
 
-
 def current_date():
     return datetime.datetime.now().isoformat()[0:10]
-
 
 def main():
     print('Publishing new Zenodo release')
