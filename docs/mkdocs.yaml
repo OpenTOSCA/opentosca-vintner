@@ -100,6 +100,7 @@ plugins:
 nav:
     - OpenTOSCA Vintner:
           - index.md
+          - features.md
           - getting-started.md
           - installation.md
           - orchestrators.md
@@ -107,6 +108,8 @@ nav:
           - dependencies.md
           - GitHub: https://github.com/opentosca/opentosca-vintner
           - Discord: https://discord.gg/Uz6348Ctmg
+          - Zenodo: https://doi.org/10.5281/zenodo.10155277
+          - Youtube: https://youtube.com/@milesstoetzner
 
     - Specifications:
           - Variability4TOSCA:
