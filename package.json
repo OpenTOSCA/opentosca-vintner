@@ -164,7 +164,9 @@
         "puccini:check:single": "bash docs/cmds/puccini/check.sh",
         "puml:up": "cd docs && docker-compose up -d",
         "puml:down": "cd docs && docker-compose down",
-        "large:check": "bash cmds/check-large-files.sh"
+        "large:check": "bash cmds/check-large-files.sh",
+        "release:npm": "npm publish",
+        "release:zenodo": "python cmds/zenodo/script.py"
     },
     "packageManager": "yarn@3.6.3"
 }

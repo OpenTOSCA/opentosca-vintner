@@ -44,7 +44,7 @@ jobs:
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
               with:
-                  python-version: 3.x
+                  python-version: 3.10.13
                   cache: pip
 
             - name: (PREPARE) Install xOpera
@@ -134,7 +134,7 @@ jobs:
               run: git tag --delete latest || true
 
             - name: (RELEASE) Create Latest Release
-              run: gh release create latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
+              run: gh release create latest --target ${GITHUB_SHA} --latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -173,6 +173,14 @@ jobs:
             - name: (DOCS) Build and Deploy Docs
               run: yarn docs:deploy
 
+            - name: (RELEASE) Archive docs
+              run: tar -czvf docs.tar.gz -C docs/site/ .
+
+            - name: (RELEASE) Upload docs to release
+              run: gh release upload latest docs.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             ###################################################
             #
             # Docker
@@ -189,7 +197,16 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (DOCKER) Build and push Docker image
+            - name: (DOCKER) Build Docker image
+              uses: docker/build-push-action@v5.0.0
+              with:
+                  context: .
+                  load: true
+                  tags: ghcr.io/opentosca/opentosca-vintner:latest,ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
+                  cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
+                  cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (DOCKER) Push Docker image
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
@@ -197,3 +214,11 @@ jobs:
                   tags: ghcr.io/opentosca/opentosca-vintner:latest
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
                   cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (RELEASE) Save docker image as tar ball
+              run: docker save ghcr.io/opentosca/opentosca-vintner:${{ github.sha }} | gzip > docker-image.tar.gz
+
+            - name: (RELEASE) Upload Docker image to release
+              run: gh release upload latest docker-image.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

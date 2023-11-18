@@ -89,7 +89,45 @@ jobs:
               run: git tag --delete build-${GITHUB_SHA} || true
 
             - name: (RELEASE) Create Build Release (and Tag)
-              run: gh release create build-${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
+              run: gh release create build-${GITHUB_SHA} --target ${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            ###################################################
+            #
+            # Docs
+            #
+            ###################################################
+
+            - name: (DOCS) Install Dependencies
+              run: yarn docs:install
+
+            - name: (DOCS) Build Documentation Commands
+              run: yarn docs:build:commands
+
+            - name: (DOCS) Generate Interface Page
+              run: yarn docs:generate:interface
+
+            - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
+              run: yarn docs:generate:tests:variability
+
+            - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
+              run: yarn docs:generate:tests:query
+
+            - name: (DOCS) Generate TOSCA SofDCar Profile Page
+              run: yarn docs:generate:sofdcar
+
+            - name: (DOCS) Generate PlantUML of Service Templates
+              run: yarn docs:generate:puml
+
+            - name: (DOCS) Build Docs
+              run: yarn docs:build
+
+            - name: (RELEASE) Archive docs
+              run: tar -czvf docs.tar.gz -C docs/site/ .
+
+            - name: (RELEASE) Upload docs to release
+              run: gh release upload build-${GITHUB_SHA} docs.tar.gz
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -109,7 +147,16 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: (DOCKER) Build and push Docker image
+            - name: (DOCKER) Build Docker image
+              uses: docker/build-push-action@v5.0.0
+              with:
+                  context: .
+                  load: true
+                  tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
+                  cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
+                  cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (DOCKER) Push Docker image
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
@@ -117,3 +164,11 @@ jobs:
                   tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
                   cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
+
+            - name: (RELEASE) Save docker image as tar ball
+              run: docker save ghcr.io/opentosca/opentosca-vintner:${{ github.sha }} | gzip > docker-image.tar.gz
+
+            - name: (RELEASE) Upload Docker image to release
+              run: gh release upload build-${GITHUB_SHA} docker-image.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
