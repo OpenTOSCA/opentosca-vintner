@@ -26,7 +26,7 @@ def create_version(id):
     print('Version created')
     return r.json()
 
-def delete_files(version, file):
+def delete_files(version):
     print(log_line)
     print('Deleting existing files')
     if 'files' in version:
