@@ -3,11 +3,12 @@ import requests
 import datetime
 import os
 
-access_token = os.getenv('ZENODO_ACCESS_TOKEN', 'H5asXH8F3sfBfx3JxbrO0MsWLbpLHi2Rxt4QwfVJZXTQoHG3a2AgYoTQztS7')
-original_id = int(os.getenv('ZENODO_ORIGINAL_ID', '91'))
-zenodo_url = os.getenv('ZENODO_URL', 'https://sandbox.zenodo.org')
+access_token = os.getenv('ZENODO_ACCESS_TOKEN')
+original_id = int(os.getenv('ZENODO_ORIGINAL_ID'))
+zenodo_url = os.getenv('ZENODO_URL', 'https://zenodo.org')
 zenodo_files = '/tmp/opentosca-vintner-zenodo-files'
 vintner_version = os.getenv('VINTNER_VERSION', 'asdfasdf')
+log_line = '--------------------------------------------------'
 
 if access_token is None:
     raise Exception('ZENODO_ACCESS_TOKEN not defined')
@@ -17,18 +18,19 @@ if vintner_version is None:
 
 
 def create_version(id):
+    print(log_line)
     print('Creating a new version')
     r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(id) + '/actions/newversion', params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
 
     print('Version created')
-    data = r.json()
+    version = r.json()
 
     # Delete all existing files
-    if 'files' in data:
+    if 'files' in version:
         print('Deleting existing files')
-        for file in data['files']:
+        for file in version['files']:
             print('Deleting file ' + file['filename'])
             r = requests.delete(file['links']['self'], params={'access_token': access_token})
             print(r.status_code)
@@ -36,20 +38,22 @@ def create_version(id):
             print('File deleted')
 
     # Set new publish date
-    set_metadata(data['id'])
+    set_metadata(version)
 
-    return data['id']
+    return version
 
 
-def publish_version(id):
-    print('Publishing version ' + str(id))
-    r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(id) + '/actions/publish', params={'access_token': access_token})
+def publish_version(version):
+    print(log_line)
+    print('Publishing version ' + str(version['id']))
+    r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(version['id']) + '/actions/publish', params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Version published')
 
 
-def set_metadata(id):
+def set_metadata(version):
+    print(log_line)
     print('Setting metadata')
     data = {"metadata": {
                  "title": "OpenTOSCA Vintner",
@@ -73,26 +77,32 @@ def set_metadata(id):
          }
     headers = {"Content-Type": "application/json"}
 
-    r = requests.put(zenodo_url + '/api/deposit/depositions/' + str(id), data=json.dumps(data), headers=headers, params={'access_token': access_token})
+    r = requests.put(zenodo_url + '/api/deposit/depositions/' + str(version['id']), data=json.dumps(data), headers=headers, params={'access_token': access_token})
     print(r.status_code)
     print(r.json())
     print('Metadata set')
 
 
-def upload_files(id):
+def upload_files(version):
+    print(log_line)
     print('Uploading files')
     files = [file for file in os.listdir(zenodo_files) if os.path.isfile(os.path.join(zenodo_files, file))]
     for file in files:
-        upload_file(id, file)
+        upload_file(version, file)
     print('Files uploaded')
 
 
-def upload_file(id, file):
+def upload_file(version, file):
+    print(log_line)
     print('Uploading file ' + file)
-    url = zenodo_url + '/api/deposit/depositions/' + str(id) + '/files'
-    data = {'name': file}
-    files = {'file': open(os.path.join(zenodo_files, file), 'rb')}
-    r = requests.post(url, params={'access_token': access_token}, data=data, files=files)
+
+    with open(os.path.join(zenodo_files, file), "rb") as fp:
+        r = requests.put(
+            "%s/%s" % (version['links']['bucket'], file),
+            data=fp,
+            params={'access_token': access_token},
+        )
+
     print(r.status_code)
     print(r.json())
     print('File uploaded')
@@ -102,7 +112,7 @@ def current_date():
 
 
 print('Publishing new Zenodo release')
-version_id = create_version(original_id)
-upload_files(version_id)
-publish_version(version_id)
+version = create_version(original_id)
+upload_files(version)
+publish_version(version)
 print('Zenodo relase published')
