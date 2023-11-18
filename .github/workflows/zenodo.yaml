@@ -29,14 +29,16 @@ jobs:
                   node-version: 18.15.0
                   cache: yarn
 
-            - name: (PREPARE) Install Dependencies
+            - name: (PREPARE) Install Node Dependencies
               run: rm -rf node_modules && yarn --immutable
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
               with:
                   python-version: 3.10.13
-                  cache: pip
+
+            - name: (PREPARE) Install Python dependencies
+              run: pip install -r cmds/zenodo/requirements.txt
 
             ###################################################
             #
