@@ -37,6 +37,8 @@ jobs:
 
             - name: (ZENODO) Download files
               run: gh release download latest --dir /tmp/opentosca-vintner-zenodo-files
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: (ZENODO) Create new Zenodo version
               run: yarn release:zenodo
