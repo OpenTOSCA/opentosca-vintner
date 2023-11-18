@@ -7,6 +7,7 @@ access_token = os.getenv('ZENODO_ACCESS_TOKEN')
 original_id = int(os.getenv('ZENODO_ORIGINAL_ID'))
 zenodo_url = os.getenv('ZENODO_URL', 'https://zenodo.org')
 zenodo_files = '/tmp/opentosca-vintner-zenodo-files'
+zenodo_publish = os.getenv('ZENODO_PUBLISH', 'False').lower() == 'true'
 vintner_version = os.getenv('VINTNER_VERSION', 'asdfasdf')
 log_line = '--------------------------------------------------'
 
@@ -129,7 +130,9 @@ def main():
     delete_files(version)
     set_metadata(version)
     upload_files(version)
-    publish_version(version)
+
+    if zenodo_publish:
+        publish_version(version)
 
     print('Zenodo relase published')
 
