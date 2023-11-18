@@ -3,6 +3,7 @@
 
 #
 *.ignored.yaml
+*.ignored.env
 
 # IDE
 .idea

@@ -179,3 +179,19 @@ The current version can be checked using `vintner --version`.
 
 The `night` workflow is scheduled for every tuesday at 420.
 This workflow ensures that the latest release is correctly signed and can be executed.
+
+## NPM 
+
+There is also a npm package [`opentosca-vintner`](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
+New versions are published manually.
+To publish a new version, first update the version number in `package.json` and then run
+
+````shell linenums="1"
+yarn release:npm
+````
+
+## Zenodo
+
+There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner.
+
+// TODO: describe workflow
