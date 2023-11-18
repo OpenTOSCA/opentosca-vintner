@@ -25,7 +25,7 @@ def create_version(id):
     # Delete all existing files
     if 'files' in data:
         for file in data['files']:
-            r = requests.delete(file['links']['self'], params=params)
+            r = requests.delete(file['links']['self'], params=params={'access_token': access_token})
             print(r.status_code)
             print(r.json())
 
