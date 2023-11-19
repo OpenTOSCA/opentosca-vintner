@@ -23,9 +23,11 @@ This document contains a list of selected publications.
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
-> _Accepted_
+> Stötzner, M., Breitenbücher, U., Pesl, R. D., & Becker, S. (2024). Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability. Proceedings of the Demonstration Track at International Conference on Cooperative Information Systems 2023, CoopIS
+2023, Groningen, The Netherlands, October 30 - November 3, 2023, CEUR-WS.org, online https://ceur-ws.org/Vol-3552/paper-8.pdf
 
-- CoopIS 2023 Demo
+- CoopIS 2023 Demo 
+- [https://ceur-ws.org/Vol-3552/paper-8.pdf](https://ceur-ws.org/Vol-3552/paper-8.pdf){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
@@ -36,7 +38,7 @@ This document contains a list of selected publications.
 
 ## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
 
-> Stötzner, M., Breitenbücher, U., Pesl, R. D., & Becker, S. (2024, October). Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies. Cooperative Information Systems, 61–78. doi:10.1007/978-3-031-46846-9_4
+> Stötzner, M., Breitenbücher, U., Pesl, R. D., & Becker, S. (2024). Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies. Cooperative Information Systems, 61–78. doi:10.1007/978-3-031-46846-9_4
 
 - CoopIS 2023
 - [https://doi.org/10.1007/978-3-031-46846-9_4](https://doi.org/10.1007/978-3-031-46846-9_4){target=_blank}

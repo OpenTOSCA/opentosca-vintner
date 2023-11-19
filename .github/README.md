@@ -33,46 +33,10 @@ This repository holds the following specifications and profiles.
 
 This repository holds the step-by-step guides of the following publications.
 
-<a id="publication-stoetzner-2023-pruning"></a>
-- **Enhancing Deployment Variability Management by Pruning Elements in Deployment Models**
-  - UCC 2023
-  - _Accepted_
-  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/pruning)
-  - [Model of the Motivating Scenario](../examples/xopera-pruning)
-  - [Models of the Complexity Evaluation](../examples/xopera-pruning/stats)
-  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6677267360/job/18147105860) (Relevant steps start with "XOPERA-PRUNING")
-  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/pruning/logs.txt) (Relevant steps start with "XOPERA-PRUNING")
-  - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10050261)
-  - [@publication-stoetzner-2023-pruning](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-pruning)
-
-<a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
-- **Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability**
-  - CoopIS 2023 Demo
-  - _Accepted_
-  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts)
-  - [Demo Video](https://youtu.be/6szIGJPuCsU)
-  - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
-  - [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878) (Relevant steps start with "UNFURL-ARTIFACTS")
-  - [GitHub Actions Raw Logs](https://vintner.opentosca.org/variability4tosca/guides/artifacts/logs.txt) (Relevant Steps start with "UNFURL-ARTIFACTS")
-  - [@publication-stoetzner-2023-vdmm-v2-demo](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2-demo)
-
-<a id="publication-stoetzner-2023-vdmm-v2"></a>
-- **Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies**
-  - CoopIS 2023
-  - https://doi.org/10.1007/978-3-031-46846-9_4
-  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/guides/artifacts) 
-  - [Model of the Motivating Scenario](../examples/unfurl-artifacts)
-  - [Models of the Complexity Evaluation](../examples/unfurl-artifacts/stats)
-  - [@publication-stoetzner-2023-vdmm-v2](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2)
-
-<a id="publication-stoetzner-2022-vdmm"/></a>
-- **Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model**
-  - Algorithms 2022
-  - https://doi.org/10.3390/a15100382
-  - [Step-by-Step Guide](https://vintner.opentosca.org/variability4tosca/motivation)
-  - [Model of the Motivating Scenario using Unfurl](../examples/unfurl-motivation)
-  - [Model of the Motivating Scenario using xOpera](../examples/xopera-motivation)
-  - [@publication-stoetzner-2022-vdmm](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2022-vdmm)
+- <a id="publication-stoetzner-2023-pruning"></a>[Enhancing Deployment Variability Management by Pruning Elements in Deployment Models](https://vintner.opentosca.org/publications/#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models)
+- <a id="publication-stoetzner-2023-vdmm-v2-demo"></a>[Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability](https://vintner.opentosca.org/publications/#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability)
+- <a id="publication-stoetzner-2023-vdmm-v2"></a>[Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies](https://vintner.opentosca.org/publications/#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies)
+- <a id="publication-stoetzner-2022-vdmm"/></a>[Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model](https://vintner.opentosca.org/publications/#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model)
 
 ## Haftungsausschluss
 
