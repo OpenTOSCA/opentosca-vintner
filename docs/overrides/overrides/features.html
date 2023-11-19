@@ -13,57 +13,7 @@
 
     .hero-content-medium {
         margin: auto;
-        width: 760px;
-    }
-
-    .hero .md-button {
-        font-weight: 400;
-        color: var(--md-primary-bg-color);
-        margin-right: 0rem;
-        padding-right: 20px;
-        padding-left: 20px;
-        border-radius: 4px;
-        text-align: center;
-        flex-grow: 1;
-    }
-
-    .hero .md-button:focus,
-    .hero .md-button:hover {
-        border-color: black;
-        color: black;
-        background-color: var(--md-accent-bg-color);
-    }
-
-    .hero .md-button--primary {
-        background-color: black;
-        border-color: black;
-        color: var(--md-accent-bg-color);
-    }
-
-    .hero-buttons-container {
         max-width: 760px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 6px;
-    }
-
-    @media (max-width: 760px) {
-        .hero-buttons-container {
-            flex-direction: column;
-        }
-    }
-
-    @media (max-width: 380px) {
-        .hero-buttons-container {
-            flex-direction: column;
-        }
-    }
-
-    @media (max-width: 760px) {
-        .max-width-on-760 {
-            width: 100%;
-        }
     }
 
     .md-header {
@@ -96,20 +46,11 @@
     }
 
     .features-container {
-        display: grid;
-        gap: 10px;
-    }
-
-    @media screen and (min-width: 760px) {
-        .features-container {
-            grid-template-columns: 50% 50%;
-        }
-    }
-
-    @media screen and (max-width: 760px) {
-        .features-container {
-            grid-template-columns: 100%;
-        }
+        max-width: 760px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 6px;
     }
 
     .features-item {
@@ -117,6 +58,7 @@
         border: solid 1px #e0e0e0;
         border-radius: 4px;
         text-align: center;
+        flex-grow: 1;
     }
 
 </style>
