@@ -11,7 +11,7 @@ theme:
     icon:
         repo: octicons/mark-github-16
         logo: assets/images/vintner-icon-bold
-    favicon: assets/images/vintner-icon-bold.svg
+    favicon: assets/images/vintner/icon/vintner-icon-bold.svg
     font:
         text: Inter
         code: ui-monospace

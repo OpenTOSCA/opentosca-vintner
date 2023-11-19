@@ -1,0 +1,234 @@
+{% extends "main.html" %} {% block tabs %} {{ super() }}
+<style>
+
+    :root > * {
+        --md-accent-fg-color: #ff6e42;
+    }
+
+    .hero-content-slim {
+        margin: auto;
+        text-align: center;
+        max-width: 400px;
+    }
+
+    .hero-content-medium {
+        margin: auto;
+        width: 760px;
+    }
+
+    .hero .md-button {
+        font-weight: 400;
+        color: var(--md-primary-bg-color);
+        margin-right: 0rem;
+        padding-right: 20px;
+        padding-left: 20px;
+        border-radius: 4px;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .hero .md-button:focus,
+    .hero .md-button:hover {
+        border-color: black;
+        color: black;
+        background-color: var(--md-accent-bg-color);
+    }
+
+    .hero .md-button--primary {
+        background-color: black;
+        border-color: black;
+        color: var(--md-accent-bg-color);
+    }
+
+    .hero-buttons-container {
+        max-width: 760px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    @media (max-width: 760px) {
+        .hero-buttons-container {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .hero-buttons-container {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .max-width-on-760 {
+            width: 100%;
+        }
+    }
+
+    .md-header {
+        position: initial;
+    }
+
+    .md-main-inner {
+        margin: 0;
+    }
+
+    .md-content {
+        display: none;
+    }
+
+    @media screen and (min-width: 60em) {
+        .md-sidebar--secondary {
+            display: none;
+        }
+    }
+
+    @media screen and (min-width: 76.25em) {
+        .md-sidebar--primary {
+            display: none;
+        }
+    }
+
+    .logo-container {
+        width: 173px;
+        margin: auto;
+    }
+
+    .features-container {
+        display: grid;
+        gap: 10px;
+    }
+
+    @media screen and (min-width: 760px) {
+        .features-container {
+            grid-template-columns: 50% 50%;
+        }
+    }
+
+    @media screen and (max-width: 760px) {
+        .features-container {
+            grid-template-columns: 100%;
+        }
+    }
+
+    .features-item {
+        padding: 10px;
+        border: solid 1px #e0e0e0;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+</style>
+<section class='mdx-container'>
+    <div class='md-grid md-typeset'>
+        <div class='hero' style='padding-top: 5rem'>
+
+            <div class='hero-content-slim'>
+                <div class="logo-container">
+                    <img src="/assets/images/vintner/logo/vintner-logo-orange.svg">
+                </div>
+                <p>
+                    OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications
+                    based on TOSCA orchestrator plugins.
+                    Preprocessing includes, e.g., the resolving of deployment variability.
+                </p>
+            </div>
+
+            {% for features in [
+                {
+                    "name": "Highlights",
+                    "features": [
+                        "TOSCA Preprocessing and Management Layer",
+                        "TOSCA conform Deployment",
+                        "Deployment Variability Management",
+                        "Standalone Utility Tools",
+                        "CLI",
+                        "JSON HTTP API",
+            ]
+                },
+            {
+            "name": "Specifications",
+            "features": [
+            "TOSCA Simple Profile in YAML Version 1.3",
+            "Variability4TOSCA",
+            "Queries4TOSCA",
+            "TOSCA SofDCar Profile",
+            "Dynamic Deployment Artifacts",
+            ]
+            },
+            {
+            "name": "Integrations",
+            "features": [
+            "xOpera",
+            "Unfurl",
+            "MiniSat",
+            "FeatureIDE",
+            ]
+            },
+
+                {
+                    "name": "Installation and Availability",
+                    "features": [
+                        "Linux",
+                        "Windows",
+                        "Docker",
+                        "NPM",
+                        "Installation script",
+            "Zenodo",
+            "DOI",
+            "Cryptographically signed binaries",
+            ]
+                },
+            {
+            "name": "Source Code",
+            "features": [
+            "GitHub",
+            "Open Source",
+            "Apache 2.0",
+            "Contributor Conveneant 2.0",
+            "Over 350 tests",
+            "Weekly integration tests",
+            "Code Quality Analysis",
+            ]
+            },
+            {
+            "name": "Community",
+            "features": [
+            "Discord",
+            "YouTube",
+            "Documentation",
+            "Guides",
+            "Examples",
+            "Assets",
+            ]
+            },
+            {
+            "name": "Acknowledgements",
+            "features": [
+            "BMWK",
+            "SofDCar",
+            "ISTE",
+            "SQA",
+            "IAAS",
+            "University of Stuttgart",
+            ]
+            },
+            ]
+            %}
+            <div class='hero-content-medium' style='padding-top: 5px'>
+
+                <h2>{{ features.name }}</h2>
+
+                <div class="features-container">
+                {% for feature in features.features %}
+                    <div class="features-item">{{ feature }}</div>
+                {% endfor %}
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} {% block content %}{% endblock %}
