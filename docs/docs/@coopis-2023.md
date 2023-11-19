@@ -1,1 +1,0 @@
-{{ redirect("/publications/#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies") }}
