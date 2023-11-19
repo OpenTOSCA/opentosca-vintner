@@ -20,6 +20,7 @@
 OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins.
 Preprocessing includes, e.g., the resolving of deployment variability.
 
+- [Publications](https://vintner.opentosca.org/publications)
 - [Documentation](https://vintner.opentosca.org)
 - [Getting Started](https://vintner.opentosca.org/getting-started)
 - [CLI Documentation](https://vintner.opentosca.org/interface)
@@ -31,19 +32,6 @@ This repository holds the following specifications and profiles.
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
-This repository holds the step-by-step guides of the following publications.
-
-<a id="publication-stoetzner-2023-pruning"></a>
-> [Enhancing Deployment Variability Management by Pruning Elements in Deployment Models (UCC 2023)](https://vintner.opentosca.org/publications/#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models)
-
-<a id="publication-stoetzner-2023-vdmm-v2-demo"></a>
-> [Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability (CoopIS 2023 Demo)](https://vintner.opentosca.org/publications/#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability)
-
-<a id="publication-stoetzner-2023-vdmm-v2"></a>
-> [Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies (CoopIS 2023)](https://vintner.opentosca.org/publications/#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies)
-
-<a id="publication-stoetzner-2022-vdmm"/></a>
-> [Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model (Algorithms 2022)](https://vintner.opentosca.org/publications/#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model)
 
 ## Haftungsausschluss
 
