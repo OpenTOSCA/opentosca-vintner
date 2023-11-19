@@ -1,1 +1,0 @@
-{{ redirect("/publications/#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability") }}

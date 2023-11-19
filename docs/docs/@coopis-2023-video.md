@@ -1,1 +1,0 @@
-{{ redirect("https://youtu.be/6szIGJPuCsU") }}
