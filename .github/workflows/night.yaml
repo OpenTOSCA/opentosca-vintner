@@ -63,10 +63,9 @@ jobs:
 
             - name: (PREPARE) Install xOpera
               run: |
-                  mkdir /home/runner/.opera
+                  mkdir -p /home/runner/.opera
                   cd /home/runner/.opera
                   python3 -m venv .venv && . .venv/bin/activate
-                  pip install --upgrade pip
                   pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
