@@ -1,5 +1,5 @@
-import {Instance} from '#repository/instances'
-import {Template} from '#repository/templates'
+import {Instance} from '#repositories/instances'
+import {Template} from '#repositories/templates'
 import * as utils from '#utils'
 import lock from '#utils/lock'
 

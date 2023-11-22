@@ -1,4 +1,4 @@
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import {emitter, events} from '#utils/emitter'
 
 type UnadaptationOptions = {instance: string}

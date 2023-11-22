@@ -1,5 +1,5 @@
+import {Instance} from '#repositories/instances'
 import Plugins from '#plugins'
-import {Instance} from '#repository/instances'
 import lock from '#utils/lock'
 
 export type InstancesContinueOptions = {instance: string; verbose?: boolean}

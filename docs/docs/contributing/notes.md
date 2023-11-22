@@ -15,7 +15,7 @@ This document contains a collection of arbitrary notes.
 ${vintner_home}/
 ├─ templates/
 ├─ instances/
-├─ store/
+├─ assets/
 ├─ plugins.yaml
 ```
 

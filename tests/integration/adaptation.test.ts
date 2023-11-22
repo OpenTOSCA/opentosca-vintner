@@ -1,5 +1,5 @@
+import {Instance} from '#repositories/instances'
 import * as files from '#files'
-import {Instance} from '#repository/instances'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import * as utils from '#utils'

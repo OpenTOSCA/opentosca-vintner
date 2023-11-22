@@ -1,8 +1,8 @@
+import {Assets} from '#repositories/assets'
+import {Instances} from '#repositories/instances'
+import {Templates} from '#repositories/templates'
 import config from '#config'
 import * as files from '#files'
-import {Instances} from '#repository/instances'
-import {Store} from '#repository/store'
-import {Templates} from '#repository/templates'
 import * as os from 'os'
 import path from 'path'
 
@@ -14,7 +14,7 @@ export default async function (options: SetupCleanOptions) {
     if (!options.force) {
         if (!Templates.isEmpty()) throw new Error(`Templates not empty`)
         if (!Instances.isEmpty()) throw new Error(`Instances not empty`)
-        if (!Store.isEmpty()) throw new Error(`Store not empty`)
+        if (!Assets.isEmpty()) throw new Error(`Assets not empty`)
     }
 
     // Delete home directory

@@ -1,4 +1,4 @@
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import lock from '#utils/lock'
 
 export type InstancesDeleteOptions = {instance: string}

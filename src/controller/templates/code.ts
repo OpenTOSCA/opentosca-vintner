@@ -1,4 +1,4 @@
-import {Template} from '#repository/templates'
+import {Template} from '#repositories/templates'
 import open from '#utils/open'
 
 export type TemplatesOpenOptions = {template: string}

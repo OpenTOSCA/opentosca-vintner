@@ -1,6 +1,6 @@
+import {Instance} from '#repositories/instances'
 import * as check from '#check'
 import Controller from '#controller'
-import {Instance} from '#repository/instances'
 import Resolver from '#resolver'
 import {InputAssignmentMap} from '#spec/topology-template'
 import std from '#std'

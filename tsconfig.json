@@ -10,7 +10,7 @@
             "#controller": ["src/controller"],
             "#graph/*": ["src/graph/*"],
             "#graph": ["src/graph"],
-            "#repository/*": ["src/repository/*"],
+            "#repositories/*": ["src/repositories/*"],
             "#resolver/*": ["src/resolver/*"],
             "#resolver": ["src/resolver"],
             "#enricher/*": ["src/enricher/*"],

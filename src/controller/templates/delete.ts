@@ -1,4 +1,4 @@
-import {Template} from '#repository/templates'
+import {Template} from '#repositories/templates'
 import lock from '#utils/lock'
 
 export type TemplatesDeleteOptions = {template: string}

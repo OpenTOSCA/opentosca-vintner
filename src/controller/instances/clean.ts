@@ -1,5 +1,5 @@
+import {Instances} from '#repositories/instances'
 import * as files from '#files'
-import {Instances} from '#repository/instances'
 
 export type InstancesCleanOptions = {}
 
