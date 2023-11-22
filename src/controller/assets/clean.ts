@@ -1,5 +1,5 @@
-import {Assets} from '#repositories/assets'
 import * as files from '#files'
+import {Assets} from '#repositories/assets'
 
 export type AssetsCleanOptions = {}
 

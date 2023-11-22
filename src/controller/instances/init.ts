@@ -1,6 +1,6 @@
+import * as assert from '#assert'
 import {Instance} from '#repositories/instances'
 import {Template} from '#repositories/templates'
-import * as assert from '#assert'
 import * as utils from '#utils'
 import lock from '#utils/lock'
 

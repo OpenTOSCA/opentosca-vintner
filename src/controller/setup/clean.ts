@@ -1,8 +1,8 @@
+import config from '#config'
+import * as files from '#files'
 import {Assets} from '#repositories/assets'
 import {Instances} from '#repositories/instances'
 import {Templates} from '#repositories/templates'
-import config from '#config'
-import * as files from '#files'
 import * as os from 'os'
 import path from 'path'
 

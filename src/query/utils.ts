@@ -1,6 +1,6 @@
-import {Instance, Instances} from '#repositories/instances'
 import * as check from '#check'
 import Plugins from '#plugins'
+import {Instance, Instances} from '#repositories/instances'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
 

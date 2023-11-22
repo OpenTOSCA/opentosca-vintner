@@ -1,6 +1,6 @@
-import {Instance} from '#repositories/instances'
 import Controller from '#controller'
 import * as files from '#files'
+import {Instance} from '#repositories/instances'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import {expect} from 'chai'

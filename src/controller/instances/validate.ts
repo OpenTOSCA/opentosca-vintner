@@ -1,5 +1,5 @@
-import {Instance} from '#repositories/instances'
 import Plugins from '#plugins'
+import {Instance} from '#repositories/instances'
 import lock from '#utils/lock'
 
 export type InstancesValidateOptions = {instance: string; verbose?: boolean}

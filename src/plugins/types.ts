@@ -1,6 +1,6 @@
-import {Instance} from '#repositories/instances'
 import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
 import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
+import {Instance} from '#repositories/instances'
 import {AttributeAssignmentMap} from '#spec/node-template'
 import {ServiceTemplate} from '#spec/service-template'
 

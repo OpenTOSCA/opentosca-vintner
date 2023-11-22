@@ -1,5 +1,5 @@
-import {Asset} from '#repositories/assets'
 import * as assert from '#assert'
+import {Asset} from '#repositories/assets'
 
 export type AssetsContentOptions = {name?: string}
 
