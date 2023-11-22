@@ -450,7 +450,7 @@ templates
     .option('--git-repository [string]', 'git repository')
     .option('--git-checkout [string]', 'git checkout')
     .option('--signature', 'path to the signature (default: template + ".asc")')
-    .option('--key', 'storage entry name to verify the signature')
+    .option('--key', 'assets name to verify the signature')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
