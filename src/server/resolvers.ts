@@ -405,41 +405,41 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/store/list',
+    '/assets/list',
     hae.express(async (req, res, next) => {
-        const entries = await Controller.store.list()
-        res.json({entries: entries.map(it => it.getName())})
+        const assets = await Controller.assets.list()
+        res.json({assets: assets.map(it => it.getName())})
     })
 )
 
 resolvers.post(
-    '/store/import',
+    '/assets/import',
     hae.express(async (req, res, next) => {
-        await Controller.store.import(req.body)
+        await Controller.assets.import(req.body)
         res.json({})
     })
 )
 
 resolvers.post(
-    '/store/delete',
+    '/assets/delete',
     hae.express(async (req, res, next) => {
-        await Controller.store.delete(req.body)
+        await Controller.assets.delete(req.body)
         res.json({})
     })
 )
 
 resolvers.post(
-    '/store/clean',
+    '/assets/clean',
     hae.express(async (req, res, next) => {
-        await Controller.store.clean(req.body)
+        await Controller.assets.clean(req.body)
         res.json({})
     })
 )
 
 resolvers.post(
-    '/store/content',
+    '/assets/content',
     hae.express(async (req, res, next) => {
-        const content = await Controller.store.content(req.body)
+        const content = await Controller.assets.content(req.body)
         res.json({content})
     })
 )

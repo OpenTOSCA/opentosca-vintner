@@ -1,4 +1,4 @@
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import Resolver from '#resolver'
 import * as utils from '#utils'
 import lock from '#utils/lock'

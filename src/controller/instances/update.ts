@@ -1,5 +1,5 @@
 import Plugins from '#plugins'
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import * as utils from '#utils'
 
 export type InstancesUpdateOptions = {instance: string; inputs?: string; time?: number; verbose?: boolean}

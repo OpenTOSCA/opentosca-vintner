@@ -1,6 +1,6 @@
 import * as check from '#check'
 import * as files from '#files'
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import {Shell} from '#shell'
 import std from '#std'
 import * as utils from '#utils'

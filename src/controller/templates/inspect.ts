@@ -1,4 +1,4 @@
-import {Template} from '#repository/templates'
+import {Template} from '#repositories/templates'
 
 export type TemplatesInspectOptions = {template: string}
 

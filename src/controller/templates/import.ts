@@ -1,5 +1,5 @@
 import * as assert from '#assert'
-import {Template} from '#repository/templates'
+import {Template} from '#repositories/templates'
 import lock from '#utils/lock'
 
 export type TemplatesCreateOptions = {

@@ -3,21 +3,21 @@ import * as files from '#files'
 import * as utils from '#utils'
 import path from 'path'
 
-export class Store {
+export class Assets {
     static all() {
-        return files.listDirectories(Store.getDirectory()).map(name => new Entry(name))
+        return files.listDirectories(Assets.getDirectory()).map(name => new Asset(name))
     }
 
     static getDirectory() {
-        return path.join(config.home, 'store')
+        return path.join(config.home, 'assets')
     }
 
     static isEmpty() {
-        return utils.isEmpty(files.listDirectories(Store.getDirectory()))
+        return utils.isEmpty(files.listDirectories(Assets.getDirectory()))
     }
 }
 
-export class Entry {
+export class Asset {
     private readonly _name: string
 
     constructor(name: string) {
@@ -29,7 +29,7 @@ export class Entry {
     }
 
     getFile() {
-        return path.join(Store.getDirectory(), this.getName())
+        return path.join(Assets.getDirectory(), this.getName())
     }
 
     exists() {

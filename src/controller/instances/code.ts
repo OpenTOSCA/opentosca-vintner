@@ -1,4 +1,4 @@
-import {Instance} from '#repository/instances'
+import {Instance} from '#repositories/instances'
 import open from '#utils/open'
 
 export type InstancesOpenOptions = {instance: string}

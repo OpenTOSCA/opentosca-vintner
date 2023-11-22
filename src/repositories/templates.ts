@@ -4,7 +4,7 @@ import Controller from '#controller'
 import * as crypto from '#crypto'
 import * as files from '#files'
 import * as git from '#git'
-import {Entry} from '#repository/store'
+import {Asset} from '#repositories/assets'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
 import path from 'path'
@@ -72,7 +72,7 @@ export class Template {
         if (files.isFile(options.path)) {
             if (check.isDefined(options.key)) {
                 options.signature = options.signature ?? crypto.signatureFile(options.path)
-                const key = new Entry(options.key)
+                const key = new Asset(options.key)
                 if (!key.exists()) throw new Error(`Key "${key.getName()}" does not exist`)
 
                 await Controller.template.verify({

@@ -450,7 +450,7 @@ templates
     .option('--git-repository [string]', 'git repository')
     .option('--git-checkout [string]', 'git checkout')
     .option('--signature', 'path to the signature (default: template + ".asc")')
-    .option('--key', 'storage entry name to verify the signature')
+    .option('--key', 'assets name to verify the signature')
     .action(
         hae.exit(async options => {
             await Controller.templates.import(options)
@@ -777,57 +777,57 @@ sensors
         })
     )
 
-const store = program.command('store').description('manages files, parameters, configs, values ...')
+const assets = program.command('assets').description('manages assets')
 
-store
+assets
     .command('list')
-    .description('lists all entries')
+    .description('lists all assets')
     .action(
         hae.exit(async options => {
-            const entries = await Controller.store.list()
-            std.out(entries.map(it => it.getName()).join('\n'))
+            const assets = await Controller.assets.list()
+            std.out(assets.map(it => it.getName()).join('\n'))
         })
     )
 
-store
+assets
     .command('import')
-    .description('imports an entry')
+    .description('imports an asset')
     .requiredOption('--name <string>', 'name (must match /^[a-z\\-]+$/)')
     .option('--file <string>', 'path to a file')
     .option('--content <string>', 'content to import')
     .action(
         hae.exit(async options => {
-            await Controller.store.import(options)
+            await Controller.assets.import(options)
         })
     )
 
-store
+assets
     .command('content')
-    .description('shows content of entry')
+    .description('shows content of an asset')
     .requiredOption('--name <string>', 'name')
     .action(
         hae.exit(async options => {
-            const content = await Controller.store.content(options)
+            const content = await Controller.assets.content(options)
             std.out(content)
         })
     )
 
-store
+assets
     .command('delete')
-    .description('deletes an entry')
+    .description('deletes an asset')
     .requiredOption('--name <string>', 'name')
     .action(
         hae.exit(async options => {
-            await Controller.store.delete(options)
+            await Controller.assets.delete(options)
         })
     )
 
-store
+assets
     .command('clean')
-    .description('cleans all entries')
+    .description('cleans all assets')
     .action(
         hae.exit(async options => {
-            await Controller.store.clean(options)
+            await Controller.assets.clean(options)
         })
     )
 

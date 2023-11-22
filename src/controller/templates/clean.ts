@@ -1,5 +1,5 @@
 import * as files from '#files'
-import {Templates} from '#repository/templates'
+import {Templates} from '#repositories/templates'
 
 export type TemplatesCleanOptions = {}
 
