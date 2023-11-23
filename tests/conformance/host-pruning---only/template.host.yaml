@@ -66,7 +66,7 @@ topology_template:
             type: gcp.runtime
             conditions: {logic_expression: is_elastic}
             requirements:
-                - host: gcp_dbms
+                - host: gcp_cloud
 
         gcp_database:
             type: gcp.database

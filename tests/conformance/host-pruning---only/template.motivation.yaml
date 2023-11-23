@@ -69,7 +69,7 @@ topology_template:
         gcp_runtime:
             type: gcp.runtime
             requirements:
-                - host: gcp_dbms
+                - host: gcp_cloud
 
         gcp_database:
             type: gcp.database

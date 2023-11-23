@@ -24,7 +24,7 @@ topology_template:
             mode: loose
             node_default_condition_mode: incoming-host
             hosting_stack_constraint: true
-            optimization: false
+            optimization: true
 
     node_templates:
         shop:
@@ -65,7 +65,7 @@ topology_template:
         gcp_runtime:
             type: gcp.runtime
             requirements:
-                - host: gcp_dbms
+                - host: gcp_cloud
 
         gcp_database:
             type: gcp.database
@@ -79,4 +79,3 @@ topology_template:
 
         gcp_cloud:
             type: gcp.provider
-            conditions: {logic_expression: is_elastic}

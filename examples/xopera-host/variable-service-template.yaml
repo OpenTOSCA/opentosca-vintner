@@ -207,7 +207,7 @@ topology_template:
             properties:
                 auto_scaling: {get_input: gcp_auto_scaling}
             requirements:
-                - host: gcp_dbms
+                - host: gcp_cloud
 
         gcp_database:
             type: gcp.database
