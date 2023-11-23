@@ -1,0 +1,3 @@
+presets: static
+expected: ../expected.static.yaml
+template: ../template.constraints.yaml

@@ -20,22 +20,20 @@ topology_template:
             is_static: {equal: [{variability_input: static}, true]}
             is_elastic: {equal: [{variability_input: static}, false]}
 
+        constraints:
+            - {implies: [{logic_expression: is_static}, {relation_presence: [shop, 2]}]}
+            - {implies: [{logic_expression: is_elastic}, {relation_presence: [shop, 3]}]}
+
         options:
             mode: loose
             node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+            optimization: true
 
     node_templates:
         shop:
             type: shop.component
             consumed: true
-            properties:
-                - DB_DIALECT:
-                      conditions: {logic_expression: is_static}
-                      value: sqlite
-
-                - DB_DIALECT:
-                      conditions: {logic_expression: is_elastic}
-                      value: mysql
             requirements:
                 - host:
                       node: os_compute
@@ -66,7 +64,6 @@ topology_template:
 
         os_cloud:
             type: os.provider
-            conditions: {logic_expression: is_static}
 
         gcp_runtime:
             type: gcp.runtime
@@ -85,4 +82,3 @@ topology_template:
 
         gcp_cloud:
             type: gcp.provider
-            conditions: {logic_expression: is_elastic}
