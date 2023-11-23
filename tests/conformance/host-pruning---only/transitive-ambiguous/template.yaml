@@ -1,14 +1,3 @@
-import Enricher from '#enricher'
-import Graph from '#graph/graph'
-import Solver from '#resolver/solver'
-import {ServiceTemplate} from '#spec/service-template'
-import std from '#std'
-import * as yaml from 'js-yaml'
-
-describe('minisat', () => {
-    it('play', async () => {
-        await play(
-            `
 tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
@@ -17,7 +6,8 @@ topology_template:
             mode: loose
             node_default_condition_mode: incoming-host
             hosting_stack_constraint: false
-            optimization: true
+            optimization: false
+            unique: true
 
     node_templates:
         agent:
@@ -39,15 +29,3 @@ topology_template:
 
         hypervisor:
             type: hypervisor
-        `
-        )
-    })
-})
-
-async function play(data: string) {
-    const template = yaml.load(data) as ServiceTemplate
-    await Enricher.enrich({template})
-
-    const solver = new Solver(new Graph(template))
-    std.log(solver.solveAll())
-}
