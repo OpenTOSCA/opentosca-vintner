@@ -1,0 +1,85 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            static:
+                type: boolean
+                default: true
+
+        presets:
+            static:
+                inputs:
+                    static: true
+
+            elastic:
+                inputs:
+                    static: false
+
+        expressions:
+            is_static: {equal: [{variability_input: static}, true]}
+            is_elastic: {equal: [{variability_input: static}, false]}
+
+        options:
+            mode: loose
+            node_default_condition_mode: incoming
+            hosting_stack_constraint: false
+            optimization: false
+
+    node_templates:
+        shop:
+            type: shop.component
+            consumed: true
+            requirements:
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_elastic}
+
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_static}
+
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_elastic}
+
+        os_database:
+            type: os.database
+            requirements:
+                - host: os_compute
+
+        os_monitor:
+            type: os.monitor
+            conditions: {logic_expression: is_static}
+            requirements:
+                - host: os_compute
+
+        os_compute:
+            type: os.compute
+            requirements:
+                - host: os_cloud
+
+        os_cloud:
+            type: os.provider
+
+        gcp_runtime:
+            type: gcp.runtime
+            requirements:
+                - host: gcp_dbms
+
+        gcp_database:
+            type: gcp.database
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host: gcp_cloud
+
+        gcp_cloud:
+            type: gcp.provider

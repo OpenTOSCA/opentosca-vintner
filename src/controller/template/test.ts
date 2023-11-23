@@ -25,6 +25,10 @@ export type VariabilityTestConfig = {
     description?: string
     presets?: string | string[]
     error?: string
+    // TODO: document this
+    // TODO: implement this everywhere
+    template?: string
+    // TODO: implement this
     expected?: string
 }
 
@@ -48,6 +52,7 @@ export default async function (options: TemplateTestOptions) {
 
 async function runTest(dir: string, vstdir: string) {
     files.assertDirectory(dir)
+
     const config = loadConfig(dir)
     const output = files.temporary()
 

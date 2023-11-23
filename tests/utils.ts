@@ -1,3 +1,4 @@
+import * as check from '#check'
 import Controller from '#controller'
 import {
     VariabilityTestGroup,
@@ -47,7 +48,9 @@ export function getDefaultTest(dir: string, vstdir?: string) {
 
         async function fn() {
             await Controller.template.resolve({
-                template: getDefaultVariableServiceTemplate(vstdir || dir),
+                template: check.isDefined(config.template)
+                    ? path.join(dir, config.template)
+                    : getDefaultVariableServiceTemplate(vstdir ?? dir),
                 inputs: getDefaultInputs(dir),
                 output,
                 presets: toList(config.presets),
