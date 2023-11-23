@@ -79,3 +79,4 @@ topology_template:
 
         gcp_cloud:
             type: gcp.provider
+            conditions: {logic_expression: is_elastic}
