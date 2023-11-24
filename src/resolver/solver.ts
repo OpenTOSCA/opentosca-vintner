@@ -177,6 +177,7 @@ export default class Solver {
         for (const element of this.graph.elements) {
             const impliesList = element.raw.implies
             if (check.isUndefined(impliesList)) continue
+            assert.isArray(impliesList)
 
             for (const implies of impliesList) {
                 if (implies.length > 2) throw new Error(`${element.Display} has an implies with more than 2 elements`)
@@ -198,7 +199,6 @@ export default class Solver {
          * Transform element.implied
          */
         for (const element of this.graph.elements) {
-            // TODO: fix this casting
             if (check.isUndefined(element.container)) continue
 
             const implied = element.raw.implied

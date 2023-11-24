@@ -200,7 +200,7 @@ export default class Graph {
         return container
     }
 
-    getRelation(member: [string | 'SELF', string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getRelation(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isRelation(element)

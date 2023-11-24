@@ -40,7 +40,7 @@ export default class Relation extends Element {
     }
 
     get relationship() {
-        if (check.isUndefined(this._relationship)) throw new Error(`${this.Display} already has no relationship`)
+        if (check.isUndefined(this._relationship)) throw new Error(`${this.Display} has no relationship`)
         return this._relationship
     }
 
