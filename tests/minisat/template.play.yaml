@@ -24,21 +24,20 @@ topology_template:
             mode: loose
             node_default_condition_mode: incoming-host
             hosting_stack_constraint: true
-            optimization: true
+            optimization: false
             unique: true
 
     node_templates:
         worker:
             type: worker
             consumed: true
-            implies:
-                - - {relation_presence: [SELF, left]}
-                  - {logic_expression: is_left}
-                - - {relation_presence: [SELF, right]}
-                  - {logic_expression: is_right}
             requirements:
-                - left: left
-                - right: right
+                - left:
+                      node: left
+                      implied: {logic_expression: is_left}
+                - right:
+                      node: right
+                      implied: {logic_expression: is_right}
 
         left:
             type: left

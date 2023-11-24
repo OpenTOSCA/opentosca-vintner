@@ -6,6 +6,8 @@ topology_template:
             mode: loose
             node_default_condition_mode: incoming-host
             hosting_stack_constraint: true
+            optimization: true
+            unique: true
 
     node_templates:
         worker:
