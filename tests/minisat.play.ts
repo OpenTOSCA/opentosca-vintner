@@ -16,6 +16,8 @@ topology_template:
         options:
             mode: loose
             node_default_condition_mode: incoming-host
+            hosting_stack_constraint: false
+            optimization: true
 
     node_templates:
         agent:

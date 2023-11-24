@@ -107,6 +107,10 @@ topology_template:
 
         options:
             mode: loose
+            node_default_condition_mode: incoming
+            hosting_stack_constraint: false
+            optimization: false
+            unique: true
 
     node_templates:
         shop:
@@ -208,7 +212,7 @@ topology_template:
             properties:
                 auto_scaling: {get_input: gcp_auto_scaling}
             requirements:
-                - host: gcp_dbms
+                - host: gcp_cloud
 
         gcp_database:
             type: gcp.database

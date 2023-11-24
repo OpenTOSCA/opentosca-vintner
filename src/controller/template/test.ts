@@ -20,11 +20,18 @@ export type VariabilityTest = {
     vstdir?: string
 }
 
+/**
+ * Used in
+ * - docs command
+ * - jest test
+ * - controller test
+ */
 export type VariabilityTestConfig = {
     name?: string
     description?: string
     presets?: string | string[]
     error?: string
+    template?: string
     expected?: string
 }
 
@@ -48,12 +55,13 @@ export default async function (options: TemplateTestOptions) {
 
 async function runTest(dir: string, vstdir: string) {
     files.assertDirectory(dir)
+
     const config = loadConfig(dir)
     const output = files.temporary()
 
     async function fn() {
         await Controller.template.resolve({
-            template: getDefaultVariableServiceTemplate(vstdir),
+            template: getVariableServiceTemplate({dir: vstdir, file: config.template}),
             inputs: getDefaultInputs(dir),
             output,
             presets: utils.toList(config.presets),
@@ -71,7 +79,7 @@ async function runTest(dir: string, vstdir: string) {
     } else {
         await fn()
         const result = files.loadYAML<ServiceTemplate>(output)
-        const expected = loadDefaultExpect(dir)
+        const expected = loadExpected({dir, file: config.expected})
 
         const diff = jsonDiff.diffString(expected, result)
         if (diff) {
@@ -81,12 +89,15 @@ async function runTest(dir: string, vstdir: string) {
     }
 }
 
-export function getDefaultVariableServiceTemplate(dir: string) {
+export function getVariableServiceTemplate(data: {dir: string; file?: string}) {
+    if (check.isDefined(data.file)) return path.join(data.dir, data.file)
+
     for (const name of ['vst.yaml', 'variable-service-template.yaml', 'service-template.yaml', 'template.yaml']) {
-        const file = path.join(dir, name)
+        const file = path.join(data.dir, name)
         if (files.isFile(file)) return file
     }
-    throw new Error(`Did not find variable service template in directory "${dir}"`)
+
+    throw new Error(`Did not find variable service template in directory "${data.dir}"`)
 }
 
 export function getDefaultInputs(dir: string) {
@@ -96,12 +107,15 @@ export function getDefaultInputs(dir: string) {
     }
 }
 
-export function loadDefaultExpect(dir: string) {
+export function loadExpected(data: {dir: string; file?: string}) {
+    if (check.isDefined(data.file)) return files.loadYAML<ServiceTemplate>(path.join(data.dir, data.file))
+
     for (const name of ['est.yaml', 'expected.yaml']) {
-        const file = path.join(dir, name)
+        const file = path.join(data.dir, name)
         if (files.isFile(file)) return files.loadYAML<ServiceTemplate>(file)
     }
-    throw new Error(`Did not find expected service template in directory "${dir}"`)
+
+    throw new Error(`Did not find expected service template in directory "${data.dir}"`)
 }
 
 export function loadConfig(dir: string) {
