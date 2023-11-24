@@ -12,10 +12,8 @@ topology_template:
             requirements:
                 - host:
                       node: two
-                      conditions: true
                 - host:
                       node: three
-                      conditions: true
 
         two:
             type: two
