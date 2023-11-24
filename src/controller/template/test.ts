@@ -20,6 +20,12 @@ export type VariabilityTest = {
     vstdir?: string
 }
 
+/**
+ * Used in
+ * - docs command
+ * - jest test
+ * - controller test
+ */
 export type VariabilityTestConfig = {
     name?: string
     description?: string
@@ -28,12 +34,6 @@ export type VariabilityTestConfig = {
     template?: string
     expected?: string
 }
-
-/**
- * docs command
- * jest test
- * controller test
- */
 
 export default async function (options: TemplateTestOptions) {
     const testsDir = path.join(options.path, 'tests')
