@@ -1,0 +1,40 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            mode: loose
+            node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+
+    node_templates:
+        worker:
+            type: worker
+            consumed: true
+            implies:
+                - - {relation_presence: [SELF, left]}
+                  - true
+            requirements:
+                - left: left
+                - right: right
+
+        left:
+            type: left
+            requirements:
+                - host: left_host
+
+        left_host:
+            type: left.host
+            requirements:
+                - host: left_host_host
+
+        left_host_host:
+            type: left.host.host
+
+        right:
+            type: right
+            requirements:
+                - host: right_host
+
+        right_host:
+            type: right.host

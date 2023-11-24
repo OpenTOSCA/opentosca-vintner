@@ -188,6 +188,14 @@ export type VariabilityPointList<T> = {[name: string]: T}[]
 
 export type VariabilityAlternative = {
     conditions?: LogicExpression | LogicExpression[]
+    // TODO: implement this at nodes
+    // TODO: document this
+    // TODO: actually this should be implemented for each conditional element ...
+    implies?: [target: LogicExpression, condition?: LogicExpression][]
+    // TODO: implement this at relations
+    // TODO: document this
+    // TODO: actually this should be implemented for each conditional element ...
+    implied?: LogicExpression
     default_alternative?: boolean
     default_condition?: boolean
     default_consistency_condition?: boolean

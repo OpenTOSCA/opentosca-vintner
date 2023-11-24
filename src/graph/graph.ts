@@ -200,7 +200,7 @@ export default class Graph {
         return container
     }
 
-    getRelation(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getRelation(member: [string | 'SELF', string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isRelation(element)
@@ -223,7 +223,7 @@ export default class Graph {
         assert.isStringOrNumber(member[1])
 
         let relation
-        const node = this.getNode(member[0])
+        const node = this.getNode(member[0], context)
 
         // Element is [node name, relation name]
         if (check.isString(member[1])) {
