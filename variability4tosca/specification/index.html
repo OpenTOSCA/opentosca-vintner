@@ -1115,11 +1115,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../tests/test-constraints-implies/">
-        constraints-implies
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-date-operators-after-false/">
         date-operators-after-false
       </a>
@@ -1207,6 +1202,36 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-groups-prune/">
         groups-prune
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-constraints/">
+        implications-constraints
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-implied-left/">
+        implications-implied-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-implied-right/">
+        implications-implied-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-implies-left/">
+        implications-implies-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-implies-right/">
+        implications-implies-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-implications-unexpected/">
+        implications-unexpected
       </a>
 </li>
 <li class="md-nav__item">
@@ -3928,6 +3953,12 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>Boolean | Non-Negative Number</td>
 <td>Configure the weight of this element used during optimization (default is 1). <em>This is an experimental feature.</em></td>
 </tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
 </tbody>
 </table>
 <p>For example, the following node template has a variability condition assigned.</p>
@@ -3997,6 +4028,18 @@ These conditions must hold otherwise the respective relationship is not present.
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
+<tr>
+<td>implied</td>
+<td>false</td>
+<td>Condition: VariabilityCondition</td>
+<td>An optional list of implications following the pattern <code>(element.container and condition) implies element</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -4079,6 +4122,18 @@ These conditions must hold otherwise the respective relationship is not present.
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
+<tr>
+<td>implied</td>
+<td>false</td>
+<td>Condition: VariabilityCondition</td>
+<td>An optional list of implications following the pattern <code>(element.container and condition) implies element</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -4214,6 +4269,18 @@ However, this only applies if the property assignment is wrapped as the followin
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
 </tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
+<tr>
+<td>implied</td>
+<td>false</td>
+<td>Condition: VariabilityCondition</td>
+<td>An optional list of implications following the pattern <code>(element.container and condition) implies element</code>.</td>
+</tr>
 </tbody>
 </table>
 <p>These keywords are used to detect if a property assignment is wrapped. 
@@ -4297,6 +4364,12 @@ A variability group is always absent and, thus, always removed when resolving va
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -4387,6 +4460,12 @@ A policy can also hold conditional types and properties.</p>
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -4519,6 +4598,18 @@ An artifact can also hold conditional properties.</p>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
 </tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
+<tr>
+<td>implied</td>
+<td>false</td>
+<td>Condition: VariabilityCondition</td>
+<td>An optional list of implications following the pattern <code>(element.container and condition) implies element</code>.</td>
+</tr>
 </tbody>
 </table>
 <p>For example, the following node template <code>my_node</code> has two artifacts <code>artifact_a</code> and <code>artifact_b</code> assigned which are both conditional.</p>
@@ -4555,6 +4646,12 @@ These conditions must hold otherwise the respective input is not present.</p>
 <td>VariabilityCondition | List(VariabilityCondition)</td>
 <td>An optional variability condition. If a list is given, then the conditions are combined using the <em>and</em> operation.</td>
 </tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
+</tr>
 </tbody>
 </table>
 <p>For example, the topology template input has a variability condition assigned.</p>
@@ -4584,6 +4681,12 @@ These conditions must hold otherwise the respective import is not present.</p>
 <td>false</td>
 <td>VariabilityCondition | List(VariabilityCondition)</td>
 <td>An optional variability condition. If a list is given, then the conditions are combined using the <em>and</em> operation.</td>
+</tr>
+<tr>
+<td>implies</td>
+<td>false</td>
+<td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
+<td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -5514,7 +5617,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 17, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 24, 2023</span>
 </small>
 </div>
 </article>

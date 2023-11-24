@@ -756,11 +756,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-constraints-implies/</loc>
-         <lastmod>2023-11-24</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-date-operators-after-false/</loc>
          <lastmod>2023-11-24</lastmod>
          <changefreq>daily</changefreq>
@@ -847,6 +842,36 @@
     </url>
     <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-groups-prune/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-constraints/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-implied-left/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-implied-right/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-implies-left/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-implies-right/</loc>
+         <lastmod>2023-11-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-unexpected/</loc>
          <lastmod>2023-11-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
