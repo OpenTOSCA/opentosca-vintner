@@ -23,6 +23,12 @@ type ExpressionContext = {
     element: Element
 }
 
+// TODO: make element optional in ExpressionContext?
+const BadContext: ExpressionContext = {
+    // TODO: this is bad
+    element: undefined as any,
+}
+
 export default class Solver {
     private readonly graph: Graph
     private readonly options?: VariabilityDefinition
@@ -162,11 +168,47 @@ export default class Solver {
          * Transform constraints
          */
         for (const constraint of this.graph.serviceTemplate.topology_template?.variability?.constraints ?? []) {
+            this.minisat.require(this.transformLogicExpression(constraint, BadContext))
+        }
+
+        /**
+         * Transform element.implies
+         */
+        for (const element of this.graph.elements) {
+            const impliesList = element.raw.implies
+            if (check.isUndefined(impliesList)) continue
+            assert.isArray(impliesList)
+
+            for (const implies of impliesList) {
+                if (implies.length > 2) throw new Error(`${element.Display} has an implies with more than 2 elements`)
+
+                const [target, condition] = implies
+                if (check.isUndefined(target)) throw new Error(`${element.Display} has an implies without an target`)
+
+                const left = check.isDefined(condition)
+                    ? this.transformLogicExpression({and: [element.id, condition]}, {element})
+                    : element.id
+
+                const right = this.transformLogicExpression(target, {element})
+
+                this.minisat.require(MiniSat.implies(left, right))
+            }
+        }
+
+        /**
+         * Transform element.implied
+         */
+        for (const element of this.graph.elements) {
+            if (check.isUndefined(element.container)) continue
+
+            const implied = element.raw.implied
+            if (check.isUndefined(implied)) continue
+
             this.minisat.require(
-                this.transformLogicExpression(constraint, {
-                    // TODO: this is bad
-                    element: undefined as any,
-                })
+                MiniSat.implies(
+                    this.transformLogicExpression({and: [element.container.id, implied]}, {element}),
+                    element.id
+                )
             )
         }
 
@@ -369,10 +411,7 @@ export default class Solver {
             definition.default_expression,
             `Variability input "${name}" has no value nor default (expression) assigned`
         )
-        value = this.evaluateValueExpression(definition.default_expression, {
-            // TODO: this is bad
-            element: undefined as any,
-        })
+        value = this.evaluateValueExpression(definition.default_expression, BadContext)
         assert.isDefined(value, `Did not find variability input "${name}"`)
         this.setInput(name, value)
         return value
@@ -498,6 +537,7 @@ export default class Solver {
 
         /**
          * host_presence
+         * This is actually accessing the hosting relations
          */
         if (check.isDefined(expression.host_presence)) {
             const node = this.graph.getNode(expression.host_presence, {
@@ -588,7 +628,7 @@ export default class Solver {
          * relation_presence
          */
         if (check.isDefined(expression.relation_presence)) {
-            const relation = this.graph.getRelation(expression.relation_presence)
+            const relation = this.graph.getRelation(expression.relation_presence, {element, cached})
             return relation.id
         }
 

@@ -4,7 +4,6 @@ import {ExtendedRequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import Element from './element'
 import Group from './group'
 import Node from './node'
@@ -36,12 +35,12 @@ export default class Relation extends Element {
 
     private _relationship?: Relationship
     set relationship(relationship: Relationship) {
-        if (check.isDefined(this._relationship)) throw new UnexpectedError()
+        if (check.isDefined(this._relationship)) throw new Error(`${this.Display} already has a relationship`)
         this._relationship = relationship
     }
 
     get relationship() {
-        if (check.isUndefined(this._relationship)) throw new UnexpectedError()
+        if (check.isUndefined(this._relationship)) throw new Error(`${this.Display} has no relationship`)
         return this._relationship
     }
 

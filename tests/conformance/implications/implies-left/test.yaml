@@ -1,0 +1,2 @@
+presets: left
+expected: ../implied-left/expected.yaml

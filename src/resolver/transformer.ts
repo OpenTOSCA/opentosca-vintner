@@ -60,6 +60,8 @@ export default class Transformer {
         delete raw.conditions
         delete raw.weight
         delete raw.consumed
+        delete raw.implies
+        delete raw.implied
 
         delete raw.default_condition
         delete raw.default_consistency_condition
