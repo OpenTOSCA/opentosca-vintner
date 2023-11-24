@@ -1,9 +1,9 @@
 import * as check from '#check'
 import {
     getDefaultInputs,
-    getDefaultVariableServiceTemplate,
+    getVariableServiceTemplate,
     loadConfig,
-    loadDefaultExpect,
+    loadExpected,
     VariabilityTestConfig,
 } from '#controller/template/test'
 import * as files from '#files'
@@ -35,11 +35,7 @@ async function main() {
             const dir = path.join(groupDir, test)
             const id = `${group}-${test}`
             const config = loadConfig(dir)
-            const template = files.loadYAML<ServiceTemplate>(
-                check.isDefined(config.template)
-                    ? path.join(dir, config.template)
-                    : getDefaultVariableServiceTemplate(dir)
-            )
+            const template = files.loadYAML<ServiceTemplate>(getVariableServiceTemplate({dir, file: config.template}))
             const inputs = getDefaultInputs(dir)
                 ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
                 : undefined
@@ -48,11 +44,7 @@ async function main() {
                 config,
                 inputs,
                 template,
-                expected: check.isUndefined(config.error)
-                    ? check.isDefined(config.expected)
-                        ? files.loadYAML<ServiceTemplate>(path.join(dir, config.expected))
-                        : loadDefaultExpect(dir)
-                    : undefined,
+                expected: check.isDefined(config.error) ? undefined : loadExpected({dir, file: config.expected}),
                 file: `test-${id}.md`,
             })
         })

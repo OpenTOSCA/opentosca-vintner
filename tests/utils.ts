@@ -1,17 +1,15 @@
-import * as check from '#check'
 import Controller from '#controller'
 import {
     VariabilityTestGroup,
     getDefaultInputs,
-    getDefaultVariableServiceTemplate,
+    getVariableServiceTemplate,
     loadConfig,
-    loadDefaultExpect,
+    loadExpected,
 } from '#controller/template/test'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {toList} from '#utils/utils'
 import {expect} from 'chai'
-import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {
@@ -48,9 +46,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
 
         async function fn() {
             await Controller.template.resolve({
-                template: check.isDefined(config.template)
-                    ? path.join(dir, config.template)
-                    : getDefaultVariableServiceTemplate(vstdir ?? dir),
+                template: getVariableServiceTemplate({dir: vstdir ?? dir, file: config.template}),
                 inputs: getDefaultInputs(dir),
                 output,
                 presets: toList(config.presets),
@@ -62,9 +58,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
         } else {
             await fn()
             const result = files.loadYAML<ServiceTemplate>(output)
-            const expected = config.expected
-                ? files.loadYAML<ServiceTemplate>(path.resolve(dir, config.expected))
-                : loadDefaultExpect(dir)
+            const expected = loadExpected({dir, file: config.expected})
             expect(result).to.deep.equal(expected)
         }
     }

@@ -45,6 +45,7 @@ The following configurations can be configured in the test configuration file.
 | description | false     | String                     | Description of the test case.                                                                | 
 | presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                       | 
 | error       | false     | String                     | The expected error that is thrown.                                                           | 
+| template    | false     | String                     | Path (relative to `test.yaml`) to the variable service template.                             | 
 | expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
 
 
