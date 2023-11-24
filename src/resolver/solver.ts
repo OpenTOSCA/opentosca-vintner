@@ -177,6 +177,7 @@ export default class Solver {
          * Transform element.implies
          */
         for (const element of this.graph.elements) {
+            // TODO: fix this casting
             const impliesList = (element.raw as VariabilityAlternative).implies
             if (check.isUndefined(impliesList)) continue
 
@@ -197,8 +198,22 @@ export default class Solver {
         }
 
         /**
-         * TODO: Transform element.implied
+         * Transform element.implied
          */
+        for (const element of this.graph.elements) {
+            if (check.isUndefined(element.container)) continue
+
+            // TODO: fix this casting
+            const implied = (element.raw as VariabilityAlternative).implied
+            if (check.isUndefined(implied)) continue
+
+            this.minisat.require(
+                MiniSat.implies(
+                    this.transformLogicExpression({and: [element.container.id, implied]}, {element}),
+                    element.id
+                )
+            )
+        }
 
         /**
          * Ensure that each relation source exists

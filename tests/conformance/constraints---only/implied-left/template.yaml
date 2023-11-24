@@ -2,6 +2,23 @@ tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
     variability:
+        inputs:
+            mode:
+                type: string
+
+        presets:
+            left:
+                inputs:
+                    mode: left
+
+            right:
+                inputs:
+                    mode: right
+
+        expressions:
+            is_left: {equal: [{variability_input: mode}, left]}
+            is_right: {equal: [{variability_input: mode}, right]}
+
         options:
             mode: loose
             node_default_condition_mode: incoming-host
@@ -14,8 +31,10 @@ topology_template:
             requirements:
                 - left:
                       node: left
-                      implied: true
-                - right: right
+                      implied: {logic_expression: is_left}
+                - right:
+                      node: right
+                      implied: {logic_expression: is_right}
 
         left:
             type: left
