@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
-import {ConditionsWrapper, LogicExpression} from '#spec/variability'
+import {ConditionsWrapper, LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Graph from './graph'
@@ -17,7 +17,7 @@ export default abstract class Element {
     abstract readonly type: string
     abstract readonly name: string
 
-    readonly raw: any
+    abstract readonly raw: VariabilityAlternative
 
     readonly index?: number
     readonly container?: Element

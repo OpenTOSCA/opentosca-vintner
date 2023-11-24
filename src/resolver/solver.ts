@@ -9,13 +9,11 @@ import {
     InputAssignmentPreset,
     LogicExpression,
     ValueExpression,
-    VariabilityAlternative,
     VariabilityDefinition,
     VariabilityExpression,
 } from '#spec/variability'
 import * as utils from '#utils'
 import day from '#utils/day'
-import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
 import regression from 'regression'
@@ -177,15 +175,14 @@ export default class Solver {
          * Transform element.implies
          */
         for (const element of this.graph.elements) {
-            // TODO: fix this casting
-            const impliesList = (element.raw as VariabilityAlternative).implies
+            const impliesList = element.raw.implies
             if (check.isUndefined(impliesList)) continue
 
             for (const implies of impliesList) {
-                if (implies.length > 2) throw new UnexpectedError()
+                if (implies.length > 2) throw new Error(`${element.Display} has an implies with more than 2 elements`)
 
                 const [target, condition] = implies
-                if (check.isUndefined(target)) throw new UnexpectedError()
+                if (check.isUndefined(target)) throw new Error(`${element.Display} has an implies without an target`)
 
                 const left = check.isDefined(condition)
                     ? this.transformLogicExpression({and: [element.id, condition]}, {element})
@@ -201,10 +198,10 @@ export default class Solver {
          * Transform element.implied
          */
         for (const element of this.graph.elements) {
+            // TODO: fix this casting
             if (check.isUndefined(element.container)) continue
 
-            // TODO: fix this casting
-            const implied = (element.raw as VariabilityAlternative).implied
+            const implied = element.raw.implied
             if (check.isUndefined(implied)) continue
 
             this.minisat.require(
