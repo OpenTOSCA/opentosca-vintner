@@ -232,7 +232,7 @@ The following options are used to configure constraints.
 | artifact_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of artifacts.  |
 | property_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of properties. |
 | type_container_constraint       | false     | Boolean   | false   | Enable the constraint regarding present containers of types.     |
-| hosting_stack_constraint        | false     | Boolean   | true    | Enable the constraint regarding present hosting stack.           |
+| hosting_stack_constraint        | false     | Boolean   | false   | Enable the constraint regarding present hosting stack.           |
 
 
 ### Resolving Modes

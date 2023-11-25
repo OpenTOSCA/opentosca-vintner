@@ -13,6 +13,7 @@ topology_template:
 
             consumed_check: false
             optimization: true
+            hosting_stack_constraint: true
     node_templates:
         worker:
             type: worker

@@ -457,7 +457,7 @@ class ConstraintsOptions {
         this.typeContainer = this.raw.type_container_constraint ?? this.constraints
         assert.isBoolean(this.typeContainer)
 
-        this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
+        this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
         assert.isBoolean(this.hostingStack)
     }
 }
