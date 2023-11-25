@@ -214,7 +214,7 @@ The following options are used to configure the solver.
 
 | Keyname      | Mandatory | Type                          | Default | Description                        |
 |--------------|-----------|-------------------------------|---------|------------------------------------|
-| optimization | false     | Boolean &#124; min &#124; max | min     | Configure optimization.            | 
+| optimization | false     | Boolean &#124; min &#124; max | false   | Configure optimization.            | 
 | unique       | false     | Boolean                       | true    | Enable check for unique results.   | 
 
 
