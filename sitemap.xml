@@ -871,6 +871,21 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-incoming-left/</loc>
+         <lastmod>2023-11-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-incoming-right/</loc>
+         <lastmod>2023-11-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-requires/</loc>
+         <lastmod>2023-11-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-implications-unexpected/</loc>
          <lastmod>2023-11-25</lastmod>
          <changefreq>daily</changefreq>
