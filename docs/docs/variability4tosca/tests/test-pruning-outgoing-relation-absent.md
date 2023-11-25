@@ -6,7 +6,7 @@
 
 - The node "source" has an outgoing relation "relation" to node "target". 
 - The node default condition mode "outgoing" is used. 
-- Thus, there is no cycle.
+- Thus, there is no circle.
 
 - "relation" is absent
 - Thus, "source" is absent

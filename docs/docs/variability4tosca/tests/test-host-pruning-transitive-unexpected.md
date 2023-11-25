@@ -4,8 +4,8 @@
 
 ## Description
 
-- cycle at hypervisor
-- cycle at agent
+- circle at hypervisor
+- circle at agent
 
 - pruned due to optimization
 

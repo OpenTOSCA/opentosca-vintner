@@ -4,7 +4,7 @@
 
 ## Description
 
-- ambiguous since cycle at agent
+- ambiguous since circle at agent
 
 
 ## Variable Service Template
