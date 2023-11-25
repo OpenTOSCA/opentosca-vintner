@@ -38,8 +38,9 @@ export default class Enricher {
             conditions = [generatify(element.defaultAlternativeCondition)]
         }
 
-        // Imply manual conditions if requested
-        this.enrichConstraints(element, conditions)
+        // Imply element if requested
+        // TODO: before or after bratans?
+        this.enrichImplications(element, conditions)
 
         // Add default condition if requested
         if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
@@ -50,25 +51,32 @@ export default class Enricher {
         element.conditions = conditions
     }
 
-    // TODO: element.implied
-    // TODO: what is about bratan?
-    // TODO: make this more beautiful: graph.addConstraint und transformer dann?
-    private enrichConstraints(element: Element, conditions: LogicExpression[]) {
+    /**
+     * If requests, then the manual condition of an element implies this element
+     * This ensures, e.g., that a relation is present under a given condition while using incoming-host
+     *
+     * This is most likely only relevant for relations.
+     * However, the method is still written in a generic way.
+     */
+    private enrichImplications(element: Element, conditions: LogicExpression[]) {
         if (utils.isEmpty(conditions)) return
         if (check.isUndefined(element.container)) return
-        if (check.isUndefined(element.raw.implied)) return
-        if (check.isFalse(element.raw.implied)) return
-        assert.isDefined(this.graph.serviceTemplate.topology_template, 'Service template has no topology template')
 
-        if (check.isUndefined(this.graph.serviceTemplate.topology_template.variability))
-            this.graph.serviceTemplate.topology_template.variability = {inputs: {}}
+        const implied = element.raw.implied
+        if (check.isUndefined(implied)) return
+        if (check.isFalse(implied)) return
 
-        if (check.isUndefined(this.graph.serviceTemplate.topology_template.variability.constraints))
-            this.graph.serviceTemplate.topology_template.variability.constraints = []
+        let left
+        if (implied === 'TARGET') {
+            assert.isRelation(element)
+            left = element.target.id
+        }
+        if (implied === 'SOURCE' || implied === 'CONTAINER' || check.isTrue(implied)) {
+            left = element.container.id
+        }
+        assert.isDefined(left, 'Left not defined')
 
-        // TODO: implement SOURCE, TARGET
-
-        this.graph.serviceTemplate.topology_template.variability.constraints.push({
+        this.graph.addConstraint({
             implies: [{and: [element.container.id, element.manualId]}, element.id],
         })
     }

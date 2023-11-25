@@ -1,5 +1,6 @@
+import path from 'path'
 import {EnricherTest} from '../utils'
 
 describe('enricher', () => {
-    EnricherTest('conditional')
+    EnricherTest(path.basename(__dirname))
 })

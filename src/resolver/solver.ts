@@ -195,26 +195,6 @@ export default class Solver {
             }
         }
 
-        // TODO: this!?
-        /**
-         * Transform element.implied
-         */
-        /*
-        for (const element of this.graph.elements) {
-            if (check.isUndefined(element.container)) continue
-
-            const implied = element.raw.implied
-            if (check.isUndefined(implied)) continue
-
-            this.minisat.require(
-                MiniSat.implies(
-                    this.transformLogicExpression({and: [element.container.id, implied]}, {element}),
-                    element.id
-                )
-            )
-        }
-            */
-
         /**
          * Ensure that each relation source exists
          */
