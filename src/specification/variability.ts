@@ -189,7 +189,9 @@ export type VariabilityPointList<T> = {[name: string]: T}[]
 export type VariabilityAlternative = {
     conditions?: LogicExpression | LogicExpression[]
     implies?: [target: LogicExpression, condition?: LogicExpression][]
-    implied?: LogicExpression
+    // TODO:
+    // implied?: LogicExpression
+    implied?: boolean | 'SOURCE' | 'TARGET'
     default_alternative?: boolean
     default_condition?: boolean
     default_consistency_condition?: boolean

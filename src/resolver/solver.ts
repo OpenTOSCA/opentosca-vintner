@@ -195,9 +195,11 @@ export default class Solver {
             }
         }
 
+        // TODO: this!?
         /**
          * Transform element.implied
          */
+        /*
         for (const element of this.graph.elements) {
             if (check.isUndefined(element.container)) continue
 
@@ -211,6 +213,7 @@ export default class Solver {
                 )
             )
         }
+            */
 
         /**
          * Ensure that each relation source exists

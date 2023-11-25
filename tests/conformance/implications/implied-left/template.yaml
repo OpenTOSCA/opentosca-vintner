@@ -34,10 +34,12 @@ topology_template:
             requirements:
                 - left:
                       node: left
-                      implied: {logic_expression: is_left}
+                      conditions: {logic_expression: is_left}
+                      implied: true
                 - right:
                       node: right
-                      implied: {logic_expression: is_right}
+                      conditions: {logic_expression: is_right}
+                      implied: true
 
         left:
             type: left
