@@ -473,4 +473,16 @@ export default class Graph {
         assert.isDefined(input, `Input "${name}" not found`)
         return input
     }
+
+    addConstraint(constraint: LogicExpression) {
+        assert.isDefined(this.serviceTemplate.topology_template, 'Service template has no topology template')
+
+        if (check.isUndefined(this.serviceTemplate.topology_template.variability))
+            this.serviceTemplate.topology_template.variability = {inputs: {}}
+
+        if (check.isUndefined(this.serviceTemplate.topology_template.variability.constraints))
+            this.serviceTemplate.topology_template.variability.constraints = []
+
+        this.serviceTemplate.topology_template.variability.constraints.push(constraint)
+    }
 }

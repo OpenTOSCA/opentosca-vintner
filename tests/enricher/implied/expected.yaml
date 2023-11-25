@@ -1,0 +1,166 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            mode:
+                type: string
+                default: left
+
+        presets:
+            left:
+                inputs:
+                    mode: left
+            right:
+                inputs:
+                    mode: right
+
+        expressions:
+            is_left:
+                equal:
+                    - variability_input: mode
+                    - left
+            is_right:
+                equal:
+                    - variability_input: mode
+                    - right
+
+        options:
+            hosting_stack_constraint: true
+            optimization: true
+            unique: true
+
+        constraints:
+            - implies:
+                  - and:
+                        - node.worker
+                        - manual.relation.left@0.node.worker
+                  - relation.left@0.node.worker
+            - implies:
+                  - and:
+                        - node.worker
+                        - manual.relation.right@1.node.worker
+                  - relation.right@1.node.worker
+
+    node_templates:
+        - worker:
+              type:
+                  - worker:
+                        conditions:
+                            - node_presence: worker
+                              _generated: true
+              consumed: true
+              requirements:
+                  - left:
+                        node: left
+                        implied: true
+                        conditions:
+                            - and:
+                                  - node_presence: worker
+                                    _generated: true
+                                  - node_presence: left
+                                    _generated: true
+                              _generated: true
+
+                            - logic_expression: is_left
+
+                  - right:
+                        node: right
+                        implied: true
+                        conditions:
+                            - and:
+                                  - node_presence: worker
+                                    _generated: true
+                                  - node_presence: right
+                                    _generated: true
+                              _generated: true
+
+                            - logic_expression: is_right
+
+              conditions: []
+
+        - left:
+              type:
+                  - left:
+                        conditions:
+                            - node_presence: left
+                              _generated: true
+              requirements:
+                  - host:
+                        node: left_host
+                        conditions:
+                            - and:
+                                  - node_presence: left
+                                    _generated: true
+                                  - node_presence: left_host
+                                    _generated: true
+                              _generated: true
+              conditions:
+                  - and:
+                        - has_incoming_relation: left
+                        - host_presence: SELF
+                    _generated: true
+
+        - left_host:
+              type:
+                  - left.host:
+                        conditions:
+                            - node_presence: left_host
+                              _generated: true
+              requirements:
+                  - host:
+                        node: left_host_host
+                        conditions:
+                            - and:
+                                  - node_presence: left_host
+                                    _generated: true
+                                  - node_presence: left_host_host
+                                    _generated: true
+                              _generated: true
+              conditions:
+                  - and:
+                        - has_incoming_relation: left_host
+                        - host_presence: SELF
+                    _generated: true
+
+        - left_host_host:
+              type:
+                  - left.host.host:
+                        conditions:
+                            - node_presence: left_host_host
+                              _generated: true
+              conditions:
+                  - has_incoming_relation: left_host_host
+                    _generated: true
+
+        - right:
+              type:
+                  - right:
+                        conditions:
+                            - node_presence: right
+                              _generated: true
+              requirements:
+                  - host:
+                        node: right_host
+                        conditions:
+                            - and:
+                                  - node_presence: right
+                                    _generated: true
+                                  - node_presence: right_host
+                                    _generated: true
+                              _generated: true
+              conditions:
+                  - and:
+                        - has_incoming_relation: right
+                        - host_presence: SELF
+                    _generated: true
+
+        - right_host:
+              type:
+                  - right.host:
+                        conditions:
+                            - node_presence: right_host
+                              _generated: true
+              conditions:
+                  - has_incoming_relation: right_host
+                    _generated: true

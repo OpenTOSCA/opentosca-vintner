@@ -1,11 +1,11 @@
 import day from '#utils/day'
 import {Dayjs} from 'dayjs'
 
-export function isTrue(element?: boolean): element is true {
+export function isTrue(element?: unknown): element is true {
     return isDefined(element) && element === true
 }
 
-export function isFalse(element?: boolean): element is false {
+export function isFalse(element?: unknown): element is false {
     return isDefined(element) && element === false
 }
 

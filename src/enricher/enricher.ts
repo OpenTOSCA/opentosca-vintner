@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
@@ -30,11 +31,16 @@ export default class Enricher {
         conditions = utils.filterNotNull(conditions)
 
         // Add condition that checks if no other bratan is present
+        // This condition is considered as manual condition
         if (element.defaultAlternative) {
             if (check.isUndefined(element.defaultAlternativeCondition))
                 throw new Error(`${element.Display} has no default alternative condition`)
             conditions = [generatify(element.defaultAlternativeCondition)]
         }
+
+        // Imply element if requested
+        // TODO: before or after bratans?
+        this.enrichImplications(element, conditions)
 
         // Add default condition if requested
         if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
@@ -43,5 +49,35 @@ export default class Enricher {
 
         // Store enriched conditions
         element.conditions = conditions
+    }
+
+    /**
+     * If requests, then the manual condition of an element implies this element
+     * This ensures, e.g., that a relation is present under a given condition while using incoming-host
+     *
+     * This is most likely only relevant for relations.
+     * However, the method is still written in a generic way.
+     */
+    private enrichImplications(element: Element, conditions: LogicExpression[]) {
+        if (utils.isEmpty(conditions)) return
+        if (check.isUndefined(element.container)) return
+
+        const implied = element.raw.implied
+        if (check.isUndefined(implied)) return
+        if (check.isFalse(implied)) return
+
+        let left
+        if (implied === 'TARGET') {
+            assert.isRelation(element)
+            left = element.target.id
+        }
+        if (implied === 'SOURCE' || implied === 'CONTAINER' || check.isTrue(implied)) {
+            left = element.container.id
+        }
+        assert.isDefined(left, 'Left not defined')
+
+        this.graph.addConstraint({
+            implies: [{and: [element.container.id, element.manualId]}, element.id],
+        })
     }
 }
