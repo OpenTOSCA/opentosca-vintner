@@ -44,12 +44,14 @@ topology_template:
       requirements:
         - left:
             node: left
-            implied:
+            conditions:
               logic_expression: is_left
+            implied: true
         - right:
             node: right
-            implied:
+            conditions:
               logic_expression: is_right
+            implied: true
     left:
       type: left
       requirements:
