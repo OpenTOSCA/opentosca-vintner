@@ -1,0 +1,5 @@
+presets: static
+expected: ../expected.static.yaml
+template: ../template.provider.yaml
+description: |
+    -

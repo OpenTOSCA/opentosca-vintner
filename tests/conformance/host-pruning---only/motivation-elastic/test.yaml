@@ -1,0 +1,3 @@
+template: ../template.motivation.yaml
+expected: ../expected.elastic.yaml
+presets: elastic
