@@ -89,7 +89,7 @@ jobs:
               run: git tag --delete build-${GITHUB_SHA} || true
 
             - name: (RELEASE) Create Build Release (and Tag)
-              run: gh release create build-${GITHUB_SHA} --target ${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/*
+              run: gh release create build-${GITHUB_SHA} --target ${GITHUB_SHA} -t "Build ${GITHUB_SHA}" -n "This is the build of the commit ${GITHUB_SHA}" ./dist/* docs/docs/vintner-release.gpg
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

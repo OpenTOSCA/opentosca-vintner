@@ -134,7 +134,7 @@ jobs:
               run: git tag --delete latest || true
 
             - name: (RELEASE) Create Latest Release
-              run: gh release create latest --target ${GITHUB_SHA} --latest -t "Latest Release" -n "This is the latest release of this project" ./dist/*
+              run: gh release create latest --target ${GITHUB_SHA} --latest -t "Latest Release" -n "This is the latest release of this project" ./dist/* docs/docs/vintner-release.gpg
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
