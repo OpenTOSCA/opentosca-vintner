@@ -793,6 +793,26 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../test-consumed-consumed-false/">
+        consumed-consumed-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consumed-consumed-throw/">
+        consumed-consumed-throw
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consumed-consumed-undefined/">
+        consumed-consumed-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consumed-consumed/">
+        consumed-consumed
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../test-date-operators-after-false/">
         date-operators-after-false
       </a>
@@ -880,6 +900,61 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../test-groups-prune/">
         groups-prune
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-constraints-elastic/">
+        host-pruning-constraints-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-constraints-static/">
+        host-pruning-constraints-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-host-elastic/">
+        host-pruning-host-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-host-static/">
+        host-pruning-host-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-motivation-elastic/">
+        host-pruning-motivation-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-motivation-static/">
+        host-pruning-motivation-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-provider-elastic/">
+        host-pruning-provider-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-provider-static/">
+        host-pruning-provider-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-transitive-ambiguous/">
+        host-pruning-transitive-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-transitive-preserved/">
+        host-pruning-transitive-preserved
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-host-pruning-transitive-unexpected/">
+        host-pruning-transitive-unexpected
       </a>
 </li>
 <li class="md-nav__item">
@@ -1390,26 +1465,6 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../test-pruning-charlie-pruning/">
         pruning-charlie-pruning
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-pruning-consumed-false/">
-        pruning-consumed-false
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-pruning-consumed-throw/">
-        pruning-consumed-throw
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-pruning-consumed-undefined/">
-        pruning-consumed-undefined
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../test-pruning-consumed/">
-        pruning-consumed
       </a>
 </li>
 <li class="md-nav__item">
@@ -2191,24 +2246,26 @@
 <span class="normal"><a href="#__codelineno-0-15">15</a></span>
 <span class="normal"><a href="#__codelineno-0-16">16</a></span>
 <span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0</span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">topology_template</span><span class="p">:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">variability</span><span class="p">:</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">options</span><span class="p">:</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loose</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="nt">worker</span><span class="p">:</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">vm</span><span class="p">:</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="nt">optimization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">agent</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">worker</span><span class="p">:</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">      </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">    </span><span class="nt">vm</span><span class="p">:</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="variability-resolved-service-template">Variability-Resolved Service Template<a class="headerlink" href="#variability-resolved-service-template" title="Permanent link">¶</a></h2>
 <p>The following variability-resolved service template is expected.</p>
@@ -2235,7 +2292,7 @@
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 26, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 26, 2023</span>
 </small>
 </div>
 </article>
