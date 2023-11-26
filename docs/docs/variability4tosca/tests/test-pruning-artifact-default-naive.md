@@ -16,6 +16,7 @@ topology_template:
       node_default_condition_mode: artifactnaive
       artifact_default_condition: true
       type_default_condition: true
+      optimization: true
   node_templates:
     container:
       type: container_type

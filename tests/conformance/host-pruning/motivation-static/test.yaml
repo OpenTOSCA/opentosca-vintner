@@ -1,0 +1,19 @@
+presets: static
+template: ../template.motivation.yaml
+expected: ../expected.static.yaml
+description: |
+    - 2 conditions at shop hosting relations
+    - required to trigger incoming pruning
+    - alternative is to model 2 conditions at the direct hosts   
+
+    - 2 conditions at shop database connections
+    - required, since database must be pruned
+    - alternative is to model 2 conditions at the databases directly
+
+    - 1 condition at monitor
+    - required, since incoming pruning of monitor host is not triggered
+
+    - 5 conditions in total
+
+    - hosting_stack_constraint has no effect
+    - optimization has no effect

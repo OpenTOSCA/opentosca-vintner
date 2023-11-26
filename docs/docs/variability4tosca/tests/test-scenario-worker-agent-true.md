@@ -21,6 +21,7 @@ topology_template:
   variability:
     options:
       mode: loose
+      optimization: true
   node_templates:
     agent:
       type: agent

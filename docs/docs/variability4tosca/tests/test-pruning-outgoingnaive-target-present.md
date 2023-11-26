@@ -6,7 +6,7 @@
 
 - The node "source" has an outgoing relation "relation" to node "target". 
 - The node default condition mode "outgoingnaive" is used. 
-- Thus, there is a cycle: "source" checks if "relation" is present and "relation" checks if "source" is present. 
+- Thus, there is a circle: "source" checks if "relation" is present and "relation" checks if "source" is present. 
 - Thus, "source" and "relation" can be removed. 
 - "target" is present since it has no default condition assigned.
 
@@ -26,6 +26,7 @@ topology_template:
       relation_default_condition_mode: source-target
       type_default_condition: true
       expected_incoming_relation_check: false
+      optimization: true
   node_templates:
     source:
       type: source

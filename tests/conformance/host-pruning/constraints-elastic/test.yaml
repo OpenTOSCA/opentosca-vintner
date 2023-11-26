@@ -1,0 +1,3 @@
+presets: elastic
+expected: ../expected.elastic.yaml
+template: ../template.constraints.yaml

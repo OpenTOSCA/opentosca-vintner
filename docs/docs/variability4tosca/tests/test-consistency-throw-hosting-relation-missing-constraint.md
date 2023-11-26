@@ -10,6 +10,9 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
+  variability:
+    options:
+      hosting_stack_constraint: true
   node_templates:
     one:
       type: one

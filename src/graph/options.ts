@@ -407,7 +407,7 @@ class SolverOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        const optimization = this.raw.optimization ?? 'min'
+        const optimization = this.raw.optimization ?? false
         if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
@@ -457,7 +457,7 @@ class ConstraintsOptions {
         this.typeContainer = this.raw.type_container_constraint ?? this.constraints
         assert.isBoolean(this.typeContainer)
 
-        this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
+        this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
         assert.isBoolean(this.hostingStack)
     }
 }
