@@ -237,17 +237,16 @@ The following options are used to configure constraints.
 
 ### Pruning Modes
 
-_TODO: adapt this_
-
 _This is an experimental feature._
 
 There are several predefined pruning modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
-- `strict`: no default or pruning conditions are enabled at all
+- `manual`: no default or pruning conditions are enabled at all
 - `consistent-strict`: all default consistency conditions are enabled
 - `consitent-loose`: consistency pruning is enabled
 - `default`: all default conditions are enabled (consistency and semantic)
-- `loose`: pruning is enabled everywhere (consistency and semantic)
+- `semantic-strict`: consistency pruning is enabled and semantic defaults
+- `semantic-loose`: pruning is enabled everywhere (consistency and semantic)
 
 
 ## Default Conditions
