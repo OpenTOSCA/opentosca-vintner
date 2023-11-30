@@ -43,7 +43,6 @@ export default class Enricher {
         this.enrichImplications(element, conditions)
 
         // TODO: remove this hotfix
-
         // Add default condition if requested
         if (element.defaultEnabled && utils.isEmpty(conditions)) {
             const condition = element.defaultCondition

@@ -78,7 +78,7 @@ describe('options', () => {
             topology_template: {variability: {options: {mode: 'consistent-strict'}, inputs: {}}},
         })
 
-        expect(graph.options.default.defaultCondition).to.be.true
+        expect(graph.options.default.defaultCondition).to.be.false
 
         expect(graph.options.default.nodeDefaultCondition).to.be.true
         expect(graph.options.default.nodeDefaultConditionMode).to.equal('incoming-artifact')
@@ -179,7 +179,7 @@ describe('options', () => {
         expect(graph.options.default.typeDefaultConsistencyCondition).to.be.false
         expect(graph.options.default.typeDefaultSemanticCondition).to.be.false
 
-        expect(graph.options.pruning.pruning).to.be.true
+        expect(graph.options.pruning.pruning).to.be.false
 
         expect(graph.options.pruning.nodePruning).to.be.true
         expect(graph.options.pruning.nodeConsistencyPruning).to.be.true
