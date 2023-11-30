@@ -44,7 +44,8 @@ export default class Enricher {
 
         // Add default condition if requested
         if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
-            conditions.unshift(generatify(element.defaultCondition))
+            const condition = element.defaultCondition
+            if (check.isDefined(condition)) conditions.unshift(generatify(condition))
         }
 
         // Store enriched conditions

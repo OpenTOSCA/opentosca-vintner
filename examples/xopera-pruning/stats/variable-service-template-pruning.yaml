@@ -10,7 +10,7 @@ description: |
 topology_template:
     variability:
         options:
-            mode: loose
+            mode: semantic-loose
 
     node_templates:
         shop:

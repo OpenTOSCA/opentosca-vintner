@@ -12,7 +12,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      mode: loose
+      mode: semantic-loose
   node_templates:
     one:
       type: one

@@ -136,13 +136,19 @@ export default abstract class Element {
     }
 
     private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
+    get defaultCondition(): LogicExpression | undefined {
         if (check.isUndefined(this._defaultCondition)) {
             const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
             const selected = candidates.find(it => this.isConditionAllowed(it))
-            assert.isDefined(selected, `${this.Display} has no default condition`)
+
+            // TODO: is this okay? or return "true"?
+            // assert.isDefined(selected, `${this.Display} has no default condition`)
+            if (check.isUndefined(selected)) return
 
             selected.conditions = utils.toList(selected.conditions)
+
+            // TODO: selected.conditions.length === 0
+
             if (selected.conditions.length === 1) {
                 this._defaultCondition = selected.conditions[0]
             } else {

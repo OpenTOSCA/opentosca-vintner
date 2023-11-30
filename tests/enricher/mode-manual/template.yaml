@@ -1,0 +1,26 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            mode: manual
+            type_pruning: true
+
+    node_templates:
+        application:
+            type: application
+            requirements:
+                - host:
+                      node: virtual_machine
+
+        virtual_machine:
+            type: virtual_machine
+            conditions: {logic_expression: is_static}
+            requirements:
+                - host:
+                      node: private_cloud
+                      conditions: {logic_expression: is_static}
+
+        private_cloud:
+            type: private_cloud
+            conditions: {logic_expression: is_static}

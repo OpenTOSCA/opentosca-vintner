@@ -112,7 +112,7 @@ However, pruning of nodes is explicitly set by `node_pruning`, thus, nodes are p
 
 ````yaml linenums="1"
 options: 
-    mode: strict
+    mode: manual
     node_pruning: true
 ````
 
@@ -120,9 +120,9 @@ options:
 
 The following options are general options.
 
-| Keyname | Mandatory | Type                                                                                                     | Default | Description               |
-|---------|-----------|----------------------------------------------------------------------------------------------------------|---------|---------------------------|
-| mode    | false     | strict &#124; consistent-strict &#124; consistent-loose &#124; default &#124; default-loose &#124; loose | strict  | Configure resolving mode. |
+| Keyname | Mandatory | Type                                                                                                                 | Default | Description               |
+|---------|-----------|----------------------------------------------------------------------------------------------------------------------|---------|---------------------------|
+| mode    | false     | manual &#124; consistent-strict &#124; consistent-loose &#124; default &#124; semantic-strict &#124; semantic-loose  | manual  | Configure pruning mode. |
 
 ### Default Condition Options
 
@@ -235,11 +235,13 @@ The following options are used to configure constraints.
 | hosting_stack_constraint        | false     | Boolean   | false   | Enable the constraint regarding present hosting stack.           |
 
 
-### Resolving Modes
+### Pruning Modes
+
+_TODO: adapt this_
 
 _This is an experimental feature._
 
-There are several predefined resolving modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
+There are several predefined pruning modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
 - `strict`: no default or pruning conditions are enabled at all
 - `consistent-strict`: all default consistency conditions are enabled

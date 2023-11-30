@@ -32,7 +32,7 @@ topology_template:
           - variability_input: mode
           - right
     options:
-      mode: loose
+      mode: semantic-loose
       node_default_condition_mode: incoming
       hosting_stack_constraint: true
       optimization: true

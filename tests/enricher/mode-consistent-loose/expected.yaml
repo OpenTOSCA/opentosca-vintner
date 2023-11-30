@@ -1,0 +1,66 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        - application:
+              type:
+                  - application:
+                        conditions:
+                            - {node_presence: application, _generated: true}
+              conditions: []
+              requirements:
+                  - host:
+                        node: virtual_machine
+                        conditions:
+                            - {
+                                  and:
+                                      [
+                                          {node_presence: application, _generated: true},
+                                          {node_presence: virtual_machine, _generated: true},
+                                      ],
+                                  _generated: true,
+                              }
+
+        - virtual_machine:
+              type:
+                  - virtual_machine:
+                        conditions:
+                            - {node_presence: virtual_machine, _generated: true}
+              conditions:
+                  - {logic_expression: is_static}
+              properties:
+                  - tier:
+                        value: large
+                        conditions:
+                            - {node_presence: virtual_machine, _generated: true}
+                            - {logic_expression: is_large}
+
+                  - tier:
+                        value: medium
+                        conditions:
+                            - {node_presence: virtual_machine, _generated: true}
+                            - {logic_expression: is_medium}
+                  - image:
+                        value: ubuntu
+                        conditions:
+                            - {node_presence: virtual_machine, _generated: true}
+              requirements:
+                  - host:
+                        node: private_cloud
+                        conditions:
+                            - {
+                                  and:
+                                      [
+                                          {node_presence: virtual_machine, _generated: true},
+                                          {node_presence: private_cloud, _generated: true},
+                                      ],
+                                  _generated: true,
+                              }
+
+        - private_cloud:
+              type:
+                  - private_cloud:
+                        conditions:
+                            - {node_presence: private_cloud, _generated: true}
+              conditions:
+                  - {logic_expression: is_static}

@@ -3,10 +3,10 @@ import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {expect} from 'chai'
 
 describe('options', () => {
-    it('mode: strict', () => {
+    it('mode: manual', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'strict'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual'}, inputs: {}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -279,7 +279,7 @@ describe('options', () => {
         expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
-    it('mode: loose', () => {
+    it('mode: semantic-loose', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
             topology_template: {variability: {options: {mode: 'loose'}, inputs: {}}},
@@ -624,10 +624,10 @@ describe('options', () => {
         expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
-    it('strict override: default_condition true', () => {
+    it('manual override: default_condition true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'strict', default_condition: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual', default_condition: true}, inputs: {}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.true
@@ -693,10 +693,10 @@ describe('options', () => {
         expect(graph.options.pruning.typeSemanticPruning).to.be.false
     })
 
-    it('strict override: pruning true', () => {
+    it('manual override: pruning true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'strict', pruning: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual', pruning: true}, inputs: {}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false

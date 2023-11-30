@@ -21,7 +21,7 @@ topology_template:
             is_right: {equal: [{variability_input: mode}, right]}
 
         options:
-            mode: loose
+            mode: semantic-loose
             node_default_condition_mode: incoming
             hosting_stack_constraint: true
             optimization: true
