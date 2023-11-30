@@ -42,10 +42,30 @@ export default class Enricher {
         // TODO: before or after bratans?
         this.enrichImplications(element, conditions)
 
+        // TODO: remove this hotfix
+
         // Add default condition if requested
-        if (element.pruningEnabled || (element.defaultEnabled && utils.isEmpty(conditions))) {
+        if (element.defaultEnabled && utils.isEmpty(conditions)) {
             const condition = element.defaultCondition
-            if (check.isDefined(condition)) conditions.unshift(generatify(condition))
+            if (check.isDefined(condition)) {
+                if (
+                    (condition?.consistency && element.defaultConsistencyCondition) ||
+                    (condition?.semantic && element.defaultSemanticCondition)
+                ) {
+                    conditions.unshift(generatify(condition.conditions as any))
+                }
+            }
+        } // Add pruning condition if requested
+        else if (element.pruningEnabled) {
+            const condition = element.defaultCondition
+            if (check.isDefined(condition)) {
+                if (
+                    (condition?.consistency && element.consistencyPruning) ||
+                    (condition?.semantic && element.semanticPruning)
+                ) {
+                    conditions.unshift(generatify(condition.conditions as any))
+                }
+            }
         }
 
         // Store enriched conditions
