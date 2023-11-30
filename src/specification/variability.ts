@@ -153,22 +153,23 @@ export const ResolverModes: {[key: string]: VariabilityOptions} = {
 
         policy_default_condition: true,
         policy_default_consistency_condition: true,
+        policy_default_semantic_condition: false,
 
         group_default_condition: true,
         group_default_consistency_condition: true,
-        group_default_semantic_condition: true,
+        group_default_semantic_condition: false,
 
         artifact_default_condition: true,
         artifact_default_consistency_condition: true,
-        artifact_default_semantic_condition: true,
+        artifact_default_semantic_condition: false,
 
         property_default_condition: true,
         property_default_consistency_condition: true,
-        property_default_semantic_condition: true,
+        property_default_semantic_condition: false,
 
         type_default_condition: true,
         type_default_consistency_condition: true,
-        type_default_semantic_condition: true,
+        type_default_semantic_condition: false,
     },
     'consistent-loose': {
         node_pruning: true,
