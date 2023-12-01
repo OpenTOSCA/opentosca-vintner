@@ -4,7 +4,7 @@ import std from '#std'
 import path from 'path'
 import {runGroups} from '../utils'
 
-describe('conformance', async () => {
+describe('modes', async () => {
     try {
         const groups: VariabilityTestGroup[] = []
 

@@ -1,0 +1,3 @@
+presets: static
+expected: ../../../../examples/xopera-pruning/tests/static/expected.yaml
+template: ../template.yaml
