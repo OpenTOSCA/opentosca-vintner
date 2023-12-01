@@ -2048,7 +2048,7 @@ signs a CSAR
 
 ## vintner template stats
 
-collects stats of a given service template
+collects stats of a given service template (experimental)
 
 
 === "CLI"
@@ -2332,7 +2332,7 @@ imports a new template
 | git-repository |  false  | string | git repository |
 | git-checkout |  false  | string | git checkout |
 | signature |  false  |  | path to the signature (default: template + ".asc") |
-| key |  false  |  | storage entry name to verify the signature |
+| key |  false  |  | assets name to verify the signature |
 
 ## vintner templates inspect
 
