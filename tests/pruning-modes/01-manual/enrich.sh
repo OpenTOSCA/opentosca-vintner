@@ -1,0 +1,1 @@
+yarn cli template enrich --template ./template.yaml --output ./enriched.yaml
