@@ -351,7 +351,7 @@ template
 
 template
     .command('stats')
-    .description('collects stats of a given service template')
+    .description('collects stats of a given service template (experimental)')
     .requiredOption('--template <strings...>', 'path to service template')
     .action(
         hae.exit(async options => {
