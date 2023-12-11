@@ -138,7 +138,6 @@ export type ChecksOptions = {
     consumed_check?: boolean
 }
 
-// TODO: more modes
 export const ResolverModes: {[key: string]: VariabilityOptions} = {
     strict: {},
     manual: {},
