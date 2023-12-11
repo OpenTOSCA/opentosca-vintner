@@ -1,0 +1,6 @@
+---
+- import_playbook: gcp.create.yaml
+  when: env_type == "gcp"
+
+- import_playbook: os.create.yaml
+  when: env_type == "os"

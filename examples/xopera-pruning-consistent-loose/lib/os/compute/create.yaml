@@ -1,0 +1,67 @@
+---
+- hosts: all
+  gather_facts: false
+  environment:
+      OS_AUTH_TYPE: '{{ auth_type }}'
+      OS_AUTH_URL: '{{ auth_url }}'
+      OS_IDENTITY_API_VERSION: '{{ identity_api_version }}'
+      OS_REGION_NAME: '{{ region_name }}'
+      OS_INTERFACE: '{{ interface }}'
+      OS_APPLICATION_CREDENTIAL_ID: '{{ application_credential_id }}'
+      OS_APPLICATION_CREDENTIAL_SECRET: '{{ application_credential_secret }}'
+  tasks:
+      - name: create security group
+        openstack.cloud.security_group:
+            name: '{{ vm_name }}'
+
+      - name: open ports
+        openstack.cloud.security_group_rule:
+            security_group: '{{ vm_name }}'
+            protocol: tcp
+            port_range_min: '{{ item }}'
+            port_range_max: '{{ item }}'
+            remote_ip_prefix: '::/0'
+            direction: ingress
+            ethertype: IPv6
+        loop: '{{ ports }}'
+
+      - name: Create VM
+        openstack.cloud.server:
+            state: present
+            name: '{{ vm_name }}'
+            image: '{{ image }}'
+            key_name: '{{ key_name }}'
+            flavor: '{{ flavor }}'
+            network: '{{ network }}'
+            security_groups: "{{ security_groups + ',' + vm_name }}"
+            auto_ip: false
+        register: server_info
+
+      - name: Set attributes
+        set_stats:
+            data:
+                private_address: '{{ server_info.server.addresses[network][1].addr }}'
+                public_address: '{{ server_info.server.addresses[network][1].addr }}'
+                id: '{{ server_info.server.id }}'
+
+      - name: Create temporary inventory for ssh wait
+        add_host:
+            name: server
+            groups: vms
+            ansible_host: '{{ server_info.server.addresses[network][1].addr }}'
+            ansible_user: '{{ ssh_user }}'
+            ansible_ssh_private_key_file: '{{ ssh_key_file }}'
+            ansible_ssh_common_args: >
+                -o IdentitiesOnly=yes
+                -o BatchMode=yes
+                -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no
+
+- hosts: vms
+  gather_facts: false
+  tasks:
+      - name: Wait for ssh to wake up
+        wait_for_connection:
+            delay: 10
+            sleep: 5
+            timeout: 30
