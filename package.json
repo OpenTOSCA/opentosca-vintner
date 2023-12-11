@@ -143,6 +143,7 @@
         "docs:build": "bash docs/cmds/mkdocs build --strict",
         "docs:clean": "cd docs && rm -rf site",
         "docs:deploy": "bash docs/cmds/mkdocs gh-deploy --force --strict",
+        "docs:generate": "bash docs/cmds/generate.sh",
         "docs:build:commands": "tsc -p tsconfig.docs.json && tsc-alias -p tsconfig.docs.json && syncdir docs/cmds build-docs/docs/cmds --quiet && syncdir src/assets build-docs/src/assets --quiet && syncdir tests build-docs/tests --quiet",
         "docs:generate:interface": "echo 'dont forget to run docs:build:commands in advance ...' && bash docs/cmds/command.sh interface",
         "docs:generate:dependencies": "bash docs/cmds/command.sh dependencies",
