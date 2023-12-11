@@ -5,6 +5,6 @@ set -e
 source configuration.sh
 
 $VINTNER setup init
-$VINTNER orchestrators init unfurl --no-venv
-$VINTNER orchestrators enable --orchestrator unfurl
-$VINTNER orchestrators attest --orchestrator unfurl
+$VINTNER orchestrators init xopera --no-venv
+$VINTNER orchestrators enable --orchestrator xopera
+$VINTNER orchestrators attest --orchestrator xopera
