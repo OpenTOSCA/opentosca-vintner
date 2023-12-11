@@ -1,0 +1,35 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            mode: semantic-strict
+            type_pruning: true
+
+    node_templates:
+        application:
+            type: application
+            requirements:
+                - host:
+                      node: virtual_machine
+
+        virtual_machine:
+            type: virtual_machine
+            properties:
+                - tier:
+                      value: large
+                      conditions:
+                          - {logic_expression: is_large}
+                - tier:
+                      value: medium
+                      conditions:
+                          - {logic_expression: is_medium}
+                - image:
+                      value: ubuntu
+
+            requirements:
+                - host:
+                      node: private_cloud
+
+        private_cloud:
+            type: private_cloud

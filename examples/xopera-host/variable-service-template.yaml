@@ -106,7 +106,7 @@ topology_template:
             is_medium: {not: {logic_expression: is_large}}
 
         options:
-            mode: loose
+            mode: semantic-loose
             node_default_condition_mode: incoming-host
             hosting_stack_constraint: true
 

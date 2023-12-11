@@ -91,7 +91,7 @@ export default class Transformer {
         if (check.isUndefined(this.topology.variability)) return
 
         if (check.isDefined(this.topology.variability.options)) {
-            // Delete resolving mode
+            // Delete pruning mode
             delete this.topology.variability.options.mode
 
             // Delete default options

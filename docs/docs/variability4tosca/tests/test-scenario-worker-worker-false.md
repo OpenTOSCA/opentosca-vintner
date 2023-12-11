@@ -21,7 +21,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      mode: loose
+      mode: semantic-loose
       optimization: true
   node_templates:
     agent:

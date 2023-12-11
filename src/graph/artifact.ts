@@ -66,10 +66,6 @@ export default class Artifact extends Element {
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
-    get defaultCondition() {
-        return this.container.presenceCondition
-    }
-
     getTypeSpecificConditionWrapper() {
         return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[
             this.raw.type

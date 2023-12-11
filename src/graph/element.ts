@@ -100,6 +100,7 @@ export default abstract class Element {
         return true
     }
 
+    // TODO: this is somehow missing context
     isConditionAllowed(wrapper?: ConditionsWrapper) {
         if (check.isUndefined(wrapper)) return false
 
@@ -135,19 +136,27 @@ export default abstract class Element {
         return {conditions: true, consistency: true, semantic: true}
     }
 
-    private _defaultCondition?: LogicExpression
-    get defaultCondition(): LogicExpression {
+    private _defaultCondition?: ConditionsWrapper
+    get defaultCondition(): ConditionsWrapper | undefined {
         if (check.isUndefined(this._defaultCondition)) {
             const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
             const selected = candidates.find(it => this.isConditionAllowed(it))
-            assert.isDefined(selected, `${this.Display} has no default condition`)
+
+            // TODO: is this okay? or return "true"?
+            // assert.isDefined(selected, `${this.Display} has no default condition`)
+            if (check.isUndefined(selected)) return
 
             selected.conditions = utils.toList(selected.conditions)
+
+            // TODO: selected.conditions.length === 0
+
             if (selected.conditions.length === 1) {
-                this._defaultCondition = selected.conditions[0]
+                selected.conditions = selected.conditions[0]
             } else {
-                this._defaultCondition = {and: selected.conditions}
+                selected.conditions = {and: selected.conditions}
             }
+
+            this._defaultCondition = selected
         }
         return this._defaultCondition
     }

@@ -50,7 +50,7 @@ topology_template:
           - variability_input: static
           - false
     options:
-      mode: loose
+      mode: semantic-loose
       node_default_condition_mode: incoming
       hosting_stack_constraint: false
       optimization: false

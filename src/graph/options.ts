@@ -70,7 +70,7 @@ class DefaultOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        const mode = getResolvingMode(this.raw)
+        const mode = getPruningMode(this.raw)
 
         this.defaultCondition = this.raw.default_condition ?? mode.default_condition ?? false
         assert.isBoolean(this.defaultCondition)
@@ -235,7 +235,7 @@ class PruningOptions {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
 
-        const mode = getResolvingMode(this.raw)
+        const mode = getPruningMode(this.raw)
 
         this.pruning = this.raw.pruning ?? mode.pruning ?? false
         assert.isBoolean(this.pruning)
@@ -462,9 +462,9 @@ class ConstraintsOptions {
     }
 }
 
-function getResolvingMode(raw: VariabilityOptions) {
-    const mode = raw.mode ?? 'strict'
+function getPruningMode(raw: VariabilityOptions) {
+    const mode = raw.mode ?? 'manual'
     const map = ResolverModes[mode]
-    assert.isDefined(map, `Resolving mode "${mode}" unknown`)
+    assert.isDefined(map, `Pruning mode "${mode}" unknown`)
     return map
 }

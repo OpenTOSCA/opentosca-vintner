@@ -19,7 +19,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
     options:
-      mode: loose
+      mode: semantic-loose
       node_default_condition_mode: incoming-host
       hosting_stack_constraint: false
       optimization: true

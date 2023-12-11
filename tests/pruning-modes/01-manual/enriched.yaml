@@ -1,0 +1,426 @@
+tosca_definitions_version: tosca_variability_1_0
+imports:
+    - file: lib/shop/types.yaml
+      conditions: []
+    - file: lib/gcp/types.yaml
+      conditions: []
+    - file: lib/os/types.yaml
+      conditions: []
+topology_template:
+    inputs:
+        - database_password:
+              type: string
+              default: password
+              conditions: []
+        - os_compute_network:
+              type: string
+              default: public-belwue-v6only
+              conditions: []
+        - os_compute_security_groups:
+              type: string
+              default: default
+              conditions: []
+        - os_compute_key_name:
+              type: string
+              default: default
+              conditions: []
+        - os_compute_ssh_user:
+              type: string
+              default: ubuntu
+              conditions: []
+        - os_compute_ssh_key_file:
+              type: string
+              default: /home/milesstoetzner/.ssh/bw-cloud--default
+              conditions: []
+        - os_region_name:
+              type: string
+              default: Mannheim
+              conditions: []
+        - os_auth_type:
+              type: string
+              default: v3applicationcredential
+              conditions: []
+        - os_auth_url:
+              type: string
+              default: https://idm02.bw-cloud.org:5000/v3
+              conditions: []
+        - os_identity_api_version:
+              type: string
+              default: '3'
+              conditions: []
+        - os_interface:
+              type: string
+              default: public
+              conditions: []
+        - os_application_credential_id:
+              type: string
+              default: 3f538f1823bd484e8238b2433de2f21a
+              conditions: []
+        - os_application_credential_secret:
+              type: string
+              conditions: []
+        - gcp_region:
+              type: string
+              default: europe-west3
+              conditions: []
+        - gcp_service_account_file:
+              type: string
+              default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+              conditions: []
+        - gcp_project:
+              type: string
+              default: stoetzms-387808
+              conditions: []
+        - gcp_auto_scaling:
+              type: boolean
+              default: true
+              conditions: []
+    variability:
+        inputs:
+            static:
+                type: boolean
+                default: true
+            large:
+                type: boolean
+                default: false
+        presets:
+            static:
+                inputs:
+                    static: true
+            static-large:
+                inputs:
+                    static: true
+                    large: true
+            elastic:
+                inputs:
+                    static: false
+        expressions:
+            is_static:
+                equal:
+                    - variability_input: static
+                    - true
+            is_elastic:
+                equal:
+                    - variability_input: static
+                    - false
+            is_large:
+                variability_input: large
+            is_medium:
+                not:
+                    logic_expression: is_large
+        options:
+            hosting_stack_constraint: false
+            optimization: false
+            unique: true
+    node_templates:
+        - shop:
+              type:
+                  - shop.component:
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+              properties:
+                  - DB_NAME:
+                        value: shop
+                        conditions: []
+                  - DB_USERNAME:
+                        value: root
+                        conditions: []
+                  - DB_PASSWORD:
+                        value:
+                            get_input: database_password
+                        conditions: []
+                  - DB_DIALECT:
+                        conditions:
+                            - logic_expression: is_static
+                        value: sqlite
+                  - DB_DIALECT:
+                        conditions:
+                            - logic_expression: is_elastic
+                        value: mysql
+                  - DB_ADDRESS:
+                        conditions:
+                            - logic_expression: is_static
+                        value:
+                            get_property:
+                                - os_database
+                                - public_address
+                  - DB_ADDRESS:
+                        conditions:
+                            - logic_expression: is_elastic
+                        value:
+                            get_attribute:
+                                - SELF
+                                - database
+                                - public_address
+                  - vm_ssh_user:
+                        value:
+                            get_input: os_compute_ssh_user
+                        conditions: []
+                  - vm_ssh_key_file:
+                        value:
+                            get_input: os_compute_ssh_key_file
+                        conditions: []
+                  - gcp_region:
+                        value:
+                            get_input: gcp_region
+                        conditions: []
+                  - gcp_service_account_file:
+                        value:
+                            get_input: gcp_service_account_file
+                        conditions: []
+                  - gcp_project:
+                        value:
+                            get_input: gcp_project
+                        conditions: []
+                  - gcp_auto_scaling:
+                        value:
+                            get_input: gcp_auto_scaling
+                        conditions: []
+              requirements:
+                  - host:
+                        node: os_compute
+                        conditions:
+                            - logic_expression: is_static
+                  - host:
+                        node: gcp_runtime
+                        conditions:
+                            - logic_expression: is_elastic
+                  - database:
+                        node: os_database
+                        conditions:
+                            - logic_expression: is_static
+                  - database:
+                        node: gcp_database
+                        conditions:
+                            - logic_expression: is_elastic
+              conditions: []
+        - os_database:
+              type:
+                  - os.database:
+                        conditions:
+                            - node_presence: os_database
+                              _generated: true
+              conditions:
+                  - logic_expression: is_static
+              properties:
+                  - database_name:
+                        value: shop
+                        conditions:
+                            - logic_expression: is_static
+                  - public_address:
+                        value: /var/lib/sqlite-databases/shop.db
+                        conditions:
+                            - logic_expression: is_static
+              requirements:
+                  - host:
+                        node: os_compute
+                        conditions:
+                            - logic_expression: is_static
+        - os_compute:
+              type:
+                  - os.compute:
+                        conditions:
+                            - node_presence: os_compute
+                              _generated: true
+              conditions:
+                  - logic_expression: is_static
+              properties:
+                  - ports:
+                        value:
+                            - 80
+                            - 3000
+                        conditions:
+                            - logic_expression: is_static
+                  - name:
+                        value: shop
+                        conditions:
+                            - logic_expression: is_static
+                  - image:
+                        value: Ubuntu 22.04
+                        conditions:
+                            - logic_expression: is_static
+                  - flavor:
+                        value: m1.medium
+                        conditions:
+                            - logic_expression: is_static
+                            - logic_expression: is_medium
+                  - flavor:
+                        value: m1.large
+                        conditions:
+                            - logic_expression: is_static
+                            - logic_expression: is_large
+                  - network:
+                        value:
+                            get_input: os_compute_network
+                        conditions:
+                            - logic_expression: is_static
+                  - security_groups:
+                        value:
+                            get_input: os_compute_security_groups
+                        conditions:
+                            - logic_expression: is_static
+                  - key_name:
+                        value:
+                            get_input: os_compute_key_name
+                        conditions:
+                            - logic_expression: is_static
+                  - ssh_user:
+                        value:
+                            get_input: os_compute_ssh_user
+                        conditions:
+                            - logic_expression: is_static
+                  - ssh_key_file:
+                        value:
+                            get_input: os_compute_ssh_key_file
+                        conditions:
+                            - logic_expression: is_static
+              requirements:
+                  - host:
+                        node: os_cloud
+                        conditions:
+                            - logic_expression: is_static
+        - os_cloud:
+              type:
+                  - os.provider:
+                        conditions:
+                            - node_presence: os_cloud
+                              _generated: true
+              conditions:
+                  - logic_expression: is_static
+              properties:
+                  - region_name:
+                        value:
+                            get_input: os_region_name
+                        conditions:
+                            - logic_expression: is_static
+                  - auth_type:
+                        value:
+                            get_input: os_auth_type
+                        conditions:
+                            - logic_expression: is_static
+                  - auth_url:
+                        value:
+                            get_input: os_auth_url
+                        conditions:
+                            - logic_expression: is_static
+                  - identity_api_version:
+                        value:
+                            get_input: os_identity_api_version
+                        conditions:
+                            - logic_expression: is_static
+                  - interface:
+                        value:
+                            get_input: os_interface
+                        conditions:
+                            - logic_expression: is_static
+                  - application_credential_id:
+                        value:
+                            get_input: os_application_credential_id
+                        conditions:
+                            - logic_expression: is_static
+                  - application_credential_secret:
+                        value:
+                            get_input: os_application_credential_secret
+                        conditions:
+                            - logic_expression: is_static
+        - gcp_runtime:
+              type:
+                  - gcp.runtime:
+                        conditions:
+                            - node_presence: gcp_runtime
+                              _generated: true
+              conditions:
+                  - logic_expression: is_elastic
+              properties:
+                  - auto_scaling:
+                        value:
+                            get_input: gcp_auto_scaling
+                        conditions:
+                            - logic_expression: is_elastic
+              requirements:
+                  - host:
+                        node: gcp_cloud
+                        conditions:
+                            - logic_expression: is_elastic
+        - gcp_database:
+              type:
+                  - gcp.database:
+                        conditions:
+                            - node_presence: gcp_database
+                              _generated: true
+              conditions:
+                  - logic_expression: is_elastic
+              properties:
+                  - database_name:
+                        value: shop
+                        conditions:
+                            - logic_expression: is_elastic
+              requirements:
+                  - host:
+                        node: gcp_dbms
+                        conditions:
+                            - logic_expression: is_elastic
+        - gcp_dbms:
+              type:
+                  - gcp.dbms:
+                        conditions:
+                            - node_presence: gcp_dbms
+                              _generated: true
+              conditions:
+                  - logic_expression: is_elastic
+              properties:
+                  - instance_name:
+                        value: shop
+                        conditions:
+                            - logic_expression: is_elastic
+                  - root_password:
+                        value:
+                            get_input: database_password
+                        conditions:
+                            - logic_expression: is_elastic
+                  - authorized_networks:
+                        value: 0.0.0.0/0
+                        conditions:
+                            - logic_expression: is_elastic
+                  - backups:
+                        value: true
+                        conditions:
+                            - logic_expression: is_elastic
+                  - database_version:
+                        value: MYSQL_5_7
+                        conditions:
+                            - logic_expression: is_elastic
+                  - availability_type:
+                        value: REGIONAL
+                        conditions:
+                            - logic_expression: is_elastic
+              requirements:
+                  - host:
+                        node: gcp_cloud
+                        conditions:
+                            - logic_expression: is_elastic
+        - gcp_cloud:
+              type:
+                  - gcp.provider:
+                        conditions:
+                            - node_presence: gcp_cloud
+                              _generated: true
+              conditions:
+                  - logic_expression: is_elastic
+              properties:
+                  - region:
+                        value:
+                            get_input: gcp_region
+                        conditions:
+                            - logic_expression: is_elastic
+                  - service_account_file:
+                        value:
+                            get_input: gcp_service_account_file
+                        conditions:
+                            - logic_expression: is_elastic
+                  - project:
+                        value:
+                            get_input: gcp_project
+                        conditions:
+                            - logic_expression: is_elastic

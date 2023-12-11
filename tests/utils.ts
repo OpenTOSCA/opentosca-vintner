@@ -8,8 +8,10 @@ import {
 } from '#controller/template/test'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import std from '#std'
 import {toList} from '#utils/utils'
 import {expect} from 'chai'
+import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
     try {
@@ -18,6 +20,25 @@ export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string
         return expect(e.message).to.equal(error)
     }
     throw new Error(`Expected that error "${error}" is thrown`)
+}
+
+export function VariabilityTestGroups(dir: string) {
+    try {
+        const groups: VariabilityTestGroup[] = []
+
+        for (const group of files.listDirectories(path.join(dir)).filter(it => !it.startsWith('.'))) {
+            const groupDir = path.join(dir, group)
+            groups.push({
+                name: group,
+                tests: files.listDirectories(groupDir).map(test => ({name: test, dir: path.join(groupDir, test)})),
+            })
+        }
+
+        runGroups(groups)
+    } catch (e) {
+        std.log(e)
+        process.exit(1)
+    }
 }
 
 export function runGroups(groups: VariabilityTestGroup[]) {
