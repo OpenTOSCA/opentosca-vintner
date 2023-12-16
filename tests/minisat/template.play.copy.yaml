@@ -27,7 +27,6 @@ topology_template:
             optimization: false
             unique: true
             type_pruning: true
-            checks: false
 
     node_templates:
         shop:
@@ -36,40 +35,42 @@ topology_template:
             requirements:
                 - host:
                       node: os_kubernetes
-                      conditions: false
+                      conditions: {logic_expression: is_static}
                       implied: true
 
                 - host:
                       node: gcp_runtime
-                      conditions: true
+                      conditions: {logic_expression: is_elastic}
                       implied: true
 
                 - database:
                       node: os_database
-                      conditions: false
+                      conditions: {logic_expression: is_static}
                       implied: true
 
                 - database:
                       node: gcp_database
-                      conditions: true
+                      conditions: {logic_expression: is_elastic}
                       implied: true
-
-        gcp_runtime:
-            type: gcp.runtime
-
-        gcp_database:
-            type: gcp.database
 
         os_database:
             type: os.database
             requirements:
                 - host:
-                      node: os_dbms
+                      node: os_kubernetes
                       conditions: true
                       implied: true
 
         os_dbms:
             type: os.dbms
+            requirements:
+                - host:
+                      node: os_kubernetes
+                      conditions: true
+                      implied: true
+
+        os_logger:
+            type: os.logger
             requirements:
                 - host:
                       node: os_kubernetes
@@ -86,29 +87,46 @@ topology_template:
 
         os_kubernetes:
             type: os.kubernetes
-#        gcp_runtime:
-#            type: gcp.runtime
-#            requirements:
-#                - host:
-#                      node: gcp_cloud
-#                      conditions: true
-#                      implied: true
+            requirements:
+                - host:
+                      node: os_compute
+                      conditions: true
+                      implied: true
 
-#        gcp_database:
-#            type: gcp.database
-#            requirements:
-#                - host:
-#                      node: gcp_dbms
-#                      conditions: true
-#                      implied: true
+        os_compute:
+            type: os.compute
+            requirements:
+                - host:
+                      node: os_cloud
+                      conditions: true
+                      implied: true
 
-#        gcp_dbms:
-#            type: gcp.dbms
-#            requirements:
-#                - host:
-#                      node: gcp_cloud
-#                      conditions: true
-#                      implied: true
+        os_cloud:
+            type: os.provider
 
-#        gcp_cloud:
-#            type: gcp.provider
+        gcp_runtime:
+            type: gcp.runtime
+            requirements:
+                - host:
+                      node: gcp_cloud
+                      conditions: true
+                      implied: true
+
+        gcp_database:
+            type: gcp.database
+            requirements:
+                - host:
+                      node: gcp_dbms
+                      conditions: true
+                      implied: true
+
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host:
+                      node: gcp_cloud
+                      conditions: true
+                      implied: true
+
+        gcp_cloud:
+            type: gcp.provider

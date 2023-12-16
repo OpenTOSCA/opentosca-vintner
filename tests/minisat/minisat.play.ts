@@ -18,5 +18,7 @@ async function play(data: string) {
     await Enricher.enrich({template})
 
     const solver = new Solver(new Graph(template))
-    std.log(solver.solveAll())
+    const results = solver.solveAll()
+    std.log(`Results: ${results.length}`)
+    std.log(results)
 }

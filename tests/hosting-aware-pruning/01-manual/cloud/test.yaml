@@ -1,0 +1,3 @@
+template: ../template.yaml
+expected: ../../cloud.expected.yaml
+presets: cloud
