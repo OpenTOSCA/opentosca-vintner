@@ -72,7 +72,7 @@ export default class Transformer {
         this._cleanCondition(next as any)
     }
 
-    private clean(raw: VariabilityAlternative & {default_condition_mode?: string}) {
+    private clean(raw: VariabilityAlternative & {default_condition_mode?: string; consumed?: boolean}) {
         delete raw.default_condition
         delete raw.default_consistency_condition
         delete raw.default_semantic_condition
@@ -84,6 +84,7 @@ export default class Transformer {
 
         delete raw.default_alternative
 
+        delete raw.consumed
         delete raw.implied
     }
 
@@ -159,6 +160,14 @@ export default class Transformer {
             delete this.topology.variability.options.type_pruning
             delete this.topology.variability.options.type_consistency_pruning
             delete this.topology.variability.options.type_semantic_pruning
+
+            // Delete constraints options
+            delete this.topology.variability.options.relation_source_constraint
+            delete this.topology.variability.options.relation_target_constraint
+            delete this.topology.variability.options.artifact_container_constraint
+            delete this.topology.variability.options.property_container_constraint
+            delete this.topology.variability.options.type_container_constraint
+            delete this.topology.variability.options.hosting_stack_constraint
         }
 
         // Remove empty options

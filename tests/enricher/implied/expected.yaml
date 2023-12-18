@@ -26,7 +26,6 @@ topology_template:
                     - right
 
         options:
-            hosting_stack_constraint: true
             optimization: true
             unique: true
 
@@ -42,6 +41,18 @@ topology_template:
                         - manual.relation.right@1.node.worker
                   - relation.right@1.node.worker
 
+            - implies:
+                  - node.left
+                  - relation.host@0.node.left
+
+            - implies:
+                  - node.left_host
+                  - relation.host@0.node.left_host
+
+            - implies:
+                  - node.right
+                  - relation.host@0.node.right
+
     node_templates:
         - worker:
               type:
@@ -49,7 +60,6 @@ topology_template:
                         conditions:
                             - node_presence: worker
                               _generated: true
-              consumed: true
               requirements:
                   - left:
                         node: left

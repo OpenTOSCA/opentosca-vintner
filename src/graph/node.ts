@@ -82,7 +82,7 @@ export default class Node extends Element {
     }
 
     get hasHost() {
-        return this.outgoing.find(it => it.isHostedOn())
+        return check.isDefined(this.outgoing.find(it => it.isHostedOn()))
     }
 
     get isTarget() {
