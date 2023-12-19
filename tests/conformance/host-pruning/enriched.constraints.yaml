@@ -1,0 +1,248 @@
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+  variability:
+    inputs:
+      static:
+        type: boolean
+        default: true
+    presets:
+      static:
+        inputs:
+          static: true
+      elastic:
+        inputs:
+          static: false
+    expressions:
+      is_static:
+        equal:
+          - variability_input: static
+          - true
+      is_elastic:
+        equal:
+          - variability_input: static
+          - false
+    options:
+      optimization: false
+    constraints:
+      - implies:
+          - and:
+              - node.shop
+              - manual.relation.database@2.node.shop
+          - relation.database@2.node.shop
+      - implies:
+          - and:
+              - node.shop
+              - manual.relation.database@3.node.shop
+          - relation.database@3.node.shop
+      - implies:
+          - node.shop
+          - xor:
+              - relation.host@0.node.shop
+              - relation.host@1.node.shop
+      - implies:
+          - node.os_database
+          - relation.host@0.node.os_database
+      - implies:
+          - node.os_monitor
+          - relation.host@0.node.os_monitor
+      - implies:
+          - node.os_compute
+          - relation.host@0.node.os_compute
+      - implies:
+          - node.gcp_runtime
+          - relation.host@0.node.gcp_runtime
+      - implies:
+          - node.gcp_database
+          - relation.host@0.node.gcp_database
+      - implies:
+          - node.gcp_dbms
+          - relation.host@0.node.gcp_dbms
+  node_templates:
+    - shop:
+        type:
+          - shop.component:
+              conditions:
+                - node_presence: shop
+                  _generated: true
+        requirements:
+          - host:
+              node: os_compute
+              conditions:
+                - and:
+                    - node_presence: shop
+                      _generated: true
+                    - node_presence: os_compute
+                      _generated: true
+                  _generated: true
+          - host:
+              node: gcp_runtime
+              conditions:
+                - and:
+                    - node_presence: shop
+                      _generated: true
+                    - node_presence: gcp_runtime
+                      _generated: true
+                  _generated: true
+          - database:
+              node: os_database
+              conditions:
+                - and:
+                    - node_presence: shop
+                      _generated: true
+                    - node_presence: os_database
+                      _generated: true
+                  _generated: true
+                - logic_expression: is_static
+          - database:
+              node: gcp_database
+              conditions:
+                - and:
+                    - node_presence: shop
+                      _generated: true
+                    - node_presence: gcp_database
+                      _generated: true
+                  _generated: true
+                - logic_expression: is_elastic
+        conditions: []
+    - os_database:
+        type:
+          - os.database:
+              conditions:
+                - node_presence: os_database
+                  _generated: true
+        requirements:
+          - host:
+              node: os_compute
+              conditions:
+                - and:
+                    - node_presence: os_database
+                      _generated: true
+                    - node_presence: os_compute
+                      _generated: true
+                  _generated: true
+        conditions:
+          - and:
+              - has_incoming_relation: os_database
+              - host_presence: SELF
+            _generated: true
+    - os_monitor:
+        type:
+          - os.monitor:
+              conditions:
+                - node_presence: os_monitor
+                  _generated: true
+        requirements:
+          - host:
+              node: os_compute
+              conditions:
+                - and:
+                    - node_presence: os_monitor
+                      _generated: true
+                    - node_presence: os_compute
+                      _generated: true
+                  _generated: true
+        conditions:
+          - host_presence: SELF
+            _generated: true
+    - os_compute:
+        type:
+          - os.compute:
+              conditions:
+                - node_presence: os_compute
+                  _generated: true
+        requirements:
+          - host:
+              node: os_cloud
+              conditions:
+                - and:
+                    - node_presence: os_compute
+                      _generated: true
+                    - node_presence: os_cloud
+                      _generated: true
+                  _generated: true
+        conditions:
+          - and:
+              - has_incoming_relation: os_compute
+              - host_presence: SELF
+            _generated: true
+    - os_cloud:
+        type:
+          - os.provider:
+              conditions:
+                - node_presence: os_cloud
+                  _generated: true
+        conditions:
+          - has_incoming_relation: os_cloud
+            _generated: true
+    - gcp_runtime:
+        type:
+          - gcp.runtime:
+              conditions:
+                - node_presence: gcp_runtime
+                  _generated: true
+        requirements:
+          - host:
+              node: gcp_cloud
+              conditions:
+                - and:
+                    - node_presence: gcp_runtime
+                      _generated: true
+                    - node_presence: gcp_cloud
+                      _generated: true
+                  _generated: true
+        conditions:
+          - and:
+              - has_incoming_relation: gcp_runtime
+              - host_presence: SELF
+            _generated: true
+    - gcp_database:
+        type:
+          - gcp.database:
+              conditions:
+                - node_presence: gcp_database
+                  _generated: true
+        requirements:
+          - host:
+              node: gcp_dbms
+              conditions:
+                - and:
+                    - node_presence: gcp_database
+                      _generated: true
+                    - node_presence: gcp_dbms
+                      _generated: true
+                  _generated: true
+        conditions:
+          - and:
+              - has_incoming_relation: gcp_database
+              - host_presence: SELF
+            _generated: true
+    - gcp_dbms:
+        type:
+          - gcp.dbms:
+              conditions:
+                - node_presence: gcp_dbms
+                  _generated: true
+        requirements:
+          - host:
+              node: gcp_cloud
+              conditions:
+                - and:
+                    - node_presence: gcp_dbms
+                      _generated: true
+                    - node_presence: gcp_cloud
+                      _generated: true
+                  _generated: true
+        conditions:
+          - and:
+              - has_incoming_relation: gcp_dbms
+              - host_presence: SELF
+            _generated: true
+    - gcp_cloud:
+        type:
+          - gcp.provider:
+              conditions:
+                - node_presence: gcp_cloud
+                  _generated: true
+        conditions:
+          - has_incoming_relation: gcp_cloud
+            _generated: true

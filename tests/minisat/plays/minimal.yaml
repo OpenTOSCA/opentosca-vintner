@@ -2,24 +2,6 @@ tosca_definitions_version: tosca_variability_1_0
 
 topology_template:
     variability:
-        inputs:
-            static:
-                type: boolean
-                default: true
-
-        presets:
-            static:
-                inputs:
-                    static: true
-
-            elastic:
-                inputs:
-                    static: false
-
-        expressions:
-            is_static: {equal: [{variability_input: static}, true]}
-            is_elastic: {equal: [{variability_input: static}, false]}
-
         options:
             mode: semantic-loose
             node_default_condition_mode: incoming-host
@@ -49,16 +31,8 @@ topology_template:
                       conditions: false
                       implied: true
 
-                - database:
-                      node: gcp_database
-                      conditions: true
-                      implied: true
-
         gcp_runtime:
             type: gcp.runtime
-
-        gcp_database:
-            type: gcp.database
 
         os_database:
             type: os.database
@@ -86,29 +60,3 @@ topology_template:
 
         os_kubernetes:
             type: os.kubernetes
-#        gcp_runtime:
-#            type: gcp.runtime
-#            requirements:
-#                - host:
-#                      node: gcp_cloud
-#                      conditions: true
-#                      implied: true
-
-#        gcp_database:
-#            type: gcp.database
-#            requirements:
-#                - host:
-#                      node: gcp_dbms
-#                      conditions: true
-#                      implied: true
-
-#        gcp_dbms:
-#            type: gcp.dbms
-#            requirements:
-#                - host:
-#                      node: gcp_cloud
-#                      conditions: true
-#                      implied: true
-
-#        gcp_cloud:
-#            type: gcp.provider
