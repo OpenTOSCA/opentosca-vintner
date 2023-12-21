@@ -44,7 +44,7 @@ export default class Enricher {
 
         // Imply element if requested
         // TODO: before or after bratans?
-        this.enrichImplications(element, conditions)
+        this.enrichImplications(element)
 
         // TODO: remove this hotfix
         // Add default condition if requested
@@ -82,11 +82,10 @@ export default class Enricher {
      * This is most likely only relevant for relations.
      * However, the method is still written in a generic way.
      */
-    private enrichImplications(element: Element, conditions: LogicExpression[]) {
-        // TODO: why ignore elements without conditions?
-        //if (utils.isEmpty(conditions)) return
+    private enrichImplications(element: Element) {
         if (check.isUndefined(element.container)) return
 
+        // TODO: move this up into class?
         const implied = element.raw.implied
         if (check.isUndefined(implied)) return
         if (check.isFalse(implied)) return

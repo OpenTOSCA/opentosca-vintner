@@ -1,0 +1,2 @@
+presets: elastic
+template: ../motivating-scenario-static/template.yaml
