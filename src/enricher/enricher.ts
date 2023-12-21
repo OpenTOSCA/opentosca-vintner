@@ -83,7 +83,8 @@ export default class Enricher {
      * However, the method is still written in a generic way.
      */
     private enrichImplications(element: Element, conditions: LogicExpression[]) {
-        if (utils.isEmpty(conditions)) return
+        // TODO: why ignore elements without conditions?
+        //if (utils.isEmpty(conditions)) return
         if (check.isUndefined(element.container)) return
 
         const implied = element.raw.implied
@@ -99,6 +100,10 @@ export default class Enricher {
             left = element.container.id
         }
         assert.isDefined(left, 'Left not defined')
+
+        // Sanity check
+        if (!(element.isRelation() || element.isArtifact()))
+            throw new Error(`${element.Display} is not issued a manual id by the Condition Enricher`)
 
         this.graph.addConstraint({
             implies: [{and: [element.container.id, element.manualId]}, element.id],

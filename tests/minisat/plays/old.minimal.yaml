@@ -5,7 +5,7 @@ topology_template:
         inputs:
             static:
                 type: boolean
-                default: false
+                default: true
 
         presets:
             static:
@@ -32,40 +32,64 @@ topology_template:
             consumed: true
             requirements:
                 - host:
-                      node: os_compute
-                      #conditions: false
+                      node: os_kubernetes
+                      conditions: {logic_expression: is_static}
 
                 - host:
                       node: gcp_runtime
-        #                      conditions: true
+                      conditions: {logic_expression: is_elastic}
 
-        #          - database:
-        #                node: os_database
-        #                conditions: false
+                - database:
+                      node: database
+                      conditions: true
+                      implied: true
 
-        #   os_database:
-        #       type: os.database
-        #       requirements:
-        #           - host: os_compute
+        database:
+            type: shop.database
+            requirements:
+                - host:
+                      node: os_dbms
 
-        #os_monitor:
-        #    type: os.monitor
-        #consumed: true
-        #    requirements:
-        #        - host: os_compute
+                - host:
+                      node: gcp_dbms
+
+        os_dbms:
+            type: os.dbms
+            requirements:
+                - host: os_kubernetes
+
+        os_monitor:
+            type: os.monitor
+            requirements:
+                - host: os_kubernetes
+
+        os_logger:
+            type: os.logger
+            requirements:
+                - host: os_kubernetes
+
+        os_kubernetes:
+            type: os.kubernetes
+            requirements:
+                - host: os_compute
 
         os_compute:
             type: os.compute
-        #        requirements:
-        #            - host: os_cloud
+            requirements:
+                - host: os_cloud
 
-        #    os_cloud:
-        #        type: os_cloud
+        os_cloud:
+            type: os_cloud
+
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host: gcp_cloud
 
         gcp_runtime:
             type: gcp.runtime
-            #   requirements:
-        #        - host: gcp_cloud
+            requirements:
+                - host: gcp_cloud
 
-        # gcp_cloud:
-        #    type: gcp.cloud
+        gcp_cloud:
+            type: gcp.cloud

@@ -22,7 +22,7 @@ topology_template:
 
         options:
             mode: semantic-loose
-            node_default_condition_mode: incoming
+            node_default_condition_mode: incomingnaive
             hosting_stack_constraint: true
             optimization: true
             unique: true

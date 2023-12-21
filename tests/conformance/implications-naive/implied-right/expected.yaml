@@ -10,7 +10,7 @@ topology_template:
         right:
             type: right
             requirements:
-                - host: far_right
+                - host: right_host
 
-        far_right:
-            type: far.right
+        right_host:
+            type: right.host
