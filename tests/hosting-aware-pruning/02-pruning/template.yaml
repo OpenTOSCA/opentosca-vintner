@@ -95,9 +95,9 @@ topology_template:
 
         options:
             mode: semantic-loose
-            node_default_condition_mode: incoming-host
+            node_default_condition_mode: incomingnaive-host
             hosting_stack_constraint: true
-            optimization: false
+            optimization: true
             unique: true
             type_pruning: true
 
@@ -130,7 +130,6 @@ topology_template:
 
                 - database:
                       node: database
-                      conditions: true
                       implied: true
 
         database:
