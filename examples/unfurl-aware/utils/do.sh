@@ -36,6 +36,13 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl apply -f node-exporter.yaml
 
 
+# mysql dbms
+kubectl apply -f mysql.yaml
+
+# mysql db
+kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h mysql -ppassword -e "create database shop";
+
+
 # helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
@@ -45,3 +52,17 @@ chmod 700 get_helm.sh
 # fluentbit
 helm repo add fluent https://fluent.github.io/helm-charts
 helm upgrade --install fluent-bit fluent/fluent-bit
+
+
+# shop
+cd shop
+
+eval $(minikube -p minikube docker-env)
+docker build -t shop .
+kubectl apply -f shop.yaml
+cd ../
+
+
+# local expose
+minikube service shop --url
+minikube service node-exporter --url

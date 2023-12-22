@@ -1,0 +1,26 @@
+{
+  "name": "express-attest-db-demo",
+  "private": true,
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dist:xz:bin": "dist:bin && cd dist && tar -cJf application.binary.xz application",
+    "dist:xz": "tar -cJf application.xz node_modules index.js package.json package-lock.json && mkdir -p dist && mv application.xz dist/",
+    "dist:xz:source": "tar -cJf application.source.xz index.js package.json package-lock.json && mkdir -p dist && mv application.source.xz dist/",
+    "dist:zip": "zip application.zip index.js package.json package-lock.json && mkdir -p dist && mv application.zip dist/",
+    "dist:bin": "pkg --config .pkgrc.json index.js",
+    "dist:arm": "pkg --config .pkgrc.arm.json index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.20.1",
+    "sqlite3": "^5.0.8"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.0"
+  }
+}
