@@ -7,7 +7,7 @@ import std from '#std'
 import * as yaml from 'js-yaml'
 import path from 'path'
 
-const PLAY = 'old.minimal'
+const PLAY = 'play'
 
 describe('minisat', () => {
     it('play', async () => {
