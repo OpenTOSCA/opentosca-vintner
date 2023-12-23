@@ -32,64 +32,30 @@ topology_template:
             consumed: true
             requirements:
                 - host:
-                      node: os_kubernetes
-                      conditions: {logic_expression: is_static}
+                      node: os_compute
 
                 - host:
                       node: gcp_runtime
-                      conditions: {logic_expression: is_elastic}
 
                 - database:
-                      node: database
-                      conditions: true
+                      node: os_database
                       implied: true
 
-        database:
-            type: shop.database
+        os_database:
+            type: os.database
             requirements:
-                - host:
-                      node: os_dbms
+                - host: os_compute_2
 
-                - host:
-                      node: gcp_dbms
-
-        os_dbms:
-            type: os.dbms
-            requirements:
-                - host: os_kubernetes
-
-        os_monitor:
-            type: os.monitor
-            requirements:
-                - host: os_kubernetes
-
-        os_logger:
-            type: os.logger
-            requirements:
-                - host: os_kubernetes
-
-        os_kubernetes:
-            type: os.kubernetes
-            requirements:
-                - host: os_compute
+        os_compute_2:
+            type: os.compute
 
         os_compute:
             type: os.compute
-            requirements:
-                - host: os_cloud
-
-        os_cloud:
-            type: os_cloud
-
-        gcp_dbms:
-            type: gcp.dbms
-            requirements:
-                - host: gcp_cloud
 
         gcp_runtime:
             type: gcp.runtime
-            requirements:
-                - host: gcp_cloud
+#            requirements:
+#                - host: gcp_cloud
 
-        gcp_cloud:
-            type: gcp.cloud
+#        gcp_cloud:
+#            type: gcp.cloud
