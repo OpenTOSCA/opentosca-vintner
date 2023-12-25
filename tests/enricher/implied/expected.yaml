@@ -31,17 +31,6 @@ topology_template:
 
         constraints:
             - implies:
-                  - and:
-                        - node.worker
-                        - manual.relation.left@0.node.worker
-                  - relation.left@0.node.worker
-            - implies:
-                  - and:
-                        - node.worker
-                        - manual.relation.right@1.node.worker
-                  - relation.right@1.node.worker
-
-            - implies:
                   - node.left
                   - relation.host@0.node.left
 
@@ -52,7 +41,16 @@ topology_template:
             - implies:
                   - node.right
                   - relation.host@0.node.right
-
+            - implies:
+                  - and:
+                        - node.worker
+                        - manual.relation.left@0.node.worker
+                  - relation.left@0.node.worker
+            - implies:
+                  - and:
+                        - node.worker
+                        - manual.relation.right@1.node.worker
+                  - relation.right@1.node.worker
     node_templates:
         - worker:
               type:

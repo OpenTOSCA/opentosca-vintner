@@ -19,11 +19,21 @@ export default class Enricher {
         if (this.transformed) return
         this.transformed = true
 
+        /**
+         * Condition Enricher
+         */
         for (const element of this.graph.elements) {
             this.enrichConditions(element)
         }
 
+        /**
+         * Constraint Enricher
+         */
         this.enrichConstraints()
+
+        for (const element of this.graph.elements) {
+            this.enrichImplications(element)
+        }
     }
 
     enrichConditions(element: Element) {
@@ -41,10 +51,6 @@ export default class Enricher {
                 throw new Error(`${element.Display} has no default alternative condition`)
             conditions = [generatify(element.defaultAlternativeCondition)]
         }
-
-        // Imply element if requested
-        // TODO: before or after bratans?
-        this.enrichImplications(element)
 
         // Enrich pruning
         this.enrichPruning(element, conditions)
