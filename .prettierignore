@@ -1,8 +1,11 @@
 dist
 build
+build-docs
 node_modules
 
 **/*.min.js
 **/*.min.css
 
 .nyc_output
+
+examples
