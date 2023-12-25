@@ -100,24 +100,6 @@ export default abstract class Element {
         return true
     }
 
-    // TODO: drop this function?
-    // TODO: this is somehow missing context
-    isConditionAllowed(wrapper?: ConditionsWrapper) {
-        if (check.isUndefined(wrapper)) return false
-
-        wrapper.consistency = wrapper.consistency ?? false
-        const consistencyAllowed =
-            (this.defaultConsistencyCondition && this.defaultEnabled) ||
-            (this.consistencyPruning && this.pruningEnabled)
-
-        // Default is "true" since type-specific condition will likely be semantic
-        wrapper.semantic = wrapper.semantic ?? true
-        const semanticAllowed =
-            (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
-
-        return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
-    }
-
     getTypeSpecificConditionWrapper(): ConditionsWrapper | undefined {
         return undefined
     }
@@ -135,15 +117,6 @@ export default abstract class Element {
 
     getElementGenericCondition(): ConditionsWrapper | undefined {
         return {conditions: true, consistency: true, semantic: true}
-    }
-
-    private _defaultCondition?: ConditionsWrapper
-    get defaultCondition(): ConditionsWrapper | undefined {
-        if (check.isUndefined(this._defaultCondition)) {
-            const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
-            this._defaultCondition = candidates.find(it => this.isConditionAllowed(it))
-        }
-        return this._defaultCondition
     }
 
     defaultAlternative = false

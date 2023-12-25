@@ -417,8 +417,8 @@ export type VariabilityExpression = LogicExpression | ValueExpression
 
 export type ConditionsWrapper = {
     conditions: LogicExpression
-    consistency?: boolean
-    semantic?: boolean
+    consistency: boolean
+    semantic: boolean
 }
 
 export type TypeSpecificLogicExpressions = {
