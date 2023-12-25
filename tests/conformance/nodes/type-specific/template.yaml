@@ -9,7 +9,6 @@ topology_template:
             node_types:
                 one:
                     conditions: false
-
     node_templates:
         one:
             type: one

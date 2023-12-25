@@ -128,7 +128,7 @@ export default class Relation extends Element {
             }
         })
 
-        return {conditions, consistency: true, semantic: false}
+        return {conditions: {and: conditions}, consistency: true, semantic: false}
     }
 
     constructPresenceCondition() {

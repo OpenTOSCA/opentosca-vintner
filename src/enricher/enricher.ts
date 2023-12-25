@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {generatify} from '#graph/utils'
+import {generatify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
@@ -46,33 +46,41 @@ export default class Enricher {
         // TODO: before or after bratans?
         this.enrichImplications(element)
 
-        // TODO: remove this hotfix
-        // Add default condition if requested
-        if (element.defaultEnabled && utils.isEmpty(conditions)) {
-            const condition = element.defaultCondition
-            if (check.isDefined(condition)) {
-                if (
-                    (condition?.consistency && element.defaultConsistencyCondition) ||
-                    (condition?.semantic && element.defaultSemanticCondition)
-                ) {
-                    conditions.unshift(generatify(condition.conditions as any))
-                }
-            }
-        } // Add pruning condition if requested
-        else if (element.pruningEnabled) {
-            const condition = element.defaultCondition
-            if (check.isDefined(condition)) {
-                if (
-                    (condition?.consistency && element.consistencyPruning) ||
-                    (condition?.semantic && element.semanticPruning)
-                ) {
-                    conditions.unshift(generatify(condition.conditions as any))
-                }
-            }
-        }
+        // Enrich pruning
+        this.enrichPruning(element, conditions)
 
         // Store enriched conditions
         element.conditions = conditions
+    }
+
+    enrichPruning(element: Element, conditions: LogicExpression[]) {
+        const candidates = [element.getTypeSpecificCondition(), element.getElementGenericCondition()]
+        const candidate = candidates.find(condition => {
+            // Ignore undefined
+            if (check.isUndefined(condition)) return false
+
+            // Add default condition if requested
+            if (element.defaultEnabled && utils.isEmpty(conditions)) {
+                // If targets consistency and if allowed
+                if (condition?.consistency && element.defaultConsistencyCondition) return true
+
+                // If targets semantics and if allowed
+                if (condition?.semantic && element.defaultSemanticCondition) return true
+            }
+
+            // Add pruning condition if requested
+            if (element.pruningEnabled) {
+                // If targets consistency and if allowed
+                if (condition?.consistency && element.consistencyPruning) return true
+
+                // If targets semantics and if allowed
+                if (condition?.semantic && element.semanticPruning) return true
+            }
+
+            // Otherwise
+            return false
+        })
+        if (check.isDefined(candidate)) conditions.unshift(generatify(simplify(candidate.conditions)))
     }
 
     /**

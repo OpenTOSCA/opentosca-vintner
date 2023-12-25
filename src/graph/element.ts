@@ -100,23 +100,6 @@ export default abstract class Element {
         return true
     }
 
-    // TODO: this is somehow missing context
-    isConditionAllowed(wrapper?: ConditionsWrapper) {
-        if (check.isUndefined(wrapper)) return false
-
-        wrapper.consistency = wrapper.consistency ?? false
-        const consistencyAllowed =
-            (this.defaultConsistencyCondition && this.defaultEnabled) ||
-            (this.consistencyPruning && this.pruningEnabled)
-
-        // Default is "true" since type-specific condition will likely be semantic
-        wrapper.semantic = wrapper.semantic ?? true
-        const semanticAllowed =
-            (this.defaultSemanticCondition && this.defaultEnabled) || (this.semanticPruning && this.pruningEnabled)
-
-        return (consistencyAllowed && wrapper.consistency) || (semanticAllowed && wrapper.semantic)
-    }
-
     getTypeSpecificConditionWrapper(): ConditionsWrapper | undefined {
         return undefined
     }
@@ -134,31 +117,6 @@ export default abstract class Element {
 
     getElementGenericCondition(): ConditionsWrapper | undefined {
         return {conditions: true, consistency: true, semantic: true}
-    }
-
-    private _defaultCondition?: ConditionsWrapper
-    get defaultCondition(): ConditionsWrapper | undefined {
-        if (check.isUndefined(this._defaultCondition)) {
-            const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
-            const selected = candidates.find(it => this.isConditionAllowed(it))
-
-            // TODO: is this okay? or return "true"?
-            // assert.isDefined(selected, `${this.Display} has no default condition`)
-            if (check.isUndefined(selected)) return
-
-            selected.conditions = utils.toList(selected.conditions)
-
-            // TODO: selected.conditions.length === 0
-
-            if (selected.conditions.length === 1) {
-                selected.conditions = selected.conditions[0]
-            } else {
-                selected.conditions = {and: selected.conditions}
-            }
-
-            this._defaultCondition = selected
-        }
-        return this._defaultCondition
     }
 
     defaultAlternative = false
