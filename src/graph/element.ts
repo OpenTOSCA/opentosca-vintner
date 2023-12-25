@@ -100,6 +100,7 @@ export default abstract class Element {
         return true
     }
 
+    // TODO: drop this function?
     // TODO: this is somehow missing context
     isConditionAllowed(wrapper?: ConditionsWrapper) {
         if (check.isUndefined(wrapper)) return false
@@ -140,23 +141,7 @@ export default abstract class Element {
     get defaultCondition(): ConditionsWrapper | undefined {
         if (check.isUndefined(this._defaultCondition)) {
             const candidates = [this.getTypeSpecificCondition(), this.getElementGenericCondition()]
-            const selected = candidates.find(it => this.isConditionAllowed(it))
-
-            // TODO: is this okay? or return "true"?
-            // assert.isDefined(selected, `${this.Display} has no default condition`)
-            if (check.isUndefined(selected)) return
-
-            selected.conditions = utils.toList(selected.conditions)
-
-            // TODO: selected.conditions.length === 0
-
-            if (selected.conditions.length === 1) {
-                selected.conditions = selected.conditions[0]
-            } else {
-                selected.conditions = {and: selected.conditions}
-            }
-
-            this._defaultCondition = selected
+            this._defaultCondition = candidates.find(it => this.isConditionAllowed(it))
         }
         return this._defaultCondition
     }

@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {generatify} from '#graph/utils'
+import {generatify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
@@ -42,7 +42,6 @@ export default class Enricher {
         // TODO: before or after bratans?
         this.enrichImplications(element, conditions)
 
-        // TODO: remove this hotfix
         // Add default condition if requested
         if (element.defaultEnabled && utils.isEmpty(conditions)) {
             const condition = element.defaultCondition
@@ -51,7 +50,7 @@ export default class Enricher {
                     (condition?.consistency && element.defaultConsistencyCondition) ||
                     (condition?.semantic && element.defaultSemanticCondition)
                 ) {
-                    conditions.unshift(generatify(condition.conditions as any))
+                    conditions.unshift(generatify(simplify(condition.conditions)))
                 }
             }
         } // Add pruning condition if requested
@@ -62,7 +61,7 @@ export default class Enricher {
                     (condition?.consistency && element.consistencyPruning) ||
                     (condition?.semantic && element.semanticPruning)
                 ) {
-                    conditions.unshift(generatify(condition.conditions as any))
+                    conditions.unshift(generatify(simplify(condition.conditions)))
                 }
             }
         }

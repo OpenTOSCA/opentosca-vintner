@@ -158,7 +158,7 @@ export default class Node extends Element {
             }
         })
 
-        return {conditions, consistency: false, semantic: true}
+        return {conditions: {and: conditions}, consistency: false, semantic: true}
     }
 
     get defaultConsistencyCondition() {
