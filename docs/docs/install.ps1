@@ -1,6 +1,12 @@
 # Bin directory
 $userBin = "$env:USERPROFILE\bin"
 
+# Check if vintner is already installed
+if (Get-Command -Name "vintner" -ErrorAction SilentlyContinue) {
+    Write-Host "vintner is already installed"
+    exit 1
+}
+
 # Add bin directory to path
 if (-not (Test-Path -Path $userBin)) {
     New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\bin"
@@ -10,11 +16,14 @@ if (-not (Test-Path -Path $userBin)) {
     [System.Environment]::SetEnvironmentVariable("PATH", $newPath, [System.EnvironmentVariableTarget]::User)
 }
 
-# Download and extract vintner
-Invoke-WebRequest -URI https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz -OutFile vintner-win-x64.exe.xz
+# Version
+$version = if ($env:VERSION) { $env:VERSION } else { "latest" }
+
+# Install vintner
+Invoke-WebRequest -URI "https://github.com/opentosca/opentosca-vintner/releases/download/$version/vintner-win-x64.exe.xz" -OutFile vintner-win-x64.exe.xz
 tar -xf vintner-win-x64.exe.xz
-rm vintner-win-x64.exe.xz
-mv vintner-win-x64.exe $userBin\vintner.exe
+Remove-Item vintner-win-x64.exe.xz
+Move-Item vintner-win-x64.exe "$userBin\vintner.exe"
 
 # Init setup
 vintner setup init
