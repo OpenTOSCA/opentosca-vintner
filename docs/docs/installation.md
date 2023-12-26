@@ -201,6 +201,11 @@ See [below](#signature) for verifying the signature of the binary.
     vintner setup init
     ```
 
+=== "Windows x64"
+```powershell linenums="1"
+
+```
+
 The following binaries are available:
 
 | Platform | Architecture | Binary | Archive | Signature | 
