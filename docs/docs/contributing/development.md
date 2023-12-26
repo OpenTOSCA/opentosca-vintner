@@ -16,11 +16,11 @@ Our branching workflow follows [GitHub Flow](https://docs.github.com/de/get-star
 
 Branches should be names as follows
 
-- `fix-short-title` for bug fixes
-- `docs-short-title` for documentations
 - `feature-short-title` for features
+- `fix-short-title` for bug fixes
 - `refactor-short-title` for refactoring
-- `imrpove-short-title` for improvements
+- `chore-short-title` for chores
+- `docs-short-title` for documentations
 - `project-short-title` for thesis, EnPro, StuPro ...
 
 ## Squash and Merge
