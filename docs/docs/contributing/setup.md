@@ -97,3 +97,16 @@ Prettier should be configured as given in the figure below with the following pa
   ![IntelliJ Prettier Settings](intellij-prettier.png){class=figure}
   <figcaption>Figure 2: IntelliJ Prettier Settings</figcaption>
 </figure>
+
+
+## Excluded Directories
+
+The following directories should be excluded from search by the IDE.
+
+- `.nyc_output`
+- `build`
+- `build-docs`
+- `coverage`
+- `yarn`
+- `dist`
+- `node_modules`
