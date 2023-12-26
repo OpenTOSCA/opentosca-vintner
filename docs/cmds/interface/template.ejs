@@ -52,6 +52,18 @@ tags:
     requests.post(SERVER_ADDRESS + "/<%- commands.join('/') -%>")
 <% } -%>
     ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+<% if (options.filter(o => o.mandatory).length !== 0) { -%>
+    post(SERVER_ADDRESS + "/<%- commands.join('/') -%>", json=mapOf(
+<%- options.filter(o => o.mandatory).map(o => `\t\t"${o.option}" to ${o.option.toUpperCase()}`).join(',\n')  %>
+    ))
+<% } else { -%>
+    post(SERVER_ADDRESS + "/<%- commands.join('/') -%>")
+<% } -%>
+    ```
 <% } -%>
 <% if (options.length !== 0) { %>
 | Option | Mandatory | Type | Description |
