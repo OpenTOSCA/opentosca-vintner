@@ -124,7 +124,7 @@
         "build": "bash cmds/build.sh",
         "package": "pkg --config .pkgrc.json build/cli/index.js",
         "deploy": "sudo cp ./dist/vintner-linux-x64 /usr/bin/vintner",
-        "lint:check": "eslint .",
+        "lint:check": "cmds/lint.sh",
         "lint:fix": "eslint . --fix",
         "style:check": "prettier --check --end-of-line auto \"./**/*.{ts,json,yaml,yml}\"",
         "style:fix": "prettier --write --end-of-line auto \"./**/*.{ts,json,yaml,yml}\"",

@@ -42,13 +42,18 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: sudo ./src/assets/scripts/install-xopera.sh
 
+            - name: (PREPARE) Install actionlint
+              run: |
+                  bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash) 1.6.26
+                  sudo mv actionlint /usr/bin
+
             ###################################################
             #
             # Test
             #
             ###################################################
 
-            - name: (TEST) Check ESLint
+            - name: (TEST) Check ESLint and actionlint
               run: yarn lint:check
 
             - name: (TEST) Check Prettier
