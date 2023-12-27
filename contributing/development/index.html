@@ -7,7 +7,7 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/contributing/development/" rel="canonical"/>
 <link href="../setup/" rel="prev"/>
-<link href="../documentation/" rel="next"/>
+<link href="../release/" rel="next"/>
 <link href="../../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
 <title>Development - OpenTOSCA Vintner</title>
@@ -2148,38 +2148,13 @@
     Patch Packages
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#build">
-    Build
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#package">
-    Package
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#release">
-    Release
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#night">
-    Night
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#npm">
-    NPM
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#zenodo">
-    Zenodo
-  </a>
-</li>
 </ul>
 </nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../release/">
+        Release
+      </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../documentation/">
@@ -2328,36 +2303,6 @@
     Patch Packages
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#build">
-    Build
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#package">
-    Package
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#release">
-    Release
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#night">
-    Night
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#npm">
-    NPM
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#zenodo">
-    Zenodo
-  </a>
-</li>
 </ul>
 </nav>
 </div>
@@ -2376,11 +2321,11 @@ But please follow the following guidelines and our <a href="../code-of-conduct/"
 <h2 id="branch-naming-convention">Branch Naming Convention<a class="headerlink" href="#branch-naming-convention" title="Permanent link">¶</a></h2>
 <p>Branches should be names as follows</p>
 <ul>
-<li><code>fix-short-title</code> for bug fixes</li>
-<li><code>docs-short-title</code> for documentations</li>
 <li><code>feature-short-title</code> for features</li>
+<li><code>fix-short-title</code> for bug fixes</li>
 <li><code>refactor-short-title</code> for refactoring</li>
-<li><code>imrpove-short-title</code> for improvements</li>
+<li><code>chore-short-title</code> for chores</li>
+<li><code>docs-short-title</code> for documentations</li>
 <li><code>project-short-title</code> for thesis, EnPro, StuPro ...</li>
 </ul>
 <h2 id="squash-and-merge">Squash and Merge<a class="headerlink" href="#squash-and-merge" title="Permanent link">¶</a></h2>
@@ -2421,7 +2366,8 @@ Respective tests are inside the <code>tests</code> directory.
 To run the tests, use</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>yarn<span class="w"> </span><span class="nb">test</span>
 </code></pre></div></td></tr></table></div>
-<p>On pushes to the <code>main</code> branch these tests are executed.</p>
+<p>On pushes to the <code>main</code> branch or on pull requests, the <code>tests</code> workflow is triggered. 
+This workflow runs the tests.</p>
 <h2 id="lint">Lint<a class="headerlink" href="#lint" title="Permanent link">¶</a></h2>
 <p><a href="https://eslint.org" target="_blank">ESLint</a> is used for linting.
 To lint typescript, run the following command</p>
@@ -2455,49 +2401,12 @@ Therefore, make changes to the package inside <code>node_modules</code>, then ru
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>yarn<span class="w"> </span>patch-package<span class="w"> </span><span class="si">${</span><span class="nv">package</span><span class="p">-name</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <p>If you need to patch the <code>package.json</code>, then append the option <code>--exclude 'nothing'</code> as stated in <a href="https://github.com/ds300/patch-package/issues/311" target="_blank">#311</a>.</p>
-<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">¶</a></h2>
-<p>To locally build the project, run the following command.
-This will transpile Javascript inside the <code>/build</code> directory.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>yarn<span class="w"> </span>build
-</code></pre></div></td></tr></table></div>
-<h2 id="package">Package<a class="headerlink" href="#package" title="Permanent link">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This only works on Linux.</p>
-</div>
-<p>To locally package the project, run the following command.
-This will package the previously transpiled Javascript using <a href="https://github.com/vercel/pkg" target="_blank"><code>pkg</code></a> and
-generate binaries inside the <code>/dist</code> directory.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>yarn<span class="w"> </span>package
-</code></pre></div></td></tr></table></div>
-<p>The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.</p>
-<h2 id="release">Release<a class="headerlink" href="#release" title="Permanent link">¶</a></h2>
-<p>On pushes to the <code>main</code> branch, the <code>release</code> workflow is triggered.
-This workflow runs several tests, builds and packages the project and creates a new release.
-Thereby, an existing release and <code>latest</code> tag is deleted.
-There is only one release at total.
-During the workflow the string <code>__VERSION__</code> inside a Javascript file is replace with the current commit hash.
-The current version can be checked using <code>vintner --version</code>.</p>
-<h2 id="night">Night<a class="headerlink" href="#night" title="Permanent link">¶</a></h2>
-<p>The <code>night</code> workflow is scheduled for every tuesday at 420.
-This workflow ensures that the latest release is correctly signed and can be executed.</p>
-<h2 id="npm">NPM<a class="headerlink" href="#npm" title="Permanent link">¶</a></h2>
-<p>There is also a npm package <a href="https://www.npmjs.com/package/opentosca-vintner" target="_blank"><code>opentosca-vintner</code></a>.
-New versions are published manually.
-To publish a new version, first update the version number in <code>package.json</code> and then run</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>yarn<span class="w"> </span>release:npm
-</code></pre></div></td></tr></table></div>
-<h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
-<p>There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner: <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>
-To publish a new version, run the Zenodo workflow on GitHub. 
-This workflow will create a draft of a new version based on the latest GitHub release. 
-The version must be manually published on Zenodo.</p>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 18, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 27, 2023</span>
 </small>
 </div>
 </article>
@@ -2519,13 +2428,13 @@ The version must be manually published on Zenodo.</p>
               </div>
 </div>
 </a>
-<a aria-label="Next: Documentation" class="md-footer__link md-footer__link--next" href="../documentation/" rel="next">
+<a aria-label="Next: Release" class="md-footer__link md-footer__link--next" href="../release/" rel="next">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 Next
               </span>
 <div class="md-ellipsis">
-                Documentation
+                Release
               </div>
 </div>
 <div class="md-footer__button md-icon">
