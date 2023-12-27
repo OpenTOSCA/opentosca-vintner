@@ -86,7 +86,7 @@ jobs:
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
                   cp /usr/bin/vintner vintner-linux-x64
                   sha256sum --check vintner-linux-x64.sha256
-                  rm /usr/bin/vintner vintner-linux-x64
+                  rm vintner-linux-x64
                   rm vintner-linux-x64.sha256
 
             - name: (INSTALLATION) Verify signature
