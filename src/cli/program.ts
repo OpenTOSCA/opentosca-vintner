@@ -722,7 +722,7 @@ const sensors = program.command('sensors').description('handles sensors')
 
 sensors
     .command('compute')
-    .description('starts a sensor for compute utilization such as cpu and memory')
+    .description('starts a sensor for compute utilization, such as cpu and memory')
     .requiredOption('--instance <string>', 'monitored instance')
     .requiredOption('--template <string>', 'node template name')
     .option('--vintner [string]', 'vintner address to submit sensors data', 'http://127.0.0.1:3000')

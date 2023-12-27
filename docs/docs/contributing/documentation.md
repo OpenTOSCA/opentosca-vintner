@@ -120,7 +120,7 @@ This command is also executed during the `release` workflow and, therefore, over
 yarn docs:generate:dependencies
 ```
 
-The list includes information such as package name, version, license, etc. and is written to a CSV file.
+The list includes information, such as package name, version, license, etc., and is written to a CSV file.
 At the same time, the [Dependencies](../dependencies.md){target=_blank} page is generated.
 
 ## Puccini

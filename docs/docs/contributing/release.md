@@ -5,7 +5,7 @@ tags:
 
 # Release
 
-This document contains information about releases.
+This document holds information about releases.
 
 ## Build
 

@@ -6,7 +6,7 @@ tags:
 
 # Publications
 
-This document contains a list of selected publications.
+This document holds a list of selected publications.
 
 [//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 

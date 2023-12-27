@@ -5,15 +5,14 @@ This document holds colors, fonts, and logos.
 ## Colors
 
 <img src="https://placehold.co/200x100/FF6E42/FFFFFF/svg?text=%23FF6E42">
+
+- Accent Color Hex: #FF6E42
+- Accent Color RGB: 255 110 66
+
 <img src="https://placehold.co/200x100/000000/FFFFFF/svg?text=%23000000">
 
-- Accent Color
-  - Hex: #FF6E42
-  - RGB: 255 110 66
-
-- Primary Color
-  - Hex: #000000
-  - RGB: 0 0 0
+- Primary Color Hex: #000000
+- Primary Color RGB: 0 0 0
 
 
 ## Fonts

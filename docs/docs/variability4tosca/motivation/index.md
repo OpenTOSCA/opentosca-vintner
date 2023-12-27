@@ -35,10 +35,7 @@ You need to fulfill the following requirements to follow this step-by-step tutor
 First, install OpenTOSCA Vintner.
 For more information see [Installation](../../installation.md){target=_blank}.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+--8<-- "install.md"
 
 Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../orchestrators.md){target=_blank}.
@@ -58,7 +55,7 @@ vintner orchestrators enable --orchestrator xopera
 First, we clone the repository.
 --8<-- "clone.md"
 
-Then, we import the template and initialize an instance.
+Next, we import the template and initialize an instance.
 
 ```shell linenums="1"
 # Add variable service template

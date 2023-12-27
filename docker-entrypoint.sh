@@ -45,7 +45,7 @@ fi
 if [[ "$VINTNER_MODE" = "cli" ]]; then
   echo "The container is kept busy so that it can run detached in the background.
 
-Vintner can be used in the following way:
+Vintner can be used as follows:
     docker exec -it vintner vintner --version
 
 If you need to log into Terraform, then you can log into your account the following way:

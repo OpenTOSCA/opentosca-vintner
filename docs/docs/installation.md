@@ -6,11 +6,11 @@ tags:
 
 # Installation
 
-In this document, we describe ways to install `vintner`.
+In this document, we describe ways to install Vintner.
 
 ## NPM 
 
-`vintner` can be installed using `npm`.
+Vintner can be installed using `npm`.
 Ensure, that `npm bin -g` is in your `$PATH`.
 
 ```shell linenums="1"
@@ -19,7 +19,7 @@ npm install --global opentosca-vintner
 
 ## Yarn v1
 
-`vintner` can be installed using `yarn` (classic).
+Vintner can be installed using `yarn` (classic).
 Ensure, that `yarn global bin` is in your `$PATH`.
 
 ```shell linenums="1"
@@ -28,8 +28,8 @@ yarn global add opentosca-vintner
 
 ## Yarn v2
 
-`vintner` can be installed using `yarn` (modern).
-However, this will not install `vintner` permanently but only temporary.
+Vintner can be installed using `yarn` (modern).
+However, this will not install Vintner permanently but only temporary.
 
 ```shell linenums="1"
 yarn dlx opentosca-vintner
@@ -37,7 +37,7 @@ yarn dlx opentosca-vintner
 
 ## Docker 
 
-`vintner` can be installed using Docker. 
+Vintner can be installed using Docker. 
 However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.
 
 ### GitHub Container Registry 
@@ -51,7 +51,7 @@ docker pull ghcr.io/opentosca/opentosca-vintner:latest
 
 ### Starting the Container
 
-To run `vintner` via docker, first create some directories for the persisting data.
+To run Vintner via docker, first create some directories for the persisting data.
 
 ```shell linenums="1"
 mkdir vintner
@@ -61,7 +61,7 @@ mkdir data
 mkdir shared
 ```
 
-Then, we can start the container.
+Next, we can start the container.
 This will start the container in the background. 
 Also, the host network is used to enable, e.g., ipv6 support.
 
@@ -84,14 +84,14 @@ There are three important directories inside the container.
 ### Executing a Command
 
 The container will run in the background. 
-`vintner` is executed as follows.
+Vintner is executed as follows.
 
 ```shell linenums="1"
 docker exec -it vintner vintner --version
 ```
 
 On Linux, it is also possible to set an alias. 
-By doing so, `vintner` is directly available as command in the terminal on the docker host.
+By doing so, Vintner is directly available as command in the terminal on the docker host.
 
 ```shell linenums="1"
 alias vintner="docker exec -it vintner vintner"
@@ -148,7 +148,7 @@ docker exec -it vintner /bin/bash
 
 ## Script
 
-`vintner` can be installed using our installation scripts. 
+Vintner can be installed using our installation scripts. 
 For the remaining supported platforms and architectures, see the manual installation.
 
 === "Linux x64/ arm64"
@@ -181,7 +181,7 @@ For the remaining supported platforms and architectures, see the manual installa
 
 ## Manual
 
-To manually install `vintner`, download the binary for your system.
+To manually install Vintner, download the binary for your system.
 There are no other dependencies required. 
 You might add the binary to your `$PATH`.
 The following example shows the installation on Linux.
@@ -251,7 +251,7 @@ The following binaries are available:
 | Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256){target=_blank}      |
 | Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.sha256){target=_blank} |
 
-To check, that `vintner` can be executed, run
+To check, that Vintner can be executed, run
 
 ```shell linenums="1"
 vintner --version

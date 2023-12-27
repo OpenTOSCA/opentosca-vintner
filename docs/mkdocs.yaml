@@ -79,8 +79,6 @@ plugins:
           on_error_fail: true
           module_name: macros
     - glightbox
-    - bibtex:
-          bib_file: 'bibtex.bib'
     - include_dir_to_nav
     - git-revision-date-localized:
           enabled: !ENV [MKDCOS_REVISION_ENABLED, true]

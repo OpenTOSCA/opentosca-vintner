@@ -5,7 +5,7 @@ tags:
 
 # Notes
 
-This document contains a collection of arbitrary notes.
+This document holds a collection of arbitrary notes.
 
 ## Filesystem
 

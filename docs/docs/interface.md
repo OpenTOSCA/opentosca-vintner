@@ -1577,7 +1577,7 @@ runs a query and returns the result
 
 ## vintner sensors compute
 
-starts a sensor for compute utilization such as cpu and memory
+starts a sensor for compute utilization, such as cpu and memory
 
 
 === "CLI"
