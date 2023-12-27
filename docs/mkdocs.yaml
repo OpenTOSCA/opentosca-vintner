@@ -138,6 +138,7 @@ nav:
     - Contributing:
           - contributing/setup.md
           - contributing/development.md
+          - contributing/release.md
           - contributing/documentation.md
           - contributing/code-of-conduct.md
           - contributing/notes.md

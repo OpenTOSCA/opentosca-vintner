@@ -16,11 +16,11 @@ Our branching workflow follows [GitHub Flow](https://docs.github.com/de/get-star
 
 Branches should be names as follows
 
-- `fix-short-title` for bug fixes
-- `docs-short-title` for documentations
 - `feature-short-title` for features
+- `fix-short-title` for bug fixes
 - `refactor-short-title` for refactoring
-- `imrpove-short-title` for improvements
+- `chore-short-title` for chores
+- `docs-short-title` for documentations
 - `project-short-title` for thesis, EnPro, StuPro ...
 
 ## Squash and Merge
@@ -80,7 +80,8 @@ To run the tests, use
 yarn test
 ```
 
-On pushes to the `main` branch these tests are executed.
+On pushes to the `main` branch or on pull requests, the `tests` workflow is triggered. 
+This workflow runs the tests.
 
 ## Lint
 
@@ -143,56 +144,3 @@ yarn patch-package ${package-name}
 
 If you need to patch the `package.json`, then append the option `--exclude 'nothing'` as stated in [#311](https://github.com/ds300/patch-package/issues/311){target=_blank}.
 
-## Build
-
-To locally build the project, run the following command.
-This will transpile Javascript inside the `/build` directory.
-
-```shell linenums="1"
-yarn build
-```
-
-## Package
-
-{{ linux_only_notice() }}
-
-To locally package the project, run the following command.
-This will package the previously transpiled Javascript using [`pkg`](https://github.com/vercel/pkg){target=_blank} and
-generate binaries inside the `/dist` directory.
-
-```shell linenums="1"
-yarn package
-```
-
-The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.
-
-## Release
-
-On pushes to the `main` branch, the `release` workflow is triggered.
-This workflow runs several tests, builds and packages the project and creates a new release.
-Thereby, an existing release and `latest` tag is deleted.
-There is only one release at total.
-During the workflow the string `__VERSION__` inside a Javascript file is replace with the current commit hash.
-The current version can be checked using `vintner --version`.
-
-## Night
-
-The `night` workflow is scheduled for every tuesday at 420.
-This workflow ensures that the latest release is correctly signed and can be executed.
-
-## NPM 
-
-There is also a npm package [`opentosca-vintner`](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
-New versions are published manually.
-To publish a new version, first update the version number in `package.json` and then run
-
-````shell linenums="1"
-yarn release:npm
-````
-
-## Zenodo
-
-There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner: [https://doi.org/10.5281/zenodo.10155277](https://doi.org/10.5281/zenodo.10155277){target=_blank}
-To publish a new version, run the Zenodo workflow on GitHub. 
-This workflow will create a draft of a new version based on the latest GitHub release. 
-The version must be manually published on Zenodo.

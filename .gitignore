@@ -61,3 +61,8 @@ opentosca-vintner-*.tgz
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# choco
+*.nupkg
+choco/tools/vintner.exe
+choco/tools/vintner.exe.asc

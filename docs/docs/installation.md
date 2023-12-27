@@ -148,20 +148,36 @@ docker exec -it vintner /bin/bash
 
 ## Script
 
-`vintner` can be installed using our installation script. 
-The script currently supports only Linux x64 and arm64.
+`vintner` can be installed using our installation scripts. 
 For the remaining supported platforms and architectures, see the manual installation.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+=== "Linux x64/ arm64"
+    ```shell linenums="1"
+    curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+    ```
+    
+    To install a specific version, run 
+    
+    ```shell linenums="1"
+    curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
+    ```
 
-To install a specific version, run 
+=== "Windows x64"
+    ```powershell linenums="1"
+    Invoke-WebRequest -Uri "https://vintner.opentosca.org/install.ps1" -OutFile install.ps1
+    powershell -ExecutionPolicy Bypass -File .\install.ps1
+    Remove-Item install.ps1
+    ```
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
-```
+    To install a specific version, run 
+    
+    ```powershell linenums="1"
+    Invoke-WebRequest -Uri "https://vintner.opentosca.org/install.ps1" -OutFile install.ps1
+    $env:VERSION = "DESIRED_VERSION"
+    powershell -ExecutionPolicy Bypass -File .\install.ps1
+    Remove-Item install.ps1
+    ```
+
 
 ## Manual
 
@@ -198,6 +214,31 @@ See [below](#signature) for verifying the signature of the binary.
     rm vintner-alpine-x64.xz
     mv vintner-alpine-x64 /usr/bin/vintner
     chmod +x /usr/bin/vintner
+    vintner setup init
+    ```
+
+=== "Windows x64"
+    First, create the directory `"$env:USERPROFILE\bin"` and add it to your PATH.
+    We recommend to do this manually.
+
+    ```powershell linenums="1"
+    $userBin = "$env:USERPROFILE\bin"
+    if (-not (Test-Path -Path $userBin)) {
+        New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\bin"
+        $userPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+        $newPath = "$userPath$userBin;"
+        [System.Environment]::SetEnvironmentVariable("PATH", $newPath, [System.EnvironmentVariableTarget]::User)
+    }
+    ```
+
+    Next, install vintner.
+
+    ```powershell linenums="1"
+    $userBin = "$env:USERPROFILE\bin"
+    Invoke-WebRequest -URI https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz -OutFile vintner-win-x64.exe.xz
+    tar -xf vintner-win-x64.exe.xz
+    Remove-Item vintner-win-x64.exe.xz
+    Move-Item vintner-win-x64.exe $userBin\vintner.exe
     vintner setup init
     ```
 

@@ -15,14 +15,8 @@ The documentation is powered by [Material for MkDocs](https://squidfunk.github.i
 Corresponding files are located in the `docs` directory.
 Custom macros are implemented in `docs/macros.py` using [mkdocs-macros](https://mkdocs-macros-plugin.readthedocs.io){target=_blank}.
 
-We expect that Python and [pandoc](https://pandoc.org){target=_blank} is already installed.
-To install [pandoc](https://pandoc.org){target=_blank} on Ubuntu you might run
-
-```shell linenums="1"
-sudo apt-get install pandoc
-```
-
-With the following command you can install `mkdocs-material` along with its requirements globally on your system.
+First, install all dependencies, such as Python, [pandoc](https://pandoc.org){target=_blank}, mkdocs, PlantUML, etc. globally on your system.
+Reload your session after the installation.
 
 ```shell linenums="1"
 yarn docs:install

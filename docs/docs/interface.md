@@ -36,6 +36,12 @@ cleans all assets
     requests.post(SERVER_ADDRESS + "/assets/clean")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/assets/clean")
+    ```
+
 ## vintner assets content
 
 shows content of an asset
@@ -68,6 +74,14 @@ shows content of an asset
     requests.post(SERVER_ADDRESS + "/assets/content", json={
 		"name": NAME
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/assets/content", json=mapOf(
+		"name" to NAME
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -106,6 +120,14 @@ deletes an asset
     requests.post(SERVER_ADDRESS + "/assets/delete", json={
 		"name": NAME
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/assets/delete", json=mapOf(
+		"name" to NAME
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -150,6 +172,16 @@ imports an asset
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/assets/import", json=mapOf(
+		"name" to NAME,
+		"file" to FILE,
+		"content" to CONTENT
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | name |  true  | string | name (must match /^[a-z\-]+$/) |
@@ -185,6 +217,12 @@ lists all assets
     requests.post(SERVER_ADDRESS + "/assets/list")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/assets/list")
+    ```
+
 ## vintner info about
 
 general information
@@ -212,6 +250,12 @@ general information
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/info/about")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/about")
     ```
 
 ## vintner info author
@@ -243,6 +287,12 @@ open author
     requests.post(SERVER_ADDRESS + "/info/author")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/author")
+    ```
+
 ## vintner info contact
 
 contact us
@@ -270,6 +320,12 @@ contact us
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/info/contact")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/contact")
     ```
 
 ## vintner info dependencies
@@ -301,6 +357,12 @@ dependencies used to implement vintner
     requests.post(SERVER_ADDRESS + "/info/dependencies")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/dependencies")
+    ```
+
 ## vintner info docs
 
 open documentation
@@ -328,6 +390,12 @@ open documentation
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/info/docs")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/docs")
     ```
 
 ## vintner info license
@@ -359,6 +427,12 @@ license of vintner
     requests.post(SERVER_ADDRESS + "/info/license")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/license")
+    ```
+
 ## vintner info repo
 
 open repository
@@ -386,6 +460,12 @@ open repository
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/info/repo")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/info/repo")
     ```
 
 ## vintner instances adapt
@@ -417,6 +497,15 @@ submit sensor data used for adapting the instance
 		"instance": INSTANCE,
 		"inputs": INPUTS
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/adapt", json=mapOf(
+		"instance" to INSTANCE,
+		"inputs" to INPUTS
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -451,6 +540,12 @@ deletes all instances
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/clean")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/clean")
     ```
 
 ## vintner instances code
@@ -502,6 +597,14 @@ continue instance (deployment)
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/continue", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -541,6 +644,14 @@ deletes instance
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/delete", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -577,6 +688,14 @@ deploys instance
     requests.post(SERVER_ADDRESS + "/instances/deploy", json={
 		"instance": INSTANCE
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/deploy", json=mapOf(
+		"instance" to INSTANCE
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -619,6 +738,14 @@ display instance info
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/info", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -657,6 +784,15 @@ initializes a new instance
 		"instance": INSTANCE,
 		"template": TEMPLATE
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/init", json=mapOf(
+		"instance" to INSTANCE,
+		"template" to TEMPLATE
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -698,6 +834,14 @@ inspects variability-resolved service template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/inspect", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -729,6 +873,12 @@ lists all instances
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/instances/list")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/list")
     ```
 
 ## vintner instances open
@@ -780,6 +930,14 @@ returns instance outputs
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/outputs", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -819,6 +977,14 @@ returns the path to the instance directory
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/path", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -855,6 +1021,14 @@ resolves variability
     requests.post(SERVER_ADDRESS + "/instances/resolve", json={
 		"instance": INSTANCE
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/resolve", json=mapOf(
+		"instance" to INSTANCE
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -899,6 +1073,15 @@ swap instance template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/swap", json=mapOf(
+		"instance" to INSTANCE,
+		"template" to TEMPLATE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -931,6 +1114,14 @@ stop adaptation loop of instance
     requests.post(SERVER_ADDRESS + "/instances/unadapt", json={
 		"instance": INSTANCE
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/unadapt", json=mapOf(
+		"instance" to INSTANCE
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -971,6 +1162,14 @@ undeploys instance
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/undeploy", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -1008,6 +1207,14 @@ update instance
     requests.post(SERVER_ADDRESS + "/instances/update", json={
 		"instance": INSTANCE
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/update", json=mapOf(
+		"instance" to INSTANCE
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1050,6 +1257,14 @@ validates variability-resolved service template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/validate", json=mapOf(
+		"instance" to INSTANCE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
@@ -1087,6 +1302,14 @@ attests an orchestrator plugin
     requests.post(SERVER_ADDRESS + "/orchestrators/attest", json={
 		"orchestrator": ORCHESTRATOR
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/attest", json=mapOf(
+		"orchestrator" to ORCHESTRATOR
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1127,6 +1350,14 @@ enables an orchestrator plugin
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/enable", json=mapOf(
+		"orchestrator" to ORCHESTRATOR
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | orchestrator |  true  | string | orchestrator plugin |
@@ -1158,6 +1389,12 @@ initializes unfurl plugin
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/unfurl")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/init/unfurl")
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1195,6 +1432,12 @@ initializes unfurl-wsl plugin
     requests.post(SERVER_ADDRESS + "/orchestrators/init/unfurl-wsl")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/init/unfurl-wsl")
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
@@ -1230,6 +1473,12 @@ initializes xopera plugin
     requests.post(SERVER_ADDRESS + "/orchestrators/init/xopera")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/init/xopera")
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
@@ -1263,6 +1512,12 @@ initializes xopera-wsl plugin
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/orchestrators/init/xopera-wsl")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/orchestrators/init/xopera-wsl")
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1303,6 +1558,14 @@ runs a query and returns the result
     requests.post(SERVER_ADDRESS + "/query", json={
 		"query": QUERY
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/query", json=mapOf(
+		"query" to QUERY
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1434,6 +1697,12 @@ benchmarks the variability resolver
     requests.post(SERVER_ADDRESS + "/setup/benchmark")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/benchmark")
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | io |  false  | boolean | enable read and writes to the filesystem |
@@ -1470,6 +1739,12 @@ cleans up the filesystem
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/setup/clean")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/clean")
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1516,6 +1791,12 @@ initialises the filesystem
     requests.post(SERVER_ADDRESS + "/setup/init")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/init")
+    ```
+
 ## vintner setup install
 
 install utils (Linux is required)
@@ -1543,6 +1824,12 @@ install utils (Linux is required)
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/setup/install")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/install")
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1597,6 +1884,12 @@ returns the path to the home directory
     requests.post(SERVER_ADDRESS + "/setup/path")
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/path")
+    ```
+
 ## vintner setup reset
 
 resets the filesystem
@@ -1624,6 +1917,12 @@ resets the filesystem
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/setup/reset")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/setup/reset")
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1664,6 +1963,15 @@ enrich conditions
 		"template": TEMPLATE,
 		"output": OUTPUT
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/enrich", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1709,6 +2017,16 @@ initializes a CSAR
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/init", json=mapOf(
+		"path" to PATH,
+		"template" to TEMPLATE,
+		"vintner" to VINTNER
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path of the directory |
@@ -1752,6 +2070,15 @@ read and transforms inputs
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/inputs", json=mapOf(
+		"path" to PATH,
+		"output" to OUTPUT
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML]) |
@@ -1791,6 +2118,15 @@ normalize service template
 		"template": TEMPLATE,
 		"output": OUTPUT
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/normalize", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1834,6 +2170,15 @@ packages a directory to a CSAR
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/package", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
@@ -1873,6 +2218,14 @@ plot topology as PlantUML
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/puml/topology", json=mapOf(
+		"path" to PATH
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path to service template |
@@ -1910,6 +2263,14 @@ plot types as PlantUML (each entity types is plotted separately)
     requests.post(SERVER_ADDRESS + "/template/puml/types", json={
 		"path": PATH
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/puml/types", json=mapOf(
+		"path" to PATH
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -1954,6 +2315,15 @@ resolves all queries in a given service template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/query", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to service template |
@@ -1993,6 +2363,15 @@ resolves variability
 		"template": TEMPLATE,
 		"output": OUTPUT
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/resolve", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -2040,6 +2419,16 @@ signs a CSAR
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/sign", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT,
+		"key" to KEY
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to service template |
@@ -2080,6 +2469,14 @@ collects stats of a given service template (experimental)
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/stats", json=mapOf(
+		"template" to TEMPLATE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | strings... | path to service template |
@@ -2116,6 +2513,14 @@ runs tests defined in the CSAR
     requests.post(SERVER_ADDRESS + "/template/test", json={
 		"path": PATH
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/test", json=mapOf(
+		"path" to PATH
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -2156,6 +2561,15 @@ unpackages a CSAR
 		"template": TEMPLATE,
 		"output": OUTPUT
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/unpackage", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -2201,6 +2615,16 @@ verify a CSAR
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/verify", json=mapOf(
+		"template" to TEMPLATE,
+		"signature" to SIGNATURE,
+		"key" to KEY
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | path to service template |
@@ -2234,6 +2658,12 @@ removes all templates
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/clean")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/clean")
     ```
 
 ## vintner templates code
@@ -2285,6 +2715,14 @@ deletes a template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/delete", json=mapOf(
+		"template" to TEMPLATE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
@@ -2323,6 +2761,15 @@ imports a new template
 		"template": TEMPLATE,
 		"path": PATH
     })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/import", json=mapOf(
+		"template" to TEMPLATE,
+		"path" to PATH
+    ))
     ```
 
 | Option | Mandatory | Type | Description |
@@ -2368,6 +2815,14 @@ inspects the variable service template
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/inspect", json=mapOf(
+		"template" to TEMPLATE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
@@ -2399,6 +2854,12 @@ lists all templates
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/templates/list")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/list")
     ```
 
 ## vintner templates open
@@ -2450,6 +2911,14 @@ returns the path to the template directory
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/templates/path", json=mapOf(
+		"template" to TEMPLATE
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | string | template name |
@@ -2488,6 +2957,14 @@ generates a key
     })
     ```
 
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/key", json=mapOf(
+		"key" to KEY
+    ))
+    ```
+
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | key |  true  | string | key name (must match /^[a-z\-]+$/) |
@@ -2519,4 +2996,10 @@ generates a nonce
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/utils/nonce")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/nonce")
     ```
