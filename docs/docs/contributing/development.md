@@ -85,8 +85,8 @@ This workflow runs the tests.
 
 ## Lint
 
-[ESLint](https://eslint.org){target=_blank} is used for linting.
-To lint typescript, run the following command
+[ESLint](https://eslint.org){target=_blank} and [actionlint](https://github.com/rhysd/actionlint){target=_blank} are used for linting.
+To lint, run the following command
 
 ```shell linenums="1"
 yarn lint:check
