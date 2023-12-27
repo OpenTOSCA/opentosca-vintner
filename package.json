@@ -167,7 +167,8 @@
         "puml:down": "cd docs && docker-compose down",
         "large:check": "bash cmds/check-large-files.sh",
         "release:npm": "npm publish",
-        "release:zenodo": "python zenodo/script.py"
+        "release:zenodo": "python zenodo/script.py",
+        "release:choco": "choco/release.sh"
     },
     "packageManager": "yarn@3.6.3"
 }

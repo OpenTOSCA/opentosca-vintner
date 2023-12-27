@@ -14,6 +14,7 @@
 [![Discord](https://img.shields.io/badge/Discord-online-blue)](https://discord.gg/Uz6348Ctmg)
 [![npm](https://img.shields.io/badge/npm-opentosca--vintner-blue)](https://www.npmjs.com/package/opentosca-vintner)
 [![docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner)
+[![choco](https://img.shields.io/badge/choco-opentosca--vintner-blue)](https://community.chocolatey.org/packages/opentosca-vintner)
 [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.10155277.svg)](https://doi.org/10.5281/zenodo.10155277)
 [![BMWK](https://img.shields.io/badge/BMWK-SofDCar%20(19S21002)-blue.svg)](https://sofdcar.de)
 
