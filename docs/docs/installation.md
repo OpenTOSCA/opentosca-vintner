@@ -218,7 +218,7 @@ See [below](#signature) for verifying the signature of the binary.
     ```
 
 === "Windows x64"
-    First, create the directory `"$env:USERPROFILE\bin"` and add it to your PATH.
+    First, create the directory `$env:USERPROFILE\bin` and add it to your PATH.
     We recommend to do this manually.
 
     ```powershell linenums="1"
@@ -244,12 +244,12 @@ See [below](#signature) for verifying the signature of the binary.
 
 The following binaries are available:
 
-| Platform | Architecture | Binary | Archive | Signature | 
-| -- | -- | -- | -- | -- |
-| Alpine | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} |
-| Linux | arm64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} |
-| Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} |
-| Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} |
+| Platform | Architecture | Binary | Archive | Signature | Checksum                                                                                                                  
+| -- | -- | -- | -- | -- |---------------------------------------------------------------------------------------------------------------------------|
+| Alpine | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.sha256){target=_blank}     |
+| Linux | arm64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.sha256){target=_blank}    |
+| Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256){target=_blank}      |
+| Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.sha256){target=_blank} |
 
 To check, that `vintner` can be executed, run
 
@@ -278,10 +278,24 @@ The following environment variables can be used for configuration.
 |----------------------------|--------------------| ----------- |
 | OPENTOSCA_VINTNER_HOME_DIR | ${HOME_DIR}/.opentosca_vintner |             |
 
+
+## Checksum 
+
+To verify the integrity of a binary, proceed as follows.
+The following is a walkthrough for `vintner-linux-x64`.
+We assume that `vintner-linux-x64` is present in the current working directory.
+
+```shell linenums="1"
+wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+sha256sum --check vintner-linux-x64.sha256
+```
+
+
 ## Signature
 
 To verify a signature of a binary, first import our public key and download the respective signature.
 The following is a walkthrough for `vintner-linux-x64` using `gpg`.
+We assume that `vintner-linux-x64` is present in the current working directory.
 
 First, import our public key.
 

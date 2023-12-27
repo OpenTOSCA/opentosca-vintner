@@ -111,6 +111,14 @@ jobs:
                     gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
                   done
 
+            - name: (BUILD) Checksum Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    sha256sum --binary ${BINARY} > ${BINARY}.sha256             
+                  done
+
             - name: (BUILD) Compress Binaries
               run: |
                   cd dist

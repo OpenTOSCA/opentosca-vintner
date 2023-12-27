@@ -81,11 +81,21 @@ jobs:
             - name: (INSTALLATION) Install vintner
               run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 
+            - name: (INSTALLATION) Verify checksum
+              run: |
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+                  cp /usr/bin/vintner vintner-linux-x64
+                  sha256sum --check vintner-linux-x64.sha256
+                  rm vintner-linux-x64
+                  rm vintner-linux-x64.sha256
+
             - name: (INSTALLATION) Verify signature
               run: |
                   curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
-                  gpg --verify vintner-linux-x64.asc /usr/bin/vintner
+                  cp /usr/bin/vintner vintner-linux-x64
+                  gpg --verify vintner-linux-x64.asc
+                  rm vintner-linux-x64.asc
 
             ###################################################
             #
