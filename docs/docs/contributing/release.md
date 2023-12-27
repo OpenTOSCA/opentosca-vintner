@@ -47,7 +47,6 @@ This workflow basically has the same steps as the `release` workflow but does cr
 The `night` workflow is scheduled for every tuesday at 420.
 This workflow ensures that the latest release is correctly signed and can be executed.
 
-
 ## NPM
 
 There is also a npm package [`opentosca-vintner`](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
@@ -56,24 +55,6 @@ To publish a new version, first update the version number in `package.json` and 
 
 ````shell linenums="1"
 yarn release:npm
-````
-
-## Choco
-
-There is also a choco package [`opentosca-vintner`](https://community.chocolatey.org/packages/opentosca-vintner){target=_blank}.
-New versions are published manually.
-See [https://docs.chocolatey.org/en-us/create/create-packages-quick-start](https://docs.chocolatey.org/en-us/create/create-packages-quick-start){target=_blank} for more information.
-
-First, log into the choco account.
-
-```shell linenums="1"
-choco apikey --api-key [API_KEY_HERE] --source https://push.chocolatey.org
-```
-
-To publish a new version, update the version number in `choco/opentosca-vintner.nuspec` and then run
-
-````shell linenums="1"
-yarn release:choco
 ````
 
 ## Docker
