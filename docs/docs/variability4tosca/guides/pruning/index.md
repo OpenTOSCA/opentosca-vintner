@@ -96,7 +96,7 @@ vintner instances inspect --instance pruning
 
 ## Deploy the Application
 
-Finally, we can deploy the elastic variant.
+Finally, we deploy the elastic variant.
 Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
 These inputs are specified in `topology_template.inputs` of the TOSCA-compliant model.
 The deployment will take around 15-20 minutes.
@@ -107,14 +107,14 @@ vintner instances deploy --instance pruning --inputs ${INPUTS_PATH}
 
 ## Undeploy the Application 
 
-Afterward, we can undeploy the application.
+Afterward, we undeploy the application.
 
 ```shell linenums="1"
 vintner instances undeploy --instance pruning
 ```
 
 We can also optionally remove the instance or cleanup the filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
+Note, cleaning up the filesystem removes any Vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 vintner instances delete --instance pruning

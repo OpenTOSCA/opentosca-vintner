@@ -79,7 +79,7 @@ vintner templates inspect --template motivation
 
 We intend to deploy the development variant of the application.
 Therefore, we need to resolve the variability by providing respective variability inputs.
-In our case, we can use already predefined variability inputs by using a variability preset.
+In our case, we use already predefined variability inputs by using a variability preset.
 
 ```shell linenums="1"
 # Resolve variability
@@ -97,7 +97,7 @@ vintner instances inspect --instance motivation
 
 ## Deployment
 
-Finally, we can deploy the application.
+Finally, we deploy the application.
 Therefore, we need to provide deployment inputs which contain, e.g., credentials for accessing OpenStack.
 An example for the deployment inputs is given in {{ repo_link('examples/xopera-motivation/inputs.example.yaml') }}.
 The deployment will take some minutes.

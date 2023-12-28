@@ -101,9 +101,11 @@ nav:
           - features.md
           - getting-started.md
           - installation.md
+          - usage.md
           - orchestrators.md
           - interface.md
           - dependencies.md
+          - uninstallation.md
           - GitHub: https://github.com/opentosca/opentosca-vintner
           - Discord: https://discord.gg/Uz6348Ctmg
           - Zenodo: https://doi.org/10.5281/zenodo.10155277

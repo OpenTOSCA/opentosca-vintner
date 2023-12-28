@@ -110,7 +110,7 @@ vintner instances inspect --instance artifacts
 
 ## Deployment
 
-Finally, we can deploy the application.
+Finally, we deploy the application.
 Therefore, we need to provide deployment inputs.
 An example for the deployment inputs is given in {{ repo_link('examples/unfurl-artifacts/deployment-inputs.example.yaml') }}.
 The deployment will take around 15-20 minutes.
