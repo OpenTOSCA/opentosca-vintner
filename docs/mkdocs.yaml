@@ -101,6 +101,7 @@ nav:
           - features.md
           - getting-started.md
           - installation.md
+          - versions.md
           - usage.md
           - orchestrators.md
           - interface.md
