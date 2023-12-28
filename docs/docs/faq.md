@@ -1,6 +1,5 @@
 ---
 tags:
-- Vintner
 - Misc
 ---
 

@@ -1,6 +1,6 @@
 ---
 tags:
-- Vintner
+- Misc
 ---
 
 # Branding

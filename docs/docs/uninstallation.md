@@ -1,6 +1,7 @@
 ---
 tags:
 - Vintner
+- Docker
 ---
 
 # Uninstallation
