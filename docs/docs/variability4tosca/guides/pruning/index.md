@@ -4,6 +4,7 @@ tags:
 - Guide
 - Publication
 - UCC 2023
+- xOpera
 ---
 
 # Pruning Elements
@@ -15,7 +16,7 @@ The web shop application can be deployed in the following deployment variants.
 - static with large resources on a single virtual machine on a local OpenStack (OS) instance
 - elastic with high availability and backups on Google Cloud Platform (GCP)
 
-## Requirements 
+## Requirements
 
 We need to fulfill the following requirements to follow this step-by-step tutorial.
 
