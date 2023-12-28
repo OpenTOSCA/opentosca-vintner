@@ -5,7 +5,7 @@ tags:
 
 # Documentation
 
-This document gives an introduction on writing the documentation.
+This document holds instructions on writing the documentation.
 
 ## MkDocs
 

@@ -5,10 +5,12 @@ tags:
 
 # Uninstallation
 
+!!! Warning
+    Undeploy all applications first.
+
 This document holds instructions on uninstalling Vintner.
 
 Depending on the installation method, uninstall Vintner as follows.
-_This will not undeploy currently deployed applications_.
 
 === "Script/ Manual"
     ```shell linenums="1"
