@@ -122,7 +122,6 @@ nav:
                 - variability4tosca/benchmark.md
                 - Guides:
                       - variability4tosca/guides/artifacts
-                      - variability4tosca/guides/pipes-and-filters
                       - variability4tosca/guides/pruning
           - Queries4TOSCA:
                 - queries4tosca/getting-started.md
