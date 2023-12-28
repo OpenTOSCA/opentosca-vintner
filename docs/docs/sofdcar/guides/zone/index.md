@@ -6,7 +6,7 @@ tags:
 
 # Zonal Architecture
 
-In this document, we discuss an example of a zonal architecture using the TOSCA SofDCar profile.
+This document holds an example of a zonal architecture using the TOSCA SofDCar profile.
 This zonal architecture consists of several zones inside the vehicle in which also cloud services are integrated.
 
 ## Scenario

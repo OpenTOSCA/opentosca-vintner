@@ -6,7 +6,7 @@ tags:
 
 # Installation
 
-In this document, we describe ways to install Vintner.
+This document holds instructions on installing Vintner.
 
 ## NPM 
 
