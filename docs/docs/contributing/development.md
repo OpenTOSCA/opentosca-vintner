@@ -5,6 +5,8 @@ tags:
 
 # Development
 
+This document holds instructions on developing Vintner.
+
 Contributions are very much welcome.
 But please follow the following guidelines and our [Code of Conduct](code-of-conduct.md){target=_blank}.
 
@@ -14,30 +16,24 @@ Our branching workflow follows [GitHub Flow](https://docs.github.com/de/get-star
 
 ## Branch Naming Convention
 
-Branches should be names as follows
+Branches should be names as follows.
 
-- `feature-short-title` for features
-- `fix-short-title` for bug fixes
-- `refactor-short-title` for refactoring
-- `chore-short-title` for chores
-- `docs-short-title` for documentations
-- `project-short-title` for thesis, EnPro, StuPro ...
+- `feature-short-title` for features.
+- `fix-short-title` for bug fixes.
+- `refactor-short-title` for refactoring.
+- `chore-short-title` for chores.
+- `docs-short-title` for documentations.
+- `project-short-title` for project, such as thesis, EnPro, StuPro ...
 
 ## Squash and Merge
 
-Please squash your commits into a single commit with a short but meaningful message and delete the branch afterwards.
+Squash your commits into a single commit with a short but meaningful message.
 The commit message should not have a link to the merge request.
+The branch is automatically deleted once merged.
 
 ## Tags 
 
-A tag must be created for each publication, thesis ...
-Therefore, run the following commands.
-
-```shell linenums="1"
-git tag -s <tag_name> -m <tag_message>
-git push origin <tag_name>
-```
-
+A tag must be created for each publication, thesis, etc.
 For example, the following commands create and push the tag for the publication "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" published by Stötzner et al. in 2022.
 
 ```shell linenums="1"
@@ -52,9 +48,9 @@ git push origin publication-stoetzner-2022-vdmm
     `yarn cli` uses `src/cli/index.ts` while `yarn vintner` uses `build/cli/index.js`.
     Therefore, run `yarn cli` to execute the current code without building it first.
 
-The CLI is build using [commander.js](https://github.com/tj/commander.js){target=_blank}.
+We use [commander.js](https://github.com/tj/commander.js){target=_blank} to implement the CLI.
 The entry point is `src/cli/index.ts`.
-To execute a CLI command during development, run
+Execute a CLI command during development as follows.
 
 ```shell linenums="1"
 yarn cli [command] [options]
@@ -62,9 +58,9 @@ yarn cli [command] [options]
 
 ## Server
 
-The server is build using [express](https://github.com/expressjs/express){target=_blank}.
+We use [express](https://github.com/expressjs/express){target=_blank} to implement the server.
 The entry point is `src/server/index.ts`.
-To run a development server on [http://localhost:3000](http://localhost:3000){target=_blank} with live-reload, run
+Run a development server on [http://localhost:3000](http://localhost:3000){target=_blank} with live-reload as follows.
 
 ```shell linenums="1"
 yarn server:serve
@@ -74,7 +70,7 @@ yarn server:serve
 
 We use [mocha](https://mochajs.org){target=_blank}, [chai](https://www.chaijs.com){target=_blank}, and [nyc](https://istanbul.js.org){target=_blank} for testing.
 Respective tests are inside the `tests` directory.
-To run the tests, use
+Run the tests as follows.
 
 ```shell linenums="1"
 yarn test
@@ -85,14 +81,14 @@ This workflow runs the tests.
 
 ## Lint
 
-[ESLint](https://eslint.org){target=_blank} is used for linting.
-To lint typescript, run the following command
+We use [ESLint](https://eslint.org){target=_blank} for code linting.
+Lint typescript as follows.
 
 ```shell linenums="1"
 yarn lint:check
 ```
 
-To fix lint problems, run the following command
+Fix lint problems as follows.
 
 ```shell linenums="1"
 yarn lint:fix
@@ -100,14 +96,14 @@ yarn lint:fix
 
 ## Code Style
 
-[Prettier](https://prettier.io){target=_blank} is used to format code.
-To check the code style, run the following command
+We use [Prettier](https://prettier.io){target=_blank} for code formatting.
+Check the code style as follows.
 
 ```shell linenums="1"
 yarn style:check
 ```
 
-To fix code style problems, run the following command
+Fix code style problems as follows.
 
 ```shell linenums="1"
 yarn style:fix
@@ -123,24 +119,23 @@ yarn benchmark
 
 ## Dependencies
 
-We use [license-checker](https://github.com/davglass/license-checker){target=_blank} for handling licenses of (transitive) dependencies.
-To check that (transitive) dependencies are licensed as expected, run the following command.
+We use [license-checker](https://github.com/davglass/license-checker){target=_blank} to handle licenses of (transitive) dependencies.
+Check that (transitive) dependencies are licensed as expected as follows.
 This check is also executed inside workflows.
 
 ```shell linenums="1"
 yarn dependencies:check
 ```
 
-
 ## Patch Packages 
 
-We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} to fixing third party libraries.
+We use [`patch-package`](https://github.com/ds300/patch-package){target=_blank} to fix dependencies.
 For example, adding `logic-solver.d.ts` to [`logic-solver`](https://github.com/meteor/logic-solver){target=_blank}.
-Therefore, make changes to the package inside `node_modules`, then run the following command.
+Therefore, proceed as follows.
+
+First, make changes to the package inside `node_modules`. 
+Then, create the patch.
 
 ```shell linenums="1"
-yarn patch-package ${package-name}
+yarn patch-package --exclude 'nothing' ${package-name}
 ```
-
-If you need to patch the `package.json`, then append the option `--exclude 'nothing'` as stated in [#311](https://github.com/ds300/patch-package/issues/311){target=_blank}.
-

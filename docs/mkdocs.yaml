@@ -79,11 +79,9 @@ plugins:
           on_error_fail: true
           module_name: macros
     - glightbox
-    - bibtex:
-          bib_file: 'bibtex.bib'
     - include_dir_to_nav
     - git-revision-date-localized:
-          enabled: !ENV [MKDCOS_REVISION_ENABLED, true]
+          enabled: !ENV [MKDOCS_REVISION_ENABLED, true]
           strict: false
     - build_plantuml:
           #render: 'local'
@@ -103,9 +101,12 @@ nav:
           - features.md
           - getting-started.md
           - installation.md
+          - versions.md
+          - usage.md
           - orchestrators.md
           - interface.md
           - dependencies.md
+          - uninstallation.md
           - GitHub: https://github.com/opentosca/opentosca-vintner
           - Discord: https://discord.gg/Uz6348Ctmg
           - Zenodo: https://doi.org/10.5281/zenodo.10155277
@@ -122,7 +123,6 @@ nav:
                 - variability4tosca/benchmark.md
                 - Guides:
                       - variability4tosca/guides/artifacts
-                      - variability4tosca/guides/pipes-and-filters
                       - variability4tosca/guides/pruning
           - Queries4TOSCA:
                 - queries4tosca/getting-started.md

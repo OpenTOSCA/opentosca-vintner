@@ -13,7 +13,7 @@ This section will give a quick introduction to Queries4TOSCA.
 
 ## Preparation
 
-To run the example queries, you need to install OpenTOSCA Vintner and have a resolved instance of the ["Getting Started" template](../getting-started.md){target=_blank}.
+To run the example queries, we need to install OpenTOSCA Vintner and have a resolved instance of the ["Getting Started" template](../getting-started.md){target=_blank}.
 First, clone the repository. 
 --8<-- "clone.md"
 
@@ -29,7 +29,7 @@ vintner instances resolve --instance getting-started --inputs examples/xopera-ge
 ## Example Queries
 
 Queries start with a `FROM` statement, followed by either `templates` or `instances` and the name of the template or the name of the instance, respectively.
-Inside a `SELECT` statement, you can enter a path to the data that you want to return.
+Inside a `SELECT` statement, we can enter a path to the data that we want to return.
 
 To get the entire contents of the template, run the following command.
 
@@ -77,7 +77,7 @@ To get the entire contents of the template, run the following command.
                 node: localhost
     ```
 
-You can return specific elements by specifying their path. Note, that `topology_template` can be omitted at the start.
+We can return specific elements by specifying their path. Note, that `topology_template` can be omitted at the start.
 The following command returns the contents of the `localhost` node.
 
 === "Query"
@@ -95,7 +95,7 @@ The following command returns the contents of the `localhost` node.
         public_address: localhost
     ```
 
-You can use an asterisk as a wildcard operator to get all child elements. The following command returns a list of all nodes.
+We can use an asterisk as a wildcard operator to get all child elements. The following command returns a list of all nodes.
 
 === "Query"
     ```shell linenums="1"
@@ -119,7 +119,7 @@ You can use an asterisk as a wildcard operator to get all child elements. The fo
     ```
 
 
-You can also specify a predicate in square brackets after any part of the path expression to filter elements.
+We can also specify a predicate in square brackets after any part of the path expression to filter elements.
 The following command will return only nodes of type `textfile`.
 
 === "Query"
@@ -139,7 +139,7 @@ The following command will return only nodes of type `textfile`.
           node: localhost
     ```
 
-In cases where you are only interested in some elements of a node, you can use a return structure to restrict the output
+In cases where we are only interested in some elements of a node, we can use a return structure to restrict the output
 to certain variables. To do this, put curly braces with key-value pairs behind your path expression. 
 The following command will return only the `content` property of the `first` node.
 
@@ -172,7 +172,7 @@ Note the lack of quotation marks - we are using a value from the template for bo
     - first: textfile
     ```
 
-`MATCH` statements are used to match patterns in the topology of a template. You can "draw" the pattern by surrounding nodes with parentheses and connect them to other nodes via arrows.
+`MATCH` statements are used to match patterns in the topology of a template. We can "draw" the pattern by surrounding nodes with parentheses and connect them to other nodes via arrows.
 The following statement will return all nodes that have a requirement fulfilled by `localhost`.
 
 === "Query"

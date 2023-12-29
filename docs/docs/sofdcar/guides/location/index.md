@@ -6,7 +6,7 @@ tags:
 
 # Distributed Locations
 
-In this document, we discuss an example of two geographically distributed ECUs using the TOSCA SofDCar profile.
+This document holds an example of two geographically distributed ECUs using the TOSCA SofDCar profile.
 
 ## Scenario
 
@@ -24,7 +24,7 @@ hardware.
 ## Appendix A "Service Template"
 
 This appendix contains the service template of this guide.
-You can also download the service template [here](service-template.yaml){download=service-template.yaml}.
+The service template is also available as [download](service-template.yaml){download=service-template.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/guides/location/service-template.yaml"
@@ -33,7 +33,7 @@ You can also download the service template [here](service-template.yaml){downloa
 ## Appendix B "Type Definitions"
 
 This appendix contains the type definitions of this guide.
-You can also download the type definitions [here](types.yaml){download=types.yaml}
+The type definitions are also available as [download](types.yaml){download=types.yaml}
 
 ```yaml linenums="1"
 --8<-- "sofdcar/guides/location/types.yaml"

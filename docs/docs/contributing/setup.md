@@ -5,11 +5,11 @@ tags:
 
 # Setup
 
-We use the following setup as working environment during development. 
+This document holds instructions on the development setup.
 
 ## Node.js
 
-We are using [Node.js](https://nodejs.org){target=_blank} version `18.15.0`.
+We use [Node.js](https://nodejs.org){target=_blank} version `18.15.0`.
 To install node, use [nvm](https://github.com/nvm-sh/nvm){target=_blank} or [nvm-windows](https://github.com/coreybutler/nvm-windows){target=_blank}.
 
 ```shell linenums="1"
@@ -22,7 +22,7 @@ nvm use 18.15.0
 
 ## Yarn 
 
-We are using [Yarn 2 (Modern)](https://yarnpkg.com/){target=_blank}.
+We use [Yarn 2 (Modern)](https://yarnpkg.com/){target=_blank}.
 Install it as follows.
 
 ```shell linenums="1"
@@ -31,7 +31,7 @@ corepack enable
 
 ## Repository
 
-The repository is a monorepo consisting of the CLI, server, docs and tests.
+The repository is a monorepo consisting of the CLI, server, docs, tests, etc.
 Clone it as follows.
 
 ```shell linenums="1"
@@ -45,20 +45,19 @@ yarn --immutable
 ## Large Files
 
 Larges files, such as binaries or archives used in examples, are added using [git lfs](https://git-lfs.com){target=_blank}.
-This includes the following file extensions `.bin`, `.gz`, `.tar`, `.zip`, `.xz`, and `.jar`.
+This includes the file extensions `.bin`, `.gz`, `.tar`, `.zip`, `.xz`, and `.jar`.
 
 ## Signed Commits
 
 Commits are required to be signed.
-Therefore, you need to register a signing key.
-For more information see
+Therefore, register a signing key as follows.
 
 - [Generating a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key){target=_blank}
 - [Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account){target=_blank}
 - [Telling Git About Your Signing Key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key){target=_blank}
 - [Signing Commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits){target=_blank}
 
-You can enable auto-signing for a specific repository with the following command
+Enable auto-signing inside the repository.
 
 ```shell linenums="1"
 git config commit.gpgsign true
@@ -70,12 +69,12 @@ git config commit.gpgsign true
     WebStorm Version 2022.3.3 seems to have problems with breakpoints when `src/resolver/graph.ts` is involved.
     However, WebStorm Version 2022.3.2 works fine.
 
-We recommend to use [IntelliJ IDEA](https://www.jetbrains.com/idea){target=_blank}
-or [WebStorm](https://www.jetbrains.com/webstorm){target=_blank} installed
-using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
-Both are [for free](https://www.jetbrains.com/community/education/#students){target=_blank} for students.
-Open the Project Settings using `Ctrl + Alt + S` to configure ESLint and Prettier.
+We use [WebStorm](https://www.jetbrains.com/webstorm){target=_blank}, which is [free for students](https://www.jetbrains.com/community/education/#students){target=_blank}.
+Install Webstorm using [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app){target=_blank}.
 
+### ESLint
+
+Open the Project Settings using `Ctrl + Alt + S`.
 ESLint should be configured as given in the figure below with the following pattern.
 
 ```text linenums="1"
@@ -87,6 +86,9 @@ ESLint should be configured as given in the figure below with the following patt
   <figcaption>Figure 1: IntelliJ ESLint Settings</figcaption>
 </figure>
 
+### Prettier
+
+Open the Project Settings using `Ctrl + Alt + S`.
 Prettier should be configured as given in the figure below with the following pattern.
 
 ```text linenums="1"

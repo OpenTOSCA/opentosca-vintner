@@ -4,6 +4,7 @@ tags:
 - Guide
 - Publication
 - UCC 2023
+- xOpera
 ---
 
 # Pruning Elements
@@ -15,7 +16,7 @@ The web shop application can be deployed in the following deployment variants.
 - static with large resources on a single virtual machine on a local OpenStack (OS) instance
 - elastic with high availability and backups on Google Cloud Platform (GCP)
 
-## Requirements 
+## Requirements
 
 We need to fulfill the following requirements to follow this step-by-step tutorial.
 
@@ -31,10 +32,7 @@ We need to fulfill the following requirements to follow this step-by-step tutori
 First, install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+--8<-- "install.md"
 
 Next, we configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.
@@ -54,13 +52,13 @@ vintner orchestrators enable --orchestrator xopera
 First, we clone the repository.
 --8<-- "clone.md"
 
-Then, import the Variability4TOSCA template.
+Next, import the Variability4TOSCA template.
 
 ```shell linenums="1"
 vintner templates import --template pruning --path examples/xopera-pruning
 ```
 
-Then, initialize an application instance.
+Next, initialize an application instance.
 
 ```shell linenums="1"
 vintner instances init --instance pruning --template pruning
@@ -89,7 +87,7 @@ We specify this when resolving variability as follows.
 vintner instances resolve --instance pruning --presets elastic
 ```
 
-You can optionally inspect the generated TOSCA-compliant model.
+We can optionally inspect the generated TOSCA-compliant model.
 This template contains only the elements required for the elastic variant, e.g., the MySQL database.
 This is shown in Figure 2.
 
@@ -99,7 +97,7 @@ vintner instances inspect --instance pruning
 
 ## Deploy the Application
 
-Finally, we can deploy the elastic variant.
+Finally, we deploy the elastic variant.
 Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
 These inputs are specified in `topology_template.inputs` of the TOSCA-compliant model.
 The deployment will take around 15-20 minutes.
@@ -110,14 +108,14 @@ vintner instances deploy --instance pruning --inputs ${INPUTS_PATH}
 
 ## Undeploy the Application 
 
-Afterward, we can undeploy the application.
+Afterward, we undeploy the application.
 
 ```shell linenums="1"
 vintner instances undeploy --instance pruning
 ```
 
 We can also optionally remove the instance or cleanup the filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
+Note, cleaning up the filesystem removes any Vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 vintner instances delete --instance pruning
@@ -131,10 +129,10 @@ The models for our complexity analysis can be found {{ repo_link('examples/xoper
 ## Logs
 
 This deployment is also executed in our integration pipeline which is executed once a week.
-The logs of the corresponding GitHub action job run can be accessed either [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6677267360/job/18147105860){target=_blank}.
-Relevant steps start with "XOPERA-PRUNING".
+The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
+Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs.
-The raw logs can be also accessed [here](./logs.txt){target=_blank} without requiring an GitHub account.
+The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
 
 ## Zenodo
 

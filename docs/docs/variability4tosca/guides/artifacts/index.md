@@ -4,6 +4,7 @@ tags:
 - Guide
 - Publication
 - CoopIS 2023
+- Unfurl
 ---
 
 # Conditional Deployment Artifacts and Conditional Properties
@@ -32,7 +33,7 @@ An important aspect of the deployment of the shop component is that the correct 
 
 ## Requirements
 
-You need to fulfill the following requirements to follow this step-by-step tutorial.
+We need to fulfill the following requirements to follow this step-by-step tutorial.
 
 - A machine having Ubuntu22.04 LTS installed
 - Ipv6 support, thus, WSL is no suitable
@@ -47,10 +48,7 @@ You need to fulfill the following requirements to follow this step-by-step tutor
 First, install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+--8<-- "install.md"
 
 Next, we configure Unfurl as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.
@@ -71,7 +69,7 @@ vintner orchestrators enable --orchestrator unfurl
 First, we clone the repository.
 --8<-- "clone.md"
 
-Then, we import the template and initialize an instance.
+Next, we import the template and initialize an instance.
 
 ```shell linenums="1"
 # Add variable service template
@@ -101,7 +99,7 @@ Therefore, we need to resolve the variability by providing respective variabilit
 vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 ```
 
-You can optionally inspect the generated service template.
+We can optionally inspect the generated service template.
 This template contains only the elements required for the enterprise plan.
 Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
 
@@ -113,7 +111,7 @@ vintner instances inspect --instance artifacts
 
 ## Deployment
 
-Finally, we can deploy the application.
+Finally, we deploy the application.
 Therefore, we need to provide deployment inputs.
 An example for the deployment inputs is given in {{ repo_link('examples/unfurl-artifacts/deployment-inputs.example.yaml') }}.
 The deployment will take around 15-20 minutes.
@@ -125,14 +123,14 @@ vintner instances deploy --instance artifacts --inputs ${INPUTS_PATH}
 
 ## Undeployment
 
-Afterward, you can undeploy the application.
+Afterward, we can undeploy the application.
 
 ```shell linenums="1"
 # Undeploy instance
 vintner instances undeploy --instance artifacts
 ```
 
-You can also optionally remove the instance or cleanup your filesystem.
+We can also optionally remove the instance or cleanup your filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
@@ -151,10 +149,10 @@ The models for our complexity analysis can be found {{ repo_link('examples/unfur
 ## Logs
 
 This deployment is also executed in our integration pipeline which is executed once a week. 
-The logs of the corresponding GitHub action job run can be accessed either [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878){target=_blank}.
+The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
-The raw logs can be also accessed [here](./logs.txt){target=_blank} without requiring an GitHub account.
+The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
 
 ## Publication
 

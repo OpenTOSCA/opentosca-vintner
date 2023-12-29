@@ -5,7 +5,7 @@ tags:
 
 # Release
 
-This document contains information about releases.
+This document holds information about building and publishing a new release.
 
 ## Build
 
@@ -34,22 +34,24 @@ The issue considering the failed bytecode generation of MiniSat is known and can
 
 ## GitHub
 
-On pushes to the `main` branch, the `release` workflow is triggered.
-This workflow runs several tests, builds and packages the project and creates a new [GitHub release](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/latest){target=_blank}.
-Thereby, an existing GitHub release and `latest` tag is deleted.
+Vintner is available as [GitHub release](https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/latest){target=_blank}.
+On pushes to the `main` branch, the Release workflow is triggered.
+This workflow runs several tests, builds binaries, signs binaries, creates a new GitHub release, and deploys the documentation.
+An already existing GitHub release and `latest` tag is deleted.
 There is only one release at total.
 
-However, there is also the `build` workflow. 
-This workflow basically has the same steps as the `release` workflow but does create his own GitHub release and does not deploy the docs.
+However, there is also the Build workflow. 
+This workflow basically has the same steps as the Release workflow but does create his own GitHub release and does not deploy the docs.
 
 ## Night
 
-The `night` workflow is scheduled for every tuesday at 420.
+The Night workflow is scheduled for every tuesday at 420.
 This workflow ensures that the latest release is correctly signed and can be executed.
+Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.
 
 ## NPM
 
-There is also a npm package [`opentosca-vintner`](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
+Vintner is available as npm package [`opentosca-vintner`](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
 New versions are published manually.
 To publish a new version, first update the version number in `package.json` and then run
 
@@ -59,13 +61,14 @@ yarn release:npm
 
 ## Docker
 
-There are also Docker containers: [https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner){target=_blank}.
+Vintner is available as Docker container on [https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner){target=_blank}.
 They are automatically build and pushed during the Release workflow.
-
 
 ## Zenodo
 
-There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner: [https://doi.org/10.5281/zenodo.10155277](https://doi.org/10.5281/zenodo.10155277){target=_blank}.
+Vintner is available on Zenodo with unique DOI [https://doi.org/10.5281/zenodo.10155277](https://doi.org/10.5281/zenodo.10155277){target=_blank}.
+New versions are published manually.
+
 To publish a new version, run the Zenodo workflow on GitHub.
 This workflow will create a draft of a new version based on the latest GitHub release.
 The version must be manually published on Zenodo.

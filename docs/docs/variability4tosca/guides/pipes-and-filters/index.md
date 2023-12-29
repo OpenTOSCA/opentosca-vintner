@@ -2,6 +2,7 @@
 tags:
 - Variability4TOSCA
 - Guide
+- xOpera
 - Experimental
 ---
 
@@ -35,10 +36,7 @@ We expect that the [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=
 First, install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+--8<-- "install.md"
 
 Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.
