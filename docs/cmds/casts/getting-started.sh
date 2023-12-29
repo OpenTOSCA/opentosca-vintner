@@ -18,7 +18,8 @@ echo '# Installation'
 p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'
 sleep 3
 
-pe 'vintner setup init'
+# Is part of the installation
+vintner setup init
 
 echo ''
 echo '# Orchestrator'
