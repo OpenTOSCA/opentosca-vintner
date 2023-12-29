@@ -81,7 +81,7 @@ plugins:
     - glightbox
     - include_dir_to_nav
     - git-revision-date-localized:
-          enabled: !ENV [MKDCOS_REVISION_ENABLED, true]
+          enabled: !ENV [MKDOCS_REVISION_ENABLED, true]
           strict: false
     - build_plantuml:
           #render: 'local'
