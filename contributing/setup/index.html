@@ -249,6 +249,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../../orchestrators/">
         Orchestrators
       </a>
@@ -261,6 +271,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1818,11 +1833,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2112,6 +2122,20 @@
 <a class="md-nav__link" href="#jetbrains">
     JetBrains
   </a>
+<nav aria-label="JetBrains" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#eslint">
+    ESLint
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prettier">
+    Prettier
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#excluded-directories">
@@ -2247,6 +2271,20 @@
 <a class="md-nav__link" href="#jetbrains">
     JetBrains
   </a>
+<nav aria-label="JetBrains" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#eslint">
+    ESLint
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prettier">
+    Prettier
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#excluded-directories">
@@ -2264,9 +2302,9 @@
 <a class="md-tag" href="../../tags/#contributing">Contributing</a>
 </nav>
 <h1 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">¶</a></h1>
-<p>We use the following setup as working environment during development. </p>
+<p>This document holds instructions on the development setup.</p>
 <h2 id="nodejs">Node.js<a class="headerlink" href="#nodejs" title="Permanent link">¶</a></h2>
-<p>We are using <a href="https://nodejs.org" target="_blank">Node.js</a> version <code>18.15.0</code>.
+<p>We use <a href="https://nodejs.org" target="_blank">Node.js</a> version <code>18.15.0</code>.
 To install node, use <a href="https://github.com/nvm-sh/nvm" target="_blank">nvm</a> or <a href="https://github.com/coreybutler/nvm-windows" target="_blank">nvm-windows</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
@@ -2279,12 +2317,12 @@ To install node, use <a href="https://github.com/nvm-sh/nvm" target="_blank">nvm
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>nvm<span class="w"> </span>use<span class="w"> </span><span class="m">18</span>.15.0
 </code></pre></div></td></tr></table></div>
 <h2 id="yarn">Yarn<a class="headerlink" href="#yarn" title="Permanent link">¶</a></h2>
-<p>We are using <a href="https://yarnpkg.com/" target="_blank">Yarn 2 (Modern)</a>.
+<p>We use <a href="https://yarnpkg.com/" target="_blank">Yarn 2 (Modern)</a>.
 Install it as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>corepack<span class="w"> </span><span class="nb">enable</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">¶</a></h2>
-<p>The repository is a monorepo consisting of the CLI, server, docs and tests.
+<p>The repository is a monorepo consisting of the CLI, server, docs, tests, etc.
 Clone it as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
@@ -2298,18 +2336,17 @@ Clone it as follows.</p>
 </code></pre></div></td></tr></table></div>
 <h2 id="large-files">Large Files<a class="headerlink" href="#large-files" title="Permanent link">¶</a></h2>
 <p>Larges files, such as binaries or archives used in examples, are added using <a href="https://git-lfs.com" target="_blank">git lfs</a>.
-This includes the following file extensions <code>.bin</code>, <code>.gz</code>, <code>.tar</code>, <code>.zip</code>, <code>.xz</code>, and <code>.jar</code>.</p>
+This includes the file extensions <code>.bin</code>, <code>.gz</code>, <code>.tar</code>, <code>.zip</code>, <code>.xz</code>, and <code>.jar</code>.</p>
 <h2 id="signed-commits">Signed Commits<a class="headerlink" href="#signed-commits" title="Permanent link">¶</a></h2>
 <p>Commits are required to be signed.
-Therefore, you need to register a signing key.
-For more information see</p>
+Therefore, register a signing key as follows.</p>
 <ul>
 <li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key" target="_blank">Generating a new GPG key</a></li>
 <li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account" target="_blank">Adding a GPG key to your GitHub account</a></li>
 <li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key" target="_blank">Telling Git About Your Signing Key</a></li>
 <li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits" target="_blank">Signing Commits</a></li>
 </ul>
-<p>You can enable auto-signing for a specific repository with the following command</p>
+<p>Enable auto-signing inside the repository.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>git<span class="w"> </span>config<span class="w"> </span>commit.gpgsign<span class="w"> </span><span class="nb">true</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="jetbrains">JetBrains<a class="headerlink" href="#jetbrains" title="Permanent link">¶</a></h2>
@@ -2318,12 +2355,11 @@ For more information see</p>
 <p>WebStorm Version 2022.3.3 seems to have problems with breakpoints when <code>src/resolver/graph.ts</code> is involved.
 However, WebStorm Version 2022.3.2 works fine.</p>
 </div>
-<p>We recommend to use <a href="https://www.jetbrains.com/idea" target="_blank">IntelliJ IDEA</a>
-or <a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a> installed
-using <a href="https://www.jetbrains.com/toolbox-app" target="_blank">JetBrains Toolbox</a>.
-Both are <a href="https://www.jetbrains.com/community/education/#students" target="_blank">for free</a> for students.
-Open the Project Settings using <code>Ctrl + Alt + S</code> to configure ESLint and Prettier.</p>
-<p>ESLint should be configured as given in the figure below with the following pattern.</p>
+<p>We use <a href="https://www.jetbrains.com/webstorm" target="_blank">WebStorm</a>, which is <a href="https://www.jetbrains.com/community/education/#students" target="_blank">free for students</a>.
+Install Webstorm using <a href="https://www.jetbrains.com/toolbox-app" target="_blank">JetBrains Toolbox</a>.</p>
+<h3 id="eslint">ESLint<a class="headerlink" href="#eslint" title="Permanent link">¶</a></h3>
+<p>Open the Project Settings using <code>Ctrl + Alt + S</code>.
+ESLint should be configured as given in the figure below with the following pattern.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>{**/*,*}.{ts}
 </code></pre></div></td></tr></table></div>
 <figure>
@@ -2331,7 +2367,9 @@ Open the Project Settings using <code>Ctrl + Alt + S</code> to configure ESLint 
 </p>
 <figcaption>Figure 1: IntelliJ ESLint Settings</figcaption>
 </figure>
-<p>Prettier should be configured as given in the figure below with the following pattern.</p>
+<h3 id="prettier">Prettier<a class="headerlink" href="#prettier" title="Permanent link">¶</a></h3>
+<p>Open the Project Settings using <code>Ctrl + Alt + S</code>.
+Prettier should be configured as given in the figure below with the following pattern.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>{**/*,*}.{ts,json,yaml,yml}
 </code></pre></div></td></tr></table></div>
 <figure>
@@ -2355,7 +2393,7 @@ Open the Project Settings using <code>Ctrl + Alt + S</code> to configure ESLint 
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 27, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>

@@ -250,6 +250,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../orchestrators/">
         Orchestrators
       </a>
@@ -262,6 +272,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1819,11 +1834,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2175,6 +2185,8 @@
 <nav class="md-tags">
 <a class="md-tag" href="../tags/#vintner">Vintner</a>
 <a class="md-tag" href="../tags/#guide">Guide</a>
+<a class="md-tag" href="../tags/#xopera">xOpera</a>
+<a class="md-tag" href="../tags/#unfurl">Unfurl</a>
 </nav>
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">¶</a></h1>
 <div id="asciinema-player-getting-started"></div>
@@ -2189,15 +2201,13 @@
     });
 </script>
 <p>In this example, we will deploy a textfile on our local machine which has a different content depending on our input.
-This is just a simple example without any dependencies such as a Docker Engine or a cloud.
+This is just a simple example without any dependencies, such as a Docker Engine or a cloud.
 For a more complex scenario including OpenStack and GCP see
 <a href="../variability4tosca/motivation/" target="_blank">Motivating Scenario</a>.
 First, install OpenTOSCA Vintner.</p>
 <p>In our case, we run on a Linux machine.
 For more information see <a href="../installation/" target="_blank">Installation</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 <p>We currently support <a href="https://github.com/xlab-si/xopera-opera" target="_blank">xOpera</a> and <a href="https://github.com/onecommons/unfurl" target="_blank">Unfurl</a>.
 Since both can only be installed on Linux, we implemented a <a href="https://docs.microsoft.com/en-us/windows/wsl" target="_blank">WSL</a>
@@ -2208,91 +2218,79 @@ For more information see <a href="../installation/" target="_blank">Installation
 <span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera
 <a id="__codelineno-1-2" name="__codelineno-1-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
 </code></pre></div></td></tr></table></div>
-<p>Then, we clone the repository.
+<p>Next, we clone the repository.
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Clone the repository</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Then, we import the template and initialize an instance.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Import the template</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>getting-started<span class="w"> </span>--path<span class="w"> </span>examples/xopera-getting-started
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># Create an instance</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--template<span class="w"> </span>getting-started
+<p>Next, we import the template.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>getting-started<span class="w"> </span>--path<span class="w"> </span>examples/xopera-getting-started
+</code></pre></div></td></tr></table></div>
+<p>Next, we initialize an instance.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--template<span class="w"> </span>getting-started
 </code></pre></div></td></tr></table></div>
 <p>The imported template contains the following conditional node templates.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span>
-<span class="normal"><a href="#__codelineno-4-12">12</a></span>
-<span class="normal"><a href="#__codelineno-4-13">13</a></span>
-<span class="normal"><a href="#__codelineno-4-14">14</a></span>
-<span class="normal"><a href="#__codelineno-4-15">15</a></span>
-<span class="normal"><a href="#__codelineno-4-16">16</a></span>
-<span class="normal"><a href="#__codelineno-4-17">17</a></span>
-<span class="normal"><a href="#__codelineno-4-18">18</a></span>
-<span class="normal"><a href="#__codelineno-4-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">first</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textfile</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_first</span><span class="p p-Indicator">}</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">'First</span><span class="nv"> </span><span class="s">Textfile</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">been</span><span class="nv"> </span><span class="s">selected!'</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">            </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_first</span><span class="p p-Indicator">}</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="nt">second</span><span class="p">:</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textfile</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">    </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_second</span><span class="p p-Indicator">}</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">'Second</span><span class="nv"> </span><span class="s">Textfile</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">been</span><span class="nv"> </span><span class="s">selected!'</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="w">    </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span>
-<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="w">            </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_second</span><span class="p p-Indicator">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nt">first</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textfile</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_first</span><span class="p p-Indicator">}</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">'First</span><span class="nv"> </span><span class="s">Textfile</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">been</span><span class="nv"> </span><span class="s">selected!'</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">            </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_first</span><span class="p p-Indicator">}</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="nt">second</span><span class="p">:</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textfile</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">    </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_second</span><span class="p p-Indicator">}</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">'Second</span><span class="nv"> </span><span class="s">Textfile</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">been</span><span class="nv"> </span><span class="s">selected!'</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="w">    </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="w">            </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_second</span><span class="p p-Indicator">}</span>
 </code></pre></div></td></tr></table></div>
 <p>We decide that the first textfile should be deployed.
-Therefore, we resolve the variability and finally deploy the application.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Resolve variability</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--inputs<span class="w"> </span>examples/xopera-getting-started/variability-inputs.example.yaml
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1"># Deploy instance</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>getting-started
+Therefore, we resolve the variability. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--inputs<span class="w"> </span>examples/xopera-getting-started/variability-inputs.example.yaml
 </code></pre></div></td></tr></table></div>
-<p>The deployed textfile <code>/tmp/vintner-getting-started.txt</code> has the content as expected.</p>
-<div class="highlight"><table class="highlighttable"><tr><th class="filename" colspan="2"><span class="filename">/tmp/vintner-getting-started.txt</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>First Textfile has been selected!
+<p>Finally, we deploy the application.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>getting-started
+</code></pre></div></td></tr></table></div>
+<p>The deployed textfile has the content as expected.</p>
+<div class="highlight"><table class="highlighttable"><tr><th class="filename" colspan="2"><span class="filename">/tmp/vintner-getting-started.txt</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>First Textfile has been selected!
 </code></pre></div></td></tr></table></div>
 <p>To undeploy, run the following command.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>getting-started
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>getting-started
 </code></pre></div></td></tr></table></div>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 5, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>

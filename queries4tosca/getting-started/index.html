@@ -249,6 +249,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../../orchestrators/">
         Orchestrators
       </a>
@@ -261,6 +271,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1818,11 +1833,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2220,17 +2230,15 @@ Therefore, we introduce Queries4TOSCA which defined a query language for TOSCA.
 This language provides a graph-based query language which includes path expressions, filters, and pattern matching. 
 This section will give a quick introduction to Queries4TOSCA.</p>
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">¶</a></h2>
-<p>To run the example queries, you need to install OpenTOSCA Vintner and have a resolved instance of the <a href="../../getting-started/" target="_blank">"Getting Started" template</a>.
+<p>To run the example queries, we need to install OpenTOSCA Vintner and have a resolved instance of the <a href="../../getting-started/" target="_blank">"Getting Started" template</a>.
 First, clone the repository. 
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
 <span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span>
-<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># Clone the repository</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
 <p>Then import the template, create an instance, and resolve the variability.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
@@ -2243,7 +2251,7 @@ First, clone the repository.
 </code></pre></div></td></tr></table></div>
 <h2 id="example-queries">Example Queries<a class="headerlink" href="#example-queries" title="Permanent link">¶</a></h2>
 <p>Queries start with a <code>FROM</code> statement, followed by either <code>templates</code> or <code>instances</code> and the name of the template or the name of the instance, respectively.
-Inside a <code>SELECT</code> statement, you can enter a path to the data that you want to return.</p>
+Inside a <code>SELECT</code> statement, we can enter a path to the data that we want to return.</p>
 <p>To get the entire contents of the template, run the following command.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Query</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">
@@ -2325,7 +2333,7 @@ Inside a <code>SELECT</code> statement, you can enter a path to the data that yo
 </div>
 </div>
 </input></input></div>
-<p>You can return specific elements by specifying their path. Note, that <code>topology_template</code> can be omitted at the start.
+<p>We can return specific elements by specifying their path. Note, that <code>topology_template</code> can be omitted at the start.
 The following command returns the contents of the <code>localhost</code> node.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Query</label><label for="__tabbed_2_2">Result</label></div>
 <div class="tabbed-content">
@@ -2349,7 +2357,7 @@ The following command returns the contents of the <code>localhost</code> node.</
 </div>
 </div>
 </input></input></div>
-<p>You can use an asterisk as a wildcard operator to get all child elements. The following command returns a list of all nodes.</p>
+<p>We can use an asterisk as a wildcard operator to get all child elements. The following command returns a list of all nodes.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">Query</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2384,7 +2392,7 @@ The following command returns the contents of the <code>localhost</code> node.</
 </div>
 </div>
 </input></input></div>
-<p>You can also specify a predicate in square brackets after any part of the path expression to filter elements.
+<p>We can also specify a predicate in square brackets after any part of the path expression to filter elements.
 The following command will return only nodes of type <code>textfile</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><input id="__tabbed_4_2" name="__tabbed_4" type="radio"><div class="tabbed-labels"><label for="__tabbed_4_1">Query</label><label for="__tabbed_4_2">Result</label></div>
 <div class="tabbed-content">
@@ -2412,7 +2420,7 @@ The following command will return only nodes of type <code>textfile</code>.</p>
 </div>
 </div>
 </input></input></div>
-<p>In cases where you are only interested in some elements of a node, you can use a return structure to restrict the output
+<p>In cases where we are only interested in some elements of a node, we can use a return structure to restrict the output
 to certain variables. To do this, put curly braces with key-value pairs behind your path expression. 
 The following command will return only the <code>content</code> property of the <code>first</code> node.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio"><input id="__tabbed_5_2" name="__tabbed_5" type="radio"><div class="tabbed-labels"><label for="__tabbed_5_1">Query</label><label for="__tabbed_5_2">Result</label></div>
@@ -2453,7 +2461,7 @@ Note the lack of quotation marks - we are using a value from the template for bo
 </div>
 </div>
 </input></input></div>
-<p><code>MATCH</code> statements are used to match patterns in the topology of a template. You can "draw" the pattern by surrounding nodes with parentheses and connect them to other nodes via arrows.
+<p><code>MATCH</code> statements are used to match patterns in the topology of a template. We can "draw" the pattern by surrounding nodes with parentheses and connect them to other nodes via arrows.
 The following statement will return all nodes that have a requirement fulfilled by <code>localhost</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio"><input id="__tabbed_7_2" name="__tabbed_7" type="radio"><div class="tabbed-labels"><label for="__tabbed_7_1">Query</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
@@ -2492,7 +2500,7 @@ In a more complex scenario, it would be possible, e.g., to dynamically access th
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 19, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>

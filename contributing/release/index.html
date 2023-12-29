@@ -249,6 +249,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../../orchestrators/">
         Orchestrators
       </a>
@@ -261,6 +271,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1818,11 +1833,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2264,7 +2274,7 @@
 <a class="md-tag" href="../../tags/#contributing">Contributing</a>
 </nav>
 <h1 id="release">Release<a class="headerlink" href="#release" title="Permanent link">¶</a></h1>
-<p>This document contains information about releases.</p>
+<p>This document holds information about building and publishing a new release.</p>
 <h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">¶</a></h2>
 <p>To locally build the project, run the following command.
 This will transpile Javascript inside the <code>/build</code> directory.
@@ -2284,27 +2294,30 @@ generate binaries inside the <code>/dist</code> directory.</p>
 </code></pre></div></td></tr></table></div>
 <p>The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.</p>
 <h2 id="github">GitHub<a class="headerlink" href="#github" title="Permanent link">¶</a></h2>
-<p>On pushes to the <code>main</code> branch, the <code>release</code> workflow is triggered.
-This workflow runs several tests, builds and packages the project and creates a new <a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/latest" target="_blank">GitHub release</a>.
-Thereby, an existing GitHub release and <code>latest</code> tag is deleted.
+<p>Vintner is available as <a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/latest" target="_blank">GitHub release</a>.
+On pushes to the <code>main</code> branch, the Release workflow is triggered.
+This workflow runs several tests, builds binaries, signs binaries, creates a new GitHub release, and deploys the documentation.
+An already existing GitHub release and <code>latest</code> tag is deleted.
 There is only one release at total.</p>
-<p>However, there is also the <code>build</code> workflow. 
-This workflow basically has the same steps as the <code>release</code> workflow but does create his own GitHub release and does not deploy the docs.</p>
+<p>However, there is also the Build workflow. 
+This workflow basically has the same steps as the Release workflow but does create his own GitHub release and does not deploy the docs.</p>
 <h2 id="night">Night<a class="headerlink" href="#night" title="Permanent link">¶</a></h2>
-<p>The <code>night</code> workflow is scheduled for every tuesday at 420.
-This workflow ensures that the latest release is correctly signed and can be executed.</p>
+<p>The Night workflow is scheduled for every tuesday at 420.
+This workflow ensures that the latest release is correctly signed and can be executed.
+Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.</p>
 <h2 id="npm">NPM<a class="headerlink" href="#npm" title="Permanent link">¶</a></h2>
-<p>There is also a npm package <a href="https://www.npmjs.com/package/opentosca-vintner" target="_blank"><code>opentosca-vintner</code></a>.
+<p>Vintner is available as npm package <a href="https://www.npmjs.com/package/opentosca-vintner" target="_blank"><code>opentosca-vintner</code></a>.
 New versions are published manually.
 To publish a new version, first update the version number in <code>package.json</code> and then run</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>release:npm
 </code></pre></div></td></tr></table></div>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
-<p>There are also Docker containers: <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner</a>.
+<p>Vintner is available as Docker container on <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner</a>.
 They are automatically build and pushed during the Release workflow.</p>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
-<p>There is also a Zenodo record with a unique DOI for OpenTOSCA Vintner: <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>.
-To publish a new version, run the Zenodo workflow on GitHub.
+<p>Vintner is available on Zenodo with unique DOI <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>.
+New versions are published manually.</p>
+<p>To publish a new version, run the Zenodo workflow on GitHub.
 This workflow will create a draft of a new version based on the latest GitHub release.
 The version must be manually published on Zenodo.</p>
 <hr/>
@@ -2312,7 +2325,7 @@ The version must be manually published on Zenodo.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 27, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>

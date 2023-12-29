@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/variability4tosca/guides/pruning/" rel="canonical"/>
-<link href="../pipes-and-filters/" rel="prev"/>
+<link href="../artifacts/" rel="prev"/>
 <link href="../../../queries4tosca/getting-started/" rel="next"/>
 <link href="../../../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
@@ -249,6 +249,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../../../orchestrators/">
         Orchestrators
       </a>
@@ -261,6 +271,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1817,11 +1832,6 @@
         Conditional Deployment Artifacts and Conditional Properties
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -2295,6 +2305,7 @@
 <a class="md-tag" href="../../../tags/#guide">Guide</a>
 <a class="md-tag" href="../../../tags/#publication">Publication</a>
 <a class="md-tag" href="../../../tags/#ucc-2023">UCC 2023</a>
+<a class="md-tag" href="../../../tags/#xopera">xOpera</a>
 </nav>
 <h1 id="pruning-elements">Pruning Elements<a class="headerlink" href="#pruning-elements" title="Permanent link">¶</a></h1>
 <p>In the following, we provide a detailed step-by-step tutorial to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
@@ -2317,9 +2328,7 @@ The web shop application can be deployed in the following deployment variants.</
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">¶</a></h2>
 <p>First, install OpenTOSCA Vintner.
 For more information see <a href="../../../installation/" target="_blank">Installation</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 <p>Next, we configure xOpera as the orchestrator that should be used for the deployment.
 For more information see <a href="../../../orchestrators/" target="_blank">Orchestrators</a>.</p>
@@ -2337,17 +2346,15 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Clone the repository</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Then, import the Variability4TOSCA template.</p>
+<p>Next, import the Variability4TOSCA template.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>pruning<span class="w"> </span>--path<span class="w"> </span>examples/xopera-pruning
 </code></pre></div></td></tr></table></div>
-<p>Then, initialize an application instance.</p>
+<p>Next, initialize an application instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--template<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
 <p>We can optionally inspect the Variability4TOSCA model.
@@ -2366,24 +2373,24 @@ This is shown in Figure 1.</p>
 We specify this when resolving variability as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--presets<span class="w"> </span>elastic
 </code></pre></div></td></tr></table></div>
-<p>You can optionally inspect the generated TOSCA-compliant model.
+<p>We can optionally inspect the generated TOSCA-compliant model.
 This template contains only the elements required for the elastic variant, e.g., the MySQL database.
 This is shown in Figure 2.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
 <h2 id="deploy-the-application">Deploy the Application<a class="headerlink" href="#deploy-the-application" title="Permanent link">¶</a></h2>
-<p>Finally, we can deploy the elastic variant.
+<p>Finally, we deploy the elastic variant.
 Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
 These inputs are specified in <code>topology_template.inputs</code> of the TOSCA-compliant model.
 The deployment will take around 15-20 minutes.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="undeploy-the-application">Undeploy the Application<a class="headerlink" href="#undeploy-the-application" title="Permanent link">¶</a></h2>
-<p>Afterward, we can undeploy the application.</p>
+<p>Afterward, we undeploy the application.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
 <p>We can also optionally remove the instance or cleanup the filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.</p>
+Note, cleaning up the filesystem removes any Vintner data including, e.g., all imported templates and created instances.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
 <span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>pruning
 <a id="__codelineno-10-2" name="__codelineno-10-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
@@ -2392,10 +2399,10 @@ Note, cleaning up the filesystem removes any vintner data including, e.g., all i
 <p>The models for our complexity analysis can be found <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-pruning/stats" target="_blank">here</a>.</p>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">¶</a></h2>
 <p>This deployment is also executed in our integration pipeline which is executed once a week.
-The logs of the corresponding GitHub action job run can be accessed either <a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6677267360/job/18147105860" target="_blank">here</a>.
-Relevant steps start with "XOPERA-PRUNING".
+The logs of the corresponding GitHub action job run can be accessed <a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">here</a>.
+Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs.
-The raw logs can be also accessed <a href="logs.txt" target="_blank">here</a> without requiring an GitHub account.</p>
+The raw logs of a recorded job are <a href="logs.txt" target="_blank">available</a> without requiring an GitHub account.</p>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
 <p>The assets of this guide can be also found on <a href="https://doi.org/10.5281/zenodo.10050261" target="_blank">Zenodo</a>.</p>
 <h2 id="publication">Publication<a class="headerlink" href="#publication" title="Permanent link">¶</a></h2>
@@ -2406,7 +2413,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>
@@ -2415,7 +2422,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Pipes and Filters Application" class="md-footer__link md-footer__link--prev" href="../pipes-and-filters/" rel="prev">
+<a aria-label="Previous: Conditional Deployment Artifacts and Conditional Properties" class="md-footer__link md-footer__link--prev" href="../artifacts/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
 </div>
@@ -2424,7 +2431,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
                 Previous
               </span>
 <div class="md-ellipsis">
-                Pipes and Filters Application
+                Conditional Deployment Artifacts and Conditional Properties
               </div>
 </div>
 </a>

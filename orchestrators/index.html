@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/orchestrators/" rel="canonical"/>
-<link href="../installation/" rel="prev"/>
+<link href="../usage/" rel="prev"/>
 <link href="../interface/" rel="next"/>
 <link href="../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
@@ -248,6 +248,16 @@
         Installation
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../usage/">
+        Usage
+      </a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -294,6 +304,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1851,11 +1866,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2232,50 +2242,53 @@
 <article class="md-content__inner md-typeset">
 <nav class="md-tags">
 <a class="md-tag" href="../tags/#vintner">Vintner</a>
+<a class="md-tag" href="../tags/#xopera">xOpera</a>
+<a class="md-tag" href="../tags/#unfurl">Unfurl</a>
 </nav>
 <h1 id="orchestrators">Orchestrators<a class="headerlink" href="#orchestrators" title="Permanent link">¶</a></h1>
-<p>We currently support <a href="https://github.com/xlab-si/xopera-opera" target="_blank">xOpera</a> and <a href="https://github.com/onecommons/unfurl" target="_blank">Unfurl</a>.
+<p>This document holds information considering supported orchestrators. 
+We currently support <a href="https://github.com/xlab-si/xopera-opera" target="_blank">xOpera</a> and <a href="https://github.com/onecommons/unfurl" target="_blank">Unfurl</a>.
 Since both can only be installed on Linux, we implemented a <a href="https://docs.microsoft.com/en-us/windows/wsl" target="_blank">WSL</a> integration for both.
 To find out more about these orchestrators, checkout our <a href="https://tosss.opentosca.org" target="_blank">TOSCA Orchestrator Selection Support System (TOSSS)</a>.
 Install, configure and enable your orchestrator as follows.
 For more information see <a href="../interface/" target="_blank">Interface</a>.</p>
 <h2 id="xopera">xOpera<a class="headerlink" href="#xopera" title="Permanent link">¶</a></h2>
-<p>You can install xOpera using the following command.
+<p>We install xOpera using the following command.
 This will install xOpera v0.6.9 system-wide using pip.
 For a manual installation see <a href="https://xlab-si.github.io/xopera-docs/02-cli.html#installation" target="_blank">the documentation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--xopera
 </code></pre></div></td></tr></table></div>
-<p>Then, you can configure Vintner to use xOpera.</p>
+<p>Next, we configure Vintner to use xOpera.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera<span class="w"> </span>--no-venv
 <a id="__codelineno-1-2" name="__codelineno-1-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
 </code></pre></div></td></tr></table></div>
-<p>To attest that Vintner can correctly use xOpera, run the following command. </p>
+<p>Next, we attest that Vintner can correctly use xOpera.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>attest<span class="w"> </span>--orchestrator<span class="w"> </span>xopera
 </code></pre></div></td></tr></table></div>
-<p>If you have installed xOpera in WSL and run Vintner on Windows, then configure Vintner in the follwoing way.</p>
+<p>If xOpera is running in WSL and Vintner on Windows, then configure Vintner as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera-wsl<span class="w"> </span>--no-venv
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera-wsl
 </code></pre></div></td></tr></table></div>
-<p>To attest that Vintner can correctly use xOpera in WSL, run the following command.</p>
+<p>Next, we attest that Vintner can correctly use xOpera in WSL.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>attest<span class="w"> </span>--orchestrator<span class="w"> </span>xopera-wsl
 </code></pre></div></td></tr></table></div>
 <h2 id="unfurl">Unfurl<a class="headerlink" href="#unfurl" title="Permanent link">¶</a></h2>
-<p>You can install Unfurl using the following command.
+<p>We install Unfurl using the following command.
 This will install Unfurl v0.9.1 system-wide using pip.
 For a manual installation see <a href="https://docs.unfurl.run/README.html#installation" target="_blank">the documentation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--unfurl
 </code></pre></div></td></tr></table></div>
-<p>Then, you can configure Vintner to use Unfurl.</p>
+<p>Next, we configure Vintner to use Unfurl.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
 <span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl<span class="w"> </span>--no-venv
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
 </code></pre></div></td></tr></table></div>
-<p>To attest that Vintner can correctly use Unfurl, run the following command.</p>
+<p>Next, we attest that Vintner can correctly use Unfurl.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>attest<span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
 </code></pre></div></td></tr></table></div>
-<p>If you have installed Unfurl in WSL and run Vintner on Windows, then configure Vintner in the following way.</p>
+<p>If Unfurl is running in WSL and Vintner on Windows, then configure Vintner as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
 <span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>unfurl-wsl<span class="w"> </span>--no-venv
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl-wsl
@@ -2285,7 +2298,7 @@ For a manual installation see <a href="https://docs.unfurl.run/README.html#insta
 </code></pre></div></td></tr></table></div>
 <h2 id="integrated-features">Integrated Features<a class="headerlink" href="#integrated-features" title="Permanent link">¶</a></h2>
 <p>The following table describes which feature of the orchestrators are integrated. 
-The orchestrators provide more features than we integrated, thus, checkout <a href="https://tosss.opentosca.org" target="_blank">TOSSS</a>.</p>
+The orchestrators provide more features, see <a href="https://tosss.opentosca.org" target="_blank">TOSSS</a>.</p>
 <table>
 <thead>
 <tr>
@@ -2296,37 +2309,37 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
 </thead>
 <tbody>
 <tr>
-<td>Validate a service template</td>
+<td>Validate an application topology</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Deploy a service template</td>
+<td>Deploy an application</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Get service template outputs</td>
+<td>Access deployment outputs</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Continue a service template</td>
+<td>Continue the deployment of an application</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Update a service template</td>
+<td>Update the service template of an application</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Undeploy a service template</td>
+<td>Undeploy an application</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 </tr>
 <tr>
-<td>Access Node Instance Attributes</td>
+<td>Access node instance attributes</td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59 21 7Z"></path></svg></span></td>
 <td><span class="twemoji"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg></span></td>
 </tr>
@@ -2334,7 +2347,7 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
 </table>
 <h2 id="known-limitations">Known Limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <ul>
-<li>xOpera version 0.6.9 should be used instead of 0.7.0 which does not parse the templates as expected, see issues
+<li>xOpera version 0.6.9 should be used. xOpera version 0.7.0 does not parse the templates as expected, see issues
   <a href="https://github.com/xlab-si/xopera-opera/issues/257" target="_blank">#257</a>,
   <a href="https://github.com/xlab-si/xopera-opera/issues/258" target="_blank">#258</a>, and
   <a href="https://github.com/xlab-si/xopera-opera/issues/261" target="_blank">#261</a>.</li>
@@ -2345,7 +2358,7 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 13, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>
@@ -2354,7 +2367,7 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Installation" class="md-footer__link md-footer__link--prev" href="../installation/" rel="prev">
+<a aria-label="Previous: Usage" class="md-footer__link md-footer__link--prev" href="../usage/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
 </div>
@@ -2363,7 +2376,7 @@ The orchestrators provide more features than we integrated, thus, checkout <a hr
                 Previous
               </span>
 <div class="md-ellipsis">
-                Installation
+                Usage
               </div>
 </div>
 </a>

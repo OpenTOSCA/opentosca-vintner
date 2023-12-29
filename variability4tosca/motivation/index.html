@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/variability4tosca/motivation/" rel="canonical"/>
-<link href="../../dependencies/" rel="prev"/>
+<link href="../../uninstallation/" rel="prev"/>
 <link href="../specification/" rel="next"/>
 <link href="../../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
@@ -249,6 +249,16 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../../orchestrators/">
         Orchestrators
       </a>
@@ -261,6 +271,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1866,11 +1881,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../guides/pruning/">
         Pruning Elements
       </a>
@@ -2265,6 +2275,7 @@
 <a class="md-tag" href="../../tags/#guide">Guide</a>
 <a class="md-tag" href="../../tags/#publication">Publication</a>
 <a class="md-tag" href="../../tags/#algorithms-2022">Algorithms 2022</a>
+<a class="md-tag" href="../../tags/#xopera">xOpera</a>
 </nav>
 <h1 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">¶</a></h1>
 <p>In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivating scenario, as presented in Figure 1.
@@ -2290,9 +2301,7 @@ However, for the productive operation, an elastic deployment is required and, th
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">¶</a></h2>
 <p>First, install OpenTOSCA Vintner.
 For more information see <a href="../../installation/" target="_blank">Installation</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 <p>Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
 For more information see <a href="../../orchestrators/" target="_blank">Orchestrators</a>.</p>
@@ -2310,14 +2319,12 @@ For more information see <a href="../../orchestrators/" target="_blank">Orchestr
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Clone the repository</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Then, we import the template and initialize an instance.</p>
+<p>Next, we import the template and initialize an instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span>
@@ -2338,19 +2345,19 @@ For example, the virtual machine hosted on OpenStack has a condition assigned th
 <h2 id="resolve-variability">Resolve Variability<a class="headerlink" href="#resolve-variability" title="Permanent link">¶</a></h2>
 <p>We intend to deploy the development variant of the application.
 Therefore, we need to resolve the variability by providing respective variability inputs.
-In our case, we can use already predefined variability inputs by using a variability preset.</p>
+In our case, we use already predefined variability inputs by using a variability preset.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
 <span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Resolve variability</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>motivation<span class="w"> </span>--presets<span class="w"> </span>dev
 </code></pre></div></td></tr></table></div>
-<p>You can optionally inspect the generated service template. 
+<p>We can optionally inspect the generated service template. 
 This template contains only the nodes required for the development variant, as presented on the left in Figure 1.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
 <span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># (optional) Inspect service template</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>motivation
 </code></pre></div></td></tr></table></div>
 <h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">¶</a></h2>
-<p>Finally, we can deploy the application.
+<p>Finally, we deploy the application.
 Therefore, we need to provide deployment inputs which contain, e.g., credentials for accessing OpenStack.
 An example for the deployment inputs is given in <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation/inputs.example.yaml" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-motivation/inputs.example.yaml</a>.
 The deployment will take some minutes.</p>
@@ -2361,12 +2368,12 @@ The deployment will take some minutes.</p>
 <a id="__codelineno-7-3" name="__codelineno-7-3"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>motivation<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="undeployment">Undeployment<a class="headerlink" href="#undeployment" title="Permanent link">¶</a></h2>
-<p>Afterward, you can undeploy the application.</p>
+<p>Afterward, we can undeploy the application.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
 <span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># Undeploy instance</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>motivation
 </code></pre></div></td></tr></table></div>
-<p>You can also optionally remove the instance or cleanup your filesystem.
+<p>We can also optionally remove the instance or cleanup your filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
 <span class="normal"><a href="#__codelineno-9-2">2</a></span>
@@ -2389,7 +2396,7 @@ Also check our other <a href="../../publications/" target="_blank">publications<
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 11, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>
@@ -2398,7 +2405,7 @@ Also check our other <a href="../../publications/" target="_blank">publications<
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Dependencies" class="md-footer__link md-footer__link--prev" href="../../dependencies/" rel="prev">
+<a aria-label="Previous: Uninstallation" class="md-footer__link md-footer__link--prev" href="../../uninstallation/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
 </div>
@@ -2407,7 +2414,7 @@ Also check our other <a href="../../publications/" target="_blank">publications<
                 Previous
               </span>
 <div class="md-ellipsis">
-                Dependencies
+                Uninstallation
               </div>
 </div>
 </a>

@@ -7,7 +7,7 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/installation/" rel="canonical"/>
 <link href="../getting-started/" rel="prev"/>
-<link href="../orchestrators/" rel="next"/>
+<link href="../versions/" rel="next"/>
 <link href="../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
 <title>Installation - OpenTOSCA Vintner</title>
@@ -259,18 +259,23 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#script">
+    Script
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#npm">
     NPM
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#yarn-v1">
-    Yarn v1
+<a class="md-nav__link" href="#yarn-classic">
+    Yarn (Classic)
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#yarn-v2">
-    Yarn v2
+<a class="md-nav__link" href="#yarn-modern">
+    Yarn (Modern)
   </a>
 </li>
 <li class="md-nav__item">
@@ -323,18 +328,8 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#script">
-    Script
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#manual">
     Manual
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#configuration">
-    Configuration
   </a>
 </li>
 <li class="md-nav__item">
@@ -346,9 +341,33 @@
 <a class="md-nav__link" href="#signature">
     Signature
   </a>
+<nav aria-label="Signature" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#verification">
+    Verification
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#public-key">
+    Public Key
+  </a>
 </li>
 </ul>
 </nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../usage/">
+        Usage
+      </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../orchestrators/">
@@ -363,6 +382,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../dependencies/">
         Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../uninstallation/">
+        Uninstallation
       </a>
 </li>
 <li class="md-nav__item">
@@ -1920,11 +1944,6 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../variability4tosca/guides/pipes-and-filters/">
-        Pipes and Filters Application
-      </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="../variability4tosca/guides/pruning/">
         Pruning Elements
       </a>
@@ -2273,18 +2292,23 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#script">
+    Script
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#npm">
     NPM
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#yarn-v1">
-    Yarn v1
+<a class="md-nav__link" href="#yarn-classic">
+    Yarn (Classic)
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#yarn-v2">
-    Yarn v2
+<a class="md-nav__link" href="#yarn-modern">
+    Yarn (Modern)
   </a>
 </li>
 <li class="md-nav__item">
@@ -2337,18 +2361,8 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#script">
-    Script
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#manual">
     Manual
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#configuration">
-    Configuration
   </a>
 </li>
 <li class="md-nav__item">
@@ -2360,6 +2374,20 @@
 <a class="md-nav__link" href="#signature">
     Signature
   </a>
+<nav aria-label="Signature" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#verification">
+    Verification
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#public-key">
+    Public Key
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -2373,163 +2401,155 @@
 <a class="md-tag" href="../tags/#docker">Docker</a>
 </nav>
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">¶</a></h1>
-<p>In this document, we describe ways to install <code>vintner</code>.</p>
-<h2 id="npm">NPM<a class="headerlink" href="#npm" title="Permanent link">¶</a></h2>
-<p><code>vintner</code> can be installed using <code>npm</code>.
-Ensure, that <code>npm bin -g</code> is in your <code>$PATH</code>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>npm<span class="w"> </span>install<span class="w"> </span>--global<span class="w"> </span>opentosca-vintner
-</code></pre></div></td></tr></table></div>
-<h2 id="yarn-v1">Yarn v1<a class="headerlink" href="#yarn-v1" title="Permanent link">¶</a></h2>
-<p><code>vintner</code> can be installed using <code>yarn</code> (classic).
-Ensure, that <code>yarn global bin</code> is in your <code>$PATH</code>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>yarn<span class="w"> </span>global<span class="w"> </span>add<span class="w"> </span>opentosca-vintner
-</code></pre></div></td></tr></table></div>
-<h2 id="yarn-v2">Yarn v2<a class="headerlink" href="#yarn-v2" title="Permanent link">¶</a></h2>
-<p><code>vintner</code> can be installed using <code>yarn</code> (modern).
-However, this will not install <code>vintner</code> permanently but only temporary.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>dlx<span class="w"> </span>opentosca-vintner
-</code></pre></div></td></tr></table></div>
-<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
-<p><code>vintner</code> can be installed using Docker. 
-However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.</p>
-<h3 id="github-container-registry">GitHub Container Registry<a class="headerlink" href="#github-container-registry" title="Permanent link">¶</a></h3>
-<p>We are using the <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">GitHub Container Registry</a>.
-To pull the latest image, run the following command: </p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/opentosca/opentosca-vintner:latest
-</code></pre></div></td></tr></table></div>
-<h3 id="starting-the-container">Starting the Container<a class="headerlink" href="#starting-the-container" title="Permanent link">¶</a></h3>
-<p>To run <code>vintner</code> via docker, first create some directories for the persisting data.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>mkdir<span class="w"> </span>vintner
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>vintner
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a>mkdir<span class="w"> </span>data
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a>mkdir<span class="w"> </span>shared
-</code></pre></div></td></tr></table></div>
-<p>Then, we can start the container.
-This will start the container in the background. 
-Also, the host network is used to enable, e.g., ipv6 support.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span>
-<span class="normal"><a href="#__codelineno-5-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--detach<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/data:/vintner/data<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/shared:/vintner/shared<span class="w">  </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span>--name<span class="w"> </span>vintner<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span>ghcr.io/opentosca/opentosca-vintner:latest
-</code></pre></div></td></tr></table></div>
-<p>There are three important directories inside the container. </p>
-<ul>
-<li><code>/vintner/data</code> holds all data written by Vintner</li>
-<li><code>/vintner/shared</code> should be used to share data between the host and the container, e.g., CSARs or GCP credentials</li>
-<li><code>/vintner/examples</code> holds the examples directory of the repository</li>
-</ul>
-<h3 id="executing-a-command">Executing a Command<a class="headerlink" href="#executing-a-command" title="Permanent link">¶</a></h3>
-<p>The container will run in the background. 
-<code>vintner</code> is executed as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>--version
-</code></pre></div></td></tr></table></div>
-<p>On Linux, it is also possible to set an alias. 
-By doing so, <code>vintner</code> is directly available as command in the terminal on the docker host.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">vintner</span><span class="o">=</span><span class="s2">"docker exec -it vintner vintner"</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a>vintner<span class="w"> </span>--version
-</code></pre></div></td></tr></table></div>
-<h3 id="xopera">xOpera<a class="headerlink" href="#xopera" title="Permanent link">¶</a></h3>
-<p>If you intend to use xOpera, run the following command. 
-Note, xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
-By default, xOpera is already enabled.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
-</code></pre></div></td></tr></table></div>
-<h3 id="unfurl">Unfurl<a class="headerlink" href="#unfurl" title="Permanent link">¶</a></h3>
-<p>If you intend to use Unfurl, run the following command.
-Note, Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
-</code></pre></div></td></tr></table></div>
-<h3 id="stopping-the-container">Stopping the Container<a class="headerlink" href="#stopping-the-container" title="Permanent link">¶</a></h3>
-<p>To stop the container, run the following command.
-Ensure to only stop Vintner, once Vintner is idle. 
-Otherwise, data and deployments will be corrupted.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>docker<span class="w"> </span>stop<span class="w"> </span>vintner
-</code></pre></div></td></tr></table></div>
-<h3 id="watching-the-logs-of-the-container">Watching the Logs of the Container<a class="headerlink" href="#watching-the-logs-of-the-container" title="Permanent link">¶</a></h3>
-<p>To watch the logs of the container, run the following command.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>vintner
-</code></pre></div></td></tr></table></div>
-<h3 id="debugging-the-container">Debugging the Container<a class="headerlink" href="#debugging-the-container" title="Permanent link">¶</a></h3>
-<p>In case you need to debug something inside the container or perform any administrative tasks, you can exec into the container as follows. 
-This will start a shell inside the container.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>/bin/bash
-</code></pre></div></td></tr></table></div>
+<p>This document holds instructions on installing Vintner.</p>
 <h2 id="script">Script<a class="headerlink" href="#script" title="Permanent link">¶</a></h2>
-<p><code>vintner</code> can be installed using our installation scripts. 
-For the remaining supported platforms and architectures, see the manual installation.</p>
+<p>Vintner can be installed on Linux x64/ arm64 and Windows x64 using our installation scripts.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Linux x64/ arm64</label><label for="__tabbed_1_2">Windows x64</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
-<p>To install a specific version, run </p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span><span class="nv">VERSION</span><span class="o">=</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="w"> </span>bash<span class="w"> </span>-
+<p>Install a specific version as follows. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span><span class="nv">VERSION</span><span class="o">=</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
-<span class="normal"><a href="#__codelineno-15-2">2</a></span>
-<span class="normal"><a href="#__codelineno-15-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
 </code></pre></div></td></tr></table></div>
-<p>To install a specific version, run </p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
-<span class="normal"><a href="#__codelineno-16-2">2</a></span>
-<span class="normal"><a href="#__codelineno-16-3">3</a></span>
-<span class="normal"><a href="#__codelineno-16-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="nv">$env:VERSION</span> <span class="p">=</span> <span class="s2">"DESIRED_VERSION"</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<p>Install a specific version as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">$env:VERSION</span> <span class="p">=</span> <span class="s2">"DESIRED_VERSION"</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
 </input></input></div>
+<h2 id="npm">NPM<a class="headerlink" href="#npm" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>npm</code>.
+Ensure, that <code>npm bin -g</code> is in your <code>$PATH</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>npm<span class="w"> </span>install<span class="w"> </span>--global<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="yarn-classic">Yarn (Classic)<a class="headerlink" href="#yarn-classic" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>yarn</code> (classic).
+Ensure, that <code>yarn global bin</code> is in your <code>$PATH</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>yarn<span class="w"> </span>global<span class="w"> </span>add<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="yarn-modern">Yarn (Modern)<a class="headerlink" href="#yarn-modern" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>yarn</code> (modern).
+However, this will not install Vintner permanently but only <a href="https://yarnpkg.com/migration/guide#use-yarn-dlx-instead-of-yarn-global" target="_blank">temporary</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>yarn<span class="w"> </span>dlx<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using Docker. 
+The Image is about 3GB large and contains tools, such as xOpera, Unfurl, Ansible, Terraform, and all of our examples.</p>
+<h3 id="github-container-registry">GitHub Container Registry<a class="headerlink" href="#github-container-registry" title="Permanent link">¶</a></h3>
+<p>Pull the latest image from the <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">GitHub Container Registry</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/opentosca/opentosca-vintner:latest
+</code></pre></div></td></tr></table></div>
+<h3 id="starting-the-container">Starting the Container<a class="headerlink" href="#starting-the-container" title="Permanent link">¶</a></h3>
+<p>First, we create directories for persisting data.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>mkdir<span class="w"> </span>vintner
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nb">cd</span><span class="w"> </span>vintner
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>mkdir<span class="w"> </span>data
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>mkdir<span class="w"> </span>shared
+</code></pre></div></td></tr></table></div>
+<p>Next, we start the container.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span>
+<span class="normal"><a href="#__codelineno-9-6">6</a></span>
+<span class="normal"><a href="#__codelineno-9-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">  </span>--detach<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/data:/vintner/data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/shared:/vintner/shared<span class="w">  </span><span class="se">\</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">  </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">  </span>--name<span class="w"> </span>vintner<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">  </span>ghcr.io/opentosca/opentosca-vintner:latest
+</code></pre></div></td></tr></table></div>
+<p>The command consists of the following aspects.</p>
+<ul>
+<li><code>--detach</code> starts the container in the background.</li>
+<li><code>--volume ${PWD}/data:/vintner/data</code> persists all data written by Vintner.</li>
+<li><code>--volume ${PWD}/shared:/vintner/shared</code> should be used to share data between the host and the container, e.g., CSARs or GCP credentials.</li>
+<li><code>--network host</code> uses the host network, e.g., for ipv6 support.</li>
+<li><code>--name vintner</code> is the container name. </li>
+<li><code>ghcr.io/opentosca/opentosca-vintner:latest</code> pulls the latest Docker Image</li>
+</ul>
+<p>Inside the container, the following directories are of interest.</p>
+<ul>
+<li><code>/vintner/data</code> holds all data written by Vintner.</li>
+<li><code>/vintner/shared</code> should be used to share data between the host and the container, e.g., CSARs or GCP credentials.</li>
+<li><code>/vintner/examples</code> holds the examples directory of the repository.</li>
+</ul>
+<h3 id="executing-a-command">Executing a Command<a class="headerlink" href="#executing-a-command" title="Permanent link">¶</a></h3>
+<p>The container runs in the background. 
+Vintner is executed as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<p>On Linux, we set an alias to directly use Vintner as command in the terminal on the docker host.
+To persist the alias, add the alias, e.g., to <code>~/.bashrc</code> (requires reloading the session).</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">vintner</span><span class="o">=</span><span class="s2">"docker exec -it vintner vintner"</span>
+</code></pre></div></td></tr></table></div>
+<p>Now, Vintner is available as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>vintner<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<h3 id="xopera">xOpera<a class="headerlink" href="#xopera" title="Permanent link">¶</a></h3>
+<p>xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+By default, xOpera is already enabled.
+Enable xOpera as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
+</code></pre></div></td></tr></table></div>
+<h3 id="unfurl">Unfurl<a class="headerlink" href="#unfurl" title="Permanent link">¶</a></h3>
+<p>Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+Enable Unfurl as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
+</code></pre></div></td></tr></table></div>
+<h3 id="stopping-the-container">Stopping the Container<a class="headerlink" href="#stopping-the-container" title="Permanent link">¶</a></h3>
+<p>Ensure to only stop Vintner, once Vintner is idle. 
+Otherwise, data and deployments will be corrupted.
+Stop the container as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>docker<span class="w"> </span>stop<span class="w"> </span>vintner
+</code></pre></div></td></tr></table></div>
+<h3 id="watching-the-logs-of-the-container">Watching the Logs of the Container<a class="headerlink" href="#watching-the-logs-of-the-container" title="Permanent link">¶</a></h3>
+<p>Watch the logs of the container as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>vintner
+</code></pre></div></td></tr></table></div>
+<h3 id="debugging-the-container">Debugging the Container<a class="headerlink" href="#debugging-the-container" title="Permanent link">¶</a></h3>
+<p>In case we need to debug something inside the container or perform any administrative tasks, we can exec into the container as follows. 
+This starts a shell inside the container.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>/bin/bash
+</code></pre></div></td></tr></table></div>
 <h2 id="manual">Manual<a class="headerlink" href="#manual" title="Permanent link">¶</a></h2>
-<p>To manually install <code>vintner</code>, download the binary for your system.
+<p>Install Vintner manually by downloading the binary for your system and adding it to <code>$PATH</code>.
 There are no other dependencies required. 
-You might add the binary to your <code>$PATH</code>.
-The following example shows the installation on Linux.
-See <a href="#signature">below</a> for verifying the signature of the binary.</p>
+The following example shows the installation on selected platforms and architectures.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><input id="__tabbed_2_4" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Linux x64</label><label for="__tabbed_2_2">Linux arm64</label><label for="__tabbed_2_3">Alpine x64</label><label for="__tabbed_2_4">Windows x64</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
-<span class="normal"><a href="#__codelineno-17-2">2</a></span>
-<span class="normal"><a href="#__codelineno-17-3">3</a></span>
-<span class="normal"><a href="#__codelineno-17-4">4</a></span>
-<span class="normal"><a href="#__codelineno-17-5">5</a></span>
-<span class="normal"><a href="#__codelineno-17-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
-<a id="__codelineno-17-2" name="__codelineno-17-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-x64.xz
-<a id="__codelineno-17-3" name="__codelineno-17-3"></a>rm<span class="w"> </span>vintner-linux-x64.xz
-<a id="__codelineno-17-4" name="__codelineno-17-4"></a>mv<span class="w"> </span>vintner-linux-x64<span class="w"> </span>/usr/bin/vintner
-<a id="__codelineno-17-5" name="__codelineno-17-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
-<a id="__codelineno-17-6" name="__codelineno-17-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
-</code></pre></div></td></tr></table></div>
-</div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
 <span class="normal"><a href="#__codelineno-18-2">2</a></span>
 <span class="normal"><a href="#__codelineno-18-3">3</a></span>
 <span class="normal"><a href="#__codelineno-18-4">4</a></span>
 <span class="normal"><a href="#__codelineno-18-5">5</a></span>
-<span class="normal"><a href="#__codelineno-18-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz
-<a id="__codelineno-18-2" name="__codelineno-18-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-arm64.xz
-<a id="__codelineno-18-3" name="__codelineno-18-3"></a>rm<span class="w"> </span>vintner-linux-arm64.xz
-<a id="__codelineno-18-4" name="__codelineno-18-4"></a>mv<span class="w"> </span>vintner-linux-arm64<span class="w"> </span>/usr/bin/vintner
+<span class="normal"><a href="#__codelineno-18-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-x64.xz
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a>rm<span class="w"> </span>vintner-linux-x64.xz
+<a id="__codelineno-18-4" name="__codelineno-18-4"></a>mv<span class="w"> </span>vintner-linux-x64<span class="w"> </span>/usr/bin/vintner
 <a id="__codelineno-18-5" name="__codelineno-18-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
 <a id="__codelineno-18-6" name="__codelineno-18-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
 </code></pre></div></td></tr></table></div>
@@ -2540,43 +2560,57 @@ See <a href="#signature">below</a> for verifying the signature of the binary.</p
 <span class="normal"><a href="#__codelineno-19-3">3</a></span>
 <span class="normal"><a href="#__codelineno-19-4">4</a></span>
 <span class="normal"><a href="#__codelineno-19-5">5</a></span>
-<span class="normal"><a href="#__codelineno-19-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz
-<a id="__codelineno-19-2" name="__codelineno-19-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-alpine-x64.xz
-<a id="__codelineno-19-3" name="__codelineno-19-3"></a>rm<span class="w"> </span>vintner-alpine-x64.xz
-<a id="__codelineno-19-4" name="__codelineno-19-4"></a>mv<span class="w"> </span>vintner-alpine-x64<span class="w"> </span>/usr/bin/vintner
+<span class="normal"><a href="#__codelineno-19-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-arm64.xz
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a>rm<span class="w"> </span>vintner-linux-arm64.xz
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a>mv<span class="w"> </span>vintner-linux-arm64<span class="w"> </span>/usr/bin/vintner
 <a id="__codelineno-19-5" name="__codelineno-19-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
 <a id="__codelineno-19-6" name="__codelineno-19-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<p>First, create the directory <code>$env:USERPROFILE\bin</code> and add it to your PATH.
-We recommend to do this manually.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
 <span class="normal"><a href="#__codelineno-20-2">2</a></span>
 <span class="normal"><a href="#__codelineno-20-3">3</a></span>
 <span class="normal"><a href="#__codelineno-20-4">4</a></span>
 <span class="normal"><a href="#__codelineno-20-5">5</a></span>
-<span class="normal"><a href="#__codelineno-20-6">6</a></span>
-<span class="normal"><a href="#__codelineno-20-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-Path</span> <span class="nv">$userBin</span><span class="p">))</span> <span class="p">{</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3"></a>    <span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">"$env:USERPROFILE\bin"</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4"></a>    <span class="nv">$userPath</span> <span class="p">=</span> <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
-<a id="__codelineno-20-5" name="__codelineno-20-5"></a>    <span class="nv">$newPath</span> <span class="p">=</span> <span class="s2">"$userPath$userBin;"</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6"></a>    <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="nv">$newPath</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
-<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-20-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-alpine-x64.xz
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a>rm<span class="w"> </span>vintner-alpine-x64.xz
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a>mv<span class="w"> </span>vintner-alpine-x64<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-20-6" name="__codelineno-20-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
 </code></pre></div></td></tr></table></div>
-<p>Next, install vintner.</p>
+</div>
+<div class="tabbed-block">
+<p>First, create the directory <code>$env:USERPROFILE\bin</code> and add it to your PATH.
+We recommend to do this manually.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span>
 <span class="normal"><a href="#__codelineno-21-2">2</a></span>
 <span class="normal"><a href="#__codelineno-21-3">3</a></span>
 <span class="normal"><a href="#__codelineno-21-4">4</a></span>
 <span class="normal"><a href="#__codelineno-21-5">5</a></span>
-<span class="normal"><a href="#__codelineno-21-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-URI</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">opentosca</span><span class="p">/</span><span class="n">opentosca-vintner</span><span class="p">/</span><span class="n">releases</span><span class="p">/</span><span class="n">download</span><span class="p">/</span><span class="n">latest</span><span class="p">/</span><span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span> <span class="n">-OutFile</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="n">tar</span> <span class="n">-xf</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
-<a id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="nb">Remove-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5"></a><span class="nb">Move-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span> <span class="nv">$userBin</span><span class="p">\</span><span class="n">vintner</span><span class="p">.</span><span class="n">exe</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6"></a><span class="n">vintner</span> <span class="n">setup</span> <span class="n">init</span>
+<span class="normal"><a href="#__codelineno-21-6">6</a></span>
+<span class="normal"><a href="#__codelineno-21-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-Path</span> <span class="nv">$userBin</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a>    <span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4"></a>    <span class="nv">$userPath</span> <span class="p">=</span> <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5"></a>    <span class="nv">$newPath</span> <span class="p">=</span> <span class="s2">"$userPath$userBin;"</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6"></a>    <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="nv">$newPath</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Next, install vintner.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span>
+<span class="normal"><a href="#__codelineno-22-2">2</a></span>
+<span class="normal"><a href="#__codelineno-22-3">3</a></span>
+<span class="normal"><a href="#__codelineno-22-4">4</a></span>
+<span class="normal"><a href="#__codelineno-22-5">5</a></span>
+<span class="normal"><a href="#__codelineno-22-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-URI</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">opentosca</span><span class="p">/</span><span class="n">opentosca-vintner</span><span class="p">/</span><span class="n">releases</span><span class="p">/</span><span class="n">download</span><span class="p">/</span><span class="n">latest</span><span class="p">/</span><span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span> <span class="n">-OutFile</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="n">tar</span> <span class="n">-xf</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="nb">Remove-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="nb">Move-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span> <span class="nv">$userBin</span><span class="p">\</span><span class="n">vintner</span><span class="p">.</span><span class="n">exe</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6"></a><span class="n">vintner</span> <span class="n">setup</span> <span class="n">init</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -2628,188 +2662,163 @@ We recommend to do this manually.</p>
 </tr>
 </tbody>
 </table>
-<p>To check, that <code>vintner</code> can be executed, run</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a>vintner<span class="w"> </span>--version
-</code></pre></div></td></tr></table></div>
-<p>To start the server, run
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>vintner<span class="w"> </span>server<span class="w"> </span>start
-</code></pre></div></td></tr></table></div></p>
-<p>To uninstall all files including the binary, run the following commands.
-<em>This will not undeploy currently deployed applications</em>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
-<span class="normal"><a href="#__codelineno-24-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
-<a id="__codelineno-24-2" name="__codelineno-24-2"></a>rm<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>which<span class="w"> </span>vintner<span class="k">)</span><span class="s2">"</span>
-</code></pre></div></td></tr></table></div>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
-<p>The following environment variables can be used for configuration.</p>
-<table>
-<thead>
-<tr>
-<th>Environment Variable</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OPENTOSCA_VINTNER_HOME_DIR</td>
-<td>${HOME_DIR}/.opentosca_vintner</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <h2 id="checksum">Checksum<a class="headerlink" href="#checksum" title="Permanent link">¶</a></h2>
 <p>To verify the integrity of a binary, proceed as follows.
 The following is a walkthrough for <code>vintner-linux-x64</code>.
 We assume that <code>vintner-linux-x64</code> is present in the current working directory.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span>
-<span class="normal"><a href="#__codelineno-25-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
-<a id="__codelineno-25-2" name="__codelineno-25-2"></a>sha256sum<span class="w"> </span>--check<span class="w"> </span>vintner-linux-x64.sha256
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span>
+<span class="normal"><a href="#__codelineno-23-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a>sha256sum<span class="w"> </span>--check<span class="w"> </span>vintner-linux-x64.sha256
 </code></pre></div></td></tr></table></div>
 <h2 id="signature">Signature<a class="headerlink" href="#signature" title="Permanent link">¶</a></h2>
+<p>Every binary is cryptographically signed.</p>
+<h3 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">¶</a></h3>
 <p>To verify a signature of a binary, first import our public key and download the respective signature.
 The following is a walkthrough for <code>vintner-linux-x64</code> using <code>gpg</code>.
 We assume that <code>vintner-linux-x64</code> is present in the current working directory.</p>
-<p>First, import our public key.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>curl<span class="w"> </span>https://vintner.opentosca.org/vintner-release.gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--import
+<p>First, we import the public key.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>curl<span class="w"> </span>https://vintner.opentosca.org/vintner-release.gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--import
 </code></pre></div></td></tr></table></div>
-<p>Then download and verify the respective signature.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
-<span class="normal"><a href="#__codelineno-27-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
-<a id="__codelineno-27-2" name="__codelineno-27-2"></a>gpg<span class="w"> </span>--verify<span class="w"> </span>vintner-linux-x64.asc
+<p>Next, we download the signature.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+</code></pre></div></td></tr></table></div>
+<p>Next, we verify the signature.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>gpg<span class="w"> </span>--verify<span class="w"> </span>vintner-linux-x64.asc
 </code></pre></div></td></tr></table></div>
 <p>The output should be something as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
+<span class="normal"><a href="#__codelineno-27-2">2</a></span>
+<span class="normal"><a href="#__codelineno-27-3">3</a></span>
+<span class="normal"><a href="#__codelineno-27-4">4</a></span>
+<span class="normal"><a href="#__codelineno-27-5">5</a></span>
+<span class="normal"><a href="#__codelineno-27-6">6</a></span>
+<span class="normal"><a href="#__codelineno-27-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>gpg: assuming signed data in 'vintner-linux-x64'
+<a id="__codelineno-27-2" name="__codelineno-27-2"></a>gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
+<a id="__codelineno-27-3" name="__codelineno-27-3"></a>gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-27-4" name="__codelineno-27-4"></a>gpg: Good signature from "vintner-release" [unknown]
+<a id="__codelineno-27-5" name="__codelineno-27-5"></a>gpg: WARNING: This key is not certified with a trusted signature!
+<a id="__codelineno-27-6" name="__codelineno-27-6"></a>gpg:          There is no indication that the signature belongs to the owner.
+<a id="__codelineno-27-7" name="__codelineno-27-7"></a>Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
+</code></pre></div></td></tr></table></div>
+<h3 id="public-key">Public Key<a class="headerlink" href="#public-key" title="Permanent link">¶</a></h3>
+<p>The following public key shall be used for verifying signatures. 
+The public key is also available as <a href="https://vintner.opentosca.org/vintner-release.gpg" target="_blank">download</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1">1</a></span>
 <span class="normal"><a href="#__codelineno-28-2">2</a></span>
 <span class="normal"><a href="#__codelineno-28-3">3</a></span>
-<span class="normal"><a href="#__codelineno-28-4">4</a></span>
-<span class="normal"><a href="#__codelineno-28-5">5</a></span>
-<span class="normal"><a href="#__codelineno-28-6">6</a></span>
-<span class="normal"><a href="#__codelineno-28-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>gpg: assuming signed data in 'vintner-linux-x64'
-<a id="__codelineno-28-2" name="__codelineno-28-2"></a>gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
-<a id="__codelineno-28-3" name="__codelineno-28-3"></a>gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
-<a id="__codelineno-28-4" name="__codelineno-28-4"></a>gpg: Good signature from "vintner-release" [unknown]
-<a id="__codelineno-28-5" name="__codelineno-28-5"></a>gpg: WARNING: This key is not certified with a trusted signature!
-<a id="__codelineno-28-6" name="__codelineno-28-6"></a>gpg:          There is no indication that the signature belongs to the owner.
-<a id="__codelineno-28-7" name="__codelineno-28-7"></a>Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
+<span class="normal"><a href="#__codelineno-28-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>pub<span class="w">   </span>rsa4096/964183A1485881AD<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>SC<span class="o">]</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="w">      </span>4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-28-3" name="__codelineno-28-3"></a>uid<span class="w">                 </span><span class="o">[</span>unknown<span class="o">]</span><span class="w"> </span>vintner-release
+<a id="__codelineno-28-4" name="__codelineno-28-4"></a>sub<span class="w">   </span>rsa4096/B230BD6651AA1BB8<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>E<span class="o">]</span>
 </code></pre></div></td></tr></table></div>
-<p>This is the public key that should be used for verification (<a href="https://vintner.opentosca.org/vintner-release.gpg" target="_blank">download</a>).</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span>
-<span class="normal"><a href="#__codelineno-29-2">2</a></span>
-<span class="normal"><a href="#__codelineno-29-3">3</a></span>
-<span class="normal"><a href="#__codelineno-29-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>pub<span class="w">   </span>rsa4096/964183A1485881AD<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>SC<span class="o">]</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="w">      </span>4BB862B810B792CC072D59DB964183A1485881AD
-<a id="__codelineno-29-3" name="__codelineno-29-3"></a>uid<span class="w">                 </span><span class="o">[</span>unknown<span class="o">]</span><span class="w"> </span>vintner-release
-<a id="__codelineno-29-4" name="__codelineno-29-4"></a>sub<span class="w">   </span>rsa4096/B230BD6651AA1BB8<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>E<span class="o">]</span>
-</code></pre></div></td></tr></table></div>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-30-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-30-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-30-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-30-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-30-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-30-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-30-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-30-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-30-10">10</a></span>
-<span class="normal"><a href="#__codelineno-30-11">11</a></span>
-<span class="normal"><a href="#__codelineno-30-12">12</a></span>
-<span class="normal"><a href="#__codelineno-30-13">13</a></span>
-<span class="normal"><a href="#__codelineno-30-14">14</a></span>
-<span class="normal"><a href="#__codelineno-30-15">15</a></span>
-<span class="normal"><a href="#__codelineno-30-16">16</a></span>
-<span class="normal"><a href="#__codelineno-30-17">17</a></span>
-<span class="normal"><a href="#__codelineno-30-18">18</a></span>
-<span class="normal"><a href="#__codelineno-30-19">19</a></span>
-<span class="normal"><a href="#__codelineno-30-20">20</a></span>
-<span class="normal"><a href="#__codelineno-30-21">21</a></span>
-<span class="normal"><a href="#__codelineno-30-22">22</a></span>
-<span class="normal"><a href="#__codelineno-30-23">23</a></span>
-<span class="normal"><a href="#__codelineno-30-24">24</a></span>
-<span class="normal"><a href="#__codelineno-30-25">25</a></span>
-<span class="normal"><a href="#__codelineno-30-26">26</a></span>
-<span class="normal"><a href="#__codelineno-30-27">27</a></span>
-<span class="normal"><a href="#__codelineno-30-28">28</a></span>
-<span class="normal"><a href="#__codelineno-30-29">29</a></span>
-<span class="normal"><a href="#__codelineno-30-30">30</a></span>
-<span class="normal"><a href="#__codelineno-30-31">31</a></span>
-<span class="normal"><a href="#__codelineno-30-32">32</a></span>
-<span class="normal"><a href="#__codelineno-30-33">33</a></span>
-<span class="normal"><a href="#__codelineno-30-34">34</a></span>
-<span class="normal"><a href="#__codelineno-30-35">35</a></span>
-<span class="normal"><a href="#__codelineno-30-36">36</a></span>
-<span class="normal"><a href="#__codelineno-30-37">37</a></span>
-<span class="normal"><a href="#__codelineno-30-38">38</a></span>
-<span class="normal"><a href="#__codelineno-30-39">39</a></span>
-<span class="normal"><a href="#__codelineno-30-40">40</a></span>
-<span class="normal"><a href="#__codelineno-30-41">41</a></span>
-<span class="normal"><a href="#__codelineno-30-42">42</a></span>
-<span class="normal"><a href="#__codelineno-30-43">43</a></span>
-<span class="normal"><a href="#__codelineno-30-44">44</a></span>
-<span class="normal"><a href="#__codelineno-30-45">45</a></span>
-<span class="normal"><a href="#__codelineno-30-46">46</a></span>
-<span class="normal"><a href="#__codelineno-30-47">47</a></span>
-<span class="normal"><a href="#__codelineno-30-48">48</a></span>
-<span class="normal"><a href="#__codelineno-30-49">49</a></span>
-<span class="normal"><a href="#__codelineno-30-50">50</a></span>
-<span class="normal"><a href="#__codelineno-30-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a>-----BEGIN PGP PUBLIC KEY BLOCK-----
-<a id="__codelineno-30-2" name="__codelineno-30-2"></a>
-<a id="__codelineno-30-3" name="__codelineno-30-3"></a>mQINBGNVcowBEAC0jzKuuLE6AqCaRvjp1mwCC76Px6wG4jgvrXfraCaOf3Y3uywW
-<a id="__codelineno-30-4" name="__codelineno-30-4"></a>lD3NNfqb/rc/FYQXH9lIU9n6zIB47mK0zoeHWWqPjRp6BTTbbMjePinHCb2K1XM5
-<a id="__codelineno-30-5" name="__codelineno-30-5"></a>wLglw0OeC2T/NvfbU7FbN/QVFgQPWL16UhuoQhfraax6TFGO9iF/+yhG7AYZ+vAE
-<a id="__codelineno-30-6" name="__codelineno-30-6"></a>7GkaPQAlzGrbbyffaBYzoqgalHslmxG9RvAxDBaQXrcsqJiv6Zfv8rDNdPlGk7mX
-<a id="__codelineno-30-7" name="__codelineno-30-7"></a>UIbMHUuFzcep15ZQy+9PY/JLyYBUUDNhAXKLomjNPuCQHvZ/DS/XveIW+l6EYSLq
-<a id="__codelineno-30-8" name="__codelineno-30-8"></a>r6B/XCFkVWUO2RugvmpEacUSLrIL39ceUh0dYnpEDU4Z8dRlAyVaswR5j90bPrgz
-<a id="__codelineno-30-9" name="__codelineno-30-9"></a>NSaLF5NQrWlE8gksvK2KYog9Q4lrAdD0wQNV0bnU6YG3TM71wXZim8PokTzxPrA0
-<a id="__codelineno-30-10" name="__codelineno-30-10"></a>JAigEHzN9nbHSzjB71m8cVt6Zl4lGCCYqr8jSjKAUAN01koQVZd/lFljXfI27NcG
-<a id="__codelineno-30-11" name="__codelineno-30-11"></a>y7yYBc97IWaOM039kyPKKVGAB3I3l9d90+RL3tSET2MwPN3Vjlq3ArJ6QBKeB80S
-<a id="__codelineno-30-12" name="__codelineno-30-12"></a>HgRroYVXx+dCJpZhMeeTC8kVjWNL1kctwOMtxWU7N4fO+pi2BW1F5QHlYWJj2fRY
-<a id="__codelineno-30-13" name="__codelineno-30-13"></a>Mp9LE9NYXD1UO/8N1bT2RLGPwrmXXCJF20UDc63wuKzO0IBgXBvPArkUtwARAQAB
-<a id="__codelineno-30-14" name="__codelineno-30-14"></a>tA92aW50bmVyLXJlbGVhc2WJAk4EEwEIADgWIQRLuGK4ELeSzActWduWQYOhSFiB
-<a id="__codelineno-30-15" name="__codelineno-30-15"></a>rQUCY1VyjAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCWQYOhSFiBraf5
-<a id="__codelineno-30-16" name="__codelineno-30-16"></a>D/4mHhD7nwLQ87bE4d6jPB9prwN86eT3bpz1wXoVwFJfArJ7I3wH/0uQe0GXGbJx
-<a id="__codelineno-30-17" name="__codelineno-30-17"></a>G9TUdQHAGgN6/e99x54Dg4n4Qzap4W5baYlE3Klu6BUZOx9RKhSdtGfCk0+kUpxV
-<a id="__codelineno-30-18" name="__codelineno-30-18"></a>lMNLWeXFeHepCp3CwKdH3gkwcWxaBBSsYE2ayk34+CXs3ftttRRUPmCCyxk+XiM9
-<a id="__codelineno-30-19" name="__codelineno-30-19"></a>HSDO/1yIdiwO1XPFVuFZA150wdW2KYL4AuG4aB7lh1nd6jNgoz7LjwdpWN4Sa+38
-<a id="__codelineno-30-20" name="__codelineno-30-20"></a>5AkQVez1n8Ru1ul4GRPbS2T+OZu6aoITe6i3JxDEAL/ljPN07ufiqFnTYKh8yUsl
-<a id="__codelineno-30-21" name="__codelineno-30-21"></a>pPOpoM6ytMgcPlSxDfyhWSKw4aFYEJYT6Teeniup4ElywOJsBHfQ6Tl9Ix9nVti1
-<a id="__codelineno-30-22" name="__codelineno-30-22"></a>9h+xbO7mik802AVYdyXtBrZHNdaUClsJjYpL17mivuZ1JoFNAmLPo1nTr/4IVuiI
-<a id="__codelineno-30-23" name="__codelineno-30-23"></a>A/LoKotLsL9OI+4rhXzsvIyvJBXHhcDp7TOjfEp8S9tLygDLnlC4lsJLzVdDamq2
-<a id="__codelineno-30-24" name="__codelineno-30-24"></a>/iDnucQu3TMRoVLrZwVAtsr5GyazmAZcpBjkh88Rgf4iKWbAesG7yGgJdOJ5Bi81
-<a id="__codelineno-30-25" name="__codelineno-30-25"></a>vmm25Sks+UxaXQzXcTe6ga80o5dqm1KYIkoj+assnA0LwOh1GZt7FZaSoQqXERKm
-<a id="__codelineno-30-26" name="__codelineno-30-26"></a>yEjOAXNt8ZhewyJZGizYhGUslFOQA/8/kKBKcW9hxqTqLbkCDQRjVXKMARAA2MNq
-<a id="__codelineno-30-27" name="__codelineno-30-27"></a>ipSOqaLOzDz4EULTYknshTe34bKw4EDYVbTeHhIJKr1VWkPo8XK9o74+NgiwpI2H
-<a id="__codelineno-30-28" name="__codelineno-30-28"></a>fPlO61BMm0FWRq9RUPQHNWU6qtV2KimQuvTdlwUiiX9uLeJvU6DO25350d7b9RdZ
-<a id="__codelineno-30-29" name="__codelineno-30-29"></a>aXUT1In9Ziya67ThsnXQqPusUyV7OEFI9xLX8EsmrZjw/7S3ACJ0ekehq0tRcPJo
-<a id="__codelineno-30-30" name="__codelineno-30-30"></a>hS5bmN75V9YZVmQViW5nuUfg3iifhsn6xMSBV2oQ+vg0qFwKlTRO1a12ltJuJjCB
-<a id="__codelineno-30-31" name="__codelineno-30-31"></a>FAtB3C8aI/tl//KRnkyuARmrtGtaht0oCbi+J3/1ChnTvbEXlMG65mNw/OXz+KsI
-<a id="__codelineno-30-32" name="__codelineno-30-32"></a>GPn4dOvigMQMTfTcvSX6pT4H3xmadFl4pF+8gmysxZuSMhTrPhLXitu24r9DxRrY
-<a id="__codelineno-30-33" name="__codelineno-30-33"></a>dAibrXOJu7J20+8ZttvRAiEUYAvUyQVtgsc0aAkbUGGBwt4NmdMb0mbN34X0bKPV
-<a id="__codelineno-30-34" name="__codelineno-30-34"></a>XGc/JImn1pZd1h7zzO4nHlJPDtjb5/s4C3g9isnvFHFXmAIfV9q94e0lXmI5xsQY
-<a id="__codelineno-30-35" name="__codelineno-30-35"></a>rGqcQzT8JT8S2SpvX/2ABPWyLBAxveDAKZpKNu6uasG2AeA8GpNqOGJq4S7IkaUx
-<a id="__codelineno-30-36" name="__codelineno-30-36"></a>1xNaQzkJvemKWefslExVAhV1uv2cOxCIq8wTxsozRxs+5WzWxIfT/ob60edKgMkn
-<a id="__codelineno-30-37" name="__codelineno-30-37"></a>z8NfPbCZw5PkHf/e0pbkbGJI8F2VerjubSSNDEMAEQEAAYkCNgQYAQgAIBYhBEu4
-<a id="__codelineno-30-38" name="__codelineno-30-38"></a>YrgQt5LMBy1Z25ZBg6FIWIGtBQJjVXKMAhsMAAoJEJZBg6FIWIGtx80QAIOGvqB5
-<a id="__codelineno-30-39" name="__codelineno-30-39"></a>X+E6VvblU5HHbj8mSZOqWKWgDpnKlehEjEx5UxFgJckmywhYy6UpxjLVGUvIaDLj
-<a id="__codelineno-30-40" name="__codelineno-30-40"></a>XTmekqV32PUzaLEA5Z/n7nnNBXhVkAPReXqOrpMru+G6q5EgEBtAqVBx34J1Wq/f
-<a id="__codelineno-30-41" name="__codelineno-30-41"></a>FBWVq4qoPVQrIuvJRtpQJTl7EDWfFZNDrbWCyNjWCQFOU0RzbpGN8Psr2yQZGBpa
-<a id="__codelineno-30-42" name="__codelineno-30-42"></a>/BkobV3ffJnNvWd2qqP0eOsmOZUrERO3wlbb4Gfi7IvbBaqrwcXw9PwgQ0mWGXoH
-<a id="__codelineno-30-43" name="__codelineno-30-43"></a>IGvcc3XgEoN4j/RCrkz8LufgkmDjjcomfwXMC/g7NWChCxlGAmZPqZnU5hCLLHpL
-<a id="__codelineno-30-44" name="__codelineno-30-44"></a>nIyEZJEhpWXk2VGwgiSl+LhfSk1jWGStVL92bgW/YGu7+rjWA6+2hu9PZ0bneAWb
-<a id="__codelineno-30-45" name="__codelineno-30-45"></a>B/ho86sE5y9eeSUM87aN0E5rWCmzx8ijTKOcukdpk+yJS1L1d/CxAv5twSrA23ne
-<a id="__codelineno-30-46" name="__codelineno-30-46"></a>aTBoNMm9JmUxJU8ILWY9DRBWV1FLsoBy3v3+ztQWz6i3bPZKNVgPdQD2XyXMZQfu
-<a id="__codelineno-30-47" name="__codelineno-30-47"></a>ZWvvd6zqXqPPX38sveW+jMyw4jUORWYkjF1MOP/YtmmuVbdcvJNTrwLlN+KWzSzd
-<a id="__codelineno-30-48" name="__codelineno-30-48"></a>e83fmHrZs0iN43SQBPNtz3hYWnwpQLZCSgLa0UKzaVWLkhHA/QBFOPMQUNwdfaHq
-<a id="__codelineno-30-49" name="__codelineno-30-49"></a>q2BZ9kJ+ruFawgv9hjTz2vYO/EGXwZuqcvHB
-<a id="__codelineno-30-50" name="__codelineno-30-50"></a>=MPBe
-<a id="__codelineno-30-51" name="__codelineno-30-51"></a>-----END PGP PUBLIC KEY BLOCK-----
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-29-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-29-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-29-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-29-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-29-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-29-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-29-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-29-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-29-10">10</a></span>
+<span class="normal"><a href="#__codelineno-29-11">11</a></span>
+<span class="normal"><a href="#__codelineno-29-12">12</a></span>
+<span class="normal"><a href="#__codelineno-29-13">13</a></span>
+<span class="normal"><a href="#__codelineno-29-14">14</a></span>
+<span class="normal"><a href="#__codelineno-29-15">15</a></span>
+<span class="normal"><a href="#__codelineno-29-16">16</a></span>
+<span class="normal"><a href="#__codelineno-29-17">17</a></span>
+<span class="normal"><a href="#__codelineno-29-18">18</a></span>
+<span class="normal"><a href="#__codelineno-29-19">19</a></span>
+<span class="normal"><a href="#__codelineno-29-20">20</a></span>
+<span class="normal"><a href="#__codelineno-29-21">21</a></span>
+<span class="normal"><a href="#__codelineno-29-22">22</a></span>
+<span class="normal"><a href="#__codelineno-29-23">23</a></span>
+<span class="normal"><a href="#__codelineno-29-24">24</a></span>
+<span class="normal"><a href="#__codelineno-29-25">25</a></span>
+<span class="normal"><a href="#__codelineno-29-26">26</a></span>
+<span class="normal"><a href="#__codelineno-29-27">27</a></span>
+<span class="normal"><a href="#__codelineno-29-28">28</a></span>
+<span class="normal"><a href="#__codelineno-29-29">29</a></span>
+<span class="normal"><a href="#__codelineno-29-30">30</a></span>
+<span class="normal"><a href="#__codelineno-29-31">31</a></span>
+<span class="normal"><a href="#__codelineno-29-32">32</a></span>
+<span class="normal"><a href="#__codelineno-29-33">33</a></span>
+<span class="normal"><a href="#__codelineno-29-34">34</a></span>
+<span class="normal"><a href="#__codelineno-29-35">35</a></span>
+<span class="normal"><a href="#__codelineno-29-36">36</a></span>
+<span class="normal"><a href="#__codelineno-29-37">37</a></span>
+<span class="normal"><a href="#__codelineno-29-38">38</a></span>
+<span class="normal"><a href="#__codelineno-29-39">39</a></span>
+<span class="normal"><a href="#__codelineno-29-40">40</a></span>
+<span class="normal"><a href="#__codelineno-29-41">41</a></span>
+<span class="normal"><a href="#__codelineno-29-42">42</a></span>
+<span class="normal"><a href="#__codelineno-29-43">43</a></span>
+<span class="normal"><a href="#__codelineno-29-44">44</a></span>
+<span class="normal"><a href="#__codelineno-29-45">45</a></span>
+<span class="normal"><a href="#__codelineno-29-46">46</a></span>
+<span class="normal"><a href="#__codelineno-29-47">47</a></span>
+<span class="normal"><a href="#__codelineno-29-48">48</a></span>
+<span class="normal"><a href="#__codelineno-29-49">49</a></span>
+<span class="normal"><a href="#__codelineno-29-50">50</a></span>
+<span class="normal"><a href="#__codelineno-29-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>-----BEGIN PGP PUBLIC KEY BLOCK-----
+<a id="__codelineno-29-2" name="__codelineno-29-2"></a>
+<a id="__codelineno-29-3" name="__codelineno-29-3"></a>mQINBGNVcowBEAC0jzKuuLE6AqCaRvjp1mwCC76Px6wG4jgvrXfraCaOf3Y3uywW
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a>lD3NNfqb/rc/FYQXH9lIU9n6zIB47mK0zoeHWWqPjRp6BTTbbMjePinHCb2K1XM5
+<a id="__codelineno-29-5" name="__codelineno-29-5"></a>wLglw0OeC2T/NvfbU7FbN/QVFgQPWL16UhuoQhfraax6TFGO9iF/+yhG7AYZ+vAE
+<a id="__codelineno-29-6" name="__codelineno-29-6"></a>7GkaPQAlzGrbbyffaBYzoqgalHslmxG9RvAxDBaQXrcsqJiv6Zfv8rDNdPlGk7mX
+<a id="__codelineno-29-7" name="__codelineno-29-7"></a>UIbMHUuFzcep15ZQy+9PY/JLyYBUUDNhAXKLomjNPuCQHvZ/DS/XveIW+l6EYSLq
+<a id="__codelineno-29-8" name="__codelineno-29-8"></a>r6B/XCFkVWUO2RugvmpEacUSLrIL39ceUh0dYnpEDU4Z8dRlAyVaswR5j90bPrgz
+<a id="__codelineno-29-9" name="__codelineno-29-9"></a>NSaLF5NQrWlE8gksvK2KYog9Q4lrAdD0wQNV0bnU6YG3TM71wXZim8PokTzxPrA0
+<a id="__codelineno-29-10" name="__codelineno-29-10"></a>JAigEHzN9nbHSzjB71m8cVt6Zl4lGCCYqr8jSjKAUAN01koQVZd/lFljXfI27NcG
+<a id="__codelineno-29-11" name="__codelineno-29-11"></a>y7yYBc97IWaOM039kyPKKVGAB3I3l9d90+RL3tSET2MwPN3Vjlq3ArJ6QBKeB80S
+<a id="__codelineno-29-12" name="__codelineno-29-12"></a>HgRroYVXx+dCJpZhMeeTC8kVjWNL1kctwOMtxWU7N4fO+pi2BW1F5QHlYWJj2fRY
+<a id="__codelineno-29-13" name="__codelineno-29-13"></a>Mp9LE9NYXD1UO/8N1bT2RLGPwrmXXCJF20UDc63wuKzO0IBgXBvPArkUtwARAQAB
+<a id="__codelineno-29-14" name="__codelineno-29-14"></a>tA92aW50bmVyLXJlbGVhc2WJAk4EEwEIADgWIQRLuGK4ELeSzActWduWQYOhSFiB
+<a id="__codelineno-29-15" name="__codelineno-29-15"></a>rQUCY1VyjAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCWQYOhSFiBraf5
+<a id="__codelineno-29-16" name="__codelineno-29-16"></a>D/4mHhD7nwLQ87bE4d6jPB9prwN86eT3bpz1wXoVwFJfArJ7I3wH/0uQe0GXGbJx
+<a id="__codelineno-29-17" name="__codelineno-29-17"></a>G9TUdQHAGgN6/e99x54Dg4n4Qzap4W5baYlE3Klu6BUZOx9RKhSdtGfCk0+kUpxV
+<a id="__codelineno-29-18" name="__codelineno-29-18"></a>lMNLWeXFeHepCp3CwKdH3gkwcWxaBBSsYE2ayk34+CXs3ftttRRUPmCCyxk+XiM9
+<a id="__codelineno-29-19" name="__codelineno-29-19"></a>HSDO/1yIdiwO1XPFVuFZA150wdW2KYL4AuG4aB7lh1nd6jNgoz7LjwdpWN4Sa+38
+<a id="__codelineno-29-20" name="__codelineno-29-20"></a>5AkQVez1n8Ru1ul4GRPbS2T+OZu6aoITe6i3JxDEAL/ljPN07ufiqFnTYKh8yUsl
+<a id="__codelineno-29-21" name="__codelineno-29-21"></a>pPOpoM6ytMgcPlSxDfyhWSKw4aFYEJYT6Teeniup4ElywOJsBHfQ6Tl9Ix9nVti1
+<a id="__codelineno-29-22" name="__codelineno-29-22"></a>9h+xbO7mik802AVYdyXtBrZHNdaUClsJjYpL17mivuZ1JoFNAmLPo1nTr/4IVuiI
+<a id="__codelineno-29-23" name="__codelineno-29-23"></a>A/LoKotLsL9OI+4rhXzsvIyvJBXHhcDp7TOjfEp8S9tLygDLnlC4lsJLzVdDamq2
+<a id="__codelineno-29-24" name="__codelineno-29-24"></a>/iDnucQu3TMRoVLrZwVAtsr5GyazmAZcpBjkh88Rgf4iKWbAesG7yGgJdOJ5Bi81
+<a id="__codelineno-29-25" name="__codelineno-29-25"></a>vmm25Sks+UxaXQzXcTe6ga80o5dqm1KYIkoj+assnA0LwOh1GZt7FZaSoQqXERKm
+<a id="__codelineno-29-26" name="__codelineno-29-26"></a>yEjOAXNt8ZhewyJZGizYhGUslFOQA/8/kKBKcW9hxqTqLbkCDQRjVXKMARAA2MNq
+<a id="__codelineno-29-27" name="__codelineno-29-27"></a>ipSOqaLOzDz4EULTYknshTe34bKw4EDYVbTeHhIJKr1VWkPo8XK9o74+NgiwpI2H
+<a id="__codelineno-29-28" name="__codelineno-29-28"></a>fPlO61BMm0FWRq9RUPQHNWU6qtV2KimQuvTdlwUiiX9uLeJvU6DO25350d7b9RdZ
+<a id="__codelineno-29-29" name="__codelineno-29-29"></a>aXUT1In9Ziya67ThsnXQqPusUyV7OEFI9xLX8EsmrZjw/7S3ACJ0ekehq0tRcPJo
+<a id="__codelineno-29-30" name="__codelineno-29-30"></a>hS5bmN75V9YZVmQViW5nuUfg3iifhsn6xMSBV2oQ+vg0qFwKlTRO1a12ltJuJjCB
+<a id="__codelineno-29-31" name="__codelineno-29-31"></a>FAtB3C8aI/tl//KRnkyuARmrtGtaht0oCbi+J3/1ChnTvbEXlMG65mNw/OXz+KsI
+<a id="__codelineno-29-32" name="__codelineno-29-32"></a>GPn4dOvigMQMTfTcvSX6pT4H3xmadFl4pF+8gmysxZuSMhTrPhLXitu24r9DxRrY
+<a id="__codelineno-29-33" name="__codelineno-29-33"></a>dAibrXOJu7J20+8ZttvRAiEUYAvUyQVtgsc0aAkbUGGBwt4NmdMb0mbN34X0bKPV
+<a id="__codelineno-29-34" name="__codelineno-29-34"></a>XGc/JImn1pZd1h7zzO4nHlJPDtjb5/s4C3g9isnvFHFXmAIfV9q94e0lXmI5xsQY
+<a id="__codelineno-29-35" name="__codelineno-29-35"></a>rGqcQzT8JT8S2SpvX/2ABPWyLBAxveDAKZpKNu6uasG2AeA8GpNqOGJq4S7IkaUx
+<a id="__codelineno-29-36" name="__codelineno-29-36"></a>1xNaQzkJvemKWefslExVAhV1uv2cOxCIq8wTxsozRxs+5WzWxIfT/ob60edKgMkn
+<a id="__codelineno-29-37" name="__codelineno-29-37"></a>z8NfPbCZw5PkHf/e0pbkbGJI8F2VerjubSSNDEMAEQEAAYkCNgQYAQgAIBYhBEu4
+<a id="__codelineno-29-38" name="__codelineno-29-38"></a>YrgQt5LMBy1Z25ZBg6FIWIGtBQJjVXKMAhsMAAoJEJZBg6FIWIGtx80QAIOGvqB5
+<a id="__codelineno-29-39" name="__codelineno-29-39"></a>X+E6VvblU5HHbj8mSZOqWKWgDpnKlehEjEx5UxFgJckmywhYy6UpxjLVGUvIaDLj
+<a id="__codelineno-29-40" name="__codelineno-29-40"></a>XTmekqV32PUzaLEA5Z/n7nnNBXhVkAPReXqOrpMru+G6q5EgEBtAqVBx34J1Wq/f
+<a id="__codelineno-29-41" name="__codelineno-29-41"></a>FBWVq4qoPVQrIuvJRtpQJTl7EDWfFZNDrbWCyNjWCQFOU0RzbpGN8Psr2yQZGBpa
+<a id="__codelineno-29-42" name="__codelineno-29-42"></a>/BkobV3ffJnNvWd2qqP0eOsmOZUrERO3wlbb4Gfi7IvbBaqrwcXw9PwgQ0mWGXoH
+<a id="__codelineno-29-43" name="__codelineno-29-43"></a>IGvcc3XgEoN4j/RCrkz8LufgkmDjjcomfwXMC/g7NWChCxlGAmZPqZnU5hCLLHpL
+<a id="__codelineno-29-44" name="__codelineno-29-44"></a>nIyEZJEhpWXk2VGwgiSl+LhfSk1jWGStVL92bgW/YGu7+rjWA6+2hu9PZ0bneAWb
+<a id="__codelineno-29-45" name="__codelineno-29-45"></a>B/ho86sE5y9eeSUM87aN0E5rWCmzx8ijTKOcukdpk+yJS1L1d/CxAv5twSrA23ne
+<a id="__codelineno-29-46" name="__codelineno-29-46"></a>aTBoNMm9JmUxJU8ILWY9DRBWV1FLsoBy3v3+ztQWz6i3bPZKNVgPdQD2XyXMZQfu
+<a id="__codelineno-29-47" name="__codelineno-29-47"></a>ZWvvd6zqXqPPX38sveW+jMyw4jUORWYkjF1MOP/YtmmuVbdcvJNTrwLlN+KWzSzd
+<a id="__codelineno-29-48" name="__codelineno-29-48"></a>e83fmHrZs0iN43SQBPNtz3hYWnwpQLZCSgLa0UKzaVWLkhHA/QBFOPMQUNwdfaHq
+<a id="__codelineno-29-49" name="__codelineno-29-49"></a>q2BZ9kJ+ruFawgv9hjTz2vYO/EGXwZuqcvHB
+<a id="__codelineno-29-50" name="__codelineno-29-50"></a>=MPBe
+<a id="__codelineno-29-51" name="__codelineno-29-51"></a>-----END PGP PUBLIC KEY BLOCK-----
 </code></pre></div></td></tr></table></div>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 27, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
 </small>
 </div>
 </article>
@@ -2831,13 +2840,13 @@ We assume that <code>vintner-linux-x64</code> is present in the current working 
               </div>
 </div>
 </a>
-<a aria-label="Next: Orchestrators" class="md-footer__link md-footer__link--next" href="../orchestrators/" rel="next">
+<a aria-label="Next: Versions" class="md-footer__link md-footer__link--next" href="../versions/" rel="next">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 Next
               </span>
 <div class="md-ellipsis">
-                Orchestrators
+                Versions
               </div>
 </div>
 <div class="md-footer__button md-icon">
