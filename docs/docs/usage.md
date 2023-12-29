@@ -88,8 +88,8 @@ The following environment variables can be used for configuration.
 
 ## Start the Server
 
+Vintner can be used in a distributed manner by starting the corresponding server.
 To start the server, run the following command.
-See [Interface](./interface.md){target=_blank} for a complete interface specification.
 
 ```shell linenums="1"
 vintner server start
