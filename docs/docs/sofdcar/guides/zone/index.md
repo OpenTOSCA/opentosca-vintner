@@ -25,7 +25,7 @@ Moreover, this vehicle control unit also connects to some service running in the
 ## Appendix A "Service Template"
 
 This appendix contains the service template of this guide.
-You can also download the service template [here](service-template.yaml){download=service-template.yaml}.
+The service template is also available as [download](service-template.yaml){download=service-template.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/guides/zone/service-template.yaml"
@@ -34,7 +34,7 @@ You can also download the service template [here](service-template.yaml){downloa
 ## Appendix B "Type Definitions"
 
 This appendix contains the type definitions of this guide.
-You can also download the type definitions [here](types.yaml){download=types.yaml}
+The type definitions are also available as [download](types.yaml){download=types.yaml}
 
 ```yaml linenums="1"
 --8<-- "sofdcar/guides/zone/types.yaml"

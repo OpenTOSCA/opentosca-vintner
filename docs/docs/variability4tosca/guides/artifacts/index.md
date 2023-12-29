@@ -33,7 +33,7 @@ An important aspect of the deployment of the shop component is that the correct 
 
 ## Requirements
 
-You need to fulfill the following requirements to follow this step-by-step tutorial.
+We need to fulfill the following requirements to follow this step-by-step tutorial.
 
 - A machine having Ubuntu22.04 LTS installed
 - Ipv6 support, thus, WSL is no suitable
@@ -99,7 +99,7 @@ Therefore, we need to resolve the variability by providing respective variabilit
 vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 ```
 
-You can optionally inspect the generated service template.
+We can optionally inspect the generated service template.
 This template contains only the elements required for the enterprise plan.
 Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
 
@@ -123,14 +123,14 @@ vintner instances deploy --instance artifacts --inputs ${INPUTS_PATH}
 
 ## Undeployment
 
-Afterward, you can undeploy the application.
+Afterward, we can undeploy the application.
 
 ```shell linenums="1"
 # Undeploy instance
 vintner instances undeploy --instance artifacts
 ```
 
-You can also optionally remove the instance or cleanup your filesystem.
+We can also optionally remove the instance or cleanup your filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"

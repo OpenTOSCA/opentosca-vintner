@@ -183,7 +183,7 @@ docker logs -f vintner
 
 ### Debugging the Container
 
-In case you need to debug something inside the container or perform any administrative tasks, you can exec into the container as follows. 
+In case we need to debug something inside the container or perform any administrative tasks, we can exec into the container as follows. 
 This starts a shell inside the container.
 
 ```shell linenums="1"
@@ -193,9 +193,8 @@ docker exec -it vintner /bin/bash
 
 ## Manual
 
-Install Vintner manually by downloading the binary for your system.
+Install Vintner manually by downloading the binary for your system and adding it to `$PATH`.
 There are no other dependencies required. 
-You might add the binary to your `$PATH`.
 The following example shows the installation on selected platforms and architectures.
 
 === "Linux x64"

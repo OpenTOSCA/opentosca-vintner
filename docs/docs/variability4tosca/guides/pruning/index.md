@@ -87,7 +87,7 @@ We specify this when resolving variability as follows.
 vintner instances resolve --instance pruning --presets elastic
 ```
 
-You can optionally inspect the generated TOSCA-compliant model.
+We can optionally inspect the generated TOSCA-compliant model.
 This template contains only the elements required for the elastic variant, e.g., the MySQL database.
 This is shown in Figure 2.
 

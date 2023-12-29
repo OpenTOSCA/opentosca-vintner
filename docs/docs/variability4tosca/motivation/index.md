@@ -87,7 +87,7 @@ In our case, we use already predefined variability inputs by using a variability
 vintner instances resolve --instance motivation --presets dev
 ```
 
-You can optionally inspect the generated service template. 
+We can optionally inspect the generated service template. 
 This template contains only the nodes required for the development variant, as presented on the left in Figure 1.
 
 ```shell linenums="1"
@@ -111,14 +111,14 @@ vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 
 ## Undeployment
 
-Afterward, you can undeploy the application.
+Afterward, we can undeploy the application.
 
 ```shell linenums="1"
 # Undeploy instance
 vintner instances undeploy --instance motivation
 ```
 
-You can also optionally remove the instance or cleanup your filesystem.
+We can also optionally remove the instance or cleanup your filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"

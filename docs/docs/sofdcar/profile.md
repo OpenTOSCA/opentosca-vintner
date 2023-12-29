@@ -49,7 +49,7 @@ These types mainly concern specific communications, such as CAN or FlexRay, but 
 ## Appendix A "TOSCA SofDCar Profile"
 
 This appendix contains the TOSCA SofDCar profile.
-You can also download the profile [here](tosca-sofdcar-profile.yaml){download=tosca-sofdcar-profile.yaml}.
+The profile is also available as [download](tosca-sofdcar-profile.yaml){download=tosca-sofdcar-profile.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile.yaml"
@@ -58,7 +58,7 @@ You can also download the profile [here](tosca-sofdcar-profile.yaml){download=to
 ## Appendix B "TOSCA SofDCar Core Profile"
 
 This appendix contains the TOSCA SofDCar Core profile.
-You can also download the profile [here](tosca-sofdcar-profile-core.yaml){download=tosca-sofdcar-profile-core.yaml}.
+The profile is also available as [download](tosca-sofdcar-profile-core.yaml){download=tosca-sofdcar-profile-core.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile-core.yaml"
@@ -67,7 +67,7 @@ You can also download the profile [here](tosca-sofdcar-profile-core.yaml){downlo
 ## Appendix C "TOSCA SofDCar Extended Profile"
 
 This appendix contains the TOSCA SofDCar Extended profile.
-You can also download the extended profile [here](tosca-sofdcar-profile-extended.yaml){download=tosca-sofdcar-profile-extended.yaml}.
+The profile is also available as [download](tosca-sofdcar-profile-extended.yaml){download=tosca-sofdcar-profile-extended.yaml}.
 
 ```yaml linenums="1"
 --8<-- "sofdcar/tosca-sofdcar-profile-extended.yaml"
