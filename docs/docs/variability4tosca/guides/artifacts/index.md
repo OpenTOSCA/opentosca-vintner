@@ -149,10 +149,10 @@ The models for our complexity analysis can be found {{ repo_link('examples/unfur
 ## Logs
 
 This deployment is also executed in our integration pipeline which is executed once a week. 
-The logs of the corresponding GitHub action job run can be accessed either [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878){target=_blank}.
+The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
-The raw logs can be also accessed [here](./logs.txt){target=_blank} without requiring an GitHub account.
+The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
 
 ## Publication
 
