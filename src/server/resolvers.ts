@@ -37,6 +37,46 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/install/ansible',
+    hae.express(async (req, res, next) => {
+        await Controller.install.ansible(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/gcloud',
+    hae.express(async (req, res, next) => {
+        await Controller.install.gcloud(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/python',
+    hae.express(async (req, res, next) => {
+        await Controller.install.python(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/terraform',
+    hae.express(async (req, res, next) => {
+        await Controller.install.terraform(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/unfurl',
+    hae.express(async (req, res, next) => {
+        await Controller.install.unfurl(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/install/utils',
     hae.express(async (req, res, next) => {
         await Controller.install.utils(req.body)
@@ -44,7 +84,13 @@ resolvers.post(
     })
 )
 
-// TODO: remaining resolvers
+resolvers.post(
+    '/install/xopera',
+    hae.express(async (req, res, next) => {
+        await Controller.install.xopera(req.body)
+        res.json({})
+    })
+)
 
 resolvers.post(
     '/orchestrators/enable',
