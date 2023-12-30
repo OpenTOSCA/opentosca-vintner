@@ -27,7 +27,7 @@ However, to have full access to all analytical reporting functionalities, the en
 An important aspect of the deployment of the shop component is that the correct SQL dialect must be configured.
 
 <figure markdown>
-  ![Motivating Scenario](motivation.png){width="700"}
+  ![Variants](variants.png){width="700"}
   <figcaption>Figure 1: The different deployment variants.</figcaption>
 </figure>
 
@@ -45,7 +45,7 @@ We need to fulfill the following requirements to follow this step-by-step guide.
 
 ## Preparation
 
-First, install OpenTOSCA Vintner.
+First, we install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
 --8<-- "install.md"
@@ -61,10 +61,9 @@ vintner orchestrators enable --orchestrator unfurl
 ## Import the Template
 
 <figure markdown>
-  ![Motivating Scenario](variable-service-template.png){width="700"}
+  ![Variability4TOSCA template](variability4tosca.png){width="700"}
   <figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
-
 
 First, we clone the repository.
 --8<-- "clone.md"
@@ -81,9 +80,10 @@ Next, we initialize an application instance.
 vintner instances init --instance artifacts --template artifacts
 ```
 
-We can optionally inspect the variable service template.
-This template contains all possible elements having conditions assigned, as presented in Figure 2.
+We can optionally inspect the Variability4TOSCA template.
+This template contains all possible elements having conditions assigned.
 For example, the MySQL database has a condition assigned that checks if the enterprise deployment artifact is present.
+An overview is given in Figure 2.
 
 ```shell linenums="1"
 vintner templates inspect --template artifacts
@@ -91,17 +91,23 @@ vintner templates inspect --template artifacts
 
 ## Resolve Variability
 
-We intend to deploy use the enterprise plan of the application.
+<figure markdown>
+  ![TOSCA Template](tosca.png){width="300"}
+  <figcaption>Figure 3: The deployment variant.</figcaption>
+</figure>
+
+We intend to deploy the enterprise plan.
 Furthermore, we want to configure the display language of the shop component to be German.
-Therefore, we need to resolve the variability by providing respective variability inputs.
+We specify this when resolving variability.
 
 ```shell linenums="1"
 vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 ```
 
-We can optionally inspect the generated service template.
+We can optionally inspect the generated TOSCA-compliant template.
 This template contains only the elements required for the enterprise plan.
 Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
+An overview is given in Figure 3.
 
 ```shell linenums="1"
 vintner instances inspect --instance artifacts
@@ -111,7 +117,7 @@ vintner instances inspect --instance artifacts
 ## Deploy the Application
 
 Finally, we deploy the application.
-Therefore, we need to provide deployment inputs.
+Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
 Possible deployment inputs are specified in `topology_template.inputs` of the TOSCA-compliant template.
 The deployment will take around 15-20 minutes.
 
@@ -127,22 +133,21 @@ Afterward, we can undeploy the application.
 vintner instances undeploy --instance artifacts
 ```
 
-We can also optionally remove the instance or cleanup your filesystem.
-Note, cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
+Optionally, we can remove the instance and cleanup the filesystem.
+Cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
-vintner instances delete --instance artifacts
+vintner instances delete --instance pruning
 vintner setup clean --force
 ```
 
-
 ## Complexity Analysis
 
-The models for our complexity analysis can be found {{ repo_link('examples/unfurl-artifacts/stats', 'here') }}.
+The templates for our complexity analysis can be found {{ repo_link('examples/unfurl-artifacts/stats', 'here') }}.
 
 ## Logs
 
-This deployment is also executed in our integration pipeline which is executed once a week. 
+This deployment is also executed in our integration pipeline, which is executed once a week. 
 The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
@@ -151,5 +156,5 @@ The raw logs of a recorded job are [available](./logs.txt){target=_blank} withou
 ## Publication
 
 This guide is part of our [research paper](../../../publications.md#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies){target=_blank} published at the main track of the CoopIS 2023.
-Also, this guide is further extended by our [demonstration paper](../../../publications.md#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability){target=_blank} which was  accepted at the demo track at the CoopIS 2023.
+Also, this guide is further extended by our [demonstration paper](../../../publications.md#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability){target=_blank} which was published at the demo track at the CoopIS 2023.
 Also check our other [publications](../../../publications.md){target=_blank}.

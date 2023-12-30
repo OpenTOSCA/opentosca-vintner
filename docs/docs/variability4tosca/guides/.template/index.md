@@ -38,7 +38,7 @@ We need to fulfill the following requirements to follow this step-by-step guide.
 
 ## Preparation
 
-First, install OpenTOSCA Vintner.
+First, we install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
 --8<-- "install.md"
@@ -54,7 +54,7 @@ vintner orchestrators enable --orchestrator <%= data.ORCHESTRATOR %>
 ## Import the Template
 
 <figure markdown>
-  ![Variability4TOSCA template](variable-service-template.png){width="700"}
+  ![Variability4TOSCA template](variability4tosca.png){width="700"}
   <figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
 
@@ -85,7 +85,7 @@ vintner templates inspect --template <%= INSTANCE_NAME %>
 ## Resolve Variability
 
 <figure markdown>
-  ![Variant](variant.png){width="300"}
+  ![TOSCA Template](tosca.png){width="300"}
   <figcaption>Figure 3: The deployment variant.</figcaption>
 </figure>
 
@@ -133,11 +133,11 @@ vintner setup clean --force
 
 ## Complexity Analysis
 
-The templates for our complexity analysis can be found {{ repo_link('<%= data.ANALYSIS_PATH %>', 'here') }}.
+The templates for our complexity analysis can be found {{ repo_link('examples/<%= data.EXAMPLE_DIR %>/stats', 'here') }}.
 
 ## Logs
 
-This deployment is also executed in our integration pipeline which is executed once a week.
+This deployment is also executed in our integration pipeline, which is executed once a week.
 The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
 Relevant steps start with "<%= data.LOGS_PREFIX %>".
 Note, a GitHub account is required to access these logs.
@@ -149,5 +149,5 @@ The assets of this guide can be also found on [Zenodo](<%= data.ZENODO %>){targe
 
 ## Publication
 
-This guide is part of our [paper](../../../publications.md#<%= data.PUBLICATION %>){target=_blank} accepted at the <%= data.CONFERENCE_NAME %> <%= data.CONFERENCE_YEAR %>.
+This guide is part of our [paper](../../../publications.md#<%= data.PUBLICATION %>){target=_blank} published at the <%= data.CONFERENCE_NAME %> <%= data.CONFERENCE_YEAR %>.
 Also check our other [publications](../../../publications.md){target=_blank}.

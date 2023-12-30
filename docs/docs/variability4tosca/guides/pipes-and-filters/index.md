@@ -33,7 +33,7 @@ We expect that the [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=
 
 ## Preparation
 
-First, install OpenTOSCA Vintner.
+First, we install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
 --8<-- "install.md"

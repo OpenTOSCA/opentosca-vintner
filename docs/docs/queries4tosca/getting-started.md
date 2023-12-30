@@ -20,7 +20,6 @@ First, clone the repository.
 Then import the template, create an instance, and resolve the variability.
 
 ```shell linenums="1"
-# Import (and resolve) the template
 vintner templates import --template getting-started --path examples/xopera-getting-started
 vintner instances init --instance getting-started --template getting-started
 vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml

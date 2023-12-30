@@ -9,20 +9,21 @@ tags:
 
 # Motivation
 
-In the following, we provide a detailed step-by-step guide to deploy the development variant of the motivating scenario, as presented in Figure 1.
-The motivating scenario is a simple composite application that consists of a web component and a database.
+<figure markdown>
+  ![Variants](variants.png){width="700"}
+  <figcaption>Figure 1: The different deployment variants.</figcaption>
+</figure>
+
+This document holds a detailed step-by-step guide to deploy the development variant of the motivating scenario.
+The motivating scenario is a simple composite application that consists of a web component and a database, as presented in Figure 1.
+
 This application can be deployed in different variants.
 During development the application should be deployed on a single virtual machine.
 However, for the productive operation, an elastic deployment is required and, therefore, the application is deployed on Google Cloud Platform (GCP).
 
-<figure markdown>
-  ![Motivating Scenario](motivation.png){width="700"}
-  <figcaption>Figure 1: The TOSCA models of our motivating scenario. The development variant on the left and the production variant on the right.</figcaption>
-</figure>
-
 ## Requirements
 
-You need to fulfill the following requirements to follow this step-by-step guide.
+We need to fulfill the following requirements to follow this step-by-step guide.
 
 - Access to an OpenStack instance
 - A machine having Ubuntu22.04 LTS installed
@@ -33,12 +34,12 @@ You need to fulfill the following requirements to follow this step-by-step guide
 
 ## Preparation
 
-First, install OpenTOSCA Vintner.
+First, we install OpenTOSCA Vintner.
 For more information see [Installation](../../installation.md){target=_blank}.
 
 --8<-- "install.md"
 
-Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
+Next, we configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../orchestrators.md){target=_blank}.
 
 ```shell linenums="1"
@@ -49,63 +50,66 @@ vintner orchestrators enable --orchestrator xopera
 ## Import the Template
 
 <figure markdown>
-  ![Motivating Scenario](variable-service-template.png){width="700"}
-  <figcaption>Figure 2: The Variability4TOSCA service template (variable service template) of our motivating scenario.</figcaption>
+  ![Variability4TOSCA template](variability4tosca.png){width="700"}
+  <figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
 
 First, we clone the repository.
 --8<-- "clone.md"
 
-Next, we import the template and initialize an instance.
+Next, we import the Variability4TOSCA template.
 
 ```shell linenums="1"
-# Add variable service template
-vintner templates import --template motivation --path opentosca-vintner/examples/motivation
+vintner templates import --template motivation --path examples/motivation
+```
 
-# Add instance
+Next, we initialize an application instance.
+
+```shell linenums="1"
 vintner instances init --instance motivation --template motivation
 ```
 
-We can optionally inspect the variable service template.
-This template contains all possible elements having conditions assigned, as presented in Figure 2.
+We can optionally inspect the Variability4TOSCA template.
+This template contains all possible elements having conditions assigned.
 For example, the virtual machine hosted on OpenStack has a condition assigned that checks if the development variant has been chosen.
+An overview is given in Figure 2.
 
 ```shell linenums="1"
-# (optional) Inspect variable service template
 vintner templates inspect --template motivation
 ```
 
 
 ## Resolve Variability
 
-We intend to deploy the development variant of the application.
+<figure markdown>
+  ![TOSCA Template](tosca.png){width="300"}
+  <figcaption>Figure 3: The deployment variant.</figcaption>
+</figure>
+
+We intend to deploy the development variant.
 Therefore, we need to resolve the variability by providing respective variability inputs.
 In our case, we use already predefined variability inputs by using a variability preset.
 
 ```shell linenums="1"
-# Resolve variability
 vintner instances resolve --instance motivation --presets dev
 ```
 
-We can optionally inspect the generated service template. 
-This template contains only the nodes required for the development variant, as presented on the left in Figure 1.
+We can optionally inspect the generated TOSCA-compliant template. 
+This template contains only the nodes required for the development variant.
+An overview is given in Figure 3.
 
 ```shell linenums="1"
-# (optional) Inspect service template
 vintner instances inspect --instance motivation
 ```
-
 
 ## Deployment
 
 Finally, we deploy the application.
-Therefore, we need to provide deployment inputs which contain, e.g., credentials for accessing OpenStack.
-An example for the deployment inputs is given in {{ repo_link('examples/xopera-motivation/inputs.example.yaml') }}.
+Therefore, we need to provide deployment inputs which contain, e.g., credentials to OpenStack.
+Possible deployment inputs are specified in `topology_template.inputs` of the TOSCA-compliant template.
 The deployment will take some minutes.
 
 ```shell linenums="1"
-# Deploy instance
-# See examples/xopera-motivation/deployment-inputs.example.yaml as reference
 vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 ```
 
@@ -114,24 +118,18 @@ vintner instances deploy --instance motivation --inputs ${INPUTS_PATH}
 Afterward, we can undeploy the application.
 
 ```shell linenums="1"
-# Undeploy instance
 vintner instances undeploy --instance motivation
 ```
 
-We can also optionally remove the instance or cleanup your filesystem.
-Note, cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
+Optionally, we can remove the instance and cleanup the filesystem.
+Cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
-# (optional) Delete instance
-vintner instances delete --instance motivation
-
-# (optional) Cleanup 
+vintner instances delete --instance pruning
 vintner setup clean --force
 ```
 
 ## Publication
 
-More information can be found in the following publication.
-Also check our other [publications](../../publications.md){target=_blank}.
-
-- Stötzner, Miles, Steffen Becker, Uwe Breitenbücher, Kálmán Képes, and Frank Leymann. 2022. "Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model" Algorithms 15, no. 10: 382. [https://doi.org/10.3390/a15100382](https://doi.org/10.3390/a15100382){target=_blank}
+This guide is part of our [paper](../../publications.md#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model){target=_blank} published at the Algorithms 2022.
+Also check our other [publications](../../../publications.md){target=_blank}.
