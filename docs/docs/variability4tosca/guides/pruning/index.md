@@ -9,7 +9,7 @@ tags:
 
 # Pruning Elements
 
-In the following, we provide a detailed step-by-step tutorial to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
+In the following, we provide a detailed step-by-step guide to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
 The web shop application can be deployed in the following deployment variants.
 
 - static with medium resources on a single virtual machine on a local OpenStack (OS) instance 
@@ -18,7 +18,7 @@ The web shop application can be deployed in the following deployment variants.
 
 ## Requirements
 
-We need to fulfill the following requirements to follow this step-by-step tutorial.
+We need to fulfill the following requirements to follow this step-by-step guide.
 
 - Linux machine, e.g., Ubuntu 22.04
 - Git installed
@@ -52,13 +52,13 @@ vintner orchestrators enable --orchestrator xopera
 First, we clone the repository.
 --8<-- "clone.md"
 
-Next, import the Variability4TOSCA template.
+Next, we import the Variability4TOSCA template.
 
 ```shell linenums="1"
 vintner templates import --template pruning --path examples/xopera-pruning
 ```
 
-Next, initialize an application instance.
+Next, we initialize an application instance.
 
 ```shell linenums="1"
 vintner instances init --instance pruning --template pruning
@@ -80,7 +80,7 @@ vintner templates inspect --template pruning
   <figcaption>Figure 1: The elastic deployment variant of our motivating scenario.</figcaption>
 </figure>
 
-We want to deploy the elastic variant of the web shop application using GCP.
+We intend to deploy the elastic variant of the web shop application using GCP.
 We specify this when resolving variability as follows.
 
 ```shell linenums="1"
@@ -115,7 +115,7 @@ vintner instances undeploy --instance pruning
 ```
 
 We can also optionally remove the instance or cleanup the filesystem.
-Note, cleaning up the filesystem removes any Vintner data including, e.g., all imported templates and created instances.
+Note, cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 vintner instances delete --instance pruning

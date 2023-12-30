@@ -9,7 +9,7 @@ tags:
 
 # Motivation
 
-In the following, we provide a detailed step-by-step tutorial to deploy the development variant of the motivating scenario, as presented in Figure 1.
+In the following, we provide a detailed step-by-step guide to deploy the development variant of the motivating scenario, as presented in Figure 1.
 The motivating scenario is a simple composite application that consists of a web component and a database.
 This application can be deployed in different variants.
 During development the application should be deployed on a single virtual machine.
@@ -22,7 +22,7 @@ However, for the productive operation, an elastic deployment is required and, th
 
 ## Requirements
 
-You need to fulfill the following requirements to follow this step-by-step tutorial.
+You need to fulfill the following requirements to follow this step-by-step guide.
 
 - Access to an OpenStack instance
 - A machine having Ubuntu22.04 LTS installed
@@ -119,7 +119,7 @@ vintner instances undeploy --instance motivation
 ```
 
 We can also optionally remove the instance or cleanup your filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
+Note, cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
 # (optional) Delete instance

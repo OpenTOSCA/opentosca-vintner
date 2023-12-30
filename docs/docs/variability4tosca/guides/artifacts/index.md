@@ -11,11 +11,11 @@ tags:
 
 <div class="video-wrap">
   <div class="video-container">
-<iframe src="https://www.youtube.com/embed/6szIGJPuCsU?si=zlqebXF3O5yE4sAP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/6szIGJPuCsU?si=zlqebXF3O5yE4sAP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
  </div>
 </div>
 
-In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of a web shop application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
+This document holds a detailed step-by-step guide to deploy the enterprise plan of a web shop application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
 The motivating scenario is a simple shopping application that consists of a shop component and a database. 
 Thereby, we take the role of a SaaS provider which offers different pricing plans to his customers.
 Furthermore, there are two different deployment artifacts: the community deployment artifact and the enterprise deployment artifact.
@@ -28,12 +28,12 @@ An important aspect of the deployment of the shop component is that the correct 
 
 <figure markdown>
   ![Motivating Scenario](motivation.png){width="700"}
-  <figcaption>Figure 1: The available plans of our motivating scenario.</figcaption>
+  <figcaption>Figure 1: The different deployment variants.</figcaption>
 </figure>
 
 ## Requirements
 
-We need to fulfill the following requirements to follow this step-by-step tutorial.
+We need to fulfill the following requirements to follow this step-by-step guide.
 
 - A machine having Ubuntu22.04 LTS installed
 - Ipv6 support, thus, WSL is no suitable
@@ -62,7 +62,7 @@ vintner orchestrators enable --orchestrator unfurl
 
 <figure markdown>
   ![Motivating Scenario](variable-service-template.png){width="700"}
-  <figcaption>Figure 2: The Variability4TOSCA service template (variable service template) of our motivating scenario.</figcaption>
+  <figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
 
 
@@ -72,10 +72,12 @@ First, we clone the repository.
 Next, we import the template and initialize an instance.
 
 ```shell linenums="1"
-# Add variable service template
 vintner templates import --template artifacts --path examples/unfurl-artifacts
+```
 
-# Add instance
+Next, we initialize an application instance.
+
+```shell linenums="1"
 vintner instances init --instance artifacts --template artifacts
 ```
 
@@ -84,7 +86,6 @@ This template contains all possible elements having conditions assigned, as pres
 For example, the MySQL database has a condition assigned that checks if the enterprise deployment artifact is present.
 
 ```shell linenums="1"
-# (optional) Inspect variable service template
 vintner templates inspect --template artifacts
 ```
 
@@ -95,7 +96,6 @@ Furthermore, we want to configure the display language of the shop component to 
 Therefore, we need to resolve the variability by providing respective variability inputs.
 
 ```shell linenums="1"
-# Resolve variability
 vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 ```
 
@@ -104,40 +104,34 @@ This template contains only the elements required for the enterprise plan.
 Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
 
 ```shell linenums="1"
-# (optional) Inspect service template
 vintner instances inspect --instance artifacts
 ```
 
 
-## Deployment
+## Deploy the Application
 
 Finally, we deploy the application.
 Therefore, we need to provide deployment inputs.
-An example for the deployment inputs is given in {{ repo_link('examples/unfurl-artifacts/deployment-inputs.example.yaml') }}.
+Possible deployment inputs are specified in `topology_template.inputs` of the TOSCA-compliant template.
 The deployment will take around 15-20 minutes.
 
 ```shell linenums="1"
-# Deploy instance
 vintner instances deploy --instance artifacts --inputs ${INPUTS_PATH}
 ```
 
-## Undeployment
+## Undeploy the Application
 
 Afterward, we can undeploy the application.
 
 ```shell linenums="1"
-# Undeploy instance
 vintner instances undeploy --instance artifacts
 ```
 
 We can also optionally remove the instance or cleanup your filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
+Note, cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.
 
 ```shell linenums="1"
-# (optional) Delete instance
 vintner instances delete --instance artifacts
-
-# (optional) Cleanup 
 vintner setup clean --force
 ```
 
