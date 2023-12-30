@@ -25,7 +25,8 @@ export class Shell {
         return path.resolve(file)
     }
 
-    async script(options: {file?: string; content?: string; sudo?: boolean}) {
+    // TODO: env
+    async script(options: {file?: string; content?: string; sudo?: boolean; env?: [string, string][]}) {
         options.sudo = check.isDefined(options.sudo) ?? false
 
         if (check.isDefined(options.content)) {

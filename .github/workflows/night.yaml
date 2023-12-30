@@ -55,22 +55,28 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
-            - name: (PREPARE) Cache Unfurl
+            - name: (PREPARE) Cache xOpera
               uses: actions/cache@v3
               with:
-                  path: /home/runner/.opera
+                  path: /home/runner/opera
                   key: xopera
 
             - name: (PREPARE) Install xOpera
-              run: |
-                  mkdir -p /home/runner/.opera
-                  cd /home/runner/.opera
-                  python3 -m venv .venv && . .venv/bin/activate
-                  pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
+              run: VENV_DIR=/home/runner/opera ./src/assets/scripts/install-xopera.sh
+
+            - name: (PREPARE) Cache Unfurl
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/unfurl
+                  key: unfurl
 
             # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
             - name: (PREPARE) Install Unfurl
-              run: pip install unfurl==0.9.1
+              run: |
+                  mkdir -p /home/runner/unfurl
+                  cd /home/runner/unfurl
+                  python3 -m venv .venv && . .venv/bin/activate
+                  pip install unfurl==0.9.1
 
             ###################################################
             #
@@ -78,7 +84,7 @@ jobs:
             #
             ###################################################
 
-            - name: (INSTALLATION) Install vintner
+            - name: (INSTALLATION) Install Vintner
               run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
 
             - name: (INSTALLATION) Verify checksum
@@ -96,6 +102,26 @@ jobs:
                   cp /usr/bin/vintner vintner-linux-x64
                   gpg --verify vintner-linux-x64.asc
                   rm vintner-linux-x64.asc
+
+            # TODO: remove this
+            - name: (XOPERA-ATTEST) Attest xOpera
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera --dir /home/runner/opera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+            # TODO: remove this
+            - name: (UNFURL-ATTEST) Attest Unfurl
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init unfurl --dir /home/runner/unfurl
+                  vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
 
             ###################################################
             #
@@ -137,7 +163,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators init xopera --dir /home/runner/opera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -168,7 +194,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators init xopera --dir /home/runner/opera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -198,7 +224,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init unfurl --no-venv
+                  vintner orchestrators init unfurl --dir /home/runner/unfurl
                   vintner orchestrators enable --orchestrator unfurl
                   vintner orchestrators attest --orchestrator unfurl
 

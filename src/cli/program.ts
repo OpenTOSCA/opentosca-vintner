@@ -217,6 +217,9 @@ install
 install
     .command('xopera')
     .description('installs xOpera')
+    .option('--venv [boolean]', 'enable the use of a virtual environment', xOperaNativeDefaults.venv)
+    .option('--no-venv [boolean]', 'disable the use of a virtual environment')
+    .option('--dir [string]', 'directory of xopera', xOperaNativeDefaults.dir)
     .action(
         hae.exit(async options => {
             await Controller.install.xopera(options)
