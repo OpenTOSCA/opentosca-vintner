@@ -153,6 +153,10 @@ Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
 The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
 
+## Zenodo
+
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}.
+
 ## Publication
 
 This guide is part of our [research paper](../../../publications.md#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies){target=_blank} published at the main track of the CoopIS 2023.

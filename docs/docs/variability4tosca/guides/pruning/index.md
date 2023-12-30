@@ -141,7 +141,7 @@ The raw logs of a recorded job are [available](./logs.txt){target=_blank} withou
 
 ## Zenodo
 
-The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10050261){target=_blank}.
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10050260){target=_blank}.
 
 ## Publication
 
