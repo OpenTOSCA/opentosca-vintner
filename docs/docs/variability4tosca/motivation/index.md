@@ -27,11 +27,10 @@ However, for the productive operation, an elastic deployment is required and, th
 We need to fulfill the following requirements to follow this step-by-step guide.
 
 - Access to an OpenStack instance
-- A machine having Ubuntu22.04 LTS installed
-- Git installed on your machine
-- Python3 installed on your machine
-- [xOpera](https://github.com/xlab-si/xopera-opera){target=_blank} installed on your machine
-- [Ansible Galaxy Collection `openstack.cloud`](https://galaxy.ansible.com/openstack/cloud){target=_blank} installed on your machine
+- Ubuntu 22.04
+- Git
+- xOpera
+- Ansible Galaxy Collection `openstack.cloud`
 
 ## Preparation
 
