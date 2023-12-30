@@ -16,7 +16,7 @@ The specification is under active development and is not backwards compatible wi
 
 In order to generate only valid service templates, feature models can be used to model dependencies between variability inputs.
 A feature model of Feature IDE is supposed to be packaged as `feature-model.xml` at the root of the CSAR.
-In the following, we describe the mapping between the Extended XML Configuration to variability inputs.
+We describe the mapping between the Extended XML Configuration to variability inputs.
 
 ### Features
 

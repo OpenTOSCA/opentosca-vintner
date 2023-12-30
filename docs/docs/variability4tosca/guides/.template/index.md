@@ -17,7 +17,7 @@ tags:
 </div>
 
 This document holds a detailed step-by-step guide to deploy the <%= data.VARIANT %> deployment variant of a <%= data.APPLICATION %> application to showcase <%= data.SHOWCASE %>.
-The application can be deployed in the following deployment variants, as given in Figure 1.
+The application can be deployed in the following deployment variants, see Figure 1.
 
 - <%= data.VARIANT_A %>
 - <%= data.VARIANT_B %>

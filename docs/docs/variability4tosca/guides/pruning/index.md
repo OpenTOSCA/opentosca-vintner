@@ -15,7 +15,7 @@ tags:
 </figure>
 
 This document holds a detailed step-by-step guide to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
-The application can be deployed in the following deployment variants, as given in Figure 1.
+The application can be deployed in the following deployment variants, see Figure 1.
 
 - static with medium resources on a single virtual machine on a local OpenStack (OS) instance 
 - static with large resources on a single virtual machine on a local OpenStack (OS) instance

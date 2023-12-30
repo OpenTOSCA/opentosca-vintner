@@ -18,7 +18,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## Terminology 
 
-In the following, we quickly introduce some terminologies.
+We quickly introduce some terminologies.
 
 - A condition holds if the condition evaluates to true.
 - An element is present if all assigned conditions hold.
@@ -883,7 +883,7 @@ The following date operators can be used inside a variability expression.
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
+We describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
 ### Resolve Variability
 

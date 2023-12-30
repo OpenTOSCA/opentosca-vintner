@@ -7,6 +7,18 @@ tags:
 
 This document holds instructions on writing the documentation.
 
+## Guidelines
+
+We follow the following guidelines when writing documentation.
+
+- start a document with "This document holds ..."
+- use "we" instead of "you" or imperative
+- use "Next, we" instead of "Then, we ...", "We then ...", etc.
+- use ", see" instead of "..., as given in ...", "..., as presented in ...", etc.
+- use the [step-by-step guide template](../variability4tosca/guides/.template)
+- use "as follows" instead of "in the following"
+
+
 ## MkDocs
 
 {{ linux_only_notice() }}
@@ -209,6 +221,7 @@ This command is also executed during the Release workflow and overwrites committ
 ```shell linenums="1"
 yarn docs:generate:tests:query
 ```
+
 
 ## Limitations
 
