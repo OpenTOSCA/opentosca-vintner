@@ -1649,7 +1649,7 @@ initializes unfurl plugin
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | no-venv |  false  | boolean | disable the use of a virtual environment |
-| dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
+| dir |  false  | string | directory of unfurl (default: "~/unfurl") |
 
 ## vintner orchestrators init unfurl-wsl
 
@@ -1690,7 +1690,7 @@ initializes unfurl-wsl plugin
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | no-venv |  false  | boolean | disable the use of a virtual environment |
-| dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
+| dir |  false  | string | directory of unfurl (default: "~/unfurl") |
 
 ## vintner orchestrators init xopera
 
