@@ -31,8 +31,8 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
-- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant Steps start with "UNFURL-ARTIFACTS")
-- [GitHub Actions Raw Logs](variability4tosca/guides/artifacts/logs.txt){target=_blank} (Relevant Steps start with "UNFURL-ARTIFACTS")
+- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant steps start with "UNFURL-ARTIFACTS")
+- [GitHub Actions Raw Logs](variability4tosca/guides/artifacts/logs.txt){target=_blank} (Relevant steps start with "UNFURL-ARTIFACTS")
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2-demo') }}
 
 

@@ -212,7 +212,7 @@ SUM:                           191           1868            773           9310
 
 ## Limitations
 
-In the following, we briefly discuss limitations of our prototypical implementation.
+We briefly discuss limitations of our prototypical implementation.
 
 1. We expect that each relationship templates is used exactly once.
 1. We expect that `relationship` at requirement assignments is a string.
