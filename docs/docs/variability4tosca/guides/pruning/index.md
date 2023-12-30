@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - UCC 2023
 - xOpera
 ---

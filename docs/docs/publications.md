@@ -2,6 +2,7 @@
 tags:
 - Misc
 - Publication
+- Zenodo
 ---
 
 # Publications

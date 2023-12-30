@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - Algorithms 2022
 - xOpera
 ---

@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - CoopIS 2023
 - Unfurl
 ---
