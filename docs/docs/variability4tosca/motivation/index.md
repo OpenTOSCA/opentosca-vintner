@@ -132,4 +132,4 @@ vintner setup clean --force
 ## Publication
 
 This guide is part of our [paper](../../publications.md#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model){target=_blank} published at the Algorithms 2022.
-Also check our other [publications](../../../publications.md){target=_blank}.
+Also check our other [publications](../../publications.md){target=_blank}.

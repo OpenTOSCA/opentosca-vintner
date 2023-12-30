@@ -15,8 +15,8 @@ We follow the following guidelines when writing documentation.
 - use "we" instead of "you" or imperative
 - use "Next, we" instead of "Then, we ...", "We then ...", etc.
 - use ", see" instead of "..., as given in ...", "..., as presented in ...", etc.
-- use the [step-by-step guide template](../../templates/guide)
-- use the [specification template](../../templates/specification)
+- use the step-by-step guide template in `docs/templates/guide`
+- use the specification template in `docs/templates/specification`
 - use "as follows" instead of "in the following"
 
 
