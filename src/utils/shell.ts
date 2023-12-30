@@ -25,7 +25,9 @@ export class Shell {
         return path.resolve(file)
     }
 
-    async script(options: {file?: string; content?: string}) {
+    async script(options: {file?: string; content?: string; sudo?: boolean}) {
+        options.sudo = check.isDefined(options.sudo) ?? false
+
         if (check.isDefined(options.content)) {
             options.file = files.temporary()
             files.storeFile(options.file, options.content)
@@ -34,7 +36,10 @@ export class Shell {
         const resolved = this.resolve(options.file)
 
         await this.execute(['chmod', '+x', resolved])
-        await this.execute(['sudo', resolved])
+
+        const command = [resolved]
+        if (options.sudo) command.unshift('sudo')
+        await this.execute(command)
     }
 
     async execute(parts: string[], options: {cwd?: string} = {}) {

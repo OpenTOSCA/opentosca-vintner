@@ -136,7 +136,7 @@ Note, this does not undeploy the instance.
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
-sudo apt-get update -y && sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
+sudo apt-get update -y && sudo apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap -y
 ```
 
 ## Put Some Stress on CPU and Memory

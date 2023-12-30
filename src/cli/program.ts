@@ -75,24 +75,6 @@ setup
     )
 
 setup
-    .command('install')
-    .description('install utils (Linux is required)')
-    .option('--all [boolean]', 'install all utils')
-    .option('--utils [boolean]', 'install sudo, unzip, git, curl, wget, nano, and tree')
-    .option('--python [boolean]', 'install Python')
-    .option('--xopera [boolean]', 'install xOpera (system-wide)')
-    .option('--unfurl [boolean]', 'install Unfurl (system-wide)')
-    .option('--gcloud [boolean]', 'install GCloud CLI')
-    .option('--openstack [boolean]', 'install OpenStack CLI')
-    .option('--terraform [boolean]', 'install Terraform')
-    .option('--ansible [boolean]', 'install Ansible (system-wide)')
-    .action(
-        hae.exit(async options => {
-            std.out(await Controller.setup.install(options))
-        })
-    )
-
-setup
     .command('benchmark')
     .description('benchmarks the variability resolver')
     .option('--io [boolean]', 'enable read and writes to the filesystem')
@@ -173,6 +155,71 @@ info.command('dependencies')
     .action(
         hae.exit(async options => {
             std.out(await Controller.info.dependencies())
+        })
+    )
+
+const install = program.command('install').description('installs utils (Linux is required)')
+
+install
+    .command('ansible')
+    .description('installs Ansible')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.utils(options)
+        })
+    )
+
+install
+    .command('gcloud')
+    .description('installs GCloud')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.gcloud(options)
+        })
+    )
+
+install
+    .command('python')
+    .description('installs Python')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.python(options)
+        })
+    )
+
+install
+    .command('terraform')
+    .description('installs Terraform')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.terraform(options)
+        })
+    )
+
+install
+    .command('unfurl')
+    .description('installs Unfurl')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.unfurl(options)
+        })
+    )
+
+install
+    .command('utils')
+    .description('installs utils, such as sudo, unzip, git ...')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.utils(options)
+        })
+    )
+
+install
+    .command('xopera')
+    .description('installs xOpera')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.xopera(options)
         })
     )
 

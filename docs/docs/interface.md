@@ -1835,17 +1835,17 @@ install utils (Linux is required)
     post(SERVER_ADDRESS + "/setup/install")
     ```
 
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| all |  false  | boolean | install all utils |
+| Option | Mandatory | Type | Description                                          |
+| --- | --- | --- |------------------------------------------------------|
+| all |  false  | boolean | install all utils                                    |
 | utils |  false  | boolean | install sudo, unzip, git, curl, wget, nano, and tree |
-| python |  false  | boolean | install Python |
-| xopera |  false  | boolean | install xOpera (system-wide) |
-| unfurl |  false  | boolean | install Unfurl (system-wide) |
-| gcloud |  false  | boolean | install GCloud CLI |
-| openstack |  false  | boolean | install OpenStack CLI |
-| terraform |  false  | boolean | install Terraform |
-| ansible |  false  | boolean | install Ansible (system-wide) |
+| python |  false  | boolean | install Python                                       |
+| xopera |  false  | boolean | install xOpera (system-wide)                         |
+| unfurl |  false  | boolean | install Unfurl (system-wide)                         |
+| gcloud |  false  | boolean | install GCloud                                       |
+| openstack |  false  | boolean | install OpenStack CLI                                |
+| terraform |  false  | boolean | install Terraform                                    |
+| ansible |  false  | boolean | install Ansible (system-wide)                        |
 
 ## vintner setup open
 

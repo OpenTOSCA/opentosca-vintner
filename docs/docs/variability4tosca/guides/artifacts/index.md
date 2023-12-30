@@ -39,7 +39,7 @@ We need to fulfill the following requirements to follow this step-by-step guide.
 - A machine having Ubuntu22.04 LTS installed
 - Ipv6 support, thus, WSL is no suitable
 - Access to a GCP project
-- Gcloud CLI installed on your machine
+- GCloud installed on your machine
 - Git installed on your machine
 - [Unfurl](https://github.com/onecommons/unfurl){target=_blank} installed on your machine
 - Terraform installed on your machine

@@ -29,20 +29,22 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/setup/utils',
-    hae.express(async (req, res, next) => {
-        await Controller.setup.install(req.body)
-        res.json({})
-    })
-)
-
-resolvers.post(
     '/setup/path',
     hae.express(async (req, res, next) => {
         const path = await Controller.setup.path()
         res.json({path})
     })
 )
+
+resolvers.post(
+    '/install/utils',
+    hae.express(async (req, res, next) => {
+        await Controller.install.utils(req.body)
+        res.json({})
+    })
+)
+
+// TODO: remaining resolvers
 
 resolvers.post(
     '/orchestrators/enable',

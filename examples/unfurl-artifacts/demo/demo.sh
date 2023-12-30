@@ -43,7 +43,7 @@ vintner instances resolve --instance artifacts --inputs unfurl-artifacts/tests/e
 vintner instances inspect --instance artifacts
 
 # unfurl
-vintner setup install --unfurl
+vintner install unfurl
 vintner orchestrators init unfurl
 vintner orchestrators enable --orchestrator unfurl
 

@@ -32,7 +32,7 @@ jobs:
                   git config --global user.name "${GITHUB_ACTOR}"
                   git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
 
-            - name: (PREPARE) Setup gcloud CLI
+            - name: (PREPARE) Setup GCloud
               uses: google-github-actions/setup-gcloud@v1
               with:
                   version: 438.0.0

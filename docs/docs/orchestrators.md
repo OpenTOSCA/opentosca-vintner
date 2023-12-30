@@ -21,7 +21,7 @@ This will install xOpera v0.6.9 system-wide using pip.
 For a manual installation see [the documentation](https://xlab-si.github.io/xopera-docs/02-cli.html#installation){target=_blank}.
 
 ```shell linenums="1"
-vintner setup install --xopera
+vintner install xopera
 ```
 
 Next, we configure Vintner to use xOpera.
@@ -58,7 +58,7 @@ This will install Unfurl v0.9.1 system-wide using pip.
 For a manual installation see [the documentation](https://docs.unfurl.run/README.html#installation){target=_blank}.
 
 ```shell linenums="1"
-vintner setup install --unfurl
+vintner install unfurl
 ```
 
 Next, we configure Vintner to use Unfurl.
