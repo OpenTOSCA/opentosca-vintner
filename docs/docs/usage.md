@@ -9,7 +9,7 @@ This document holds instructions on using Vintner.
 
 ## Use the CLI
 
-To ensure that Vintner can be executed, run the following command.
+First, we ensure that Vintner can be executed.
 
 ```shell linenums="1"
 vintner --version
@@ -54,17 +54,17 @@ Next, we initialize an application instance.
 vintner instances init --instance ${INSTANCE_NAME} --template ${TEMPLATE_NAME}
 ```
 
-Next, specify variability inputs.
+Next, we specify variability inputs.
 
-Next, resolve the variability.
+Next, we resolve the variability.
 
 ```shell linenums="1"
 vintner instances resolve --instance ${INSTANCE_NAME} --inputs ${VARIABILITY_INPUTS}
 ```
 
-Next, specify deployment inputs. 
+Next, we specify deployment inputs. 
 
-Next, deploy the application. 
+Next, we deploy the application. 
 
 ```shell linenums="1"
 vintner instances deploy --instance ${INSTANCE_NAME} --inputs ${DEPLOYMENT_INPUTS_PATH}
@@ -75,7 +75,7 @@ vintner instances deploy --instance ${INSTANCE_NAME} --inputs ${DEPLOYMENT_INPUT
 Eventually, we undeploy the application.
 
 ```shell linenums="1"
-vintner instances undeploy --instance pruning
+vintner instances undeploy --instance ${INSTANCE_NAME}
 ```
 
 ## Configuration
@@ -88,7 +88,7 @@ The following environment variables can be used for configuration.
 
 ## Start the Server
 
-Vintner can be used in a distributed manner by starting the corresponding server.
+Vintner can be used as server.
 To start the server, run the following command.
 
 ```shell linenums="1"
