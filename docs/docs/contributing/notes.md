@@ -210,6 +210,14 @@ SUM:                           191           1868            773           9310
 -------------------------------------------------------------------------------
 ```
 
+## Adding a New Publication
+
+1. Step-by-step guide
+1. Zenodo
+1. Integration tests
+1. Entry in [Publications](../publications.md)
+1. Git tag
+
 ## Limitations
 
 We briefly discuss limitations of our prototypical implementation.

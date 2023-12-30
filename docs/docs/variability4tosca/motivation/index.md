@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - Algorithms 2022
 - xOpera
 ---
@@ -128,6 +129,10 @@ Cleaning up the filesystem removes any data including, e.g., all imported templa
 vintner instances delete --instance pruning
 vintner setup clean --force
 ```
+
+## Zenodo
+
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}.
 
 ## Publication
 

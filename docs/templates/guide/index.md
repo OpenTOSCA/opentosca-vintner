@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - <%= data.CONFERENCE_NAME %> <%= data.CONFERENCE_YEAR %>
 - <%= data.ORCHESTRATOR %>
 ---

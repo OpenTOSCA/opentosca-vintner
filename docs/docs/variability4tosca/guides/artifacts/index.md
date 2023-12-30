@@ -3,6 +3,7 @@ tags:
 - Variability4TOSCA
 - Guide
 - Publication
+- Zenodo
 - CoopIS 2023
 - Unfurl
 ---
@@ -152,6 +153,10 @@ The logs of the corresponding GitHub action job run can be accessed [here](https
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
 The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
+
+## Zenodo
+
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}.
 
 ## Publication
 
