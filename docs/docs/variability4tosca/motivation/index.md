@@ -129,6 +129,10 @@ vintner instances delete --instance pruning
 vintner setup clean --force
 ```
 
+## Zenodo
+
+The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}.
+
 ## Publication
 
 This guide is part of our [paper](../../publications.md#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model){target=_blank} published at the Algorithms 2022.

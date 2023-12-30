@@ -13,12 +13,12 @@ The current version can be accessed using `vintner --version`.
 Vintner is a research prototype.
 There exists only a single GitHub release.
 Older releases are removed when a new GitHub release is published.
-Vintner versions used in publications are typically archived using Zenodo.
+Vintner versions used in publications are archived using Zenodo.
 
 For each GitHub release, there exists a Docker Image. 
 These images are not removed.
 
-The version used in package managers, such as npm, use semantic versioning.
+The versions used in package managers, such as npm, use semantic versioning.
 
 | Package Version | Vintner Version                           |
 |-----------------|-------------------------------------------|

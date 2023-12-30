@@ -7,4 +7,5 @@
 - (optional) YouTube
 - (optional) Complexity Analysis
 - (optional) logs.txt and logs.zip
+- Zenodo
 - Remove README.md

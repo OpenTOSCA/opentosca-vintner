@@ -59,4 +59,5 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/motivation/index.md){target=_blank}
 - {{ repo_link('examples/unfurl-motivation', 'Model of the Motivating Scenario using Unfurl') }}
 - {{ repo_link('examples/xopera-motivation', 'Model of the Motivating Scenario using xOpera') }}
+- [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}
 - {{ tag_link('publication-stoetzner-2022-vdmm') }}
