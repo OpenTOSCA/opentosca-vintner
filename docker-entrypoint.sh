@@ -25,12 +25,15 @@ if [[ ! -f $VINTNER_INIT ]]; then
 
   # Configure Unfurl
   echo "Configure Unfurl"
-  $VINTNER orchestrators init unfurl --no-venv
+  $VINTNER orchestrators init unfurl
+  $VINTNER orchestrators enable --orchestrator unfurl
+  $VINTNER orchestrators attest --orchestrator unfurl
 
   # Configure and enable xOpera
   echo "Configure and enable xOpera"
-  $VINTNER orchestrators init xopera --no-venv
+  $VINTNER orchestrators init xopera
   $VINTNER orchestrators enable --orchestrator xopera
+  $VINTNER orchestrators attest --orchestrator xopera
 
   date > $VINTNER_INIT
 fi
@@ -48,10 +51,10 @@ if [[ "$VINTNER_MODE" = "cli" ]]; then
 Vintner can be used as follows:
     docker exec -it vintner vintner --version
 
-If you need to log into Terraform, then you can log into your account the following way:
+If you need to log into Terraform, you can log into your account as follows:
     docker exec -it vintner terraform login
 
-If you are running on Linux, then you can set an alias to natively use \"vintner\" on the host, e.g., \"vintner --version\"
+If you are running on Linux, you can set an alias to natively use \"vintner\" on the host, e.g., \"vintner --version\"
     alias vintner=\"docker exec -it vintner vintner\"
 
 For more information, please consider our documentation:

@@ -613,7 +613,7 @@ installs Terraform
 
 ## vintner install unfurl
 
-installs Unfurl
+installs Unfurl in a venv in "~/unfurl"
 
 
 === "CLI"
@@ -683,7 +683,7 @@ installs utils, such as sudo, unzip, git ...
 
 ## vintner install xopera
 
-installs xOpera
+installs xOpera in a venv in "~/opera"
 
 
 === "CLI"

@@ -47,8 +47,14 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
+            - name: (PREPARE) Cache xOpera
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/opera
+                  key: xopera
+
             - name: (PREPARE) Install xOpera
-              run: sudo ./src/assets/scripts/install-xopera.sh
+              run: ./src/assets/scripts/install-xopera.sh
 
             ###################################################
             #

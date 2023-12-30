@@ -1,20 +1,11 @@
 import Controller from '#controller'
-import {Shell} from '#shell'
+import {xOperaNativeDefaults} from '#plugins/xopera'
 import path from 'path'
 
 export const examplesDir = path.join(__dirname, '..', '..', 'examples')
 
 export const insideWorkflow = process.env.CI === 'true'
 export const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION_TESTS === 'true'
-
-export async function checkSetup() {
-    // Check that xOpera is installed
-    if (insideWorkflow) {
-        await new Shell().execute(['which opera &>/dev/null'])
-    } else {
-        await new Shell(true).execute(['cd ~/opera', '&&', '. .venv/bin/activate', '&&', 'which opera &>/dev/null'])
-    }
-}
 
 export async function initSetup() {
     // TODO: set vintner home to not nuke local setups
@@ -24,11 +15,13 @@ export async function initSetup() {
 
     // Setup xOpera
     if (insideWorkflow) {
-        await Controller.orchestrators.initxOpera({venv: false, dir: 'none'})
+        await Controller.orchestrators.initxOpera({venv: true, dir: xOperaNativeDefaults.dir})
         await Controller.orchestrators.enable({orchestrator: 'xopera'})
+        await Controller.orchestrators.attest({orchestrator: 'xopera'})
     } else {
-        await Controller.orchestrators.initxOperaWSL({venv: true, dir: '~/opera'})
+        await Controller.orchestrators.initxOperaWSL({venv: true, dir: xOperaNativeDefaults.dir})
         await Controller.orchestrators.enable({orchestrator: 'xopera-wsl'})
+        await Controller.orchestrators.attest({orchestrator: 'xopera-wsl'})
     }
 }
 

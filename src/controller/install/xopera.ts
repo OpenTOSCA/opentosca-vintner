@@ -1,15 +1,10 @@
 import Installer from '#controller/install/installer'
-import {xOperaNativeConfig} from '#plugins/xopera'
 import std from '#std'
 
-// TODO: venv
-
-export type InstallxOperaOptions = xOperaNativeConfig
+export type InstallxOperaOptions = {}
 
 export default async function (options: InstallxOperaOptions) {
     std.log('Installing xOpera')
-
-    // TODO: env?
 
     const installer = new Installer()
     await installer.attest()

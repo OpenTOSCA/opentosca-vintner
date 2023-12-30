@@ -198,7 +198,7 @@ install
 
 install
     .command('unfurl')
-    .description('installs Unfurl')
+    .description('installs Unfurl in a venv in "' + UnfurlNativeDefaults.dir + '"')
     .action(
         hae.exit(async options => {
             await Controller.install.unfurl(options)
@@ -216,10 +216,7 @@ install
 
 install
     .command('xopera')
-    .description('installs xOpera')
-    .option('--venv [boolean]', 'enable the use of a virtual environment', xOperaNativeDefaults.venv)
-    .option('--no-venv [boolean]', 'disable the use of a virtual environment')
-    .option('--dir [string]', 'directory of xopera', xOperaNativeDefaults.dir)
+    .description('installs xOpera in a venv in "' + xOperaNativeDefaults.dir + '"')
     .action(
         hae.exit(async options => {
             await Controller.install.xopera(options)

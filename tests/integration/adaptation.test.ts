@@ -4,20 +4,15 @@ import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import * as utils from '#utils'
 import {expect} from 'chai'
-import {before} from 'mocha'
 import path from 'path'
 import Controller from '../../src/controller'
-import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
+import {cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
     std.log()
     std.log('Skipping integration tests')
 } else {
     describe('adaptation', () => {
-        before(async () => {
-            await checkSetup()
-        })
-
         beforeEach(async () => {
             await initSetup()
         })

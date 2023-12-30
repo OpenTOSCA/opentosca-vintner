@@ -62,7 +62,7 @@ jobs:
                   key: xopera
 
             - name: (PREPARE) Install xOpera
-              run: VENV_DIR=~/opera ./src/assets/scripts/install-xopera.sh
+              run: ./src/assets/scripts/install-xopera.sh
 
             - name: (PREPARE) Cache Unfurl
               uses: actions/cache@v3
@@ -71,7 +71,7 @@ jobs:
                   key: unfurl
 
             - name: (PREPARE) Install Unfurl
-              run: VENV_DIR=~/unfurl ./src/assets/scripts/install-unfurl.sh
+              run: ./src/assets/scripts/install-unfurl.sh
 
             ###################################################
             #
@@ -97,26 +97,6 @@ jobs:
                   cp /usr/bin/vintner vintner-linux-x64
                   gpg --verify vintner-linux-x64.asc
                   rm vintner-linux-x64.asc
-
-            # TODO: remove this
-            - name: (XOPERA-ATTEST) Attest xOpera
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
-
-            # TODO: remove this
-            - name: (UNFURL-ATTEST) Attest Unfurl
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl --dir ~/unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
 
             ###################################################
             #
@@ -153,12 +133,13 @@ jobs:
             # xOpera Motivation
             #
             ###################################################
+
             - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
               run: |
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/opera
+                  vintner orchestrators init xopera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -189,7 +170,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/opera
+                  vintner orchestrators init xopera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -219,7 +200,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init unfurl --dir /home/runner/unfurl
+                  vintner orchestrators init unfurl
                   vintner orchestrators enable --orchestrator unfurl
                   vintner orchestrators attest --orchestrator unfurl
 

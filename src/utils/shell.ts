@@ -25,21 +25,30 @@ export class Shell {
         return path.resolve(file)
     }
 
-    // TODO: env
-    async script(options: {file?: string; content?: string; sudo?: boolean; env?: [string, string][]}) {
-        options.sudo = check.isDefined(options.sudo) ?? false
+    async script(options: {file?: string; content?: string; sudo?: boolean; env?: {[key: string]: string}}) {
+        options.sudo = options.sudo ?? false
+        options.env = options.env ?? {}
 
+        // If content, then store it as file
         if (check.isDefined(options.content)) {
             options.file = files.temporary()
             files.storeFile(options.file, options.content)
         }
         assert.isDefined(options.file, 'File is not defined')
+
         const resolved = this.resolve(options.file)
-
-        await this.execute(['chmod', '+x', resolved])
-
         const command = [resolved]
+
+        // Set environment
+        for (const env of Object.entries(options.env)) {
+            command.unshift(`${env[0]}=${env[1]}`)
+        }
+
+        // Use "sudo" (after setting environment)
         if (options.sudo) command.unshift('sudo')
+
+        // Execute script
+        await this.execute(['chmod', '+x', resolved])
         await this.execute(command)
     }
 
