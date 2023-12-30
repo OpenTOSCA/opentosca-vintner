@@ -2308,15 +2308,20 @@
 <a class="md-tag" href="../../../tags/#xopera">xOpera</a>
 </nav>
 <h1 id="pruning-elements">Pruning Elements<a class="headerlink" href="#pruning-elements" title="Permanent link">¶</a></h1>
-<p>In the following, we provide a detailed step-by-step tutorial to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
-The web shop application can be deployed in the following deployment variants.</p>
+<figure>
+<p><a class="glightbox" href="variants.png"><img alt="Variants" src="variants.png"/></a>
+</p>
+<figcaption>Figure 1: The different deployment variants.</figcaption>
+</figure>
+<p>This document holds a detailed step-by-step guide to deploy the elastic deployment variant of a web shop application to showcase the reduced modeling effort when pruning elements.
+The application can be deployed in the following deployment variants, see Figure 1.</p>
 <ul>
 <li>static with medium resources on a single virtual machine on a local OpenStack (OS) instance </li>
 <li>static with large resources on a single virtual machine on a local OpenStack (OS) instance</li>
 <li>elastic with high availability and backups on Google Cloud Platform (GCP)</li>
 </ul>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
-<p>We need to fulfill the following requirements to follow this step-by-step tutorial.</p>
+<p>We need to fulfill the following requirements to follow this step-by-step guide.</p>
 <ul>
 <li>Linux machine, e.g., Ubuntu 22.04</li>
 <li>Git installed</li>
@@ -2326,7 +2331,7 @@ The web shop application can be deployed in the following deployment variants.</
 <li>Access to a GCP project</li>
 </ul>
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">¶</a></h2>
-<p>First, install OpenTOSCA Vintner.
+<p>First, we install OpenTOSCA Vintner.
 For more information see <a href="../../../installation/" target="_blank">Installation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
@@ -2338,9 +2343,9 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 </code></pre></div></td></tr></table></div>
 <h2 id="import-the-template">Import the Template<a class="headerlink" href="#import-the-template" title="Permanent link">¶</a></h2>
 <figure>
-<p><a class="glightbox" href="variable-service-template.png"><img alt="Motivating Scenario" src="variable-service-template.png" width="700"/></a>
+<p><a class="glightbox" href="variability4tosca.png"><img alt="Variability4TOSCA template" src="variability4tosca.png" width="700"/></a>
 </p>
-<figcaption>Figure 1: The Variability4TOSCA model of our motivating scenario.</figcaption>
+<figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
 <p>First, we clone the repository.
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
@@ -2351,37 +2356,37 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Next, import the Variability4TOSCA template.</p>
+<p>Next, we import the Variability4TOSCA template.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>pruning<span class="w"> </span>--path<span class="w"> </span>examples/xopera-pruning
 </code></pre></div></td></tr></table></div>
-<p>Next, initialize an application instance.</p>
+<p>Next, we initialize an application instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--template<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
-<p>We can optionally inspect the Variability4TOSCA model.
-This model contains all possible elements having conditions assigned.
+<p>We can optionally inspect the Variability4TOSCA template.
+This template contains all possible elements having conditions assigned.
 However, due to pruning, only a handful of condition must be modeled, e.g., the condition checking if a medium or large virtual machine is required.
-This is shown in Figure 1.</p>
+An overview is given in Figure 2.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>inspect<span class="w"> </span>--template<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
 <h2 id="resolve-variability">Resolve Variability<a class="headerlink" href="#resolve-variability" title="Permanent link">¶</a></h2>
 <figure>
-<p><a class="glightbox" href="elastic.png"><img alt="Motivating Scenario" src="elastic.png" width="300"/></a>
+<p><a class="glightbox" href="tosca.png"><img alt="TOSCA template" src="tosca.png" width="300"/></a>
 </p>
-<figcaption>Figure 1: The elastic deployment variant of our motivating scenario.</figcaption>
+<figcaption>Figure 3: The deployment variant.</figcaption>
 </figure>
-<p>We want to deploy the elastic variant of the web shop application using GCP.
-We specify this when resolving variability as follows.</p>
+<p>We intend to deploy the elastic variant.
+We specify this when resolving variability.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--presets<span class="w"> </span>elastic
 </code></pre></div></td></tr></table></div>
-<p>We can optionally inspect the generated TOSCA-compliant model.
+<p>We can optionally inspect the generated TOSCA-compliant template.
 This template contains only the elements required for the elastic variant, e.g., the MySQL database.
-This is shown in Figure 2.</p>
+An overview is given in Figure 3.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
 <h2 id="deploy-the-application">Deploy the Application<a class="headerlink" href="#deploy-the-application" title="Permanent link">¶</a></h2>
-<p>Finally, we deploy the elastic variant.
+<p>Finally, we deploy the application.
 Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
-These inputs are specified in <code>topology_template.inputs</code> of the TOSCA-compliant model.
+Possible deployment inputs are specified in <code>topology_template.inputs</code> of the TOSCA-compliant template.
 The deployment will take around 15-20 minutes.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>pruning<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
@@ -2389,16 +2394,16 @@ The deployment will take around 15-20 minutes.</p>
 <p>Afterward, we undeploy the application.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>pruning
 </code></pre></div></td></tr></table></div>
-<p>We can also optionally remove the instance or cleanup the filesystem.
-Note, cleaning up the filesystem removes any Vintner data including, e.g., all imported templates and created instances.</p>
+<p>Optionally, we can remove the instance and cleanup the filesystem.
+Cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
 <span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>pruning
 <a id="__codelineno-10-2" name="__codelineno-10-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
 </code></pre></div></td></tr></table></div>
 <h2 id="complexity-analysis">Complexity Analysis<a class="headerlink" href="#complexity-analysis" title="Permanent link">¶</a></h2>
-<p>The models for our complexity analysis can be found <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-pruning/stats" target="_blank">here</a>.</p>
+<p>The templates for our complexity analysis can be found <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/xopera-pruning/stats" target="_blank">here</a>.</p>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">¶</a></h2>
-<p>This deployment is also executed in our integration pipeline which is executed once a week.
+<p>This deployment is also executed in our integration pipeline, which is executed once a week.
 The logs of the corresponding GitHub action job run can be accessed <a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">here</a>.
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs.
@@ -2406,14 +2411,14 @@ The raw logs of a recorded job are <a href="logs.txt" target="_blank">available<
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
 <p>The assets of this guide can be also found on <a href="https://doi.org/10.5281/zenodo.10050261" target="_blank">Zenodo</a>.</p>
 <h2 id="publication">Publication<a class="headerlink" href="#publication" title="Permanent link">¶</a></h2>
-<p>This guide is part of our <a href="../../../publications/#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models" target="_blank">paper</a> accepted at the UCC 2023.
+<p>This guide is part of our <a href="../../../publications/#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models" target="_blank">paper</a> published at the UCC 2023.
 Also check our other <a href="../../../publications/" target="_blank">publications</a>.</p>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2023</span>
 </small>
 </div>
 </article>

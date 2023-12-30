@@ -2202,17 +2202,14 @@
 </script>
 <p>In this example, we will deploy a textfile on our local machine which has a different content depending on our input.
 This is just a simple example without any dependencies, such as a Docker Engine or a cloud.
-For a more complex scenario including OpenStack and GCP see
-<a href="../variability4tosca/motivation/" target="_blank">Motivating Scenario</a>.
-First, install OpenTOSCA Vintner.</p>
-<p>In our case, we run on a Linux machine.
+For a more complex scenario including OpenStack and GCP see <a href="../variability4tosca/motivation/" target="_blank">Motivating Scenario</a>.</p>
+<p>First, we install OpenTOSCA Vintner.
 For more information see <a href="../installation/" target="_blank">Installation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 <p>We currently support <a href="https://github.com/xlab-si/xopera-opera" target="_blank">xOpera</a> and <a href="https://github.com/onecommons/unfurl" target="_blank">Unfurl</a>.
-Since both can only be installed on Linux, we implemented a <a href="https://docs.microsoft.com/en-us/windows/wsl" target="_blank">WSL</a>
-integration for both.
-Configure and enable your orchestrator.
+Since both can only be installed on Linux, we provide a <a href="https://docs.microsoft.com/en-us/windows/wsl" target="_blank">WSL</a> integration for both.
+We configure and enable xOpera.
 For more information see <a href="../installation/" target="_blank">Installation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera
@@ -2227,10 +2224,10 @@ For more information see <a href="../installation/" target="_blank">Installation
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
-<p>Next, we import the template.</p>
+<p>Next, we import the Variability4TOSCA template.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>getting-started<span class="w"> </span>--path<span class="w"> </span>examples/xopera-getting-started
 </code></pre></div></td></tr></table></div>
-<p>Next, we initialize an instance.</p>
+<p>Next, we initialize an application instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--template<span class="w"> </span>getting-started
 </code></pre></div></td></tr></table></div>
 <p>The imported template contains the following conditional node templates.</p>
@@ -2272,8 +2269,8 @@ For more information see <a href="../installation/" target="_blank">Installation
 <a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="w">            </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <a id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_second</span><span class="p p-Indicator">}</span>
 </code></pre></div></td></tr></table></div>
-<p>We decide that the first textfile should be deployed.
-Therefore, we resolve the variability. </p>
+<p>We intend to deploy the first textfile.
+We specify this when resolving variability.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>getting-started<span class="w"> </span>--inputs<span class="w"> </span>examples/xopera-getting-started/variability-inputs.example.yaml
 </code></pre></div></td></tr></table></div>
 <p>Finally, we deploy the application.</p>
@@ -2282,7 +2279,7 @@ Therefore, we resolve the variability. </p>
 <p>The deployed textfile has the content as expected.</p>
 <div class="highlight"><table class="highlighttable"><tr><th class="filename" colspan="2"><span class="filename">/tmp/vintner-getting-started.txt</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>First Textfile has been selected!
 </code></pre></div></td></tr></table></div>
-<p>To undeploy, run the following command.</p>
+<p>Eventually, we undeploy the application.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>getting-started
 </code></pre></div></td></tr></table></div>
 <hr/>
@@ -2290,7 +2287,7 @@ Therefore, we resolve the variability. </p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2023</span>
 </small>
 </div>
 </article>

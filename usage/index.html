@@ -2266,7 +2266,7 @@
 <h1 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">¶</a></h1>
 <p>This document holds instructions on using Vintner.</p>
 <h2 id="use-the-cli">Use the CLI<a class="headerlink" href="#use-the-cli" title="Permanent link">¶</a></h2>
-<p>To ensure that Vintner can be executed, run the following command.</p>
+<p>First, we ensure that Vintner can be executed.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>vintner<span class="w"> </span>--version
 </code></pre></div></td></tr></table></div>
 <p>From there on use the help command.
@@ -2289,17 +2289,17 @@ See <a href="../orchestrators/" target="_blank">Orchestrators</a> for a complete
 <p>Next, we initialize an application instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE_NAME</span><span class="si">}</span><span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE_NAME</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Next, specify variability inputs.</p>
-<p>Next, resolve the variability.</p>
+<p>Next, we specify variability inputs.</p>
+<p>Next, we resolve the variability.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE_NAME</span><span class="si">}</span><span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">VARIABILITY_INPUTS</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Next, specify deployment inputs. </p>
-<p>Next, deploy the application. </p>
+<p>Next, we specify deployment inputs. </p>
+<p>Next, we deploy the application. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE_NAME</span><span class="si">}</span><span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">DEPLOYMENT_INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="undeploy-an-application">Undeploy an Application<a class="headerlink" href="#undeploy-an-application" title="Permanent link">¶</a></h2>
 <p>Eventually, we undeploy the application.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>pruning
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span><span class="si">${</span><span class="nv">INSTANCE_NAME</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
 <p>The following environment variables can be used for configuration.</p>
@@ -2320,7 +2320,7 @@ See <a href="../orchestrators/" target="_blank">Orchestrators</a> for a complete
 </tbody>
 </table>
 <h2 id="start-the-server">Start the Server<a class="headerlink" href="#start-the-server" title="Permanent link">¶</a></h2>
-<p>Vintner can be used in a distributed manner by starting the corresponding server.
+<p>Vintner can be used as server.
 To start the server, run the following command.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>server<span class="w"> </span>start
 </code></pre></div></td></tr></table></div>
@@ -2329,7 +2329,7 @@ To start the server, run the following command.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2023</span>
 </small>
 </div>
 </article>

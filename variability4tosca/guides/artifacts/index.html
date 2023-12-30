@@ -1863,13 +1863,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#deployment">
-    Deployment
+<a class="md-nav__link" href="#deploy-the-application">
+    Deploy the Application
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#undeployment">
-    Undeployment
+<a class="md-nav__link" href="#undeploy-the-application">
+    Undeploy the Application
   </a>
 </li>
 <li class="md-nav__item">
@@ -2259,13 +2259,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#deployment">
-    Deployment
+<a class="md-nav__link" href="#deploy-the-application">
+    Deploy the Application
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#undeployment">
-    Undeployment
+<a class="md-nav__link" href="#undeploy-the-application">
+    Undeploy the Application
   </a>
 </li>
 <li class="md-nav__item">
@@ -2303,7 +2303,7 @@
 <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/6szIGJPuCsU?si=zlqebXF3O5yE4sAP" title="YouTube video player"></iframe>
 </div>
 </div>
-<p>In the following, we provide a detailed step-by-step tutorial to deploy the enterprise plan of a web shop application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
+<p>This document holds a detailed step-by-step guide to deploy the enterprise plan of a web shop application to showcase conditional deployment artifacts and conditional properties, as presented in Figure 1.
 The motivating scenario is a simple shopping application that consists of a shop component and a database. 
 Thereby, we take the role of a SaaS provider which offers different pricing plans to his customers.
 Furthermore, there are two different deployment artifacts: the community deployment artifact and the enterprise deployment artifact.
@@ -2313,12 +2313,12 @@ In contrast, the business plan is a paid plan that deploys the enterprise deploy
 However, to have full access to all analytical reporting functionalities, the enterprise plan is required. 
 An important aspect of the deployment of the shop component is that the correct SQL dialect must be configured.</p>
 <figure>
-<p><a class="glightbox" href="motivation.png"><img alt="Motivating Scenario" src="motivation.png" width="700"/></a>
+<p><a class="glightbox" href="variants.png"><img alt="Variants" src="variants.png" width="700"/></a>
 </p>
-<figcaption>Figure 1: The available plans of our motivating scenario.</figcaption>
+<figcaption>Figure 1: The different deployment variants.</figcaption>
 </figure>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
-<p>We need to fulfill the following requirements to follow this step-by-step tutorial.</p>
+<p>We need to fulfill the following requirements to follow this step-by-step guide.</p>
 <ul>
 <li>A machine having Ubuntu22.04 LTS installed</li>
 <li>Ipv6 support, thus, WSL is no suitable</li>
@@ -2329,7 +2329,7 @@ An important aspect of the deployment of the shop component is that the correct 
 <li>Terraform installed on your machine</li>
 </ul>
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">¶</a></h2>
-<p>First, install OpenTOSCA Vintner.
+<p>First, we install OpenTOSCA Vintner.
 For more information see <a href="../../../installation/" target="_blank">Installation</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
@@ -2341,9 +2341,9 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 </code></pre></div></td></tr></table></div>
 <h2 id="import-the-template">Import the Template<a class="headerlink" href="#import-the-template" title="Permanent link">¶</a></h2>
 <figure>
-<p><a class="glightbox" href="variable-service-template.png"><img alt="Motivating Scenario" src="variable-service-template.png" width="700"/></a>
+<p><a class="glightbox" href="variability4tosca.png"><img alt="Variability4TOSCA template" src="variability4tosca.png" width="700"/></a>
 </p>
-<figcaption>Figure 2: The Variability4TOSCA service template (variable service template) of our motivating scenario.</figcaption>
+<figcaption>Figure 2: The Variability4TOSCA template.</figcaption>
 </figure>
 <p>First, we clone the repository.
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
@@ -2355,83 +2355,69 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></td></tr></table></div></p>
 <p>Next, we import the template and initialize an instance.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Add variable service template</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>artifacts<span class="w"> </span>--path<span class="w"> </span>examples/unfurl-artifacts
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># Add instance</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--template<span class="w"> </span>artifacts
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>artifacts<span class="w"> </span>--path<span class="w"> </span>examples/unfurl-artifacts
 </code></pre></div></td></tr></table></div>
-<p>We can optionally inspect the variable service template.
-This template contains all possible elements having conditions assigned, as presented in Figure 2.
-For example, the MySQL database has a condition assigned that checks if the enterprise deployment artifact is present.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># (optional) Inspect variable service template</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a>vintner<span class="w"> </span>templates<span class="w"> </span>inspect<span class="w"> </span>--template<span class="w"> </span>artifacts
+<p>Next, we initialize an application instance.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--template<span class="w"> </span>artifacts
+</code></pre></div></td></tr></table></div>
+<p>We can optionally inspect the Variability4TOSCA template.
+This template contains all possible elements having conditions assigned.
+For example, the MySQL database has a condition assigned that checks if the enterprise deployment artifact is present.
+An overview is given in Figure 2.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>inspect<span class="w"> </span>--template<span class="w"> </span>artifacts
 </code></pre></div></td></tr></table></div>
 <h2 id="resolve-variability">Resolve Variability<a class="headerlink" href="#resolve-variability" title="Permanent link">¶</a></h2>
-<p>We intend to deploy use the enterprise plan of the application.
+<figure>
+<p><a class="glightbox" href="tosca.png"><img alt="TOSCA Template" src="tosca.png" width="300"/></a>
+</p>
+<figcaption>Figure 3: The deployment variant.</figcaption>
+</figure>
+<p>We intend to deploy the enterprise plan.
 Furthermore, we want to configure the display language of the shop component to be German.
-Therefore, we need to resolve the variability by providing respective variability inputs.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Resolve variability</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--inputs<span class="w"> </span>examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+We specify this when resolving variability.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--inputs<span class="w"> </span>examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 </code></pre></div></td></tr></table></div>
-<p>We can optionally inspect the generated service template.
+<p>We can optionally inspect the generated TOSCA-compliant template.
 This template contains only the elements required for the enterprise plan.
-Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># (optional) Inspect service template</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>artifacts
+Notably, the enterprise deployment artifacts is present and configured to use the MySQL dialect.
+An overview is given in Figure 3.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>artifacts
 </code></pre></div></td></tr></table></div>
-<h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">¶</a></h2>
+<h2 id="deploy-the-application">Deploy the Application<a class="headerlink" href="#deploy-the-application" title="Permanent link">¶</a></h2>
 <p>Finally, we deploy the application.
-Therefore, we need to provide deployment inputs.
-An example for the deployment inputs is given in <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/deployment-inputs.example.yaml" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/deployment-inputs.example.yaml</a>.
+Therefore, we need to provide deployment inputs, e.g., credentials to GCP.
+Possible deployment inputs are specified in <code>topology_template.inputs</code> of the TOSCA-compliant template.
 The deployment will take around 15-20 minutes.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Deploy instance</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="undeployment">Undeployment<a class="headerlink" href="#undeployment" title="Permanent link">¶</a></h2>
+<h2 id="undeploy-the-application">Undeploy the Application<a class="headerlink" href="#undeploy-the-application" title="Permanent link">¶</a></h2>
 <p>Afterward, we can undeploy the application.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
-<span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># Undeploy instance</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>artifacts
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>artifacts
 </code></pre></div></td></tr></table></div>
-<p>We can also optionally remove the instance or cleanup your filesystem.
-Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
-<span class="normal"><a href="#__codelineno-9-2">2</a></span>
-<span class="normal"><a href="#__codelineno-9-3">3</a></span>
-<span class="normal"><a href="#__codelineno-9-4">4</a></span>
-<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1"># (optional) Delete instance</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>artifacts
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="c1"># (optional) Cleanup </span>
-<a id="__codelineno-9-5" name="__codelineno-9-5"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
+<p>Optionally, we can remove the instance and cleanup the filesystem.
+Cleaning up the filesystem removes any data including, e.g., all imported templates and created instances.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>pruning
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
 </code></pre></div></td></tr></table></div>
 <h2 id="complexity-analysis">Complexity Analysis<a class="headerlink" href="#complexity-analysis" title="Permanent link">¶</a></h2>
-<p>The models for our complexity analysis can be found <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats" target="_blank">here</a>.</p>
+<p>The templates for our complexity analysis can be found <a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples/unfurl-artifacts/stats" target="_blank">here</a>.</p>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">¶</a></h2>
-<p>This deployment is also executed in our integration pipeline which is executed once a week. 
+<p>This deployment is also executed in our integration pipeline, which is executed once a week. 
 The logs of the corresponding GitHub action job run can be accessed <a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">here</a>.
 Relevant steps start with "UNFURL-ARTIFACTS".
 Note, a GitHub account is required to access these logs. 
 The raw logs of a recorded job are <a href="logs.txt" target="_blank">available</a> without requiring an GitHub account.</p>
 <h2 id="publication">Publication<a class="headerlink" href="#publication" title="Permanent link">¶</a></h2>
 <p>This guide is part of our <a href="../../../publications/#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies" target="_blank">research paper</a> published at the main track of the CoopIS 2023.
-Also, this guide is further extended by our <a href="../../../publications/#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability" target="_blank">demonstration paper</a> which was  accepted at the demo track at the CoopIS 2023.
+Also, this guide is further extended by our <a href="../../../publications/#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability" target="_blank">demonstration paper</a> which was published at the demo track at the CoopIS 2023.
 Also check our other <a href="../../../publications/" target="_blank">publications</a>.</p>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2023</span>
 </small>
 </div>
 </article>
