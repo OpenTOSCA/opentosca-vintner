@@ -7,7 +7,7 @@ import * as utils from '#utils'
 import _ from 'lodash'
 import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
 
-export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWLSConfig & {wsl: true})
+export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWSLConfig & {wsl: true})
 
 export type xOperaNativeConfig = {
     venv: boolean
@@ -19,9 +19,9 @@ export const xOperaNativeDefaults: xOperaNativeConfig = {
     dir: '~/opera',
 }
 
-export type xOperaWLSConfig = xOperaNativeConfig
+export type xOperaWSLConfig = xOperaNativeConfig
 
-export const xOperaWSLDefaults: xOperaWLSConfig = xOperaNativeDefaults
+export const xOperaWSLDefaults: xOperaWSLConfig = xOperaNativeDefaults
 
 export class xOperaPlugin implements OrchestratorPlugin {
     private readonly config: xOperaConfig
