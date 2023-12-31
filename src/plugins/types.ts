@@ -1,5 +1,5 @@
 import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
-import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
+import {xOperaNativeConfig, xOperaWSLConfig} from '#plugins/xopera'
 import {Instance} from '#repositories/instances'
 import {AttributeAssignmentMap} from '#spec/node-template'
 import {ServiceTemplate} from '#spec/service-template'
@@ -42,7 +42,7 @@ export interface OrchestratorPlugin {
 export type OrchestratorsConfig = {
     enabled?: string
     xOpera?: xOperaNativeConfig
-    xOperaWSL?: xOperaWLSConfig
+    xOperaWSL?: xOperaWSLConfig
     unfurl?: UnfurlNativeConfig
     unfurlWSL?: UnfurlWSLConfig
 }

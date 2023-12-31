@@ -26,12 +26,12 @@ The application can be deployed in the following deployment variants, see Figure
 
 We need to fulfill the following requirements to follow this step-by-step guide.
 
-- Linux machine, e.g., Ubuntu 22.04
-- Git installed
-- Ansible installed
-- [xOpera](https://github.com/xlab-si/xopera-opera) installed (Version 0.6.9 is required!)
-- [gcloud](https://cloud.google.com/sdk/docs/install) installed
+- Ubuntu 22.04
 - Access to a GCP project
+- GCloud
+- Git
+- xOpera
+- Ansible
 
 ## Preparation
 

@@ -471,6 +471,251 @@ open repository
     post(SERVER_ADDRESS + "/info/repo")
     ```
 
+## vintner install ansible
+
+installs Ansible
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install ansible 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/ansible
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/ansible")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/ansible")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/ansible")
+    ```
+
+## vintner install gcloud
+
+installs GCloud
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install gcloud 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/gcloud
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/gcloud")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/gcloud")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/gcloud")
+    ```
+
+## vintner install python
+
+installs Python
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install python 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/python
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/python")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/python")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/python")
+    ```
+
+## vintner install terraform
+
+installs Terraform
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install terraform 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/terraform
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/terraform")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/terraform")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/terraform")
+    ```
+
+## vintner install unfurl
+
+installs Unfurl in a venv in "~/unfurl"
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install unfurl 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/unfurl
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/unfurl")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/unfurl")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/unfurl")
+    ```
+
+## vintner install utils
+
+installs utils, such as sudo, unzip, git ...
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install utils 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/utils
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/utils")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/utils")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/utils")
+    ```
+
+## vintner install xopera
+
+installs xOpera in a venv in "~/opera"
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install xopera 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/xopera
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/xopera")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/xopera")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/xopera")
+    ```
+
 ## vintner instances adapt
 
 submit sensor data used for adapting the instance
@@ -1404,7 +1649,7 @@ initializes unfurl plugin
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | no-venv |  false  | boolean | disable the use of a virtual environment |
-| dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
+| dir |  false  | string | directory of unfurl (default: "~/unfurl") |
 
 ## vintner orchestrators init unfurl-wsl
 
@@ -1445,7 +1690,7 @@ initializes unfurl-wsl plugin
 | --- | --- | --- | --- |
 | venv |  false  | boolean | enable the use of a virtual environment (default: true) |
 | no-venv |  false  | boolean | disable the use of a virtual environment |
-| dir |  false  | string | directory of unfurl (default: "~/.unfurl_home") |
+| dir |  false  | string | directory of unfurl (default: "~/unfurl") |
 
 ## vintner orchestrators init xopera
 
@@ -1799,53 +2044,6 @@ initialises the filesystem
     import khttp.post
     post(SERVER_ADDRESS + "/setup/init")
     ```
-
-## vintner setup install
-
-install utils (Linux is required)
-
-
-=== "CLI"
-    ```shell linenums="1"
-    vintner setup install 
-    ```
-
-=== "cURL"
-    ```shell linenums="1"
-    curl --header "Content-Type: application/json" \
-            --request POST \
-            ${SERVER_ADDRESS}/setup/install
-    ```
-
-=== "JavaScript"
-    ```javascript linenums="1"
-    const axios = require("axios")
-    await axios.post(SERVER_ADDRESS + "/setup/install")
-    ```
-
-=== "Python"
-    ```python linenums="1"
-    import requests
-    requests.post(SERVER_ADDRESS + "/setup/install")
-    ```
-
-=== "Kotlin"
-    ```kotlin linenums="1"
-    import khttp.post
-    post(SERVER_ADDRESS + "/setup/install")
-    ```
-
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| all |  false  | boolean | install all utils |
-| utils |  false  | boolean | install sudo, unzip, git, curl, wget, nano, and tree |
-| python |  false  | boolean | install Python |
-| xopera |  false  | boolean | install xOpera (system-wide) |
-| unfurl |  false  | boolean | install Unfurl (system-wide) |
-| gcloud |  false  | boolean | install GCloud CLI |
-| openstack |  false  | boolean | install OpenStack CLI |
-| terraform |  false  | boolean | install Terraform |
-| ansible |  false  | boolean | install Ansible (system-wide) |
 
 ## vintner setup open
 

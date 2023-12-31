@@ -36,13 +36,13 @@ An important aspect of the deployment of the shop component is that the correct 
 
 We need to fulfill the following requirements to follow this step-by-step guide.
 
-- A machine having Ubuntu22.04 LTS installed
+- Ubuntu 22.04
 - Ipv6 support, thus, WSL is no suitable
 - Access to a GCP project
-- Gcloud CLI installed on your machine
-- Git installed on your machine
-- [Unfurl](https://github.com/onecommons/unfurl){target=_blank} installed on your machine
-- Terraform installed on your machine
+- GCloud
+- Git
+- Unfurl
+- Terraform
 
 ## Preparation
 

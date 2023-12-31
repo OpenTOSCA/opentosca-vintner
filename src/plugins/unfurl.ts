@@ -15,7 +15,7 @@ export type UnfurlNativeConfig = {
 
 export const UnfurlNativeDefaults: UnfurlNativeConfig = {
     venv: true,
-    dir: '~/.unfurl_home',
+    dir: '~/unfurl',
 }
 
 export type UnfurlWSLConfig = UnfurlNativeConfig

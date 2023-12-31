@@ -1,5 +1,6 @@
 import AssetsController from './assets'
 import InfoController from './info'
+import InstallController from './install'
 import InstancesController from './instances'
 import OrchestratorsController from './orchestrators'
 import QueryController from './query'
@@ -12,6 +13,7 @@ import UtilsController from './utils'
 
 export default {
     info: InfoController,
+    install: InstallController,
     instances: InstancesController,
     query: QueryController,
     orchestrators: OrchestratorsController,
