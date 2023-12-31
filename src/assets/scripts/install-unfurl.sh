@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -e
 
 VENV_DIR=${VENV_DIR:-~/unfurl}
