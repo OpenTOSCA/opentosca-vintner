@@ -1,4 +1,5 @@
-import Installer from '#controller/install/installer'
+import * as assert from '#assert'
+import {Shell} from '#shell'
 import std from '#std'
 
 export type InstallGCloudOptions = {}
@@ -6,9 +7,8 @@ export type InstallGCloudOptions = {}
 export default async function (options: InstallGCloudOptions) {
     std.log('Installing GCloud')
 
-    const installer = new Installer()
-    await installer.attest()
-    await installer.install({script: 'install-gcloud.sh', sudo: true})
+    assert.isLinux()
+    await new Shell().script({asset: 'install-gcloud.sh'})
 
     std.log('GCloud installed')
 }

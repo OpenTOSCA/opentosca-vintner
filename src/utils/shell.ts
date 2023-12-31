@@ -25,7 +25,16 @@ export class Shell {
         return path.resolve(file)
     }
 
-    async script(options: {file?: string; content?: string; sudo?: boolean; env?: {[key: string]: string}}) {
+    async script(
+        options: {
+            file?: string
+            content?: string
+            asset?: string
+        } & {
+            sudo?: boolean
+            env?: {[key: string]: string}
+        }
+    ) {
         options.sudo = options.sudo ?? false
         options.env = options.env ?? {}
 
@@ -34,8 +43,14 @@ export class Shell {
             options.file = files.temporary()
             files.storeFile(options.file, options.content)
         }
-        assert.isDefined(options.file, 'File is not defined')
 
+        // If asset, then copy asset from within binary to filesystem
+        if (check.isDefined(options.asset)) {
+            options.file = files.temporary(options.asset)
+            files.copy(path.join(files.SCRIPTS_DIR, options.asset), options.file)
+        }
+
+        assert.isDefined(options.file, 'File is not defined')
         const resolved = this.resolve(options.file)
         const command = [resolved]
 
@@ -72,7 +87,7 @@ export class Shell {
                 child.stdin.end()
             } else {
                 child = spawn(command, {
-                    shell: true,
+                    shell: '/usr/bin/bash',
                     stdio: ['pipe', process.stderr, process.stderr],
                     cwd: options.cwd,
                 })

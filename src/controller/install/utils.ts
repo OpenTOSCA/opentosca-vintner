@@ -1,4 +1,5 @@
-import Installer from '#controller/install/installer'
+import * as assert from '#assert'
+import {Shell} from '#shell'
 import std from '#std'
 
 export type InstallUtilsOptions = {}
@@ -6,9 +7,8 @@ export type InstallUtilsOptions = {}
 export default async function (options: InstallUtilsOptions) {
     std.log('Installing utils')
 
-    const installer = new Installer()
-    await installer.attest()
-    await installer.install({script: 'install-utils.sh', sudo: true})
+    assert.isLinux()
+    await new Shell().script({asset: 'install-utils.sh'})
 
     std.log('Utils installed')
 }
