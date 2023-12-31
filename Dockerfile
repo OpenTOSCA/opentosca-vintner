@@ -28,9 +28,11 @@ RUN git config --global user.name vintner
 RUN ./scripts/install-python.sh
 
 # Install OpenStack CLI
+# TODO: do we need that?
 RUN ./scripts/install-openstack.sh
 
 # Install Ansible
+# TODO: do we need that?
 RUN ./scripts/install-ansible.sh
 
 # Install Terraform
