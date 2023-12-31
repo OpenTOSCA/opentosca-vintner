@@ -25,7 +25,7 @@ if [[ ! -f $VINTNER_INIT ]]; then
 
   # Configure Unfurl
   echo "Configure Unfurl"
-  $VINTNER orchestrators init unfurl
+  $VINTNER orchestrators init unfurl --dir ~/unfurl # TODO: remove --dir
   $VINTNER orchestrators enable --orchestrator unfurl
   $VINTNER orchestrators attest --orchestrator unfurl
 

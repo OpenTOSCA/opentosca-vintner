@@ -15,4 +15,4 @@ fi
 
 # Install Python
 apt-get update -y
-apt-get install python3 python3-pip python-is-python3 -y
+apt-get install python3 python3-pip python3-venv python-is-python3 -y

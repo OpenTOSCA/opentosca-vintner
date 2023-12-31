@@ -218,7 +218,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init unfurl
+                  vintner orchestrators init unfurl --dir ~/unfurl # TODO: remove --dir
                   vintner orchestrators enable --orchestrator unfurl
                   vintner orchestrators attest --orchestrator unfurl
 
