@@ -141,7 +141,7 @@ jobs:
                   docker logs vintner
 
             - name: (DOCKER) Ensure Vintner can be executed
-              run: docker exec -it vintner vintner --help
+              run: docker exec vintner vintner --version
 
             - name: (DOCKER) Stop Docker container
               run: docker kill vintner
