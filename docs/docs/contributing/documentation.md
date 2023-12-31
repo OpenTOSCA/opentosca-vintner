@@ -28,7 +28,8 @@ We use [Material for MkDocs](https://squidfunk.github.io/mkdocs-material){target
 The files are located in the `docs` directory.
 Custom macros are implemented in `docs/macros.py` using [mkdocs-macros](https://mkdocs-macros-plugin.readthedocs.io){target=_blank}.
 
-First, install all dependencies, such as Python, [pandoc](https://pandoc.org){target=_blank}, mkdocs, PlantUML, etc. globally on your system.
+First, install all dependencies. 
+This will install several apt packages on the system and mkdocs in a virtual environment.
 
 ```shell linenums="1"
 yarn docs:install

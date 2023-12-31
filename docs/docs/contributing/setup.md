@@ -106,6 +106,7 @@ Prettier should be configured as given in the figure below with the following pa
 The following directories should be excluded from search by the IDE.
 
 - `.nyc_output`
+- `docs/.venv`
 - `build`
 - `build-docs`
 - `coverage`
