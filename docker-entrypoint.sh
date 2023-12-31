@@ -28,12 +28,14 @@ if [[ ! -f $VINTNER_INIT ]]; then
   $VINTNER orchestrators init unfurl --dir ~/unfurl # TODO: remove --dir
   $VINTNER orchestrators enable --orchestrator unfurl
   $VINTNER orchestrators attest --orchestrator unfurl
+  echo
 
   # Configure and enable xOpera
   echo "Configure and enable xOpera"
   $VINTNER orchestrators init xopera
   $VINTNER orchestrators enable --orchestrator xopera
   $VINTNER orchestrators attest --orchestrator xopera
+  echo
 
   date > $VINTNER_INIT
 fi

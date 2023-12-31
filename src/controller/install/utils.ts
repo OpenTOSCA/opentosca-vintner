@@ -8,7 +8,7 @@ export default async function (options: InstallUtilsOptions) {
     std.log('Installing utils')
 
     assert.isLinux()
-    await new Shell().script({asset: 'install-utils.sh'})
+    await new Shell().script({asset: 'install-utils.sh', sudo: true})
 
     std.log('Utils installed')
 }

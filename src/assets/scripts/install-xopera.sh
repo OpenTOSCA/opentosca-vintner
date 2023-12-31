@@ -29,4 +29,4 @@ python3 -m venv .venv && . .venv/bin/activate
 # Install xOpera
 # openstacksdk 0.61 is required, see https://storyboard.openstack.org/#!/story/2010128
 # pyyaml 5.3.1 is required, see https://github.com/yaml/pyyaml/issues/724#issuecomment-1638587228
-pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
+pip install opera==0.6.9 openstacksdk==0.61 pyyaml==5.3.1
