@@ -106,18 +106,21 @@ jobs:
 
             - name: (VINTNER) Ensure that version is overridden
               run: |
+                  vintner --version
                   if [ "$(vintner --version)" == "__VERSION__" ]; then 
                     exit 1
                   fi
 
             - name: (VINTNER) Ensure that license is overridden
               run: |
+                  vintner info license
                   if [ "$(vintner info license)" == "$(cat src/assets/LICENSE)" ]; then
                     exit 1
                   fi
 
             - name: (VINTNER) Ensure that dependencies are overridden
               run: |
+                  vintner info dependencies
                   if [ "$(vintner info dependencies)" == "$(cat src/assets/dependencies.csv)" ]; then 
                     exit 1
                   fi

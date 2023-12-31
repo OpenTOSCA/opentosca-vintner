@@ -24,5 +24,11 @@ if ! which asciinema &>/dev/null; then
   exit 1
 fi
 
+# Ensure that pv is installed
+if ! which pv &>/dev/null; then
+  echo "\"pv\" not installed"
+  exit 1
+fi
+
 echo "Recoding cast \"${CAST_NAME}\" ..."
 asciinema rec -c "bash ${CAST_INPUT}" --overwrite "${CAST_OUTPUT}"

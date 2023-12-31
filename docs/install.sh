@@ -16,5 +16,8 @@ sudo apt-get install default-jre graphviz -y
 # Install pandoc
 sudo apt-get install pandoc -y
 
+# Install pv for demo magic
+sudo apt-get install pv -y
+
 # Install mkdocs
 pip install -r requirements.txt
