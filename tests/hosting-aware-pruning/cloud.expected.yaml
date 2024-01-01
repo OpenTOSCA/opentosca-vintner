@@ -64,15 +64,11 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
             default: stoetzms-387808
-
-        gcp_auto_scaling:
-            type: boolean
-            default: true
 
     node_templates:
         shop:
@@ -90,15 +86,14 @@ topology_template:
                 gcp_region: {get_input: gcp_region}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
                 gcp_project: {get_input: gcp_project}
-                gcp_auto_scaling: {get_input: gcp_auto_scaling}
+
+                deployment_mode: {get_property: [SELF, host, deployment_mode]}
             requirements:
                 - host: gcp_runtime
                 - database: database
 
         gcp_runtime:
             type: gcp.runtime
-            properties:
-                auto_scaling: {get_input: gcp_auto_scaling}
             requirements:
                 - host: gcp_cloud
 
@@ -106,6 +101,7 @@ topology_template:
             type: mysql.database
             properties:
                 database_name: shop
+                deployment_mode: {get_property: [SELF, host, deployment_mode]}
             requirements:
                 - host: gcp_dbms
 

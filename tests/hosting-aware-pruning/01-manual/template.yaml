@@ -64,15 +64,11 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
             default: stoetzms-387808
-
-        gcp_auto_scaling:
-            type: boolean
-            default: true
 
     variability:
         inputs:
@@ -113,11 +109,12 @@ topology_template:
 
                 - vm_ssh_user: {get_input: os_compute_ssh_user}
                 - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
+
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
                 - gcp_project: {get_input: gcp_project}
-                - gcp_auto_scaling: {get_input: gcp_auto_scaling}
 
+                - deployment_mode: {get_property: [SELF, host, deployment_mode]}
             requirements:
                 - host:
                       node: os_kubernetes
@@ -133,15 +130,22 @@ topology_template:
         database:
             type: mysql.database
             properties:
-                database_name: shop
+                - database_name: shop
+                - deployment_mode: {get_property: [SELF, host, deployment_mode]}
             requirements:
                 - host:
-                      node: os_kubernetes
+                      node: os_dbms
                       conditions: {logic_expression: is_local}
 
                 - host:
                       node: gcp_dbms
                       conditions: {logic_expression: is_cloud}
+
+        os_dbms:
+            type: os.dbms
+            requirements:
+                - host:
+                      node: os_kubernetes
 
         os_monitor:
             type: os.monitor
@@ -210,9 +214,6 @@ topology_template:
 
         gcp_runtime:
             type: gcp.runtime
-            properties:
-                - auto_scaling:
-                      value: {get_input: gcp_auto_scaling}
             requirements:
                 - host:
                       node: gcp_cloud
@@ -226,16 +227,10 @@ topology_template:
                       value: {get_input: database_password}
                 - authorized_networks:
                       value: 0.0.0.0/0
-
-                # backups
                 - backups:
                       value: true
-
-                # variant
                 - database_version:
                       value: MYSQL_5_7
-
-                # high availability
                 - availability_type:
                       value: REGIONAL
             requirements:
