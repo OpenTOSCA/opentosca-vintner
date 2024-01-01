@@ -46,5 +46,5 @@ export function isName(name: string) {
 }
 
 export function isLinux() {
-    return process.platform !== 'linux'
+    return process.platform === 'linux'
 }
