@@ -11,11 +11,13 @@ topology_template:
 
             type_default_condition: true
 
+            persisent_check: false
+            optimization: true
+
             hosting_stack_constraint: true
     node_templates:
         worker:
             type: worker
-            consumed: true
             requirements:
                 - host:
                       node: vm

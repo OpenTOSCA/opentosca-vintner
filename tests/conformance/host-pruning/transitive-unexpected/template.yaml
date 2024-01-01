@@ -19,7 +19,7 @@ topology_template:
 
         worker:
             type: worker
-            consumed: true
+            persisent: true
             requirements:
                 - host:
                       node: vm

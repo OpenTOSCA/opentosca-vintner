@@ -53,15 +53,15 @@ export class Populator {
             ...this.graph.imports,
         ]
 
-        // Ensure that at least one node template is consumed if "incoming-host" is used
-        if (this.graph.options.checks.consumed) {
+        // Ensure that at least one node template is persisent if "incoming-host" is used
+        if (this.graph.options.checks.persisent) {
             if (
                 this.graph.options.default.nodeDefaultConditionMode.includes('incoming') &&
                 this.graph.options.default.nodeDefaultConditionMode.includes('host')
             ) {
-                if (check.isUndefined(this.graph.nodes.find(it => it.consumed)))
+                if (check.isUndefined(this.graph.nodes.find(it => it.persisent)))
                     throw new Error(
-                        `Node default condition mode "incoming-host" requires at least one consumed node template`
+                        `Node default condition mode "incoming-host" requires at least one persisent node template`
                     )
             }
         }

@@ -113,7 +113,7 @@ topology_template:
                         conditions:
                             - node_presence: shop
                               _generated: true
-              consumed: true
+              persisent: true
               properties:
                   - DB_NAME:
                         value: shop

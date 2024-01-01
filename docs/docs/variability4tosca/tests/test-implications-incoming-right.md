@@ -40,7 +40,7 @@ topology_template:
   node_templates:
     worker:
       type: worker
-      consumed: true
+      persisent: true
       requirements:
         - left:
             node: left
@@ -57,7 +57,7 @@ topology_template:
     right:
       type: right
       requirements:
-        - far_right: far_right
+        - host: far_right
     far_right:
       type: far.right
 ```
@@ -79,7 +79,7 @@ topology_template:
     right:
       type: right
       requirements:
-        - far_right: far_right
+        - host: far_right
     far_right:
       type: far.right
 ```

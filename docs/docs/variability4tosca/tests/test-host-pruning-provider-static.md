@@ -43,7 +43,7 @@ topology_template:
   node_templates:
     shop:
       type: shop.component
-      consumed: true
+      persisent: true
       requirements:
         - host:
             node: os_compute

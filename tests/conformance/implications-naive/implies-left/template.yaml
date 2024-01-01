@@ -30,7 +30,7 @@ topology_template:
     node_templates:
         worker:
             type: worker
-            consumed: true
+            persisent: true
             implies:
                 - - {relation_presence: [SELF, left]}
                   - {logic_expression: is_left}
