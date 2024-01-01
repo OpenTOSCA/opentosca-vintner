@@ -30,7 +30,6 @@ export default class Enricher {
          * Constraint Enricher
          */
         this.enrichConstraints()
-
         for (const element of this.graph.elements) {
             this.enrichImplications(element)
         }

@@ -25,7 +25,7 @@ async function play(data: string) {
     std.log(results)
 }
 
-function sort(unordered: any) {
+function sort(unordered: Record<string, boolean>) {
     return Object.keys(unordered)
         .sort()
         .reduce((obj, key) => {
