@@ -100,7 +100,7 @@ topology_template:
     node_templates:
         shop:
             type: shop.component
-            persisent: true
+            persistent: true
             properties:
                 - DB_NAME: shop
                 - DB_USERNAME: root

@@ -17,13 +17,13 @@ topology_template:
       relation_default_condition: true
       relation_default_condition_mode: source-target
       type_default_condition: true
-      persisent_check: false
+      persistent_check: false
       optimization: true
       hosting_stack_constraint: true
   node_templates:
     worker:
       type: worker
-      persisent: false
+      persistent: false
       requirements:
         - host:
             node: vm

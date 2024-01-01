@@ -29,7 +29,7 @@ topology_template:
         - host: vm
     worker:
       type: worker
-      persisent: true
+      persistent: true
       requirements:
         - host:
             node: vm

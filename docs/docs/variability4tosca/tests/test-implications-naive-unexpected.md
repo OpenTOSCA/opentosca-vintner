@@ -20,7 +20,7 @@ topology_template:
   node_templates:
     worker:
       type: worker
-      persisent: true
+      persistent: true
       requirements:
         - left: left
         - right: right

@@ -40,7 +40,7 @@ topology_template:
   node_templates:
     worker:
       type: worker
-      persisent: true
+      persistent: true
       implies:
         - - relation_presence:
               - SELF

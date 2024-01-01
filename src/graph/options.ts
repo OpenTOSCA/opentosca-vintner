@@ -338,7 +338,7 @@ class ChecksOptions {
     expectedIncomingRelation: boolean
     expectedArtifact: boolean
 
-    persisent: boolean
+    persistent: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -389,8 +389,8 @@ class ChecksOptions {
         this.expectedArtifact = this.raw.expected_artifact_check ?? this.semantic
         assert.isBoolean(this.expectedArtifact)
 
-        this.persisent = this.raw.persisent_check ?? this.checks
-        assert.isBoolean(this.persisent)
+        this.persistent = this.raw.persistent_check ?? this.checks
+        assert.isBoolean(this.persistent)
     }
 }
 

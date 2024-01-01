@@ -135,7 +135,7 @@ export type ChecksOptions = {
     expected_incoming_relation_check?: boolean
     expected_artifact_check?: boolean
 
-    persisent_check?: boolean
+    persistent_check?: boolean
 }
 
 export const ResolverModes: {[key: string]: VariabilityOptions} = {
