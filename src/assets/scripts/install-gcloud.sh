@@ -1,16 +1,25 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -e
 
-if [ "$EUID" -ne 0 ]; then
-  echo "script must be executed as root"
-  exit 1
-fi
-
+# Ensure that GCloud is not already installed
 if which gcloud &>/dev/null; then
     echo "\"gcloud\" already installed"
     exit 0
 fi
 
+# Ensure that apt is installed
+if ! which apt &>/dev/null; then
+    echo "\"apt\" not installed"
+    exit 0
+fi
+
+# Ensure that curl is installed
+if ! which curl &>/dev/null; then
+    echo "\"curl\" not installed"
+    exit 0
+fi
+
+# Install GCloud
 # https://cloud.google.com/sdk/docs/install-sdk?hl=de#deb
 sudo apt-get update -y
 sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo -y

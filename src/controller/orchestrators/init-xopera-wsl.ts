@@ -1,8 +1,8 @@
 import Plugins from '#plugins'
-import {xOperaWLSConfig} from '#plugins/xopera'
+import {xOperaWSLConfig} from '#plugins/xopera'
 import lock from '#utils/lock'
 
-export default async function (option: xOperaWLSConfig) {
+export default async function (option: xOperaWSLConfig) {
     await lock.try(Plugins.getLockKey(), () => {
         const data = Plugins.loadConfig()
         data.xOperaWSL = option

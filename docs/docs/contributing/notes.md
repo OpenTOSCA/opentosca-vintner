@@ -5,7 +5,7 @@ tags:
 
 # Notes
 
-This document contains a collection of arbitrary notes.
+This document holds a collection of arbitrary notes.
 
 ## Filesystem
 
@@ -136,7 +136,7 @@ Note, this does not undeploy the instance.
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
-sudo apt-get update -y && sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
+sudo apt-get update -y && sudo apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap -y
 ```
 
 ## Put Some Stress on CPU and Memory
@@ -210,9 +210,17 @@ SUM:                           191           1868            773           9310
 -------------------------------------------------------------------------------
 ```
 
+## Adding a New Publication
+
+1. Step-by-step guide
+1. Zenodo
+1. Integration tests
+1. Entry in [Publications](../publications.md)
+1. Git tag
+
 ## Limitations
 
-In the following, we briefly discuss limitations of our prototypical implementation.
+We briefly discuss limitations of our prototypical implementation.
 
 1. We expect that each relationship templates is used exactly once.
 1. We expect that `relationship` at requirement assignments is a string.

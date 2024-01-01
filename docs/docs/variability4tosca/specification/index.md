@@ -18,7 +18,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## Terminology 
 
-In the following, we quickly introduce some terminologies.
+We quickly introduce some terminologies.
 
 - A condition holds if the condition evaluates to true.
 - An element is present if all assigned conditions hold.
@@ -883,7 +883,7 @@ The following date operators can be used inside a variability expression.
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
+We describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
 ### Resolve Variability
 
@@ -1023,7 +1023,7 @@ As an overview, the following table shows the collections that are used in TOSCA
 
 ### Element Uniqueness
 
-As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers such as the key in a map.
+As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers, such as the key in a map.
 This is directly related to the used collections.
 
 | Element    | TOSCA            | Variability4TOSCA   |
@@ -1071,7 +1071,7 @@ node_templates:
 ```
 
 
-Then, the following identifiers, among others, exist.
+Next, the following identifiers, among others, exist.
 
 - `node.my_node` for the node template `my_node`.
 - `property.my_property@0.node.my_node` for the first property `my_property` of the node template `my_node`.
@@ -1113,7 +1113,7 @@ node_templates:
 ```
 
 
-Then, the following display representations, among others, exist.
+Next, the following display representations, among others, exist.
 
 - `Node "my_node"` for the node template `my_node`.
 - `Property "my_property@0" of Node "my_node"` for the first property `my_property` of the node template `my_node`.

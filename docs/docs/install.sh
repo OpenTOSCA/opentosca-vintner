@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 set -e
 
 if which vintner &>/dev/null; then
   echo "vintner is already installed"
-  exit 0
+  exit 1
 fi
 
 if [ "$EUID" -ne 0 ]; then

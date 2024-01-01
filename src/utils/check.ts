@@ -44,3 +44,7 @@ export function isDate(element: Dayjs): element is Dayjs {
 export function isName(name: string) {
     return name.match(/^[a-z-0-9.]+$/)
 }
+
+export function isLinux() {
+    return process.platform !== 'linux'
+}

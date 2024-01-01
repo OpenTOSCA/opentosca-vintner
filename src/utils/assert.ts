@@ -107,3 +107,7 @@ export function isArtifact(element?: Element): asserts element is Artifact {
     isDefined(element, 'Element not defined')
     if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
 }
+
+export function isLinux() {
+    if (!check.isLinux()) throw new Error(`Linux required`)
+}

@@ -2,6 +2,7 @@
 tags:
 - Variability4TOSCA
 - Guide
+- xOpera
 - Experimental
 ---
 
@@ -10,7 +11,7 @@ tags:
 !!! Warning
     This document presents experimental features and is still in an early stage.
 
-In the following, we provide a detailed step-by-step tutorial to deploy the Raspberry Pi variant of the pipes-and-filters application to showcase conditional deployment artifacts and properties.
+In the following, we provide a detailed step-by-step guide to deploy the Raspberry Pi variant of the pipes-and-filters application to showcase conditional deployment artifacts and properties.
 The application can be either installed on a Raspberry Pi or on a virtual machine. 
 Based on the underlying host, either an arm64 or x64 binary must be used. 
 The application is also differently configured due to the different availability of RAM.
@@ -32,13 +33,10 @@ We expect that the [xOpera CLI](https://github.com/xlab-si/xopera-opera){target=
 
 ## Preparation
 
-First, install OpenTOSCA Vintner.
+First, we install OpenTOSCA Vintner.
 For more information see [Installation](../../../installation.md){target=_blank}.
 
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
+--8<-- "install.md"
 
 Next, we need to configure xOpera as the orchestrator that should be used for the deployment.
 For more information see [Orchestrators](../../../orchestrators.md){target=_blank}.

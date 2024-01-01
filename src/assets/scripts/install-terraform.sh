@@ -1,17 +1,27 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -e
 
-if [ "$EUID" -ne 0 ]; then
-  echo "script must be executed as root"
-  exit 1
-fi
-
+# Ensure that Terraform is not already installed
 if which terraform &>/dev/null; then
     echo "\"terraform\" already installed"
     exit 0
 fi
 
+# Ensure that apt is installed
+if ! which apt &>/dev/null; then
+    echo "\"apt\" not installed"
+    exit 0
+fi
+
+# Ensure that wget is installed
+if ! which wget &>/dev/null; then
+    echo "\"wget\" not installed"
+    exit 0
+fi
+
+# Install Terraform
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+
 sudo apt-get update -y
 sudo apt-get install gnupg software-properties-common -y
 

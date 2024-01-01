@@ -4,19 +4,14 @@ import {Instance} from '#repositories/instances'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import {expect} from 'chai'
-import {before} from 'mocha'
 import path from 'path'
-import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
+import {cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
     std.log()
     std.log('Skipping integration tests')
 } else {
     describe('swap', () => {
-        before(async () => {
-            await checkSetup()
-        })
-
         beforeEach(async () => {
             await initSetup()
         })

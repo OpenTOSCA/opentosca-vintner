@@ -32,7 +32,7 @@ jobs:
                   git config --global user.name "${GITHUB_ACTOR}"
                   git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
 
-            - name: (PREPARE) Setup gcloud CLI
+            - name: (PREPARE) Setup GCloud
               uses: google-github-actions/setup-gcloud@v1
               with:
                   version: 438.0.0
@@ -55,22 +55,23 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
-            - name: (PREPARE) Cache Unfurl
+            - name: (PREPARE) Cache xOpera
               uses: actions/cache@v3
               with:
-                  path: /home/runner/.opera
+                  path: /home/runner/opera
                   key: xopera
 
             - name: (PREPARE) Install xOpera
-              run: |
-                  mkdir -p /home/runner/.opera
-                  cd /home/runner/.opera
-                  python3 -m venv .venv && . .venv/bin/activate
-                  pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
+              run: ./src/assets/scripts/install-xopera.sh
 
-            # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
+            - name: (PREPARE) Cache Unfurl
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/unfurl
+                  key: unfurl
+
             - name: (PREPARE) Install Unfurl
-              run: pip install unfurl==0.9.1
+              run: ./src/assets/scripts/install-unfurl.sh
 
             ###################################################
             #
@@ -78,14 +79,24 @@ jobs:
             #
             ###################################################
 
-            - name: (INSTALLATION) Install vintner
+            - name: (INSTALLATION) Install Vintner
               run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+
+            - name: (INSTALLATION) Verify checksum
+              run: |
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+                  cp /usr/bin/vintner vintner-linux-x64
+                  sha256sum --check vintner-linux-x64.sha256
+                  rm vintner-linux-x64
+                  rm vintner-linux-x64.sha256
 
             - name: (INSTALLATION) Verify signature
               run: |
                   curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
-                  gpg --verify vintner-linux-x64.asc /usr/bin/vintner
+                  cp /usr/bin/vintner vintner-linux-x64
+                  gpg --verify vintner-linux-x64.asc
+                  rm vintner-linux-x64.asc
 
             ###################################################
             #
@@ -95,18 +106,21 @@ jobs:
 
             - name: (VINTNER) Ensure that version is overridden
               run: |
+                  vintner --version
                   if [ "$(vintner --version)" == "__VERSION__" ]; then 
                     exit 1
                   fi
 
             - name: (VINTNER) Ensure that license is overridden
               run: |
+                  vintner info license
                   if [ "$(vintner info license)" == "$(cat src/assets/LICENSE)" ]; then
                     exit 1
                   fi
 
             - name: (VINTNER) Ensure that dependencies are overridden
               run: |
+                  vintner info dependencies
                   if [ "$(vintner info dependencies)" == "$(cat src/assets/dependencies.csv)" ]; then 
                     exit 1
                   fi
@@ -119,15 +133,34 @@ jobs:
 
             ###################################################
             #
+            # Docker
+            #
+            ###################################################
+
+            - name: (DOCKER) Start Docker container
+              run: |
+                  docker run --detach --name vintner ghcr.io/opentosca/opentosca-vintner:latest
+                  sleep 2
+                  docker logs vintner
+
+            - name: (DOCKER) Ensure Vintner can be executed
+              run: docker exec vintner vintner --version
+
+            - name: (DOCKER) Stop Docker container
+              run: docker kill vintner
+
+            ###################################################
+            #
             # xOpera Motivation
             #
             ###################################################
+
             - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
               run: |
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators init xopera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -158,7 +191,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
+                  vintner orchestrators init xopera
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
@@ -188,7 +221,7 @@ jobs:
                   vintner setup clean --force
                   vintner setup init
 
-                  vintner orchestrators init unfurl --no-venv
+                  vintner orchestrators init unfurl
                   vintner orchestrators enable --orchestrator unfurl
                   vintner orchestrators attest --orchestrator unfurl
 

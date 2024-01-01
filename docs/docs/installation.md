@@ -6,30 +6,62 @@ tags:
 
 # Installation
 
-In this document, we describe ways to install `vintner`.
+This document holds instructions on installing Vintner.
+
+
+## Script
+
+Vintner can be installed on Linux x64/ arm64 and Windows x64 using our installation scripts.
+
+=== "Linux x64/ arm64"
+    ```shell linenums="1"
+    curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+    ```
+
+    Install a specific version as follows. 
+    
+    ```shell linenums="1"
+    curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
+    ```
+
+=== "Windows x64"
+    ```powershell linenums="1"
+    Invoke-WebRequest -Uri "https://vintner.opentosca.org/install.ps1" -OutFile install.ps1
+    powershell -ExecutionPolicy Bypass -File .\install.ps1
+    Remove-Item install.ps1
+    ```
+
+    Install a specific version as follows.
+    
+    ```powershell linenums="1"
+    Invoke-WebRequest -Uri "https://vintner.opentosca.org/install.ps1" -OutFile install.ps1
+    $env:VERSION = "DESIRED_VERSION"
+    powershell -ExecutionPolicy Bypass -File .\install.ps1
+    Remove-Item install.ps1
+    ```
 
 ## NPM 
 
-`vintner` can be installed using `npm`.
+Vintner can be installed using `npm`.
 Ensure, that `npm bin -g` is in your `$PATH`.
 
 ```shell linenums="1"
 npm install --global opentosca-vintner
 ```
 
-## Yarn v1
+## Yarn (Classic)
 
-`vintner` can be installed using `yarn` (classic).
+Vintner can be installed using `yarn` (classic).
 Ensure, that `yarn global bin` is in your `$PATH`.
 
 ```shell linenums="1"
 yarn global add opentosca-vintner
 ```
 
-## Yarn v2
+## Yarn (Modern)
 
-`vintner` can be installed using `yarn` (modern).
-However, this will not install `vintner` permanently but only temporary.
+Vintner can be installed using `yarn` (modern).
+However, this will not install Vintner permanently but only [temporary](https://yarnpkg.com/migration/guide#use-yarn-dlx-instead-of-yarn-global){target=_blank}.
 
 ```shell linenums="1"
 yarn dlx opentosca-vintner
@@ -37,13 +69,12 @@ yarn dlx opentosca-vintner
 
 ## Docker 
 
-`vintner` can be installed using Docker. 
-However, the provided Docker Image is about 3GB large since it contains tools, such as xOpera, Unfurl, Ansible, Terraform, and our examples directory.
+Vintner can be installed using Docker. 
+The Image is about 3GB large and contains tools, such as xOpera, Unfurl, Ansible, Terraform, and all of our examples.
 
 ### GitHub Container Registry 
 
-We are using the {{ link('https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner', 'GitHub Container Registry') }}.
-To pull the latest image, run the following command: 
+Pull the latest image from the {{ link('https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner', 'GitHub Container Registry') }}.
 
 ```shell linenums="1"
 docker pull ghcr.io/opentosca/opentosca-vintner:latest
@@ -51,7 +82,7 @@ docker pull ghcr.io/opentosca/opentosca-vintner:latest
 
 ### Starting the Container
 
-To run `vintner` via docker, first create some directories for the persisting data.
+First, we create directories for persisting data.
 
 ```shell linenums="1"
 mkdir vintner
@@ -61,12 +92,11 @@ mkdir data
 mkdir shared
 ```
 
-Then, we can start the container.
-This will start the container in the background. 
-Also, the host network is used to enable, e.g., ipv6 support.
+Next, we start the container.
 
 ```shell linenums="1"
-docker run --detach --rm \
+docker run \
+  --detach \
   --volume ${PWD}/data:/vintner/data \
   --volume ${PWD}/shared:/vintner/shared  \
   --network host \
@@ -74,35 +104,50 @@ docker run --detach --rm \
   ghcr.io/opentosca/opentosca-vintner:latest
 ```
 
-There are three important directories inside the container. 
+The command consists of the following aspects.
 
-- `/vintner/data` holds all data written by Vintner
-- `/vintner/shared` should be used to share data between the host and the container, e.g., CSARs or GCP credentials
-- `/vintner/examples` holds the examples directory of the repository
+- `--detach` starts the container in the background.
+- `--volume ${PWD}/data:/vintner/data` persists all data written by Vintner.
+- `--volume ${PWD}/shared:/vintner/shared` should be used to share data between the host and the container, e.g., CSARs or GCP credentials.
+- `--network host` uses the host network, e.g., for ipv6 support.
+- `--name vintner` is the container name. 
+- `ghcr.io/opentosca/opentosca-vintner:latest` pulls the latest Docker Image
+
+Inside the container, the following directories are of interest.
+
+- `/vintner/data` holds all data written by Vintner.
+- `/vintner/shared` should be used to share data between the host and the container, e.g., CSARs or GCP credentials.
+- `/vintner/examples` holds the examples directory of the repository.
 
 
 ### Executing a Command
 
-The container will run in the background. 
-`vintner` is executed as follows.
+The container runs in the background. 
+Vintner is executed as follows.
 
 ```shell linenums="1"
 docker exec -it vintner vintner --version
 ```
 
-On Linux, it is also possible to set an alias. 
-By doing so, `vintner` is directly available as command in the terminal on the docker host.
+On Linux, we set an alias to directly use Vintner as command in the terminal on the docker host.
+To persist the alias, add the alias, e.g., to `~/.bashrc` (requires reloading the session).
 
 ```shell linenums="1"
 alias vintner="docker exec -it vintner vintner"
+```
+
+Now, Vintner is available as follows.
+
+```shell linenums="1"
 vintner --version
 ```
 
+
 ### xOpera
 
-If you intend to use xOpera, run the following command. 
-Note, xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
 By default, xOpera is already enabled.
+Enable xOpera as follows.
 
 ```shell linenums="1"
 docker exec -it vintner vintner orchestrators enable --orchestrator xopera
@@ -110,8 +155,8 @@ docker exec -it vintner vintner orchestrators enable --orchestrator xopera
 
 ### Unfurl
 
-If you intend to use Unfurl, run the following command.
-Note, Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+Enable Unfurl as follows.
 
 ```shell linenums="1"
 docker exec -it vintner vintner orchestrators enable --orchestrator unfurl
@@ -119,9 +164,9 @@ docker exec -it vintner vintner orchestrators enable --orchestrator unfurl
 
 ### Stopping the Container
 
-To stop the container, run the following command.
 Ensure to only stop Vintner, once Vintner is idle. 
 Otherwise, data and deployments will be corrupted.
+Stop the container as follows.
 
 ```shell linenums="1"
 docker stop vintner
@@ -129,7 +174,7 @@ docker stop vintner
 
 ### Watching the Logs of the Container
 
-To watch the logs of the container, run the following command.
+Watch the logs of the container as follows.
 
 ```shell linenums="1"
 docker logs -f vintner
@@ -138,38 +183,19 @@ docker logs -f vintner
 
 ### Debugging the Container
 
-In case you need to debug something inside the container or perform any administrative tasks, you can exec into the container as follows. 
-This will start a shell inside the container.
+In case we need to debug something inside the container or perform any administrative tasks, we can exec into the container as follows. 
+This starts a shell inside the container.
 
 ```shell linenums="1"
 docker exec -it vintner /bin/bash
 ```
 
 
-## Script
-
-`vintner` can be installed using our installation script. 
-The script currently supports only Linux x64 and arm64.
-For the remaining supported platforms and architectures, see the manual installation.
-
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
-vintner setup init
-```
-
-To install a specific version, run 
-
-```shell linenums="1"
-curl -fsSL https://vintner.opentosca.org/install.sh | sudo VERSION=${VERSION} bash -
-```
-
 ## Manual
 
-To manually install `vintner`, download the binary for your system.
+Install Vintner manually by downloading the binary for your system and adding it to `$PATH`.
 There are no other dependencies required. 
-You might add the binary to your `$PATH`.
-The following example shows the installation on Linux.
-See [below](#signature) for verifying the signature of the binary.
+The following example shows the installation on selected platforms and architectures.
 
 === "Linux x64"
     ```shell linenums="1"
@@ -201,57 +227,78 @@ See [below](#signature) for verifying the signature of the binary.
     vintner setup init
     ```
 
+=== "Windows x64"
+    First, create the directory `$env:USERPROFILE\bin` and add it to your PATH.
+    We recommend to do this manually.
+
+    ```powershell linenums="1"
+    $userBin = "$env:USERPROFILE\bin"
+    if (-not (Test-Path -Path $userBin)) {
+        New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\bin"
+        $userPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+        $newPath = "$userPath$userBin;"
+        [System.Environment]::SetEnvironmentVariable("PATH", $newPath, [System.EnvironmentVariableTarget]::User)
+    }
+    ```
+
+    Next, install vintner.
+
+    ```powershell linenums="1"
+    $userBin = "$env:USERPROFILE\bin"
+    Invoke-WebRequest -URI https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz -OutFile vintner-win-x64.exe.xz
+    tar -xf vintner-win-x64.exe.xz
+    Remove-Item vintner-win-x64.exe.xz
+    Move-Item vintner-win-x64.exe $userBin\vintner.exe
+    vintner setup init
+    ```
+
 The following binaries are available:
 
-| Platform | Architecture | Binary | Archive | Signature | 
-| -- | -- | -- | -- | -- |
-| Alpine | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} |
-| Linux | arm64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} |
-| Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} |
-| Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} |
+| Platform | Architecture | Binary | Archive | Signature | Checksum                                                                                                                  
+| -- | -- | -- | -- | -- |---------------------------------------------------------------------------------------------------------------------------|
+| Alpine | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.sha256){target=_blank}     |
+| Linux | arm64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.sha256){target=_blank}    |
+| Linux | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256){target=_blank}      |
+| Windows | x64 | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz){target=_blank} |  [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc){target=_blank} | [link](https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.sha256){target=_blank} |
 
-To check, that `vintner` can be executed, run
 
-```shell linenums="1"
-vintner --version
-```
+## Checksum 
 
-To start the server, run
-```shell linenums="1"
-vintner server start
-```
-
-To uninstall all files including the binary, run the following commands.
-_This will not undeploy currently deployed applications_.
+To verify the integrity of a binary, proceed as follows.
+The following is a walkthrough for `vintner-linux-x64`.
+We assume that `vintner-linux-x64` is present in the current working directory.
 
 ```shell linenums="1"
-vintner setup clean --force
-rm "$(which vintner)"
+wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+sha256sum --check vintner-linux-x64.sha256
 ```
 
-## Configuration
-
-The following environment variables can be used for configuration.
-
-| Environment Variable       | Default            | Description |
-|----------------------------|--------------------| ----------- |
-| OPENTOSCA_VINTNER_HOME_DIR | ${HOME_DIR}/.opentosca_vintner |             |
 
 ## Signature
 
+Every binary is cryptographically signed.
+
+### Verification
+
 To verify a signature of a binary, first import our public key and download the respective signature.
 The following is a walkthrough for `vintner-linux-x64` using `gpg`.
+We assume that `vintner-linux-x64` is present in the current working directory.
 
-First, import our public key.
+First, we import the public key.
 
 ```shell linenums="1"
 curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import
 ```
 
-Then download and verify the respective signature.
+Next, we download the signature.
 
 ```shell linenums="1"
 wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+```
+
+Next, we verify the signature.
+
+```shell linenums="1"
 gpg --verify vintner-linux-x64.asc
 ```
 
@@ -267,7 +314,10 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
 ```
 
-This is the public key that should be used for verification ([download](https://vintner.opentosca.org/vintner-release.gpg){target=_blank}).
+### Public Key
+
+The following public key shall be used for verifying signatures. 
+The public key is also available as [download](https://vintner.opentosca.org/vintner-release.gpg){target=_blank}.
 
 ```shell linenums="1"
 pub   rsa4096/964183A1485881AD 2022-10-23 [SC]

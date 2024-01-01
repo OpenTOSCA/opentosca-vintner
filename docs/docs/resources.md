@@ -5,7 +5,7 @@ tags:
 
 # Resources
 
-This document contains a collection of interesting resources such as the TOSCA specifications, introductions, popular orchestrators and TOSCA repositories.
+This document holds a collection of interesting resources, such as the TOSCA specifications, introductions, popular orchestrators and TOSCA repositories.
 
 ## Specifications
 
@@ -19,10 +19,10 @@ This document contains a collection of interesting resources such as the TOSCA s
 ## Introductions
 
 - [Understanding OASIS TOSCA](https://www.youtube.com/watch?v=C75LBxsQNsc){target=_blank}
-- [Portable Cloud Services Using TOSCA](https://www.iaas.uni-stuttgart.de/publications/ART-2012-09-PortableCloudServicesUsingTOSCA.pdf){target=_blank}[@ART-2012-09]
-- [TOSCA: Portable Automated Deployment and Management of Cloud Applications](https://www.iaas.uni-stuttgart.de/publications/INBOOK-2014-01-TOSCA-Portable-Automated-Deployment-and-Management-of-Cloud-Applications.pdf){target=_blank} [@INBOOK-2014-01]
-- [Unified Invocation of Scripts and Services for Provisioning, Deployment, and Management of Cloud Applications Based on TOSCA](https://www.iaas.uni-stuttgart.de/publications/INPROC-2014-22-Unified-Invocation-of-Scripts-and-Services-for-Provisioning-Deployment-and-Management-of-Cloud-Applications-Based-on-TOSCA.pdf){target=_blank}[@Wettinger2014]
-- [Declarative vs. Imperative: Two Modeling Patterns for the Automated Deployment of Applications](https://www.iaas.uni-stuttgart.de/publications/INPROC-2017-12-Declarative-vs-Imperative-Modeling-Patterns.pdf){target=_blank}[@Endres2017]
+- [Portable Cloud Services Using TOSCA](https://www.iaas.uni-stuttgart.de/publications/ART-2012-09-PortableCloudServicesUsingTOSCA.pdf){target=_blank}
+- [TOSCA: Portable Automated Deployment and Management of Cloud Applications](https://www.iaas.uni-stuttgart.de/publications/INBOOK-2014-01-TOSCA-Portable-Automated-Deployment-and-Management-of-Cloud-Applications.pdf){target=_blank}
+- [Unified Invocation of Scripts and Services for Provisioning, Deployment, and Management of Cloud Applications Based on TOSCA](https://www.iaas.uni-stuttgart.de/publications/INPROC-2014-22-Unified-Invocation-of-Scripts-and-Services-for-Provisioning-Deployment-and-Management-of-Cloud-Applications-Based-on-TOSCA.pdf){target=_blank}
+- [Declarative vs. Imperative: Two Modeling Patterns for the Automated Deployment of Applications](https://www.iaas.uni-stuttgart.de/publications/INPROC-2017-12-Declarative-vs-Imperative-Modeling-Patterns.pdf){target=_blank}
 - [TOSCA Primer Version 1.0](http://docs.oasis-open.org/tosca/tosca-primer/v1.0/tosca-primer-v1.0.html){target=_blank}
 - [TOSCA Introduction](https://www.opentosca.org/documents/presentation-tosca.pdf){target=_blank}
 
@@ -36,8 +36,8 @@ This document contains a collection of interesting resources such as the TOSCA s
 
 ## Other Interesting Tools
 
-- [Alien4Cloud](https://alien4cloud.github.io){target=_blank} (TOSCA Management Layer) ([Getting Started](https://alien4cloud.github.io/common/features.html#/documentation/latest/getting_started/new_getting_started.html){target=_blank})
-- [Ansible](https://docs.ansible.com/ansible/latest/index.html){target=_blank} (Popular Deployment Technology for Implementation Artifacts)
+- [Alien4Cloud](https://alien4cloud.github.io){target=_blank} (TOSCA management layer) ([Getting Started](https://alien4cloud.github.io/common/features.html#/documentation/latest/getting_started/new_getting_started.html){target=_blank})
+- [Ansible](https://docs.ansible.com/ansible/latest/index.html){target=_blank} (Popular deployment technology for implementation artifacts)
 - [Eclipse Winery](https://github.com/eclipse/winery){target=_blank} (TOSCA Modeling Tool)
 
 ## TOSCA Repositories

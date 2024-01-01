@@ -29,18 +29,66 @@ resolvers.post(
 )
 
 resolvers.post(
-    '/setup/utils',
+    '/setup/path',
     hae.express(async (req, res, next) => {
-        await Controller.setup.install(req.body)
+        const path = await Controller.setup.path()
+        res.json({path})
+    })
+)
+
+resolvers.post(
+    '/install/ansible',
+    hae.express(async (req, res, next) => {
+        await Controller.install.ansible(req.body)
         res.json({})
     })
 )
 
 resolvers.post(
-    '/setup/path',
+    '/install/gcloud',
     hae.express(async (req, res, next) => {
-        const path = await Controller.setup.path()
-        res.json({path})
+        await Controller.install.gcloud(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/python',
+    hae.express(async (req, res, next) => {
+        await Controller.install.python(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/terraform',
+    hae.express(async (req, res, next) => {
+        await Controller.install.terraform(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/unfurl',
+    hae.express(async (req, res, next) => {
+        await Controller.install.unfurl(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/utils',
+    hae.express(async (req, res, next) => {
+        await Controller.install.utils(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/install/xopera',
+    hae.express(async (req, res, next) => {
+        await Controller.install.xopera(req.body)
+        res.json({})
     })
 )
 

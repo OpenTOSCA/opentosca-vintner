@@ -5,6 +5,6 @@ tags:
 
 # Tags
 
-This document contains tags used throughout this documentation.
+This document holds tags used throughout this documentation.
 
 [TAGS]

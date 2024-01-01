@@ -38,7 +38,7 @@ jobs:
                   python-version: 3.10.13
 
             - name: (PREPARE) Install Python dependencies
-              run: pip install -r cmds/zenodo/requirements.txt
+              run: pip install -r zenodo/requirements.txt
 
             ###################################################
             #
