@@ -32,12 +32,11 @@ node_types:
 
             database_address:
                 type: string
-                value: {eval: '.::public_address'}
+                default: {eval: '.::public_address'}
 
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-                valid_source_types: [ shop_database ]
 
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
