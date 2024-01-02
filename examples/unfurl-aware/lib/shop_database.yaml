@@ -10,7 +10,7 @@ node_types:
 
             deployment_mode:
                 type: string
-                default: { get_property: [ SELF, host, deployment_mode ] }
+                default: {eval: '.::.requirements[.name=host]::.target::deployment_mode'}
 
             ###################################################
             #
@@ -47,6 +47,22 @@ node_types:
                 type: string
                 default: {get_input: os_compute_ssh_key_file}
 
+        attributes:
+            public_address:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+
+            public_ip:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
+
+            database_address:
+                type: string
+                default: mysql
+
+        capabilities:
+            database:
+                type: tosca.capabilities.Endpoint.Database
 
         requirements:
             - host:

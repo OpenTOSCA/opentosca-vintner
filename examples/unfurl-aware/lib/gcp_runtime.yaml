@@ -39,8 +39,8 @@ node_types:
                             primary: Ansible
                             operation_host: ORCHESTRATOR
                         inputs:
-                            q:
-                                playbook:
+                            playbook:
+                                q:
                                     -   name: active service account
                                         shell: 'gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}'
 

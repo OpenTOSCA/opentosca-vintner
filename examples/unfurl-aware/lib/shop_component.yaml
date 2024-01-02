@@ -26,7 +26,7 @@ node_types:
 
             deployment_mode:
                 type: string
-                default: { get_property: [ SELF, host, deployment_mode ] }
+                default: {eval: '.::.requirements[.name=host]::.target::deployment_mode'}
 
             ###################################################
             #
@@ -66,9 +66,9 @@ node_types:
                     relationship: tosca.relationships.ConnectsTo
 
         artifacts:
-            -   artifact:
-                    type: tosca.artifacts.File
-                    file: files/shop.tar.gz
+            artifact:
+                type: tosca.artifacts.File
+                file: files/shop.tar.gz
 
         interfaces:
             Standard:
@@ -203,19 +203,19 @@ node_types:
 
                                 -   name: active service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                                 -   name: Create working directory
                                     tempfile:
                                         state: directory
                                     register: tempdir_info
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                                 -   name: Extract deployment artifact in working directory
                                     unarchive:
                                         src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                         dest: '{{ tempdir_info.path }}'
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                                 # https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=node.js
                                 -   name: Configure app yaml
@@ -231,12 +231,12 @@ node_types:
                                                 DB_USERNAME: {{ SELF.DB_USERNAME }}
                                                 DB_PASSWORD: {{ SELF.DB_PASSWORD }}
                                                 DB_ADDRESS: {{ SELF.DB_ADDRESS }}
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 -   name: Create App
                                     shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}
@@ -259,12 +259,12 @@ node_types:
 
                                 -   name: active service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 -   name: Create App
                                     shell: 'gcloud app services delete shop --quiet'
-                                    when: SELF.deployment_mode == "GCP"
+                                    when: SELF.deployment_mode != "OS"
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}

@@ -12,6 +12,15 @@ node_types:
                 type: string
                 default: { get_input: ssh_key_file }
 
+        attributes:
+            public_address:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+
+            public_ip:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
+
         capabilities:
             host:
                 type: tosca.capabilities.Compute
