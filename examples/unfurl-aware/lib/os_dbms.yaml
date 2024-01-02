@@ -97,7 +97,7 @@ node_types:
                                     shell: |
                                         kubectl apply -f mysql.yaml
                                         kubectl rollout status deployment/mysql --timeout 60s
-                                        sleep 10s
+                                        sleep 2m
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}

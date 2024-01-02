@@ -24,7 +24,6 @@ topology_template:
 
         os_compute_network:
             type: string
-            #default: public-belwue-v6only
             default: public-belwue
 
         os_compute_key_name:

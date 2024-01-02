@@ -19,11 +19,11 @@ node_types:
         attributes:
             public_address:
                 type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+                default: { eval: '.::.requirements[.name=host]::.target::public_address' }
 
             public_ip:
                 type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
+                default: { eval: '.::.requirements[.name=host]::.target::public_ip' }
 
         capabilities:
             host:
@@ -52,7 +52,7 @@ node_types:
                                     shell: |
                                         curl -fsSL https://get.docker.com -o get-docker.sh
                                         sh get-docker.sh
-    
+                                        
                                         groupadd docker
                                         usermod -aG docker ubuntu
                                         
@@ -63,6 +63,9 @@ node_types:
                                     shell: |
                                         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
                                         sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+                                -   name: Reset connection
+                                    meta: reset_connection
 
                                 -   name: Install kubectl
                                     shell: |
