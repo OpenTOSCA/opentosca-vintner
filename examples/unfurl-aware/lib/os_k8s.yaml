@@ -48,41 +48,26 @@ node_types:
                                 -   name: wait for ssh
                                     wait_for_connection:
 
-                                -   name: Install utilities
-                                    shell: |
-                                        sudo apt-get update -y
-                                        sudo apt-get install sudo unzip tree nano wget jq net-tools curl git stress -y
-
                                 -   name: Install Docker
                                     shell: |
-                                        sudo apt-get update -y
-                                        sudo apt-get install ca-certificates curl gnupg  -y
-                                        sudo install -m 0755 -d /etc/apt/keyrings
-                                        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-                                        sudo chmod a+r /etc/apt/keyrings/docker.gpg
-                                        echo \
-                                            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                                            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-                                            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                                        sudo apt-get update  -y
-                                        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin  -y
-                                        
-                                        sudo groupadd docker
-                                        sudo usermod -aG docker ubuntu
+                                        curl -fsSL https://get.docker.com -o get-docker.sh
+                                        sh get-docker.sh
+    
+                                        groupadd docker
+                                        usermod -aG docker ubuntu
                                         
                                         docker ps
+                                        sleep 30s
 
                                 -   name: Install minikube
                                     shell: |
                                         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
                                         sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-
                                 -   name: Install kubectl
                                     shell: |
                                         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
                                         sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
 
                                 -   name: Install helm
                                     shell: |

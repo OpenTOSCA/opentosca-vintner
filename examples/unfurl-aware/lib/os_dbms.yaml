@@ -32,7 +32,8 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
         requirements:
             -   host:
                     capability: tosca.capabilities.Compute
@@ -96,6 +97,7 @@ node_types:
                                     shell: |
                                         kubectl apply -f mysql.yaml
                                         kubectl rollout status deployment/mysql --timeout 60s
+                                        sleep 10s
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}
