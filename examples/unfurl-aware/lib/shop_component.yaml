@@ -87,29 +87,35 @@ node_types:
 
                                 -   name: wait for ssh
                                     wait_for_connection:
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
 
                                 -   name: Create application directory
                                     file:
                                         path: shop
                                         state: directory
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
 
-                                -   name: Extract deployment artifact in application directory
-                                    unarchive:
+                                -   name: Copy deployment artifact
+                                    copy:
                                         src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                         dest: shop
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
+
+                                -   name: Extract deployment artifact
+                                    shell: |
+                                        cd shop
+                                        tar -xvf shop.tar.gz
+                                    when: SELF.deployment_mode[0] == "OS"
 
                                 -   name: Build Docker Image
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
                                     shell: |
                                         cd shop
                                         eval $(minikube -p minikube docker-env)
                                         docker build -t shop .
 
                                 -   name: Create file
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
                                     copy:
                                         dest: shop.yaml
                                         content: |
@@ -163,7 +169,7 @@ node_types:
 
 
                                 -   name: Install shop component
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
                                     shell: |
                                         kubectl apply -f shop.yaml
                                         kubectl rollout status deployment/shop --timeout 60s
@@ -184,7 +190,7 @@ node_types:
                                             [Install]
                                             WantedBy=multi-user.target
                                     become: true
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
 
                                 -   name: start service
                                     systemd:
@@ -193,7 +199,7 @@ node_types:
                                         enabled: yes
                                         daemon_reload: yes
                                     become: true
-                                    when: SELF.deployment_mode == "OS"
+                                    when: SELF.deployment_mode[0] == "OS"
 
                                 ###################################################
                                 #
@@ -203,19 +209,19 @@ node_types:
 
                                 -   name: active service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                                 -   name: Create working directory
                                     tempfile:
                                         state: directory
                                     register: tempdir_info
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                                 -   name: Extract deployment artifact in working directory
                                     unarchive:
                                         src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact.attributes.file }}"
                                         dest: '{{ tempdir_info.path }}'
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                                 # https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=node.js
                                 -   name: Configure app yaml
@@ -231,12 +237,12 @@ node_types:
                                                 DB_USERNAME: {{ SELF.DB_USERNAME }}
                                                 DB_PASSWORD: {{ SELF.DB_PASSWORD }}
                                                 DB_ADDRESS: {{ SELF.DB_ADDRESS }}
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 -   name: Create App
                                     shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}
@@ -259,12 +265,12 @@ node_types:
 
                                 -   name: active service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 -   name: Create App
                                     shell: 'gcloud app services delete shop --quiet'
-                                    when: SELF.deployment_mode != "OS"
+                                    when: SELF.deployment_mode[0] == "GCP"
 
                         playbookArgs:
                             - --key-file={{ SELF.ssh_key_file }}

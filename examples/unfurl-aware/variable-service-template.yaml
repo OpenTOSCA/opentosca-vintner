@@ -144,6 +144,12 @@ topology_template:
 
         os_dbms:
             type: os.dbms
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: ssh
+                        host:
+                            eval: '.::..::.requirements[.name=host]::.target::.requirements[.name=host]::.target::public_ip'
             requirements:
                 - host:
                       node: os_kubernetes
@@ -162,6 +168,12 @@ topology_template:
 
         os_kubernetes:
             type: os.k8s
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: ssh
+                        host:
+                            eval: '.::..::.requirements[.name=host]::.target::public_ip'
             requirements:
                 - host:
                       node: os_compute
