@@ -144,30 +144,18 @@ topology_template:
 
         os_dbms:
             type: os.dbms
-            capabilities:
-                endpoint:
-                    properties:
-                        host: { get_attribute: [ os_compute, public_address ] }
             requirements:
                 - host:
                       node: os_kubernetes
 
         os_monitor:
             type: os.monitor
-            capabilities:
-                endpoint:
-                    properties:
-                        host: { get_attribute: [ os_compute, public_address ] }
             requirements:
                 - host:
                       node: os_kubernetes
 
         os_logger:
             type: os.logger
-            capabilities:
-                endpoint:
-                    properties:
-                        host: {get_attribute: [os_compute, public_address]}
             requirements:
                 - host:
                       node: os_kubernetes
