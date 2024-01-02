@@ -1,7 +1,7 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
-    os.vm:
+    os.compute:
         derived_from: unfurl.nodes.Installer.Terraform
         properties:
             port:
@@ -159,10 +159,10 @@ node_types:
 
                         output "public_address" {
                           #value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
-                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)[0]
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
                         }
 
                         output "public_ip" {
                           #value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v6)[0]
-                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)[0]
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
                         }

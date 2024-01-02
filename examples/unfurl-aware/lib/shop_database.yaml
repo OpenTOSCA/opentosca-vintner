@@ -58,7 +58,7 @@ node_types:
 
             database_address:
                 type: string
-                default: mysql
+                default: {eval: '.::.requirements[.name=host]::.target::database_address'}
 
         capabilities:
             database:

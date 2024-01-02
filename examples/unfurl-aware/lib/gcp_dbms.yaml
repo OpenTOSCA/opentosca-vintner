@@ -32,6 +32,7 @@ node_types:
 
             database_address:
                 type: string
+                value: {eval: '.::public_address'}
 
         capabilities:
             host:
@@ -142,10 +143,6 @@ node_types:
                            password = var.password
                          }
 
-                         output "database_address" {
-                           value = google_sql_database_instance.dbms.public_ip_address
-                         }
-                        
                          output "public_address" {
                            value = google_sql_database_instance.dbms.public_ip_address
                          }

@@ -7,12 +7,12 @@ imports:
     - lib/gcp_dbms.yaml
     - lib/gcp_runtime.yaml
     - lib/gcp_provider.yaml
+    - lib/os_compute.yaml
     - lib/os_dbms.yaml
     - lib/os_k8s.yaml
     - lib/os_logger.yaml
     - lib/os_monitor.yaml
     - lib/os_provider.yaml
-    - lib/os_vm.yaml
     - lib/shop_component.yaml
     - lib/shop_database.yaml
 
@@ -161,7 +161,7 @@ topology_template:
                       node: os_kubernetes
 
         os_kubernetes:
-            type: os.kubernetes
+            type: os.k8s
             requirements:
                 - host:
                       node: os_compute
