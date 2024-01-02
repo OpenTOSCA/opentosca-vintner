@@ -24,7 +24,9 @@ sudo usermod -aG docker ubuntu
 # minikube
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
-minikube start
+
+# Not as root!
+minikube start # --listen-address=0.0.0.0
 
 
 # kubectl
@@ -65,4 +67,8 @@ cd ../
 
 # local expose
 minikube service shop --url
+
+# sudo -E kubectl port-forward service/shop 80:80 --address 0.0.0.0
+
 minikube service node-exporter --url
+

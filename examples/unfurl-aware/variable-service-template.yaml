@@ -1,9 +1,17 @@
 tosca_definitions_version: tosca_variability_1_0
 
 imports:
-    - lib/shop/types.yaml
-    - lib/gcp/types.yaml
-    - lib/os/types.yaml
+    - lib/gcp_dbms.yaml
+    - lib/gcp_runtime.yaml
+    - lib/gcp_provider.yaml
+    - lib/os_dbms.yaml
+    - lib/os_k8s.yaml
+    - lib/os_logger.yaml
+    - lib/os_monitor.yaml
+    - lib/os_provider.yaml
+    - lib/os_vm.yaml
+    - lib/shop_component.yaml
+    - lib/shop_database.yaml
 
 topology_template:
     inputs:
@@ -13,11 +21,8 @@ topology_template:
 
         os_compute_network:
             type: string
-            default: public-belwue-v6only
-
-        os_compute_security_groups:
-            type: string
-            default: default
+            #default: public-belwue-v6only
+            default: public-belwue
 
         os_compute_key_name:
             type: string
@@ -107,15 +112,6 @@ topology_template:
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
                 - DB_ADDRESS: {get_attribute: [SELF, database, public_address]}
-
-                - vm_ssh_user: {get_input: os_compute_ssh_user}
-                - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
-
-                - gcp_region: {get_input: gcp_region}
-                - gcp_service_account_file: {get_input: gcp_service_account_file}
-                - gcp_project: {get_input: gcp_project}
-
-                - deployment_mode: {get_property: [SELF, host, deployment_mode]}
             requirements:
                 - host:
                       node: os_kubernetes
@@ -130,10 +126,10 @@ topology_template:
                       implied: true
 
         database:
-            type: mysql.database
+            type: shop.database
             properties:
                 - database_name: shop
-                - deployment_mode: { get_property: [ SELF, host, deployment_mode ] }
+                - gcp_dbms_name: shop
             requirements:
                 - host:
                       node: os_dbms
@@ -145,18 +141,30 @@ topology_template:
 
         os_dbms:
             type: os.dbms
+            capabilities:
+                endpoint:
+                    properties:
+                        host: { get_attribute: [ os_compute, public_address ] }
             requirements:
                 - host:
                       node: os_kubernetes
 
         os_monitor:
             type: os.monitor
+            capabilities:
+                endpoint:
+                    properties:
+                        host: { get_attribute: [ os_compute, public_address ] }
             requirements:
                 - host:
                       node: os_kubernetes
 
         os_logger:
             type: os.logger
+            capabilities:
+                endpoint:
+                    properties:
+                        host: {get_attribute: [os_compute, public_address]}
             requirements:
                 - host:
                       node: os_kubernetes
@@ -170,50 +178,28 @@ topology_template:
         os_compute:
             type: os.compute
             properties:
-                - ports:
-                      value: [80, 3000]
-                - name:
+                - port:
+                      value: 80
+
+                - machine:
                       value: shop
-
-                - image:
-                      value: Ubuntu 22.04
-
-                - flavor: m1.medium
 
                 - network:
                       value: {get_input: os_compute_network}
-                - security_groups:
-                      value: {get_input: os_compute_security_groups}
-                - key_name:
-                      value: {get_input: os_compute_key_name}
-                - ssh_user:
-                      value: {get_input: os_compute_ssh_user}
-                - ssh_key_file:
-                      value: {get_input: os_compute_ssh_key_file}
+
             requirements:
                 - host:
                       node: os_cloud
 
         os_cloud:
             type: os.provider
-            properties:
-                - region_name:
-                      value: {get_input: os_region_name}
-                - auth_type:
-                      value: {get_input: os_auth_type}
-                - auth_url:
-                      value: {get_input: os_auth_url}
-                - identity_api_version:
-                      value: {get_input: os_identity_api_version}
-                - interface:
-                      value: {get_input: os_interface}
-                - application_credential_id:
-                      value: {get_input: os_application_credential_id}
-                - application_credential_secret:
-                      value: {get_input: os_application_credential_secret}
 
         gcp_runtime:
             type: gcp.runtime
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
             requirements:
                 - host:
                       node: gcp_cloud
@@ -225,24 +211,13 @@ topology_template:
                       value: shop
                 - root_password:
                       value: {get_input: database_password}
-                - authorized_networks:
-                      value: 0.0.0.0/0
-                - backups:
-                      value: true
-                - database_version:
-                      value: MYSQL_5_7
-                - availability_type:
-                      value: REGIONAL
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
             requirements:
                 - host:
                       node: gcp_cloud
 
         gcp_cloud:
             type: gcp.provider
-            properties:
-                - region:
-                      value: {get_input: gcp_region}
-                - service_account_file:
-                      value: {get_input: gcp_service_account_file}
-                - project:
-                      value: {get_input: gcp_project}
