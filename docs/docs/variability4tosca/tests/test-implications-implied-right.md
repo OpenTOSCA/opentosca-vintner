@@ -40,7 +40,7 @@ topology_template:
   node_templates:
     worker:
       type: worker
-      consumed: true
+      persistent: true
       requirements:
         - left:
             node: left

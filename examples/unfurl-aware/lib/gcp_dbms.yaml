@@ -1,0 +1,147 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    gcp.dbms:
+        derived_from: unfurl.nodes.Installer.Terraform
+        properties:
+            instance_name:
+                type: string
+
+            root_password:
+                type: string
+
+            service_account_file:
+                type: string
+                default: { get_input: gcp_service_account_file }
+
+            project:
+                type: string
+                default: { get_input: gcp_project }
+
+            region:
+                type: string
+                default: { get_input: gcp_region }
+
+            deployment_mode:
+                type: string
+                default: GCP
+
+        attributes:
+            public_address:
+                type: string
+
+            database_address:
+                type: string
+                default: {eval: '.::public_address'}
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+
+        requirements:
+            -   host:
+                    capability: tosca.capabilities.Compute
+                    relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                    delete:
+            defaults:
+                outputs:
+                    public_ip: public_address
+                    public_address: public_address
+                inputs:
+                    tfvars: |
+                        project = "{{ SELF.project }}"
+                        region = "{{ SELF.region }}"
+                        service_account_file = "{{ SELF.service_account_file }}"
+
+                        name = "{{ SELF.instance_name}}"
+                        password = "{{ SELF.root_password }}"
+                    main: |
+                        terraform {
+                           required_providers {
+                             google = {
+                               source = "hashicorp/google"
+                               version = "4.67.0"
+                             }
+                           }
+                         }
+
+                         provider "google" {
+                           project = var.project
+                           region = var.region
+                           credentials = var.service_account_file
+                         }
+
+                         variable "service_account_file" {
+                           type        = string
+                         }
+
+                         variable "project" {
+                           type        = string
+                         }
+
+                         variable "region" {
+                           type        = string
+                         }
+
+                         variable "name" {
+                           type        = string
+                         }
+
+                         variable "password" {
+                           type        = string
+                         }                        
+
+                         resource "google_project_service" "cloud_sql_admin" {
+                           project  = var.project
+                           service = "sqladmin.googleapis.com"
+                         }
+
+                         # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
+                         resource "google_sql_database_instance" "dbms" {
+                           depends_on = [ google_project_service.cloud_sql_admin ]
+
+                           name             = var.name
+                           database_version = "MYSQL_5_7"
+                           root_password = var.password
+                           deletion_protection = false
+
+                           settings {
+                             tier = "db-f1-micro"
+
+                             availability_type = "REGIONAL"
+
+                             backup_configuration {
+                               enabled = true
+                               binary_log_enabled = true
+                             }
+
+                             ip_configuration {
+                               ipv4_enabled = true
+
+                               authorized_networks {
+                                 name = "public"
+                                 value = "0.0.0.0/0"
+                               }
+
+                             }
+                           }
+                         }
+
+                         resource "google_sql_user" "users" {
+                           name     = "root"
+                           instance = google_sql_database_instance.dbms.name
+                           host     = "%"
+                           password = var.password
+                         }
+
+                         output "public_address" {
+                           value = google_sql_database_instance.dbms.public_ip_address
+                         }

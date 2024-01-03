@@ -19,7 +19,20 @@ export default class Enricher {
         if (this.transformed) return
         this.transformed = true
 
-        for (const element of this.graph.elements) this.enrichConditions(element)
+        /**
+         * Condition Enricher
+         */
+        for (const element of this.graph.elements) {
+            this.enrichConditions(element)
+        }
+
+        /**
+         * Constraint Enricher
+         */
+        this.enrichConstraints()
+        for (const element of this.graph.elements) {
+            this.enrichImplications(element)
+        }
     }
 
     enrichConditions(element: Element) {
@@ -37,10 +50,6 @@ export default class Enricher {
                 throw new Error(`${element.Display} has no default alternative condition`)
             conditions = [generatify(element.defaultAlternativeCondition)]
         }
-
-        // Imply element if requested
-        // TODO: before or after bratans?
-        this.enrichImplications(element, conditions)
 
         // Enrich pruning
         this.enrichPruning(element, conditions)
@@ -86,10 +95,10 @@ export default class Enricher {
      * This is most likely only relevant for relations.
      * However, the method is still written in a generic way.
      */
-    private enrichImplications(element: Element, conditions: LogicExpression[]) {
-        if (utils.isEmpty(conditions)) return
+    private enrichImplications(element: Element) {
         if (check.isUndefined(element.container)) return
 
+        // TODO: move this up into class?
         const implied = element.raw.implied
         if (check.isUndefined(implied)) return
         if (check.isFalse(implied)) return
@@ -104,8 +113,85 @@ export default class Enricher {
         }
         assert.isDefined(left, 'Left not defined')
 
+        // Sanity check
+        if (!(element.isRelation() || element.isArtifact()))
+            throw new Error(`${element.Display} is not issued a manual id by the Condition Enricher`)
+
         this.graph.addConstraint({
             implies: [{and: [element.container.id, element.manualId]}, element.id],
         })
+    }
+
+    private enrichConstraints() {
+        /**
+         * Ensure that each relation source exists
+         */
+        if (this.graph.options.constraints.relationSource) {
+            for (const relation of this.graph.relations) {
+                this.graph.addConstraint({implies: [relation.id, relation.target.id]})
+            }
+        }
+
+        /**
+         * Ensure that each relation target exists
+         */
+        if (this.graph.options.constraints.relationTarget) {
+            for (const relation of this.graph.relations) {
+                this.graph.addConstraint({implies: [relation.id, relation.source.id]})
+            }
+        }
+
+        // TODO: Ensure that artifacts are unique within their node (also considering non-present nodes)
+
+        /**
+         * Ensure that each artifact container exists
+         */
+        if (this.graph.options.constraints.artifactContainer) {
+            for (const artifact of this.graph.artifacts)
+                this.graph.addConstraint({implies: [artifact.id, artifact.container.id]})
+        }
+
+        /**
+         * Ensure that each property container exists
+         */
+        if (this.graph.options.constraints.propertyContainer) {
+            for (const property of this.graph.properties)
+                this.graph.addConstraint({implies: [property.id, property.container.id]})
+        }
+
+        // TODO: Ensure that each property has maximum one value (also considering non-present nodes)
+
+        /**
+         * Ensure that each type container exists
+         */
+        if (this.graph.options.constraints.typeContainer) {
+            for (const type of this.graph.types) this.graph.addConstraint({implies: [type.id, type.container.id]})
+        }
+
+        /**
+         * Ensure that hosting stack exists
+         * This prevents, e.g., the unexpected removal of the hosting stack.
+         */
+        if (this.graph.options.constraints.hostingStack) {
+            for (const node of this.graph.nodes.filter(it => it.hasHost)) {
+                const hostings = node.outgoing.filter(it => it.isHostedOn())
+                const consequence = hostings.length === 1 ? hostings[0].id : {xor: hostings.map(it => it.id)}
+                this.graph.addConstraint({
+                    implies: [node.id, consequence],
+                })
+            }
+        }
+
+        // TODO: Ensure that each node has exactly one type
+
+        // TODO: Ensure that every component has at maximum one hosting relation
+
+        // TODO: Ensure that every component that had a hosting relation previously still has one
+
+        // TODO: Ensure that every component that had an incoming relation previously still has one
+
+        // TODO: Ensure that every component that had a deployment artifact previously still has one
+
+        // TODO: enable/ disable flag for each constraint in variability.options
     }
 }

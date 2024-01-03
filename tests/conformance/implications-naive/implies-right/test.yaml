@@ -1,0 +1,3 @@
+presets: right
+template: ../implies-left/template.yaml
+expected: ../implied-right/expected.yaml

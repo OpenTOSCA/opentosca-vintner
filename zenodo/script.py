@@ -123,9 +123,10 @@ def main():
     set_metadata(version)
     upload_files(version)
 
+    print('Zenodo release drafted')
+
     if zenodo_publish:
         publish_version(version)
-
-    print('Zenodo relase published')
+        print('Zenodo relase published')
 
 main()

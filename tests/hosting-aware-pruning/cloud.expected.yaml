@@ -1,0 +1,123 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+
+    - lib/gcp_dbms.yaml
+    - lib/gcp_runtime.yaml
+    - lib/gcp_provider.yaml
+    - lib/os_compute.yaml
+    - lib/os_dbms.yaml
+    - lib/os_k8s.yaml
+    - lib/os_logger.yaml
+    - lib/os_monitor.yaml
+    - lib/os_provider.yaml
+    - lib/shop_component.yaml
+    - lib/shop_database.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+            default: password
+
+        os_compute_network:
+            type: string
+            default: public-belwue
+
+        os_compute_key_name:
+            type: string
+            default: default
+
+        os_compute_ssh_user:
+            type: string
+            default: ubuntu
+
+        os_compute_ssh_key_file:
+            type: string
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
+
+        os_region_name:
+            type: string
+            default: Mannheim
+
+        os_auth_type:
+            type: string
+            default: v3applicationcredential
+
+        os_auth_url:
+            type: string
+            default: https://idm02.bw-cloud.org:5000/v3
+
+        os_identity_api_version:
+            type: string
+            default: '3'
+
+        os_interface:
+            type: string
+            default: public
+
+        os_application_credential_id:
+            type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+            default: europe-west3
+
+        gcp_service_account_file:
+            type: string
+            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
+
+    node_templates:
+        shop:
+            type: shop.component
+            properties:
+                DB_NAME: shop
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: database_password}
+                DB_DIALECT: mysql
+                DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
+            requirements:
+                - host: gcp_runtime
+                - database: database
+
+        database:
+            type: shop.database
+            properties:
+                database_name: shop
+                gcp_dbms_name: shop
+            requirements:
+                - host: gcp_dbms
+
+        gcp_runtime:
+            type: gcp.runtime
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
+            requirements:
+                - host: gcp_cloud
+
+        gcp_dbms:
+            type: gcp.dbms
+            properties:
+                instance_name: shop
+                root_password: {get_input: database_password}
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
+            requirements:
+                - host: gcp_cloud
+
+        gcp_cloud:
+            type: gcp.provider

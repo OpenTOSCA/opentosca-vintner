@@ -1,0 +1,3 @@
+template: ../template.yaml
+expected: ../../local.expected.yaml
+presets: local

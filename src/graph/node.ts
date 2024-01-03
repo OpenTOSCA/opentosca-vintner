@@ -60,10 +60,10 @@ export default class Node extends Element {
         return this.name
     }
 
-    get consumed() {
-        if (check.isDefined(this.raw.consumed)) {
-            assert.isBoolean(this.raw.consumed)
-            return this.raw.consumed
+    get persistent() {
+        if (check.isDefined(this.raw.persistent)) {
+            assert.isBoolean(this.raw.persistent)
+            return this.raw.persistent
         }
     }
 
@@ -72,17 +72,17 @@ export default class Node extends Element {
     }
 
     get defaultEnabled() {
-        return check.isTrue(this.consumed)
+        return check.isTrue(this.persistent)
             ? false
             : this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return check.isTrue(this.consumed) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
+        return check.isTrue(this.persistent) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     get hasHost() {
-        return this.outgoing.find(it => it.isHostedOn())
+        return check.isDefined(this.outgoing.find(it => it.isHostedOn()))
     }
 
     get isTarget() {

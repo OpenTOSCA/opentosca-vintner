@@ -1,0 +1,22 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    gcp.provider:
+        derived_from: tosca.nodes.Root
+        properties:
+            service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            project:
+                type: string
+                default: {get_input: gcp_project}
+
+            region:
+                type: string
+                default: {get_input: gcp_region}
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+                valid_source_types: [gcp.dbms, gcp.runtime]

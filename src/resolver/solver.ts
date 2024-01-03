@@ -174,6 +174,7 @@ export default class Solver {
         /**
          * Transform element.implies
          */
+        // TODO: should this be part of the enricher? but transformLogicExpression is used ... therefore, introduce _context_element: string or something
         for (const element of this.graph.elements) {
             const impliesList = element.raw.implies
             if (check.isUndefined(impliesList)) continue
@@ -194,74 +195,6 @@ export default class Solver {
                 this.minisat.require(MiniSat.implies(left, right))
             }
         }
-
-        /**
-         * Ensure that each relation source exists
-         */
-        if (this.graph.options.constraints.relationSource) {
-            for (const relation of this.graph.relations) {
-                this.minisat.require(MiniSat.implies(relation.id, relation.target.id))
-            }
-        }
-
-        /**
-         * Ensure that each relation target exists
-         */
-        if (this.graph.options.constraints.relationTarget) {
-            for (const relation of this.graph.relations) {
-                this.minisat.require(MiniSat.implies(relation.id, relation.source.id))
-            }
-        }
-
-        // TODO: Ensure that artifacts are unique within their node (also considering non-present nodes)
-
-        /**
-         * Ensure that each artifact container exists
-         */
-        if (this.graph.options.constraints.artifactContainer) {
-            for (const artifact of this.graph.artifacts)
-                this.minisat.require(MiniSat.implies(artifact.id, artifact.container.id))
-        }
-
-        /**
-         * Ensure that each property container exists
-         */
-        if (this.graph.options.constraints.propertyContainer) {
-            for (const property of this.graph.properties)
-                this.minisat.require(MiniSat.implies(property.id, property.container.id))
-        }
-
-        // TODO: Ensure that each property has maximum one value (also considering non-present nodes)
-
-        /**
-         * Ensure that each type container exists
-         */
-        if (this.graph.options.constraints.typeContainer) {
-            for (const type of this.graph.types) this.minisat.require(MiniSat.implies(type.id, type.container.id))
-        }
-        // TODO: Ensure that each node has exactly one type
-
-        /**
-         * Ensure that hosting stack exists
-         * This prevents, e.g., the unexpected removal of the hosting stack.
-         */
-        if (this.graph.options.constraints.hostingStack) {
-            for (const node of this.graph.nodes.filter(it => it.hasHost)) {
-                const hostings = node.outgoing.filter(it => it.isHostedOn())
-                const consequence = hostings.length === 1 ? hostings[0].id : MiniSat.xor(hostings.map(it => it.id))
-                this.minisat.require(MiniSat.implies(node.id, consequence))
-            }
-        }
-
-        // TODO: Ensure that every component has at maximum one hosting relation
-
-        // TODO: Ensure that every component that had a hosting relation previously still has one
-
-        // TODO: Ensure that every component that had an incoming relation previously still has one
-
-        // TODO: Ensure that every component that had a deployment artifact previously still has one
-
-        // TODO: enable/ disable flag for each constraint in variability.options
     }
 
     /**
