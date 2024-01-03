@@ -12,7 +12,7 @@ topology_template:
             type_default_condition: true
 
             hosting_stack_constraint: true
-            optimization: true
+            optimization: false
             unique: true
 
     node_templates:
