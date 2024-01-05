@@ -1,4 +1,4 @@
-# GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
+# GitHub runner seems not to support IPv6.
 # See https://github.com/actions/runner-images/issues/668
 
 name: Night
@@ -178,6 +178,18 @@ jobs:
             - name: (DOCKER) Ensure Vintner can be executed
               run: docker exec vintner vintner --version
 
+            - name: (DOCKER) Ensure Vintner can be executed
+              run: |
+                  DOCKER_VERSION=$(docker exec vintner vintner --version)
+                  echo "Docker version: $DOCKER_VERSION}"
+
+                  BINARY_VERSION=$(vintner --version)
+                  echo "Binary version: ${BINARY_VERSION}"
+
+                  if [ ${DOCKER_VERSION} != ${BINARY_VERSION} ]; then
+                      echo "Versions do not match"
+                      exit 1
+                  fi
             - name: (DOCKER) Stop Docker container
               run: docker kill vintner
 
