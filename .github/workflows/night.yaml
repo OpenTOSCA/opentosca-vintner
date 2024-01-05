@@ -43,7 +43,7 @@ jobs:
                   script: |
                       const fs = require('fs')
                       if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
-                      const file = 'gcp-credentials.json'
+                      const file = '/tmp/gcp-credentials.json'
                       const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
                       fs.writeFileSync(file, content)
               env:
@@ -62,10 +62,10 @@ jobs:
                       if (!process.env.OS_SSH_KEY_FILE) throw 'OS_SSH_KEY_FILE undefined'
 
                       // Write "os-ssh-key-file"
-                      fs.writeFileSync('os-ssh-key-file', new Buffer.from(process.env.OS_SSH_KEY_FILE, 'base64').toString('utf-8'))
+                      fs.writeFileSync('/tmp/os-ssh-key-file', new Buffer.from(process.env.OS_SSH_KEY_FILE, 'base64').toString('utf-8'))
 
                       // Write "os-credentials.sh"
-                      fs.writeFileSync('os-credentials.sh',
+                      fs.writeFileSync('/tmp/os-credentials.sh',
                       `#!/usr/bin/env bash
                       export OS_AUTH_TYPE=v3applicationcredential
                       export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
@@ -74,7 +74,7 @@ jobs:
                       export OS_INTERFACE=public
                       export OS_APPLICATION_CREDENTIAL_ID=${process.OS_APPLICATION_CREDENTIAL_ID}
                       export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}`)
-                      fs.chmodSync('os-credentials.sh', '755')
+                      fs.chmodSync('/tmp/os-credentials.sh', '755')
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -200,11 +200,12 @@ jobs:
                   vintner instances resolve --instance motivation --presets dev
                   vintner instances validate --instance motivation
 
-                  echo "os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}" >> xopera-motivation-dev-deployment-inputs.yaml
-                  echo "os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}" >> xopera-motivation-dev-deployment-inputs.yaml
-                  echo "private_vm_ssh_key_file: ~/os-ssh-key-file" >> xopera-motivation-dev-deployment-inputs.yaml
+                  DEPLOYMENT_INPUTS=/tmp/xopera-motivation-dev-deployment-inputs.yaml
+                  echo "os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}" >> ${DEPLOYMENT_INPUTS} 
+                  echo "os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}" >> ${DEPLOYMENT_INPUTS}
+                  echo "private_vm_ssh_key_file: /tmp/os-ssh-key-file" >> ${DEPLOYMENT_INPUTS}
 
-                  vintner instances deploy --instance motivation --inputs xopera-motivation-dev-deployment-inputs.yaml
+                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -213,7 +214,7 @@ jobs:
               run: |
                   cd ~/opera
                   . .venv/bin/activate
-                  source ~/.os-credentials.sh
+                  source /tmp/.os-credentials.sh
                   VIRTUAL_MACHINE_IP=$(openstack server show motivation -f json | jq  -r '.addresses."public-belwue"[0]')
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
@@ -246,7 +247,7 @@ jobs:
                   vintner instances validate --instance motivation
 
                   cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: /tmp/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
 
             - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
@@ -276,7 +277,7 @@ jobs:
                   vintner instances resolve --instance pruning --presets elastic
                   vintner instances validate --instance pruning
 
-                  echo "gcp_service_account_file: $(pwd)/gcp-credentials.json" > examples/xopera-pruning/deployment-inputs.ignored.yaml
+                  echo "gcp_service_account_file: /tmp/gcp-credentials.json" > examples/xopera-pruning/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance pruning --inputs examples/xopera-pruning/deployment-inputs.ignored.yaml
 
             - name: (XOPERA-PRUNING) Test the elastic variant of xopera-pruning on GCP
@@ -305,7 +306,7 @@ jobs:
                   vintner instances init --instance artifacts --template artifacts
                   vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 
-                  echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+                  echo "gcp_credentials: /tmp/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
                   vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
 
             - name: (UNFURL-ARTIFACTS) Test the enterprise plan of unfurl-artifacts on GCP
