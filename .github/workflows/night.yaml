@@ -63,6 +63,7 @@ jobs:
 
                       // Write "os-ssh-key-file"
                       fs.writeFileSync('/tmp/os-ssh-key-file', new Buffer.from(process.env.OS_SSH_KEY_FILE, 'base64').toString('utf-8'))
+                      fs.chmodSync('/tmp/os-ssh-key-file', '400')
 
                       // Write "os-credentials.sh"
                       fs.writeFileSync('/tmp/os-credentials.sh',
