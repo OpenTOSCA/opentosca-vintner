@@ -200,11 +200,11 @@ jobs:
                   vintner instances resolve --instance motivation --presets dev
                   vintner instances validate --instance motivation
 
-                  echo "os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}" > examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  echo "os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_ID}" > examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  echo "private_vm_ssh_key_file: ~/os-ssh-key-file" > examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  echo "os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}" >> xopera-motivation-dev-deployment-inputs.yaml
+                  echo "os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}" >> xopera-motivation-dev-deployment-inputs.yaml
+                  echo "private_vm_ssh_key_file: ~/os-ssh-key-file" >> xopera-motivation-dev-deployment-inputs.yaml
 
-                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  vintner instances deploy --instance motivation --inputs xopera-motivation-dev-deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
