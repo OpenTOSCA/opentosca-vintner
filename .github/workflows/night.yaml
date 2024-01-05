@@ -41,13 +41,44 @@ jobs:
               uses: actions/github-script@v3
               with:
                   script: |
-                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
                       const fs = require('fs')
+                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
                       const file = 'gcp-credentials.json'
                       const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
                       fs.writeFileSync(file, content)
               env:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+            - name: (PREPARE) Setup OS credentials
+              uses: actions/github-script@v3
+              with:
+                  script: |
+                      // Imports
+                      const fs = require('fs')
+
+                      // Ensure env is set
+                      if (!process.env.OS_APPLICATION_CREDENTIAL_ID) throw 'OS_APPLICATION_CREDENTIAL_ID undefined'
+                      if (!process.env.OS_APPLICATION_CREDENTIAL_SECRET) throw 'OS_APPLICATION_CREDENTIAL_SECRET undefined'
+                      if (!process.env.OS_SSH_KEY_FILE) throw 'OS_SSH_KEY_FILE undefined'
+
+                      // Write "os-ssh-key-file"
+                      fs.writeFileSync('os-ssh-key-file', new Buffer.from(process.env.OS_SSH_KEY_FILE, 'base64').toString('utf-8'))
+
+                      // Write "os-credentials.sh"
+                      fs.writeFileSync('os-credentials.sh',
+                      `#!/usr/bin/env bash
+                      export OS_AUTH_TYPE=v3applicationcredential
+                      export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
+                      export OS_IDENTITY_API_VERSION=3
+                      export OS_REGION_NAME="Mannheim"
+                      export OS_INTERFACE=public
+                      export OS_APPLICATION_CREDENTIAL_ID=${process.OS_APPLICATION_CREDENTIAL_ID}
+                      export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}`)
+                      fs.chmodSync('os-credentials.sh', '755')
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -148,6 +179,51 @@ jobs:
 
             - name: (DOCKER) Stop Docker container
               run: docker kill vintner
+
+            ###################################################
+            #
+            # xOpera Motivation: Development
+            #
+            ###################################################
+
+            - name: (XOPERA-MOTIVATION-DEV) Deploy the development variant of xopera-motivation on OpenStack
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+                  vintner templates import --template motivation --path examples/xopera-motivation
+                  vintner instances init --instance motivation --template motivation
+                  vintner instances resolve --instance motivation --presets dev
+                  vintner instances validate --instance motivation
+
+                  echo "os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}" > examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  echo "os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_ID}" > examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  echo "private_vm_ssh_key_file: ~/os-ssh-key-file" > examples/xopera-motivation/deployment-inputs.ignored.yaml
+
+                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (XOPERA-MOTIVATION-DEV) Test the development variant of xopera-motivation on OpenStack
+              run: |
+                  cd ~/opera
+                  . .venv/bin/activate
+                  source ~/.os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show motivation -f json | jq  -r '.addresses."public-belwue"[0]')
+                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+
+            - name: (XOPERA-MOTIVATION-DEV) Undeploy the development variant of xopera-motivation on OpenStack
+              run: vintner instances undeploy --instance motivation
+              if: always()
+
+            - name: Abort
+              run: exit 1
+              if: always()
 
             ###################################################
             #
