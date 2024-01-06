@@ -187,7 +187,7 @@ node_types:
                                   copy:
                                       dest: '{{ tempdir_info.path }}/app.yaml'
                                       content: |
-                                          runtime: nodejs14
+                                          runtime: nodejs18
                                           service: {{ SELF.application_name }}
                                           instance_class: F1
                                           automatic_scaling:

@@ -228,7 +228,7 @@ node_types:
                                     copy:
                                         dest: '{{ tempdir_info.path }}/app.yaml'
                                         content: |
-                                            runtime: nodejs14
+                                            runtime: nodejs18
                                             service: shop
                                             instance_class: F1
                                             env_variables:

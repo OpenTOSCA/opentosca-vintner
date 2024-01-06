@@ -110,7 +110,7 @@ node_types:
                                 tar -zxvf {{ 'project' | get_dir }}/ensemble/files/application.tar.gz --directory $TMP_DIR
 
                                 echo APP_YAML $TMP_DIR/app.yaml
-                                echo 'runtime: nodejs14' >> $TMP_DIR/app.yaml
+                                echo 'runtime: nodejs18' >> $TMP_DIR/app.yaml
                                 echo 'service: {{ SELF.application_name }}' >> $TMP_DIR/app.yaml
                                 echo 'env_variables:' >> $TMP_DIR/app.yaml
                                 echo '  DB_DIALECT: {{ SELF.DB_DIALECT }}' >> $TMP_DIR/app.yaml
