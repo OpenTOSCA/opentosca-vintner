@@ -13,6 +13,10 @@ topology_template:
 
         gcp_region:
             type: string
+            default: europe-west3
+
+        gcp_project:
+            type: string
             default: stoetzms-387808
 
         gcp_service_account_file:
@@ -152,6 +156,7 @@ topology_template:
             type: gcp.provider
             conditions: {logic_expression: is_prod}
             properties:
+                project: {get_input: gcp_project}
                 region: {get_input: gcp_region}
                 service_account_file: {get_input: gcp_service_account_file}
 

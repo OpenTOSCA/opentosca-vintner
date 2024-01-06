@@ -7,6 +7,9 @@ node_types:
             region:
                 type: string
 
+            project:
+                type: string
+
             service_account_file:
                 type: string
         capabilities:
@@ -42,6 +45,10 @@ node_types:
                 type: string
                 default: '0.0.0.0/0'
 
+            project:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::project'}
+
             region:
                 type: string
                 default: {eval: '.::.requirements::[.name=host]::.target::region'}
@@ -70,7 +77,7 @@ node_types:
                     create:
                         implementation: |
                             set -e
-                            gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }}
+                            gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
                             gcloud services enable sqladmin.googleapis.com >/dev/null
                             gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --async --format=json | gcloud beta sql operations wait --timeout unlimited $(jq --raw-output '.name') >/dev/null
                             gcloud sql users set-password root --host=% --instance {{ SELF.instance_name }} --password {{ SELF.password }} >/dev/null
@@ -83,7 +90,7 @@ node_types:
                     delete:
                         implementation: |
                             set -e
-                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
+                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
                             gcloud sql instances delete {{ SELF.instance_name }} --quiet
                         inputs:
                             keeplines: true
@@ -107,15 +114,23 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements::[.name=host]::.target::public_address'}
 
-            service_account_file:
-                type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
-
             password:
                 type: string
 
             user:
                 type: string
+
+            project:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::project'}
+
+            region:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::region'}
+
+            service_account_file:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
 
         capabilities:
             database:
@@ -132,7 +147,7 @@ node_types:
                     create:
                         implementation: |
                             set -e
-                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
+                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
                             gcloud sql databases create {{ SELF.database_name }} --instance {{ SELF.instance_name }}
                         inputs:
                             keeplines: true
@@ -140,7 +155,7 @@ node_types:
                     delete:
                         implementation: |
                             set -e
-                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
+                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
                             gcloud sql databases delete {{ SELF.database_name }} --instance {{ SELF.instance_name }}
                         inputs:
                             keeplines: true
@@ -151,6 +166,10 @@ node_types:
             env_type:
                 type: string
                 default: gcp
+
+            project:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::project'}
 
             region:
                 type: string
@@ -175,7 +194,7 @@ node_types:
                     create:
                         implementation: |
                             set -e
-                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }}
+                            gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
                             gcloud services enable cloudbuild.googleapis.com || true
                             gcloud services enable appengine.googleapis.com || true
                             gcloud app create --region {{ SELF.region }} || true
