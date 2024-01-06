@@ -9,48 +9,63 @@ topology_template:
     inputs:
         release:
             type: string
+            default: abcdefgh
 
         gcp_region:
             type: string
+            default: stoetzms-387808
 
         gcp_service_account_file:
             type: string
+            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
 
         db_password:
             type: string
+            default: password
 
         vm_network:
             type: string
+            default: public-belwue
 
         vm_security_group:
             type: string
+            default: default
 
         vm_key_name:
             type: string
+            default: default
 
         vm_ssh_user:
             type: string
+            default: ubuntu
 
         vm_ssh_key_file:
             type: string
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
+            default: Mannheim
 
         os_auth_type:
             type: string
+            default: v3applicationcredential
 
         os_auth_url:
             type: string
+            default: https://idm02.bw-cloud.org:5000/v3
 
         os_identity_api_version:
             type: string
+            default: '3'
 
         os_interface:
             type: string
+            default: public
 
         os_application_credential_id:
             type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
 
         os_application_credential_secret:
             type: string
