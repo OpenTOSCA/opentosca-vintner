@@ -1,0 +1,115 @@
+name: 'Prepare Integration Test Environment'
+inputs:
+    GCP_CREDENTIALS:
+        required: true
+
+    OS_SSH_KEY_FILE:
+        required: true
+
+    OS_APPLICATION_CREDENTIAL_ID:
+        required: true
+
+    OS_APPLICATION_CREDENTIAL_SECRET:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        ###################################################
+        #
+        # Prepare
+        #
+        ###################################################
+
+        - name: (PREPARE) Checkout Repository
+          uses: actions/checkout@v3
+          with:
+              lfs: true
+
+        - name: (PREPARE) Setup Git
+          run: |
+              git config --global user.name "${GITHUB_ACTOR}"
+              git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
+
+        - name: (PREPARE) Setup GCloud
+          uses: google-github-actions/setup-gcloud@v1
+          with:
+              version: 438.0.0
+
+        - name: (PREPARE) Setup GCP credentials
+          run: |
+              if [ -z "${GCP_CREDENTIALS}" ]; then
+                echo "GCP_CREDENTIALS not defined"
+                exit 1
+              fi
+
+              echo ${GCP_CREDENTIALS} | base64 --decode > /tmp/gcp-credentials.json
+          env:
+              GCP_CREDENTIALS: ${{ inputs.GCP_CREDENTIALS }}
+
+        - name: (PREPARE) Setup OS SSH key file
+          run: |
+              if [ -z "${OS_SSH_KEY_FILE}" ]; then
+                echo "OS_SSH_KEY_FILE not defined"
+                exit 1
+              fi
+
+              echo ${OS_SSH_KEY_FILE} | base64 --decode > /tmp/os-ssh-key-file
+              chmod 400 /tmp/os-ssh-key-file
+          env:
+              OS_SSH_KEY_FILE: ${{ inputs.OS_SSH_KEY_FILE }}
+
+        - name: (PREPARE) Setup OS credentials
+          run: |
+              if [ -z "${OS_APPLICATION_CREDENTIAL_ID}" ]; then
+                echo "OS_APPLICATION_CREDENTIAL_ID not defined"
+                exit 1
+              fi
+
+              if [ -z "${OS_APPLICATION_CREDENTIAL_SECRET}" ]; then
+                echo "OS_APPLICATION_CREDENTIAL_SECRET not defined"
+                exit 1
+              fi
+
+              cat << EOF > /tmp/os-credentials.sh
+              #!/usr/bin/env bash
+              export OS_AUTH_TYPE=v3applicationcredential
+              export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
+              export OS_IDENTITY_API_VERSION=3
+              export OS_REGION_NAME="Mannheim"
+              export OS_INTERFACE=public
+              export OS_APPLICATION_CREDENTIAL_ID=${OS_APPLICATION_CREDENTIAL_ID}
+              export OS_APPLICATION_CREDENTIAL_SECRET=${OS_APPLICATION_CREDENTIAL_SECRET}                  
+              EOF
+
+              chmod 755 /tmp/os-credentials.sh
+          env:
+              OS_APPLICATION_CREDENTIAL_ID: ${{ inputs.OS_APPLICATION_CREDENTIAL_ID }}
+              OS_APPLICATION_CREDENTIAL_SECRET: ${{ inputs.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+        - name: (PREPARE) Setup Python
+          uses: actions/setup-python@v4
+          with:
+              python-version: 3.10.13
+              cache: pip
+
+        - name: (PREPARE) Cache xOpera
+          uses: actions/cache@v3
+          with:
+              path: /home/runner/opera
+              key: xopera
+
+        - name: (PREPARE) Install xOpera
+          run: ./src/assets/scripts/install-xopera.sh
+
+        - name: (PREPARE) Cache Unfurl
+          uses: actions/cache@v3
+          with:
+              path: /home/runner/unfurl
+              key: unfurl
+
+        - name: (PREPARE) Install Unfurl
+          run: ./src/assets/scripts/install-unfurl.sh
+
+        - name: (PREPARE) Install Vintner
+          run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
