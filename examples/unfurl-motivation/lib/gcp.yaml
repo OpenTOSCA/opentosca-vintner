@@ -91,7 +91,7 @@ node_types:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud sql instances delete {{ SELF.instance_name }} --quiet
+                            gcloud sql instances delete {{ SELF.instance_name }}
                         inputs:
                             keeplines: true
 
@@ -178,6 +178,10 @@ node_types:
             service_account_file:
                 type: string
                 default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
+
+            public_address:
+                type: string
+                default: dummy
 
         capabilities:
             host:
