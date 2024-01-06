@@ -22,6 +22,11 @@ jobs:
             #
             ###################################################
 
+            - name: (PREPARE) Checkout Repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
             - name: (PREPARE) Prepare environment
               uses: ./.github/actions/prepare-integration-test
               with:
