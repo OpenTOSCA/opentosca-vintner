@@ -38,7 +38,7 @@ jobs:
                   version: 438.0.0
 
             - name: (PREPARE) Setup GCP credentials
-              shell: |
+              run: |
                   if [ -z "${GCP_CREDENTIALS}" ]; then
                     echo "GCP_CREDENTIALS not defined"
                     exit 1
@@ -49,7 +49,7 @@ jobs:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
             - name: (PREPARE) Setup OS SSH key file
-              shell: |
+              run: |
                   if [ -z "${OS_SSH_KEY_FILE}" ]; then
                     echo "OS_SSH_KEY_FILE not defined"
                     exit 1
@@ -61,7 +61,7 @@ jobs:
                   OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
 
             - name: (PREPARE) Setup OS SSH key file
-              shell: |
+              run: |
                   if [ -z "${OS_SSH_KEY_FILE}" ]; then
                     echo "OS_SSH_KEY_FILE not defined"
                     exit 1
@@ -73,7 +73,7 @@ jobs:
                   OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
 
             - name: (PREPARE) Setup OS credentials
-              shell: |
+              run: |
                   if [ -z "${OS_APPLICATION_CREDENTIAL_ID}" ]; then
                     echo "OS_APPLICATION_CREDENTIAL_ID not defined"
                     exit 1
