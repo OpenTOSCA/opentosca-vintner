@@ -200,7 +200,6 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
-        needs: xopera-motivation-dev
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -256,7 +255,6 @@ jobs:
     unfurl-motivation-dev:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
-        needs: xopera-motivation-prod
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -384,7 +382,6 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        needs: unfurl-motivation-dev
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -440,7 +437,6 @@ jobs:
     unfurl-artifacts-enterprise:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
-        needs: xopera-pruning-elastic
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
