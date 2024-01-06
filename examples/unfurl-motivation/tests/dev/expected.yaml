@@ -7,10 +7,6 @@ imports:
 
 topology_template:
     inputs:
-        release:
-            type: string
-            default: abcdefgh
-
         gcp_region:
             type: string
             default: europe-west3
@@ -78,10 +74,11 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: application
+                application_name: unfurl-motivation-application
                 vm_ssh_user: {get_input: vm_ssh_user}
                 vm_ssh_key_file: {get_input: vm_ssh_key_file}
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_project: { get_input: gcp_project }
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
                 - host: dev_runtime
@@ -95,7 +92,7 @@ topology_template:
         dev_database:
             type: sqlite.db
             properties:
-                database_name: {concat: [{get_input: release}, '-', db]}
+                database_name: unfurl-motivation-db
             requirements:
                 - host: dev_vm
 
@@ -103,7 +100,7 @@ topology_template:
             type: openstack.vm
             properties:
                 port: 80
-                instance_name: {concat: [{get_input: release}, '-', private-vm]}
+                instance_name: unfurl-motivation-vm
                 network: {get_input: vm_network}
                 security_group: {get_input: vm_security_group}
                 key_name: {get_input: vm_key_name}

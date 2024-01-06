@@ -229,7 +229,7 @@ node_types:
                                         dest: '{{ tempdir_info.path }}/app.yaml'
                                         content: |
                                             runtime: nodejs18
-                                            service: shop
+                                            service: unfurl-aware-shop
                                             instance_class: F1
                                             env_variables:
                                                 DB_DIALECT: {{ SELF.DB_DIALECT}}

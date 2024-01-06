@@ -8,10 +8,6 @@ imports:
 
 topology_template:
     inputs:
-        release:
-            type: string
-            default: abcdefgh
-
         gcp_project:
             type: string
             default: europe-west3
@@ -79,7 +75,7 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: application
+                application_name: xopera-motivation-application
                 application_environment:
                     DB_DIALECT: {get_property: [SELF, database, database_dialect]}
                     DB_NAME: {get_property: [SELF, database, database_name]}
@@ -107,7 +103,7 @@ topology_template:
         dev_database:
             type: sqlite.db
             properties:
-                database_name: {concat: [{get_input: release}, '-', db]}
+                database_name: xopera-motivation-db
             requirements:
                 - host: private_vm
 
@@ -115,7 +111,7 @@ topology_template:
             type: openstack.vm
             properties:
                 ports: [80]
-                name: {concat: [{get_input: release}, '-', private-vm]}
+                name: xopera-motivation-vm
                 image: Ubuntu 20.04
                 flavor: m1.medium
                 network: {get_input: private_vm_network}

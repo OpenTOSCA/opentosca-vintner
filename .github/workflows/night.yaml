@@ -175,7 +175,7 @@ jobs:
 
             - name: (CASE-STUDY) Test application
               run: |
-                  VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
+                  VIRTUAL_MACHINE_NAME=xopera-motivation-vm
 
                   cd ~/opera
                   . .venv/bin/activate
@@ -241,7 +241,7 @@ jobs:
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://xopera-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance motivation
@@ -302,7 +302,7 @@ jobs:
 
             - name: (CASE-STUDY) Test the application
               run: |
-                  VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
+                  VIRTUAL_MACHINE_NAME=unfurl-motivation-vm
 
                   cd ~/unfurl
                   . .venv/bin/activate
@@ -369,7 +369,7 @@ jobs:
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://unfurl-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance motivation
@@ -425,7 +425,7 @@ jobs:
                   vintner instances deploy --instance pruning --inputs ${DEPLOYMENT_INPUTS}
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance pruning
@@ -480,7 +480,7 @@ jobs:
                   vintner instances deploy --instance artifacts --inputs ${DEPLOYMENT_INPUTS}
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
+              run: curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance artifacts

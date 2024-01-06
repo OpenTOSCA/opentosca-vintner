@@ -48,7 +48,7 @@ node_types:
                         credentials = "{{ SELF.credentials }}"
 
                         name = "{{ SELF.database_name }}"
-                        instance = "shop"
+                        instance = "unfurl-artifacts-shop"
                     main: |
                         terraform {
                            required_providers {
