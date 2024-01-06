@@ -139,11 +139,11 @@ jobs:
 
             ###################################################
             #
-            # Unfurl Motivation Development
+            # Unfurl Motivation Production
             #
             ###################################################
 
-            - name: (UNFURL-MOTIVATION-DEV) Prepare environment
+            - name: (UNFURL-MOTIVATION-PROD) Prepare environment
               run: |
                   vintner setup clean --force
                   vintner setup init
@@ -152,41 +152,25 @@ jobs:
                   vintner orchestrators enable --orchestrator unfurl
                   vintner orchestrators attest --orchestrator unfurl
 
-            - name: (UNFURL-MOTIVATION-DEV) Resolve variability
+            - name: (UNFURL-MOTIVATION-PROD) Resolve variability
               run: |
                   vintner templates import --template motivation --path examples/unfurl-motivation
                   vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets dev
+                  vintner instances resolve --instance motivation --presets prod
 
-            - name: (UNFURL-MOTIVATION-DEV) Deploy application
+            - name: (UNFURL-MOTIVATION-PROD) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-dev-deployment-inputs.yaml
+                  DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-prod-deployment-inputs.yaml
                   cat << EOF > ${DEPLOYMENT_INPUTS}
-                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
-                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
-                  vm_ssh_key_file: /tmp/os-ssh-key-file
+                  gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
-              env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (UNFURL-MOTIVATION-DEV) Test the application
-              run: |
-                  VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
+            - name: (UNFURL-MOTIVATION-PROD) Test application
+              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
 
-                  cd ~/unfurl
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
-
-            - name: (UNFURL-MOTIVATION-DEV) Undeploy the application
+            - name: (UNFURL-MOTIVATION-PROD) Undeploy application
               run: vintner instances undeploy --instance motivation
               if: always()
 
@@ -385,6 +369,59 @@ jobs:
 
             - name: (XOPERA-PRUNING-ELASTIC) Undeploy application
               run: vintner instances undeploy --instance pruning
+              if: always()
+
+            ###################################################
+            #
+            # Unfurl Motivation Development
+            #
+            ###################################################
+
+            - name: (UNFURL-MOTIVATION-DEV) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init unfurl
+                  vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
+
+            - name: (UNFURL-MOTIVATION-DEV) Resolve variability
+              run: |
+                  vintner templates import --template motivation --path examples/unfurl-motivation
+                  vintner instances init --instance motivation --template motivation
+                  vintner instances resolve --instance motivation --presets dev
+
+            - name: (UNFURL-MOTIVATION-DEV) Deploy application
+              run: |
+                  DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-dev-deployment-inputs.yaml
+                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  vm_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+
+                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (UNFURL-MOTIVATION-DEV) Test the application
+              run: |
+                  VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
+
+                  cd ~/unfurl
+                  . .venv/bin/activate
+                  . /tmp/os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
+                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+
+            - name: (UNFURL-MOTIVATION-DEV) Undeploy the application
+              run: vintner instances undeploy --instance motivation
               if: always()
 
             ###################################################
