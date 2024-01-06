@@ -38,48 +38,67 @@ jobs:
                   version: 438.0.0
 
             - name: (PREPARE) Setup GCP credentials
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      const fs = require('fs')
-                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
-                      const file = '/tmp/gcp-credentials.json'
-                      const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
-                      fs.writeFileSync(file, content)
+              shell: |
+                  if [ -z "${GCP_CREDENTIALS}" ]; then
+                    echo "GCP_CREDENTIALS not defined"
+                    exit 1
+                  fi
+
+                  base64 --decode ${GCP_CREDENTIALS} > /tmp/gcp-credentials.json
               env:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
+            - name: (PREPARE) Setup OS SSH key file
+              shell: |
+                  if [ -z "${OS_SSH_KEY_FILE}" ]; then
+                    echo "OS_SSH_KEY_FILE not defined"
+                    exit 1
+                  fi
+
+                  base64 --decode ${OS_SSH_KEY_FILE} > /tmp/os-ssh-key-file
+                  chmod 400 /tmp/os-ssh-key-file
+              env:
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+
+            - name: (PREPARE) Setup OS SSH key file
+              shell: |
+                  if [ -z "${OS_SSH_KEY_FILE}" ]; then
+                    echo "OS_SSH_KEY_FILE not defined"
+                    exit 1
+                  fi
+
+                  base64 --decode ${OS_SSH_KEY_FILE} > /tmp/os-ssh-key-file
+                  chmod 400 /tmp/os-ssh-key-file
+              env:
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+
             - name: (PREPARE) Setup OS credentials
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      // Imports
-                      const fs = require('fs')
+              shell: |
+                  if [ -z "${OS_APPLICATION_CREDENTIAL_ID}" ]; then
+                    echo "OS_APPLICATION_CREDENTIAL_ID not defined"
+                    exit 1
+                  fi
 
-                      // Ensure env is set
-                      if (!process.env.OS_APPLICATION_CREDENTIAL_ID) throw 'OS_APPLICATION_CREDENTIAL_ID undefined'
-                      if (!process.env.OS_APPLICATION_CREDENTIAL_SECRET) throw 'OS_APPLICATION_CREDENTIAL_SECRET undefined'
-                      if (!process.env.OS_SSH_KEY_FILE) throw 'OS_SSH_KEY_FILE undefined'
+                  if [ -z "${OS_APPLICATION_CREDENTIAL_SECRET}" ]; then
+                    echo "OS_APPLICATION_CREDENTIAL_SECRET not defined"
+                    exit 1
+                  fi
 
-                      // Write "os-ssh-key-file"
-                      fs.writeFileSync('/tmp/os-ssh-key-file', new Buffer.from(process.env.OS_SSH_KEY_FILE, 'base64').toString('utf-8'))
-                      fs.chmodSync('/tmp/os-ssh-key-file', '400')
+                  cat << EOF > /tmp/os-credentials.sh
+                  #!/usr/bin/env bash
+                  export OS_AUTH_TYPE=v3applicationcredential
+                  export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
+                  export OS_IDENTITY_API_VERSION=3
+                  export OS_REGION_NAME="Mannheim"
+                  export OS_INTERFACE=public
+                  export OS_APPLICATION_CREDENTIAL_ID=${process.env.OS_APPLICATION_CREDENTIAL_ID}
+                  export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}                  
+                  EOF
 
-                      // Write "os-credentials.sh"
-                      fs.writeFileSync('/tmp/os-credentials.sh',
-                      `#!/usr/bin/env bash
-                      export OS_AUTH_TYPE=v3applicationcredential
-                      export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
-                      export OS_IDENTITY_API_VERSION=3
-                      export OS_REGION_NAME="Mannheim"
-                      export OS_INTERFACE=public
-                      export OS_APPLICATION_CREDENTIAL_ID=${process.env.OS_APPLICATION_CREDENTIAL_ID}
-                      export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}`)
-                      fs.chmodSync('/tmp/os-credentials.sh', '755')
+                  chmod 755 /tmp/os-credentials.sh
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
