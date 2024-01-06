@@ -227,9 +227,16 @@ jobs:
 
             - name: (XOPERA-MOTIVATION-DEV) Test the development variant of xopera-motivation on OpenStack
               run: |
+                  VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
+
                   cd ~/opera
                   . .venv/bin/activate
-                  VIRTUAL_MACHINE_IP=$(. /tmp/os-credentials.sh && openstack server show motivation -f json | jq  -r '.addresses."public-belwue"[0]')
+                  . /tmp/os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
             - name: (XOPERA-MOTIVATION-DEV) Undeploy the development variant of xopera-motivation on OpenStack
