@@ -73,7 +73,7 @@ jobs:
                       export OS_IDENTITY_API_VERSION=3
                       export OS_REGION_NAME="Mannheim"
                       export OS_INTERFACE=public
-                      export OS_APPLICATION_CREDENTIAL_ID=${process.OS_APPLICATION_CREDENTIAL_ID}
+                      export OS_APPLICATION_CREDENTIAL_ID=${process.env.OS_APPLICATION_CREDENTIAL_ID}
                       export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}`)
                       fs.chmodSync('/tmp/os-credentials.sh', '755')
               env:
