@@ -172,6 +172,9 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
             - name: (CASE-STUDY) Test application
               run: |
                   VIRTUAL_MACHINE_NAME=xopera-motivation-vm
@@ -238,6 +241,9 @@ jobs:
 
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
 
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
             - name: (CASE-STUDY) Test application
               run: curl --fail-with-body https://xopera-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
 
@@ -297,7 +303,10 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Test the application
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
               run: |
                   VIRTUAL_MACHINE_NAME=unfurl-motivation-vm
 
@@ -311,7 +320,7 @@ jobs:
 
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
-            - name: (CASE-STUDY) Undeploy the application
+            - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance motivation
               if: always()
 
@@ -364,6 +373,9 @@ jobs:
                   EOF
 
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
 
             - name: (CASE-STUDY) Test application
               run: curl --fail-with-body https://unfurl-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
@@ -420,6 +432,9 @@ jobs:
 
                   vintner instances deploy --instance pruning --inputs ${DEPLOYMENT_INPUTS}
 
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
             - name: (CASE-STUDY) Test application
               run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
 
@@ -473,6 +488,9 @@ jobs:
                   EOF
 
                   vintner instances deploy --instance artifacts --inputs ${DEPLOYMENT_INPUTS}
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
 
             - name: (CASE-STUDY) Test application
               run: curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
