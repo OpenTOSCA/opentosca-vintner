@@ -176,7 +176,7 @@ jobs:
               run: |
                   VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
 
-                  cd ~/opera
+                  cd ~/unfurl
                   . .venv/bin/activate
                   . /tmp/os-credentials.sh
                   VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
@@ -259,11 +259,11 @@ jobs:
 
             ###################################################
             #
-            # xOpera Motivation: Development
+            # xOpera Motivation Development
             #
             ###################################################
 
-            - name: (XOPERA-MOTIVATION-DEV) Deploy the development variant of xopera-motivation on OpenStack
+            - name: (XOPERA-MOTIVATION-DEV) Prepare environment
               run: |
                   vintner setup clean --force
                   vintner setup init
@@ -272,11 +272,15 @@ jobs:
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
+            - name: (XOPERA-MOTIVATION-DEV) Resolve variability
+              run: |
                   vintner templates import --template motivation --path examples/xopera-motivation
                   vintner instances init --instance motivation --template motivation
                   vintner instances resolve --instance motivation --presets dev
                   vintner instances validate --instance motivation
 
+            - name: (XOPERA-MOTIVATION-DEV) Deploy application
+              run: |
                   DEPLOYMENT_INPUTS=/tmp/xopera-motivation-dev-deployment-inputs.yaml
                   cat << EOF > ${DEPLOYMENT_INPUTS}
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -289,7 +293,7 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (XOPERA-MOTIVATION-DEV) Test the development variant of xopera-motivation on OpenStack
+            - name: (XOPERA-MOTIVATION-DEV) Test application
               run: |
                   VIRTUAL_MACHINE_NAME=abcdefgh-private-vm
 
@@ -303,17 +307,17 @@ jobs:
 
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
-            - name: (XOPERA-MOTIVATION-DEV) Undeploy the development variant of xopera-motivation on OpenStack
+            - name: (XOPERA-MOTIVATION-DEV) Undeploy application
               run: vintner instances undeploy --instance motivation
               if: always()
 
             ###################################################
             #
-            # xOpera Motivation
+            # xOpera Motivation Production
             #
             ###################################################
 
-            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
+            - name: (XOPERA-MOTIVATION-PROD) Prepare environment
               run: |
                   vintner setup clean --force
                   vintner setup init
@@ -322,11 +326,15 @@ jobs:
                   vintner orchestrators enable --orchestrator xopera
                   vintner orchestrators attest --orchestrator xopera
 
+            - name: (XOPERA-MOTIVATION-PROD) Resolve variability
+              run: |
                   vintner templates import --template motivation --path examples/xopera-motivation
                   vintner instances init --instance motivation --template motivation
                   vintner instances resolve --instance motivation --presets prod
                   vintner instances validate --instance motivation
 
+            - name: (XOPERA-MOTIVATION-PROD) Deploy application
+              run: |
                   DEPLOYMENT_INPUTS=/tmp/xopera-motivation-prod-deployment-inputs.yaml
                   cat << EOF > ${DEPLOYMENT_INPUTS}
                   gcp_service_account_file: /tmp/gcp-credentials.json
@@ -334,10 +342,10 @@ jobs:
 
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
 
-            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
+            - name: (XOPERA-MOTIVATION-PROD) Test application
               run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
 
-            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
+            - name: (XOPERA-MOTIVATION-PROD) Undeploy application
               run: vintner instances undeploy --instance motivation
               if: always()
 
