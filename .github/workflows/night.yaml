@@ -55,7 +55,7 @@ jobs:
                     exit 1
                   fi
 
-                  base64 --decode ${OS_SSH_KEY_FILE} > /tmp/os-ssh-key-file
+                  echo ${OS_SSH_KEY_FILE} | base64 --decode > /tmp/os-ssh-key-file
                   chmod 400 /tmp/os-ssh-key-file
               env:
                   OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
@@ -67,7 +67,7 @@ jobs:
                     exit 1
                   fi
 
-                  base64 --decode ${OS_SSH_KEY_FILE} > /tmp/os-ssh-key-file
+                  echo ${OS_SSH_KEY_FILE} | base64 --decode > /tmp/os-ssh-key-file
                   chmod 400 /tmp/os-ssh-key-file
               env:
                   OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
