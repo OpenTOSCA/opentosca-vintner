@@ -9,7 +9,6 @@ on:
     push:
         branches:
             - fix-night-workflow
-
 concurrency: night
 jobs:
     ###################################################
