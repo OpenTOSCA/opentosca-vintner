@@ -44,7 +44,7 @@ jobs:
                     exit 1
                   fi
 
-                  base64 --decode ${GCP_CREDENTIALS} > /tmp/gcp-credentials.json
+                  echo ${GCP_CREDENTIALS} | base64 --decode > /tmp/gcp-credentials.json
               env:
                   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
