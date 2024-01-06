@@ -94,7 +94,7 @@ topology_template:
             type: shop.database
             properties:
                 database_name: shop
-                gcp_dbms_name: shop
+                gcp_dbms_name: unfurl-aware-shop
             requirements:
                 - host: os_dbms
 
@@ -134,7 +134,7 @@ topology_template:
             type: os.compute
             properties:
                 port: 80
-                machine: shop
+                machine: unfurl-aware-shop
                 network: {get_input: os_compute_network}
             requirements:
                 - host: os_cloud

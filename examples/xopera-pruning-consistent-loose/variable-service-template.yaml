@@ -184,7 +184,7 @@ topology_template:
                       value: [80, 3000]
 
                 - name:
-                      value: shop
+                      value: xopera-pruning-shop
 
                 - image:
                       value: Ubuntu 22.04
@@ -271,7 +271,7 @@ topology_template:
             conditions: {logic_expression: is_elastic}
             properties:
                 - instance_name:
-                      value: shop
+                      value: xopera-pruning-shop
 
                 - root_password:
                       value: {get_input: database_password}

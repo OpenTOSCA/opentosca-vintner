@@ -94,7 +94,7 @@ topology_template:
             type: shop.database
             properties:
                 database_name: shop
-                gcp_dbms_name: shop
+                gcp_dbms_name: unfurl-aware-shop
             requirements:
                 - host: gcp_dbms
 
@@ -110,7 +110,7 @@ topology_template:
         gcp_dbms:
             type: gcp.dbms
             properties:
-                instance_name: shop
+                instance_name: unfurl-aware-shop
                 root_password: {get_input: database_password}
             capabilities:
                 endpoint:

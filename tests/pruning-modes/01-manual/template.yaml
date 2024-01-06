@@ -188,7 +188,7 @@ topology_template:
                       conditions: {logic_expression: is_static}
 
                 - name:
-                      value: shop
+                      value: xopera-pruning-shop
                       conditions: {logic_expression: is_static}
 
                 - image:
@@ -296,7 +296,7 @@ topology_template:
             conditions: {logic_expression: is_elastic}
             properties:
                 - instance_name:
-                      value: shop
+                      value: xopera-pruning-shop
                       conditions: {logic_expression: is_elastic}
 
                 - root_password:
