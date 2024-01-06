@@ -22,6 +22,7 @@ runs:
         ###################################################
 
         - name: (PREPARE) Setup Git
+          shell: bash
           run: |
               git config --global user.name "${GITHUB_ACTOR}"
               git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
@@ -32,6 +33,7 @@ runs:
               version: 438.0.0
 
         - name: (PREPARE) Setup GCP credentials
+          shell: bash
           run: |
               if [ -z "${GCP_CREDENTIALS}" ]; then
                 echo "GCP_CREDENTIALS not defined"
@@ -43,6 +45,7 @@ runs:
               GCP_CREDENTIALS: ${{ inputs.GCP_CREDENTIALS }}
 
         - name: (PREPARE) Setup OS SSH key file
+          shell: bash
           run: |
               if [ -z "${OS_SSH_KEY_FILE}" ]; then
                 echo "OS_SSH_KEY_FILE not defined"
@@ -55,6 +58,7 @@ runs:
               OS_SSH_KEY_FILE: ${{ inputs.OS_SSH_KEY_FILE }}
 
         - name: (PREPARE) Setup OS credentials
+          shell: bash
           run: |
               if [ -z "${OS_APPLICATION_CREDENTIAL_ID}" ]; then
                 echo "OS_APPLICATION_CREDENTIAL_ID not defined"
@@ -95,6 +99,7 @@ runs:
               key: xopera
 
         - name: (PREPARE) Install xOpera
+          shell: bash
           run: ./src/assets/scripts/install-xopera.sh
 
         - name: (PREPARE) Cache Unfurl
@@ -104,7 +109,9 @@ runs:
               key: unfurl
 
         - name: (PREPARE) Install Unfurl
+          shell: bash
           run: ./src/assets/scripts/install-unfurl.sh
 
         - name: (PREPARE) Install Vintner
+          shell: bash
           run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
