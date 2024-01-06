@@ -79,8 +79,8 @@ jobs:
                   export OS_IDENTITY_API_VERSION=3
                   export OS_REGION_NAME="Mannheim"
                   export OS_INTERFACE=public
-                  export OS_APPLICATION_CREDENTIAL_ID=${process.env.OS_APPLICATION_CREDENTIAL_ID}
-                  export OS_APPLICATION_CREDENTIAL_SECRET=${process.env.OS_APPLICATION_CREDENTIAL_SECRET}                  
+                  export OS_APPLICATION_CREDENTIAL_ID=${OS_APPLICATION_CREDENTIAL_ID}
+                  export OS_APPLICATION_CREDENTIAL_SECRET=${OS_APPLICATION_CREDENTIAL_SECRET}                  
                   EOF
 
                   chmod 755 /tmp/os-credentials.sh
