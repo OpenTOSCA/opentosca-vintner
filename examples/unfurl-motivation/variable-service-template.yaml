@@ -107,6 +107,7 @@ topology_template:
                 vm_ssh_user: {get_input: vm_ssh_user}
                 vm_ssh_key_file: {get_input: vm_ssh_key_file}
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_project: {get_input: gcp_project}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
                 - host:
