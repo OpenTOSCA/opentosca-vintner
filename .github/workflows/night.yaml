@@ -229,8 +229,7 @@ jobs:
               run: |
                   cd ~/opera
                   . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show motivation -f json | jq  -r '.addresses."public-belwue"[0]')
+                  VIRTUAL_MACHINE_IP=$(. /tmp/os-credentials.sh && openstack server show motivation -f json | jq  -r '.addresses."public-belwue"[0]')
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
             - name: (XOPERA-MOTIVATION-DEV) Undeploy the development variant of xopera-motivation on OpenStack
