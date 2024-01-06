@@ -163,6 +163,7 @@ jobs:
                   DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-prod-deployment-inputs.yaml
                   cat << EOF > ${DEPLOYMENT_INPUTS}
                   gcp_service_account_file: /tmp/gcp-credentials.json
+                  os_application_credential_secret: dummy
                   EOF
 
                   vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}

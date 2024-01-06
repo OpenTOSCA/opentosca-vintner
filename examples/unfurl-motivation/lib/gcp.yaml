@@ -111,6 +111,12 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements::[.name=host]::.target::service_account_file'}
 
+            password:
+                type: string
+
+            user:
+                type: string
+
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database
