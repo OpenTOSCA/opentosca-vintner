@@ -516,7 +516,7 @@ jobs:
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance artifacts
-              if: always()
+              # if: always()
 
     ###################################################
     #
