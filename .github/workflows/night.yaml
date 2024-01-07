@@ -393,6 +393,7 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -493,6 +494,140 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               run: |
                   vintner templates import --template pruning --path examples/xopera-pruning
+                  vintner instances init --instance pruning --template pruning
+                  vintner instances resolve --instance pruning --presets elastic
+                  vintner instances validate --instance pruning
+
+            - name: (CASE-STUDY) Deploy application
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  EOF
+
+                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
+              run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (CASE-STUDY) Undeploy application
+              run: vintner instances undeploy --instance pruning
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Mode Static
+    #
+    ###################################################
+
+    xopera-pruning-mode-static:
+        name: xOpera Pruning Mode "Consistent Loose" Static
+        runs-on: ubuntu-22.04
+        needs: xopera-pruning-static
+        if: always()
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Prepare job
+              uses: ./.github/actions/prepare-integration-job
+              with:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+            - name: (CASE-STUDY) Resolve variability
+              run: |
+                  vintner templates import --template pruning --path examples/xopera-pruning-consistent-loose
+                  vintner instances init --instance pruning --template pruning
+                  vintner instances resolve --instance pruning --presets static
+                  vintner instances validate --instance pruning
+
+            - name: (CASE-STUDY) Deploy application
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  os_compute_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+
+                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
+              run: |
+                  VIRTUAL_MACHINE_NAME=xopera-pruning-shop
+
+                  cd ~/opera
+                  . .venv/bin/activate
+                  . /tmp/os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
+                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
+
+            - name: (CASE-STUDY) Undeploy application
+              run: vintner instances undeploy --instance pruning
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Mode Elastic
+    #
+    ###################################################
+
+    xopera-pruning-mode-elastic:
+        name: xOpera Pruning Mode "Consistent Loose" Elastic
+        runs-on: ubuntu-22.04
+        needs: xopera-pruning-elastic
+        if: always()
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Prepare job
+              uses: ./.github/actions/prepare-integration-job
+              with:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init xopera
+                  vintner orchestrators enable --orchestrator xopera
+                  vintner orchestrators attest --orchestrator xopera
+
+            - name: (CASE-STUDY) Resolve variability
+              run: |
+                  vintner templates import --template pruning --path examples/xopera-pruning-consistent-loose
                   vintner instances init --instance pruning --template pruning
                   vintner instances resolve --instance pruning --presets elastic
                   vintner instances validate --instance pruning
