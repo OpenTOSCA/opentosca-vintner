@@ -112,7 +112,7 @@ topology_template:
             properties:
                 ports: [80]
                 name: xopera-motivation-vm
-                image: Ubuntu 20.04
+                image: Ubuntu 22.04
                 flavor: m1.medium
                 network: {get_input: private_vm_network}
                 security_groups: {get_input: private_vm_security_groups}

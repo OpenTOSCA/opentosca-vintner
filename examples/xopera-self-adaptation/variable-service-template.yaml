@@ -175,7 +175,7 @@ topology_template:
             properties:
                 ports: [80, 3000, 3001, 3002, 3003, 3004]
                 name: {concat: ['compute-vm-', {get_input: instance}]}
-                image: Ubuntu 20.04
+                image: Ubuntu 22.04
                 flavor: m1.medium
                 network: {get_input: compute_vm_network}
                 security_groups: {get_input: compute_vm_security_groups}

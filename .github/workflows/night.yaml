@@ -201,6 +201,7 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -462,6 +463,7 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -520,7 +522,7 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
-        if: always()
+        if: !cancelled()
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -595,7 +597,8 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
         needs: xopera-pruning-elastic
-        if: always()
+        #if: !cancelled()
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -727,6 +730,7 @@ jobs:
     unfurl-artifacts-enterprise:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -855,6 +859,7 @@ jobs:
     unfurl-aware-cloud:
         name: Unfurl Aware Cloud
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
