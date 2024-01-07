@@ -4,7 +4,9 @@
     gather_facts: false
     tasks:
         -   name: Activate service account
-            shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project }}'
+            shell: gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project }}
+            args:
+                executable: /usr/bin/bash
 
         # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
         -   name: Enable Cloud Build API
@@ -15,6 +17,8 @@
                 if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
                     gcloud services enable ${GCP_SERVICE}
                 fi
+            args:
+                executable: /usr/bin/bash
 
         -   name: Enable appengine.googleapis.com
             shell: |
@@ -24,11 +28,15 @@
                 if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
                     gcloud services enable ${GCP_SERVICE}
                 fi
+            args:
+                executable: /usr/bin/bash
 
         # https://cloud.google.com/sdk/gcloud/reference/app/create
         -   name: Create app
-            shell: 'gcloud app create --region {{ region }}'
+            shell: gcloud app create --region {{ region }}
             register: app_create_command
             failed_when:
                 - "'Created' not in app_create_command.stderr"
                 - "'already contains' not in app_create_command.stderr"
+            args:
+                executable: /usr/bin/bash
