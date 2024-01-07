@@ -71,7 +71,7 @@ runs:
               fi
 
               cat << EOF > /tmp/os-credentials.sh
-              #!/usr/bin/env bash
+              #!/usr/bin/bash
               export OS_AUTH_TYPE=v3applicationcredential
               export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
               export OS_IDENTITY_API_VERSION=3
