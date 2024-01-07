@@ -20,9 +20,9 @@
             protocol: tcp
             port_range_min: '{{ item }}'
             port_range_max: '{{ item }}'
-            remote_ip_prefix: '::/0'
+            remote_ip_prefix: '0.0.0.0/0'
             direction: ingress
-            ethertype: IPv6
+            ethertype: IPv4
         loop: '{{ ports }}'
 
       - name: Create VM
@@ -40,15 +40,15 @@
       - name: Set attributes
         set_stats:
             data:
-                private_address: '{{ server_info.server.addresses[network][1].addr }}'
-                public_address: '{{ server_info.server.addresses[network][1].addr }}'
+                private_address: '{{ server_info.server.addresses[network][0].addr }}'
+                public_address: '{{ server_info.server.addresses[network][0].addr }}'
                 id: '{{ server_info.server.id }}'
 
       - name: Create temporary inventory for ssh wait
         add_host:
             name: server
             groups: vms
-            ansible_host: '{{ server_info.server.addresses[network][1].addr }}'
+            ansible_host: '{{ server_info.server.addresses[network][0].addr }}'
             ansible_user: '{{ ssh_user }}'
             ansible_ssh_private_key_file: '{{ ssh_key_file }}'
             ansible_ssh_common_args: >

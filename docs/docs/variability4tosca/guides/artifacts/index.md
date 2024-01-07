@@ -37,7 +37,6 @@ An important aspect of the deployment of the shop component is that the correct 
 We need to fulfill the following requirements to follow this step-by-step guide.
 
 - Ubuntu 22.04
-- Ipv6 support, thus, WSL is no suitable
 - Access to a GCP project
 - GCloud
 - Git
