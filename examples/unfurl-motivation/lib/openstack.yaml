@@ -121,7 +121,7 @@ node_types:
 
                             openstack security group create {{ SELF.instance_name }} >/dev/null
                             openstack security group rule create --protocol tcp --dst-port {{ SELF.port }} --remote-ip 0.0.0.0/0 --ingress --ethertype IPv4 {{ SELF.instance_name }} >/dev/null
-                            openstack server create --flavor {{ SELF.flavor }} --image "{{ SELF.image }}" --key-name {{ SELF.key_name }} --security-group {{ SELF.security_group }} --security-group {{ SELF.instance_name }} --wait {{ SELF.instance_name }} >/dev/null
+                            openstack server create --flavor {{ SELF.flavor }} --image "{{ SELF.image }}" --key-name {{ SELF.key_name }} --security-group {{ SELF.security_group }} --security-group {{ SELF.instance_name }} --network {{ SELF.network }} --wait {{ SELF.instance_name }} >/dev/null
                             sleep 60
                             openstack server show {{ SELF.instance_name }} --format=json
                         inputs:

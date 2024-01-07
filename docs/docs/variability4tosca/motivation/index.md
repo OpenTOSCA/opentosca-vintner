@@ -30,7 +30,6 @@ We need to fulfill the following requirements to follow this step-by-step guide.
 - Ubuntu 22.04
 - Git
 - xOpera
-- Ansible Galaxy Collection `openstack.cloud`
 
 ## Preparation
 

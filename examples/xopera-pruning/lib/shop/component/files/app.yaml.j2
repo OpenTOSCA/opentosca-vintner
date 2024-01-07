@@ -1,5 +1,5 @@
-runtime: nodejs14
-service: shop
+runtime: nodejs18
+service: {{ application_name }}
 instance_class: F1
 automatic_scaling:
   max_instances: {{ 100 if gcp_auto_scaling else 1 }}

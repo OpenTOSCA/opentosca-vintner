@@ -109,6 +109,7 @@ topology_template:
             type: shop.component
             persistent: true
             properties:
+                - application_name: unfurl-aware-shop
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
@@ -131,7 +132,7 @@ topology_template:
             type: shop.database
             properties:
                 - database_name: shop
-                - gcp_dbms_name: shop
+                - gcp_dbms_name: unfurl-aware-shop
             requirements:
                 - host:
                       node: os_dbms
@@ -184,7 +185,7 @@ topology_template:
                       value: 80
 
                 - machine:
-                      value: shop
+                      value: unfurl-aware-shop
 
                 - network:
                       value: {get_input: os_compute_network}
@@ -210,7 +211,7 @@ topology_template:
             type: gcp.dbms
             properties:
                 - instance_name:
-                      value: shop
+                      value: unfurl-aware-shop
                 - root_password:
                       value: {get_input: database_password}
             capabilities:

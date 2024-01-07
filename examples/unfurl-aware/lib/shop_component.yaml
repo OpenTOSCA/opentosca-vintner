@@ -5,6 +5,9 @@ node_types:
         derived_from: tosca.nodes.SoftwareComponent
 
         properties:
+            application_name:
+                type: string
+
             DB_DIALECT:
                 type: string
 
@@ -207,7 +210,7 @@ node_types:
                                 #
                                 ###################################################
 
-                                -   name: active service account
+                                -   name: Activate service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
                                     when: SELF.deployment_mode[0] == "GCP"
 
@@ -228,8 +231,8 @@ node_types:
                                     copy:
                                         dest: '{{ tempdir_info.path }}/app.yaml'
                                         content: |
-                                            runtime: nodejs14
-                                            service: shop
+                                            runtime: nodejs18
+                                            service: {{ SELF.application_name }}
                                             instance_class: F1
                                             env_variables:
                                                 DB_DIALECT: {{ SELF.DB_DIALECT}}
@@ -263,7 +266,7 @@ node_types:
                                 #
                                 ###################################################
 
-                                -   name: active service account
+                                -   name: Activate service account
                                     shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
                                     when: SELF.deployment_mode[0] == "GCP"
 

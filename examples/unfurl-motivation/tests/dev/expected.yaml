@@ -7,50 +7,65 @@ imports:
 
 topology_template:
     inputs:
-        release:
-            type: string
-
         gcp_region:
             type: string
+            default: europe-west3
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
 
         gcp_service_account_file:
             type: string
+            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
 
         db_password:
             type: string
+            default: password
 
         vm_network:
             type: string
+            default: public-belwue
 
         vm_security_group:
             type: string
+            default: default
 
         vm_key_name:
             type: string
+            default: default
 
         vm_ssh_user:
             type: string
+            default: ubuntu
 
         vm_ssh_key_file:
             type: string
+            default: /home/milesstoetzner/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
+            default: Mannheim
 
         os_auth_type:
             type: string
+            default: v3applicationcredential
 
         os_auth_url:
             type: string
+            default: https://idm02.bw-cloud.org:5000/v3
 
         os_identity_api_version:
             type: string
+            default: '3'
 
         os_interface:
             type: string
+            default: public
 
         os_application_credential_id:
             type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
 
         os_application_credential_secret:
             type: string
@@ -59,10 +74,11 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: application
+                application_name: unfurl-motivation-application
                 vm_ssh_user: {get_input: vm_ssh_user}
                 vm_ssh_key_file: {get_input: vm_ssh_key_file}
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_project: { get_input: gcp_project }
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
                 - host: dev_runtime
@@ -76,7 +92,7 @@ topology_template:
         dev_database:
             type: sqlite.db
             properties:
-                database_name: {concat: [{get_input: release}, '-', db]}
+                database_name: unfurl-motivation-db
             requirements:
                 - host: dev_vm
 
@@ -84,7 +100,7 @@ topology_template:
             type: openstack.vm
             properties:
                 port: 80
-                instance_name: {concat: [{get_input: release}, '-', private-vm]}
+                instance_name: unfurl-motivation-vm
                 network: {get_input: vm_network}
                 security_group: {get_input: vm_security_group}
                 key_name: {get_input: vm_key_name}

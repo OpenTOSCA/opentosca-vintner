@@ -82,6 +82,9 @@ node_types:
             gcp_service_account_file:
                 type: string
 
+            gcp_project:
+                type: string
+
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -98,8 +101,8 @@ node_types:
                         implementation: |
                             set -e
 
-                            if [ "{{ SELF.env_type }}" = "gcp" ]
-                            then gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }}
+                            if [ "{{ SELF.env_type }}" = "gcp" ]; then 
+                                gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                 TMP_DIR=/tmp/$(date +%s)
                                 echo TMP_DIR $TMP_DIR
                                 mkdir $TMP_DIR
@@ -107,7 +110,7 @@ node_types:
                                 tar -zxvf {{ 'project' | get_dir }}/ensemble/files/application.tar.gz --directory $TMP_DIR
 
                                 echo APP_YAML $TMP_DIR/app.yaml
-                                echo 'runtime: nodejs14' >> $TMP_DIR/app.yaml
+                                echo 'runtime: nodejs18' >> $TMP_DIR/app.yaml
                                 echo 'service: {{ SELF.application_name }}' >> $TMP_DIR/app.yaml
                                 echo 'env_variables:' >> $TMP_DIR/app.yaml
                                 echo '  DB_DIALECT: {{ SELF.DB_DIALECT }}' >> $TMP_DIR/app.yaml
@@ -120,8 +123,7 @@ node_types:
                                 exit 0
                             fi
 
-                            if [ "{{ SELF.env_type}}" = "local" ]
-                            then
+                            if [ "{{ SELF.env_type}}" = "local" ]; then
                                 scp -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ 'project' | get_dir }}/ensemble/files/application.tar.gz {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }}:/tmp
                                 ssh -i {{ SELF.vm_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.vm_ssh_user }}@{{ SELF.vm_public_address }} <<EOF
                                     sudo mkdir -p {{ SELF.application_directory }}
@@ -142,6 +144,24 @@ node_types:
                             fi
 
                             echo {{SELF.env_type}} is not a valid env_type
-                            exit 1;
+                            exit 1
+                        inputs:
+                            keeplines: true
+                    delete:
+                        implementation: |
+                            set -e
+
+                            if [ "{{ SELF.env_type }}" = "gcp" ]; then 
+                                gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
+                                gcloud app services delete {{ SELF.application_name }}
+                                exit 0
+                            fi
+
+                            if [ "{{ SELF.env_type}}" = "local" ]; then
+                                exit 0
+                            fi
+
+                            echo {{SELF.env_type}} is not a valid env_type
+                            exit 1
                         inputs:
                             keeplines: true

@@ -60,7 +60,7 @@ topology_template:
         shop:
             type: shop.app
             properties:
-                application_name: shop
+                application_name: unfurl-artifacts-shop
 
                 DB_NAME: shop
                 DB_USERNAME: root

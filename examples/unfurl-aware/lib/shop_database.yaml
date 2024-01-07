@@ -98,7 +98,7 @@ node_types:
                                 #
                                 ###################################################
 
-                                - name: active service account
+                                - name: Activate service account
                                   shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
                                   when: SELF.deployment_mode == "GCP"
 
