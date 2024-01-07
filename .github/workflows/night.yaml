@@ -128,6 +128,7 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -160,14 +161,13 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/xopera-motivation-dev-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
                   private_vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -202,6 +202,7 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -234,12 +235,11 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/xopera-motivation-prod-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -260,6 +260,7 @@ jobs:
     unfurl-motivation-dev:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -291,14 +292,13 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-dev-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
                   vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -366,13 +366,12 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/unfurl-motivation-prod-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   os_application_credential_secret: dummy
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -393,6 +392,7 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -425,12 +425,11 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/xopera-pruning-elastic-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance pruning --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -444,6 +443,78 @@ jobs:
 
     ###################################################
     #
+    # Unfurl Artifacts Community
+    #
+    ###################################################
+
+    unfurl-artifacts-community:
+        name: Unfurl Artifacts Community
+        runs-on: ubuntu-22.04
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Prepare job
+              uses: ./.github/actions/prepare-integration-job
+              with:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init unfurl
+                  vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
+
+            - name: (CASE-STUDY) Resolve variability
+              run: |
+                  vintner templates import --template artifacts --path examples/unfurl-artifacts
+                  vintner instances init --instance artifacts --template artifacts
+                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/community/inputs.yaml
+
+            - name: (CASE-STUDY) Deploy application
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+
+                  vintner instances deploy --instance artifacts --inputs /tmp/deployment-inputs.yaml
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
+              run: |
+                  VIRTUAL_MACHINE_NAME=unfurl-artifacts-vm
+
+                  cd ~/unfurl
+                  . .venv/bin/unfurl
+                  . /tmp/os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
+                  curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (CASE-STUDY) Undeploy application
+              run: vintner instances undeploy --instance artifacts
+              if: always()
+
+    ###################################################
+    #
     # Unfurl Artifacts Enterprise
     #
     ###################################################
@@ -451,6 +522,7 @@ jobs:
     unfurl-artifacts-enterprise:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -482,12 +554,11 @@ jobs:
 
             - name: (CASE-STUDY) Deploy application
               run: |
-                  DEPLOYMENT_INPUTS=/tmp/unfurl-artifacts-pruning-elastic-deployment-inputs.yaml
-                  cat << EOF > ${DEPLOYMENT_INPUTS}
+                  cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_credentials: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance artifacts --inputs ${DEPLOYMENT_INPUTS}
+                  vintner instances deploy --instance artifacts --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s

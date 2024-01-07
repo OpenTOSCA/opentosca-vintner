@@ -97,5 +97,5 @@ topology_template:
             type: os.vm
             properties:
                 port: 3000
-                machine_name: shop
+                machine_name: unfurl-artifacts-vm
                 flavor_name: 'm1.small'
