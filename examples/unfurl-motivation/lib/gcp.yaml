@@ -98,7 +98,7 @@ node_types:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud sql instances delete {{ SELF.instance_name }}
+                            gcloud sql instances delete {{ SELF.instance_name }} --quiet
                         inputs:
                             keeplines: true
 

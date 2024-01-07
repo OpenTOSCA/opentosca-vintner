@@ -272,7 +272,7 @@ node_types:
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 -   name: Create App
-                                    shell: 'gcloud app services delete shop --quiet'
+                                    shell: 'gcloud app services delete {{ SELF.application_name }} --quiet'
                                     when: SELF.deployment_mode[0] == "GCP"
 
                         playbookArgs:
