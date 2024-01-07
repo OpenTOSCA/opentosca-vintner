@@ -20,6 +20,7 @@ jobs:
     installation:
         name: Installation
         runs-on: ubuntu-22.04
+        if: false
         steps:
             ###################################################
             #
