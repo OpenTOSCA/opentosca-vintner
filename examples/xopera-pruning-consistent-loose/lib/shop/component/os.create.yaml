@@ -22,7 +22,7 @@
             dest: '/var/lib/shop/.env'
             content: |
                 PORT=3000
-                INTERFACE="::"
+                INTERFACE="0.0.0.0"
                 DB_DIALECT={{ DB_DIALECT }}
                 DB_NAME={{ DB_NAME }}
                 DB_USERNAME={{ DB_USERNAME }}

@@ -22,7 +22,7 @@
             port_range_max: '{{ item }}'
             remote_ip_prefix: '::/0'
             direction: ingress
-            ethertype: IPv6
+            ethertype: IPv4
         loop: '{{ ports }}'
 
       - name: Create VM

@@ -14,7 +14,7 @@ topology_template:
               conditions: []
         - os_compute_network:
               type: string
-              default: public-belwue-v6only
+              default: public-belwue
               conditions: []
         - os_compute_security_groups:
               type: string
