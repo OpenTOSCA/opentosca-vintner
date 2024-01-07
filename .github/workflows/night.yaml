@@ -441,7 +441,7 @@ jobs:
 
             - name: (CASE-STUDY) Test application
               run: |
-                  VIRTUAL_MACHINE_NAME=xopera-pruning-vm
+                  VIRTUAL_MACHINE_NAME=xopera-pruning-shop
 
                   cd ~/opera
                   . .venv/bin/activate
