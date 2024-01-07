@@ -819,7 +819,6 @@ jobs:
                   vintner templates import --template template --path examples/unfurl-aware
                   vintner instances init --instance instance --template template
                   vintner instances resolve --instance instance --presets local
-                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -864,7 +863,6 @@ jobs:
     unfurl-aware-cloud:
         name: Unfurl Aware Cloud
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -893,7 +891,6 @@ jobs:
                   vintner templates import --template template --path examples/unfurl-aware
                   vintner instances init --instance instance --template template
                   vintner instances resolve --instance instance --presets cloud
-                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
