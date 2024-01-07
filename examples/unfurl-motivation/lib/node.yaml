@@ -139,7 +139,7 @@ node_types:
                                     cd {{ SELF.application_directory }}
                                     sudo npm install --unsafe-perm
                                     sudo pm2 start --name {{ SELF.application_name }} start.sh
-                                EOF
+                            EOF
                                 exit 0
                             fi
 

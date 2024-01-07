@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: false
   tasks:
-      - name: Active service account
+      - name: Activate service account
         shell: 'gcloud auth activate-service-account --key-file {{ gcp_service_account_file }} --project {{ gcp_project }}'
 
       - name: Delete app

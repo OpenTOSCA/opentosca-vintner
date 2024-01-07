@@ -78,7 +78,13 @@ node_types:
                         implementation: |
                             set -e
                             gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud services enable sqladmin.googleapis.com >/dev/null                                      
+                            
+                            GCP_SERVICE=sqladmin.googleapis.com
+                            GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                                gcloud services enable ${GCP_SERVICE} >/dev/null
+                            fi
+
                             gcloud sql instances create {{ SELF.instance_name }} --tier {{ SELF.instance_tier }} --region {{ SELF.region }} --database-version={{ SELF.database_version }} --authorized-networks {{ SELF.authorized_networks }} --timeout unlimited >/dev/null
                             gcloud sql users set-password root --host=% --instance {{ SELF.instance_name }} --password {{ SELF.password }} >/dev/null
                             gcloud sql instances describe {{ SELF.instance_name }} --format=json
@@ -199,8 +205,19 @@ node_types:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud services enable cloudbuild.googleapis.com || true
-                            gcloud services enable appengine.googleapis.com || true
+                            
+                            GCP_SERVICE=cloudbuild.googleapis.com
+                            GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                                gcloud services enable ${GCP_SERVICE}
+                            fi
+                
+                            GCP_SERVICE=appengine.googleapis.com
+                            GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                                gcloud services enable ${GCP_SERVICE}
+                            fi
+                            
                             gcloud app create --region {{ SELF.region }} || true
                         inputs:
                             keeplines: true
