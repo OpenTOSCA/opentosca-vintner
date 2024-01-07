@@ -102,6 +102,7 @@ node_types:
                          resource "google_project_service" "cloud_sql_admin" {
                            project  = var.project
                            service = "sqladmin.googleapis.com"
+                           disable_on_destroy = false
                          }
 
                          # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
