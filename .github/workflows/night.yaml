@@ -496,10 +496,6 @@ jobs:
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
 
-            - name: Abort
-              run: exit 1
-              if: always()
-
             - name: (CASE-STUDY) Test application
               run: |
                   VIRTUAL_MACHINE_NAME=unfurl-artifacts-vm
@@ -516,7 +512,7 @@ jobs:
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance artifacts
-              # if: always()
+              if: always()
 
     ###################################################
     #
