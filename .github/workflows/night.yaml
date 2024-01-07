@@ -432,6 +432,9 @@ jobs:
                   EOF
 
                   vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
