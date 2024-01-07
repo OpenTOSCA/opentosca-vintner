@@ -522,7 +522,7 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
-        if: !cancelled()
+        if: '!cancelled()'
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -597,7 +597,7 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
         needs: xopera-pruning-elastic
-        #if: !cancelled()
+        #if: '!cancelled()'
         if: false
         steps:
             - name: (PREPARE) Checkout repository
