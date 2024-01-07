@@ -443,7 +443,7 @@ jobs:
               run: |
                   VIRTUAL_MACHINE_NAME=xopera-pruning-vm
 
-                  cd ~/xopera
+                  cd ~/opera
                   . .venv/bin/activate
                   . /tmp/os-credentials.sh
                   VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
