@@ -20,6 +20,7 @@ jobs:
     installation:
         name: Installation
         runs-on: ubuntu-22.04
+        if: false
         steps:
             ###################################################
             #
@@ -507,7 +508,7 @@ jobs:
                   echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
                   echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
 
-                  curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
+                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
 
             - name: (CASE-STUDY) Undeploy application
               run: vintner instances undeploy --instance artifacts

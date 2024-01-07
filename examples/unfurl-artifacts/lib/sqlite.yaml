@@ -48,12 +48,6 @@ node_types:
                                 - name: wait for ssh
                                   wait_for_connection:
 
-                                - name: add ipv6 dns
-                                  ansible.builtin.lineinfile:
-                                      path: /etc/resolv.conf
-                                      insertbefore: BOF
-                                      line: nameserver 2001:4860:4860::8888
-
                                 - name: Install sqlite
                                   package:
                                       name: sqlite3
