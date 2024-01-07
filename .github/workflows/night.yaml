@@ -20,7 +20,6 @@ jobs:
     installation:
         name: Installation
         runs-on: ubuntu-22.04
-        if: false
         steps:
             ###################################################
             #
@@ -129,7 +128,6 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -203,7 +201,6 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -261,7 +258,6 @@ jobs:
     unfurl-motivation-dev:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -393,7 +389,6 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -467,7 +462,6 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -526,8 +520,7 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
-        if: false
-        #if: always()
+        if: always()
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -602,8 +595,7 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
         needs: xopera-pruning-elastic
-        if: false
-        #if: always()
+        if: always()
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -658,6 +650,7 @@ jobs:
     #
     ###################################################
 
+    # TODO: somehow testing step is broken
     unfurl-artifacts-community:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
@@ -734,7 +727,6 @@ jobs:
     unfurl-artifacts-enterprise:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -791,7 +783,6 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
-        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
