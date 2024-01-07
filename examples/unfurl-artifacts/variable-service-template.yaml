@@ -247,6 +247,7 @@ topology_template:
             conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 database_name: shop
+                instance_name: unfurl-artifacts-shop
             requirements:
                 - host: gcp_dbms
 

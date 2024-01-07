@@ -74,6 +74,7 @@ topology_template:
             type: gcp.database
             properties:
                 database_name: shop
+                instance_name: unfurl-artifacts-shop
             requirements:
                 - host: gcp_dbms
 

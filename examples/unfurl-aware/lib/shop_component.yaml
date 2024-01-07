@@ -5,6 +5,9 @@ node_types:
         derived_from: tosca.nodes.SoftwareComponent
 
         properties:
+            application_name:
+                type: string
+
             DB_DIALECT:
                 type: string
 
@@ -229,7 +232,7 @@ node_types:
                                         dest: '{{ tempdir_info.path }}/app.yaml'
                                         content: |
                                             runtime: nodejs18
-                                            service: unfurl-aware-shop
+                                            service: {{ SELF.application_name }}
                                             instance_class: F1
                                             env_variables:
                                                 DB_DIALECT: {{ SELF.DB_DIALECT}}

@@ -109,6 +109,7 @@ topology_template:
             type: shop.component
             persistent: true
             properties:
+                - application_name: unfurl-aware-shop
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}

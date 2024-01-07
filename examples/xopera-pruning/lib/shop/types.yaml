@@ -4,6 +4,9 @@ node_types:
     shop.component:
         derived_from: tosca.nodes.Root
         properties:
+            application_name:
+                type: string
+
             DB_DIALECT:
                 type: string
 
@@ -65,6 +68,10 @@ node_types:
         interfaces:
             Standard:
                 inputs:
+                    application_name:
+                        type: string
+                        value: {get_property: [SELF, application_name]}
+
                     env_type:
                         type: string
                         value: {get_property: [SELF, host, env_type]}

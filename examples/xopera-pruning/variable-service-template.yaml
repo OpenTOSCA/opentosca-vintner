@@ -117,6 +117,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
+                - application_name: xopera-pruning-shop
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
