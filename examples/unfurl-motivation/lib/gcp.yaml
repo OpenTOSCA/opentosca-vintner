@@ -90,6 +90,7 @@ node_types:
                             gcloud sql instances describe {{ SELF.instance_name }} --format=json
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
                             resultTemplate:
                                 attributes:
                                     public_address: '{{ (stdout | from_json).ipAddresses[0].ipAddress }}'
@@ -221,3 +222,5 @@ node_types:
                             gcloud app create --region {{ SELF.region }} || true
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
+
