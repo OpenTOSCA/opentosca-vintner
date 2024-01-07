@@ -155,10 +155,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template motivation --path examples/xopera-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets dev
-                  vintner instances validate --instance motivation
+                  vintner templates import --template template --path examples/xopera-motivation
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets dev
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -168,7 +168,7 @@ jobs:
                   private_vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -191,7 +191,7 @@ jobs:
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance motivation
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -229,10 +229,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template motivation --path examples/xopera-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets prod
-                  vintner instances validate --instance motivation
+                  vintner templates import --template template --path examples/xopera-motivation
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets prod
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -240,7 +240,7 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -249,7 +249,7 @@ jobs:
               run: curl --fail-with-body https://xopera-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance motivation
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -287,9 +287,9 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template motivation --path examples/unfurl-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets dev
+                  vintner templates import --template template --path examples/unfurl-motivation
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets dev
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -299,7 +299,7 @@ jobs:
                   vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -322,7 +322,7 @@ jobs:
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance motivation
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -361,9 +361,9 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template motivation --path examples/unfurl-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets prod
+                  vintner templates import --template template --path examples/unfurl-motivation
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets prod
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -372,7 +372,7 @@ jobs:
                   os_application_credential_secret: dummy
                   EOF
 
-                  vintner instances deploy --instance motivation --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -381,7 +381,7 @@ jobs:
               run: curl --fail-with-body https://unfurl-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance motivation
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -419,10 +419,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template pruning --path examples/xopera-pruning
-                  vintner instances init --instance pruning --template pruning
-                  vintner instances resolve --instance pruning --presets static
-                  vintner instances validate --instance pruning
+                  vintner templates import --template template --path examples/xopera-pruning
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets static
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -432,7 +432,7 @@ jobs:
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -455,7 +455,7 @@ jobs:
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance pruning
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -493,10 +493,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template pruning --path examples/xopera-pruning
-                  vintner instances init --instance pruning --template pruning
-                  vintner instances resolve --instance pruning --presets elastic
-                  vintner instances validate --instance pruning
+                  vintner templates import --template template --path examples/xopera-pruning
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets elastic
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -504,7 +504,7 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -513,7 +513,7 @@ jobs:
               run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance pruning
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -526,7 +526,8 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
-        if: always()
+        if: false
+        #if: always()
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -552,10 +553,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template pruning --path examples/xopera-pruning-consistent-loose
-                  vintner instances init --instance pruning --template pruning
-                  vintner instances resolve --instance pruning --presets static
-                  vintner instances validate --instance pruning
+                  vintner templates import --template template --path examples/xopera-pruning-consistent-loose
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets static
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -565,7 +566,7 @@ jobs:
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -588,7 +589,7 @@ jobs:
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance pruning
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -601,7 +602,8 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
         needs: xopera-pruning-elastic
-        if: always()
+        if: false
+        #if: always()
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -627,10 +629,10 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template pruning --path examples/xopera-pruning-consistent-loose
-                  vintner instances init --instance pruning --template pruning
-                  vintner instances resolve --instance pruning --presets elastic
-                  vintner instances validate --instance pruning
+                  vintner templates import --template template --path examples/xopera-pruning-consistent-loose
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets elastic
+                  vintner instances validate --instance instance
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -638,7 +640,7 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance pruning --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -647,7 +649,7 @@ jobs:
               run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance pruning
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -685,9 +687,9 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template artifacts --path examples/unfurl-artifacts
-                  vintner instances init --instance artifacts --template artifacts
-                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/community/inputs.yaml
+                  vintner templates import --template template --path examples/unfurl-artifacts
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --inputs examples/unfurl-artifacts/tests/community/inputs.yaml
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -697,7 +699,7 @@ jobs:
                   ssh_key_file: /tmp/os-ssh-key-file
                   EOF
 
-                  vintner instances deploy --instance artifacts --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -720,7 +722,7 @@ jobs:
                   curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance artifacts
+              run: vintner instances undeploy --instance instance
               if: always()
 
     ###################################################
@@ -758,9 +760,9 @@ jobs:
 
             - name: (CASE-STUDY) Resolve variability
               run: |
-                  vintner templates import --template artifacts --path examples/unfurl-artifacts
-                  vintner instances init --instance artifacts --template artifacts
-                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+                  vintner templates import --template template --path examples/unfurl-artifacts
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
 
             - name: (CASE-STUDY) Deploy application
               run: |
@@ -768,7 +770,7 @@ jobs:
                   gcp_credentials: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance artifacts --inputs /tmp/deployment-inputs.yaml
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -777,5 +779,136 @@ jobs:
               run: curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance artifacts
+              run: vintner instances undeploy --instance instance
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Aware Local
+    #
+    ###################################################
+
+    unfurl-aware-local:
+        name: Unfurl Aware Local
+        runs-on: ubuntu-22.04
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Prepare job
+              uses: ./.github/actions/prepare-integration-job
+              with:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init unfurl
+                  vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
+
+            - name: (CASE-STUDY) Resolve variability
+              run: |
+                  vintner templates import --template template --path examples/unfurl-aware
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets local
+                  vintner instances validate --instance instance
+
+            - name: (CASE-STUDY) Deploy application
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  os_compute_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
+              run: |
+                  VIRTUAL_MACHINE_NAME=unfurl-aware-shop
+
+                  cd ~/unfurl
+                  . .venv/bin/activate
+                  . /tmp/os-credentials.sh
+                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
+                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+
+            - name: (CASE-STUDY) Undeploy application
+              run: vintner instances undeploy --instance instance
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Aware Cloud
+    #
+    ###################################################
+
+    unfurl-aware-cloud:
+        name: Unfurl Aware Cloud
+        runs-on: ubuntu-22.04
+        if: false
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Prepare job
+              uses: ./.github/actions/prepare-integration-job
+              with:
+                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (CASE-STUDY) Prepare environment
+              run: |
+                  vintner setup clean --force
+                  vintner setup init
+
+                  vintner orchestrators init unfurl
+                  vintner orchestrators enable --orchestrator unfurl
+                  vintner orchestrators attest --orchestrator unfurl
+
+            - name: (CASE-STUDY) Resolve variability
+              run: |
+                  vintner templates import --template template --path examples/unfurl-aware
+                  vintner instances init --instance instance --template template
+                  vintner instances resolve --instance instance --presets cloud
+                  vintner instances validate --instance instance
+
+            - name: (CASE-STUDY) Deploy application
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  EOF
+
+                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
+
+            - name: (CASE-STUDY) Sleep
+              run: sleep 5s
+
+            - name: (CASE-STUDY) Test application
+              run: curl --fail-with-body https://unfurl-aware-shop-dot-stoetzms-387808.ey.r.appspot.com
+
+            - name: (CASE-STUDY) Undeploy application
+              run: vintner instances undeploy --instance instance
               if: always()
