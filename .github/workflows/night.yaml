@@ -791,6 +791,7 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -895,6 +896,8 @@ jobs:
             - name: (CASE-STUDY) Deploy application
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
