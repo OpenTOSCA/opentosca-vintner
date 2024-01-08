@@ -33,8 +33,8 @@ jobs:
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
@@ -130,68 +130,55 @@ jobs:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-motivation
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets dev
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-motivation
+                  preset: dev
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
                   private_vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=xopera-motivation-vm
-
-                  cd ~/opera
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: xopera-motivation-vm
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -204,52 +191,50 @@ jobs:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-motivation
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets prod
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-motivation
+                  preset: prod
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://xopera-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: xopera-motivation-application
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -262,67 +247,55 @@ jobs:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-motivation
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets dev
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-motivation
+                  preset: dev
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
                   vm_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=unfurl-motivation-vm
-
-                  cd ~/unfurl
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: unfurl-motivation-vm
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -336,52 +309,51 @@ jobs:
         name: Unfurl Motivation Prod
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-motivation
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets prod
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-motivation
+                  preset: prod
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   os_application_credential_secret: dummy
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://unfurl-motivation-application-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: unfurl-motivation-application
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -394,68 +366,56 @@ jobs:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-pruning
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets static
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-pruning
+                  preset: static
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=xopera-pruning-shop
-
-                  cd ~/opera
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: xopera-pruning-shop
+                  port: 3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -468,52 +428,50 @@ jobs:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-pruning
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets elastic
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-pruning
+                  preset: elastic
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: xopera-pruning-shop
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -526,7 +484,8 @@ jobs:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
-        if: '!cancelled()'
+        #if: '!cancelled()'
+        if: false
         env:
             ORCHESTRATOR: xopera
         steps:
@@ -536,7 +495,7 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Configure environment
-              uses: ./.github/actions/vintner-environment
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
@@ -591,52 +550,50 @@ jobs:
         needs: xopera-pruning-elastic
         #if: '!cancelled()'
         if: false
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-pruning-consistent-loose
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets elastic
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-pruning-consistent-loose
+                  preset: elastic
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://xopera-pruning-shop-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: xopera-pruning-shop
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -650,67 +607,56 @@ jobs:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-artifacts
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --inputs examples/unfurl-artifacts/tests/community/inputs.yaml
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-artifacts
+                  inputs: examples/unfurl-artifacts/tests/community/inputs.yaml
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
                   ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=unfurl-artifacts-vm
-
-                  cd ~/unfurl
-                  . .venv/bin/unfurl
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: unfurl-artifacts-vm
+                  port: 3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -723,51 +669,50 @@ jobs:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-artifacts
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-artifacts
+                  inputs: examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_credentials: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://unfurl-artifacts-shop-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: unfurl-artifacts-shop
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -780,67 +725,55 @@ jobs:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-aware
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets local
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-aware
+                  preset: local
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=unfurl-aware-shop
-
-                  cd ~/unfurl
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: unfurl-aware-shop
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -859,30 +792,27 @@ jobs:
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/vintner-environment
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
                   gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init unfurl
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/unfurl-aware
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets cloud
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: unfurl-aware
+                  preset: cloud
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -890,14 +820,14 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
-
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: curl --fail-with-body https://unfurl-aware-shop-dot-stoetzms-387808.ey.r.appspot.com
+              uses: ./.github/actions/vintner-test-gcp
+              with:
+                  service: unfurl-aware-shop
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()

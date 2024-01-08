@@ -1,0 +1,14 @@
+name: 'Test Application'
+
+inputs:
+    service:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Test application
+          shell: bash
+          run: curl --fail-with-body https://${SERVICE}-dot-stoetzms-387808.ey.r.appspot.com
+          env:
+              SERVICE: ${{ inputs.service }}
