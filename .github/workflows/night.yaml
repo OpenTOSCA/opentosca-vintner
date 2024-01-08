@@ -34,12 +34,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             ###################################################
             #
@@ -136,12 +136,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -169,8 +169,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -210,12 +210,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -267,12 +267,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -299,8 +299,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -341,12 +341,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -399,12 +399,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -432,8 +432,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -473,12 +473,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -525,68 +525,56 @@ jobs:
         runs-on: ubuntu-22.04
         needs: xopera-pruning-static
         if: '!cancelled()'
+        env:
+            ORCHESTRATOR: xopera
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+            - name: (PREPARE) Configure environment
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Prepare environment
-              run: |
-                  vintner setup clean --force
-                  vintner setup init
-
-                  vintner orchestrators init xopera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (CASE-STUDY) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Resolve variability
-              run: |
-                  vintner templates import --template template --path examples/xopera-pruning-consistent-loose
-                  vintner instances init --instance instance --template template
-                  vintner instances resolve --instance instance --presets static
-                  vintner instances validate --instance instance
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: xopera-pruning-consistent-loose
+                  preset: static
+                  orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (CASE-STUDY) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
-
-                  vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Sleep
-              run: sleep 5s
+            - name: (CASE-STUDY) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              run: |
-                  VIRTUAL_MACHINE_NAME=xopera-pruning-shop
-
-                  cd ~/opera
-                  . .venv/bin/activate
-                  . /tmp/os-credentials.sh
-                  VIRTUAL_MACHINE_IP=$(openstack server show ${VIRTUAL_MACHINE_NAME} -f json | jq  -r '.addresses."public-belwue"[0]')
-
-                  echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
-                  echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
-
-                  curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:3000
+              uses: ./.github/actions/vintner-test-openstack
+              with:
+                  virtual_machine: xopera-pruning-shop
+                  port: 3000
 
             - name: (CASE-STUDY) Undeploy application
-              run: vintner instances undeploy --instance instance
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
     ###################################################
@@ -608,12 +596,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -667,12 +655,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -699,8 +687,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -740,12 +728,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -797,12 +785,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |
@@ -829,8 +817,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -870,12 +858,12 @@ jobs:
                   lfs: true
 
             - name: (PREPARE) Prepare job
-              uses: ./.github/actions/prepare-integration-job
+              uses: ./.github/actions/vintner-environment
               with:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-                  OS_SSH_KEY_FILE: ${{ secrets.OS_SSH_KEY_FILE }}
-                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Prepare environment
               run: |

@@ -1,0 +1,19 @@
+name: 'Configure Setup'
+inputs:
+    orchestrator:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Configure setup
+          shell: bash
+          run: |
+              vintner setup clean --force
+              vintner setup init
+
+              vintner orchestrators init ${ORCHESTRATOR}
+              vintner orchestrators enable --orchestrator ${ORCHESTRATOR}
+              vintner orchestrators attest --orchestrator ${ORCHESTRATOR}
+          env:
+              ORCHESTRATOR: ${{ inputs.orchestrator }}

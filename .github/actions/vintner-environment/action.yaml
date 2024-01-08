@@ -1,15 +1,15 @@
-name: 'Prepare Integration Job'
+name: 'Configure environment'
 inputs:
-    GCP_CREDENTIALS:
+    gcp_credentials:
         required: true
 
-    OS_SSH_KEY_FILE:
+    os_ssh_key_file:
         required: true
 
-    OS_APPLICATION_CREDENTIAL_ID:
+    os_application_credential_id:
         required: true
 
-    OS_APPLICATION_CREDENTIAL_SECRET:
+    os_application_credential_secret:
         required: true
 
 runs:
@@ -42,7 +42,7 @@ runs:
 
               echo ${GCP_CREDENTIALS} | base64 --decode > /tmp/gcp-credentials.json
           env:
-              GCP_CREDENTIALS: ${{ inputs.GCP_CREDENTIALS }}
+              GCP_CREDENTIALS: ${{ inputs.gcp_credentials }}
 
         - name: (PREPARE) Setup OS SSH key file
           shell: bash
@@ -55,7 +55,7 @@ runs:
               echo ${OS_SSH_KEY_FILE} | base64 --decode > /tmp/os-ssh-key-file
               chmod 400 /tmp/os-ssh-key-file
           env:
-              OS_SSH_KEY_FILE: ${{ inputs.OS_SSH_KEY_FILE }}
+              OS_SSH_KEY_FILE: ${{ inputs.os_ssh_key_file }}
 
         - name: (PREPARE) Setup OS credentials
           shell: bash
@@ -83,8 +83,8 @@ runs:
 
               chmod 755 /tmp/os-credentials.sh
           env:
-              OS_APPLICATION_CREDENTIAL_ID: ${{ inputs.OS_APPLICATION_CREDENTIAL_ID }}
-              OS_APPLICATION_CREDENTIAL_SECRET: ${{ inputs.OS_APPLICATION_CREDENTIAL_SECRET }}
+              OS_APPLICATION_CREDENTIAL_ID: ${{ inputs.os_application_credential_id }}
+              OS_APPLICATION_CREDENTIAL_SECRET: ${{ inputs.os_application_credential_secret }}
 
         - name: (PREPARE) Setup Python
           uses: actions/setup-python@v4
