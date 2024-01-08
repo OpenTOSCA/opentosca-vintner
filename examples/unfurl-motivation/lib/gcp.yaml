@@ -81,7 +81,7 @@ node_types:
                             
                             GCP_SERVICE=sqladmin.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
-                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                            if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                                 gcloud services enable ${GCP_SERVICE} >/dev/null
                             fi
 
@@ -101,6 +101,7 @@ node_types:
                             gcloud sql instances delete {{ SELF.instance_name }} --quiet
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
 
     gcp.sql.db:
         derived_from: tosca.nodes.Root
@@ -155,17 +156,19 @@ node_types:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud sql databases create {{ SELF.database_name }} --instance {{ SELF.instance_name }}
+                            gcloud sql databases create {{ SELF.database_name }} --instance {{ SELF.instance_name }} --quiet
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
 
                     delete:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            gcloud sql databases delete {{ SELF.database_name }} --instance {{ SELF.instance_name }}
+                            gcloud sql databases delete {{ SELF.database_name }} --instance {{ SELF.instance_name }} --quiet
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
 
     gcp.appengine.engine:
         derived_from: tosca.nodes.Root
@@ -209,17 +212,17 @@ node_types:
                             
                             GCP_SERVICE=cloudbuild.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
-                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                            if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                                 gcloud services enable ${GCP_SERVICE}
                             fi
                 
                             GCP_SERVICE=appengine.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
-                            if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                            if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                                 gcloud services enable ${GCP_SERVICE}
                             fi
                             
-                            gcloud app create --region {{ SELF.region }} || true
+                            gcloud app create --region {{ SELF.region }} --quiet || true
                         inputs:
                             keeplines: true
                             shell: /usr/bin/bash

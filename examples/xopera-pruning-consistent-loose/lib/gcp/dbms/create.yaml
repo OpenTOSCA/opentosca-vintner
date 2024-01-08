@@ -12,7 +12,7 @@
                 GCP_SERVICE=sqladmin.googleapis.com
                 
                 GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
-                if [ ${GCP_SERVICE_ENABLED} == 0 ]; then
+                if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                     gcloud services enable ${GCP_SERVICE}
                 fi
             args:
