@@ -632,7 +632,7 @@ jobs:
               uses: ./.github/actions/vintner-resolve
               with:
                   example: unfurl-artifacts
-                  inputs: examples/unfurl-artifacts/tests/community/inputs.yaml
+                  preset: community
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -694,7 +694,7 @@ jobs:
               uses: ./.github/actions/vintner-resolve
               with:
                   example: unfurl-artifacts
-                  inputs: examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+                  preset: enterprise
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
