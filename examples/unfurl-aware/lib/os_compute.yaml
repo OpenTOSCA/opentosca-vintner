@@ -12,7 +12,7 @@ node_types:
 
             flavor:
                 type: string
-                default: 'm1.small'
+                default: 'm1.medium'
 
             network:
                 type: string
