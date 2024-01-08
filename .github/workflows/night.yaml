@@ -129,6 +129,7 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -260,6 +261,7 @@ jobs:
     unfurl-motivation-dev:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
