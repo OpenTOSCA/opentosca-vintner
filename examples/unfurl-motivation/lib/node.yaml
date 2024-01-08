@@ -147,6 +147,8 @@ node_types:
                             exit 1
                         inputs:
                             keeplines: true
+                            shell: bash
+
                     delete:
                         implementation: |
                             set -e
@@ -165,3 +167,4 @@ node_types:
                             exit 1
                         inputs:
                             keeplines: true
+                            shell: bash
