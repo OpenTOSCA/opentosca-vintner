@@ -78,7 +78,7 @@ node_types:
 
             flavor:
                 type: string
-                default: m1.medium
+                default: m1.small
 
             network:
                 type: string

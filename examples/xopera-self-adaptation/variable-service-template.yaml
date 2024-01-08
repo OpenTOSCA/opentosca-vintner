@@ -176,7 +176,7 @@ topology_template:
                 ports: [80, 3000, 3001, 3002, 3003, 3004]
                 name: {concat: ['compute-vm-', {get_input: instance}]}
                 image: Ubuntu 22.04
-                flavor: m1.medium
+                flavor: m1.small
                 network: {get_input: compute_vm_network}
                 security_groups: {get_input: compute_vm_security_groups}
                 key_name: {get_input: compute_vm_key_name}

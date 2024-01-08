@@ -153,7 +153,7 @@ node_types:
 
                             if [ "{{ SELF.env_type }}" = "gcp" ]; then 
                                 gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
-                                gcloud app services delete {{ SELF.application_name }}
+                                gcloud app services delete {{ SELF.application_name }} --quiet
                                 exit 0
                             fi
 

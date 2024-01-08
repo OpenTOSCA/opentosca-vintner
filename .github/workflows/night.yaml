@@ -567,7 +567,7 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE }}
+                  example: xopera-pruning
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
@@ -630,7 +630,7 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE }}
+                  example: xopera-pruning
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 

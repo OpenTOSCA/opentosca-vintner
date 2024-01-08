@@ -75,7 +75,7 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: xopera-motivation-application
+                application_name: xopera-motivation
                 application_environment:
                     DB_DIALECT: {get_property: [SELF, database, database_dialect]}
                     DB_NAME: {get_property: [SELF, database, database_name]}
@@ -112,7 +112,7 @@ topology_template:
         gcp_dbms:
             type: gcp.sql.dbms
             properties:
-                instance_name: xopera-motivation-dbms
+                instance_name: xopera-motivation
                 root_password: {get_input: root_password}
                 authorized_networks: '0.0.0.0/0'
             requirements:

@@ -75,7 +75,7 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: xopera-motivation-application
+                application_name: xopera-motivation
                 application_environment:
                     DB_DIALECT: {get_property: [SELF, database, database_dialect]}
                     DB_NAME: {get_property: [SELF, database, database_name]}
@@ -113,7 +113,7 @@ topology_template:
                 ports: [80]
                 name: xopera-motivation
                 image: Ubuntu 22.04
-                flavor: m1.medium
+                flavor: m1.small
                 network: {get_input: private_vm_network}
                 security_groups: {get_input: private_vm_security_groups}
                 key_name: {get_input: private_vm_key_name}
