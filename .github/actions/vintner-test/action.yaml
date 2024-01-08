@@ -18,7 +18,7 @@ runs:
     using: 'composite'
     steps:
         - name: (VINTNER) Test application
-          if: ${{ inputs.env == "OS" }}
+          if: ${{ inputs.env == 'OS' }}
           shell: bash
           run: |
               cd ~/opera
@@ -35,7 +35,7 @@ runs:
               PORT: ${{ inputs.port }}
 
         - name: (VINTNER) Test application
-          if: ${{ inputs.env == "GCP" }}
+          if: ${{ inputs.env == 'GCP' }}
           shell: bash
           run: curl --fail-with-body https://${EXAMPLE}-dot-stoetzms-387808.ey.r.appspot.com
           env:
