@@ -170,8 +170,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -301,8 +301,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -434,8 +434,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -563,8 +563,8 @@ jobs:
                   os_compute_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -689,8 +689,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
@@ -819,8 +819,8 @@ jobs:
 
                   vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
               env:
-                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
-                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             - name: (CASE-STUDY) Sleep
               run: sleep 5s
