@@ -78,7 +78,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
-                application_name: xopera-pruning-shop
+                application_name: xopera-pruning
 
                 DB_NAME: shop
                 DB_USERNAME: root
@@ -109,7 +109,7 @@ topology_template:
             type: os.compute
             properties:
                 ports: [80, 3000]
-                name: xopera-pruning-shop
+                name: xopera-pruning
 
                 image: Ubuntu 22.04
                 flavor: m1.large

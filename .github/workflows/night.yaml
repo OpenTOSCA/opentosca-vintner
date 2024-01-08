@@ -1,5 +1,8 @@
-# GitHub runner seems not to support IPv6.
+# GitHub runner does not support IPv6.
 # See https://github.com/actions/runner-images/issues/668
+
+# We dot not introduce one big "vintner-case-study" action due to better logging.defaults:
+# See https://github.com/orgs/community/discussions/21276
 
 name: Night
 on:
@@ -132,6 +135,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-motivation
+            PRESET: dev
+            ENV: OS
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -154,8 +161,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-motivation
-                  preset: dev
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -173,9 +180,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: xopera-motivation-vm
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -193,6 +202,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-motivation
+            PRESET: prod
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -215,8 +228,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-motivation
-                  preset: prod
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -229,9 +242,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: xopera-motivation-application
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -249,6 +264,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-motivation
+            PRESET: dev
+            ENV: OS
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -271,8 +290,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-motivation
-                  preset: dev
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -290,9 +309,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: unfurl-motivation-vm
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -311,6 +332,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-motivation
+            PRESET: prod
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -333,8 +358,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-motivation
-                  preset: prod
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -348,9 +373,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: unfurl-motivation-application
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -368,6 +395,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning
+            PRESET: static
+            ENV: OS
+            PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -390,8 +421,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-pruning
-                  preset: static
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -409,10 +440,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: xopera-pruning-shop
-                  port: 3000
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -430,6 +462,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning
+            PRESET: elastic
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -452,8 +488,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-pruning
-                  preset: elastic
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -466,9 +502,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: xopera-pruning-shop
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -488,6 +526,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning-consistent-loose
+            PRESET: static
+            ENV: OS
+            PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -510,8 +552,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-pruning-consistent-loose
-                  preset: static
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -529,10 +571,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: xopera-pruning-shop
-                  port: 3000
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -552,6 +595,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning-consistent-loose
+            PRESET: elastic
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -574,8 +621,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: xopera-pruning-consistent-loose
-                  preset: elastic
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -588,9 +635,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: xopera-pruning-shop
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -609,6 +658,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-artifacts
+            PRESET: community
+            ENV: OS
+            PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -631,8 +684,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-artifacts
-                  preset: community
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -650,10 +703,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: unfurl-artifacts-vm
-                  port: 3000
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -671,6 +725,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-artifacts
+            PRESET: enterprise
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -693,8 +751,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-artifacts
-                  preset: enterprise
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -707,9 +765,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: unfurl-artifacts-shop
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -727,6 +787,10 @@ jobs:
         if: false
         env:
             ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-aware
+            PRESET: local
+            ENV: OS
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -749,8 +813,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-aware
-                  preset: local
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -768,9 +832,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-openstack
+              uses: ./.github/actions/vintner-test
               with:
-                  virtual_machine: unfurl-aware-shop
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy
@@ -786,6 +852,12 @@ jobs:
         name: Unfurl Aware Cloud
         runs-on: ubuntu-22.04
         if: false
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-aware
+            PRESET: cloud
+            ENV: GCP
+            PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
@@ -808,8 +880,8 @@ jobs:
             - name: (CASE-STUDY) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
-                  example: unfurl-aware
-                  preset: cloud
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (CASE-STUDY) Assign deployment inputs
@@ -824,9 +896,11 @@ jobs:
               uses: ./.github/actions/vintner-deploy
 
             - name: (CASE-STUDY) Test application
-              uses: ./.github/actions/vintner-test-gcp
+              uses: ./.github/actions/vintner-test
               with:
-                  service: unfurl-aware-shop
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
             - name: (CASE-STUDY) Undeploy application
               uses: ./.github/actions/vintner-undeploy

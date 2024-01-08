@@ -125,7 +125,7 @@ topology_template:
         shop:
             type: shop.app
             properties:
-                -   application_name: unfurl-artifacts-shop
+                -   application_name: unfurl-artifacts
 
                 ###################################################
                 #
@@ -263,7 +263,7 @@ topology_template:
             conditions: { logic_expression: is_business_or_enterprise }
             properties:
                 database_name: shop
-                instance_name: unfurl-artifacts-shop
+                instance_name: unfurl-artifacts
             requirements:
                 -   host: gcp_dbms
 
@@ -271,7 +271,7 @@ topology_template:
             type: gcp.dbms
             conditions: { logic_expression: is_business_or_enterprise }
             properties:
-                -   instance_name: unfurl-artifacts-shop
+                -   instance_name: unfurl-artifacts
                 -   root_password: { get_input: db_password }
                 -   backups: true
 
@@ -302,5 +302,5 @@ topology_template:
             conditions: { logic_expression: is_community }
             properties:
                 port: 3000
-                machine_name: unfurl-artifacts-vm
+                machine_name: unfurl-artifacts
                 flavor_name: 'm1.small'

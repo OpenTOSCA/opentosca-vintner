@@ -60,7 +60,7 @@ topology_template:
         shop:
             type: shop.app
             properties:
-                application_name: unfurl-artifacts-shop
+                application_name: unfurl-artifacts
 
                 DB_NAME: shop
                 DB_USERNAME: root
@@ -97,5 +97,5 @@ topology_template:
             type: os.vm
             properties:
                 port: 3000
-                machine_name: unfurl-artifacts-vm
+                machine_name: unfurl-artifacts
                 flavor_name: 'm1.small'

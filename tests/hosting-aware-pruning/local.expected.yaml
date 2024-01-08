@@ -81,7 +81,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
-                application_name: unfurl-aware-shop
+                application_name: unfurl-aware
                 DB_NAME: shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
@@ -95,7 +95,7 @@ topology_template:
             type: shop.database
             properties:
                 database_name: shop
-                gcp_dbms_name: unfurl-aware-shop
+                gcp_dbms_name: unfurl-aware
             requirements:
                 - host: os_dbms
 
@@ -135,7 +135,7 @@ topology_template:
             type: os.compute
             properties:
                 port: 80
-                machine: unfurl-aware-shop
+                machine: unfurl-aware
                 network: {get_input: os_compute_network}
             requirements:
                 - host: os_cloud

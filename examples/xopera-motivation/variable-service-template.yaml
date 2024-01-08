@@ -191,7 +191,7 @@ topology_template:
             conditions: {logic_expression: is_dev}
             properties:
                 ports: [80]
-                name: xopera-motivation-vm
+                name: xopera-motivation
                 image: Ubuntu 22.04
                 flavor: m1.medium
                 network: {get_input: private_vm_network}

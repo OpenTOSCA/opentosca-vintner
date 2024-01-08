@@ -118,7 +118,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
-                - application_name: xopera-pruning-shop
+                - application_name: xopera-pruning
 
                 - DB_NAME: shop
                 - DB_USERNAME: root
@@ -190,7 +190,7 @@ topology_template:
                       conditions: {logic_expression: is_static}
 
                 - name:
-                      value: xopera-pruning-shop
+                      value: xopera-pruning
                       conditions: {logic_expression: is_static}
 
                 - image:
@@ -298,7 +298,7 @@ topology_template:
             conditions: {logic_expression: is_elastic}
             properties:
                 - instance_name:
-                      value: xopera-pruning-shop
+                      value: xopera-pruning
                       conditions: {logic_expression: is_elastic}
 
                 - root_password:

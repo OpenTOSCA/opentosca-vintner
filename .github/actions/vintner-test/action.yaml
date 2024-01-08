@@ -1,0 +1,42 @@
+name: 'Test Application'
+
+inputs:
+    port:
+        required: true
+
+    example:
+        required: true
+
+    env:
+        required: true
+        type: choice
+        options:
+            - OS
+            - GCP
+
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Test application
+          if: ${{ inputs.env }} == "OS"
+          shell: bash
+          run: |
+              cd ~/opera
+              . .venv/bin/activate
+              . /tmp/os-credentials.sh
+              VIRTUAL_MACHINE_IP=$(openstack server show ${EXAMPLE} -f json | jq  -r '.addresses."public-belwue"[0]')
+
+              echo "virtual machine name: ${VIRTUAL_MACHINE_NAME}"
+              echo "virtual machine ip: ${VIRTUAL_MACHINE_IP}"
+
+              curl --fail-with-body http://${VIRTUAL_MACHINE_IP}:${PORT}
+          env:
+              EXAMPLE: ${{ inputs.example }}
+              PORT: ${{ inputs.port }}
+
+        - name: (VINTNER) Test application
+          if: ${{ inputs.env }} == "GCP"
+          shell: bash
+          run: curl --fail-with-body https://${SERVICE}-dot-stoetzms-387808.ey.r.appspot.com
+          env:
+              SERVICE: ${{ inputs.service }}

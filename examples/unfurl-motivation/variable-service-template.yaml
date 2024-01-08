@@ -180,7 +180,7 @@ topology_template:
             conditions: {logic_expression: is_dev}
             properties:
                 port: 80
-                instance_name: unfurl-motivation-vm
+                instance_name: unfurl-motivation
                 network: {get_input: vm_network}
                 security_group: {get_input: vm_security_group}
                 key_name: {get_input: vm_key_name}
