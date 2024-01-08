@@ -41,7 +41,7 @@ node_types:
 
                                 - name: download install script
                                   get_url:
-                                      url: https://deb.nodesource.com/setup_14.x
+                                      url: https://deb.nodesource.com/setup_18.x
                                       dest: /tmp/nodesource_setup.sh
                                       mode: a+x
 
