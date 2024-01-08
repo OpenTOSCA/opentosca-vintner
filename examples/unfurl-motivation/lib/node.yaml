@@ -147,7 +147,7 @@ node_types:
                             exit 1
                         inputs:
                             keeplines: true
-                            shell: bash
+                            shell: /usr/bin/bash
 
                     delete:
                         implementation: |
@@ -167,4 +167,4 @@ node_types:
                             exit 1
                         inputs:
                             keeplines: true
-                            shell: bash
+                            shell: /usr/bin/bash
