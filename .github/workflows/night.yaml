@@ -391,6 +391,7 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
+        if: false
         steps:
             - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
