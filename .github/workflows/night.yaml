@@ -132,7 +132,7 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
+        #if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
