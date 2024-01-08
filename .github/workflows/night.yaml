@@ -23,7 +23,6 @@ jobs:
     installation:
         name: Installation
         runs-on: ubuntu-22.04
-        if: false
         steps:
             ###################################################
             #
@@ -132,7 +131,6 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
-        #if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -199,7 +197,6 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -261,7 +258,6 @@ jobs:
     unfurl-motivation-dev:
         name: Unfurl Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-motivation
@@ -329,7 +325,6 @@ jobs:
     unfurl-motivation-prod:
         name: Unfurl Motivation Prod
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-motivation
@@ -392,7 +387,7 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
-        if: false
+        concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -459,7 +454,7 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        if: false
+        concurrency: xopera-pruning-elastic
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -521,9 +516,8 @@ jobs:
     xopera-pruning-mode-static:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
-        needs: xopera-pruning-static
+        concurrency: xopera-pruning-static
         #if: '!cancelled()'
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning-consistent-loose
@@ -590,9 +584,8 @@ jobs:
     xopera-pruning-mode-elastic:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
-        needs: xopera-pruning-elastic
+        concurrency: xopera-pruning-elastic
         #if: '!cancelled()'
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning-consistent-loose
@@ -655,7 +648,6 @@ jobs:
     unfurl-artifacts-community:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-artifacts
@@ -722,7 +714,6 @@ jobs:
     unfurl-artifacts-enterprise:
         name: Unfurl Artifacts Enterprise
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-artifacts
@@ -784,7 +775,6 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
@@ -851,7 +841,6 @@ jobs:
     unfurl-aware-cloud:
         name: Unfurl Aware Cloud
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
