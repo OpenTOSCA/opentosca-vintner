@@ -27,7 +27,7 @@ node_types:
                         implementation: |
                             set -e
                             ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} <<EOF
-                                curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+                                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
                                 sudo apt-get install -y nodejs
                                 sudo mkdir -p /var/lib/node-applications
                                 sudo npm install pm2@latest -g
