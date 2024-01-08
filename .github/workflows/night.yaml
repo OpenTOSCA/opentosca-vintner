@@ -153,19 +153,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -176,17 +176,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -220,35 +220,35 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -282,19 +282,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -305,17 +305,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -350,36 +350,36 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   os_application_credential_secret: dummy
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -413,19 +413,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -436,17 +436,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -480,35 +480,35 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -544,19 +544,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -567,17 +567,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -613,35 +613,35 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -676,19 +676,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -699,17 +699,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -743,35 +743,35 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_credentials: /tmp/gcp-credentials.json
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -805,19 +805,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -828,17 +828,17 @@ jobs:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
 
@@ -872,19 +872,19 @@ jobs:
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (CASE-STUDY) Configure setup
+            - name: (VINTNER) Configure setup
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Resolve variability
+            - name: (VINTNER) Resolve variability
               uses: ./.github/actions/vintner-resolve
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
                   orchestrator: ${{ env.ORCHESTRATOR }}
 
-            - name: (CASE-STUDY) Assign deployment inputs
+            - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
@@ -892,16 +892,16 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-credentials.json
                   EOF
 
-            - name: (CASE-STUDY) Deploy application
+            - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
 
-            - name: (CASE-STUDY) Test application
+            - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
-            - name: (CASE-STUDY) Undeploy application
+            - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
