@@ -702,7 +702,6 @@ jobs:
 
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
-              if: false
               with:
                   example: ${{ env.EXAMPLE }}
                   env: ${{ env.ENV }}
@@ -710,8 +709,7 @@ jobs:
 
             - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
-              #if: always()
-              if: false
+              if: always()
 
     ###################################################
     #
@@ -784,7 +782,7 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
-        #if: false
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
