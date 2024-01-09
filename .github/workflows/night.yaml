@@ -784,7 +784,7 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
-        if: false
+        #if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
