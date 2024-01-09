@@ -39,10 +39,15 @@ node_types:
                                 -   name: wait for ssh
                                     wait_for_connection:
 
-                                -   name: install node
-                                    shell: |
-                                        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
-                                        sudo apt-get install -y nodejs
+                                - name: Install Node.js
+                                  shell: |
+                                      if [ ! -f /usr/bin/node ]; then
+                                          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+                                          sudo apt-get install -y nodejs
+                                          npm install -g yarn
+                                      fi
+                                  args:
+                                      executable: /usr/bin/bash
 
                                 -   name: create applications directory
                                     file:
