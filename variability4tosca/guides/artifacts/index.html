@@ -2480,7 +2480,7 @@ An overview is given in Figure 2.</p>
 <p>We intend to deploy the enterprise plan.
 Furthermore, we want to configure the display language of the shop component to be German.
 We specify this when resolving variability.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--inputs<span class="w"> </span>examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>artifacts<span class="w"> </span>--presets<span class="w"> </span>enterprise
 </code></pre></div></td></tr></table></div>
 <p>We can optionally inspect the generated TOSCA-compliant template.
 This template contains only the elements required for the enterprise plan.
@@ -2524,7 +2524,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 7, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 10, 2024</span>
 </small>
 </div>
 </article>
