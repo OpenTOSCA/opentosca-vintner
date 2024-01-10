@@ -26,7 +26,7 @@ topology_template:
 
         ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string

@@ -22,7 +22,7 @@ topology_template:
 
         gcp_credentials:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
