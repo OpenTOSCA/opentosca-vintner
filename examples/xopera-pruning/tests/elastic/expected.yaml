@@ -29,7 +29,7 @@ topology_template:
 
         os_compute_ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -64,7 +64,7 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
@@ -78,7 +78,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
-                application_name: xopera-pruning-shop
+                application_name: xopera-pruning
 
                 DB_NAME: shop
                 DB_USERNAME: root
@@ -114,7 +114,7 @@ topology_template:
         gcp_dbms:
             type: gcp.dbms
             properties:
-                instance_name: xopera-pruning-shop
+                instance_name: xopera-pruning
                 root_password: {get_input: database_password}
                 authorized_networks: 0.0.0.0/0
 

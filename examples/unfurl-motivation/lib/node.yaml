@@ -27,7 +27,7 @@ node_types:
                         implementation: |
                             set -e
                             ssh -i {{ SELF.ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.ssh_user }}@{{ SELF.public_address }} <<EOF
-                                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+                                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
                                 sudo apt-get install -y nodejs
                                 sudo mkdir -p /var/lib/node-applications
                                 sudo npm install pm2@latest -g
@@ -143,17 +143,19 @@ node_types:
                                 exit 0
                             fi
 
-                            echo {{SELF.env_type}} is not a valid env_type
+                            echo "{{SELF.env_type}}" is not a valid env_type
                             exit 1
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
+
                     delete:
                         implementation: |
                             set -e
 
                             if [ "{{ SELF.env_type }}" = "gcp" ]; then 
                                 gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
-                                gcloud app services delete {{ SELF.application_name }}
+                                gcloud app services delete {{ SELF.application_name }} --quiet
                                 exit 0
                             fi
 
@@ -161,7 +163,8 @@ node_types:
                                 exit 0
                             fi
 
-                            echo {{SELF.env_type}} is not a valid env_type
+                            echo "{{SELF.env_type}}" is not a valid env_type
                             exit 1
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash

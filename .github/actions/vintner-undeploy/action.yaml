@@ -1,0 +1,7 @@
+name: 'Undeploy Application'
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Undeploy application
+          shell: bash
+          run: vintner instances undeploy --instance instance

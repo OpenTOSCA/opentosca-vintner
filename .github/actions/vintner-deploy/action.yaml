@@ -1,0 +1,9 @@
+name: 'Deploy Application'
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Deploy application
+          shell: bash
+          run: |
+              vintner instances deploy --instance instance --inputs /tmp/deployment-inputs.yaml
+              sleep 5s

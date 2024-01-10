@@ -18,7 +18,6 @@ node_types:
 
             service_name:
                 type: string
-                default: 'scenario-application'
         requirements:
             - input:
                   capability: tosca.capabilities.Endpoint

@@ -18,7 +18,7 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         root_password:
             type: string
@@ -42,7 +42,7 @@ topology_template:
 
         private_vm_ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -100,7 +100,7 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: xopera-motivation-application
+                application_name: xopera-motivation
                 application_environment:
                     DB_DIALECT: {get_property: [SELF, database, database_dialect]}
                     DB_NAME: {get_property: [SELF, database, database_name]}
@@ -152,7 +152,7 @@ topology_template:
             type: gcp.sql.dbms
             conditions: {logic_expression: is_prod}
             properties:
-                instance_name: xopera-motivation-dbms
+                instance_name: xopera-motivation
                 root_password: {get_input: root_password}
                 authorized_networks: '0.0.0.0/0'
             requirements:
@@ -191,9 +191,9 @@ topology_template:
             conditions: {logic_expression: is_dev}
             properties:
                 ports: [80]
-                name: xopera-motivation-vm
-                image: Ubuntu 20.04
-                flavor: m1.medium
+                name: xopera-motivation
+                image: Ubuntu 22.04
+                flavor: m1.small
                 network: {get_input: private_vm_network}
                 security_groups: {get_input: private_vm_security_groups}
                 key_name: {get_input: private_vm_key_name}

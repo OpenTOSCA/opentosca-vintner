@@ -36,7 +36,7 @@ topology_template:
 
         os_compute_ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -71,7 +71,7 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
@@ -108,7 +108,7 @@ topology_template:
         shop:
             type: shop.component
             properties:
-                - application_name: unfurl-aware-shop
+                - application_name: unfurl-aware
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
@@ -130,7 +130,7 @@ topology_template:
             type: shop.database
             properties:
                 - database_name: shop
-                - gcp_dbms_name: unfurl-aware-shop
+                - gcp_dbms_name: unfurl-aware
             requirements:
                 - host:
                       node: os_dbms
@@ -184,7 +184,7 @@ topology_template:
                 - port:
                       value: 80
                 - machine:
-                      value: unfurl-aware-shop
+                      value: unfurl-aware
                 - network:
                       value: {get_input: os_compute_network}
             requirements:
@@ -208,7 +208,7 @@ topology_template:
             type: gcp.dbms
             properties:
                 - instance_name:
-                      value: unfurl-aware-shop
+                      value: unfurl-aware
                 - root_password:
                       value: {get_input: database_password}
             capabilities:

@@ -130,13 +130,13 @@ node_types:
                             protocol          = "tcp"
                             port_range_min    = var.port
                             port_range_max    = var.port
-                            remote_ip_prefix  = "0.0.0.0"
+                            remote_ip_prefix  = "0.0.0.0/0"
                             security_group_id = openstack_networking_secgroup_v2.ports.id
                         }
 
                         resource "openstack_compute_instance_v2" "machine" {
                           name            = var.machine_name
-                          image_name      = "Ubuntu 20.04"
+                          image_name      = "Ubuntu 22.04"
                           flavor_name     = var.flavor_name
                           key_pair        = "default"
                           security_groups = ["default", openstack_networking_secgroup_v2.ports.name]

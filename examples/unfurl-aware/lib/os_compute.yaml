@@ -16,7 +16,6 @@ node_types:
 
             network:
                 type: string
-                default: 'm1.medium'
 
             os_region_name:
                 type: string

@@ -17,7 +17,7 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/gcp/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         db_password:
             type: string
@@ -41,7 +41,7 @@ topology_template:
 
         vm_ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -74,7 +74,7 @@ topology_template:
         web_component:
             type: node.application
             properties:
-                application_name: unfurl-motivation-application
+                application_name: unfurl-motivation
                 vm_ssh_user: {get_input: vm_ssh_user}
                 vm_ssh_key_file: {get_input: vm_ssh_key_file}
                 vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
@@ -100,7 +100,7 @@ topology_template:
         prod_dbms:
             type: gcp.sql.dbms
             properties:
-                instance_name: unfurl-motivation-dbms
+                instance_name: unfurl-motivation
                 password: {get_input: db_password}
             requirements:
                 - host: gcp

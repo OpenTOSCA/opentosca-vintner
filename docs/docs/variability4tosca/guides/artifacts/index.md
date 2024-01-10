@@ -101,7 +101,7 @@ Furthermore, we want to configure the display language of the shop component to 
 We specify this when resolving variability.
 
 ```shell linenums="1"
-vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+vintner instances resolve --instance artifacts --presets enterprise
 ```
 
 We can optionally inspect the generated TOSCA-compliant template.
