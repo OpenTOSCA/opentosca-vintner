@@ -69,6 +69,7 @@ topology_template:
         compute_raspberry_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/id_ed25519
+
     node_templates:
         application:
             type: scenario.application
