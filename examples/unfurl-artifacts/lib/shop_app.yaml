@@ -65,12 +65,12 @@ node_types:
             #
             ###################################################
 
-            ssh_user:
+            os_ssh_user:
                 type: string
                 required: false
                 default: ubuntu
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 required: false
                 default: dummy
@@ -208,8 +208,8 @@ node_types:
                                   when: SELF.deployment_mode == "GCP"
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
                 delete:
@@ -272,6 +272,6 @@ node_types:
                                   when: SELF.deployment_mode == "GCP"
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

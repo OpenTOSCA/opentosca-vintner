@@ -57,11 +57,11 @@ node_types:
 
             ssh_user:
                 type: string
-                default: { get_input: os_compute_ssh_user }
+                default: { get_input: os_ssh_user }
 
             ssh_key_file:
                 type: string
-                default: { get_input: os_compute_ssh_key_file }
+                default: { get_input: os_ssh_key_file }
 
         requirements:
             -   database:

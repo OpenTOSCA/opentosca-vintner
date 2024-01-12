@@ -61,12 +61,12 @@ topology_template:
             type: string
             default: password
 
-        ssh_user:
+        os_ssh_user:
             type: string
             default: ubuntu
             conditions: { logic_expression: is_community }
 
-        ssh_key_file:
+        os_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--default
             conditions: { logic_expression: is_community }
@@ -106,7 +106,7 @@ topology_template:
             default: '*****************'
             conditions: { logic_expression: is_community }
 
-        gcp_credentials:
+        gcp_service_account_file:
             type: string
             default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
             conditions: { logic_expression: is_business_or_enterprise }
@@ -195,7 +195,7 @@ topology_template:
 
                 -   credentials:
                         conditions: { logic_expression: is_business_or_enterprise }
-                        value: { get_input: gcp_credentials }
+                        value: { get_input: gcp_service_account_file }
 
                 -   project:
                         conditions: { logic_expression: is_business_or_enterprise }
@@ -215,13 +215,13 @@ topology_template:
                 #
                 ###################################################
 
-                -   ssh_user:
+                -   os_ssh_user:
                         conditions: { logic_expression: is_community }
-                        value: { get_input: ssh_user }
+                        value: { get_input: os_ssh_user }
 
-                -   ssh_key_file:
+                -   os_ssh_key_file:
                         conditions: { logic_expression: is_community }
-                        value: { get_input: ssh_key_file }
+                        value: { get_input: os_ssh_key_file }
 
             requirements:
                 -   host:

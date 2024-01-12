@@ -20,11 +20,11 @@ topology_template:
             type: string
             default: password
 
-        ssh_user:
+        os_ssh_user:
             type: string
             default: ubuntu
 
-        ssh_key_file:
+        os_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--default
 
@@ -71,8 +71,8 @@ topology_template:
                 APPLICATION_LANGUAGE: DE
 
                 deployment_mode: OS
-                ssh_user: {get_input: ssh_user}
-                ssh_key_file: {get_input: ssh_key_file}
+                os_ssh_user: {get_input: os_ssh_user}
+                os_ssh_key_file: {get_input: os_ssh_key_file}
             requirements:
                 - host: os_runtime
                 - database: os_database

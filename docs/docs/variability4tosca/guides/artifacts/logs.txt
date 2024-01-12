@@ -539,10 +539,10 @@
 2023-09-06T18:23:26.9914709Z ##[warning]No authentication found for gcloud, authenticate with `google-github-actions/auth`.
 2023-09-06T18:23:27.0070806Z ##[group]Run actions/github-script@v3
 2023-09-06T18:23:27.0071108Z with:
-2023-09-06T18:23:27.0071743Z   script: if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
+2023-09-06T18:23:27.0071743Z   script: if (!process.env.GCP_SERVICE_ACCOUNT_FILE) throw 'GCP_SERVICE_ACCOUNT_FILE undefined'
 const fs = require('fs')
 const file = 'gcp-credentials.json'
-const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
+const content = new Buffer.from(process.env.GCP_SERVICE_ACCOUNT_FILE, 'base64').toString('utf-8')
 fs.writeFileSync(file, content)
 
 2023-09-06T18:23:27.0072563Z   github-token: ***
@@ -552,7 +552,7 @@ fs.writeFileSync(file, content)
 2023-09-06T18:23:27.0073597Z env:
 2023-09-06T18:23:27.0073917Z   CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
 2023-09-06T18:23:27.0074290Z   CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 1.1.1
-2023-09-06T18:23:27.0328038Z   GCP_CREDENTIALS: ***
+2023-09-06T18:23:27.0328038Z   GCP_SERVICE_ACCOUNT_FILE: ***
 2023-09-06T18:23:27.0328347Z ##[endgroup]
 2023-09-06T18:23:27.1200714Z ##[group]Run actions/github-script@v3
 2023-09-06T18:23:27.1201035Z with:
@@ -1609,7 +1609,7 @@ fs.writeFileSync(file, content)
 2023-09-06T18:42:43.3392310Z [36;1mvintner instances init --instance artifacts --template artifacts[0m
 2023-09-06T18:42:43.3392809Z [36;1mvintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml[0m
 2023-09-06T18:42:43.3393199Z [36;1m[0m
-2023-09-06T18:42:43.3393620Z [36;1mecho "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml[0m
+2023-09-06T18:42:43.3393620Z [36;1mecho "gcp_service_account_file: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml[0m
 2023-09-06T18:42:43.3394271Z [36;1mvintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml[0m
 2023-09-06T18:42:43.3450390Z shell: /usr/bin/bash -e {0}
 2023-09-06T18:42:43.3450647Z env:
