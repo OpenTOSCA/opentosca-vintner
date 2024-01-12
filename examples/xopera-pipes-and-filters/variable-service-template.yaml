@@ -9,39 +9,51 @@ topology_template:
     inputs:
         instance:
             type: string
+            default: x000001
 
         compute_vm_network:
             type: string
+            default: public-belwue
 
         compute_vm_security_groups:
             type: string
+            default: default
 
         compute_vm_key_name:
             type: string
+            default: default
 
         compute_vm_ssh_user:
             type: string
+            default: user
 
         compute_vm_ssh_key_file:
             type: string
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
+            default: Mannheim
 
         os_auth_type:
             type: string
+            default: v3applicationcredential
 
         os_auth_url:
             type: string
+            default: https://idm02.bw-cloud.org:5000/v3
 
         os_identity_api_version:
             type: string
+            default: '3'
 
         os_interface:
             type: string
+            default: public
 
         os_application_credential_id:
             type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
 
         os_application_credential_secret:
             type: string
@@ -52,9 +64,11 @@ topology_template:
 
         compute_raspberry_user_name:
             type: string
+            default: pi
 
         compute_raspberry_ssh_key_file:
             type: string
+            default: /home/stoetzms/.ssh/id_ed25519
 
     variability:
         inputs:
@@ -77,30 +91,30 @@ topology_template:
         application:
             type: scenario.application
             properties:
-                - scale:
-                      value: 1
-                      conditions: {node_presence: compute_raspberry}
-                - scale:
-                      value: 4
-                      conditions: {node_presence: compute_vm}
+                -   scale:
+                        value: 1
+                        conditions: { node_presence: compute_raspberry }
+                -   scale:
+                        value: 4
+                        conditions: { node_presence: compute_vm }
             requirements:
-                - input: queue_input
-                - output: queue_output
-                - host:
-                      node: compute_raspberry
-                      conditions: {target_presence: SELF}
-                - host:
-                      node: compute_vm
-                      conditions: {target_presence: SELF}
+                -   input: queue_input
+                -   output: queue_output
+                -   host:
+                        node: compute_raspberry
+                        conditions: { target_presence: SELF }
+                -   host:
+                        node: compute_vm
+                        conditions: { target_presence: SELF }
             artifacts:
-                - binary:
-                      type: tosca.artifacts.File
-                      file: files/application-linux-arm64.xz
-                      conditions: {node_presence: compute_raspberry}
-                - binary:
-                      type: tosca.artifacts.File
-                      file: files/application-linux-x64.xz
-                      conditions: {node_presence: compute_vm}
+                -   binary:
+                        type: tosca.artifacts.File
+                        file: files/application-linux-arm64.xz
+                        conditions: { node_presence: compute_raspberry }
+                -   binary:
+                        type: tosca.artifacts.File
+                        file: files/application-linux-x64.xz
+                        conditions: { node_presence: compute_vm }
 
         queue_input:
             type: queue.queue
@@ -110,40 +124,40 @@ topology_template:
 
         compute_raspberry:
             type: compute.raspberry
-            conditions: {equal: [{variability_input: workload}, low]}
+            conditions: { equal: [ { variability_input: workload }, low ] }
             properties:
-                ssh_user: {get_input: compute_raspberry_user_name}
-                ssh_key_file: {get_input: compute_raspberry_ssh_key_file}
+                ssh_user: { get_input: compute_raspberry_user_name }
+                ssh_key_file: { get_input: compute_raspberry_ssh_key_file }
             attributes:
-                private_address: {get_input: compute_raspberry_address}
-                public_address: {get_input: compute_raspberry_address}
+                private_address: { get_input: compute_raspberry_address }
+                public_address: { get_input: compute_raspberry_address }
 
         compute_vm:
             type: compute.vm
-            conditions: {equal: [{variability_input: workload}, high]}
+            conditions: { equal: [ { variability_input: workload }, high ] }
             properties:
-                ports: [80, 3000, 3001, 3002, 3003, 3004]
-                name: {concat: ['compute-vm-', {get_input: instance}]}
+                ports: [ 80, 3000, 3001, 3002, 3003, 3004 ]
+                name: { concat: [ 'compute-vm-', { get_input: instance } ] }
                 image: Ubuntu 22.04
                 flavor: m1.small
-                network: {get_input: compute_vm_network}
-                security_groups: {get_input: compute_vm_security_groups}
-                key_name: {get_input: compute_vm_key_name}
-                ssh_user: {get_input: compute_vm_ssh_user}
-                ssh_key_file: {get_input: compute_vm_ssh_key_file}
+                network: { get_input: compute_vm_network }
+                security_groups: { get_input: compute_vm_security_groups }
+                key_name: { get_input: compute_vm_key_name }
+                ssh_user: { get_input: compute_vm_ssh_user }
+                ssh_key_file: { get_input: compute_vm_ssh_key_file }
             requirements:
-                - host:
-                      node: compute_hypervisor
-                      conditions: {source_presence: SELF}
+                -   host:
+                        node: compute_hypervisor
+                        conditions: { source_presence: SELF }
 
         compute_hypervisor:
             type: compute.hypervisor
-            conditions: {node_presence: compute_vm}
+            conditions: { node_presence: compute_vm }
             properties:
-                region_name: {get_input: os_region_name}
-                auth_type: {get_input: os_auth_type}
-                auth_url: {get_input: os_auth_url}
-                identity_api_version: {get_input: os_identity_api_version}
-                interface: {get_input: os_interface}
-                application_credential_id: {get_input: os_application_credential_id}
-                application_credential_secret: {get_input: os_application_credential_secret}
+                region_name: { get_input: os_region_name }
+                auth_type: { get_input: os_auth_type }
+                auth_url: { get_input: os_auth_url }
+                identity_api_version: { get_input: os_identity_api_version }
+                interface: { get_input: os_interface }
+                application_credential_id: { get_input: os_application_credential_id }
+                application_credential_secret: { get_input: os_application_credential_secret }
