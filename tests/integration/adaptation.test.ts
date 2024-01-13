@@ -44,7 +44,7 @@ if (!integrationTestsEnabled) {
             // Resolve variability
             await Controller.instances.resolve({
                 instance: instanceName,
-                inputs: path.join(templateDirectory, 'variability-inputs.example.yaml'),
+                presets: ['first'],
             })
 
             // Assert that variability-resolved service template and variability inputs are as expected

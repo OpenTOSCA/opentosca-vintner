@@ -215,6 +215,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   load: true
                   tags: ghcr.io/opentosca/opentosca-vintner:latest,ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
@@ -224,6 +225,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   push: true
                   tags: ghcr.io/opentosca/opentosca-vintner:latest
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache

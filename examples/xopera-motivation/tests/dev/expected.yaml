@@ -24,23 +24,23 @@ topology_template:
             type: string
             default: password
 
-        private_vm_network:
+        os_network:
             type: string
             default: public-belwue
 
-        private_vm_security_groups:
+        os_security_groups:
             type: string
             default: default
 
-        private_vm_key_name:
+        os_ssh_key_name:
             type: string
             default: default
 
-        private_vm_ssh_user:
+        os_ssh_user:
             type: string
             default: ubuntu
 
-        private_vm_ssh_key_file:
+        os_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--default
 
@@ -82,8 +82,8 @@ topology_template:
                     DB_USERNAME: root
                     DB_PASSWORD: {get_input: root_password}
                     DB_ADDRESS: {get_property: [SELF, database, public_address]}
-                vm_ssh_user: {get_input: private_vm_ssh_user}
-                vm_ssh_key_file: {get_input: private_vm_ssh_key_file}
+                vm_ssh_user: {get_input: os_ssh_user}
+                vm_ssh_key_file: {get_input: os_ssh_key_file}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
                 gcp_project: {get_input: gcp_project}
                 gcp_region: {get_input: gcp_region}
@@ -114,11 +114,11 @@ topology_template:
                 name: xopera-motivation
                 image: Ubuntu 22.04
                 flavor: m1.small
-                network: {get_input: private_vm_network}
-                security_groups: {get_input: private_vm_security_groups}
-                key_name: {get_input: private_vm_key_name}
-                ssh_user: {get_input: private_vm_ssh_user}
-                ssh_key_file: {get_input: private_vm_ssh_key_file}
+                network: {get_input: os_network}
+                security_groups: {get_input: os_security_groups}
+                key_name: {get_input: os_ssh_key_name}
+                ssh_user: {get_input: os_ssh_user}
+                ssh_key_file: {get_input: os_ssh_key_file}
             requirements:
                 - host: openstack
 

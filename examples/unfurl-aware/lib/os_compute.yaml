@@ -126,7 +126,7 @@ node_types:
                         variable "network" {
                           type        = string
                         }
-                        
+
                         resource "openstack_networking_secgroup_v2" "ports" {
                             name        = "${var.machine}-ports"
                             description = "ports for ${var.machine}"

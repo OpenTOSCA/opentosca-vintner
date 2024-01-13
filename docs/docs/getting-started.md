@@ -72,7 +72,7 @@ We intend to deploy the first textfile.
 We specify this when resolving variability.
 
 ```shell linenums="1"
-vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml
+vintner instances resolve --instance getting-started --presets first
 ```
 
 Finally, we deploy the application.

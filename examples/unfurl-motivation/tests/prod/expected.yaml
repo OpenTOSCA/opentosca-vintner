@@ -23,23 +23,23 @@ topology_template:
             type: string
             default: password
 
-        vm_network:
+        os_network:
             type: string
             default: public-belwue
 
-        vm_security_group:
+        os_security_group:
             type: string
             default: default
 
-        vm_key_name:
+        os_ssh_key_name:
             type: string
             default: default
 
-        vm_ssh_user:
+        os_ssh_user:
             type: string
             default: ubuntu
 
-        vm_ssh_key_file:
+        os_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--default
 
@@ -75,10 +75,10 @@ topology_template:
             type: node.application
             properties:
                 application_name: unfurl-motivation
-                vm_ssh_user: {get_input: vm_ssh_user}
-                vm_ssh_key_file: {get_input: vm_ssh_key_file}
-                vm_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
-                gcp_project: { get_input: gcp_project }
+                os_ssh_user: {get_input: os_ssh_user}
+                os_ssh_key_file: {get_input: os_ssh_key_file}
+                vm_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                gcp_project: {get_input: gcp_project}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:
                 - host: prod_runtime

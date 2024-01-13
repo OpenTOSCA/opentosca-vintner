@@ -1,6 +1,6 @@
 name: 'Install Vintner'
 inputs:
-    gcp_credentials:
+    gcp_service_account_file:
         required: true
 
     os_ssh_key_file:
@@ -32,17 +32,17 @@ runs:
           with:
               version: 438.0.0
 
-        - name: (PREPARE) Setup GCP credentials
+        - name: (PREPARE) Setup GCP service account file
           shell: bash
           run: |
-              if [ -z "${GCP_CREDENTIALS}" ]; then
-                echo "GCP_CREDENTIALS not defined"
+              if [ -z "${GCP_SERVICE_ACCOUNT_FILE}" ]; then
+                echo "GCP_SERVICE_ACCOUNT_FILE not defined"
                 exit 1
               fi
 
-              echo ${GCP_CREDENTIALS} | base64 --decode > /tmp/gcp-credentials.json
+              echo ${GCP_SERVICE_ACCOUNT_FILE} | base64 --decode > /tmp/gcp-service-account-file.json
           env:
-              GCP_CREDENTIALS: ${{ inputs.gcp_credentials }}
+              GCP_SERVICE_ACCOUNT_FILE: ${{ inputs.gcp_service_account_file }}
 
         - name: (PREPARE) Setup OS SSH key file
           shell: bash

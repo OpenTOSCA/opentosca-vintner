@@ -38,7 +38,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -146,7 +146,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -168,7 +168,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
-                  private_vm_ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -212,7 +212,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -232,7 +232,7 @@ jobs:
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
-                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
 
             - name: (VINTNER) Deploy application
@@ -273,7 +273,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -295,7 +295,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
-                  vm_ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -339,7 +339,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -359,7 +359,7 @@ jobs:
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
-                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   os_application_credential_secret: dummy
                   EOF
 
@@ -402,7 +402,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -424,7 +424,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
-                  os_compute_ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -469,7 +469,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -489,7 +489,7 @@ jobs:
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
-                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
 
             - name: (VINTNER) Deploy application
@@ -531,7 +531,7 @@ jobs:
             - name: (PREPARE) Configure environment
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -553,7 +553,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
-                  os_compute_ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -598,7 +598,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -618,7 +618,7 @@ jobs:
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
-                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
 
             - name: (VINTNER) Deploy application
@@ -660,7 +660,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -682,7 +682,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
-                  ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -726,7 +726,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -746,7 +746,7 @@ jobs:
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
-                  gcp_credentials: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
 
             - name: (VINTNER) Deploy application
@@ -787,7 +787,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -809,7 +809,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
-                  os_compute_ssh_key_file: /tmp/os-ssh-key-file
+                  os_ssh_key_file: /tmp/os-ssh-key-file
                   EOF
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
@@ -853,7 +853,7 @@ jobs:
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
               with:
-                  gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
                   os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
                   os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
@@ -875,7 +875,7 @@ jobs:
                   cat << EOF > /tmp/deployment-inputs.yaml
                   os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
-                  gcp_service_account_file: /tmp/gcp-credentials.json
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
 
             - name: (VINTNER) Deploy application

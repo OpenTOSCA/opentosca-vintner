@@ -75,5 +75,5 @@ ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
 COPY ./examples ./examples
 
 # Entrypoint
-COPY --chmod=+x docker-entrypoint.sh .
+COPY --chmod=+x docker/docker-entrypoint.sh .
 ENTRYPOINT /vintner/docker-entrypoint.sh
