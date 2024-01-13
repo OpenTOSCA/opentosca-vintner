@@ -102,7 +102,7 @@ topology_template:
                 application_name: unfurl-motivation
                 os_ssh_user: {get_input: os_ssh_user}
                 os_ssh_key_file: {get_input: os_ssh_key_file}
-                os_public_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
+                vm_address: {eval: '.::.requirements::[.name=host]::.target::public_address'}
                 gcp_project: {get_input: gcp_project}
                 gcp_service_account_file: {get_input: gcp_service_account_file}
             requirements:

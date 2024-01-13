@@ -76,7 +76,7 @@ node_types:
             os_ssh_key_file:
                 type: string
 
-            os_public_address:
+            vm_address:
                 type: string
 
             gcp_service_account_file:
@@ -124,8 +124,8 @@ node_types:
                             fi
 
                             if [ "{{ SELF.env_type}}" = "local" ]; then
-                                scp -i {{ SELF.os_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ 'project' | get_dir }}/ensemble/files/application.tar.gz {{ SELF.os_ssh_user }}@{{ SELF.os_public_address }}:/tmp
-                                ssh -i {{ SELF.os_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.os_ssh_user }}@{{ SELF.os_public_address }} <<EOF
+                                scp -i {{ SELF.os_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ 'project' | get_dir }}/ensemble/files/application.tar.gz {{ SELF.os_ssh_user }}@{{ SELF.vm_address }}:/tmp
+                                ssh -i {{ SELF.os_ssh_key_file }} -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  {{ SELF.os_ssh_user }}@{{ SELF.vm_address }} <<EOF
                                     sudo mkdir -p {{ SELF.application_directory }}
                                     sudo tar -zxvf /tmp/application.tar.gz --directory {{ SELF.application_directory }}
 
