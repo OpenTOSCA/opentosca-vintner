@@ -7,9 +7,6 @@ tags:
 
 This document holds instructions on developing Vintner.
 
-Contributions are very much welcome.
-But please follow the following guidelines and our [Code of Conduct](code-of-conduct.md){target=_blank}.
-
 ## GitHub Flow
 
 Our branching workflow follows [GitHub Flow](https://docs.github.com/de/get-started/quickstart/github-flow){target=_blank}.
