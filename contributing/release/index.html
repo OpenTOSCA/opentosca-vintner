@@ -2407,8 +2407,11 @@ To publish a new version, first update the version number in <code>package.json<
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>release:npm
 </code></pre></div></td></tr></table></div>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
-<p>Vintner is available as Docker container on <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner</a>.
+<p>Vintner is available as Docker image on <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner</a>.
 They are automatically build and pushed during the Release workflow.</p>
+<p>Locally build the image as follows. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>opentosca/opentosca-vintner:local<span class="w"> </span>-f<span class="w"> </span>docker/Dockerfile<span class="w"> </span>.
+</code></pre></div></td></tr></table></div>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
 <p>Vintner is available on Zenodo with unique DOI <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>.
 New versions are published manually.</p>
@@ -2420,7 +2423,7 @@ The version must be manually published on Zenodo.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 13, 2024</span>
 </small>
 </div>
 </article>
