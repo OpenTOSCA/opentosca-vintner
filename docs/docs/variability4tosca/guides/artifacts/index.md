@@ -148,10 +148,10 @@ The templates for our complexity analysis can be found {{ repo_link('examples/un
 ## Logs
 
 This deployment is also executed in our integration pipeline, which is executed once a week. 
-The logs of the corresponding GitHub action job run can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
-Relevant steps start with "UNFURL-ARTIFACTS".
+The logs of the corresponding GitHub action can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
+Relevant jobs start with "Unfurl Artifacts".
 Note, a GitHub account is required to access these logs. 
-The raw logs of a recorded job are [available](./logs.txt){target=_blank} without requiring an GitHub account.
+The raw logs are [available](../../../assets/documents/night.zip){target=_blank} without requiring an GitHub account.
 
 ## Zenodo
 

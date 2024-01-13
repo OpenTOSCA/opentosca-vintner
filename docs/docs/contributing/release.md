@@ -61,8 +61,15 @@ yarn release:npm
 
 ## Docker
 
-Vintner is available as Docker container on [https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner){target=_blank}.
+Vintner is available as Docker image on [https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner){target=_blank}.
 They are automatically build and pushed during the Release workflow.
+
+Locally build the image as follows. 
+
+````shell linenums="1"
+docker build -t opentosca/opentosca-vintner:local -f docker/Dockerfile .
+````
+
 
 ## Zenodo
 

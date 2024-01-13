@@ -6,6 +6,6 @@
 - tosca.png
 - (optional) YouTube
 - (optional) Complexity Analysis
-- (optional) logs.txt and logs.zip
+- (optional) Add logs, see `/docs/docs/assets/documents/night.zip`
 - Zenodo
 - Remove README.md

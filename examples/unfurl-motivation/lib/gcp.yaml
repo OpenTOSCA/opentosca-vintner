@@ -78,7 +78,7 @@ node_types:
                         implementation: |
                             set -e
                             gcloud --no-user-output-enabled auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            
+
                             GCP_SERVICE=sqladmin.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
                             if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
@@ -209,21 +209,20 @@ node_types:
                         implementation: |
                             set -e
                             gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
-                            
+
                             GCP_SERVICE=cloudbuild.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
                             if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                                 gcloud services enable ${GCP_SERVICE}
                             fi
-                
+
                             GCP_SERVICE=appengine.googleapis.com
                             GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
                             if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
                                 gcloud services enable ${GCP_SERVICE}
                             fi
-                            
+
                             gcloud app create --region {{ SELF.region }} --quiet || true
                         inputs:
                             keeplines: true
                             shell: /usr/bin/bash
-

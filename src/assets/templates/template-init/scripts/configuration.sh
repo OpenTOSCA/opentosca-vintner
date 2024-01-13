@@ -19,5 +19,11 @@ if [[ -z ${VINTNER} ]]; then
     exit 1
 fi
 
+# Check that DEPLOYMENT_VARIANT is defined
+if [[ -z ${DEPLOYMENT_VARIANT} ]]; then
+    echo "DEPLOYMENT_VARIANT is not defined"
+    exit 1
+fi
+
 # Set template directory
 TEMPLATE_DIR=$(readlink -f $(dirname $0)/../)

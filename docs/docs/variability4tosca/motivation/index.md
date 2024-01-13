@@ -128,6 +128,15 @@ vintner instances delete --instance pruning
 vintner setup clean --force
 ```
 
+
+## Logs
+
+This deployment is also executed in our integration pipeline, which is executed once a week.
+The logs of the corresponding GitHub action can be accessed [here](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank}.
+Relevant jobs start with "Unfurl Motivation" and "xOpera Motivation".
+Note, a GitHub account is required to access these logs.
+The raw logs are [available](../../assets/documents/night.zip){target=_blank} without requiring an GitHub account.
+
 ## Zenodo
 
 The assets of this guide can be also found on [Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}.

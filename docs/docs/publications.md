@@ -17,8 +17,8 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/guides/pruning/index.md){target=_blank}
 - {{ repo_link('examples/xopera-pruning', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/xopera-pruning/stats', 'Models of the Complexity Evaluation') }}
-- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant steps start with "XOPERA-PRUNING")
-- [GitHub Actions Raw Logs](variability4tosca/guides/pruning/logs.txt){target=_blank} (Relevant steps start with "XOPERA-PRUNING")
+- [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "xOpera Pruning")
+- [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "xOpera Pruning")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10050260){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-pruning') }}
 
@@ -32,8 +32,8 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - [Demo Video](https://youtu.be/6szIGJPuCsU){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
-- [GitHub Actions Job Run](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant steps start with "UNFURL-ARTIFACTS")
-- [GitHub Actions Raw Logs](variability4tosca/guides/artifacts/logs.txt){target=_blank} (Relevant steps start with "UNFURL-ARTIFACTS")
+- [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Artifacts")
+- [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant steps start with "Unfurl Artifacts")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2-demo') }}
 
@@ -47,6 +47,8 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/guides/artifacts/index.md){target=_blank}
 - {{ repo_link('examples/unfurl-artifacts', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/unfurl-artifacts/stats', 'Models of the Complexity Evaluation') }}
+- [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Artifacts")
+- [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Artifacts")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
 
@@ -60,5 +62,7 @@ This document holds a list of selected publications.
 - [Step-by-Step Guide](variability4tosca/motivation/index.md){target=_blank}
 - {{ repo_link('examples/unfurl-motivation', 'Model of the Motivating Scenario using Unfurl') }}
 - {{ repo_link('examples/xopera-motivation', 'Model of the Motivating Scenario using xOpera') }}
+- [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Motivation" and "xOpera Motivation")
+- [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Motivation" and "xOpera Motivation")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}
 - {{ tag_link('publication-stoetzner-2022-vdmm') }}
