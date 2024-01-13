@@ -1,469 +1,469 @@
 tosca_definitions_version: tosca_variability_1_0
 imports:
-  - repository: unfurl
-    file: tosca_plugins/artifacts.yaml
-    conditions: []
-  - file: lib/gcp_dbms.yaml
-    conditions: []
-  - file: lib/gcp_runtime.yaml
-    conditions: []
-  - file: lib/gcp_provider.yaml
-    conditions: []
-  - file: lib/os_compute.yaml
-    conditions: []
-  - file: lib/os_dbms.yaml
-    conditions: []
-  - file: lib/os_k8s.yaml
-    conditions: []
-  - file: lib/os_logger.yaml
-    conditions: []
-  - file: lib/os_monitor.yaml
-    conditions: []
-  - file: lib/os_provider.yaml
-    conditions: []
-  - file: lib/shop_component.yaml
-    conditions: []
-  - file: lib/shop_database.yaml
-    conditions: []
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+      conditions: []
+    - file: lib/gcp_dbms.yaml
+      conditions: []
+    - file: lib/gcp_runtime.yaml
+      conditions: []
+    - file: lib/gcp_provider.yaml
+      conditions: []
+    - file: lib/os_compute.yaml
+      conditions: []
+    - file: lib/os_dbms.yaml
+      conditions: []
+    - file: lib/os_k8s.yaml
+      conditions: []
+    - file: lib/os_logger.yaml
+      conditions: []
+    - file: lib/os_monitor.yaml
+      conditions: []
+    - file: lib/os_provider.yaml
+      conditions: []
+    - file: lib/shop_component.yaml
+      conditions: []
+    - file: lib/shop_database.yaml
+      conditions: []
 topology_template:
-  inputs:
-    - database_password:
-        type: string
-        default: password
-        conditions: []
-    - os_network:
-        type: string
-        default: public-belwue
-        conditions: []
-    - os_ssh_key_name:
-        type: string
-        default: default
-        conditions: []
-    - os_ssh_user:
-        type: string
-        default: ubuntu
-        conditions: []
-    - os_ssh_key_file:
-        type: string
-        default: /home/stoetzms/.ssh/bw-cloud--default
-        conditions: []
-    - os_region_name:
-        type: string
-        default: Mannheim
-        conditions: []
-    - os_auth_type:
-        type: string
-        default: v3applicationcredential
-        conditions: []
-    - os_auth_url:
-        type: string
-        default: https://idm02.bw-cloud.org:5000/v3
-        conditions: []
-    - os_identity_api_version:
-        type: string
-        default: '3'
-        conditions: []
-    - os_interface:
-        type: string
-        default: public
-        conditions: []
-    - os_application_credential_id:
-        type: string
-        default: 3f538f1823bd484e8238b2433de2f21a
-        conditions: []
-    - os_application_credential_secret:
-        type: string
-        conditions: []
-    - gcp_region:
-        type: string
-        default: europe-west3
-        conditions: []
-    - gcp_service_account_file:
-        type: string
-        default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
-        conditions: []
-    - gcp_project:
-        type: string
-        default: stoetzms-387808
-        conditions: []
-  variability:
     inputs:
-      cloud:
-        type: boolean
-        default: false
-    presets:
-      local:
+        - database_password:
+              type: string
+              default: password
+              conditions: []
+        - os_network:
+              type: string
+              default: public-belwue
+              conditions: []
+        - os_ssh_key_name:
+              type: string
+              default: default
+              conditions: []
+        - os_ssh_user:
+              type: string
+              default: ubuntu
+              conditions: []
+        - os_ssh_key_file:
+              type: string
+              default: /home/stoetzms/.ssh/bw-cloud--default
+              conditions: []
+        - os_region_name:
+              type: string
+              default: Mannheim
+              conditions: []
+        - os_auth_type:
+              type: string
+              default: v3applicationcredential
+              conditions: []
+        - os_auth_url:
+              type: string
+              default: https://idm02.bw-cloud.org:5000/v3
+              conditions: []
+        - os_identity_api_version:
+              type: string
+              default: '3'
+              conditions: []
+        - os_interface:
+              type: string
+              default: public
+              conditions: []
+        - os_application_credential_id:
+              type: string
+              default: 3f538f1823bd484e8238b2433de2f21a
+              conditions: []
+        - os_application_credential_secret:
+              type: string
+              conditions: []
+        - gcp_region:
+              type: string
+              default: europe-west3
+              conditions: []
+        - gcp_service_account_file:
+              type: string
+              default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
+              conditions: []
+        - gcp_project:
+              type: string
+              default: stoetzms-387808
+              conditions: []
+    variability:
         inputs:
-          cloud: false
-      cloud:
-        inputs:
-          cloud: true
-    expressions:
-      is_local:
-        equal:
-          - variability_input: cloud
-          - false
-      is_cloud:
-        equal:
-          - variability_input: cloud
-          - true
-    options:
-      optimization: true
-      unique: true
-    constraints:
-      - implies:
-          - node.shop
-          - xor:
-              - relation.host@0.node.shop
-              - relation.host@1.node.shop
-      - implies:
-          - node.database
-          - xor:
-              - relation.host@0.node.database
-              - relation.host@1.node.database
-      - implies:
-          - node.os_dbms
-          - relation.host@0.node.os_dbms
-      - implies:
-          - node.os_monitor
-          - relation.host@0.node.os_monitor
-      - implies:
-          - node.os_logger
-          - relation.host@0.node.os_logger
-      - implies:
-          - node.os_kubernetes
-          - relation.host@0.node.os_kubernetes
-      - implies:
-          - node.os_compute
-          - relation.host@0.node.os_compute
-      - implies:
-          - node.gcp_runtime
-          - relation.host@0.node.gcp_runtime
-      - implies:
-          - node.gcp_dbms
-          - relation.host@0.node.gcp_dbms
-      - implies:
-          - and:
-              - node.shop
-              - manual.relation.database@2.node.shop
-          - relation.database@2.node.shop
-  node_templates:
-    - shop:
-        type:
-          - shop.component:
+            cloud:
+                type: boolean
+                default: false
+        presets:
+            local:
+                inputs:
+                    cloud: false
+            cloud:
+                inputs:
+                    cloud: true
+        expressions:
+            is_local:
+                equal:
+                    - variability_input: cloud
+                    - false
+            is_cloud:
+                equal:
+                    - variability_input: cloud
+                    - true
+        options:
+            optimization: true
+            unique: true
+        constraints:
+            - implies:
+                  - node.shop
+                  - xor:
+                        - relation.host@0.node.shop
+                        - relation.host@1.node.shop
+            - implies:
+                  - node.database
+                  - xor:
+                        - relation.host@0.node.database
+                        - relation.host@1.node.database
+            - implies:
+                  - node.os_dbms
+                  - relation.host@0.node.os_dbms
+            - implies:
+                  - node.os_monitor
+                  - relation.host@0.node.os_monitor
+            - implies:
+                  - node.os_logger
+                  - relation.host@0.node.os_logger
+            - implies:
+                  - node.os_kubernetes
+                  - relation.host@0.node.os_kubernetes
+            - implies:
+                  - node.os_compute
+                  - relation.host@0.node.os_compute
+            - implies:
+                  - node.gcp_runtime
+                  - relation.host@0.node.gcp_runtime
+            - implies:
+                  - node.gcp_dbms
+                  - relation.host@0.node.gcp_dbms
+            - implies:
+                  - and:
+                        - node.shop
+                        - manual.relation.database@2.node.shop
+                  - relation.database@2.node.shop
+    node_templates:
+        - shop:
+              type:
+                  - shop.component:
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+              properties:
+                  - DB_NAME:
+                        value: shop
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+                  - DB_USERNAME:
+                        value: root
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+                  - DB_PASSWORD:
+                        value:
+                            get_input: database_password
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+                  - DB_DIALECT:
+                        value: mysql
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+                  - DB_ADDRESS:
+                        value:
+                            eval: .::.requirements[.name=database]::.target::database_address
+                        conditions:
+                            - node_presence: shop
+                              _generated: true
+              requirements:
+                  - host:
+                        node: os_kubernetes
+                        conditions:
+                            - and:
+                                  - node_presence: shop
+                                    _generated: true
+                                  - node_presence: os_kubernetes
+                                    _generated: true
+                              _generated: true
+                            - logic_expression: is_local
+                  - host:
+                        node: gcp_runtime
+                        conditions:
+                            - and:
+                                  - node_presence: shop
+                                    _generated: true
+                                  - node_presence: gcp_runtime
+                                    _generated: true
+                              _generated: true
+                            - logic_expression: is_cloud
+                  - database:
+                        node: database
+                        conditions:
+                            - and:
+                                  - node_presence: shop
+                                    _generated: true
+                                  - node_presence: database
+                                    _generated: true
+                              _generated: true
+              conditions: []
+        - database:
+              type:
+                  - shop.database:
+                        conditions:
+                            - node_presence: database
+                              _generated: true
+              properties:
+                  - database_name:
+                        value: shop
+                        conditions:
+                            - node_presence: database
+                              _generated: true
+                  - gcp_dbms_name:
+                        value: shop
+                        conditions:
+                            - node_presence: database
+                              _generated: true
+              requirements:
+                  - host:
+                        node: os_dbms
+                        conditions:
+                            - and:
+                                  - node_presence: database
+                                    _generated: true
+                                  - node_presence: os_dbms
+                                    _generated: true
+                              _generated: true
+                            - logic_expression: is_local
+                  - host:
+                        node: gcp_dbms
+                        conditions:
+                            - and:
+                                  - node_presence: database
+                                    _generated: true
+                                  - node_presence: gcp_dbms
+                                    _generated: true
+                              _generated: true
+                            - logic_expression: is_cloud
               conditions:
-                - node_presence: shop
-                  _generated: true
-        properties:
-          - DB_NAME:
-              value: shop
+                  - and:
+                        - has_incoming_relation_naive: database
+                        - host_presence: SELF
+                    _generated: true
+        - os_dbms:
+              type:
+                  - os.dbms:
+                        conditions:
+                            - node_presence: os_dbms
+                              _generated: true
+              capabilities:
+                  endpoint:
+                      properties:
+                          connection: ssh
+                          host:
+                              eval: >-
+                                  .::..::.requirements[.name=host]::.target::.requirements[.name=host]::.target::public_ip
+              requirements:
+                  - host:
+                        node: os_kubernetes
+                        conditions:
+                            - and:
+                                  - node_presence: os_dbms
+                                    _generated: true
+                                  - node_presence: os_kubernetes
+                                    _generated: true
+                              _generated: true
               conditions:
-                - node_presence: shop
-                  _generated: true
-          - DB_USERNAME:
-              value: root
+                  - and:
+                        - has_incoming_relation_naive: os_dbms
+                        - host_presence: SELF
+                    _generated: true
+        - os_monitor:
+              type:
+                  - os.monitor:
+                        conditions:
+                            - node_presence: os_monitor
+                              _generated: true
+              requirements:
+                  - host:
+                        node: os_kubernetes
+                        conditions:
+                            - and:
+                                  - node_presence: os_monitor
+                                    _generated: true
+                                  - node_presence: os_kubernetes
+                                    _generated: true
+                              _generated: true
               conditions:
-                - node_presence: shop
-                  _generated: true
-          - DB_PASSWORD:
-              value:
-                get_input: database_password
+                  - host_presence: SELF
+                    _generated: true
+        - os_logger:
+              type:
+                  - os.logger:
+                        conditions:
+                            - node_presence: os_logger
+                              _generated: true
+              requirements:
+                  - host:
+                        node: os_kubernetes
+                        conditions:
+                            - and:
+                                  - node_presence: os_logger
+                                    _generated: true
+                                  - node_presence: os_kubernetes
+                                    _generated: true
+                              _generated: true
               conditions:
-                - node_presence: shop
-                  _generated: true
-          - DB_DIALECT:
-              value: mysql
+                  - host_presence: SELF
+                    _generated: true
+        - os_kubernetes:
+              type:
+                  - os.k8s:
+                        conditions:
+                            - node_presence: os_kubernetes
+                              _generated: true
+              capabilities:
+                  endpoint:
+                      properties:
+                          connection: ssh
+                          host:
+                              eval: .::..::.requirements[.name=host]::.target::public_ip
+              requirements:
+                  - host:
+                        node: os_compute
+                        conditions:
+                            - and:
+                                  - node_presence: os_kubernetes
+                                    _generated: true
+                                  - node_presence: os_compute
+                                    _generated: true
+                              _generated: true
               conditions:
-                - node_presence: shop
-                  _generated: true
-          - DB_ADDRESS:
-              value:
-                eval: .::.requirements[.name=database]::.target::database_address
+                  - and:
+                        - has_incoming_relation_naive: os_kubernetes
+                        - host_presence: SELF
+                    _generated: true
+        - os_compute:
+              type:
+                  - os.compute:
+                        conditions:
+                            - node_presence: os_compute
+                              _generated: true
+              properties:
+                  - port:
+                        value: 80
+                        conditions:
+                            - node_presence: os_compute
+                              _generated: true
+                  - machine:
+                        value: shop
+                        conditions:
+                            - node_presence: os_compute
+                              _generated: true
+                  - network:
+                        value:
+                            get_input: os_network
+                        conditions:
+                            - node_presence: os_compute
+                              _generated: true
+              requirements:
+                  - host:
+                        node: os_cloud
+                        conditions:
+                            - and:
+                                  - node_presence: os_compute
+                                    _generated: true
+                                  - node_presence: os_cloud
+                                    _generated: true
+                              _generated: true
               conditions:
-                - node_presence: shop
-                  _generated: true
-        requirements:
-          - host:
-              node: os_kubernetes
+                  - and:
+                        - has_incoming_relation_naive: os_compute
+                        - host_presence: SELF
+                    _generated: true
+        - os_cloud:
+              type:
+                  - os.provider:
+                        conditions:
+                            - node_presence: os_cloud
+                              _generated: true
               conditions:
-                - and:
-                    - node_presence: shop
-                      _generated: true
-                    - node_presence: os_kubernetes
-                      _generated: true
-                  _generated: true
-                - logic_expression: is_local
-          - host:
-              node: gcp_runtime
+                  - has_incoming_relation_naive: os_cloud
+                    _generated: true
+        - gcp_runtime:
+              type:
+                  - gcp.runtime:
+                        conditions:
+                            - node_presence: gcp_runtime
+                              _generated: true
+              capabilities:
+                  endpoint:
+                      properties:
+                          connection: local
+              requirements:
+                  - host:
+                        node: gcp_cloud
+                        conditions:
+                            - and:
+                                  - node_presence: gcp_runtime
+                                    _generated: true
+                                  - node_presence: gcp_cloud
+                                    _generated: true
+                              _generated: true
               conditions:
-                - and:
-                    - node_presence: shop
-                      _generated: true
-                    - node_presence: gcp_runtime
-                      _generated: true
-                  _generated: true
-                - logic_expression: is_cloud
-          - database:
-              node: database
+                  - and:
+                        - has_incoming_relation_naive: gcp_runtime
+                        - host_presence: SELF
+                    _generated: true
+        - gcp_dbms:
+              type:
+                  - gcp.dbms:
+                        conditions:
+                            - node_presence: gcp_dbms
+                              _generated: true
+              properties:
+                  - instance_name:
+                        value: shop
+                        conditions:
+                            - node_presence: gcp_dbms
+                              _generated: true
+                  - root_password:
+                        value:
+                            get_input: database_password
+                        conditions:
+                            - node_presence: gcp_dbms
+                              _generated: true
+              capabilities:
+                  endpoint:
+                      properties:
+                          connection: local
+              requirements:
+                  - host:
+                        node: gcp_cloud
+                        conditions:
+                            - and:
+                                  - node_presence: gcp_dbms
+                                    _generated: true
+                                  - node_presence: gcp_cloud
+                                    _generated: true
+                              _generated: true
               conditions:
-                - and:
-                    - node_presence: shop
-                      _generated: true
-                    - node_presence: database
-                      _generated: true
-                  _generated: true
-        conditions: []
-    - database:
-        type:
-          - shop.database:
+                  - and:
+                        - has_incoming_relation_naive: gcp_dbms
+                        - host_presence: SELF
+                    _generated: true
+        - gcp_cloud:
+              type:
+                  - gcp.provider:
+                        conditions:
+                            - node_presence: gcp_cloud
+                              _generated: true
               conditions:
-                - node_presence: database
-                  _generated: true
-        properties:
-          - database_name:
-              value: shop
-              conditions:
-                - node_presence: database
-                  _generated: true
-          - gcp_dbms_name:
-              value: shop
-              conditions:
-                - node_presence: database
-                  _generated: true
-        requirements:
-          - host:
-              node: os_dbms
-              conditions:
-                - and:
-                    - node_presence: database
-                      _generated: true
-                    - node_presence: os_dbms
-                      _generated: true
-                  _generated: true
-                - logic_expression: is_local
-          - host:
-              node: gcp_dbms
-              conditions:
-                - and:
-                    - node_presence: database
-                      _generated: true
-                    - node_presence: gcp_dbms
-                      _generated: true
-                  _generated: true
-                - logic_expression: is_cloud
-        conditions:
-          - and:
-              - has_incoming_relation_naive: database
-              - host_presence: SELF
-            _generated: true
-    - os_dbms:
-        type:
-          - os.dbms:
-              conditions:
-                - node_presence: os_dbms
-                  _generated: true
-        capabilities:
-          endpoint:
-            properties:
-              connection: ssh
-              host:
-                eval: >-
-                  .::..::.requirements[.name=host]::.target::.requirements[.name=host]::.target::public_ip
-        requirements:
-          - host:
-              node: os_kubernetes
-              conditions:
-                - and:
-                    - node_presence: os_dbms
-                      _generated: true
-                    - node_presence: os_kubernetes
-                      _generated: true
-                  _generated: true
-        conditions:
-          - and:
-              - has_incoming_relation_naive: os_dbms
-              - host_presence: SELF
-            _generated: true
-    - os_monitor:
-        type:
-          - os.monitor:
-              conditions:
-                - node_presence: os_monitor
-                  _generated: true
-        requirements:
-          - host:
-              node: os_kubernetes
-              conditions:
-                - and:
-                    - node_presence: os_monitor
-                      _generated: true
-                    - node_presence: os_kubernetes
-                      _generated: true
-                  _generated: true
-        conditions:
-          - host_presence: SELF
-            _generated: true
-    - os_logger:
-        type:
-          - os.logger:
-              conditions:
-                - node_presence: os_logger
-                  _generated: true
-        requirements:
-          - host:
-              node: os_kubernetes
-              conditions:
-                - and:
-                    - node_presence: os_logger
-                      _generated: true
-                    - node_presence: os_kubernetes
-                      _generated: true
-                  _generated: true
-        conditions:
-          - host_presence: SELF
-            _generated: true
-    - os_kubernetes:
-        type:
-          - os.k8s:
-              conditions:
-                - node_presence: os_kubernetes
-                  _generated: true
-        capabilities:
-          endpoint:
-            properties:
-              connection: ssh
-              host:
-                eval: .::..::.requirements[.name=host]::.target::public_ip
-        requirements:
-          - host:
-              node: os_compute
-              conditions:
-                - and:
-                    - node_presence: os_kubernetes
-                      _generated: true
-                    - node_presence: os_compute
-                      _generated: true
-                  _generated: true
-        conditions:
-          - and:
-              - has_incoming_relation_naive: os_kubernetes
-              - host_presence: SELF
-            _generated: true
-    - os_compute:
-        type:
-          - os.compute:
-              conditions:
-                - node_presence: os_compute
-                  _generated: true
-        properties:
-          - port:
-              value: 80
-              conditions:
-                - node_presence: os_compute
-                  _generated: true
-          - machine:
-              value: shop
-              conditions:
-                - node_presence: os_compute
-                  _generated: true
-          - network:
-              value:
-                get_input: os_network
-              conditions:
-                - node_presence: os_compute
-                  _generated: true
-        requirements:
-          - host:
-              node: os_cloud
-              conditions:
-                - and:
-                    - node_presence: os_compute
-                      _generated: true
-                    - node_presence: os_cloud
-                      _generated: true
-                  _generated: true
-        conditions:
-          - and:
-              - has_incoming_relation_naive: os_compute
-              - host_presence: SELF
-            _generated: true
-    - os_cloud:
-        type:
-          - os.provider:
-              conditions:
-                - node_presence: os_cloud
-                  _generated: true
-        conditions:
-          - has_incoming_relation_naive: os_cloud
-            _generated: true
-    - gcp_runtime:
-        type:
-          - gcp.runtime:
-              conditions:
-                - node_presence: gcp_runtime
-                  _generated: true
-        capabilities:
-          endpoint:
-            properties:
-              connection: local
-        requirements:
-          - host:
-              node: gcp_cloud
-              conditions:
-                - and:
-                    - node_presence: gcp_runtime
-                      _generated: true
-                    - node_presence: gcp_cloud
-                      _generated: true
-                  _generated: true
-        conditions:
-          - and:
-              - has_incoming_relation_naive: gcp_runtime
-              - host_presence: SELF
-            _generated: true
-    - gcp_dbms:
-        type:
-          - gcp.dbms:
-              conditions:
-                - node_presence: gcp_dbms
-                  _generated: true
-        properties:
-          - instance_name:
-              value: shop
-              conditions:
-                - node_presence: gcp_dbms
-                  _generated: true
-          - root_password:
-              value:
-                get_input: database_password
-              conditions:
-                - node_presence: gcp_dbms
-                  _generated: true
-        capabilities:
-          endpoint:
-            properties:
-              connection: local
-        requirements:
-          - host:
-              node: gcp_cloud
-              conditions:
-                - and:
-                    - node_presence: gcp_dbms
-                      _generated: true
-                    - node_presence: gcp_cloud
-                      _generated: true
-                  _generated: true
-        conditions:
-          - and:
-              - has_incoming_relation_naive: gcp_dbms
-              - host_presence: SELF
-            _generated: true
-    - gcp_cloud:
-        type:
-          - gcp.provider:
-              conditions:
-                - node_presence: gcp_cloud
-                  _generated: true
-        conditions:
-          - has_incoming_relation_naive: gcp_cloud
-            _generated: true
+                  - has_incoming_relation_naive: gcp_cloud
+                    _generated: true

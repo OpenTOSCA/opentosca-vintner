@@ -1,18 +1,18 @@
 tosca_definitions_version: tosca_variability_1_0
 
 imports:
-    -   repository: unfurl
-        file: tosca_plugins/artifacts.yaml
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
 
-    -   file: lib/shop_app.yaml
+    - file: lib/shop_app.yaml
 
-    -   file: lib/node_runtime.yaml
-    -   file: lib/sqlite.yaml
-    -   file: lib/os_vm.yaml
+    - file: lib/node_runtime.yaml
+    - file: lib/sqlite.yaml
+    - file: lib/os_vm.yaml
 
-    -   file: lib/gcp_runtime.yaml
-    -   file: lib/gcp_database.yaml
-    -   file: lib/gcp_dbms.yaml
+    - file: lib/gcp_runtime.yaml
+    - file: lib/gcp_database.yaml
+    - file: lib/gcp_dbms.yaml
 
 topology_template:
     variability:
@@ -42,14 +42,14 @@ topology_template:
                     language: DE
 
         expressions:
-            is_community: { equal: [ { variability_input: plan }, COMMUNITY ] }
-            is_business: { equal: [ { variability_input: plan }, BUSINESS ] }
-            is_enterprise: { equal: [ { variability_input: plan }, ENTERPRISE ] }
-            is_business_or_enterprise: { or: [ { logic_expression: is_business }, { logic_expression: is_enterprise } ] }
+            is_community: {equal: [{variability_input: plan}, COMMUNITY]}
+            is_business: {equal: [{variability_input: plan}, BUSINESS]}
+            is_enterprise: {equal: [{variability_input: plan}, ENTERPRISE]}
+            is_business_or_enterprise: {or: [{logic_expression: is_business}, {logic_expression: is_enterprise}]}
 
-            is_EN: { equal: [ { variability_input: language }, EN ] }
-            is_DE: { equal: [ { variability_input: language }, DE ] }
-            is_ES: { equal: [ { variability_input: language }, ES ] }
+            is_EN: {equal: [{variability_input: language}, EN]}
+            is_DE: {equal: [{variability_input: language}, DE]}
+            is_ES: {equal: [{variability_input: language}, ES]}
 
         options:
             type_default_condition: true
@@ -64,68 +64,68 @@ topology_template:
         os_ssh_user:
             type: string
             default: ubuntu
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_ssh_key_file:
             type: string
             default: /home/stoetzms/.ssh/bw-cloud--default
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_region_name:
             type: string
             default: Mannheim
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_auth_type:
             type: string
             default: v3applicationcredential
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_auth_url:
             type: string
             default: https://idm02.bw-cloud.org:5000/v3
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_identity_api_version:
             type: string
             default: '3'
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_interface:
             type: string
             default: public
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_application_credential_id:
             type: string
             default: 3f538f1823bd484e8238b2433de2f21a
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         os_application_credential_secret:
             type: string
             default: '*****************'
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
 
         gcp_service_account_file:
             type: string
             default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
 
         gcp_project:
             type: string
             default: stoetzms-387808
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
 
         gcp_region:
             type: string
             default: europe-west3
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
 
     node_templates:
         shop:
             type: shop.app
             properties:
-                -   application_name: unfurl-artifacts
+                - application_name: unfurl-artifacts
 
                 ###################################################
                 #
@@ -133,25 +133,25 @@ topology_template:
                 #
                 ###################################################
 
-                -   DB_NAME: shop
-                -   DB_USERNAME: root
-                -   DB_PASSWORD: { get_input: db_password }
+                - DB_NAME: shop
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: db_password}
 
-                -   DB_DIALECT:
-                        conditions: { node_presence: os_database }
-                        value: sqlite
+                - DB_DIALECT:
+                      conditions: {node_presence: os_database}
+                      value: sqlite
 
-                -   DB_DIALECT:
-                        conditions: { node_presence: gcp_database }
-                        value: mysql
+                - DB_DIALECT:
+                      conditions: {node_presence: gcp_database}
+                      value: mysql
 
-                -   DB_ADDRESS:
-                        conditions: { node_presence: os_database }
-                        value: { get_attribute: [ os_database, public_address ] }
+                - DB_ADDRESS:
+                      conditions: {node_presence: os_database}
+                      value: {get_attribute: [os_database, public_address]}
 
-                -   DB_ADDRESS:
-                        conditions: { node_presence: gcp_dbms }
-                        value: { get_attribute: [ gcp_dbms, public_address ] }
+                - DB_ADDRESS:
+                      conditions: {node_presence: gcp_dbms}
+                      value: {get_attribute: [gcp_dbms, public_address]}
 
                 ###################################################
                 #
@@ -159,29 +159,29 @@ topology_template:
                 #
                 ###################################################
 
-                -   APPLICATION_LANGUAGE:
-                        conditions: { logic_expression: is_EN }
-                        value: EN
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_EN}
+                      value: EN
 
-                -   APPLICATION_LANGUAGE:
-                        conditions: { logic_expression: is_DE }
-                        value: DE
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_DE}
+                      value: DE
 
-                -   APPLICATION_LANGUAGE:
-                        conditions: { logic_expression: is_ES }
-                        value: ES
+                - APPLICATION_LANGUAGE:
+                      conditions: {logic_expression: is_ES}
+                      value: ES
 
-                -   APPLICATION_ANALYTICAL_REPORTS:
-                        conditions: { logic_expression: is_business }
-                        value: false
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_business}
+                      value: false
 
-                -   APPLICATION_ANALYTICAL_REPORTS:
-                        conditions: { logic_expression: is_enterprise }
-                        value: true
+                - APPLICATION_ANALYTICAL_REPORTS:
+                      conditions: {logic_expression: is_enterprise}
+                      value: true
 
-                -   deployment_mode:
-                        conditions: { logic_expression: is_community }
-                        value: OS
+                - deployment_mode:
+                      conditions: {logic_expression: is_community}
+                      value: OS
 
                 ###################################################
                 #
@@ -189,25 +189,25 @@ topology_template:
                 #
                 ###################################################
 
-                -   deployment_mode:
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        value: GCP
+                - deployment_mode:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: GCP
 
-                -   credentials:
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        value: { get_input: gcp_service_account_file }
+                - credentials:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_service_account_file}
 
-                -   project:
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        value: { get_input: gcp_project }
+                - project:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_project}
 
-                -   region:
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        value: { get_input: gcp_region }
+                - region:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_input: gcp_region}
 
-                -   auto_scaling:
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        value: { get_property: [ gcp_runtime, auto_scaling ] }
+                - auto_scaling:
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      value: {get_property: [gcp_runtime, auto_scaling]}
 
                 ###################################################
                 #
@@ -215,42 +215,42 @@ topology_template:
                 #
                 ###################################################
 
-                -   os_ssh_user:
-                        conditions: { logic_expression: is_community }
-                        value: { get_input: os_ssh_user }
+                - os_ssh_user:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: os_ssh_user}
 
-                -   os_ssh_key_file:
-                        conditions: { logic_expression: is_community }
-                        value: { get_input: os_ssh_key_file }
+                - os_ssh_key_file:
+                      conditions: {logic_expression: is_community}
+                      value: {get_input: os_ssh_key_file}
 
             requirements:
-                -   host:
-                        node: os_runtime
-                        conditions: { logic_expression: is_community }
-                -   host:
-                        node: gcp_runtime
-                        conditions: { logic_expression: is_business_or_enterprise }
-                -   database:
-                        node: os_database
-                        conditions: { logic_expression: is_community }
-                -   database:
-                        node: gcp_database
-                        conditions: { logic_expression: is_business_or_enterprise }
+                - host:
+                      node: os_runtime
+                      conditions: {logic_expression: is_community}
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_business_or_enterprise}
+                - database:
+                      node: os_database
+                      conditions: {logic_expression: is_community}
+                - database:
+                      node: gcp_database
+                      conditions: {logic_expression: is_business_or_enterprise}
 
             artifacts:
-                -   artifact:
-                        type: tosca.artifacts.File
-                        conditions: { logic_expression: is_community }
-                        file: files/application.community.xz
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_community}
+                      file: files/application.community.xz
 
-                -   artifact:
-                        type: tosca.artifacts.File
-                        conditions: { logic_expression: is_business_or_enterprise }
-                        file: files/application.enterprise.zip
+                - artifact:
+                      type: tosca.artifacts.File
+                      conditions: {logic_expression: is_business_or_enterprise}
+                      file: files/application.enterprise.zip
 
         gcp_runtime:
             type: gcp.runtime
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 auto_scaling: true
             capabilities:
@@ -260,46 +260,46 @@ topology_template:
 
         gcp_database:
             type: gcp.database
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
             properties:
                 database_name: shop
                 instance_name: unfurl-artifacts
             requirements:
-                -   host: gcp_dbms
+                - host: gcp_dbms
 
         gcp_dbms:
             type: gcp.dbms
-            conditions: { logic_expression: is_business_or_enterprise }
+            conditions: {logic_expression: is_business_or_enterprise}
             properties:
-                -   instance_name: unfurl-artifacts
-                -   root_password: { get_input: db_password }
-                -   backups: true
+                - instance_name: unfurl-artifacts
+                - root_password: {get_input: db_password}
+                - backups: true
 
-                -   availability_type:
-                        conditions: { logic_expression: is_business }
-                        value: ZONAL
+                - availability_type:
+                      conditions: {logic_expression: is_business}
+                      value: ZONAL
 
-                -   availability_type:
-                        conditions: { logic_expression: is_enterprise }
-                        value: REGIONAL
+                - availability_type:
+                      conditions: {logic_expression: is_enterprise}
+                      value: REGIONAL
 
         os_runtime:
             type: node.runtime
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
             requirements:
-                -   host: os_vm
+                - host: os_vm
 
         os_database:
             type: sqlite.database
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
             properties:
                 database_name: shop
             requirements:
-                -   host: os_vm
+                - host: os_vm
 
         os_vm:
             type: os.vm
-            conditions: { logic_expression: is_community }
+            conditions: {logic_expression: is_community}
             properties:
                 port: 3000
                 machine_name: unfurl-artifacts

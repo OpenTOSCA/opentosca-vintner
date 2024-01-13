@@ -12,15 +12,15 @@ node_types:
 
             service_account_file:
                 type: string
-                default: { get_input: gcp_service_account_file }
+                default: {get_input: gcp_service_account_file}
 
             project:
                 type: string
-                default: { get_input: gcp_project }
+                default: {get_input: gcp_project}
 
             region:
                 type: string
-                default: { get_input: gcp_region }
+                default: {get_input: gcp_region}
 
             deployment_mode:
                 type: string
@@ -42,9 +42,9 @@ node_types:
                 type: unfurl.capabilities.Endpoint.Ansible
 
         requirements:
-            -   host:
-                    capability: tosca.capabilities.Compute
-                    relationship: tosca.relationships.HostedOn
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
 
         interfaces:
             Standard:

@@ -27,7 +27,7 @@ node_types:
 
             gcp_region:
                 type: string
-                default:  {get_input: gcp_region}
+                default: {get_input: gcp_region}
 
             gcp_project:
                 type: string
