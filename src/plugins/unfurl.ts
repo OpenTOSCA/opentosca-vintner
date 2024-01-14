@@ -45,7 +45,7 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         files.copy(instance.getTemplateDirectory(), this.getEnsembleDirectory(instance))
         files.copy(instance.getServiceInputs(), this.getEnsembleInputsPath(instance))
 
-        const command = [this.getBinary(instance), 'deploy', '--approve']
+        const command = [this.getBinary(instance), 'deploy', '--approve', '--jobexitcode error']
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -55,7 +55,7 @@ export class UnfurlPlugin implements OrchestratorPlugin {
     }
 
     async undeploy(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [this.getBinary(instance), 'undeploy', '--approve']
+        const command = [this.getBinary(instance), 'undeploy', '--approve', '--jobexitcode error']
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -65,7 +65,7 @@ export class UnfurlPlugin implements OrchestratorPlugin {
     }
 
     async continue(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [this.getBinary(instance), 'deploy', '--approve']
+        const command = [this.getBinary(instance), 'deploy', '--approve', '--jobexitcode error']
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
