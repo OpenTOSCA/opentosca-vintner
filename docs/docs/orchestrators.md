@@ -94,7 +94,7 @@ The orchestrators provide more features, see [TOSSS](https://tosss.opentosca.org
 
 | Feature                                       | xOpera           | Unfurl           |
 |-----------------------------------------------|------------------|------------------|
-| Validate an application topology              | :material-check: | :material-close: |
+| Validate an application topology              | :material-check: | :material-check: |
 | Deploy an application                         | :material-check: | :material-check: |
 | Access deployment outputs                     | :material-check: | :material-close: |
 | Continue the deployment of an application     | :material-check: | :material-close: | 
