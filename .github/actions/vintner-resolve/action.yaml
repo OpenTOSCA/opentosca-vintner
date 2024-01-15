@@ -18,11 +18,6 @@ runs:
               vintner templates import --template template --path examples/${EXAMPLE}
               vintner instances init --instance instance --template template
               vintner instances resolve --instance instance --presets ${PRESET}
-
-              if [ ${ORCHESTRATOR} == "xopera" ]; then 
-                vintner instances validate --instance instance
-              fi
           env:
               EXAMPLE: ${{ inputs.example }}
               PRESET: ${{ inputs.preset }}
-              ORCHESTRATOR: ${{ inputs.orchestrator }}

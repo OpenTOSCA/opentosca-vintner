@@ -647,6 +647,7 @@ instances
     .command('validate')
     .description('validates variability-resolved service template')
     .requiredOption('--instance <string>', 'instance name')
+    .option('--inputs [string]', 'path to the deployment inputs')
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {

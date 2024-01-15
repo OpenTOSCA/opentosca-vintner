@@ -161,7 +161,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -173,6 +172,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -227,13 +229,15 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -288,7 +292,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -300,6 +303,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -354,7 +360,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -362,6 +367,9 @@ jobs:
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   os_application_credential_secret: dummy
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -417,7 +425,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -429,6 +436,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -484,13 +494,15 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -546,7 +558,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -558,6 +569,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -613,13 +627,15 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -641,7 +657,6 @@ jobs:
     #
     ###################################################
 
-    # TODO: somehow testing step is broken
     unfurl-artifacts-community:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
@@ -675,7 +690,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -687,6 +701,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -741,13 +758,15 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -802,7 +821,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -814,6 +832,9 @@ jobs:
               env:
                   OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
                   OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy
@@ -868,7 +889,6 @@ jobs:
               with:
                   example: ${{ env.EXAMPLE }}
                   preset: ${{ env.PRESET }}
-                  orchestrator: ${{ env.ORCHESTRATOR }}
 
             - name: (VINTNER) Assign deployment inputs
               run: |
@@ -877,6 +897,9 @@ jobs:
                   os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
             - name: (VINTNER) Deploy application
               uses: ./.github/actions/vintner-deploy

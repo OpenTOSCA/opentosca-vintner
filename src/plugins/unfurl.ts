@@ -1,5 +1,6 @@
+import * as check from '#check'
 import * as files from '#files'
-import {OrchestratorOperationOptions, OrchestratorPlugin} from '#plugins/types'
+import {OrchestratorOperationOptions, OrchestratorPlugin, OrchestratorValidateOptions} from '#plugins/types'
 import {Instance} from '#repositories/instances'
 import {Shell} from '#shell'
 import * as utils from '#utils'
@@ -46,18 +47,17 @@ export class UnfurlPlugin implements OrchestratorPlugin {
     /**
      * https://docs.unfurl.run/cli.html#unfurl-validate
      */
-    async validate(instance: Instance, options?: OrchestratorOperationOptions) {
+    async validate(instance: Instance, options?: OrchestratorValidateOptions) {
         const tmp = files.temporary()
         files.createDirectory(tmp)
-        await this.createEnsemble(instance, tmp)
-
-        // TODO: handle --inputs. maybe via service-inputs.tmp.yaml or something?
+        await this.createEnsemble(instance, {dir: tmp, inputs: options?.inputs})
 
         const command = [this.binary, 'validate', this.shell.resolve(tmp)]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
 
-        files.deleteDirectory(tmp)
+        // TODO: Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
+        // TODO: files.deleteDirectory(tmp)
     }
 
     /**
@@ -118,8 +118,8 @@ export class UnfurlPlugin implements OrchestratorPlugin {
         return Promise.reject('Not Implemented')
     }
 
-    private async createEnsemble(instance: Instance, dir?: string) {
-        const dataDirectory = dir ?? instance.getDataDirectory()
+    private async createEnsemble(instance: Instance, options: {dir?: string; inputs?: string} = {}) {
+        const dataDirectory = options.dir ?? instance.getDataDirectory()
         const ensembleDirectory = path.join(dataDirectory, 'ensemble')
         const ensembleFile = path.join(ensembleDirectory, 'ensemble.yaml')
         const ensembleFileContent = `apiVersion: unfurl/v1alpha1
@@ -134,7 +134,9 @@ spec:
         await this.shell.execute([this.binary, 'init', '--empty', this.shell.resolve(dataDirectory)])
         files.storeYAML(ensembleFile, ensembleFileContent)
         files.copy(instance.getTemplateDirectory(), ensembleDirectory)
-        // TODO: but this is required during deployment
-        if (instance.hasServiceInputs()) files.copy(instance.getServiceInputs(), ensembleInputsFile)
+
+        // This is messy: use options.inputs for validating and instance.hasVariabilityInputs for deployment
+        const inputs = options.inputs ?? (instance.hasServiceInputs() ? instance.getServiceInputs() : undefined)
+        if (check.isDefined(inputs)) files.copy(inputs, ensembleInputsFile)
     }
 }

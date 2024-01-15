@@ -45,7 +45,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute([this.binary, '--version'])
     }
 
-    async validate(instance: Instance, options?: OrchestratorOperationOptions) {
+    async validate(instance: Instance, options?: {inputs?: string} & OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'validate',
@@ -53,8 +53,12 @@ export class xOperaPlugin implements OrchestratorPlugin {
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
+
+        if (check.isDefined(options) && check.isDefined(options.inputs))
+            command.push('--inputs', this.shell.resolve(options.inputs))
+
         if (options?.verbose) command.push('--verbose')
+
         await this.shell.execute(command)
     }
 

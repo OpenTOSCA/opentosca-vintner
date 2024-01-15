@@ -1,0 +1,8 @@
+name: 'Validate application'
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Validate application
+          shell: bash
+          run: |
+              vintner instances validate --instance instance --inputs /tmp/deployment-inputs.yaml
