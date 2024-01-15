@@ -82,13 +82,8 @@ First, log into the choco account.
 choco apikey --api-key [API_KEY_HERE] --source https://push.chocolatey.org
 ```
 
-Prepare a new version as follows. 
-
-1. Place the binary in `choco/tools/vintner.exe`
-2. Place the signature in `choco/tools/vintner.exe.asc`
-3. Update the version in `choco/opentosca-vintner.nuspec`
-
-Finally, publish the new version.
+Publish a new version as follows. 
+This will use the latest release.
 
 ````shell linenums="1"
 yarn release:choco

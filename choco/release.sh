@@ -4,19 +4,11 @@ set -e
 # Set working directory
 cd "$(dirname "$0")"
 
-# Ensure that signature exists
-VINTNER_EXE="tools/vintner.exe"
-if [ ! -f "${VINTNER_EXE}" ]; then
-  echo "\"${VINTNER_EXE}\" does not exists"
-  exit 1
-fi
+# Download binary
+curl -L https://github.com/OpenTOSCA/opentosca-vintner/releases/download/latest/vintner-win-x64.exe -o tools/vintner.exe
 
-# Ensure that signature exists
-VINTNER_EXE_ASC="tools/vintner.exe.asc"
-if [ ! -f "${VINTNER_EXE_ASC}" ]; then
-  echo "\"${VINTNER_EXE_ASC}\" does not exists"
-  exit 1
-fi
+# Download signature
+curl -L https://github.com/OpenTOSCA/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc -o tools/vintner.exe.asc
 
 # Create package
 choco pack
