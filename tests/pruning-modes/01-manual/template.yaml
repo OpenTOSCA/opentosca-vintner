@@ -11,25 +11,25 @@ topology_template:
             type: string
             default: password
 
-        os_compute_network:
+        os_network:
             type: string
-            default: public-belwue-v6only
+            default: public-belwue
 
-        os_compute_security_groups:
-            type: string
-            default: default
-
-        os_compute_key_name:
+        os_security_groups:
             type: string
             default: default
 
-        os_compute_ssh_user:
+        os_ssh_key_name:
+            type: string
+            default: default
+
+        os_ssh_user:
             type: string
             default: ubuntu
 
-        os_compute_ssh_key_file:
+        os_ssh_key_file:
             type: string
-            default: /home/milesstoetzner/.ssh/bw-cloud--default
+            default: /home/stoetzms/.ssh/bw-cloud--default
 
         os_region_name:
             type: string
@@ -64,7 +64,7 @@ topology_template:
 
         gcp_service_account_file:
             type: string
-            default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
@@ -118,6 +118,8 @@ topology_template:
         shop:
             type: shop.component
             properties:
+                - application_name: xopera-pruning
+
                 - DB_NAME: shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
@@ -138,8 +140,8 @@ topology_template:
                       conditions: {logic_expression: is_elastic}
                       value: {get_attribute: [SELF, database, public_address]}
 
-                - vm_ssh_user: {get_input: os_compute_ssh_user}
-                - vm_ssh_key_file: {get_input: os_compute_ssh_key_file}
+                - vm_ssh_user: {get_input: os_ssh_user}
+                - vm_ssh_key_file: {get_input: os_ssh_key_file}
 
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
@@ -188,7 +190,7 @@ topology_template:
                       conditions: {logic_expression: is_static}
 
                 - name:
-                      value: shop
+                      value: xopera-pruning
                       conditions: {logic_expression: is_static}
 
                 - image:
@@ -210,23 +212,23 @@ topology_template:
                           - {logic_expression: is_large}
 
                 - network:
-                      value: {get_input: os_compute_network}
+                      value: {get_input: os_network}
                       conditions: {logic_expression: is_static}
 
                 - security_groups:
-                      value: {get_input: os_compute_security_groups}
+                      value: {get_input: os_security_groups}
                       conditions: {logic_expression: is_static}
 
                 - key_name:
-                      value: {get_input: os_compute_key_name}
+                      value: {get_input: os_ssh_key_name}
                       conditions: {logic_expression: is_static}
 
                 - ssh_user:
-                      value: {get_input: os_compute_ssh_user}
+                      value: {get_input: os_ssh_user}
                       conditions: {logic_expression: is_static}
 
                 - ssh_key_file:
-                      value: {get_input: os_compute_ssh_key_file}
+                      value: {get_input: os_ssh_key_file}
                       conditions: {logic_expression: is_static}
 
             requirements:
@@ -296,7 +298,7 @@ topology_template:
             conditions: {logic_expression: is_elastic}
             properties:
                 - instance_name:
-                      value: shop
+                      value: xopera-pruning
                       conditions: {logic_expression: is_elastic}
 
                 - root_password:

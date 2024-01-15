@@ -18,7 +18,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## Terminology 
 
-In the following, we quickly introduce some terminologies.
+We quickly introduce some terminologies.
 
 - A condition holds if the condition evaluates to true.
 - An element is present if all assigned conditions hold.
@@ -406,7 +406,7 @@ A node template can also hold conditional types, artifact, and properties.
 | default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
 | default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
 | default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                                        |
-| consumed                      | false     | Boolean                                                                              | Configure if node is consumed, e.g., by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.                                       |
+| persistent                     | false     | Boolean                                                                              | Configure if node is persistent, e.g., always consumed by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.                      |
 | pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
 | consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
@@ -883,7 +883,7 @@ The following date operators can be used inside a variability expression.
 
 ## Processing
 
-In the following, we describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
+We describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
 ### Resolve Variability
 
@@ -1023,7 +1023,7 @@ As an overview, the following table shows the collections that are used in TOSCA
 
 ### Element Uniqueness
 
-As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers such as the key in a map.
+As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers, such as the key in a map.
 This is directly related to the used collections.
 
 | Element    | TOSCA            | Variability4TOSCA   |
@@ -1071,7 +1071,7 @@ node_templates:
 ```
 
 
-Then, the following identifiers, among others, exist.
+Next, the following identifiers, among others, exist.
 
 - `node.my_node` for the node template `my_node`.
 - `property.my_property@0.node.my_node` for the first property `my_property` of the node template `my_node`.
@@ -1113,7 +1113,7 @@ node_templates:
 ```
 
 
-Then, the following display representations, among others, exist.
+Next, the following display representations, among others, exist.
 
 - `Node "my_node"` for the node template `my_node`.
 - `Property "my_property@0" of Node "my_node"` for the first property `my_property` of the node template `my_node`.

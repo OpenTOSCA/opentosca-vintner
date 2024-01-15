@@ -66,6 +66,14 @@ jobs:
                     gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
                   done
 
+            - name: (BUILD) Checksum Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    sha256sum --binary ${BINARY} > ${BINARY}.sha256             
+                  done
+
             - name: (BUILD) Compress Binaries
               run: |
                   cd dist
@@ -151,6 +159,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   load: true
                   tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
@@ -160,6 +169,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   push: true
                   tags: ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache

@@ -14,7 +14,7 @@
 
       - name: Create directory for databases
         file:
-            path: '{{ databases_directory }}'
+            path: /var/lib/sqlite-databases
             state: directory
 
       - name: Create database

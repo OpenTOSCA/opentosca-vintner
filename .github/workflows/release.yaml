@@ -47,8 +47,14 @@ jobs:
                   python-version: 3.10.13
                   cache: pip
 
+            - name: (PREPARE) Cache xOpera
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/opera
+                  key: xopera
+
             - name: (PREPARE) Install xOpera
-              run: sudo ./src/assets/scripts/install-xopera.sh
+              run: ./src/assets/scripts/install-xopera.sh
 
             ###################################################
             #
@@ -109,6 +115,14 @@ jobs:
                   for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
                   do 
                     gpg --no-tty --detach-sign -a --local-user vintner-release ${BINARY}             
+                  done
+
+            - name: (BUILD) Checksum Binaries
+              run: |
+                  cd dist
+                  for BINARY in vintner-alpine-x64 vintner-linux-arm64 vintner-linux-x64 vintner-win-x64.exe
+                  do 
+                    sha256sum --binary ${BINARY} > ${BINARY}.sha256             
                   done
 
             - name: (BUILD) Compress Binaries
@@ -201,6 +215,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   load: true
                   tags: ghcr.io/opentosca/opentosca-vintner:latest,ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
@@ -210,6 +225,7 @@ jobs:
               uses: docker/build-push-action@v5.0.0
               with:
                   context: .
+                  file: docker/Dockerfile
                   push: true
                   tags: ghcr.io/opentosca/opentosca-vintner:latest
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache

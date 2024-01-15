@@ -1,0 +1,3 @@
+template: ../../../../examples/unfurl-aware/variable-service-template.yaml
+expected: ../../local.expected.yaml
+presets: local

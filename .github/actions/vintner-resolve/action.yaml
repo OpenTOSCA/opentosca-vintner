@@ -1,0 +1,23 @@
+name: 'Resolve Variability'
+inputs:
+    example:
+        required: true
+
+    preset:
+        required: true
+
+    orchestrator:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Resolve variability
+          shell: bash
+          run: |
+              vintner templates import --template template --path examples/${EXAMPLE}
+              vintner instances init --instance instance --template template
+              vintner instances resolve --instance instance --presets ${PRESET}
+          env:
+              EXAMPLE: ${{ inputs.example }}
+              PRESET: ${{ inputs.preset }}

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/bash
 set -e
 
 # Ensure that vintner is installed
@@ -18,7 +18,8 @@ echo '# Installation'
 p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'
 sleep 3
 
-pe 'vintner setup init'
+# Is part of the installation
+vintner setup init
 
 echo ''
 echo '# Orchestrator'
@@ -38,7 +39,7 @@ pe 'vintner templates import --template getting-started --path examples/xopera-g
 pe 'vintner instances init --instance getting-started --template getting-started'
 # sleep 0.5
 
-pe 'vintner instances resolve --instance getting-started --inputs examples/xopera-getting-started/variability-inputs.example.yaml'
+pe 'vintner instances resolve --instance getting-started --presets first'
 ## sleep 0.5
 
 pe 'vintner instances deploy --instance getting-started'

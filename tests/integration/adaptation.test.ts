@@ -4,20 +4,15 @@ import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import * as utils from '#utils'
 import {expect} from 'chai'
-import {before} from 'mocha'
 import path from 'path'
 import Controller from '../../src/controller'
-import {checkSetup, cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
+import {cleanSetup, examplesDir, initSetup, integrationTestsEnabled} from './utils'
 
 if (!integrationTestsEnabled) {
     std.log()
     std.log('Skipping integration tests')
 } else {
     describe('adaptation', () => {
-        before(async () => {
-            await checkSetup()
-        })
-
         beforeEach(async () => {
             await initSetup()
         })
@@ -49,7 +44,7 @@ if (!integrationTestsEnabled) {
             // Resolve variability
             await Controller.instances.resolve({
                 instance: instanceName,
-                inputs: path.join(templateDirectory, 'variability-inputs.example.yaml'),
+                presets: ['first'],
             })
 
             // Assert that variability-resolved service template and variability inputs are as expected

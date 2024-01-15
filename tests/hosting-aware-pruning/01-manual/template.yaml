@@ -1,0 +1,223 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+
+    - lib/gcp_dbms.yaml
+    - lib/gcp_runtime.yaml
+    - lib/gcp_provider.yaml
+    - lib/os_compute.yaml
+    - lib/os_dbms.yaml
+    - lib/os_k8s.yaml
+    - lib/os_logger.yaml
+    - lib/os_monitor.yaml
+    - lib/os_provider.yaml
+    - lib/shop_component.yaml
+    - lib/shop_database.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+            default: password
+
+        os_network:
+            type: string
+            default: public-belwue
+
+        os_ssh_key_name:
+            type: string
+            default: default
+
+        os_ssh_user:
+            type: string
+            default: ubuntu
+
+        os_ssh_key_file:
+            type: string
+            default: /home/stoetzms/.ssh/bw-cloud--default
+
+        os_region_name:
+            type: string
+            default: Mannheim
+
+        os_auth_type:
+            type: string
+            default: v3applicationcredential
+
+        os_auth_url:
+            type: string
+            default: https://idm02.bw-cloud.org:5000/v3
+
+        os_identity_api_version:
+            type: string
+            default: '3'
+
+        os_interface:
+            type: string
+            default: public
+
+        os_application_credential_id:
+            type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+            default: europe-west3
+
+        gcp_service_account_file:
+            type: string
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
+
+    variability:
+        inputs:
+            cloud:
+                type: boolean
+                default: false
+
+        presets:
+            local:
+                inputs:
+                    cloud: false
+
+            cloud:
+                inputs:
+                    cloud: true
+
+        expressions:
+            is_local: {equal: [{variability_input: cloud}, false]}
+            is_cloud: {equal: [{variability_input: cloud}, true]}
+
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming
+            hosting_stack_constraint: false
+            optimization: false
+            unique: true
+            type_pruning: true
+
+    node_templates:
+        shop:
+            type: shop.component
+            properties:
+                - application_name: unfurl-aware
+                - DB_NAME: shop
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: database_password}
+                - DB_DIALECT: mysql
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
+            requirements:
+                - host:
+                      node: os_kubernetes
+                      conditions: {logic_expression: is_local}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_cloud}
+
+                - database:
+                      node: database
+
+        database:
+            type: shop.database
+            properties:
+                - database_name: shop
+                - gcp_dbms_name: unfurl-aware
+            requirements:
+                - host:
+                      node: os_dbms
+                      conditions: {logic_expression: is_local}
+
+                - host:
+                      node: gcp_dbms
+                      conditions: {logic_expression: is_cloud}
+
+        os_dbms:
+            type: os.dbms
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: ssh
+                        host:
+                            eval: '.::..::.requirements[.name=host]::.target::.requirements[.name=host]::.target::public_ip'
+            requirements:
+                - host:
+                      node: os_kubernetes
+
+        os_monitor:
+            type: os.monitor
+            conditions: {logic_expression: is_local}
+            requirements:
+                - host:
+                      node: os_kubernetes
+
+        os_logger:
+            type: os.logger
+            conditions: {logic_expression: is_local}
+            requirements:
+                - host:
+                      node: os_kubernetes
+
+        os_kubernetes:
+            type: os.k8s
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: ssh
+                        host:
+                            eval: '.::..::.requirements[.name=host]::.target::public_ip'
+            requirements:
+                - host:
+                      node: os_compute
+
+        os_compute:
+            type: os.compute
+            properties:
+                - port:
+                      value: 80
+                - machine:
+                      value: unfurl-aware
+                - network:
+                      value: {get_input: os_network}
+            requirements:
+                - host:
+                      node: os_cloud
+
+        os_cloud:
+            type: os.provider
+
+        gcp_runtime:
+            type: gcp.runtime
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
+            requirements:
+                - host:
+                      node: gcp_cloud
+
+        gcp_dbms:
+            type: gcp.dbms
+            properties:
+                - instance_name:
+                      value: unfurl-aware
+                - root_password:
+                      value: {get_input: database_password}
+            capabilities:
+                endpoint:
+                    properties:
+                        connection: local
+            requirements:
+                - host:
+                      node: gcp_cloud
+
+        gcp_cloud:
+            type: gcp.provider

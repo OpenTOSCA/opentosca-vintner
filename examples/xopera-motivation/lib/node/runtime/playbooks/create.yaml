@@ -7,18 +7,15 @@
       ansible_ssh_private_key_file: '{{ ssh_key_file }}'
       ansible_ssh_user: '{{ ssh_user }}'
   tasks:
-      - name: download install script
-        get_url:
-            url: https://deb.nodesource.com/setup_14.x
-            dest: /tmp/nodesource_setup.sh
-            mode: a+x
-
-      - name: setup source
-        shell: bash /tmp/nodesource_setup.sh
-
-      - name: install package
-        apt:
-            name: nodejs
+      - name: Install Node.js
+        shell: |
+            if [ ! -f /usr/bin/node ]; then
+                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+                sudo apt-get install -y nodejs
+                npm install -g yarn
+            fi
+        args:
+            executable: /usr/bin/bash
 
       - name: Create applications directory
         file:

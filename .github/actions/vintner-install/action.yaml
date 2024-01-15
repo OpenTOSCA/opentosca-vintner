@@ -1,0 +1,117 @@
+name: 'Install Vintner'
+inputs:
+    gcp_service_account_file:
+        required: true
+
+    os_ssh_key_file:
+        required: true
+
+    os_application_credential_id:
+        required: true
+
+    os_application_credential_secret:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        ###################################################
+        #
+        # Prepare
+        #
+        ###################################################
+
+        - name: (PREPARE) Setup Git
+          shell: bash
+          run: |
+              git config --global user.name "${GITHUB_ACTOR}"
+              git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
+
+        - name: (PREPARE) Setup GCloud
+          uses: google-github-actions/setup-gcloud@v1
+          with:
+              version: 438.0.0
+
+        - name: (PREPARE) Setup GCP service account file
+          shell: bash
+          run: |
+              if [ -z "${GCP_SERVICE_ACCOUNT_FILE}" ]; then
+                echo "GCP_SERVICE_ACCOUNT_FILE not defined"
+                exit 1
+              fi
+
+              echo ${GCP_SERVICE_ACCOUNT_FILE} | base64 --decode > /tmp/gcp-service-account-file.json
+          env:
+              GCP_SERVICE_ACCOUNT_FILE: ${{ inputs.gcp_service_account_file }}
+
+        - name: (PREPARE) Setup OS SSH key file
+          shell: bash
+          run: |
+              if [ -z "${OS_SSH_KEY_FILE}" ]; then
+                echo "OS_SSH_KEY_FILE not defined"
+                exit 1
+              fi
+
+              echo ${OS_SSH_KEY_FILE} | base64 --decode > /tmp/os-ssh-key-file
+              chmod 400 /tmp/os-ssh-key-file
+          env:
+              OS_SSH_KEY_FILE: ${{ inputs.os_ssh_key_file }}
+
+        - name: (PREPARE) Setup OS credentials
+          shell: bash
+          run: |
+              if [ -z "${OS_APPLICATION_CREDENTIAL_ID}" ]; then
+                echo "OS_APPLICATION_CREDENTIAL_ID not defined"
+                exit 1
+              fi
+
+              if [ -z "${OS_APPLICATION_CREDENTIAL_SECRET}" ]; then
+                echo "OS_APPLICATION_CREDENTIAL_SECRET not defined"
+                exit 1
+              fi
+
+              cat << EOF > /tmp/os-credentials.sh
+              #!/usr/bin/bash
+              export OS_AUTH_TYPE=v3applicationcredential
+              export OS_AUTH_URL=https://idm02.bw-cloud.org:5000/v3
+              export OS_IDENTITY_API_VERSION=3
+              export OS_REGION_NAME="Mannheim"
+              export OS_INTERFACE=public
+              export OS_APPLICATION_CREDENTIAL_ID=${OS_APPLICATION_CREDENTIAL_ID}
+              export OS_APPLICATION_CREDENTIAL_SECRET=${OS_APPLICATION_CREDENTIAL_SECRET}                  
+              EOF
+
+              chmod 755 /tmp/os-credentials.sh
+          env:
+              OS_APPLICATION_CREDENTIAL_ID: ${{ inputs.os_application_credential_id }}
+              OS_APPLICATION_CREDENTIAL_SECRET: ${{ inputs.os_application_credential_secret }}
+
+        - name: (PREPARE) Setup Python
+          uses: actions/setup-python@v4
+          with:
+              python-version: 3.10.13
+              cache: pip
+
+        - name: (PREPARE) Cache xOpera
+          uses: actions/cache@v3
+          with:
+              path: /home/runner/opera
+              key: xopera
+
+        - name: (PREPARE) Install xOpera
+          shell: bash
+          run: ./src/assets/scripts/install-xopera.sh
+
+        - name: (PREPARE) Cache Unfurl
+          uses: actions/cache@v3
+          with:
+              path: /home/runner/unfurl
+              key: unfurl
+
+        - name: (PREPARE) Install Unfurl
+          shell: bash
+          run: ./src/assets/scripts/install-unfurl.sh
+
+        - name: (PREPARE) Install Vintner
+          shell: bash
+          run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -

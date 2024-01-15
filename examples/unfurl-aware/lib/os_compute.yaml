@@ -1,0 +1,163 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    os.compute:
+        derived_from: unfurl.nodes.Installer.Terraform
+        properties:
+            port:
+                type: string
+
+            machine:
+                type: string
+
+            flavor:
+                type: string
+                default: 'm1.medium'
+
+            network:
+                type: string
+
+            os_region_name:
+                type: string
+                default: {get_input: os_region_name}
+
+            os_auth_type:
+                type: string
+                default: {get_input: os_auth_type}
+
+            os_auth_url:
+                type: string
+                default: {get_input: os_auth_url}
+
+            os_identity_api_version:
+                type: string
+                default: {get_input: os_identity_api_version}
+
+            os_interface:
+                type: string
+                default: {get_input: os_interface}
+
+            os_application_credential_id:
+                type: string
+                default: {get_input: os_application_credential_id}
+
+            os_application_credential_secret:
+                type: string
+                default: {get_input: os_application_credential_secret}
+
+        attributes:
+            public_address:
+                type: string
+            public_ip:
+                type: string
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                    delete:
+            defaults:
+                outputs:
+                    public_ip: public_ip
+                    public_address: public_address
+                inputs:
+                    tfvars: |
+                        os_region_name = "{{ SELF.os_region_name}}"
+                        os_auth_url = "{{ SELF.os_auth_url}}"
+
+                        os_application_credential_id = "{{ SELF.os_application_credential_id}}"
+                        os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
+
+                        port = {{ SELF.port }}
+                        machine = "{{ SELF.machine }}"
+                        flavor = "{{ SELF.flavor }}"
+                        network = "{{ SELF.network }}"
+                    main: |
+                        terraform {
+                        required_version = ">= 0.14.0"
+                          required_providers {
+                            openstack = {
+                              source  = "terraform-provider-openstack/openstack"
+                              version = "~> 1.48.0"
+                            }
+                          }
+                        }
+
+                        provider "openstack" {
+                          region = var.os_region_name
+                          auth_url = var.os_auth_url
+
+                          application_credential_id = var.os_application_credential_id
+                          application_credential_secret = var.os_application_credential_secret
+                        }
+
+                        variable "os_region_name" {
+                          type        = string
+                        }
+
+                        variable "os_auth_url" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_id" {
+                          type        = string
+                        }
+
+                        variable "os_application_credential_secret" {
+                          type        = string
+                        }
+
+                        variable "port" {
+                          type        = string
+                        }
+
+                        variable "machine" {
+                          type        = string
+                        }
+
+                        variable "flavor" {
+                          type        = string
+                        }
+
+                        variable "network" {
+                          type        = string
+                        }
+
+                        resource "openstack_networking_secgroup_v2" "ports" {
+                            name        = "${var.machine}-ports"
+                            description = "ports for ${var.machine}"
+                        }
+
+                        resource "openstack_networking_secgroup_rule_v2" "port" {
+                            direction         = "ingress"
+                            ethertype         = "IPv4"
+                            protocol          = "tcp"
+                            port_range_min    = var.port
+                            port_range_max    = var.port
+                            remote_ip_prefix  = "0.0.0.0/0"
+                            security_group_id = openstack_networking_secgroup_v2.ports.id
+                        }
+
+                        resource "openstack_compute_instance_v2" "machine" {
+                          name            = var.machine
+                          image_name      = "Ubuntu 22.04"
+                          flavor_name     = var.flavor
+                          key_pair        = "default"
+                          security_groups = ["default", openstack_networking_secgroup_v2.ports.name]
+
+                          network {
+                            name = var.network
+                          }
+                        }
+
+                        output "public_address" {
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
+                        }
+
+                        output "public_ip" {
+                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
+                        }

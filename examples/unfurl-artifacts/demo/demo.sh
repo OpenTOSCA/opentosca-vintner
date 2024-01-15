@@ -33,17 +33,14 @@ vintner templates inspect --template artifacts
 # init
 vintner instances init --instance artifacts --template artifacts
 
-# inspect variability inputs
-cat unfurl-artifacts/tests/enterprise/inputs.yaml
-
 # resolve
-vintner instances resolve --instance artifacts --inputs unfurl-artifacts/tests/enterprise/inputs.yaml
+vintner instances resolve --instance artifacts --presets enterprise
 
 # inspect variability-resolved deployment model
 vintner instances inspect --instance artifacts
 
 # unfurl
-vintner setup install --unfurl
+vintner install unfurl
 vintner orchestrators init unfurl
 vintner orchestrators enable --orchestrator unfurl
 

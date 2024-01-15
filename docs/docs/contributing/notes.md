@@ -5,7 +5,7 @@ tags:
 
 # Notes
 
-This document contains a collection of arbitrary notes.
+This document holds a collection of arbitrary notes.
 
 ## Filesystem
 
@@ -136,7 +136,7 @@ Note, this does not undeploy the instance.
 ## General Helpful Tools on Linux
 
 ```shell linenums="1"
-sudo apt-get update -y && sudo apt-get install tree nano wget jq net-tools curl git stress nmap -y
+sudo apt-get update -y && sudo apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap -y
 ```
 
 ## Put Some Stress on CPU and Memory
@@ -189,30 +189,51 @@ Run the following command, to count the lines of code in the `src` folder.
 cloc src
 ```
 
-The following output has been generated for the commit `3f90b22c17472f43062a63b306bc3ea6b134b899` on September 11, 2023.
+The following output has been generated for the commit `d28fbf54fcdc1ecae8abf7cdbdf2e04cb42e53a7` on January 1, 2024.
 
 ```text linenums="1"
-     194 text files.
-     191 unique files.                                          
+     202 text files.
+     199 unique files.                                          
        3 files ignored.
 
-github.com/AlDanial/cloc v 1.98  T=0.15 s (1237.1 files/s, 77407.3 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.89 s (223.7 files/s, 14234.5 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     162           1804            756           9020
-Bourne Shell                    16             46             17            152
+TypeScript                     170           1946            842           9443
+Bourne Shell                    16             55             46            176
 YAML                             7             11              0            103
 EJS                              5              7              0             34
 CSV                              1              0              0              1
 -------------------------------------------------------------------------------
-SUM:                           191           1868            773           9310
+SUM:                           199           2019            888           9757
 -------------------------------------------------------------------------------
 ```
 
+## Adding a New Publication
+
+1. Step-by-step guide
+1. Zenodo
+1. Integration tests
+1. Entry in [Publications](../publications.md)
+1. Git tag
+1. Add used links 
+
+## Used Links
+
+The following links are used in publications.
+
+- https://github.com/opentosca/opentosca-vintner
+- https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/6100939642/job/16556255878
+- https://vintner.opentosca.org
+- https://vintner.opentosca.org/variability4tosca/specification
+- https://vintner.opentosca.org/variability4tosca/guides/artifacts
+- https://vintner.opentosca.org/variability4tosca/guides/pruning
+
+
 ## Limitations
 
-In the following, we briefly discuss limitations of our prototypical implementation.
+We briefly discuss limitations of our prototypical implementation.
 
 1. We expect that each relationship templates is used exactly once.
 1. We expect that `relationship` at requirement assignments is a string.

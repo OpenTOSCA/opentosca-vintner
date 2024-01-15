@@ -8,6 +8,14 @@ topology_template:
             mode:
                 type: string
 
+        presets:
+            first:
+                inputs:
+                    mode: first
+            second:
+                inputs:
+                    mode: second
+
         expressions:
             is_first: {equal: [{variability_input: mode}, first]}
             is_second: {equal: [{variability_input: mode}, second]}

@@ -11,9 +11,12 @@ node_types:
                 type: string
                 default: mysql
 
+            instance_name:
+                type: string
+
             credentials:
                 type: string
-                default: {get_input: gcp_credentials}
+                default: {get_input: gcp_service_account_file}
 
             project:
                 type: string
@@ -48,7 +51,7 @@ node_types:
                         credentials = "{{ SELF.credentials }}"
 
                         name = "{{ SELF.database_name }}"
-                        instance = "shop"
+                        instance = "{{ SELF.instance_name }}"
                     main: |
                         terraform {
                            required_providers {

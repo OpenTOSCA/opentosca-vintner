@@ -12,25 +12,25 @@ topology_template:
               type: string
               default: password
               conditions: []
-        - os_compute_network:
+        - os_network:
               type: string
-              default: public-belwue-v6only
+              default: public-belwue
               conditions: []
-        - os_compute_security_groups:
-              type: string
-              default: default
-              conditions: []
-        - os_compute_key_name:
+        - os_security_groups:
               type: string
               default: default
               conditions: []
-        - os_compute_ssh_user:
+        - os_ssh_key_name:
+              type: string
+              default: default
+              conditions: []
+        - os_ssh_user:
               type: string
               default: ubuntu
               conditions: []
-        - os_compute_ssh_key_file:
+        - os_ssh_key_file:
               type: string
-              default: /home/milesstoetzner/.ssh/bw-cloud--default
+              default: /home/stoetzms/.ssh/bw-cloud--default
               conditions: []
         - os_region_name:
               type: string
@@ -65,7 +65,7 @@ topology_template:
               conditions: []
         - gcp_service_account_file:
               type: string
-              default: /home/milesstoetzner/opera/stoetzms-387808-2ec1cf865c76.json
+              default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
               conditions: []
         - gcp_project:
               type: string
@@ -161,13 +161,13 @@ topology_template:
                                 - public_address
                   - vm_ssh_user:
                         value:
-                            get_input: os_compute_ssh_user
+                            get_input: os_ssh_user
                         conditions:
                             - node_presence: shop
                               _generated: true
                   - vm_ssh_key_file:
                         value:
-                            get_input: os_compute_ssh_key_file
+                            get_input: os_ssh_key_file
                         conditions:
                             - node_presence: shop
                               _generated: true
@@ -280,31 +280,31 @@ topology_template:
                             - logic_expression: is_large
                   - network:
                         value:
-                            get_input: os_compute_network
+                            get_input: os_network
                         conditions:
                             - node_presence: os_compute
                               _generated: true
                   - security_groups:
                         value:
-                            get_input: os_compute_security_groups
+                            get_input: os_security_groups
                         conditions:
                             - node_presence: os_compute
                               _generated: true
                   - key_name:
                         value:
-                            get_input: os_compute_key_name
+                            get_input: os_ssh_key_name
                         conditions:
                             - node_presence: os_compute
                               _generated: true
                   - ssh_user:
                         value:
-                            get_input: os_compute_ssh_user
+                            get_input: os_ssh_user
                         conditions:
                             - node_presence: os_compute
                               _generated: true
                   - ssh_key_file:
                         value:
-                            get_input: os_compute_ssh_key_file
+                            get_input: os_ssh_key_file
                         conditions:
                             - node_presence: os_compute
                               _generated: true

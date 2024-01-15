@@ -59,18 +59,7 @@ export default class Transformer {
     private clean(raw: any) {
         delete raw.conditions
         delete raw.weight
-        delete raw.consumed
         delete raw.implies
-        delete raw.implied
-
-        delete raw.default_condition
-        delete raw.default_consistency_condition
-        delete raw.default_semantic_condition
-        delete raw.default_condition_mode
-
-        delete raw.pruning
-        delete raw.consistency_pruning
-        delete raw.semantic_pruning
     }
 
     private transformNodes() {

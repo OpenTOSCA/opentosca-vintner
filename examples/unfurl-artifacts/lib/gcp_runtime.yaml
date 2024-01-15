@@ -10,7 +10,7 @@ node_types:
 
             credentials:
                 type: string
-                default: {get_input: gcp_credentials}
+                default: {get_input: gcp_service_account_file}
 
             project:
                 type: string
@@ -67,9 +67,11 @@ node_types:
                          resource "google_project_service" "app_engine_reporting" {
                            project  = var.project
                            service = "appenginereporting.googleapis.com"
+                           disable_on_destroy = false
                          }
 
                          resource "google_project_service" "app_engine_admin" {
                            project  = var.project
                            service = "appengine.googleapis.com"
+                           disable_on_destroy = false
                          }

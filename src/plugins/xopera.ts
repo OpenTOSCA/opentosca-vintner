@@ -7,7 +7,7 @@ import * as utils from '#utils'
 import _ from 'lodash'
 import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
 
-export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWLSConfig & {wsl: true})
+export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWSLConfig & {wsl: true})
 
 export type xOperaNativeConfig = {
     venv: boolean
@@ -19,9 +19,9 @@ export const xOperaNativeDefaults: xOperaNativeConfig = {
     dir: '~/opera',
 }
 
-export type xOperaWLSConfig = xOperaNativeConfig
+export type xOperaWSLConfig = xOperaNativeConfig
 
-export const xOperaWSLDefaults: xOperaWLSConfig = xOperaNativeDefaults
+export const xOperaWSLDefaults: xOperaWSLConfig = xOperaNativeDefaults
 
 export class xOperaPlugin implements OrchestratorPlugin {
     private readonly config: xOperaConfig
@@ -45,7 +45,7 @@ export class xOperaPlugin implements OrchestratorPlugin {
         await this.shell.execute([this.binary, '--version'])
     }
 
-    async validate(instance: Instance, options?: OrchestratorOperationOptions) {
+    async validate(instance: Instance, options?: {inputs?: string} & OrchestratorOperationOptions) {
         const command = [
             this.binary,
             'validate',
@@ -53,8 +53,12 @@ export class xOperaPlugin implements OrchestratorPlugin {
             '--instance-path',
             this.shell.resolve(instance.getDataDirectory()),
         ]
-        if (instance.hasServiceInputs()) command.push('--inputs', this.shell.resolve(instance.getServiceInputs()))
+
+        if (check.isDefined(options) && check.isDefined(options.inputs))
+            command.push('--inputs', this.shell.resolve(options.inputs))
+
         if (options?.verbose) command.push('--verbose')
+
         await this.shell.execute(command)
     }
 

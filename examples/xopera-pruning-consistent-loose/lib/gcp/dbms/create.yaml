@@ -3,12 +3,20 @@
   hosts: all
   gather_facts: false
   tasks:
-      - name: active service account
+      - name: Activate service account
         shell: 'gcloud auth activate-service-account --key-file {{ service_account_file }} --project {{ project }}'
 
       # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
       - name: Enable Cloud SQL Admin API
-        shell: 'gcloud services enable sqladmin.googleapis.com'
+        shell: |
+            GCP_SERVICE=sqladmin.googleapis.com
+
+            GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+            if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
+                gcloud services enable ${GCP_SERVICE}
+            fi
+        args:
+            executable: /usr/bin/bash
 
       # https://cloud.google.com/sql/docs/mysql/create-instance
       # https://cloud.google.com/sdk/gcloud/reference/sql/instances/create

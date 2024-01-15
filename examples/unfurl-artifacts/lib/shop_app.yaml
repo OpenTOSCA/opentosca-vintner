@@ -65,12 +65,12 @@ node_types:
             #
             ###################################################
 
-            ssh_user:
+            os_ssh_user:
                 type: string
                 required: false
                 default: ubuntu
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 required: false
                 default: dummy
@@ -122,7 +122,7 @@ node_types:
                                       dest: '{{ SELF.application_directory }}/.env'
                                       content: |
                                           PORT=3000
-                                          INTERFACE="::"
+                                          INTERFACE="0.0.0.0"
                                           DB_DIALECT={{ SELF.DB_DIALECT}}
                                           DB_NAME={{ SELF.DB_NAME }}
                                           DB_USERNAME={{ SELF.DB_USERNAME }}
@@ -166,7 +166,7 @@ node_types:
                                 #
                                 ###################################################
 
-                                - name: active service account
+                                - name: Activate service account
                                   shell: 'gcloud auth activate-service-account --key-file {{ SELF.credentials }} --project {{ SELF.project }}'
                                   when: SELF.deployment_mode == "GCP"
 
@@ -187,7 +187,7 @@ node_types:
                                   copy:
                                       dest: '{{ tempdir_info.path }}/app.yaml'
                                       content: |
-                                          runtime: nodejs14
+                                          runtime: nodejs18
                                           service: {{ SELF.application_name }}
                                           instance_class: F1
                                           automatic_scaling:
@@ -208,8 +208,8 @@ node_types:
                                   when: SELF.deployment_mode == "GCP"
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
                 delete:
@@ -262,7 +262,7 @@ node_types:
                                 #
                                 ###################################################
 
-                                - name: active service account
+                                - name: Activate service account
                                   shell: 'gcloud auth activate-service-account --key-file {{ SELF.credentials }} --project {{ SELF.project }}'
                                   when: SELF.deployment_mode == "GCP"
 
@@ -272,6 +272,6 @@ node_types:
                                   when: SELF.deployment_mode == "GCP"
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

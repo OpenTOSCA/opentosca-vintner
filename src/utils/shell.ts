@@ -25,16 +25,46 @@ export class Shell {
         return path.resolve(file)
     }
 
-    async script(options: {file?: string; content?: string}) {
+    async script(
+        options: {
+            file?: string
+            content?: string
+            asset?: string
+        } & {
+            sudo?: boolean
+            env?: {[key: string]: string}
+        }
+    ) {
+        options.sudo = options.sudo ?? false
+        options.env = options.env ?? {}
+
+        // If content, then store it as file
         if (check.isDefined(options.content)) {
             options.file = files.temporary()
             files.storeFile(options.file, options.content)
         }
+
+        // If asset, then copy asset from within binary to filesystem
+        if (check.isDefined(options.asset)) {
+            options.file = files.temporary(options.asset)
+            files.copy(path.join(files.SCRIPTS_DIR, options.asset), options.file)
+        }
+
         assert.isDefined(options.file, 'File is not defined')
         const resolved = this.resolve(options.file)
+        const command = [resolved]
 
+        // Set environment
+        for (const env of Object.entries(options.env)) {
+            command.unshift(`${env[0]}=${env[1]}`)
+        }
+
+        // Use "sudo" (after setting environment)
+        if (options.sudo) command.unshift('sudo')
+
+        // Execute script
         await this.execute(['chmod', '+x', resolved])
-        await this.execute(['sudo', resolved])
+        await this.execute(command)
     }
 
     async execute(parts: string[], options: {cwd?: string} = {}) {
@@ -57,7 +87,7 @@ export class Shell {
                 child.stdin.end()
             } else {
                 child = spawn(command, {
-                    shell: true,
+                    shell: '/usr/bin/bash',
                     stdio: ['pipe', process.stderr, process.stderr],
                     cwd: options.cwd,
                 })

@@ -7,9 +7,11 @@ import std from '#std'
 import * as yaml from 'js-yaml'
 import path from 'path'
 
+const PLAY = 'play'
+
 describe('minisat', () => {
     it('play', async () => {
-        await play(files.loadFile(path.join(__dirname, 'template.play.yaml')))
+        await play(files.loadFile(path.join(__dirname, 'plays', PLAY + '.yaml')))
     })
 })
 
@@ -18,5 +20,17 @@ async function play(data: string) {
     await Enricher.enrich({template})
 
     const solver = new Solver(new Graph(template))
-    std.log(solver.solveAll())
+    const results = solver.solveAll().map(it => sort(it))
+    std.log(`Results: ${results.length}`)
+    std.log(results)
+}
+
+function sort(unordered: Record<string, boolean>) {
+    return Object.keys(unordered)
+        .sort()
+        .reduce((obj, key) => {
+            // @ts-ignore
+            obj[key] = unordered[key]
+            return obj
+        }, {})
 }

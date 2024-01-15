@@ -1,5 +1,5 @@
 import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
-import {xOperaNativeConfig, xOperaWLSConfig} from '#plugins/xopera'
+import {xOperaNativeConfig, xOperaWSLConfig} from '#plugins/xopera'
 import {Instance} from '#repositories/instances'
 import {AttributeAssignmentMap} from '#spec/node-template'
 import {ServiceTemplate} from '#spec/service-template'
@@ -28,9 +28,11 @@ export type OrchestratorOperationOptions = {
     time?: number
 }
 
+export type OrchestratorValidateOptions = {inputs?: string} & OrchestratorOperationOptions
+
 export interface OrchestratorPlugin {
     attest: () => Promise<void>
-    validate: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
+    validate: (instance: Instance, options?: OrchestratorValidateOptions) => Promise<void>
     deploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     outputs: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     continue: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
@@ -42,7 +44,7 @@ export interface OrchestratorPlugin {
 export type OrchestratorsConfig = {
     enabled?: string
     xOpera?: xOperaNativeConfig
-    xOperaWSL?: xOperaWLSConfig
+    xOperaWSL?: xOperaWSLConfig
     unfurl?: UnfurlNativeConfig
     unfurlWSL?: UnfurlWSLConfig
 }

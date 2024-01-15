@@ -22,7 +22,7 @@ export type NodeTemplate = {
     capabilities?: CapabilityAssignmentMap
     artifacts?: VariabilityPointMap<ArtifactDefinition>
     weight?: number | boolean
-    consumed?: boolean
+    persistent?: boolean
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }

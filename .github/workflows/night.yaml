@@ -1,5 +1,8 @@
-# GitHub runner seems not to support ipv6, thus, we can not test on bwCloud.
+# GitHub runner does not support IPv6.
 # See https://github.com/actions/runner-images/issues/668
+
+# We dot not introduce one big "vintner-case-study" action due to better logging.defaults:
+# See https://github.com/orgs/community/discussions/21276
 
 name: Night
 on:
@@ -9,11 +12,16 @@ on:
     push:
         branches:
             - fix-night-workflow
-
 concurrency: night
 jobs:
-    night:
-        name: Night
+    ###################################################
+    #
+    # General
+    #
+    ###################################################
+
+    general:
+        name: General
         runs-on: ubuntu-22.04
         steps:
             ###################################################
@@ -22,213 +30,887 @@ jobs:
             #
             ###################################################
 
-            - name: (PREPARE) Checkout Repository
+            - name: (PREPARE) Checkout repository
               uses: actions/checkout@v3
               with:
                   lfs: true
 
-            - name: (PREPARE) Setup Git
-              run: |
-                  git config --global user.name "${GITHUB_ACTOR}"
-                  git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
-
-            - name: (PREPARE) Setup gcloud CLI
-              uses: google-github-actions/setup-gcloud@v1
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
               with:
-                  version: 438.0.0
-
-            - name: (PREPARE) Setup GCP credentials
-              uses: actions/github-script@v3
-              with:
-                  script: |
-                      if (!process.env.GCP_CREDENTIALS) throw 'GCP_CREDENTIALS undefined'
-                      const fs = require('fs')
-                      const file = 'gcp-credentials.json'
-                      const content = new Buffer.from(process.env.GCP_CREDENTIALS, 'base64').toString('utf-8')
-                      fs.writeFileSync(file, content)
-              env:
-                  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-
-            - name: (PREPARE) Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: 3.10.13
-                  cache: pip
-
-            - name: (PREPARE) Cache Unfurl
-              uses: actions/cache@v3
-              with:
-                  path: /home/runner/.opera
-                  key: xopera
-
-            - name: (PREPARE) Install xOpera
-              run: |
-                  mkdir -p /home/runner/.opera
-                  cd /home/runner/.opera
-                  python3 -m venv .venv && . .venv/bin/activate
-                  pip install openstacksdk==0.61 pyyaml==5.3.1 opera==0.6.9
-
-            # TODO: ./src/assets/scripts/install-unfurl.sh installs unfurl for root and not for "runner"
-            - name: (PREPARE) Install Unfurl
-              run: pip install unfurl==0.9.1
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
             ###################################################
             #
-            # Installation
+            # Binary
             #
             ###################################################
 
-            - name: (INSTALLATION) Install vintner
-              run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+            - name: (BINARY) Verify checksum
+              run: |
+                  wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+                  cp /usr/bin/vintner vintner-linux-x64
+                  sha256sum --check vintner-linux-x64.sha256
+                  rm vintner-linux-x64
+                  rm vintner-linux-x64.sha256
 
-            - name: (INSTALLATION) Verify signature
+            - name: (BINARY) Verify signature
               run: |
                   curl https://vintner.opentosca.org/vintner-release.gpg | gpg --import                  
                   wget https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
-                  gpg --verify vintner-linux-x64.asc /usr/bin/vintner
+                  cp /usr/bin/vintner vintner-linux-x64
+                  gpg --verify vintner-linux-x64.asc
+                  rm vintner-linux-x64.asc
 
-            ###################################################
-            #
-            # Vintner
-            #
-            ###################################################
-
-            - name: (VINTNER) Ensure that version is overridden
+            - name: (BINARY) Ensure that version is overridden
               run: |
+                  vintner --version
                   if [ "$(vintner --version)" == "__VERSION__" ]; then 
                     exit 1
                   fi
 
-            - name: (VINTNER) Ensure that license is overridden
+            - name: (BINARY) Ensure that license is overridden
               run: |
+                  vintner info license
                   if [ "$(vintner info license)" == "$(cat src/assets/LICENSE)" ]; then
                     exit 1
                   fi
 
-            - name: (VINTNER) Ensure that dependencies are overridden
+            - name: (BINARY) Ensure that dependencies are overridden
               run: |
+                  vintner info dependencies
                   if [ "$(vintner info dependencies)" == "$(cat src/assets/dependencies.csv)" ]; then 
                     exit 1
                   fi
 
-            - name: (VINTNER) Test filesystem initialization
+            - name: (BINARY) Test filesystem initialization
               run: vintner setup init
 
-            - name: (VINTNER) Test resolver
+            - name: (BINARY) Test resolver
               run: vintner setup benchmark --seeds 10 250
 
             ###################################################
             #
-            # xOpera Motivation
+            # Docker
             #
             ###################################################
-            - name: (XOPERA-MOTIVATION) Deploy the production variant of xopera-motivation on GCP
+
+            - name: (DOCKER) Start Docker container
               run: |
-                  vintner setup clean --force
-                  vintner setup init
+                  docker run --detach --name vintner ghcr.io/opentosca/opentosca-vintner:latest
+                  sleep 2
+                  docker logs vintner
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (DOCKER) Ensure Vintner can be executed
+              run: docker exec vintner vintner --version
 
-                  vintner templates import --template motivation --path examples/xopera-motivation
-                  vintner instances init --instance motivation --template motivation
-                  vintner instances resolve --instance motivation --presets prod
-                  vintner instances validate --instance motivation
+            - name: (DOCKER) Ensure Vintner can be executed
+              run: |
+                  DOCKER_VERSION=$(docker exec vintner vintner --version)
+                  echo "Docker version: $DOCKER_VERSION}"
 
-                  cp examples/xopera-motivation/deployment-inputs.example.yaml examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  sed -i "/gcp_service_account_file:/c\gcp_service_account_file: $(pwd)/gcp-credentials.json" examples/xopera-motivation/deployment-inputs.ignored.yaml
-                  vintner instances deploy --instance motivation --inputs examples/xopera-motivation/deployment-inputs.ignored.yaml
+                  BINARY_VERSION=$(vintner --version)
+                  echo "Binary version: ${BINARY_VERSION}"
 
-            - name: (XOPERA-MOTIVATION) Test the production variant of xopera-motivation on GCP
-              run: curl --fail-with-body https://application-dot-stoetzms-387808.ey.r.appspot.com
+                  if [ ${DOCKER_VERSION} != ${BINARY_VERSION} ]; then
+                      echo "Versions do not match"
+                      exit 1
+                  fi
+            - name: (DOCKER) Stop Docker container
+              run: docker kill vintner
 
-            - name: (XOPERA-MOTIVATION) Undeploy the production variant of xopera-motivation on GCP
-              run: vintner instances undeploy --instance motivation
+    ###################################################
+    #
+    # xOpera Motivation Development
+    #
+    ###################################################
+
+    xopera-motivation-dev:
+        name: xOpera Motivation Dev
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-motivation
+            PRESET: dev
+            ENV: OS
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
-            ###################################################
-            #
-            # xOpera Pruning
-            #
-            ###################################################
+    ###################################################
+    #
+    # xOpera Motivation Production
+    #
+    ###################################################
 
-            - name: (XOPERA-PRUNING) Deploy the elastic variant of xopera-pruning on GCP
+    xopera-motivation-prod:
+        name: xOpera Motivation Prod
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-motivation
+            PRESET: prod
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
               run: |
-                  vintner setup clean --force
-                  vintner setup init
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
 
-                  vintner orchestrators init xopera --dir /home/runner/.opera
-                  vintner orchestrators enable --orchestrator xopera
-                  vintner orchestrators attest --orchestrator xopera
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
-                  vintner templates import --template pruning --path examples/xopera-pruning
-                  vintner instances init --instance pruning --template pruning
-                  vintner instances resolve --instance pruning --presets elastic
-                  vintner instances validate --instance pruning
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
-                  echo "gcp_service_account_file: $(pwd)/gcp-credentials.json" > examples/xopera-pruning/deployment-inputs.ignored.yaml
-                  vintner instances deploy --instance pruning --inputs examples/xopera-pruning/deployment-inputs.ignored.yaml
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
-            - name: (XOPERA-PRUNING) Test the elastic variant of xopera-pruning on GCP
-              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
-
-            - name: (XOPERA-PRUNING) Undeploy the elastic variant of xopera-pruning on GCP
-              run: vintner instances undeploy --instance pruning
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
-            ###################################################
-            #
-            # Unfurl Artifacts
-            #
-            ###################################################
+    ###################################################
+    #
+    # Unfurl Motivation Development
+    #
+    ###################################################
 
-            - name: (UNFURL-ARTIFACTS) Deploy the enterprise plan of unfurl-artifacts on GCP
+    unfurl-motivation-dev:
+        name: Unfurl Motivation Dev
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-motivation
+            PRESET: dev
+            ENV: OS
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
               run: |
-                  vintner setup clean --force
-                  vintner setup init
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-                  vintner orchestrators init unfurl --no-venv
-                  vintner orchestrators enable --orchestrator unfurl
-                  vintner orchestrators attest --orchestrator unfurl
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
 
-                  vintner templates import --template artifacts --path examples/unfurl-artifacts
-                  vintner instances init --instance artifacts --template artifacts
-                  vintner instances resolve --instance artifacts --inputs examples/unfurl-artifacts/tests/enterprise/inputs.yaml
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
 
-                  echo "gcp_credentials: $(pwd)/gcp-credentials.json" > examples/unfurl-artifacts/deployment-inputs.ignored.yaml
-                  vintner instances deploy --instance artifacts --inputs examples/unfurl-artifacts/deployment-inputs.ignored.yaml
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
 
-            - name: (UNFURL-ARTIFACTS) Test the enterprise plan of unfurl-artifacts on GCP
-              run: curl --fail-with-body https://shop-dot-stoetzms-387808.ey.r.appspot.com
-
-            - name: (UNFURL-ARTIFACTS) Undeploy the enterprise plan of unfurl-artifacts on GCP
-              run: vintner instances undeploy --instance artifacts
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
               if: always()
 
-            ###################################################
-            #
-            # Notification
-            #
-            ###################################################
+    ###################################################
+    #
+    # Unfurl Motivation Production
+    #
+    ###################################################
 
-            - name: (NOTIFICATION) Send success notification
-              run: |
-                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) succeeded.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
-              env:
-                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
-              if: success()
+    unfurl-motivation-prod:
+        name: Unfurl Motivation Prod
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-motivation
+            PRESET: prod
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
 
-            - name: (NOTIFICATION) Send failure notification
-              run: |
-                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) failed.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
-              env:
-                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
-              if: failure()
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
-            - name: (DISCORD) Send cancel notification
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
               run: |
-                  curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Night workflow [${GITHUB_RUN_ID}](https://github.com/OpenTOSCA/opentosca-vintner/actions/runs/${GITHUB_RUN_ID}) cancelled.\"}" ${DISCORD_WEBHOOK_NIGHT_WORKFLOW}
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  os_application_credential_secret: dummy
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Static
+    #
+    ###################################################
+
+    xopera-pruning-static:
+        name: xOpera Pruning Static
+        runs-on: ubuntu-22.04
+        concurrency: xopera-pruning-static
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning
+            PRESET: static
+            ENV: OS
+            PORT: 3000
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
               env:
-                  DISCORD_WEBHOOK_NIGHT_WORKFLOW: ${{ secrets.DISCORD_WEBHOOK_NIGHT_WORKFLOW }}
-              if: cancelled()
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Elastic
+    #
+    ###################################################
+
+    xopera-pruning-elastic:
+        name: xOpera Pruning Elastic
+        runs-on: ubuntu-22.04
+        concurrency: xopera-pruning-elastic
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning
+            PRESET: elastic
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Mode Static
+    #
+    ###################################################
+
+    xopera-pruning-mode-static:
+        name: xOpera Pruning Mode "Consistent Loose" Static
+        runs-on: ubuntu-22.04
+        concurrency: xopera-pruning-static
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning-consistent-loose
+            PRESET: static
+            ENV: OS
+            PORT: 3000
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Configure environment
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: xopera-pruning
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # xOpera Pruning Mode Elastic
+    #
+    ###################################################
+
+    xopera-pruning-mode-elastic:
+        name: xOpera Pruning Mode "Consistent Loose" Elastic
+        runs-on: ubuntu-22.04
+        concurrency: xopera-pruning-elastic
+        env:
+            ORCHESTRATOR: xopera
+            EXAMPLE: xopera-pruning-consistent-loose
+            PRESET: elastic
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: xopera-pruning
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Artifacts Community
+    #
+    ###################################################
+
+    unfurl-artifacts-community:
+        name: Unfurl Artifacts Community
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-artifacts
+            PRESET: community
+            ENV: OS
+            PORT: 3000
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Artifacts Enterprise
+    #
+    ###################################################
+
+    unfurl-artifacts-enterprise:
+        name: Unfurl Artifacts Enterprise
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-artifacts
+            PRESET: enterprise
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Aware Local
+    #
+    ###################################################
+
+    unfurl-aware-local:
+        name: Unfurl Aware Local
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-aware
+            PRESET: local
+            ENV: OS
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # Unfurl Aware Cloud
+    #
+    ###################################################
+
+    unfurl-aware-cloud:
+        name: Unfurl Aware Cloud
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-aware
+            PRESET: cloud
+            ENV: GCP
+            PORT: 80
+        steps:
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET} 
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
