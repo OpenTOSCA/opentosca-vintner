@@ -2229,6 +2229,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#choco">
+    Choco
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#zenodo">
     Zenodo
   </a>
@@ -2354,6 +2359,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#choco">
+    Choco
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#zenodo">
     Zenodo
   </a>
@@ -2412,6 +2422,17 @@ They are automatically build and pushed during the Release workflow.</p>
 <p>Locally build the image as follows. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>opentosca/opentosca-vintner:local<span class="w"> </span>-f<span class="w"> </span>docker/Dockerfile<span class="w"> </span>.
 </code></pre></div></td></tr></table></div>
+<h2 id="choco">Choco<a class="headerlink" href="#choco" title="Permanent link">¶</a></h2>
+<p>There is also a choco package <a href="https://community.chocolatey.org/packages/opentosca-vintner" target="_blank"><code>opentosca-vintner</code></a>.
+New versions are published manually.
+See <a href="https://docs.chocolatey.org/en-us/create/create-packages-quick-start" target="_blank">https://docs.chocolatey.org/en-us/create/create-packages-quick-start</a> for more information.</p>
+<p>First, log into the choco account.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>choco<span class="w"> </span>apikey<span class="w"> </span>--api-key<span class="w"> </span><span class="o">[</span>API_KEY_HERE<span class="o">]</span><span class="w"> </span>--source<span class="w"> </span>https://push.chocolatey.org
+</code></pre></div></td></tr></table></div>
+<p>Publish a new version as follows. 
+This will use the latest release.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>yarn<span class="w"> </span>release:choco
+</code></pre></div></td></tr></table></div>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
 <p>Vintner is available on Zenodo with unique DOI <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>.
 New versions are published manually.</p>
@@ -2423,7 +2444,7 @@ The version must be manually published on Zenodo.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 13, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 15, 2024</span>
 </small>
 </div>
 </article>
