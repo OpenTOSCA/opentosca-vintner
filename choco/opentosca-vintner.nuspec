@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>opentosca-vintner</id>
+    <version>0.1.4</version>
+    <title>OpenTOSCA Vintner</title>
+    <authors>Miles Stötzner</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/opentosca/opentosca-vintner</projectUrl>
+    <description>OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins. Preprocessing includes, e.g., the resolving of deployment variability.</description>
+    <summary>OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins. Preprocessing includes, e.g., the resolving of deployment variability.</summary>
+    <tags>OpenTOSCA Vintner TOSCA Variability4TOSCA variability deployment orchestration management</tags>
+    <projectSourceUrl>https://github.com/opentosca/opentosca-vintner</projectSourceUrl>
+    <docsUrl>https://vintner.opentosca.org/</docsUrl>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -22,5 +22,5 @@ The versions used in package managers, such as npm, use semantic versioning.
 
 | Package Version | Vintner Version                           |
 |-----------------|-------------------------------------------|
-| 0.1.4           | 1a1b668a17980308f639fb7f1d7d2d48e3e4118b  |
+| 0.1.4           | 5e5e3bca56ad702ec0d3c3561a1eac3363576a3c  |
 | 0.1.3           | b75c2fdb75334a7f6ff531ad8b4e47bd188b964a  |

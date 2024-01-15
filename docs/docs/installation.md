@@ -67,6 +67,14 @@ However, this will not install Vintner permanently but only [temporary](https://
 yarn dlx opentosca-vintner
 ```
 
+## Choco
+
+Vintner can be installed using `choco`.
+
+```shell linenums="1"
+choco install opentosca-vintner -y
+```
+
 ## Docker 
 
 Vintner can be installed using Docker. 

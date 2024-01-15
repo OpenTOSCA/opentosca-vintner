@@ -70,6 +70,24 @@ Locally build the image as follows.
 docker build -t opentosca/opentosca-vintner:local -f docker/Dockerfile .
 ````
 
+## Choco
+
+There is also a choco package [`opentosca-vintner`](https://community.chocolatey.org/packages/opentosca-vintner){target=_blank}.
+New versions are published manually.
+See [https://docs.chocolatey.org/en-us/create/create-packages-quick-start](https://docs.chocolatey.org/en-us/create/create-packages-quick-start){target=_blank} for more information.
+
+First, log into the choco account.
+
+```shell linenums="1"
+choco apikey --api-key [API_KEY_HERE] --source https://push.chocolatey.org
+```
+
+Publish a new version as follows. 
+This will use the latest release.
+
+````shell linenums="1"
+yarn release:choco
+````
 
 ## Zenodo
 
