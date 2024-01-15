@@ -1516,6 +1516,7 @@ validates variability-resolved service template
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
+| inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
 
 ## vintner orchestrators attest

@@ -28,9 +28,11 @@ export type OrchestratorOperationOptions = {
     time?: number
 }
 
+export type OrchestratorValidateOptions = {inputs?: string} & OrchestratorOperationOptions
+
 export interface OrchestratorPlugin {
     attest: () => Promise<void>
-    validate: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
+    validate: (instance: Instance, options?: OrchestratorValidateOptions) => Promise<void>
     deploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     outputs: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     continue: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
