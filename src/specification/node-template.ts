@@ -10,7 +10,7 @@ import {
     RelationDefaultConditionMode,
     VariabilityAlternative,
     VariabilityPointList,
-    VariabilityPointMap,
+    VariabilityPointObject,
 } from './variability'
 
 export type NodeTemplate = {
@@ -20,9 +20,10 @@ export type NodeTemplate = {
     attributes?: AttributeAssignmentMap
     requirements?: VariabilityPointList<RequirementAssignment>
     capabilities?: CapabilityAssignmentMap
-    artifacts?: VariabilityPointMap<ArtifactDefinition>
+    artifacts?: VariabilityPointObject<ArtifactDefinition>
     weight?: number | boolean
     persistent?: boolean
+    deployment?: DeploymentTechnologyAssignment
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }
@@ -42,3 +43,5 @@ export type ExtendedRequirementAssignment = {
 } & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode}
 
 export type CapabilityAssignmentMap = {[key: string]: string}
+
+export type DeploymentTechnologyAssignment = boolean | string | VariabilityPointObject<VariabilityAlternative>

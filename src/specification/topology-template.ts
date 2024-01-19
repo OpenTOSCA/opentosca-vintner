@@ -11,16 +11,16 @@ import {
     VariabilityAlternative,
     VariabilityDefinition,
     VariabilityPointList,
-    VariabilityPointMap,
+    VariabilityPointObject,
 } from './variability'
 
 export type TopologyTemplate = {
     description?: string
-    inputs?: VariabilityPointMap<InputDefinition>
-    node_templates?: VariabilityPointMap<NodeTemplate>
+    inputs?: VariabilityPointObject<InputDefinition>
+    node_templates?: VariabilityPointObject<NodeTemplate>
     relationship_templates?: RelationshipTemplateMap
     variability?: VariabilityDefinition
-    groups?: VariabilityPointMap<GroupTemplate>
+    groups?: VariabilityPointObject<GroupTemplate>
     policies?: VariabilityPointList<PolicyTemplate>
 }
 

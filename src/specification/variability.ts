@@ -251,13 +251,9 @@ export type InputAssignmentPreset = {
 export type VariabilityExpressionList = VariabilityExpression[]
 export type VariabilityExpressionMap = {[key: string]: VariabilityExpression}
 
-export type VariabilityPointMap<T> =
-    | {[name: string]: T}
-    | {
-          [name: string]: T
-      }[]
-
-export type VariabilityPointList<T> = {[name: string]: T}[]
+export type VariabilityPointObject<T> = VariabilityPoint<T> | VariabilityPointList<T>
+export type VariabilityPointList<T> = VariabilityPoint<T>[]
+export type VariabilityPoint<T> = {[name: string]: T}
 
 export type VariabilityAlternative = {
     conditions?: LogicExpression | LogicExpression[]

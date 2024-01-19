@@ -9,7 +9,7 @@ import {PropertyAssignmentList, PropertyAssignmentListEntry, PropertyAssignmentV
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {VariabilityPointList, VariabilityPointMap} from '#spec/variability'
+import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Normalizer {
@@ -50,7 +50,7 @@ export default class Normalizer {
         }, [])
     }
 
-    private getFromVariabilityPointMap<T>(data?: VariabilityPointMap<T>): {[name: string]: T}[] {
+    private getFromVariabilityPointMap<T>(data?: VariabilityPointObject<T>): {[name: string]: T}[] {
         if (check.isUndefined(data)) return []
         if (check.isArray(data)) return data
         return Object.entries(data).map(([name, template]) => {
