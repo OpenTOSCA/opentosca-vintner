@@ -4,7 +4,7 @@ import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
-import {DeploymentTechnologyTemplate, NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {NodeTemplate, NodeTemplateMap, TechnologyTemplate} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentListEntry, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap} from '#spec/topology-template'
@@ -220,7 +220,7 @@ export default class Normalizer {
         if (check.isFalse(template.technology)) return delete template.technology
 
         if (check.isString(template.technology)) {
-            const map: {[name: string]: DeploymentTechnologyTemplate} = {}
+            const map: {[name: string]: TechnologyTemplate} = {}
             map[template.technology] = {}
             template.technology = map
             return

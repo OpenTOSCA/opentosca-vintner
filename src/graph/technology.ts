@@ -2,20 +2,20 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
 import {bratify} from '#graph/utils'
-import {DeploymentTechnologyTemplate} from '#spec/node-template'
+import {TechnologyTemplate} from '#spec/node-template'
 import {LogicExpression, TechnologyPresenceArguments} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Technology extends Element {
     readonly name: string
     readonly type = 'technology'
-    readonly raw: DeploymentTechnologyTemplate
+    readonly raw: TechnologyTemplate
     readonly index: number
     readonly container: Node
 
     readonly defaultAlternative: boolean
 
-    constructor(data: {name: string; raw: DeploymentTechnologyTemplate; container: Node; index: number}) {
+    constructor(data: {name: string; raw: TechnologyTemplate; container: Node; index: number}) {
         super()
 
         this.name = data.name

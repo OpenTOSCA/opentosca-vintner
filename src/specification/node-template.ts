@@ -23,7 +23,7 @@ export type NodeTemplate = {
     artifacts?: VariabilityPointObject<ArtifactDefinition>
     weight?: number | boolean
     persistent?: boolean
-    technology?: DeploymentTechnologyAssignment
+    technology?: TechnologyAssignment
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }
@@ -44,6 +44,6 @@ export type ExtendedRequirementAssignment = {
 
 export type CapabilityAssignmentMap = {[key: string]: string}
 
-export type DeploymentTechnologyAssignment = boolean | string | VariabilityPointObject<DeploymentTechnologyTemplate>
+export type TechnologyAssignment = boolean | string | VariabilityPointObject<TechnologyTemplate>
 
-export type DeploymentTechnologyTemplate = VariabilityAlternative
+export type TechnologyTemplate = VariabilityAlternative
