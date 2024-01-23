@@ -4,7 +4,7 @@ import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
-import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {DeploymentTechnologyTemplate, NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentListEntry, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap} from '#spec/topology-template'
@@ -172,6 +172,9 @@ export default class Normalizer {
             // Artifacts
             this.extendArtifacts(template)
 
+            // Technologies
+            this.extendTechnologies(template)
+
             list.push(map)
             return list
         }, [])
@@ -206,5 +209,30 @@ export default class Normalizer {
         if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
         if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
         this.extendProperties(map[name])
+    }
+
+    private extendTechnologies(template: NodeTemplate) {
+        if (check.isUndefined(template.technology)) return
+
+        // TODO: implement this
+        if (check.isTrue(template.technology)) throw new Error(`Not supported yet`)
+
+        if (check.isFalse(template.technology)) return delete template.technology
+
+        if (check.isString(template.technology)) {
+            const map: {[name: string]: DeploymentTechnologyTemplate} = {}
+            map[template.technology] = {}
+            template.technology = map
+            return
+        }
+
+        if (check.isArray(template.technology)) return
+
+        if (check.isObject(template.technology)) {
+            template.technology = [template.technology]
+            return
+        }
+
+        throw new Error('Deployment technology template malformed')
     }
 }

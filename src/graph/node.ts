@@ -1,5 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import Technology from '#graph/technology'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
@@ -26,6 +27,7 @@ export default class Node extends Element {
     readonly artifactsMap: Map<String, Artifact[]> = new Map()
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly technologies: Technology[] = []
 
     readonly weight: number = 1
 

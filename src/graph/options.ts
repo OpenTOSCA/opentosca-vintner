@@ -66,6 +66,10 @@ class DefaultOptions {
     typeDefaultConsistencyCondition: boolean
     typeDefaultSemanticCondition: boolean
 
+    technologyDefaultCondition: boolean
+    technologyDefaultConsistencyCondition: boolean
+    technologyDefaultSemanticCondition: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
@@ -194,6 +198,11 @@ class DefaultOptions {
             mode.type_default_semantic_condition ??
             this.typeDefaultCondition
         assert.isBoolean(this.typeDefaultSemanticCondition)
+
+        // TODO: implement these
+        this.technologyDefaultCondition = false
+        this.technologyDefaultConsistencyCondition = false
+        this.technologyDefaultSemanticCondition = false
     }
 }
 
@@ -230,6 +239,10 @@ class PruningOptions {
     typePruning: boolean
     typeConsistencyPruning: boolean
     typeSemanticPruning: boolean
+
+    technologyPruning: boolean
+    technologyConsistencyPruning: boolean
+    technologySemanticPruning: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -313,6 +326,11 @@ class PruningOptions {
 
         this.typeSemanticPruning = this.raw.type_semantic_pruning ?? mode.type_semantic_pruning ?? this.typePruning
         assert.isBoolean(this.typeSemanticPruning)
+
+        // TODO
+        this.technologyPruning = false
+        this.technologyConsistencyPruning = false
+        this.technologySemanticPruning = false
     }
 }
 

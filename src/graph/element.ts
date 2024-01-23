@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
+import Technology from '#graph/technology'
 import {ConditionsWrapper, LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -187,6 +188,10 @@ export default abstract class Element {
     }
 
     isImport(): this is Import {
+        return false
+    }
+
+    isTechnology(): this is Technology {
         return false
     }
 }

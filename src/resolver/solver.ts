@@ -678,6 +678,14 @@ export default class Solver {
         }
 
         /**
+         * technology_presence
+         */
+        if (check.isDefined(expression.technology_presence)) {
+            const technology = this.graph.getTechnology(expression.technology_presence, {element, cached})
+            return technology.id
+        }
+
+        /**
          * node_type_presence
          */
         if (check.isDefined(expression.node_type_presence)) {

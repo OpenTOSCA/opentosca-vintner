@@ -279,6 +279,8 @@ export type GroupPropertyPresenceArguments = [group: string, property: string | 
 export type PolicyPropertyPresenceArguments = [policy: string | number, property: string | number]
 export type ArtifactPropertyPresenceArguments = [node: string, artifact: string | number, property: string | number]
 
+export type TechnologyPresenceArguments = [node: string, technology: string | number]
+
 export type LogicExpression =
     | {
           // Boolean operators
@@ -334,6 +336,9 @@ export type LogicExpression =
 
           // Import functions
           import_presence?: number
+
+          // Technology functions
+          technology_presence?: TechnologyPresenceArguments
 
           // Intrinsic functions
           logic_expression?: string

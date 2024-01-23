@@ -128,83 +128,91 @@ The following options are general options.
 
 The following options are used to configure the default conditions of elements.
 
-| Keyname                                | Mandatory | Type                                                                                                  | Default           | Description                                                         |
-|----------------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|---------------------------------------------------------------------|
-| default_condition                      | false     | Boolean                                                                                               | false             | Enable all default conditions (consistency and semantic).           |
-| node_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for nodes (consistency and semantic).      |
-| node_default_condition_mode            | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.                          |
-| node_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for nodes.                     |
-| node_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                        |
-| relation_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).  |
-| relation_default_condition_mode        | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                      |
-| relation_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                    |
-| relation_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for relations.                 |
-| policy_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).   |
-| policy_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                  |
-| policy_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                     |
-| group_default_condition                | false     | Boolean                                                                                               | false             | Enable default condition for groups (consistency and semantic).     |
-| group_default_consistency_condition    | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                    |
-| group_default_semantic_condition       | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                       |
-| artifact_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).  |
-| artifact_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                 |
-| artifact_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                    |
-| property_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic). |
-| property_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for properties.                |
-| property_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for properties.                   |
-| type_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for types (consistency and semantic).      |
-| type_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for types.                     |
-| type_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for types.                        |
+| Keyname                                  | Mandatory | Type                                                                                                  | Default           | Description                                                                        |
+|------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|------------------------------------------------------------------------------------|
+| default_condition                        | false     | Boolean                                                                                               | false             | Enable all default conditions (consistency and semantic).                          |
+| node_default_condition                   | false     | Boolean                                                                                               | false             | Enable default condition for nodes (consistency and semantic).                     |
+| node_default_condition_mode              | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.                                         |
+| node_default_consistency_condition       | false     | Boolean                                                                                               | false             | Enable default consistency condition for nodes.                                    |
+| node_default_semantic_condition          | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                                       |
+| relation_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).                 |
+| relation_default_condition_mode          | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                                     |
+| relation_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                                   |
+| relation_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for relations.                                |
+| policy_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).                  |
+| policy_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                                 |
+| policy_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                                    |
+| group_default_condition                  | false     | Boolean                                                                                               | false             | Enable default condition for groups (consistency and semantic).                    |
+| group_default_consistency_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                                   |
+| group_default_semantic_condition         | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                                      |
+| artifact_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).                 |
+| artifact_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                                |
+| artifact_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                                   |
+| property_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic).                |
+| property_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for properties.                               |
+| property_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for properties.                                  |
+| type_default_condition                   | false     | Boolean                                                                                               | false             | Enable default condition for types (consistency and semantic).                     |
+| type_default_consistency_condition       | false     | Boolean                                                                                               | false             | Enable default consistency condition for types.                                    |
+| type_default_semantic_condition          | false     | Boolean                                                                                               | false             | Enable default semantic condition for types.                                       |
+| technology_default_condition             | false     | Boolean                                                                                               | false             | Enable default condition for (deployment) technologies (consistency and semantic). |
+| technology_default_consistency_condition | false     | Boolean                                                                                               | false             | Enable default consistency condition for technologies.                             |
+| technology_default_semantic_condition    | false     | Boolean                                                                                               | false             | Enable default semantic condition for technologies.                                |
 
 ### Pruning Options
 
 The following options are used to configure the pruning of elements.
 
-| Keyname                      | Mandatory | Type                                      | Default       | Description                                                 |
-|------------------------------|-----------|-------------------------------------------|---------------|-------------------------------------------------------------|
-| pruning                      | false     | Boolean                                   | false         | Enable pruning of all elements  (consistency and semantic). |
-| node_pruning                 | false     | Boolean                                   | false         | Enable pruning of nodes (consistency and semantic).         |
-| node_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of nodes.                        |
-| node_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of nodes.                           |
-| relation_pruning             | false     | Boolean                                   | false         | Enable pruning of relations (consistency and semantic).     |
-| relation_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of relations.                    |
-| relation_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of relations.                       |
-| policy_pruning               | false     | Boolean                                   | false         | Enable pruning of policies (consistency and semantic).      |
-| policy_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of policies.                     |
-| policy_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of policies.                        |
-| group_pruning                | false     | Boolean                                   | false         | Enable pruning of groups (consistency and semantic).        |
-| group_consistency_pruning    | false     | Boolean                                   | false         | Enable consistency pruning of groups.                       |
-| group_semantic_pruning       | false     | Boolean                                   | false         | Enable semantic pruning of groups.                          |
-| artifact_pruning             | false     | Boolean                                   | false         | Enable pruning of artifacts (consistency and semantic).     |
-| artifact_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of artifacts.                    |
-| artifact_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of artifacts.                       |
-| property_pruning             | false     | Boolean                                   | false         | Enable pruning of properties (consistency and semantic).    |
-| property_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of properties.                   |
-| property_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of properties.                      |
-| type_pruning                 | false     | Boolean                                   | false         | Enable pruning of types (consistency and semantic).         |
-| type_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of types.                        |
-| type_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of types.                           |
+| Keyname                        | Mandatory | Type                                      | Default       | Description                                                             |
+|--------------------------------|-----------|-------------------------------------------|---------------|-------------------------------------------------------------------------|
+| pruning                        | false     | Boolean                                   | false         | Enable pruning of all elements  (consistency and semantic).             |
+| node_pruning                   | false     | Boolean                                   | false         | Enable pruning of nodes (consistency and semantic).                     |
+| node_consistency_pruning       | false     | Boolean                                   | false         | Enable consistency pruning of nodes.                                    |
+| node_semantic_pruning          | false     | Boolean                                   | false         | Enable semantic pruning of nodes.                                       |
+| relation_pruning               | false     | Boolean                                   | false         | Enable pruning of relations (consistency and semantic).                 |
+| relation_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of relations.                                |
+| relation_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of relations.                                   |
+| policy_pruning                 | false     | Boolean                                   | false         | Enable pruning of policies (consistency and semantic).                  |
+| policy_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of policies.                                 |
+| policy_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of policies.                                    |
+| group_pruning                  | false     | Boolean                                   | false         | Enable pruning of groups (consistency and semantic).                    |
+| group_consistency_pruning      | false     | Boolean                                   | false         | Enable consistency pruning of groups.                                   |
+| group_semantic_pruning         | false     | Boolean                                   | false         | Enable semantic pruning of groups.                                      |
+| artifact_pruning               | false     | Boolean                                   | false         | Enable pruning of artifacts (consistency and semantic).                 |
+| artifact_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of artifacts.                                |
+| artifact_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of artifacts.                                   |
+| property_pruning               | false     | Boolean                                   | false         | Enable pruning of properties (consistency and semantic).                |
+| property_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of properties.                               |
+| property_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of properties.                                  |
+| type_pruning                   | false     | Boolean                                   | false         | Enable pruning of types (consistency and semantic).                     |
+| type_consistency_pruning       | false     | Boolean                                   | false         | Enable consistency pruning of types.                                    |
+| type_semantic_pruning          | false     | Boolean                                   | false         | Enable semantic pruning of types.                                       |
+| technology_pruning             | false     | Boolean                                   | false         | Enable pruning of (deployment) technologies (consistency and semantic). |
+| technology_consistency_pruning | false     | Boolean                                   | false         | Enable consistency pruning of technologies.                             |
+| technology_semantic_pruning    | false     | Boolean                                   | false         | Enable semantic pruning of technologies.                                |
 
 ### Checks Options
 
 The following options are used to configure checks.
 
-| Keyname                          | Mandatory | Type      | Default | Description                                                                     |
-|----------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| checks                           | false     | Boolean   | true    | Enable all checks.                                                              |
-| consistency_checks               | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| semantic_checks                  | false     | Boolean   | true    | Enable all semantic checks.                                                     |
-| relation_source_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
-| relation_target_check            | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
-| ambiguous_hosting_check          | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
-| missing_artifact_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
-| ambiguous_artifact_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
-| missing_property_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
-| ambiguous_property_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
-| missing_type_container_check     | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
-| ambiguous_type_check             | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
-| expected_hosting_check           | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
-| expected_incoming_relation_check | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
-| expected_artifact_check          | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
+| Keyname                              | Mandatory | Type      | Default | Description                                                                     |
+|--------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
+| checks                               | false     | Boolean   | true    | Enable all checks.                                                              |
+| consistency_checks                   | false     | Boolean   | true    | Enable all consistency checks.                                                  |
+| semantic_checks                      | false     | Boolean   | true    | Enable all semantic checks.                                                     |
+| relation_source_check                | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
+| relation_target_check                | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
+| ambiguous_hosting_check              | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
+| missing_artifact_container_check     | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
+| ambiguous_artifact_check             | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
+| missing_property_container_check     | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
+| ambiguous_property_check             | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
+| missing_type_container_check         | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
+| ambiguous_type_check                 | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| expected_hosting_check               | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_check     | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_check              | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
+| missing_technology_container_check   | false     | Boolean   | true    | Enable the consistency check regarding present container of technologies.       |
+| ambiguous_technology_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present technologies.          |
 
 ### Solver Options
 
@@ -224,16 +232,16 @@ _This is an experimental feature._
 
 The following options are used to configure constraints.
 
-| Keyname                         | Mandatory | Type      | Default | Description                                                      |
-|---------------------------------|-----------|-----------|---------|------------------------------------------------------------------|
-| constraints                     | false     | Boolean   | false   | Enable all constraints.                                          |
-| relation_source_constraint      | false     | Boolean   | false   | Enable the constraint regarding present relation sources.        |
-| relation_target_constraint      | false     | Boolean   | false   | Enable the constraint regarding present relation targets.        |
-| artifact_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of artifacts.  |
-| property_container_constraint   | false     | Boolean   | false   | Enable the constraint regarding present container of properties. |
-| type_container_constraint       | false     | Boolean   | false   | Enable the constraint regarding present containers of types.     |
-| hosting_stack_constraint        | false     | Boolean   | false   | Enable the constraint regarding present hosting stack.           |
-
+| Keyname                       | Mandatory | Type     | Default | Description                                                      |
+|-------------------------------|-----------|----------|---------|------------------------------------------------------------------|
+| constraints                   | false     | Boolean  | false   | Enable all constraints.                                          |
+| relation_source_constraint    | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
+| relation_target_constraint    | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
+| artifact_container_constraint | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
+| property_container_constraint | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
+| type_container_constraint     | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
+| hosting_stack_constraint      | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
+| technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
 
 ### Pruning Modes
 
@@ -268,6 +276,7 @@ The following element-generic default conditions can be assigned to elements.
 | Policy                                           | false       | true     | Check if the policy has any targets which are present.                             |
 | Group                                            | false       | true     | Check if the group has any members which are present.                              |
 | Artifact                                         | true        | false    | Check if the node template of the artifact is present.                             |
+| Technology                                       | true        | false    | Check if the node template of the technology is present.                           |
 | Root                                             | true        | true     | The default condition of element always holds.                                     |
 
 Thereby, we define a consistency condition a condition which targets the consistency of the metamodel, thus, ensuring that the metamodel can be correctly parsed, e.g., a property must have a container.
@@ -818,6 +827,7 @@ The following presence operators can be used inside a logic expression.
 | artifact_property_presence  | Tuple(Node: String, Artifact: String &#124; Number, Property: String &#124; Number) | Boolean | Returns if property of artifact is present.                                                                                                                                      |
 | container_presence          | SELF                                                                                | Boolean | Returns if container is present. Can only be used inside a property or artifact.                                                                                                 |
 | import_presence             | Import: Number                                                                      | Boolean | Returns if import is present.                                                                                                                                                    |
+| technology_presence         | Tuple(Node: String, Technology: String &#124; Number)                               | Boolean | Returns if technology of node is present.                                                                                                                                        |
 
 
 ### String Operators 

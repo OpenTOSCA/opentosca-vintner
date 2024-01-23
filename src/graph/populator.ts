@@ -10,6 +10,7 @@ import {Options} from '#graph/options'
 import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
+import Technology from '#graph/technology'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {NodeTemplate} from '#spec/node-template'
 import * as utils from '#utils'
@@ -51,6 +52,7 @@ export class Populator {
             ...this.graph.inputs,
             ...this.graph.artifacts,
             ...this.graph.imports,
+            ...this.graph.technologies,
         ]
 
         // Ensure that at least one node template is persistent if "incoming-host" is used
@@ -127,6 +129,9 @@ export class Populator {
 
             // Artifacts
             this.populateArtifacts(node, raw)
+
+            // Technologies
+            this.populateTechnologies(node, raw)
         })
 
         // Ensure that each relationship is used
@@ -267,6 +272,26 @@ export class Populator {
             const candidates = artifacts.filter(it => it.defaultAlternative)
             if (candidates.length > 1) throw new Error(`${artifacts[0].Display} has multiple defaults`)
         })
+    }
+
+    private populateTechnologies(node: Node, nodeTemplate: NodeTemplate) {
+        if (check.isUndefined(nodeTemplate.technology)) return
+        assert.isArray(nodeTemplate.technology, `Technologies of ${node.display} not normalized`)
+
+        for (const [index, map] of nodeTemplate.technology.entries()) {
+            const [name, raw] = utils.firstEntry(map)
+
+            const technology = new Technology({
+                name,
+                raw,
+                container: node,
+                index,
+            })
+            technology.graph = this.graph
+
+            node.technologies.push(technology)
+            this.graph.technologies.push(technology)
+        }
     }
 
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
