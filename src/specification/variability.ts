@@ -33,6 +33,8 @@ export type ConstraintsOptions = {
     property_container_constraint?: boolean
     type_container_constraint?: boolean
     hosting_stack_constraint?: boolean
+    // TODO: tests
+    technology_constraint?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
@@ -80,6 +82,10 @@ export type DefaultOptions = {
     type_default_condition?: boolean
     type_default_consistency_condition?: boolean
     type_default_semantic_condition?: boolean
+
+    technology_default_condition?: boolean
+    technology_default_consistency_condition?: boolean
+    technology_default_semantic_condition?: boolean
 }
 
 export type PruningOptions = {
@@ -114,6 +120,10 @@ export type PruningOptions = {
     type_pruning?: boolean
     type_consistency_pruning?: boolean
     type_semantic_pruning?: boolean
+
+    technology_pruning?: boolean
+    technology_consistency_pruning?: boolean
+    technology_semantic_pruning?: boolean
 }
 
 export type ChecksOptions = {
@@ -136,9 +146,16 @@ export type ChecksOptions = {
     expected_artifact_check?: boolean
 
     persistent_check?: boolean
+
+    // TODO: tests
+    expected_technology_check?: boolean
+    // TODO: tests
+    missing_technology_container_check?: boolean
+    // TODO: tests
+    ambiguous_technology_check?: boolean
 }
 
-export const ResolverModes: {[key: string]: VariabilityOptions} = {
+export const ResolverModes: {[mode: string]: VariabilityOptions} = {
     strict: {},
     manual: {},
     'consistent-strict': {
@@ -169,6 +186,10 @@ export const ResolverModes: {[key: string]: VariabilityOptions} = {
         type_default_condition: true,
         type_default_consistency_condition: true,
         type_default_semantic_condition: false,
+
+        technology_default_condition: true,
+        technology_default_consistency_condition: true,
+        technology_default_semantic_condition: false,
     },
     'consistent-loose': {
         node_pruning: true,
@@ -198,6 +219,10 @@ export const ResolverModes: {[key: string]: VariabilityOptions} = {
         type_pruning: true,
         type_consistency_pruning: true,
         type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
     },
     default: {
         default_condition: true,
@@ -232,6 +257,10 @@ export const ResolverModes: {[key: string]: VariabilityOptions} = {
         type_pruning: true,
         type_consistency_pruning: true,
         type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
     },
     'semantic-loose': {
         pruning: true,
