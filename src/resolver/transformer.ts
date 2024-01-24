@@ -74,7 +74,7 @@ export default class Transformer {
                     // Select present type
                     this.transformType(node, template)
 
-                    // Select technology
+                    // Select present technology
                     this.transformTechnology(node, template)
 
                     // Select present properties
@@ -237,7 +237,7 @@ export default class Transformer {
     }
 
     private transformTechnology(element: Node, template: NodeTemplate) {
-        // Ignore if previously had not technologies
+        // Ignore if previously had no technologies
         if (utils.isEmpty(element.technologies)) return
 
         const technology = element.technologies.find(it => it.present)

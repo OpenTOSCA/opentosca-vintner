@@ -89,12 +89,13 @@ export default class Solver {
          * Check if there are multiple minimal/ maximal results considering the weight of nodes
          */
         if (this.graph.options.solver.unique) {
-            if (this.graph.options.solver.optimize) {
-                if (results.length > 1 && results[0].weight === results[1].weight && !results[0].equals(results[1]))
-                    throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
-            } else {
-                if (results.length > 1 && !results[0].equals(results[1]))
+            if (results.length > 1 && !results[0].equals(results[1])) {
+                if (this.graph.options.solver.optimize) {
+                    if (results[0].weight === results[1].weight)
+                        throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
+                } else {
                     throw new Error(`The result is ambiguous considering nodes (without optimization)`)
+                }
             }
         }
 
@@ -120,12 +121,13 @@ export default class Solver {
          * Check if there are multiple minimal results considering the number of used technologies
          */
         if (this.graph.options.solver.uniqueTechnologies) {
-            if (this.graph.options.solver.optimizeTechnologies) {
-                if (results.length > 1 && results[0].technologies === results[1].technologies)
-                    throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
-            } else {
-                if (results.length > 1)
+            if (results.length > 1) {
+                if (this.graph.options.solver.optimizeTechnologies) {
+                    if (results[0].technologies === results[1].technologies)
+                        throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
+                } else {
                     throw new Error(`The result is ambiguous considering technologies (without optimization)`)
+                }
             }
         }
 

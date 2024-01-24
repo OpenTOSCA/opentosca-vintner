@@ -35,7 +35,6 @@ export type ConstraintsOptions = {
     property_container_constraint?: boolean
     type_container_constraint?: boolean
     hosting_stack_constraint?: boolean
-    // TODO: tests
     technology_constraint?: boolean
 }
 
