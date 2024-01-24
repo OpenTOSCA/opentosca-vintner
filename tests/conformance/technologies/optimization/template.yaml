@@ -4,6 +4,7 @@ topology_template:
     variability:
         options:
             optimization_technologies: true
+            technology_pruning: true
 
     node_templates:
         container:

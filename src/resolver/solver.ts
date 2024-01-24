@@ -4,6 +4,7 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
 import {andify} from '#graph/utils'
+import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {
     InputAssignmentPreset,
@@ -34,10 +35,6 @@ export default class Solver {
     private readonly options?: VariabilityDefinition
 
     readonly minisat = new MiniSat.Solver()
-    private result?: {
-        map: Record<string, boolean>
-        formula: MiniSat.Formula
-    }
 
     // Some operations on MiniSat cannot be undone
     private solved = false
@@ -57,7 +54,7 @@ export default class Solver {
             throw new Error(`Variability groups are not allowed`)
     }
 
-    run() {
+    run(): ResultMap {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
 
@@ -66,7 +63,7 @@ export default class Solver {
         /**
          * Get all results
          */
-        let results = this.getAllResults()
+        let results = this.solveAll()
         if (utils.isEmpty(results)) throw new Error(`Could not solve`)
 
         /**
@@ -93,10 +90,11 @@ export default class Solver {
          */
         if (this.graph.options.solver.unique) {
             if (this.graph.options.solver.optimize) {
-                if (results.length > 1 && results[0].weight === results[1].weight)
-                    throw new Error(`The result is ambiguous considering nodes`)
+                if (results.length > 1 && results[0].weight === results[1].weight && !results[0].equals(results[1]))
+                    throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
             } else {
-                if (results.length > 1) throw new Error(`The result is ambiguous considering nodes`)
+                if (results.length > 1 && !results[0].equals(results[1]))
+                    throw new Error(`The result is ambiguous considering nodes (without optimization)`)
             }
         }
 
@@ -124,30 +122,31 @@ export default class Solver {
         if (this.graph.options.solver.uniqueTechnologies) {
             if (this.graph.options.solver.optimizeTechnologies) {
                 if (results.length > 1 && results[0].technologies === results[1].technologies)
-                    throw new Error(`The result is ambiguous considering technologies`)
+                    throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
             } else {
-                if (results.length > 1) throw new Error(`The result is ambiguous considering technologies`)
+                if (results.length > 1)
+                    throw new Error(`The result is ambiguous considering technologies (without optimization)`)
             }
         }
 
         /**
          * Result
          */
-        const map = results[0].result.getMap()
+        const result = results[0]
 
         /**
          * Assign presence to elements
          */
         for (const element of this.graph.elements) {
-            const present = map[element.id]
-            if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
-            element.present = present
+            element.present = result.getPresence(element)
         }
 
         /**
          * Evaluate value expressions
          */
-        for (const property of this.graph.properties.filter(it => it.present)) this.evaluateProperty(property)
+        for (const property of this.graph.properties.filter(it => it.present)) {
+            this.evaluateProperty(property)
+        }
 
         /**
          * Note, input default expressions are evaluated on-demand in {@link getInput}
@@ -156,52 +155,31 @@ export default class Solver {
         /**
          * Return result
          */
-        return map
+        return result.map
     }
 
-    solveAll() {
+    runAll(): ResultMap[] {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
 
         this.transform()
 
-        return this.getAllResults().map(it => it.result.getMap())
+        return this.solveAll().map(it => it.map)
     }
 
-    private getAllResults() {
-        const results: {weight: number; technologies: number; result: MiniSat.Solution}[] = []
+    private solveAll() {
+        const results: Result[] = []
 
         let result: MiniSat.Solution | null
         while ((result = this.minisat.solve())) {
-            results.push({
-                result,
-                weight: this.weightResult(result, this.graph.nodes),
-                technologies: this.countTechnologies(result),
-            })
+            results.push(new Result(this.graph, result))
             this.minisat.forbid(result.getFormula())
         }
 
         return results
     }
 
-    private weightResult(result: MiniSat.Solution, elements: {id: string; weight: number}[]) {
-        let sum = 0
-        const map = result.getMap()
-        for (const element of elements) {
-            if (map[element.id]) sum += element.weight
-        }
-        return sum
-    }
-
-    private countTechnologies(result: MiniSat.Solution) {
-        const counts: {[key: string]: number} = {}
-        const map = result.getMap()
-        for (const technology of this.graph.technologies) {
-            if (check.isUndefined(counts[technology.name])) counts[technology.name] = 0
-            if (map[technology.id]) counts[technology.name]++
-        }
-        return Object.keys(counts).length
-    }
+    private areEqualResults(a: Result, b: Result) {}
 
     /**
      * Transform assigned conditions to MiniSat clauses

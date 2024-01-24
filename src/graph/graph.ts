@@ -20,7 +20,6 @@ import {
     TechnologyPresenceArguments,
 } from '#spec/variability'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import Artifact from './artifact'
 import Element from './element'
 import Group from './group'
@@ -492,17 +491,22 @@ export default class Graph {
 
         const node = this.getNode(data[0], context)
 
-        if (check.isString(data[0])) {
-            const technologies = node.technologies.filter(it => it.name === data[0])
+        let technology
+
+        // [string, string]
+        if (check.isString(data[1])) {
+            const technologies = node.technologies.filter(it => it.name === data[1])
             if (technologies.length > 1) throw new Error(`Technology "${utils.pretty(data)}" is ambiguous`)
-            return technologies[0]
+            technology = technologies[0]
         }
 
+        // [string, number]
         if (check.isNumber(data[1])) {
-            return node.technologies[data[1]]
+            technology = node.technologies[data[1]]
         }
 
-        throw new UnexpectedError()
+        assert.isDefined(technology, `Technology "${utils.pretty(data)} not found`)
+        return technology
     }
 
     addConstraint(constraint: LogicExpression) {

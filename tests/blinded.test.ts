@@ -1,5 +1,6 @@
 import Enricher from '#enricher'
 import Graph from '#graph/graph'
+import {ResultMap} from '#resolver/result'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import {expect} from 'chai'
@@ -99,12 +100,12 @@ topology_template:
     })
 })
 
-async function blinded(template: string, expected: Record<string, boolean>[]) {
+async function blinded(template: string, expected: ResultMap[]) {
     const _template = yaml.load(template) as ServiceTemplate
     await Enricher.enrich({template: _template})
 
     const solver = new Solver(new Graph(_template))
-    const result = solver.solveAll()
+    const result = solver.runAll()
 
     expect(result).to.deep.equal(expected)
 }

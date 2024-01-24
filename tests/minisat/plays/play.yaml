@@ -3,40 +3,20 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     variability:
         options:
-            node_default_condition: true
-            node_default_condition_mode: incomingnaive-host
-
-            relation_default_condition: true
-            relation_default_condition_mode: source-target
-
-            type_default_condition: true
-
-            hosting_stack_constraint: true
-            optimization: true
-            unique: true
+            optimization_technologies: true
+            technology_pruning: true
 
     node_templates:
-        app:
-            type: app
-            persistent: true
-            requirements:
-                - database:
-                      node: database
-                      implied: true
-                - host:
-                      node: static
+        container:
+            type: container
+            technology:
+                - ansible:
+                      conditions: true
+                - terraform:
+                      conditions: true
 
-                - host:
-                      node: elastic
-
-        database:
-            type: database
-            requirements:
-                - host:
-                      node: static
-
-        static:
-            type: static
-
-        elastic:
-            type: elastic
+        another:
+            type: another
+            technology:
+                - ansible:
+                      conditions: true

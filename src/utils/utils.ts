@@ -167,3 +167,19 @@ export function getPrefixedEnv(prefix: string) {
         return acc
     }, {})
 }
+
+export function sort(unordered: {[key: string]: boolean}) {
+    return Object.keys(unordered)
+        .sort()
+        .reduce<{[key: string]: boolean}>((obj, key) => {
+            obj[key] = unordered[key]
+            return obj
+        }, {})
+}
+
+export function filter(unfiltered: {[key: string]: boolean}, filter: RegExp) {
+    return Object.keys(unfiltered).reduce<{[key: string]: boolean}>((obj, key) => {
+        if (filter.test(key)) obj[key] = unfiltered[key]
+        return obj
+    }, {})
+}

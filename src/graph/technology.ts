@@ -24,8 +24,6 @@ export default class Technology extends Element {
         this.index = data.index
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
-
-        // TODO: this overrides conditions -> move it to pruning
         this.defaultAlternative = check.isObject(data.raw.default_alternative) ?? true
     }
 
@@ -68,7 +66,12 @@ export default class Technology extends Element {
     }
 
     getElementGenericCondition() {
-        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
+        // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+        return {
+            conditions: {and: [this.container.presenceCondition, this.constructDefaultAlternativeCondition()]},
+            consistency: true,
+            semantic: false,
+        }
     }
 
     constructDefaultAlternativeCondition(): LogicExpression {
@@ -78,8 +81,6 @@ export default class Technology extends Element {
     constructPresenceCondition(): LogicExpression {
         return {technology_presence: this.toscaId, _cached_element: this}
     }
-
-    // TODO: the whole pruning stuff
 
     isTechnology() {
         return true
