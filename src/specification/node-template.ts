@@ -8,6 +8,7 @@ import {ElementType} from '#spec/type-assignment'
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
+    TechnologyDefaultConditionMode,
     VariabilityAlternative,
     VariabilityPointList,
     VariabilityPointObject,
@@ -46,4 +47,4 @@ export type CapabilityAssignmentMap = {[key: string]: string}
 
 export type TechnologyAssignment = boolean | string | VariabilityPointObject<TechnologyTemplate>
 
-export type TechnologyTemplate = VariabilityAlternative
+export type TechnologyTemplate = VariabilityAlternative & {default_condition_mode?: TechnologyDefaultConditionMode}

@@ -3,7 +3,7 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import {bratify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/node-template'
-import {LogicExpression, TechnologyPresenceArguments} from '#spec/variability'
+import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Technology extends Element {
@@ -65,10 +65,28 @@ export default class Technology extends Element {
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.technologySemanticPruning
     }
 
+    get getDefaultMode(): TechnologyDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.technologyDefaultConditionMode
+    }
     getElementGenericCondition() {
-        // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['container', 'other'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'container') {
+                return conditions.push(this.container.presenceCondition)
+            }
+            if (it === 'other') {
+                // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+                return conditions.push(this.constructDefaultAlternativeCondition())
+            }
+        })
+
         return {
-            conditions: {and: [this.container.presenceCondition, this.constructDefaultAlternativeCondition()]},
+            conditions: {and: conditions},
             consistency: true,
             semantic: false,
         }

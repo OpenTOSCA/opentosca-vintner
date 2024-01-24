@@ -51,6 +51,7 @@ export type NodeDefaultConditionMode =
     | 'outgoing'
     | 'outgoingnaive'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
+export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
 
 export type DefaultOptions = {
     default_condition?: boolean
@@ -86,6 +87,7 @@ export type DefaultOptions = {
     type_default_semantic_condition?: boolean
 
     technology_default_condition?: boolean
+    technology_default_condition_mode?: TechnologyDefaultConditionMode
     technology_default_consistency_condition?: boolean
     technology_default_semantic_condition?: boolean
 }

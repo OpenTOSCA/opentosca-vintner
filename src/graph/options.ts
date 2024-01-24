@@ -5,6 +5,7 @@ import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
     ResolverModes,
+    TechnologyDefaultConditionMode,
     VariabilityOptions,
 } from '#spec/variability'
 
@@ -67,6 +68,7 @@ class DefaultOptions {
     typeDefaultSemanticCondition: boolean
 
     technologyDefaultCondition: boolean
+    technologyDefaultConditionMode: TechnologyDefaultConditionMode
     technologyDefaultConsistencyCondition: boolean
     technologyDefaultSemanticCondition: boolean
 
@@ -202,6 +204,10 @@ class DefaultOptions {
         this.technologyDefaultCondition =
             this.raw.technology_default_condition ?? mode.technology_default_condition ?? this.defaultCondition
         assert.isBoolean(this.technologyDefaultCondition)
+
+        this.technologyDefaultConditionMode =
+            this.raw.technology_default_condition_mode ?? mode.technology_default_condition_mode ?? 'container-other'
+        assert.isString(this.technologyDefaultConditionMode)
 
         this.technologyDefaultConsistencyCondition =
             this.raw.technology_default_consistency_condition ??
