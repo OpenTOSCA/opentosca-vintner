@@ -21,25 +21,25 @@ export default class Normalizer {
 
     run() {
         // Imports
-        this.extendImports()
+        this.normalizeImports()
 
         // Inputs
-        this.extendInputs()
+        this.normalizeInputs()
 
         // Nodes
-        this.extendNodes()
+        this.normalizeNodes()
 
         // Policies
-        this.extendPolicies()
+        this.normalizePolicies()
 
         // Groups
-        this.extendGroups()
+        this.normalizeGroups()
 
         // Relationship
-        this.extendRelationships()
+        this.normalizeRelationships()
     }
 
-    private extendInputs() {
+    private normalizeInputs() {
         if (check.isUndefined(this.serviceTemplate.topology_template?.inputs)) return
 
         this.serviceTemplate.topology_template!.inputs = this.getFromVariabilityPointMap(
@@ -60,7 +60,7 @@ export default class Normalizer {
         })
     }
 
-    private extendProperties(template: PropertyContainerTemplate) {
+    private normalizeProperties(template: PropertyContainerTemplate) {
         assert.isObject(template)
         if (check.isUndefined(template.properties)) return
 
@@ -93,41 +93,41 @@ export default class Normalizer {
         })
     }
 
-    private extendRelationships() {
+    private normalizeRelationships() {
         Object.entries(this.serviceTemplate.topology_template?.relationship_templates || {}).forEach(it => {
             const template = it[1]
-            this.extendTypes(template)
-            this.extendProperties(template)
+            this.normalizeTypes(template)
+            this.normalizeProperties(template)
         })
     }
 
-    private extendGroups() {
+    private normalizeGroups() {
         if (check.isUndefined(this.serviceTemplate.topology_template?.groups)) return
 
         this.serviceTemplate.topology_template!.groups = this.getFromVariabilityPointMap(
             this.serviceTemplate.topology_template!.groups
         ).reduce<GroupTemplateMap[]>((list, map) => {
             const template = utils.firstValue(map)
-            this.extendTypes(template)
-            this.extendProperties(template)
+            this.normalizeTypes(template)
+            this.normalizeProperties(template)
 
             list.push(map)
             return list
         }, [])
     }
 
-    private extendPolicies() {
+    private normalizePolicies() {
         const policies = this.serviceTemplate.topology_template?.policies
         if (check.isUndefined(policies)) return
         assert.isArray(policies, 'Policies must be an array')
         policies.forEach(it => {
             const template = utils.firstValue(it)
-            this.extendTypes(template)
-            this.extendProperties(template)
+            this.normalizeTypes(template)
+            this.normalizeProperties(template)
         })
     }
 
-    private extendTypes(template: TypeContainerTemplate) {
+    private normalizeTypes(template: TypeContainerTemplate) {
         assert.isDefined(template.type, `${utils.stringify(template)} has no type`)
 
         if (check.isArray(template.type)) return
@@ -146,12 +146,12 @@ export default class Normalizer {
         template.type = types
     }
 
-    private extendImports() {
+    private normalizeImports() {
         if (check.isUndefined(this.serviceTemplate.imports)) return
         this.serviceTemplate.imports = this.serviceTemplate.imports.map(it => (check.isString(it) ? {file: it} : it))
     }
 
-    private extendNodes() {
+    private normalizeNodes() {
         if (check.isUndefined(this.serviceTemplate.topology_template?.node_templates)) return
 
         this.serviceTemplate.topology_template!.node_templates = this.getFromVariabilityPointMap(
@@ -161,26 +161,26 @@ export default class Normalizer {
             const template = utils.firstValue(map)
 
             // Types
-            this.extendTypes(template)
+            this.normalizeTypes(template)
 
             // Properties
-            this.extendProperties(template)
+            this.normalizeProperties(template)
 
             // Relations
-            this.extendRelations(template)
+            this.normalizeRelations(template)
 
             // Artifacts
-            this.extendArtifacts(template)
+            this.normalizeArtifacts(template)
 
             // Technologies
-            this.extendTechnologies(template)
+            this.normalizeTechnologies(template)
 
             list.push(map)
             return list
         }, [])
     }
 
-    private extendRelations(template: NodeTemplate) {
+    private normalizeRelations(template: NodeTemplate) {
         if (check.isUndefined(template.requirements)) return
         for (const [index, map] of template.requirements.entries()) {
             const [relationName, assignment] = utils.firstEntry(map)
@@ -188,7 +188,7 @@ export default class Normalizer {
         }
     }
 
-    private extendArtifacts(template: NodeTemplate) {
+    private normalizeArtifacts(template: NodeTemplate) {
         if (check.isUndefined(template.artifacts)) return
 
         if (!check.isArray(template.artifacts)) {
@@ -201,17 +201,17 @@ export default class Normalizer {
             }, [])
         }
 
-        template.artifacts.forEach(it => this.extendArtifact(it))
+        template.artifacts.forEach(it => this.normalizeArtifact(it))
     }
 
-    private extendArtifact(map: ArtifactDefinitionMap) {
+    private normalizeArtifact(map: ArtifactDefinitionMap) {
         const [name, template] = utils.firstEntry(map)
         if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
         if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
-        this.extendProperties(map[name])
+        this.normalizeProperties(map[name])
     }
 
-    private extendTechnologies(template: NodeTemplate) {
+    private normalizeTechnologies(template: NodeTemplate) {
         if (check.isUndefined(template.technology)) return
 
         // TODO: implement this
@@ -222,17 +222,24 @@ export default class Normalizer {
         if (check.isString(template.technology)) {
             const map: {[name: string]: TechnologyTemplate} = {}
             map[template.technology] = {}
-            template.technology = map
-            return
+            template.technology = [map]
         }
 
-        if (check.isArray(template.technology)) return
+        if (check.isArray(template.technology)) {
+            // Do nothing
+        }
 
-        if (check.isObject(template.technology)) {
+        if (!check.isArray(template.technology) && check.isObject(template.technology)) {
             template.technology = [template.technology]
-            return
         }
 
-        throw new Error('Deployment technology template malformed')
+        assert.isDefined(template.technology)
+
+        template.technology = template.technology.map(it => {
+            const entry = utils.firstEntry(it)
+            const map: {[name: string]: TechnologyTemplate} = {}
+            map[entry[0].toLowerCase()] = entry[1]
+            return map
+        })
     }
 }

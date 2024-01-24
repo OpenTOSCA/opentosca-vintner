@@ -159,25 +159,6 @@ export default class Solver {
         return map
     }
 
-    private weightResult(result: MiniSat.Solution, elements: {id: string; weight: number}[]) {
-        let sum = 0
-        const map = result.getMap()
-        for (const element of elements) {
-            if (map[element.id]) sum += element.weight
-        }
-        return sum
-    }
-
-    private countTechnologies(result: MiniSat.Solution) {
-        const counts: {[key: string]: number} = {}
-        const map = result.getMap()
-        for (const technology of this.graph.technologies) {
-            if (check.isUndefined(counts[technology.name])) counts[technology.name] = 0
-            if (map[technology.id]) counts[technology.name]++
-        }
-        return Object.keys(counts).length
-    }
-
     solveAll() {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
@@ -201,6 +182,25 @@ export default class Solver {
         }
 
         return results
+    }
+
+    private weightResult(result: MiniSat.Solution, elements: {id: string; weight: number}[]) {
+        let sum = 0
+        const map = result.getMap()
+        for (const element of elements) {
+            if (map[element.id]) sum += element.weight
+        }
+        return sum
+    }
+
+    private countTechnologies(result: MiniSat.Solution) {
+        const counts: {[key: string]: number} = {}
+        const map = result.getMap()
+        for (const technology of this.graph.technologies) {
+            if (check.isUndefined(counts[technology.name])) counts[technology.name] = 0
+            if (map[technology.id]) counts[technology.name]++
+        }
+        return Object.keys(counts).length
     }
 
     /**

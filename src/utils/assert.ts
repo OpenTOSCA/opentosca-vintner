@@ -13,11 +13,14 @@ import Type from '#graph/type'
 import * as utils from '#utils'
 import {Dayjs} from 'dayjs'
 
-export function isDefined<T>(element: T | undefined | null, msg: string): asserts element is T {
+export function isDefined<T>(element: T | undefined | null, msg = 'Unexpected error'): asserts element is T {
     if (!check.isDefined(element)) throw new Error(msg)
 }
 
-export function isUndefined<T>(element: T | undefined | null, msg: string): asserts element is undefined | null {
+export function isUndefined<T>(
+    element: T | undefined | null,
+    msg = 'Unexpected error'
+): asserts element is undefined | null {
     if (!check.isUndefined(element)) throw new Error(msg)
 }
 
