@@ -454,6 +454,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#technology-template">
+    Technology Template
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#type-assignment">
     Type Assignment
   </a>
@@ -2214,6 +2219,91 @@
         scenario-worker-worker-true
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-ambiguous-disabled/">
+        technologies-ambiguous-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-ambiguous/">
+        technologies-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-conditional/">
+        technologies-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-constraint-disabled/">
+        technologies-constraint-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-constraint/">
+        technologies-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-expected-disabled/">
+        technologies-expected-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-expected/">
+        technologies-expected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-lowercase/">
+        technologies-lowercase
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-missing-disabled/">
+        technologies-missing-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-missing/">
+        technologies-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-optimization-double/">
+        technologies-optimization-double
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-optimization-unsat/">
+        technologies-optimization-unsat
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-optimization/">
+        technologies-optimization
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-pruning-disabled/">
+        technologies-pruning-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-pruning/">
+        technologies-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-unique-disabled/">
+        technologies-unique-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-unique/">
+        technologies-unique
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -2703,6 +2793,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#node-template">
     Node Template
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#technology-template">
+    Technology Template
   </a>
 </li>
 <li class="md-nav__item">
@@ -3347,6 +3442,34 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>false</td>
 <td>Enable default semantic condition for types.</td>
 </tr>
+<tr>
+<td>technology_default_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable default condition for (deployment) technologies (consistency and semantic).</td>
+</tr>
+<tr>
+<td>technology_default_condition_mode</td>
+<td>false</td>
+<td>List(container | other, -)</td>
+<td>container-other</td>
+<td>Configure the default condition for (deployment) technologies.</td>
+</tr>
+<tr>
+<td>technology_default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable default consistency condition for technologies.</td>
+</tr>
+<tr>
+<td>technology_default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable default semantic condition for technologies.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="pruning-options">Pruning Options<a class="headerlink" href="#pruning-options" title="Permanent link">¶</a></h3>
@@ -3516,6 +3639,27 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>false</td>
 <td>Enable semantic pruning of types.</td>
 </tr>
+<tr>
+<td>technology_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable pruning of (deployment) technologies (consistency and semantic).</td>
+</tr>
+<tr>
+<td>technology_consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable consistency pruning of technologies.</td>
+</tr>
+<tr>
+<td>technology_semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable semantic pruning of technologies.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="checks-options">Checks Options<a class="headerlink" href="#checks-options" title="Permanent link">¶</a></h3>
@@ -3636,6 +3780,27 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>true</td>
 <td>Enable the semantic check regarding an expected artifact.</td>
 </tr>
+<tr>
+<td>expected_technology_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the consistency check regarding present technologies.</td>
+</tr>
+<tr>
+<td>missing_technology_container_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the consistency check regarding present container of technologies.</td>
+</tr>
+<tr>
+<td>ambiguous_technology_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the consistency check regarding ambiguous present technologies.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="solver-options">Solver Options<a class="headerlink" href="#solver-options" title="Permanent link">¶</a></h3>
@@ -3657,14 +3822,28 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>false</td>
 <td>Boolean | min | max</td>
 <td>false</td>
-<td>Configure optimization.</td>
+<td>Configure optimization considering nodes.</td>
 </tr>
 <tr>
 <td>unique</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
-<td>Enable check for unique results.</td>
+<td>Enable check for unique results considering nodes.</td>
+</tr>
+<tr>
+<td>optimization_technologies</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable optimization considering technologies.</td>
+</tr>
+<tr>
+<td>unique_technologies</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable check for unique results considering technologies</td>
 </tr>
 </tbody>
 </table>
@@ -3731,6 +3910,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>false</td>
 <td>Enable the constraint regarding present hosting stack.</td>
 </tr>
+<tr>
+<td>technology_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding technologies.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="pruning-modes">Pruning Modes<a class="headerlink" href="#pruning-modes" title="Permanent link">¶</a></h3>
@@ -3761,13 +3947,13 @@ However, type-specific default conditions are defined per type, e.g., node type,
 </thead>
 <tbody>
 <tr>
-<td>Node Template with Incoming Relations (incoming)</td>
+<td>Node with Incoming Relations (incoming)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any incoming relation is present.</td>
 </tr>
 <tr>
-<td>Node Template with Artifacts (artifact)</td>
+<td>Node with Artifacts (artifact)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any artifact is present.</td>
@@ -3803,6 +3989,18 @@ However, type-specific default conditions are defined per type, e.g., node type,
 <td>Check if the node template of the artifact is present.</td>
 </tr>
 <tr>
+<td>Technology (container)</td>
+<td>true</td>
+<td>false</td>
+<td>Check if the node template of the technology is present.</td>
+</tr>
+<tr>
+<td>Technology (other)</td>
+<td>true</td>
+<td>false</td>
+<td>Check if no other technology of the node template is present.</td>
+</tr>
+<tr>
 <td>Root</td>
 <td>true</td>
 <td>true</td>
@@ -3825,37 +4023,37 @@ The following default conditions can be chosen instead of the ones introduced ab
 </thead>
 <tbody>
 <tr>
-<td>Node Template with Incoming Relations (incomingnaive)</td>
+<td>Node with Incoming Relations (incomingnaive)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any incoming relation is present using <code>has_incoming_relation_naive</code>.</td>
 </tr>
 <tr>
-<td>Node Template with Incoming Relations (source)</td>
+<td>Node with Incoming Relations (source)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any source of any incoming relation is present.</td>
 </tr>
 <tr>
-<td>Node Template with Outgoing Relations (outgoing)</td>
+<td>Node with Outgoing Relations (outgoing)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any outgoing relation is present.</td>
 </tr>
 <tr>
-<td>Node Template with Outgoing Relations (outgoingnaive)</td>
+<td>Node with Outgoing Relations (outgoingnaive)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any outgoing relation is present using <code>has_outgoing_relation_naive</code>.</td>
 </tr>
 <tr>
-<td>Node Template with Host (host)</td>
+<td>Node with Host (host)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any host is present.</td>
 </tr>
 <tr>
-<td>Node Template with Artifact (artifactnaive)</td>
+<td>Node with Artifact (artifactnaive)</td>
 <td>false</td>
 <td>true</td>
 <td>Check if any artifact is present using <code>has_artifact_naive</code>.</td>
@@ -4071,7 +4269,7 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <tr>
 <td>artifacts</td>
 <td>false</td>
-<td>Map(String, Artifact) | List(Map(String, Artifact){single})</td>
+<td>Map(String, ArtifactTemplate) | List(Map(String, ArtifactTemplate){single})</td>
 <td>An optional map of artifact or a list of artifact maps. If a list is given, then each artifact map must contain only one artifact.</td>
 </tr>
 <tr>
@@ -4140,6 +4338,12 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))</td>
 <td>An optional list of implications following the pattern <code>element implies target</code> or <code>(element and condition) implies target</code>.</td>
 </tr>
+<tr>
+<td>technology</td>
+<td>false</td>
+<td>Boolean | Map(String, TechnologyTemplate){single} | List(Map(String, TechnologyTemplate){single})</td>
+<td>An optional conditional assignment of deployment technologies.</td>
+</tr>
 </tbody>
 </table>
 <p>For example, the following node template has a variability condition assigned.</p>
@@ -4149,6 +4353,75 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my.prod.db</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_prod</span><span class="p p-Indicator">}</span>
 </code></pre></div></td></tr></table></div>
+<h2 id="technology-template">Technology Template<a class="headerlink" href="#technology-template" title="Permanent link">¶</a></h2>
+<p>A technology template is a conditional elements, thus, variability conditions and other options can be assigned. 
+These conditions must hold otherwise the respective technology template is not present. </p>
+<table>
+<thead>
+<tr>
+<th>Keyname</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>conditions</td>
+<td>false</td>
+<td>VariabilityCondition | List(VariabilityCondition)</td>
+<td>An optional variability condition. If a list is given, then the conditions are combined using the <em>and</em> operation.</td>
+</tr>
+<tr>
+<td>default_alternative</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Declare the type as default. This overwrites assigned conditions. There must be only one default assignment.</td>
+</tr>
+<tr>
+<td>default_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default condition for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>default_condition_mode</td>
+<td>false</td>
+<td>container | other | container-other</td>
+<td>Configure the default condition for this element.</td>
+</tr>
+<tr>
+<td>default_consistency_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>default_semantic_condition</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the pruning for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>consistency_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>semantic_pruning</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="type-assignment">Type Assignment<a class="headerlink" href="#type-assignment" title="Permanent link">¶</a></h2>
 <p>A type is a conditional element, thus, variability conditions and further options can be assigned to a type assignment.
 These conditions must hold otherwise the respective relationship is not present.</p>
@@ -4700,7 +4973,7 @@ For more information about this example, take a look in the <a href="https://doc
 <a id="__codelineno-14-29" name="__codelineno-14-29"></a><span class="w">          </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="nv">is_prod</span><span class="p p-Indicator">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="artifact-template">Artifact Template<a class="headerlink" href="#artifact-template" title="Permanent link">¶</a></h2>
-<p>An (deployment) artifact is a conditional element, thus, variability conditions and other options can be assigned.
+<p>A (deployment) artifact is a conditional element, thus, variability conditions and other options can be assigned.
 These conditions must hold otherwise the respective artifact is not present.
 An artifact can also hold conditional properties.</p>
 <table>
@@ -5189,6 +5462,12 @@ The definition is intended to be extended in other specifications, e.g., for bui
 <td>Import: Number</td>
 <td>Boolean</td>
 <td>Returns if import is present.</td>
+</tr>
+<tr>
+<td>technology_presence</td>
+<td>Tuple(Node: String, Technology: String | Number)</td>
+<td>Boolean</td>
+<td>Returns if technology of node is present.</td>
 </tr>
 </tbody>
 </table>
@@ -5780,7 +6059,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 3, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 24, 2024</span>
 </small>
 </div>
 </article>
