@@ -179,8 +179,6 @@ export default class Solver {
         return results
     }
 
-    private areEqualResults(a: Result, b: Result) {}
-
     /**
      * Transform assigned conditions to MiniSat clauses
      * Note, this also evaluates value expressions if they are part of logic expressions
