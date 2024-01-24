@@ -281,6 +281,7 @@ export class Populator {
         for (const [index, map] of nodeTemplate.technology.entries()) {
             const [name, raw] = utils.firstEntry(map)
 
+            console.log({name, raw})
             const technology = new Technology({
                 name,
                 raw,
