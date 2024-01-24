@@ -7,9 +7,11 @@ import * as yaml from 'js-yaml'
 
 // TODO: unblind me
 
+// TODO: unskip
+
 describe('blinded', () => {
     it('one', async () => {
-        await blined(
+        await blinded(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -57,7 +59,7 @@ topology_template:
     })
 
     it('two', async () => {
-        await blined(
+        await blinded(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -97,7 +99,7 @@ topology_template:
     })
 })
 
-async function blined(template: string, expected: Record<string, boolean>[]) {
+async function blinded(template: string, expected: Record<string, boolean>[]) {
     const _template = yaml.load(template) as ServiceTemplate
     await Enricher.enrich({template: _template})
 

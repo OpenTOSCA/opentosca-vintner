@@ -23,6 +23,8 @@ export type PruningMode = 'manual' | 'consistent-strict' | 'consistent-loose' | 
 export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
     unique?: boolean
+    optimization_technologies?: boolean
+    unique_technologies?: boolean
 }
 
 export type ConstraintsOptions = {

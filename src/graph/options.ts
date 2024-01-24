@@ -455,6 +455,9 @@ class SolverOptions {
     optimize: boolean
     unique: boolean
 
+    optimizeTechnologies: boolean
+    uniqueTechnologies: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
@@ -470,6 +473,12 @@ class SolverOptions {
 
         this.unique = this.raw.unique ?? true
         assert.isBoolean(this.unique)
+
+        this.optimizeTechnologies = this.raw.optimization_technologies ?? false
+        assert.isBoolean(this.optimizeTechnologies)
+
+        this.uniqueTechnologies = this.raw.unique_technologies ?? false
+        assert.isBoolean(this.uniqueTechnologies)
     }
 }
 

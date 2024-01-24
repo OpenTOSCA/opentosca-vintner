@@ -221,11 +221,12 @@ _This is an experimental feature._
 
 The following options are used to configure the solver.
 
-| Keyname      | Mandatory | Type                          | Default | Description                        |
-|--------------|-----------|-------------------------------|---------|------------------------------------|
-| optimization | false     | Boolean &#124; min &#124; max | false   | Configure optimization.            | 
-| unique       | false     | Boolean                       | true    | Enable check for unique results.   | 
-
+| Keyname                   | Mandatory | Type                          | Default | Description                                              |
+|---------------------------|-----------|-------------------------------|---------|----------------------------------------------------------|
+| optimization              | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering nodes.                | 
+| unique                    | false     | Boolean                       | true    | Enable check for unique results considering nodes.       | 
+| optimization_technologies | false     | Boolean                       | false   | Enable optimization considering technologies.            | 
+| unique_technologies       | false     | Boolean                       | false   | Enable check for unique results considering technologies | 
 
 ### Constraints Options
 
