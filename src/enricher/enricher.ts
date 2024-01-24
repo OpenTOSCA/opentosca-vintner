@@ -197,7 +197,7 @@ export default class Enricher {
         /**
          * Ensure that technology exists
          */
-        if (this.graph.options.constraints) {
+        if (this.graph.options.constraints.technology) {
             for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {
                 const consequence =
                     node.technologies.length === 1 ? node.technologies[0].id : {xor: node.technologies.map(it => it.id)}

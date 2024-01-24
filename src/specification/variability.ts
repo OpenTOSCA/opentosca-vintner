@@ -149,11 +149,8 @@ export type ChecksOptions = {
 
     persistent_check?: boolean
 
-    // TODO: tests
     expected_technology_check?: boolean
-    // TODO: tests
     missing_technology_container_check?: boolean
-    // TODO: tests
     ambiguous_technology_check?: boolean
 }
 

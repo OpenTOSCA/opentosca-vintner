@@ -24,7 +24,7 @@ export default class Technology extends Element {
         this.index = data.index
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
-        this.defaultAlternative = check.isObject(data.raw.default_alternative) ?? true
+        this.defaultAlternative = check.isObject(data.raw.default_alternative) ?? false
     }
 
     get toscaId(): TechnologyPresenceArguments {

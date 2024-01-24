@@ -1,0 +1,2 @@
+error: Node "container" has more than one technology
+description: technology optimization requires technology pruning
