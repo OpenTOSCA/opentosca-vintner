@@ -8,7 +8,7 @@ import Type from '#graph/type'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
 import {GroupMember} from '#spec/group-type'
-import {NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
+import {NodeTemplate, NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
 import {PolicyAssignmentMap} from '#spec/policy-template'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
@@ -60,6 +60,7 @@ export default class Transformer {
         delete raw.conditions
         delete raw.weight
         delete raw.implies
+        delete raw.technology
     }
 
     private transformNodes() {
@@ -72,6 +73,9 @@ export default class Transformer {
 
                     // Select present type
                     this.transformType(node, template)
+
+                    // Select present technology
+                    this.transformTechnology(node, template)
 
                     // Select present properties
                     this.transformProperties(node, template)
@@ -230,6 +234,15 @@ export default class Transformer {
         const type = element.types.find(it => it.present)
         if (check.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
         template.type = type.name
+    }
+
+    private transformTechnology(element: Node, template: NodeTemplate) {
+        // Ignore if previously had no technologies
+        if (utils.isEmpty(element.technologies)) return
+
+        const technology = element.technologies.find(it => it.present)
+        if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
+        template.type += '.' + technology.name
     }
 
     private transformProperties(

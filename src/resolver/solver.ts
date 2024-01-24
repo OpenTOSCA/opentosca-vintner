@@ -4,6 +4,7 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
 import {andify} from '#graph/utils'
+import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {
     InputAssignmentPreset,
@@ -34,10 +35,6 @@ export default class Solver {
     private readonly options?: VariabilityDefinition
 
     readonly minisat = new MiniSat.Solver()
-    private result?: {
-        map: Record<string, boolean>
-        formula: MiniSat.Formula
-    }
 
     // Some operations on MiniSat cannot be undone
     private solved = false
@@ -57,73 +54,101 @@ export default class Solver {
             throw new Error(`Variability groups are not allowed`)
     }
 
-    run() {
+    run(): ResultMap {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
 
         this.transform()
 
         /**
-         * Get initial result
+         * Get all results
          */
-        const solution = this.minisat.solve()
-        if (check.isUndefined(solution)) throw new Error(`Could not solve`)
+        let results = this.solveAll()
+        if (utils.isEmpty(results)) throw new Error(`Could not solve`)
 
         /**
-         * Get optimized result
+         * Optimized number of nodes
          */
         if (this.graph.options.solver.optimize) {
-            const nodes = this.graph.nodes.map(it => it.id)
-            const weights = this.graph.nodes.map(it => it.weight)
-            let optimized
-
             /**
-             * Minimize weight of node templates
+             * Minimize weight of node templates, i.e., sort ascending
              */
             if (this.graph.options.solver.min) {
-                optimized = this.minisat.minimizeWeightedSum(solution, nodes, weights)
+                results.sort((a, b) => a.weight - b.weight)
             }
 
             /**
-             * Maximize weight of node templates
+             * Maximize weight of node templates, i.e., sort descending
              */
             if (this.graph.options.solver.max) {
-                optimized = this.minisat.maximizeWeightedSum(solution, nodes, weights)
-            }
-
-            if (check.isUndefined(optimized)) throw new Error(`Could not optimize`)
-            this.result = {
-                map: optimized.getMap(),
-                formula: optimized.getFormula(),
-            }
-        } else {
-            this.result = {
-                map: solution.getMap(),
-                formula: solution.getFormula(),
+                results.sort((a, b) => b.weight - a.weight)
             }
         }
 
         /**
-         * Check if there are multiple possible solutions (e.g., with the same weight)
+         * Check if there are multiple minimal/ maximal results considering the weight of nodes
          */
         if (this.graph.options.solver.unique) {
-            this.minisat.forbid(this.result.formula)
-            if (check.isDefined(this.minisat.solve())) throw new Error(`The result is ambiguous`)
+            if (results.length > 1 && !results[0].equals(results[1])) {
+                if (this.graph.options.solver.optimize) {
+                    if (results[0].weight === results[1].weight)
+                        throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
+                } else {
+                    throw new Error(`The result is ambiguous considering nodes (without optimization)`)
+                }
+            }
         }
+
+        /**
+         * Minimize number of technologies
+         */
+        if (this.graph.options.solver.optimizeTechnologies) {
+            results = results
+                /**
+                 * Get subset of result (this simplifies unique check and does not sort in-place considering weight)
+                 * If optimized, then the best results.
+                 * If optimized and unique, then only the first.
+                 * If not optimized, then not further defined/ any/ just chose the first one/ might be a list or just the first one
+                 */
+                .filter(it => it.weight === results[0].weight)
+                /**
+                 * Sort based on number of used technologies
+                 */
+                .sort((a, b) => a.technologies - b.technologies)
+        }
+
+        /**
+         * Check if there are multiple minimal results considering the number of used technologies
+         */
+        if (this.graph.options.solver.uniqueTechnologies) {
+            if (results.length > 1) {
+                if (this.graph.options.solver.optimizeTechnologies) {
+                    if (results[0].technologies === results[1].technologies)
+                        throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
+                } else {
+                    throw new Error(`The result is ambiguous considering technologies (without optimization)`)
+                }
+            }
+        }
+
+        /**
+         * Result
+         */
+        const result = results[0]
 
         /**
          * Assign presence to elements
          */
         for (const element of this.graph.elements) {
-            const present = this.result.map[element.id]
-            if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
-            element.present = present
+            element.present = result.getPresence(element)
         }
 
         /**
          * Evaluate value expressions
          */
-        for (const property of this.graph.properties.filter(it => it.present)) this.evaluateProperty(property)
+        for (const property of this.graph.properties.filter(it => it.present)) {
+            this.evaluateProperty(property)
+        }
 
         /**
          * Note, input default expressions are evaluated on-demand in {@link getInput}
@@ -132,19 +157,24 @@ export default class Solver {
         /**
          * Return result
          */
-        return this.result.map
+        return result.map
     }
 
-    solveAll() {
+    runAll(): ResultMap[] {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
 
         this.transform()
 
-        const results = []
-        let result
+        return this.solveAll().map(it => it.map)
+    }
+
+    private solveAll() {
+        const results: Result[] = []
+
+        let result: MiniSat.Solution | null
         while ((result = this.minisat.solve())) {
-            results.push(result.getMap())
+            results.push(new Result(this.graph, result))
             this.minisat.forbid(result.getFormula())
         }
 
@@ -175,6 +205,7 @@ export default class Solver {
          * Transform element.implies
          */
         // TODO: should this be part of the enricher? but transformLogicExpression is used ... therefore, introduce _context_element: string or something
+        // This is not used in any publication, thus, its fine ...
         for (const element of this.graph.elements) {
             const impliesList = element.raw.implies
             if (check.isUndefined(impliesList)) continue
@@ -675,6 +706,14 @@ export default class Solver {
         if (check.isDefined(expression.import_presence)) {
             const imp = this.graph.getImport(expression.import_presence, {element, cached})
             return imp.id
+        }
+
+        /**
+         * technology_presence
+         */
+        if (check.isDefined(expression.technology_presence)) {
+            const technology = this.graph.getTechnology(expression.technology_presence, {element, cached})
+            return technology.id
         }
 
         /**

@@ -8,15 +8,19 @@ import Node from '#graph/node'
 import Policy from '#graph/policy'
 import Property from '#graph/property'
 import Relation from '#graph/relation'
+import Technology from '#graph/technology'
 import Type from '#graph/type'
 import * as utils from '#utils'
 import {Dayjs} from 'dayjs'
 
-export function isDefined<T>(element: T | undefined | null, msg: string): asserts element is T {
+export function isDefined<T>(element: T | undefined | null, msg = 'Unexpected error'): asserts element is T {
     if (!check.isDefined(element)) throw new Error(msg)
 }
 
-export function isUndefined<T>(element: T | undefined | null, msg: string): asserts element is undefined | null {
+export function isUndefined<T>(
+    element: T | undefined | null,
+    msg = 'Unexpected error'
+): asserts element is undefined | null {
     if (!check.isUndefined(element)) throw new Error(msg)
 }
 
@@ -106,6 +110,11 @@ export function isType(element?: Element): asserts element is Type {
 export function isArtifact(element?: Element): asserts element is Artifact {
     isDefined(element, 'Element not defined')
     if (!element.isArtifact()) throw new Error(`${element.Display} is not an artifact`)
+}
+
+export function isTechnology(element?: Element): asserts element is Technology {
+    isDefined(element, 'Element not defined')
+    if (!element.isTechnology()) throw new Error(`${element.Display} is not a technology`)
 }
 
 export function isLinux() {

@@ -14,6 +14,7 @@ export default class Checker {
         const artifacts = this.graph.artifacts.filter(it => it.present)
         const properties = this.graph.properties.filter(it => it.present)
         const types = this.graph.types.filter(it => it.present)
+        const technologies = this.graph.technologies.filter(it => it.present)
 
         // Ensure that each relation source exists
         if (this.graph.options.checks.relationSource) {
@@ -124,6 +125,29 @@ export default class Checker {
             for (const node of nodes) {
                 if (node.artifacts.length !== 0 && !node.artifacts.some(it => it.present))
                     throw new Error(`${node.Display} expected to have an deployment artifact`)
+            }
+        }
+
+        // Ensure that every component that had a technology previously still has one
+        if (this.graph.options.checks.expectedTechnology) {
+            for (const node of nodes) {
+                if (node.technologies.length !== 0 && !node.technologies.some(it => it.present))
+                    throw new Error(`${node.Display} expected to have a technology`)
+            }
+        }
+
+        // Ensure that container of each technology exists
+        if (this.graph.options.checks.missingTechnologyContainer) {
+            for (const technology of technologies) {
+                if (!technology.container.present) throw new Error(`Container of ${technology.display} does not exist`)
+            }
+        }
+
+        // Ensure that every component has at maximum technology
+        if (this.graph.options.checks.ambiguousTechnology) {
+            for (const node of nodes) {
+                const technologies = node.technologies.filter(it => it.present)
+                if (technologies.length > 1) throw new Error(`${node.Display} has more than one technology`)
             }
         }
     }

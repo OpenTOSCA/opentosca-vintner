@@ -136,7 +136,7 @@ export default class Relation extends Element {
     }
 
     // Check if no other relation having the same name is present
-    constructDefaultAlternativeCondition() {
+    constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
     }
 

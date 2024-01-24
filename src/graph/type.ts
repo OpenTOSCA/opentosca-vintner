@@ -5,6 +5,7 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
+import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 import Group from './group'
@@ -86,7 +87,7 @@ export default class Type extends Element {
     }
 
     // Check if no other type is present
-    constructDefaultAlternativeCondition() {
+    constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.types.filter(it => it !== this))
     }
 

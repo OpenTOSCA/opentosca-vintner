@@ -8,9 +8,10 @@ import {ElementType} from '#spec/type-assignment'
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
+    TechnologyDefaultConditionMode,
     VariabilityAlternative,
     VariabilityPointList,
-    VariabilityPointMap,
+    VariabilityPointObject,
 } from './variability'
 
 export type NodeTemplate = {
@@ -20,9 +21,10 @@ export type NodeTemplate = {
     attributes?: AttributeAssignmentMap
     requirements?: VariabilityPointList<RequirementAssignment>
     capabilities?: CapabilityAssignmentMap
-    artifacts?: VariabilityPointMap<ArtifactDefinition>
+    artifacts?: VariabilityPointObject<ArtifactDefinition>
     weight?: number | boolean
     persistent?: boolean
+    technology?: TechnologyAssignment
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }
@@ -42,3 +44,7 @@ export type ExtendedRequirementAssignment = {
 } & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode}
 
 export type CapabilityAssignmentMap = {[key: string]: string}
+
+export type TechnologyAssignment = boolean | string | VariabilityPointObject<TechnologyTemplate>
+
+export type TechnologyTemplate = VariabilityAlternative & {default_condition_mode?: TechnologyDefaultConditionMode}

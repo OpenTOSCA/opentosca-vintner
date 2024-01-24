@@ -330,6 +330,23 @@ processing.
 | 305 | [scenario-worker-agent-true](./test-scenario-worker-agent-true.md) |
 | 306 | [scenario-worker-worker-false](./test-scenario-worker-worker-false.md) |
 | 307 | [scenario-worker-worker-true](./test-scenario-worker-worker-true.md) |
+| 308 | [technologies-ambiguous](./test-technologies-ambiguous.md) |
+| 309 | [technologies-ambiguous-disabled](./test-technologies-ambiguous-disabled.md) |
+| 310 | [technologies-conditional](./test-technologies-conditional.md) |
+| 311 | [technologies-constraint](./test-technologies-constraint.md) |
+| 312 | [technologies-constraint-disabled](./test-technologies-constraint-disabled.md) |
+| 313 | [technologies-expected](./test-technologies-expected.md) |
+| 314 | [technologies-expected-disabled](./test-technologies-expected-disabled.md) |
+| 315 | [technologies-lowercase](./test-technologies-lowercase.md) |
+| 316 | [technologies-missing](./test-technologies-missing.md) |
+| 317 | [technologies-missing-disabled](./test-technologies-missing-disabled.md) |
+| 318 | [technologies-optimization](./test-technologies-optimization.md) |
+| 319 | [technologies-optimization-double](./test-technologies-optimization-double.md) |
+| 320 | [technologies-optimization-unsat](./test-technologies-optimization-unsat.md) |
+| 321 | [technologies-pruning](./test-technologies-pruning.md) |
+| 322 | [technologies-pruning-disabled](./test-technologies-pruning-disabled.md) |
+| 323 | [technologies-unique](./test-technologies-unique.md) |
+| 324 | [technologies-unique-disabled](./test-technologies-unique-disabled.md) |
 
 
 --8<-- "vacd.md"

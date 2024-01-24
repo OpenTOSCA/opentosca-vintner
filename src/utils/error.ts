@@ -1,5 +1,5 @@
 export class UnexpectedError extends Error {
-    constructor(msg = 'Unexpected event') {
+    constructor(msg = 'Unexpected error') {
         super(msg)
     }
 }

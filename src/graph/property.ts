@@ -6,7 +6,7 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
-import {ValueExpression} from '#spec/variability'
+import {LogicExpression, ValueExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -99,7 +99,7 @@ export default class Property extends Element {
     }
 
     // Check if no other property having the same name is present
-    constructDefaultAlternativeCondition() {
+    constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
     }
 

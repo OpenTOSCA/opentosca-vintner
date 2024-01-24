@@ -5,6 +5,7 @@ import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
     ResolverModes,
+    TechnologyDefaultConditionMode,
     VariabilityOptions,
 } from '#spec/variability'
 
@@ -65,6 +66,11 @@ class DefaultOptions {
     typeDefaultCondition: boolean
     typeDefaultConsistencyCondition: boolean
     typeDefaultSemanticCondition: boolean
+
+    technologyDefaultCondition: boolean
+    technologyDefaultConditionMode: TechnologyDefaultConditionMode
+    technologyDefaultConsistencyCondition: boolean
+    technologyDefaultSemanticCondition: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -194,6 +200,26 @@ class DefaultOptions {
             mode.type_default_semantic_condition ??
             this.typeDefaultCondition
         assert.isBoolean(this.typeDefaultSemanticCondition)
+
+        this.technologyDefaultCondition =
+            this.raw.technology_default_condition ?? mode.technology_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.technologyDefaultCondition)
+
+        this.technologyDefaultConditionMode =
+            this.raw.technology_default_condition_mode ?? mode.technology_default_condition_mode ?? 'container-other'
+        assert.isString(this.technologyDefaultConditionMode)
+
+        this.technologyDefaultConsistencyCondition =
+            this.raw.technology_default_consistency_condition ??
+            mode.technology_default_consistency_condition ??
+            this.technologyDefaultCondition
+        assert.isBoolean(this.technologyDefaultConsistencyCondition)
+
+        this.technologyDefaultSemanticCondition =
+            this.raw.technology_default_semantic_condition ??
+            mode.technology_default_semantic_condition ??
+            this.technologyDefaultCondition
+        assert.isBoolean(this.technologyDefaultSemanticCondition)
     }
 }
 
@@ -230,6 +256,10 @@ class PruningOptions {
     typePruning: boolean
     typeConsistencyPruning: boolean
     typeSemanticPruning: boolean
+
+    technologyPruning: boolean
+    technologyConsistencyPruning: boolean
+    technologySemanticPruning: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -313,6 +343,17 @@ class PruningOptions {
 
         this.typeSemanticPruning = this.raw.type_semantic_pruning ?? mode.type_semantic_pruning ?? this.typePruning
         assert.isBoolean(this.typeSemanticPruning)
+
+        this.technologyPruning = this.raw.technology_pruning ?? mode.technology_pruning ?? this.pruning
+        assert.isBoolean(this.technologyPruning)
+
+        this.technologyConsistencyPruning =
+            this.raw.technology_consistency_pruning ?? mode.technology_consistency_pruning ?? this.technologyPruning
+        assert.isBoolean(this.technologyConsistencyPruning)
+
+        this.technologySemanticPruning =
+            this.raw.technology_semantic_pruning ?? mode.technology_semantic_pruning ?? this.typePruning
+        assert.isBoolean(this.technologySemanticPruning)
     }
 }
 
@@ -325,11 +366,15 @@ class ChecksOptions {
     consistency: boolean
     relationSource: boolean
     relationTarget: boolean
+
     ambiguousHosting: boolean
+
     missingArtifactContainer: boolean
     ambiguousArtifact: boolean
+
     missingPropertyContainer: boolean
     ambiguousProperty: boolean
+
     missingTypeContainer: boolean
     ambiguousType: boolean
 
@@ -339,6 +384,10 @@ class ChecksOptions {
     expectedArtifact: boolean
 
     persistent: boolean
+
+    expectedTechnology: boolean
+    missingTechnologyContainer: boolean
+    ambiguousTechnology: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -391,6 +440,15 @@ class ChecksOptions {
 
         this.persistent = this.raw.persistent_check ?? this.checks
         assert.isBoolean(this.persistent)
+
+        this.expectedTechnology = this.raw.expected_technology_check ?? this.semantic
+        assert.isBoolean(this.expectedTechnology)
+
+        this.missingTechnologyContainer = this.raw.missing_technology_container_check ?? this.consistency
+        assert.isBoolean(this.missingTechnologyContainer)
+
+        this.ambiguousTechnology = this.raw.ambiguous_technology_check ?? this.consistency
+        assert.isBoolean(this.ambiguousTechnology)
     }
 }
 
@@ -402,6 +460,9 @@ class SolverOptions {
     max: boolean
     optimize: boolean
     unique: boolean
+
+    optimizeTechnologies: boolean
+    uniqueTechnologies: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -418,6 +479,12 @@ class SolverOptions {
 
         this.unique = this.raw.unique ?? true
         assert.isBoolean(this.unique)
+
+        this.optimizeTechnologies = this.raw.optimization_technologies ?? false
+        assert.isBoolean(this.optimizeTechnologies)
+
+        this.uniqueTechnologies = this.raw.unique_technologies ?? false
+        assert.isBoolean(this.uniqueTechnologies)
     }
 }
 
@@ -433,6 +500,7 @@ class ConstraintsOptions {
     propertyContainer: boolean
     typeContainer: boolean
     hostingStack: boolean
+    technology: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -459,6 +527,9 @@ class ConstraintsOptions {
 
         this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
         assert.isBoolean(this.hostingStack)
+
+        this.technology = this.raw.technology_constraint ?? this.constraints
+        assert.isBoolean(this.technology)
     }
 }
 

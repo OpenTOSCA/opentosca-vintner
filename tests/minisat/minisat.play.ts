@@ -4,6 +4,7 @@ import Graph from '#graph/graph'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
+import * as utils from '#utils'
 import * as yaml from 'js-yaml'
 import path from 'path'
 
@@ -20,17 +21,7 @@ async function play(data: string) {
     await Enricher.enrich({template})
 
     const solver = new Solver(new Graph(template))
-    const results = solver.solveAll().map(it => sort(it))
+    const results = solver.runAll().map(it => utils.sort(it))
     std.log(`Results: ${results.length}`)
     std.log(results)
-}
-
-function sort(unordered: Record<string, boolean>) {
-    return Object.keys(unordered)
-        .sort()
-        .reduce((obj, key) => {
-            // @ts-ignore
-            obj[key] = unordered[key]
-            return obj
-        }, {})
 }

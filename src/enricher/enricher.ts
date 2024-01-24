@@ -193,5 +193,18 @@ export default class Enricher {
         // TODO: Ensure that every component that had a deployment artifact previously still has one
 
         // TODO: enable/ disable flag for each constraint in variability.options
+
+        /**
+         * Ensure that technology exists
+         */
+        if (this.graph.options.constraints.technology) {
+            for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {
+                const consequence =
+                    node.technologies.length === 1 ? node.technologies[0].id : {xor: node.technologies.map(it => it.id)}
+                this.graph.addConstraint({
+                    implies: [node.id, consequence],
+                })
+            }
+        }
     }
 }

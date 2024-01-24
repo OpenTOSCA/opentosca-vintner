@@ -3,6 +3,7 @@ import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
 import {Populator} from '#graph/populator'
+import Technology from '#graph/technology'
 import Normalizer from '#normalizer'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
@@ -16,6 +17,7 @@ import {
     PolicyTypePresenceArguments,
     RelationPropertyPresenceArguments,
     RelationTypePresenceArguments,
+    TechnologyPresenceArguments,
 } from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -76,6 +78,8 @@ export default class Graph {
     artifacts: Artifact[] = []
 
     imports: Import[] = []
+
+    technologies: Technology[] = []
 
     constraints: LogicExpression[] = []
 
@@ -472,6 +476,37 @@ export default class Graph {
         const input = this.inputsMap.get(name)
         assert.isDefined(input, `Input "${name}" not found`)
         return input
+    }
+
+    getTechnology(data: TechnologyPresenceArguments, context: Context = {}) {
+        assert.isArray(data)
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isTechnology(element)
+            return element
+        }
+
+        const node = this.getNode(data[0], context)
+
+        let technology
+
+        // [string, string]
+        if (check.isString(data[1])) {
+            const technologies = node.technologies.filter(it => it.name === data[1])
+            if (technologies.length > 1) throw new Error(`Technology "${utils.pretty(data)}" is ambiguous`)
+            technology = technologies[0]
+        }
+
+        // [string, number]
+        if (check.isNumber(data[1])) {
+            technology = node.technologies[data[1]]
+        }
+
+        assert.isDefined(technology, `Technology "${utils.pretty(data)} not found`)
+        return technology
     }
 
     addConstraint(constraint: LogicExpression) {

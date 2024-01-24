@@ -1,15 +1,14 @@
 import Enricher from '#enricher'
 import Graph from '#graph/graph'
+import {ResultMap} from '#resolver/result'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import {expect} from 'chai'
 import * as yaml from 'js-yaml'
 
-// TODO: unblind me
-
-describe('blinded', () => {
+describe('naive', () => {
     it('one', async () => {
-        await blined(
+        await run(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -57,7 +56,7 @@ topology_template:
     })
 
     it('two', async () => {
-        await blined(
+        await run(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -97,12 +96,12 @@ topology_template:
     })
 })
 
-async function blined(template: string, expected: Record<string, boolean>[]) {
+export async function run(template: string, expected: ResultMap[]) {
     const _template = yaml.load(template) as ServiceTemplate
     await Enricher.enrich({template: _template})
 
     const solver = new Solver(new Graph(_template))
-    const result = solver.solveAll()
+    const result = solver.runAll()
 
     expect(result).to.deep.equal(expected)
 }

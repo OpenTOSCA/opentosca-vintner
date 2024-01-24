@@ -44,7 +44,7 @@ export function isEmpty(obj: any) {
     if (check.isUndefined(obj)) return true
     if (check.isArray(obj)) return obj.length === 0
     if (check.isObject(obj)) return Object.keys(obj).length === 0
-    throw new Error(`Can not check if obj ${pretty(obj)} is empty`)
+    throw new Error(`Can not check if object ${pretty(obj)} is empty`)
 }
 
 export function last<T>(array: T[]) {
@@ -165,5 +165,21 @@ export function getPrefixedEnv(prefix: string) {
 
         acc[name] = parsed
         return acc
+    }, {})
+}
+
+export function sort(unordered: {[key: string]: boolean}) {
+    return Object.keys(unordered)
+        .sort()
+        .reduce<{[key: string]: boolean}>((obj, key) => {
+            obj[key] = unordered[key]
+            return obj
+        }, {})
+}
+
+export function filter(unfiltered: {[key: string]: boolean}, filter: RegExp) {
+    return Object.keys(unfiltered).reduce<{[key: string]: boolean}>((obj, key) => {
+        if (filter.test(key)) obj[key] = unfiltered[key]
+        return obj
     }, {})
 }
