@@ -6,13 +6,9 @@ import {ServiceTemplate} from '#spec/service-template'
 import {expect} from 'chai'
 import * as yaml from 'js-yaml'
 
-// TODO: unblind me
-
-// TODO: unskip
-
-describe('blinded', () => {
+describe('naive', () => {
     it('one', async () => {
-        await blinded(
+        await run(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -60,7 +56,7 @@ topology_template:
     })
 
     it('two', async () => {
-        await blinded(
+        await run(
             `
 tosca_definitions_version: tosca_variability_1_0
 
@@ -100,7 +96,7 @@ topology_template:
     })
 })
 
-async function blinded(template: string, expected: ResultMap[]) {
+export async function run(template: string, expected: ResultMap[]) {
     const _template = yaml.load(template) as ServiceTemplate
     await Enricher.enrich({template: _template})
 
