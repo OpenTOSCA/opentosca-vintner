@@ -48,5 +48,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-The result is ambiguous considering nodes
+The result is ambiguous considering nodes (without optimization)
 ```
