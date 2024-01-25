@@ -45,6 +45,6 @@ export type ExtendedRequirementAssignment = {
 
 export type CapabilityAssignmentMap = {[key: string]: string}
 
-export type TechnologyAssignment = boolean | string | VariabilityPointObject<TechnologyTemplate>
+export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate>
 
 export type TechnologyTemplate = VariabilityAlternative & {default_condition_mode?: TechnologyDefaultConditionMode}

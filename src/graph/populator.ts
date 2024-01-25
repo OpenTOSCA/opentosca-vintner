@@ -292,6 +292,12 @@ export class Populator {
             node.technologies.push(technology)
             this.graph.technologies.push(technology)
         }
+
+        // Ensure that there is only one default property per property name
+        const candidates = node.technologies.filter(it => it.defaultAlternative)
+        if (candidates.length > 1) {
+            throw new Error(`${node.Display} has multiple default technologies`)
+        }
     }
 
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
