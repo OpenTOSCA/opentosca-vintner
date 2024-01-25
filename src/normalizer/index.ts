@@ -214,11 +214,6 @@ export default class Normalizer {
     private normalizeTechnologies(template: NodeTemplate) {
         if (check.isUndefined(template.technology)) return
 
-        // TODO: implement this
-        if (check.isTrue(template.technology)) throw new Error(`Not supported yet`)
-
-        if (check.isFalse(template.technology)) return delete template.technology
-
         if (check.isString(template.technology)) {
             const map: {[name: string]: TechnologyTemplate} = {}
             map[template.technology] = {}
@@ -229,11 +224,7 @@ export default class Normalizer {
             // Do nothing
         }
 
-        if (!check.isArray(template.technology) && check.isObject(template.technology)) {
-            template.technology = [template.technology]
-        }
-
-        assert.isDefined(template.technology)
+        assert.isArray(template.technology)
 
         template.technology = template.technology.map(it => {
             const entry = utils.firstEntry(it)
