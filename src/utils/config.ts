@@ -3,17 +3,17 @@ import env from '#env'
 import * as files from '#files'
 import path from 'path'
 
-// TODO: config is more than just orchestrators
+type Data = OrchestratorsConfig
 
 class Config {
     private readonly file = path.join(env.home, 'plugins.yaml')
     readonly lock = 'misc:config'
 
     load() {
-        return files.loadYAML<OrchestratorsConfig>(this.file)
+        return files.loadYAML<Data>(this.file)
     }
 
-    set(config: OrchestratorsConfig) {
+    set(config: Data) {
         files.storeYAML(this.file, config)
     }
 }
