@@ -19,8 +19,6 @@ export class ElementEnricher {
         this.enrichTechnologies()
     }
 
-    // TODO: consider inheritance when checking type?
-
     private enrichTechnologies() {
         const map = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
         if (check.isUndefined(map)) return
