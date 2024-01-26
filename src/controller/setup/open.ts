@@ -1,6 +1,6 @@
-import config from '#config'
+import env from '#utils/env'
 import open from '#utils/open'
 
 export default async function () {
-    await open.file(config.home)
+    await open.file(env.home)
 }

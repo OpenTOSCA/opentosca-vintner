@@ -5,9 +5,8 @@ import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
-import {PropertyAssignmentList, PropertyAssignmentListEntry, PropertyAssignmentValue} from '#spec/property-assignments'
+import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
-import {TechnologyTemplate} from '#spec/technology-template'
 import {InputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
@@ -55,9 +54,7 @@ export default class Normalizer {
         if (check.isUndefined(data)) return []
         if (check.isArray(data)) return data
         return Object.entries(data).map(([name, template]) => {
-            const map: {[name: string]: T} = {}
-            map[name] = template
-            return map
+            return {[name]: template}
         })
     }
 
@@ -68,9 +65,7 @@ export default class Normalizer {
         if (!check.isArray(template.properties)) {
             template.properties = Object.entries(template.properties).reduce<PropertyAssignmentList>(
                 (list, [name, value]) => {
-                    const map: PropertyAssignmentListEntry = {}
-                    map[name] = {value}
-                    list.push(map)
+                    list.push({[name]: {value}})
                     return list
                 },
                 []
@@ -135,13 +130,7 @@ export default class Normalizer {
 
         // Collect types
         const types: VariabilityPointList<TypeAssignment> = check.isString(template.type)
-            ? [
-                  (() => {
-                      const map: {[name: string]: TypeAssignment} = {}
-                      map[template.type] = {}
-                      return map
-                  })(),
-              ]
+            ? [{[template.type]: {}}]
             : template.type
 
         template.type = types
@@ -195,9 +184,7 @@ export default class Normalizer {
         if (!check.isArray(template.artifacts)) {
             const artifacts = Object.entries(template.artifacts)
             template.artifacts = artifacts.reduce<ArtifactDefinitionList>((list, [name, definition]) => {
-                const map: ArtifactDefinitionMap = {}
-                map[name] = definition
-                list.push(map)
+                list.push({[name]: definition})
                 return list
             }, [])
         }
@@ -216,9 +203,7 @@ export default class Normalizer {
         if (check.isUndefined(template.technology)) return
 
         if (check.isString(template.technology)) {
-            const map: {[name: string]: TechnologyTemplate} = {}
-            map[template.technology] = {}
-            template.technology = [map]
+            template.technology = [{[template.technology]: {}}]
         }
 
         if (check.isArray(template.technology)) {
@@ -229,9 +214,7 @@ export default class Normalizer {
 
         template.technology = template.technology.map(it => {
             const entry = utils.firstEntry(it)
-            const map: {[name: string]: TechnologyTemplate} = {}
-            map[entry[0].toLowerCase()] = entry[1]
-            return map
+            return {[entry[0].toLowerCase()]: entry[1]}
         })
     }
 }

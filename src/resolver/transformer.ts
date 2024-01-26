@@ -8,8 +8,7 @@ import Type from '#graph/type'
 import {ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
 import {GroupMember} from '#spec/group-type'
-import {NodeTemplate, NodeTemplateMap, RequirementAssignmentMap} from '#spec/node-template'
-import {PolicyAssignmentMap} from '#spec/policy-template'
+import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
@@ -87,17 +86,16 @@ export default class Transformer {
                             const assignment = relation.raw
                             if (!check.isString(assignment)) this.clean(assignment)
 
-                            const map: RequirementAssignmentMap = {}
-
-                            // Minimize
-                            // TODO: is this dirty?
-                            map[relation.name] =
-                                !check.isString(assignment) &&
-                                Object.keys(assignment).length === 1 &&
-                                Object.keys(assignment)[0] === 'node'
-                                    ? assignment.node
-                                    : assignment
-                            return map
+                            return {
+                                [relation.name]:
+                                    // Minimize
+                                    // TODO: is this dirty?
+                                    !check.isString(assignment) &&
+                                    Object.keys(assignment).length === 1 &&
+                                    Object.keys(assignment)[0] === 'node'
+                                        ? assignment.node
+                                        : assignment,
+                            }
                         })
                     if (utils.isEmpty(template.requirements)) delete template.requirements
 
@@ -201,9 +199,7 @@ export default class Transformer {
                         )
                     })
 
-                    const map: PolicyAssignmentMap = {}
-                    map[policy.name] = template
-                    return map
+                    return {[policy.name]: template}
                 })
 
             if (utils.isEmpty(this.topology.policies)) {

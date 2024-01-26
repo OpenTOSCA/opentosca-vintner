@@ -1,5 +1,5 @@
-import config from '#config'
+import env from '#utils/env'
 
 export default async function () {
-    return config.home
+    return env.home
 }

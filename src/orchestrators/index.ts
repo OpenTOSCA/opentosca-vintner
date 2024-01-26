@@ -1,20 +1,40 @@
-import {UnfurlNativeConfig, UnfurlWSLConfig} from '#plugins/unfurl'
-import {xOperaNativeConfig, xOperaWSLConfig} from '#plugins/xopera'
+import * as assert from '#assert'
+import config from '#config'
+import {UnfurlNativeConfig, UnfurlPlugin, UnfurlWSLConfig} from '#orchestrators/unfurl'
+import {xOperaNativeConfig, xOperaPlugin, xOperaWSLConfig} from '#orchestrators/xopera'
 import {Instance} from '#repositories/instances'
 import {AttributeAssignmentMap} from '#spec/node-template'
-import {ServiceTemplate} from '#spec/service-template'
 
-type NamedServiceTemplate = {name: string; template: ServiceTemplate}
-
-export interface TemplatesRepositoryPlugin {
-    getTemplate: (path: string) => Promise<NamedServiceTemplate>
-    getTemplates: () => Promise<NamedServiceTemplate[]>
+export default {
+    get: getOrchestrator,
 }
 
-// TODO: this never used
-export interface InstancesRepositoryPlugin {
-    getInstance: (path: string) => Promise<NamedServiceTemplate>
-    getInstances: () => Promise<NamedServiceTemplate[]>
+function getOrchestrator(orchestrator?: string) {
+    const data = config.load()
+
+    switch (orchestrator ?? data.enabled) {
+        case 'xopera':
+            assert.isDefined(data.xOpera, 'xOpera is enabled but no config was found')
+            return new xOperaPlugin({...data.xOpera, wsl: false})
+
+        case 'xopera-wsl':
+            assert.isDefined(data.xOperaWSL, 'xOperaWSL is enabled but no config was found')
+            return new xOperaPlugin({...data.xOperaWSL, wsl: true})
+
+        case 'unfurl':
+            assert.isDefined(data.unfurl, 'Unfurl is enabled but no config was found')
+            return new UnfurlPlugin({...data.unfurl, wsl: false})
+
+        case 'unfurl-wsl':
+            assert.isDefined(data.unfurlWSL, 'UnfurlWSL is enabled but no config was found')
+            return new UnfurlPlugin({...data.unfurlWSL, wsl: true})
+
+        case undefined:
+            throw new Error('No orchestrator is enabled')
+
+        default:
+            throw new Error(`Orchestrator "${data.enabled}" is not supported`)
+    }
 }
 
 export type NodeTemplateAttributes = {

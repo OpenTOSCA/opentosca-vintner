@@ -1,6 +1,6 @@
-import config from '#config'
 import * as files from '#files'
 import * as utils from '#utils'
+import env from '#utils/env'
 import path from 'path'
 
 export class Assets {
@@ -9,7 +9,7 @@ export class Assets {
     }
 
     static getDirectory() {
-        return path.join(config.home, 'assets')
+        return path.join(env.home, 'assets')
     }
 
     static isEmpty() {

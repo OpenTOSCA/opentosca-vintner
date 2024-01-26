@@ -1,5 +1,4 @@
 import * as check from '#check'
-import config from '#config'
 import Controller from '#controller'
 import * as crypto from '#crypto'
 import * as files from '#files'
@@ -7,6 +6,7 @@ import * as git from '#git'
 import {Asset} from '#repositories/assets'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
+import env from '#utils/env'
 import path from 'path'
 
 export class Templates {
@@ -15,7 +15,7 @@ export class Templates {
     }
 
     static getTemplatesDirectory() {
-        return path.join(config.home, 'templates')
+        return path.join(env.home, 'templates')
     }
 
     static isEmpty() {

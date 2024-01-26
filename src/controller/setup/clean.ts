@@ -1,8 +1,8 @@
-import config from '#config'
 import * as files from '#files'
 import {Assets} from '#repositories/assets'
 import {Instances} from '#repositories/instances'
 import {Templates} from '#repositories/templates'
+import env from '#utils/env'
 import * as os from 'os'
 import path from 'path'
 
@@ -18,7 +18,7 @@ export default async function (options: SetupCleanOptions) {
     }
 
     // Delete home directory
-    files.deleteDirectory(config.home)
+    files.deleteDirectory(env.home)
 
     // Delete tmp directories
     files

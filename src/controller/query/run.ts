@@ -1,4 +1,4 @@
-import {Query, QueryResult, QueryResults} from '#/query/query'
+import {Query, QueryResult, QueryResults} from '#query/query'
 import * as files from '../../utils/files'
 
 export type QueryTemplateOptions = {

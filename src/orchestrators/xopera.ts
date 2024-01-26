@@ -5,7 +5,7 @@ import {Shell} from '#shell'
 import std from '#std'
 import * as utils from '#utils'
 import _ from 'lodash'
-import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './types'
+import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './index'
 
 export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWSLConfig & {wsl: true})
 

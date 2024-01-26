@@ -1,6 +1,6 @@
 import * as files from '#files'
-import {TemplatesRepositoryPlugin} from '#plugins/types'
 import {ServiceTemplate} from '#spec/service-template'
+import {TemplatesRepositoryPlugin} from './index'
 
 export class FilePlugin implements TemplatesRepositoryPlugin {
     async getTemplate(name: string) {

@@ -1,4 +1,4 @@
-import Plugins from '#plugins'
+import orchestrators from '#orchestrators'
 import {Instance} from '#repositories/instances'
 import * as utils from '#utils'
 import lock from '#utils/lock'
@@ -11,6 +11,6 @@ export default async function (options: InstancesDeployOptions) {
     await lock.try(instance.getLockKey(), async () => {
         if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
         instance.setServiceInputs(utils.now(), options.inputs)
-        await Plugins.getOrchestrator().deploy(instance, {verbose: options.verbose})
+        await orchestrators.get().deploy(instance, {verbose: options.verbose})
     })
 }
