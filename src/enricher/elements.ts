@@ -52,10 +52,6 @@ export class ElementEnricher {
         conditions = check.isArray(conditions) ? andify(conditions) : conditions
         conditions = check.isDefined(conditions) ? generatify(conditions) : undefined
 
-        node.raw.technology.push({
-            [`${technology}`]: {
-                conditions,
-            },
-        })
+        node.raw.technology.push({[technology]: {conditions}})
     }
 }
