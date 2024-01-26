@@ -1,4 +1,6 @@
-import Enricher from '#enricher/enricher'
+import {ConditionEnricher} from '#enricher/conditions'
+import {ConstraintEnricher} from '#enricher/constraints'
+import {ElementEnricher} from '#enricher/elements'
 import Transformer from '#enricher/transformer'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
@@ -14,15 +16,39 @@ type EnrichResult = {
 }
 
 async function enrich(options: EnrichOptions): Promise<EnrichResult> {
-    // Generate graph
-    const graph = new Graph(options.template)
+    /**
+     * Generate graph
+     */
+    let graph = new Graph(options.template)
 
-    // Enrich conditions
-    new Enricher(graph).run()
+    /**
+     * Element Enricher
+     */
+    new ElementEnricher(graph).run()
 
-    // Remove all pruning concepts
+    /**
+     * Regenerate graph
+     */
+    graph = new Graph(options.template)
+
+    /**
+     * Condition Enricher
+     */
+    new ConditionEnricher(graph).run()
+
+    /**
+     * Constraint Enricher
+     */
+    new ConstraintEnricher(graph).run()
+
+    /**
+     * Transformer
+     */
     new Transformer(graph).run()
 
+    /**
+     * Return (in-place) enriched and transformed template
+     */
     return {
         template: options.template,
     }

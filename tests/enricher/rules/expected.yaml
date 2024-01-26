@@ -1,0 +1,75 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    node_templates:
+        - application:
+              type:
+                  - application:
+                        conditions: []
+              requirements:
+                  - host:
+                        node: ansible_host
+                        conditions: []
+                  - host:
+                        node: terraform_host
+                        conditions: []
+                  - host:
+                        node: ansible_terraform_host
+                        conditions: []
+              conditions: []
+              technology:
+                  - terraform:
+                        conditions:
+                            - {node_presence: terraform_host, _generated: true}
+
+                  - terraform:
+                        conditions:
+                            - {node_presence: ansible_terraform_host, _generated: true}
+
+                  - ansible:
+                        conditions:
+                            - {node_presence: ansible_host, _generated: true}
+
+                  - ansible:
+                        conditions:
+                            - {node_presence: ansible_terraform_host, _generated: true}
+
+        - ansible_host:
+              type:
+                  - ansible_host:
+                        conditions: []
+              conditions: []
+
+        - terraform_host:
+              type:
+                  - terraform_host:
+                        conditions: []
+              conditions: []
+
+        - ansible_terraform_host:
+              type:
+                  - ansible_terraform_host:
+                        conditions: []
+              conditions: []
+
+        - database:
+              type:
+                  - database:
+                        conditions: []
+              technology:
+                  - terraform:
+                        conditions: []
+              requirements:
+                  - host:
+                        node: dbms
+                        conditions: []
+              conditions: []
+
+        - dbms:
+              type:
+                  - dbms:
+                        conditions: []
+              technology:
+                  - terraform:
+                        conditions: []
+              conditions: []

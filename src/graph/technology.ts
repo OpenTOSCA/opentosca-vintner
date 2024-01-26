@@ -2,7 +2,7 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
 import {bratify} from '#graph/utils'
-import {TechnologyTemplate} from '#spec/node-template'
+import {TechnologyTemplate} from '#spec/technology-template'
 import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
 import * as utils from '#utils'
 

@@ -83,8 +83,15 @@ export default class Node extends Element {
         return check.isTrue(this.persistent) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
+    private _hosts?: Node[]
+    get hosts(): Node[] {
+        if (check.isUndefined(this._hosts))
+            this._hosts = this.outgoing.filter(it => it.isHostedOn()).map(it => it.target)
+        return this._hosts
+    }
+
     get hasHost() {
-        return check.isDefined(this.outgoing.find(it => it.isHostedOn()))
+        return !utils.isEmpty(this.hosts)
     }
 
     get isTarget() {
@@ -99,10 +106,19 @@ export default class Node extends Element {
         return !utils.isEmpty(this.artifacts)
     }
 
-    getTypeSpecificConditionWrapper() {
+    getTypeSilent() {
         // Conditional types are not supported
-        if (this.types.length > 1) return
-        const type = this.types[0]
+        if (this.types.length === 1) return this.types[0]
+    }
+
+    getType() {
+        if (this.types.length > 1) throw new Error(`${this.Display} has more than one type`)
+        return this.types[0]
+    }
+
+    getTypeSpecificConditionWrapper() {
+        const type = this.getTypeSilent()
+        if (check.isUndefined(type)) return
         return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[
             type.name
         ]

@@ -8,6 +8,7 @@ export function EnricherTest(dir: string) {
         const output = files.temporary()
         await Controller.template.enrich({template: path.join(__dirname, dir, 'template.yaml'), output})
         const result = await files.loadYAML(path.join(output))
+        console.log(output)
         expect(result).to.deep.equal(await files.loadYAML(path.join(__dirname, dir, 'expected.yaml')))
         await files.deleteFile(output)
     })

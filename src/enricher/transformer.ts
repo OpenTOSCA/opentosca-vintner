@@ -56,7 +56,6 @@ export default class Transformer {
         conditions.forEach(it => this._cleanCondition(it))
     }
 
-    // TODO: clean condition
     private _cleanCondition(condition: LogicExpression[] | LogicExpression): void {
         if (!check.isObject(condition)) return
 
@@ -90,6 +89,8 @@ export default class Transformer {
 
     private cleanVariabilityDefinition() {
         if (check.isUndefined(this.topology.variability)) return
+
+        delete this.topology.variability.technology_assignment_rules
 
         if (check.isDefined(this.topology.variability.options)) {
             // Delete pruning mode

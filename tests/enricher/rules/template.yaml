@@ -1,0 +1,58 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        technology_assignment_rules:
+            terraform:
+                - component: application
+                  host: terraform_host
+
+                - component: application
+                  host: ansible_terraform_host
+
+                - component: another
+                  host: another_terraform_host
+
+            ansible:
+                - component: application
+                  host: ansible_host
+
+                - component: application
+                  host: ansible_terraform_host
+
+            helm:
+                - component: application
+                  host: helm_host
+
+    node_templates:
+        application:
+            type: application
+            requirements:
+                - host:
+                      node: ansible_host
+
+                - host:
+                      node: terraform_host
+
+                - host:
+                      node: ansible_terraform_host
+
+        ansible_host:
+            type: ansible_host
+
+        terraform_host:
+            type: terraform_host
+
+        ansible_terraform_host:
+            type: ansible_terraform_host
+
+        database:
+            type: database
+            technology: terraform
+            requirements:
+                - host:
+                      node: dbms
+
+        dbms:
+            type: dbms
+            technology: terraform
