@@ -44,9 +44,9 @@ export class Result {
         const counts: {[key: string]: number} = {}
         for (const technology of this.graph.technologies) {
             if (check.isUndefined(counts[technology.name])) counts[technology.name] = 0
-            if (this.map[technology.id]) counts[technology.name]++
+            if (check.isTrue(this.map[technology.id])) counts[technology.name]++
         }
-        return Object.keys(counts).length
+        return Object.values(counts).filter(it => it !== 0).length
     }
 
     equals(result: Result): boolean {

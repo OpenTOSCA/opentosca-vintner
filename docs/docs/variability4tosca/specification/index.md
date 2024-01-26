@@ -49,13 +49,14 @@ Such a topology template is also called variable topology template.
 
 A variability definition defines variability inputs, variability presets, variability expressions, and variability options.
 
-| Keyname                    | Mandatory | Type                               | Description                                                             |
-|----------------------------|-----------|------------------------------------|-------------------------------------------------------------------------|
-| inputs                     | true      | Map(String, VariabilityInput)      | A required map of input parameters used inside variability expressions. |
-| presets                    | false     | Map(String, VariabilityPreset)     | An optional map of variability preset definitions.                      |
-| expressions                | false     | Map(String, VariabilityExpression) | An optional map of variability expressions.                             |
-| options                    | false     | Map(String, Boolean)               | An optional map of variability options.                                 |
-| type_specific_conditions   | false     | TypeSpecificDefaultConditions      | An optional definition of type-specific default conditions.             |
+| Keyname                         | Mandatory | Type                                  | Description                                                             |
+|---------------------------------|-----------|---------------------------------------|-------------------------------------------------------------------------|
+| inputs                          | true      | Map(String, VariabilityInput)         | A required map of input parameters used inside variability expressions. |
+| presets                         | false     | Map(String, VariabilityPreset)        | An optional map of variability preset definitions.                      |
+| expressions                     | false     | Map(String, VariabilityExpression)    | An optional map of variability expressions.                             |
+| options                         | false     | Map(String, Boolean)                  | An optional map of variability options.                                 |
+| type_specific_conditions        | false     | List(TypeSpecificDefaultCondition)    | An optional definition of type-specific default conditions.             |
+| technology_assignment_rules     | false     | Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules.                  |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
 input `mode` and  two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
@@ -323,6 +324,29 @@ type_specific_conditions:
             conditions: {host_presence: SELF}
             semantic: true
 ```
+
+## Technology Assignment Rules
+
+_Conditional types conflict with this feature!_
+
+Technology assignment rules can be defined to automatically select a deployment technology for a component.
+A technology assignment rule is defined as follows.
+
+| Keyname    | Mandatory | Type                                                   | Description                                                                                       |
+|------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| component  | true      | String                                                 | The type of the component to which the technology can be assigned.                                |
+| host       | false     | String                                                 | The type of the host of the component which the technology requires (conflicts with "conditions") |
+| conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component (conflicts with "host").   |
+
+For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
+
+```yaml linenums="1"
+technology_assignment_rules:
+    terraform:
+        - component: application
+          host: terraform_host
+```
+
 
 ## Variability Preset
 

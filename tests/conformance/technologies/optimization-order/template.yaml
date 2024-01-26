@@ -11,11 +11,10 @@ topology_template:
         container:
             type: container
             technology:
-                - terraform:
-                      conditions: true
                 - ansible:
                       conditions: true
-
+                - terraform:
+                      conditions: true
         another:
             type: another
             technology:

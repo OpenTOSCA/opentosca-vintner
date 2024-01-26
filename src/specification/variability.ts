@@ -1,4 +1,5 @@
 import Element from '#/graph/element'
+import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
@@ -8,6 +9,7 @@ export type VariabilityDefinition = {
     constraints?: LogicExpression[]
     options?: VariabilityOptions
     type_specific_conditions?: TypeSpecificLogicExpressions
+    technology_assignment_rules?: TechnologyAssignmentRulesMap
 }
 
 export type VariabilityOptions = {

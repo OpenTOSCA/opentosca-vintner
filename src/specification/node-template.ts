@@ -4,11 +4,11 @@
  */
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
+import {TechnologyAssignment} from '#spec/technology-template'
 import {ElementType} from '#spec/type-assignment'
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
-    TechnologyDefaultConditionMode,
     VariabilityAlternative,
     VariabilityPointList,
     VariabilityPointObject,
@@ -44,7 +44,3 @@ export type ExtendedRequirementAssignment = {
 } & VariabilityAlternative & {default_condition_mode?: RelationDefaultConditionMode}
 
 export type CapabilityAssignmentMap = {[key: string]: string}
-
-export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate>
-
-export type TechnologyTemplate = VariabilityAlternative & {default_condition_mode?: TechnologyDefaultConditionMode}
