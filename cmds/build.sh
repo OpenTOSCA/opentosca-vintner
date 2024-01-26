@@ -10,7 +10,7 @@ tsc -p tsconfig.build.json
 tsc-alias -p tsconfig.build.json
 
 # set version
-sed -i "s/__VERSION__/$(git rev-parse HEAD)/" build/cli/config.js
+sed -i "s/__VERSION__/$(git rev-parse HEAD)/" build/utils/env.js
 
 # copy assets
 syncdir src/assets build/assets --quiet

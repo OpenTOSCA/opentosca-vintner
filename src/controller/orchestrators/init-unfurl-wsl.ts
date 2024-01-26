@@ -1,11 +1,11 @@
-import Plugins from '#plugins'
-import {UnfurlWSLConfig} from '#plugins/unfurl'
+import config from '#config'
+import {UnfurlWSLConfig} from '#orchestrators/unfurl'
 import lock from '#utils/lock'
 
 export default async function (option: UnfurlWSLConfig) {
-    await lock.try(Plugins.getLockKey(), () => {
-        const data = Plugins.loadConfig()
+    await lock.try(config.lock, () => {
+        const data = config.load()
         data.unfurlWSL = option
-        Plugins.setConfig(data)
+        config.set(data)
     })
 }

@@ -1,9 +1,9 @@
-import config from '#config'
 import Controller from '#controller'
 import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
+import env from '#env'
 import * as files from '#files'
-import {UnfurlNativeDefaults, UnfurlWSLDefaults} from '#plugins/unfurl'
-import {xOperaNativeDefaults, xOperaWSLDefaults} from '#plugins/xopera'
+import {UnfurlNativeDefaults, UnfurlWSLDefaults} from '#orchestrators/unfurl'
+import {xOperaNativeDefaults, xOperaWSLDefaults} from '#orchestrators/xopera'
 import std from '#std'
 import hae from '#utils/hae'
 import open from '#utils/open'
@@ -11,7 +11,7 @@ import {Command, Option} from 'commander'
 
 export const program = new Command()
 
-program.name('vintner').version(config.version)
+program.name('vintner').version(env.version)
     .description(`OpenTOSCA Vintner is a TOSCA preprocessing and management layer which is able to deploy applications based on TOSCA orchestrator plugins. Preprocessing includes, e.g., the resolving of deployment variability.
 
 Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.`)

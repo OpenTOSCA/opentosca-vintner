@@ -1,5 +1,5 @@
 import Controller from '#controller'
-import {xOperaNativeDefaults} from '#plugins/xopera'
+import {xOperaNativeDefaults} from '#orchestrators/xopera'
 import path from 'path'
 
 export const examplesDir = path.join(__dirname, '..', '..', 'examples')

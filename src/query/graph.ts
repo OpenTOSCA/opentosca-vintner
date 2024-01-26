@@ -1,5 +1,5 @@
-import {Query} from '#/query/query'
 import {isString} from '#check'
+import {Query} from '#query/query'
 import {RequirementAssignmentMap} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {ServiceTemplate} from '#spec/service-template'

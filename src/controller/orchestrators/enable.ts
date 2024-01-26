@@ -1,12 +1,12 @@
-import Plugins from '#plugins'
+import config from '#config'
 import lock from '#utils/lock'
 
 export type OrchestratorsEnableOptions = {orchestrator: string}
 
 export default async function (option: OrchestratorsEnableOptions) {
-    await lock.try(Plugins.getLockKey(), () => {
-        const data = Plugins.loadConfig()
+    await lock.try(config.lock, () => {
+        const data = config.load()
         data.enabled = option.orchestrator
-        Plugins.setConfig(data)
+        config.set(data)
     })
 }

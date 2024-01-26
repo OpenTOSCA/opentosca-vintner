@@ -1,6 +1,6 @@
+import * as files from '#files'
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as files from './files'
-import * as utils from './utils'
+import * as utils from '#utils'
 
 type Feature = {
     automatic?: 'undefined' | 'selected'

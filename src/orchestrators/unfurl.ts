@@ -1,10 +1,10 @@
 import * as check from '#check'
 import * as files from '#files'
-import {OrchestratorOperationOptions, OrchestratorPlugin, OrchestratorValidateOptions} from '#plugins/types'
 import {Instance} from '#repositories/instances'
 import {Shell} from '#shell'
 import * as utils from '#utils'
 import path from 'path'
+import {OrchestratorOperationOptions, OrchestratorPlugin, OrchestratorValidateOptions} from './index'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 

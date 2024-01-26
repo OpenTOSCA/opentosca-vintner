@@ -1,5 +1,5 @@
 import * as check from '#check'
-import Plugins from '#plugins'
+import plugins from '#query/plugins'
 import {Instance, Instances} from '#repositories/instances'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
@@ -34,7 +34,7 @@ async function _getTemplates(
     name: string
 ): Promise<{name: string; template: ServiceTemplate}[]> {
     if (type === 'Template') {
-        const plugin = Plugins.getTemplateRepository(source)
+        const plugin = plugins.get(source)
         if (name == '*') return plugin.getTemplates()
         return [await plugin.getTemplate(name)]
     }

@@ -1,4 +1,4 @@
-import Plugins from '#plugins'
+import orchestrators from '#orchestrators'
 import {Instance} from '#repositories/instances'
 import lock from '#utils/lock'
 
@@ -9,6 +9,6 @@ export default async function (options: InstancesValidateOptions) {
 
     await lock.try(instance.getLockKey(), async () => {
         if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
-        await Plugins.getOrchestrator().validate(instance, {verbose: options.verbose, inputs: options.inputs})
+        await orchestrators.get().validate(instance, {verbose: options.verbose, inputs: options.inputs})
     })
 }

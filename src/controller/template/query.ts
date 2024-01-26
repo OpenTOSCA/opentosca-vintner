@@ -1,7 +1,7 @@
-import {Query} from '#/query/query'
-import {getParentNode} from '#/query/utils'
 import * as check from '#check'
 import * as files from '#files'
+import {Query} from '#query/query'
+import {getParentNode} from '#query/utils'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 
 export type TemplateQueryOptions = {

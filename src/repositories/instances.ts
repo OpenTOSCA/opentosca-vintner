@@ -1,10 +1,10 @@
 import * as check from '#check'
-import config from '#config'
 import * as files from '#files'
-import Plugins from '#plugins'
+import orchestrators from '#orchestrators'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as utils from '#utils'
+import env from '#utils/env'
 import _ from 'lodash'
 import * as path from 'path'
 import {Template} from './templates'
@@ -23,7 +23,7 @@ export class Instances {
     }
 
     static getInstancesDirectory() {
-        return path.join(config.home, 'instances')
+        return path.join(env.home, 'instances')
     }
 
     static isEmpty() {
@@ -135,7 +135,7 @@ export class Instance {
     getInstanceTemplate(): ServiceTemplate {
         // TODO: does not handle relationships
         const template = this.loadServiceTemplate()
-        const attributes = Plugins.getOrchestrator().getAttributes(this)
+        const attributes = orchestrators.get().getAttributes(this)
         const inputs = this.hasServiceInputs() ? this.loadServiceInputs() : {}
         if (template.topology_template?.node_templates) {
             template.topology_template.node_templates = _.merge(template.topology_template.node_templates, attributes)

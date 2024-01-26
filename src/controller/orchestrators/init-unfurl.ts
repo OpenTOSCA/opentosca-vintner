@@ -1,11 +1,11 @@
-import Plugins from '#plugins'
-import {UnfurlNativeConfig} from '#plugins/unfurl'
+import config from '#config'
+import {UnfurlNativeConfig} from '#orchestrators/unfurl'
 import lock from '#utils/lock'
 
 export default async function (option: UnfurlNativeConfig) {
-    await lock.try(Plugins.getLockKey(), () => {
-        const data = Plugins.loadConfig()
+    await lock.try(config.lock, () => {
+        const data = config.load()
         data.unfurl = option
-        Plugins.setConfig(data)
+        config.set(data)
     })
 }
