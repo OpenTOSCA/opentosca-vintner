@@ -19,13 +19,13 @@ Thus, generated and resolved service templates are not read or stored to the fil
 
 | Test | Seed   | Templates | Median     | Median per Template |
 |------|--------|-----------|------------|---------------------|
-| 1    | 10     | 40        | 6.814 ms   | 0.170 ms            |
-| 2    | 250    | 1,000     | 47.356 ms  | 0.047 ms            |
-| 3    | 500    | 2,000     | 83.033 ms  | 0.042 ms            |
-| 4    | 1,000  | 4,000     | 153.731 ms | 0.038 ms            |
-| 5    | 2,500  | 10,000    | 348.550 ms | 0.035 ms            |
-| 6    | 5,000  | 20,000    | 676.006 ms | 0.034 ms            |
-| 7    | 10,000 | 40,000    | 1.407 s    | 0.035 ms            |
+| 1    | 10     | 40        | 37.918 ms  | 0.948 ms            |
+| 2    | 250    | 1,000     | 38.578 ms  | 0.039 ms            |
+| 3    | 500    | 2,000     | 71.489 ms  | 0.036 ms            |
+| 4    | 1,000  | 4,000     | 136.850 ms | 0.034 ms            |
+| 5    | 2,500  | 10,000    | 334.963 ms | 0.033 ms            |
+| 6    | 5,000  | 20,000    | 669.432 ms | 0.033 ms            |
+| 7    | 10,000 | 40,000    | 1.365 s    | 0.034 ms            |
 
 ## Tests with Filesystem
 
@@ -34,13 +34,13 @@ Thus, generated and resolved service templates are also read and stored to the f
 
 | Test | Seed   | Templates | Median     | Median per Template |
 |------|--------|-----------|------------|---------------------|
-| 1    | 10     | 40        | 6.505 ms   | 0.163 ms            |
-| 2    | 250    | 1,000     | 60.408 ms  | 0.060 ms            |
-| 3    | 500    | 2,000     | 105.211 ms | 0.053 ms            |
-| 4    | 1,000  | 4,000     | 199.979 ms | 0.050 ms            |
-| 5    | 2,500  | 10,000    | 479.681 ms | 0.048 ms            |
-| 6    | 5,000  | 20,000    | 966.606 ms | 0.048 ms            |
-| 7    | 10,000 | 40,000    | 1.979 s    | 0.049 ms            |
+| 1    | 10     | 40        | 5.992 ms   | 0.150 ms            |
+| 2    | 250    | 1,000     | 48.485 ms  | 0.048 ms            |
+| 3    | 500    | 2,000     | 94.863 ms  | 0.047 ms            |
+| 4    | 1,000  | 4,000     | 182.193 ms | 0.046 ms            |
+| 5    | 2,500  | 10,000    | 463.675 ms | 0.046 ms            |
+| 6    | 5,000  | 20,000    | 955.071 ms | 0.048 ms            |
+| 7    | 10,000 | 40,000    | 1.997 s    | 0.050 ms            |
 
 
 ## File Measurements
@@ -62,16 +62,16 @@ The written variable service templates have the following measurements.
 
 The following computing resources have been used for the benchmark.
 
-| Resource          | Value                                      |
-|-------------------|--------------------------------------------|
-| Date              | 2023-11-26                                 | 
-| OpenTOSCA Vintner | 2eb5b1670413a0c1b335af414ed53e80b18ddbf2   |
-| Operating System  | Windows 11                                 |
-| Processor         | Intel Core i7-12700KF                      |
-| Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22      |
-| Motherboard       | ASRock H670 PG Riptide Intel H670          |
-| Graphic Card      | GeForce RTX TM 2060 WINDFORCE OC 6G        | 
-| Disk              | Samsung 990 Pro NVMe M.2 SSD PCIe 4.0 1TB  |
+| Resource          | Value                                     |
+|-------------------|-------------------------------------------|
+| Date              | 2024-01-27                                | 
+| OpenTOSCA Vintner | e800c672edebf2d7338029680b58016244461736  |
+| Operating System  | Windows 11                                |
+| Processor         | Intel Core i7-12700KF                     |
+| Memory            | 2x Crucial RAM 32GB DDR4 3200MHz CL22     |
+| Motherboard       | ASRock H670 PG Riptide Intel H670         |
+| Graphic Card      | GeForce RTX TM 2060 WINDFORCE OC 6G       | 
+| Disk              | Samsung 990 Pro NVMe M.2 SSD PCIe 4.0 1TB |
 
 ## Running the Benchmark
 
