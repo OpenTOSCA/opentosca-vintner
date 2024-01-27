@@ -33,7 +33,7 @@ topology_template:
 })
 
 function run(template: string, expected: string) {
-    const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate))
+    const solver = new Solver(new Graph(yaml.load(template) as ServiceTemplate), {})
     solver.transform()
     expect(solver.toCNF()).to.equal(expected)
 }

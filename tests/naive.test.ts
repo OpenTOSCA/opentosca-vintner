@@ -98,9 +98,9 @@ topology_template:
 
 export async function run(template: string, expected: ResultMap[]) {
     const _template = yaml.load(template) as ServiceTemplate
-    await Enricher.enrich({template: _template})
+    await new Enricher(_template).run()
 
-    const solver = new Solver(new Graph(_template))
+    const solver = new Solver(new Graph(_template), {})
     const result = solver.runAll()
 
     expect(result).to.deep.equal(expected)

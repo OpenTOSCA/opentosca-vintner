@@ -6,7 +6,8 @@ import {expect} from 'chai'
 
 function getDefaultSolver(template?: ServiceTemplate) {
     return new Solver(
-        new Graph(template || {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0})
+        new Graph(template || {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0}),
+        {}
     )
 }
 

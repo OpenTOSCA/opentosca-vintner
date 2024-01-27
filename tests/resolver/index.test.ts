@@ -1,5 +1,5 @@
 import * as files from '#files'
-import Resolver from '#resolver'
+import Inputs from '#resolver/inputs'
 import {expect} from 'chai'
 
 describe('resolver', () => {
@@ -12,7 +12,7 @@ describe('resolver', () => {
             variability_input_two: 'variability_value_two',
         })
 
-        const result = await Resolver.loadInputs(inputs)
+        const result = await new Inputs().loadInputs(inputs)
         expect(result['variability_input_one']).to.equal(1)
         expect(result['variability_input_two']).to.equal('variability_value_two')
 
@@ -25,7 +25,7 @@ describe('resolver', () => {
             'variability_preset_two',
         ])
 
-        const result = Resolver.loadPresets()
+        const result = new Inputs().loadPresets()
         expect(result[0]).to.equal('variability_preset_one')
         expect(result[1]).to.equal('variability_preset_two')
 
@@ -38,7 +38,7 @@ describe('resolver', () => {
             'variability_preset_two',
         ])
 
-        const result = Resolver.loadPresets(['variability_preset_three'])
+        const result = new Inputs().loadPresets(['variability_preset_three'])
         expect(result.length).to.equal(1)
         expect(result[0]).to.equal('variability_preset_three')
 

@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import config from '#config'
-import {UnfurlNativeConfig, UnfurlPlugin, UnfurlWSLConfig} from '#orchestrators/unfurl'
-import {xOperaNativeConfig, xOperaPlugin, xOperaWSLConfig} from '#orchestrators/xopera'
+import {Unfurl, UnfurlNativeConfig, UnfurlWSLConfig} from '#orchestrators/unfurl'
+import {xOpera, xOperaNativeConfig, xOperaWSLConfig} from '#orchestrators/xopera'
 import {Instance} from '#repositories/instances'
 import {AttributeAssignmentMap} from '#spec/node-template'
 
@@ -15,19 +15,19 @@ function getOrchestrator(orchestrator?: string) {
     switch (orchestrator ?? data.enabled) {
         case 'xopera':
             assert.isDefined(data.xOpera, 'xOpera is enabled but no config was found')
-            return new xOperaPlugin({...data.xOpera, wsl: false})
+            return new xOpera({...data.xOpera, wsl: false})
 
         case 'xopera-wsl':
             assert.isDefined(data.xOperaWSL, 'xOperaWSL is enabled but no config was found')
-            return new xOperaPlugin({...data.xOperaWSL, wsl: true})
+            return new xOpera({...data.xOperaWSL, wsl: true})
 
         case 'unfurl':
             assert.isDefined(data.unfurl, 'Unfurl is enabled but no config was found')
-            return new UnfurlPlugin({...data.unfurl, wsl: false})
+            return new Unfurl({...data.unfurl, wsl: false})
 
         case 'unfurl-wsl':
             assert.isDefined(data.unfurlWSL, 'UnfurlWSL is enabled but no config was found')
-            return new UnfurlPlugin({...data.unfurlWSL, wsl: true})
+            return new Unfurl({...data.unfurlWSL, wsl: true})
 
         case undefined:
             throw new Error('No orchestrator is enabled')
@@ -50,7 +50,7 @@ export type OrchestratorOperationOptions = {
 
 export type OrchestratorValidateOptions = {inputs?: string} & OrchestratorOperationOptions
 
-export interface OrchestratorPlugin {
+export interface Orchestrator {
     attest: () => Promise<void>
     validate: (instance: Instance, options?: OrchestratorValidateOptions) => Promise<void>
     deploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>

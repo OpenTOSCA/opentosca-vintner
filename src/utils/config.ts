@@ -6,7 +6,7 @@ import path from 'path'
 type Data = OrchestratorsConfig
 
 class Config {
-    private readonly file = path.join(env.home, 'plugins.yaml')
+    private readonly file = path.join(env.home, 'config.yaml')
     readonly lock = 'misc:config'
 
     load() {

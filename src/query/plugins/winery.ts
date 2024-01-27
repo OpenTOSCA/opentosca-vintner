@@ -3,9 +3,9 @@ import {ServiceTemplate} from '#spec/service-template'
 import glob from 'glob'
 import os from 'os'
 import path from 'path'
-import {TemplatesRepositoryPlugin} from './index'
+import {TemplatesRepository} from './index'
 
-export class WineryPlugin implements TemplatesRepositoryPlugin {
+export class WineryTemplatesRepository implements TemplatesRepository {
     private readonly templatesPath: string
 
     constructor() {

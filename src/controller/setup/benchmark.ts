@@ -1,6 +1,6 @@
 import * as crypto from '#crypto'
 import * as files from '#files'
-import Resolver from '#resolver'
+import * as Resolver from '#resolver'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import std from '#std'
 import * as utils from '#utils'
@@ -51,7 +51,7 @@ export default async function (options: BenchmarkOptions) {
 
                 if (io) files.storeYAML(input, serviceTemplate)
 
-                const result = await Resolver.resolve({
+                const result = await Resolver.run({
                     template: io ? files.loadYAML<ServiceTemplate>(input) : serviceTemplate,
                     inputs: {mode: 'present'},
                 })
