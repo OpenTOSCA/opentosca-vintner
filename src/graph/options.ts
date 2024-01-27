@@ -467,7 +467,7 @@ class SolverTopologyOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const optimization = this.raw.optimization ?? false
+        const optimization = this.raw.optimization_topology ?? false
         if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
             throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
         }
@@ -478,7 +478,7 @@ class SolverTopologyOptions extends BaseOptions {
 
         // TODO: count vs weight
 
-        this.unique = this.raw.unique ?? true
+        this.unique = this.raw.optimization_topology_unique ?? true
         assert.isBoolean(this.unique)
     }
 }

@@ -19,7 +19,7 @@ topology_template:
       type_default_condition: true
       hosting_stack_constraint: true
       optimization: true
-      unique: true
+      optimization_topology_unique: true
     inputs:
       static:
         type: boolean

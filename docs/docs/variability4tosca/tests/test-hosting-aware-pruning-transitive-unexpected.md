@@ -23,7 +23,7 @@ topology_template:
       node_default_condition_mode: incoming-host
       hosting_stack_constraint: false
       optimization: true
-      unique: true
+      optimization_topology_unique: true
       expected_hosting_check: false
   node_templates:
     agent:

@@ -223,12 +223,12 @@ _This is an experimental feature._
 
 The following options are used to configure the solver.
 
-| Keyname                   | Mandatory | Type                               | Default | Description                                              |
-|---------------------------|-----------|------------------------------------|---------|----------------------------------------------------------|
-| optimization              | false     | Boolean &#124; min &#124; max      | false   | Configure optimization considering nodes.                | 
-| unique                    | false     | Boolean                            | true    | Enable check for unique results considering nodes.       | 
-| optimization_technologies | false     | Boolean &#124; count &#124; weight | false   | Enable optimization considering technologies.            | 
-| optimization_technologies_unique       | false     | Boolean                            | false   | Enable check for unique results considering technologies | 
+| Keyname                          | Mandatory | Type                               | Default | Description                                              |
+|----------------------------------|-----------|------------------------------------|---------|----------------------------------------------------------|
+| optimization_topology            | false     | Boolean &#124; min &#124; max      | false   | Configure optimization considering nodes.                | 
+| optimization_topology_unique                           | false     | Boolean                            | true    | Enable check for unique results considering nodes.       | 
+| optimization_technologies        | false     | Boolean &#124; count &#124; weight | false   | Enable optimization considering technologies.            | 
+| optimization_technologies_unique | false     | Boolean                            | false   | Enable check for unique results considering technologies | 
 
 ### Constraints Options
 

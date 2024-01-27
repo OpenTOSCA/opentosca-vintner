@@ -21,7 +21,7 @@ topology_template:
       relation_pruning: true
       type_default_condition: true
       type_pruning: true
-      optimization: true
+      optimization_topology: true
   node_templates:
     source:
       type: source

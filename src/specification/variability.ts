@@ -23,8 +23,8 @@ export type VariabilityOptions = {
 export type PruningMode = 'manual' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
 export type SolverOptions = {
-    optimization?: boolean | 'min' | 'max'
-    unique?: boolean
+    optimization_topology?: boolean | 'min' | 'max'
+    optimization_topology_unique?: boolean
     optimization_technologies?: boolean
     optimization_technologies_unique?: boolean
 }

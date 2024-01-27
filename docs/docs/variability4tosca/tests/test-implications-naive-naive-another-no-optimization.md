@@ -19,7 +19,7 @@ topology_template:
       type_default_condition: true
       hosting_stack_constraint: true
       optimization: false
-      unique: true
+      optimization_topology_unique: true
   node_templates:
     app:
       type: app

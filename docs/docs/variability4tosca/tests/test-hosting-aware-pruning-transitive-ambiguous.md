@@ -19,8 +19,8 @@ topology_template:
       mode: semantic-loose
       node_default_condition_mode: incoming-host
       hosting_stack_constraint: false
-      optimization: false
-      unique: true
+      optimization_topology: false
+      optimization_topology_unique: true
   node_templates:
     agent:
       type: agent

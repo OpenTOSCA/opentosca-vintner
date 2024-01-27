@@ -11,7 +11,7 @@ topology_template:
 
             type_default_condition: true
 
-            optimization: true
+            optimization_topology: true
     node_templates:
         source:
             type: source

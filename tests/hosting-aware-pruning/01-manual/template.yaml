@@ -101,7 +101,7 @@ topology_template:
             node_default_condition_mode: incoming
             hosting_stack_constraint: false
             optimization: false
-            unique: true
+            optimization_topology_unique: true
             type_pruning: true
 
     node_templates:

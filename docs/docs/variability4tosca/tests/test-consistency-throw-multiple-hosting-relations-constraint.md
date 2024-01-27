@@ -14,7 +14,7 @@ topology_template:
     options:
       mode: semantic-loose
       constraints: false
-      optimization: false
+      optimization_topology: false
       hosting_stack_constraint: true
   node_templates:
     one:

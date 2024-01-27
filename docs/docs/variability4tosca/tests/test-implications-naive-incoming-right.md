@@ -36,7 +36,7 @@ topology_template:
       node_default_condition_mode: incomingnaive
       hosting_stack_constraint: true
       optimization: true
-      unique: true
+      optimization_topology_unique: true
   node_templates:
     worker:
       type: worker
