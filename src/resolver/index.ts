@@ -28,12 +28,14 @@ export type ResolveResult = {
     template: ServiceTemplate
 }
 
+export class Resolver {}
+
 async function resolve(options: ResolveOptions): Promise<ResolveResult> {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
     // Enrich conditions
-    await Enricher.enrich({template: options.template})
+    await new Enricher(options.template).run()
 
     // Create graph
     const graph = new Graph(options.template)

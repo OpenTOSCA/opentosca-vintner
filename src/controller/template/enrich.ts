@@ -14,6 +14,6 @@ export default async function (options: TemplateEnrichOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isDefined(options.output, 'Output not defined')
     const template = files.loadYAML<ServiceTemplate>(options.template)
-    const result = await Enricher.enrich({template})
-    files.storeYAML(options.output, result.template)
+    await new Enricher(template).run()
+    files.storeYAML(options.output, template)
 }

@@ -1,4 +1,5 @@
 import hae from '#utils/hae'
+import process from 'process'
 
 type Element = {stop: () => Promise<void> | void}
 const list: Element[] = []
@@ -14,4 +15,5 @@ async function shutdown() {
     for (const element of list) {
         await element.stop()
     }
+    process.exit()
 }
