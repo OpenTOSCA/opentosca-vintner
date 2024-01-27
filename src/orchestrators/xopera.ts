@@ -5,7 +5,7 @@ import {Shell} from '#shell'
 import std from '#std'
 import * as utils from '#utils'
 import _ from 'lodash'
-import {NodeTemplateAttributesMap, OrchestratorOperationOptions, OrchestratorPlugin} from './index'
+import {NodeTemplateAttributesMap, Orchestrator, OrchestratorOperationOptions} from './index'
 
 export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWSLConfig & {wsl: true})
 
@@ -23,7 +23,7 @@ export type xOperaWSLConfig = xOperaNativeConfig
 
 export const xOperaWSLDefaults: xOperaWSLConfig = xOperaNativeDefaults
 
-export class xOperaPlugin implements OrchestratorPlugin {
+export class xOpera implements Orchestrator {
     private readonly config: xOperaConfig
     private readonly binary: string
     private readonly shell: Shell

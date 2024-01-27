@@ -1,7 +1,6 @@
+import configurators from '#/configurators'
 import * as check from '#check'
-import * as featureIDE from '#configurators/feature-ide'
 import Enricher from '#enricher'
-import * as files from '#files'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
@@ -69,8 +68,9 @@ async function loadInputs(file?: string) {
     const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')
 
     if (check.isDefined(file)) {
-        if (file.endsWith('.xml')) return featureIDE.loadConfiguration(file)
-        _.merge(inputs, files.loadYAML<InputAssignmentMap>(file))
+        const configurator = configurators.get(file)
+        const data = await configurator.load(file)
+        _.merge(inputs, data)
     }
 
     return inputs
