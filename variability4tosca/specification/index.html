@@ -2300,6 +2300,11 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-technologies-optimization-weight/">
+        technologies-optimization-weight
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-technologies-optimization/">
         technologies-optimization
       </a>
@@ -3854,32 +3859,46 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </thead>
 <tbody>
 <tr>
-<td>optimization</td>
+<td>optimization_topology</td>
 <td>false</td>
 <td>Boolean | min | max</td>
 <td>false</td>
-<td>Configure optimization considering nodes.</td>
+<td>Configure optimization considering topology.</td>
 </tr>
 <tr>
-<td>unique</td>
+<td>optimization_topology_unique</td>
 <td>false</td>
 <td>Boolean</td>
 <td>true</td>
-<td>Enable check for unique results considering nodes.</td>
+<td>Enable check for unique results considering topology.</td>
+</tr>
+<tr>
+<td>optimization_topology_mode</td>
+<td>false</td>
+<td>count | weight</td>
+<td>weight</td>
+<td>Configure optimization mode considering topology.</td>
 </tr>
 <tr>
 <td>optimization_technologies</td>
 <td>false</td>
-<td>Boolean</td>
+<td>Boolean | min | max</td>
 <td>false</td>
 <td>Enable optimization considering technologies.</td>
 </tr>
 <tr>
-<td>unique_technologies</td>
+<td>optimization_technologies_unique</td>
 <td>false</td>
 <td>Boolean</td>
 <td>false</td>
-<td>Enable check for unique results considering technologies</td>
+<td>Enable check for unique results considering technologies.</td>
+</tr>
+<tr>
+<td>optimization_technologies_mode</td>
+<td>false</td>
+<td>count | weight</td>
+<td>count</td>
+<td>Configure optimization mode considering technologies.</td>
 </tr>
 </tbody>
 </table>
@@ -4188,6 +4207,12 @@ A technology assignment rule is defined as follows.</p>
 <td>false</td>
 <td>VariabilityCondition | List(VariabilityCondition)</td>
 <td>The conditions under which a technology can be assigned to a component (conflicts with "host").</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>false</td>
+<td>Number</td>
+<td>The weight which is minimized (default is 1).</td>
 </tr>
 </tbody>
 </table>
@@ -6138,7 +6163,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 26, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 27, 2024</span>
 </small>
 </div>
 </article>

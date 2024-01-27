@@ -1936,6 +1936,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-technologies-optimization-weight/</loc>
+         <lastmod>2024-01-27</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-technologies-optimization/</loc>
          <lastmod>2024-01-27</lastmod>
          <changefreq>daily</changefreq>
