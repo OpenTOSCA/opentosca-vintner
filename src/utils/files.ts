@@ -161,6 +161,10 @@ export function createDirectory(directory: string) {
 
 export function deleteDirectory(directory: string) {
     const resolved = path.resolve(directory)
+
+    if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved))
+        throw new Error(`Deleting directory "${resolved}" not allowed`)
+
     fs.rmSync(resolved, {recursive: true, force: true})
 }
 
