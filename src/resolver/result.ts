@@ -10,14 +10,14 @@ export class Result {
     private readonly graph: Graph
 
     private readonly result: MiniSat.Solution
-    readonly elements: {count: number; weight: number}
+    readonly topology: {count: number; weight: number}
     readonly technologies: {count: number; weight: number}
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
         this.result = result
 
-        this.elements = this.weightResult()
+        this.topology = this.weightTopology()
         this.technologies = this.weightTechnologies()
     }
 
@@ -33,7 +33,7 @@ export class Result {
         return present
     }
 
-    private weightResult() {
+    private weightTopology() {
         let weight = 0
         for (const node of this.graph.nodes) {
             if (check.isTrue(this.map[node.id])) weight += node.weight

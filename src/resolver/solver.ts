@@ -69,29 +69,29 @@ export default class Solver {
         /**
          * Optimized number of nodes
          */
-        if (this.graph.options.solver.elements.optimize) {
+        if (this.graph.options.solver.topology.optimize) {
             /**
              * Minimize weight of node templates, i.e., sort ascending
              */
-            if (this.graph.options.solver.elements.min) {
-                results.sort((a, b) => a.elements.weight - b.elements.weight)
+            if (this.graph.options.solver.topology.min) {
+                results.sort((a, b) => a.topology.weight - b.topology.weight)
             }
 
             /**
              * Maximize weight of node templates, i.e., sort descending
              */
-            if (this.graph.options.solver.elements.max) {
-                results.sort((a, b) => b.elements.weight - a.elements.weight)
+            if (this.graph.options.solver.topology.max) {
+                results.sort((a, b) => b.topology.weight - a.topology.weight)
             }
         }
 
         /**
          * Check if there are multiple minimal/ maximal results considering the weight of nodes
          */
-        if (this.graph.options.solver.elements.unique) {
+        if (this.graph.options.solver.topology.unique) {
             if (results.length > 1 && !results[0].equals(results[1])) {
-                if (this.graph.options.solver.elements.optimize) {
-                    if (results[0].elements.weight === results[1].elements.weight)
+                if (this.graph.options.solver.topology.optimize) {
+                    if (results[0].topology.weight === results[1].topology.weight)
                         throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
                 } else {
                     throw new Error(`The result is ambiguous considering nodes (without optimization)`)
@@ -110,7 +110,7 @@ export default class Solver {
                  * If optimized and unique, then only the first.
                  * If not optimized, then not further defined/ any/ just chose the first one/ might be a list or just the first one
                  */
-                .filter(it => it.elements.weight === results[0].elements.weight)
+                .filter(it => it.topology.weight === results[0].topology.weight)
                 /**
                  * Sort based on number of used technologies
                  */
