@@ -463,23 +463,33 @@ class SolverTopologyOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
+    readonly mode: 'weight' | 'count'
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         const optimization = this.raw.optimization_topology ?? false
         if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
-            throw new Error(`Solver option optimization "${optimization}" must be a boolean, "min", or "max"`)
+            throw new Error(`Option optimization_topology must be a boolean, "min", or "max"`)
         }
 
         this.optimize = optimization !== false
-        this.max = optimization === 'max'
-        this.min = optimization === 'min' || optimization === true
+        assert.isBoolean(this.optimize)
 
-        // TODO: count vs weight
+        this.max = optimization === 'max'
+        assert.isBoolean(this.max)
+
+        this.min = optimization === 'min' || optimization === true
+        assert.isBoolean(this.min)
 
         this.unique = this.raw.optimization_topology_unique ?? true
         assert.isBoolean(this.unique)
+
+        const mode = this.raw.optimization_topology_mode ?? 'weight'
+        if (!['weight', 'count'].includes(mode)) {
+            throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+        }
+        this.mode = mode
     }
 }
 
@@ -488,20 +498,33 @@ class SolverTechnologyOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
+    readonly mode: 'weight' | 'count'
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        // TODO: count vs weight
+        const optimization = this.raw.optimization_technologies ?? false
+        if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+            throw new Error(`Option optimization_technologies must be a boolean, "min", or "max"`)
+        }
 
-        this.min = true
-        this.max = false
-
-        this.optimize = this.raw.optimization_technologies ?? false
+        this.optimize = optimization !== false
         assert.isBoolean(this.optimize)
+
+        this.max = optimization === 'max'
+        assert.isBoolean(this.max)
+
+        this.min = optimization === 'min' || optimization === true
+        assert.isBoolean(this.min)
 
         this.unique = this.raw.optimization_technologies_unique ?? false
         assert.isBoolean(this.unique)
+
+        const mode = this.raw.optimization_technologies_mode ?? 'count'
+        if (!['weight', 'count'].includes(mode)) {
+            throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+        }
+        this.mode = mode
     }
 }
 

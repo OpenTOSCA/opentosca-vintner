@@ -4,6 +4,7 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
 import {andify} from '#graph/utils'
+import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
@@ -46,11 +47,11 @@ export default class Solver {
 
         // Variability groups are not allowed since they must be resolved by the Conditions Enricher
         if (check.isDefined(this.graph.groups.find(it => it.variability)))
-            throw new Error(`Variability groups are not allowed`)
+            throw new Error('Variability groups are not allowed')
     }
 
     run(): ResultMap {
-        if (this.solved) throw new Error(`Has been already solved`)
+        if (this.solved) throw new Error('Has been already solved')
         this.solved = true
 
         this.transform()
@@ -58,78 +59,13 @@ export default class Solver {
         /**
          * Get all results
          */
-        let results = this.solveAll()
-        if (utils.isEmpty(results)) throw new Error(`Could not solve`)
+        const results = this.solveAll()
+        if (utils.isEmpty(results)) throw new Error('Could not solve')
 
         /**
-         * Optimized number of nodes
+         * Optimizer
          */
-        if (this.graph.options.solver.topology.optimize) {
-            /**
-             * Minimize weight of node templates, i.e., sort ascending
-             */
-            if (this.graph.options.solver.topology.min) {
-                results.sort((a, b) => a.topology.weight - b.topology.weight)
-            }
-
-            /**
-             * Maximize weight of node templates, i.e., sort descending
-             */
-            if (this.graph.options.solver.topology.max) {
-                results.sort((a, b) => b.topology.weight - a.topology.weight)
-            }
-        }
-
-        /**
-         * Check if there are multiple minimal/ maximal results considering the weight of nodes
-         */
-        if (this.graph.options.solver.topology.unique) {
-            if (results.length > 1 && !results[0].equals(results[1])) {
-                if (this.graph.options.solver.topology.optimize) {
-                    if (results[0].topology.weight === results[1].topology.weight)
-                        throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
-                } else {
-                    throw new Error(`The result is ambiguous considering nodes (without optimization)`)
-                }
-            }
-        }
-
-        /**
-         * Minimize number of technologies
-         */
-        if (this.graph.options.solver.technologies.optimize) {
-            results = results
-                /**
-                 * Get subset of result (this simplifies unique check and does not sort in-place considering weight)
-                 * If optimized, then the best results.
-                 * If optimized and unique, then only the first.
-                 * If not optimized, then not further defined/ any/ just chose the first one/ might be a list or just the first one
-                 */
-                .filter(it => it.topology.weight === results[0].topology.weight)
-                /**
-                 * Sort based on number of used technologies
-                 */
-                .sort((a, b) => a.technologies.count - b.technologies.count)
-        }
-
-        /**
-         * Check if there are multiple minimal results considering the number of used technologies
-         */
-        if (this.graph.options.solver.technologies.unique) {
-            if (results.length > 1) {
-                if (this.graph.options.solver.technologies.optimize) {
-                    if (results[0].technologies.count === results[1].technologies.count)
-                        throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
-                } else {
-                    throw new Error(`The result is ambiguous considering technologies (without optimization)`)
-                }
-            }
-        }
-
-        /**
-         * Result
-         */
-        const result = results[0]
+        const result = new Optimizer(this.graph, results).run()
 
         /**
          * Assign presence to elements
