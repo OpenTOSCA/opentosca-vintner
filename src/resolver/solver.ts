@@ -6,13 +6,7 @@ import Property from '#graph/property'
 import {andify} from '#graph/utils'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
-import {
-    InputAssignmentPreset,
-    LogicExpression,
-    ValueExpression,
-    VariabilityDefinition,
-    VariabilityExpression,
-} from '#spec/variability'
+import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
 import * as utils from '#utils'
 import day from '#utils/day'
 import _ from 'lodash'
@@ -43,9 +37,10 @@ export default class Solver {
     private inputs: InputAssignmentMap = {}
     private weekday = utils.weekday()
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, inputs: InputAssignmentMap) {
         this.graph = graph
         this.options = graph.serviceTemplate.topology_template?.variability
+        this.inputs = inputs
 
         // TODO: do not allow pruning
 
@@ -320,23 +315,7 @@ export default class Solver {
         this.minisat.require(MiniSat.equiv(element.id, this.transformLogicExpression(condition, {element})))
     }
 
-    setPreset(name?: string) {
-        if (check.isUndefined(name)) return this
-        this.setInputs(this.getPreset(name).inputs)
-        return this
-    }
-
-    setInputs(inputs?: InputAssignmentMap) {
-        if (check.isUndefined(inputs)) return this
-        this.inputs = _.merge(this.inputs, inputs)
-        return this
-    }
-
-    setInput(name: string, value: InputAssignmentValue) {
-        this.inputs[name] = value
-    }
-
-    getInput(name: string) {
+    private getInput(name: string) {
         let value
 
         // Get variability input definition
@@ -349,7 +328,7 @@ export default class Solver {
 
         // Return default value
         if (check.isDefined(definition.default)) {
-            this.setInput(name, definition.default)
+            this.inputs[name] = definition.default
             return definition.default
         }
 
@@ -360,18 +339,8 @@ export default class Solver {
         )
         value = this.evaluateValueExpression(definition.default_expression, BadContext)
         assert.isDefined(value, `Did not find variability input "${name}"`)
-        this.setInput(name, value)
+        this.inputs[name] = value
         return value
-    }
-
-    getInputs() {
-        return this.inputs
-    }
-
-    getPreset(name: string) {
-        const set: InputAssignmentPreset | undefined = (this.options?.presets || {})[name]
-        assert.isDefined(set, `Did not find variability preset "${name}"`)
-        return set
     }
 
     getLogicExpression(name: string) {

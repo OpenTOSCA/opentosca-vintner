@@ -1,26 +1,18 @@
-import configurators from '#/configurators'
+import * as assert from '#assert'
 import * as check from '#check'
 import Enricher from '#enricher'
+import * as files from '#files'
 import Graph from '#graph/graph'
+import Inputs from '#resolver/inputs'
+import Resolver from '#resolver/resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
-import * as utils from '#utils'
-import * as _ from 'lodash'
-import * as process from 'process'
-import Checker from './checker'
-import Solver from './solver'
-import Transformer from './transformer'
-
-export default {
-    resolve,
-    loadInputs,
-    loadPresets,
-}
+import {InputAssignmentPreset} from '#spec/variability'
 
 export type ResolveOptions = {
-    template: ServiceTemplate
+    template: ServiceTemplate | string
     presets?: string[]
-    inputs?: InputAssignmentMap
+    inputs?: InputAssignmentMap | string
 }
 
 export type ResolveResult = {
@@ -28,62 +20,52 @@ export type ResolveResult = {
     template: ServiceTemplate
 }
 
-export class Resolver {}
-
-async function resolve(options: ResolveOptions): Promise<ResolveResult> {
+export async function run(options: ResolveOptions): Promise<ResolveResult> {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
-    // Enrich conditions
+    /**
+     * Service template
+     */
+    if (check.isString(options.template)) options.template = files.loadYAML<ServiceTemplate>(options.template)
+
+    /**
+     * Enricher
+     */
     await new Enricher(options.template).run()
 
-    // Create graph
-    const graph = new Graph(options.template)
+    /**
+     * Graph
+     */
+    const inputs = new Inputs()
 
-    // Create solver
-    const solver = new Solver(graph)
-
-    // Apply variability presets
+    /**
+     * Variability presets
+     */
+    options.presets = inputs.loadPresets(options.presets)
     for (const preset of options.presets) {
-        solver.setPreset(preset)
+        const set: InputAssignmentPreset | undefined = (options.template.topology_template?.variability?.presets || {})[
+            preset
+        ]
+        assert.isDefined(set, `Did not find variability preset "${preset}"`)
+        inputs.setInputs(set.inputs)
     }
 
-    // Apply variability inputs
-    solver.setInputs(options.inputs)
+    /**
+     * Variability inputs
+     */
+    if (check.isString(options.inputs)) {
+        options.inputs = await inputs.loadInputs(options.inputs)
+    }
+    inputs.setInputs(options.inputs)
 
-    // Resolve variability
-    solver.run()
-
-    // Check consistency
-    new Checker(graph).run()
-
-    // Transform to TOSCA compliant format
-    new Transformer(graph).run()
+    /**
+     * Resolver
+     */
+    new Resolver(new Graph(options.template), inputs).run()
 
     return {
-        inputs: solver.getInputs(),
+        inputs: inputs.inputs,
         template: options.template,
     }
-}
-
-async function loadInputs(file?: string) {
-    const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')
-
-    if (check.isDefined(file)) {
-        const configurator = configurators.get(file)
-        const data = await configurator.load(file)
-        _.merge(inputs, data)
-    }
-
-    return inputs
-}
-
-function loadPresets(presets: string[] = []): string[] {
-    if (utils.isEmpty(presets)) {
-        const entry = Object.entries(process.env).find(it => it[0] === 'OPENTOSCA_VINTNER_VARIABILITY_PRESETS')
-        if (!check.isDefined(entry)) return []
-        if (!check.isDefined(entry[1])) return []
-        return utils.looseParse(entry[1])
-    }
-    return presets
 }

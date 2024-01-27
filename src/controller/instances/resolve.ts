@@ -1,5 +1,5 @@
 import {Instance} from '#repositories/instances'
-import Resolver from '#resolver'
+import * as Resolver from '#resolver'
 import * as utils from '#utils'
 import lock from '#utils/lock'
 
@@ -15,10 +15,10 @@ export default async function (options: InstanceResolveOptions) {
 
     await lock.try(instance.getLockKey(), async () => {
         // Resolve variability
-        const result = await Resolver.resolve({
+        const result = await Resolver.run({
             template: instance.loadVariableServiceTemplate(),
-            inputs: await Resolver.loadInputs(options.inputs),
-            presets: Resolver.loadPresets(options.presets),
+            inputs: options.inputs,
+            presets: options.presets,
         })
 
         // Store used variability inputs

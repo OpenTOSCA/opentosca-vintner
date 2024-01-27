@@ -100,7 +100,7 @@ export async function run(template: string, expected: ResultMap[]) {
     const _template = yaml.load(template) as ServiceTemplate
     await new Enricher(_template).run()
 
-    const solver = new Solver(new Graph(_template))
+    const solver = new Solver(new Graph(_template), {})
     const result = solver.runAll()
 
     expect(result).to.deep.equal(expected)
