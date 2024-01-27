@@ -5,7 +5,7 @@ topology_template:
         options:
             mode: semantic-loose
             optimization_technologies: true
-            unique_technologies: true
+            optimization_technologies_unique: true
             technology_pruning: true
             technology_constraint: true
 

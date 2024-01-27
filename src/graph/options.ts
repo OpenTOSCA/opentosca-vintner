@@ -9,19 +9,25 @@ import {
     VariabilityOptions,
 } from '#spec/variability'
 
-export class Options {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
+abstract class BaseOptions {
+    protected readonly serviceTemplate: ServiceTemplate
+    protected readonly raw: VariabilityOptions
 
-    default: DefaultOptions
-    pruning: PruningOptions
-    checks: ChecksOptions
-    solver: SolverOptions
-    constraints: ConstraintsOptions
-
-    constructor(serviceTemplate: ServiceTemplate) {
+    protected constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
+    }
+}
+
+export class Options extends BaseOptions {
+    readonly default: DefaultOptions
+    readonly pruning: PruningOptions
+    readonly checks: ChecksOptions
+    readonly solver: SolverOptions
+    readonly constraints: ConstraintsOptions
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
 
         this.default = new DefaultOptions(serviceTemplate)
         this.pruning = new PruningOptions(serviceTemplate)
@@ -31,50 +37,46 @@ export class Options {
     }
 }
 
-class DefaultOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
+class DefaultOptions extends BaseOptions {
+    readonly defaultCondition: boolean
 
-    defaultCondition: boolean
+    readonly nodeDefaultCondition: boolean
+    readonly nodeDefaultConditionMode: NodeDefaultConditionMode
+    readonly nodeDefaultConsistencyCondition: boolean
+    readonly nodeDefaultSemanticCondition: boolean
 
-    nodeDefaultCondition: boolean
-    nodeDefaultConditionMode: NodeDefaultConditionMode
-    nodeDefaultConsistencyCondition: boolean
-    nodeDefaultSemanticCondition: boolean
+    readonly relationDefaultCondition: boolean
+    readonly relationDefaultConditionMode: RelationDefaultConditionMode
+    readonly relationDefaultConsistencyCondition: boolean
+    readonly relationDefaultSemanticCondition: boolean
 
-    relationDefaultCondition: boolean
-    relationDefaultConditionMode: RelationDefaultConditionMode
-    relationDefaultConsistencyCondition: boolean
-    relationDefaultSemanticCondition: boolean
+    readonly policyDefaultCondition: boolean
+    readonly policyDefaultConsistencyCondition: boolean
+    readonly policyDefaultSemanticCondition: boolean
 
-    policyDefaultCondition: boolean
-    policyDefaultConsistencyCondition: boolean
-    policyDefaultSemanticCondition: boolean
+    readonly groupDefaultCondition: boolean
+    readonly groupDefaultConsistencyCondition: boolean
+    readonly groupDefaultSemanticCondition: boolean
 
-    groupDefaultCondition: boolean
-    groupDefaultConsistencyCondition: boolean
-    groupDefaultSemanticCondition: boolean
+    readonly artifactDefaultCondition: boolean
+    readonly artifactDefaultConsistencyCondition: boolean
+    readonly artifactDefaultSemanticCondition: boolean
 
-    artifactDefaultCondition: boolean
-    artifactDefaultConsistencyCondition: boolean
-    artifactDefaultSemanticCondition: boolean
+    readonly propertyDefaultCondition: boolean
+    readonly propertyDefaultConsistencyCondition: boolean
+    readonly propertyDefaultSemanticCondition: boolean
 
-    propertyDefaultCondition: boolean
-    propertyDefaultConsistencyCondition: boolean
-    propertyDefaultSemanticCondition: boolean
+    readonly typeDefaultCondition: boolean
+    readonly typeDefaultConsistencyCondition: boolean
+    readonly typeDefaultSemanticCondition: boolean
 
-    typeDefaultCondition: boolean
-    typeDefaultConsistencyCondition: boolean
-    typeDefaultSemanticCondition: boolean
-
-    technologyDefaultCondition: boolean
-    technologyDefaultConditionMode: TechnologyDefaultConditionMode
-    technologyDefaultConsistencyCondition: boolean
-    technologyDefaultSemanticCondition: boolean
+    readonly technologyDefaultCondition: boolean
+    readonly technologyDefaultConditionMode: TechnologyDefaultConditionMode
+    readonly technologyDefaultConsistencyCondition: boolean
+    readonly technologyDefaultSemanticCondition: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+        super(serviceTemplate)
 
         const mode = getPruningMode(this.raw)
 
@@ -223,47 +225,43 @@ class DefaultOptions {
     }
 }
 
-class PruningOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
+class PruningOptions extends BaseOptions {
+    readonly pruning: boolean
 
-    pruning: boolean
+    readonly nodePruning: boolean
+    readonly nodeConsistencyPruning: boolean
+    readonly nodeSemanticPruning: boolean
 
-    nodePruning: boolean
-    nodeConsistencyPruning: boolean
-    nodeSemanticPruning: boolean
+    readonly relationPruning: boolean
+    readonly relationConsistencyPruning: boolean
+    readonly relationSemanticPruning: boolean
 
-    relationPruning: boolean
-    relationConsistencyPruning: boolean
-    relationSemanticPruning: boolean
+    readonly policyPruning: boolean
+    readonly policyConsistencyPruning: boolean
+    readonly policySemanticPruning: boolean
 
-    policyPruning: boolean
-    policyConsistencyPruning: boolean
-    policySemanticPruning: boolean
+    readonly groupPruning: boolean
+    readonly groupConsistencyPruning: boolean
+    readonly groupSemanticPruning: boolean
 
-    groupPruning: boolean
-    groupConsistencyPruning: boolean
-    groupSemanticPruning: boolean
+    readonly artifactPruning: boolean
+    readonly artifactConsistencyPruning: boolean
+    readonly artifactSemanticPruning: boolean
 
-    artifactPruning: boolean
-    artifactConsistencyPruning: boolean
-    artifactSemanticPruning: boolean
+    readonly propertyPruning: boolean
+    readonly propertyConsistencyPruning: boolean
+    readonly propertySemanticPruning: boolean
 
-    propertyPruning: boolean
-    propertyConsistencyPruning: boolean
-    propertySemanticPruning: boolean
+    readonly typePruning: boolean
+    readonly typeConsistencyPruning: boolean
+    readonly typeSemanticPruning: boolean
 
-    typePruning: boolean
-    typeConsistencyPruning: boolean
-    typeSemanticPruning: boolean
-
-    technologyPruning: boolean
-    technologyConsistencyPruning: boolean
-    technologySemanticPruning: boolean
+    readonly technologyPruning: boolean
+    readonly technologyConsistencyPruning: boolean
+    readonly technologySemanticPruning: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+        super(serviceTemplate)
 
         const mode = getPruningMode(this.raw)
 
@@ -357,41 +355,37 @@ class PruningOptions {
     }
 }
 
-class ChecksOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
+class ChecksOptions extends BaseOptions {
+    readonly checks: boolean
 
-    checks: boolean
+    readonly consistency: boolean
+    readonly relationSource: boolean
+    readonly relationTarget: boolean
 
-    consistency: boolean
-    relationSource: boolean
-    relationTarget: boolean
+    readonly ambiguousHosting: boolean
 
-    ambiguousHosting: boolean
+    readonly missingArtifactContainer: boolean
+    readonly ambiguousArtifact: boolean
 
-    missingArtifactContainer: boolean
-    ambiguousArtifact: boolean
+    readonly missingPropertyContainer: boolean
+    readonly ambiguousProperty: boolean
 
-    missingPropertyContainer: boolean
-    ambiguousProperty: boolean
+    readonly missingTypeContainer: boolean
+    readonly ambiguousType: boolean
 
-    missingTypeContainer: boolean
-    ambiguousType: boolean
+    readonly semantic: boolean
+    readonly expectedHosting: boolean
+    readonly expectedIncomingRelation: boolean
+    readonly expectedArtifact: boolean
 
-    semantic: boolean
-    expectedHosting: boolean
-    expectedIncomingRelation: boolean
-    expectedArtifact: boolean
+    readonly persistent: boolean
 
-    persistent: boolean
-
-    expectedTechnology: boolean
-    missingTechnologyContainer: boolean
-    ambiguousTechnology: boolean
+    readonly expectedTechnology: boolean
+    readonly missingTechnologyContainer: boolean
+    readonly ambiguousTechnology: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+        super(serviceTemplate)
 
         this.checks = this.raw.checks ?? true
         assert.isBoolean(this.checks)
@@ -452,21 +446,26 @@ class ChecksOptions {
     }
 }
 
-class SolverOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
-
-    min: boolean
-    max: boolean
-    optimize: boolean
-    unique: boolean
-
-    optimizeTechnologies: boolean
-    uniqueTechnologies: boolean
+class SolverOptions extends BaseOptions {
+    readonly elements: SolverElementsOptions
+    readonly technologies: SolverTechnologyOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+        super(serviceTemplate)
+
+        this.elements = new SolverElementsOptions(serviceTemplate)
+        this.technologies = new SolverTechnologyOptions(serviceTemplate)
+    }
+}
+
+class SolverElementsOptions extends BaseOptions {
+    readonly min: boolean
+    readonly max: boolean
+    readonly optimize: boolean
+    readonly unique: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
 
         const optimization = this.raw.optimization ?? false
         if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
@@ -477,34 +476,48 @@ class SolverOptions {
         this.max = optimization === 'max'
         this.min = optimization === 'min' || optimization === true
 
+        // TODO: count vs weight
+
         this.unique = this.raw.unique ?? true
         assert.isBoolean(this.unique)
-
-        this.optimizeTechnologies = this.raw.optimization_technologies ?? false
-        assert.isBoolean(this.optimizeTechnologies)
-
-        this.uniqueTechnologies = this.raw.unique_technologies ?? false
-        assert.isBoolean(this.uniqueTechnologies)
     }
 }
 
-class ConstraintsOptions {
-    private readonly serviceTemplate: ServiceTemplate
-    private readonly raw: VariabilityOptions
-
-    constraints: boolean
-
-    relationSource: boolean
-    relationTarget: boolean
-    artifactContainer: boolean
-    propertyContainer: boolean
-    typeContainer: boolean
-    hostingStack: boolean
-    technology: boolean
+class SolverTechnologyOptions extends BaseOptions {
+    readonly min: boolean
+    readonly max: boolean
+    readonly optimize: boolean
+    readonly unique: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
-        this.serviceTemplate = serviceTemplate
-        this.raw = serviceTemplate.topology_template?.variability?.options || {}
+        super(serviceTemplate)
+
+        // TODO: count vs weight
+
+        this.min = true
+        this.max = false
+
+        this.optimize = this.raw.optimization_technologies ?? false
+        assert.isBoolean(this.optimize)
+
+        this.unique = this.raw.optimization_technologies_unique ?? false
+        assert.isBoolean(this.unique)
+    }
+}
+
+class ConstraintsOptions extends BaseOptions {
+    readonly constraints: boolean
+
+    readonly relationSource: boolean
+    readonly relationTarget: boolean
+    readonly artifactContainer: boolean
+    readonly propertyContainer: boolean
+    readonly typeContainer: boolean
+    readonly hostingStack: boolean
+    readonly technology: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
 
         // TODO: set this by default to true (check backwards compatibility first)
         this.constraints = this.raw.constraints ?? false

@@ -69,29 +69,29 @@ export default class Solver {
         /**
          * Optimized number of nodes
          */
-        if (this.graph.options.solver.optimize) {
+        if (this.graph.options.solver.elements.optimize) {
             /**
              * Minimize weight of node templates, i.e., sort ascending
              */
-            if (this.graph.options.solver.min) {
-                results.sort((a, b) => a.weight - b.weight)
+            if (this.graph.options.solver.elements.min) {
+                results.sort((a, b) => a.elements.weight - b.elements.weight)
             }
 
             /**
              * Maximize weight of node templates, i.e., sort descending
              */
-            if (this.graph.options.solver.max) {
-                results.sort((a, b) => b.weight - a.weight)
+            if (this.graph.options.solver.elements.max) {
+                results.sort((a, b) => b.elements.weight - a.elements.weight)
             }
         }
 
         /**
          * Check if there are multiple minimal/ maximal results considering the weight of nodes
          */
-        if (this.graph.options.solver.unique) {
+        if (this.graph.options.solver.elements.unique) {
             if (results.length > 1 && !results[0].equals(results[1])) {
-                if (this.graph.options.solver.optimize) {
-                    if (results[0].weight === results[1].weight)
+                if (this.graph.options.solver.elements.optimize) {
+                    if (results[0].elements.weight === results[1].elements.weight)
                         throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
                 } else {
                     throw new Error(`The result is ambiguous considering nodes (without optimization)`)
@@ -102,7 +102,7 @@ export default class Solver {
         /**
          * Minimize number of technologies
          */
-        if (this.graph.options.solver.optimizeTechnologies) {
+        if (this.graph.options.solver.technologies.optimize) {
             results = results
                 /**
                  * Get subset of result (this simplifies unique check and does not sort in-place considering weight)
@@ -110,20 +110,20 @@ export default class Solver {
                  * If optimized and unique, then only the first.
                  * If not optimized, then not further defined/ any/ just chose the first one/ might be a list or just the first one
                  */
-                .filter(it => it.weight === results[0].weight)
+                .filter(it => it.elements.weight === results[0].elements.weight)
                 /**
                  * Sort based on number of used technologies
                  */
-                .sort((a, b) => a.technologies - b.technologies)
+                .sort((a, b) => a.technologies.count - b.technologies.count)
         }
 
         /**
          * Check if there are multiple minimal results considering the number of used technologies
          */
-        if (this.graph.options.solver.uniqueTechnologies) {
+        if (this.graph.options.solver.technologies.unique) {
             if (results.length > 1) {
-                if (this.graph.options.solver.optimizeTechnologies) {
-                    if (results[0].technologies === results[1].technologies)
+                if (this.graph.options.solver.technologies.optimize) {
+                    if (results[0].technologies.count === results[1].technologies.count)
                         throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
                 } else {
                     throw new Error(`The result is ambiguous considering technologies (without optimization)`)

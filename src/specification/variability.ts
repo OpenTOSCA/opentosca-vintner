@@ -26,7 +26,7 @@ export type SolverOptions = {
     optimization?: boolean | 'min' | 'max'
     unique?: boolean
     optimization_technologies?: boolean
-    unique_technologies?: boolean
+    optimization_technologies_unique?: boolean
 }
 
 export type ConstraintsOptions = {

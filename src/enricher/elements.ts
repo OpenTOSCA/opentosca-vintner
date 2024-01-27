@@ -35,23 +35,38 @@ export class ElementEnricher {
                     if (check.isString(rule.host)) {
                         const hosts = node.hosts.filter(it => it.getType().name === rule.host)
                         for (const host of hosts) {
-                            this.addTechnology(node, technology, {node_presence: host.name})
+                            this.addTechnology({
+                                node,
+                                technology,
+                                conditions: {node_presence: host.name},
+                                weight: rule.weight,
+                            })
                         }
                     } else {
-                        this.addTechnology(node, technology, rule.conditions)
+                        this.addTechnology({node, technology, conditions: rule.conditions, weight: rule.weight})
                     }
                 }
             }
         }
     }
 
-    private addTechnology(node: Node, technology: string, conditions?: LogicExpression | LogicExpression[]) {
+    private addTechnology({
+        node,
+        technology,
+        conditions,
+        weight,
+    }: {
+        node: Node
+        technology: string
+        conditions?: LogicExpression | LogicExpression[]
+        weight?: number
+    }) {
         if (check.isUndefined(node.raw.technology)) node.raw.technology = []
         assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
 
         conditions = check.isArray(conditions) ? andify(conditions) : conditions
         conditions = check.isDefined(conditions) ? generatify(conditions) : undefined
 
-        node.raw.technology.push({[technology]: {conditions}})
+        node.raw.technology.push({[technology]: {conditions, weight}})
     }
 }
