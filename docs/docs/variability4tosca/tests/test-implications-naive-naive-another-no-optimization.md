@@ -18,7 +18,7 @@ topology_template:
       relation_default_condition_mode: source-target
       type_default_condition: true
       hosting_stack_constraint: true
-      optimization: false
+      optimization_topology: false
       optimization_topology_unique: true
   node_templates:
     app:

@@ -35,7 +35,7 @@ topology_template:
       mode: semantic-loose
       node_default_condition_mode: incomingnaive
       hosting_stack_constraint: true
-      optimization: true
+      optimization_topology: true
       optimization_topology_unique: true
   node_templates:
     worker:

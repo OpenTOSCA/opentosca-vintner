@@ -335,18 +335,23 @@ processing.
 | 310 | [technologies-conditional](./test-technologies-conditional.md) |
 | 311 | [technologies-constraint](./test-technologies-constraint.md) |
 | 312 | [technologies-constraint-disabled](./test-technologies-constraint-disabled.md) |
-| 313 | [technologies-expected](./test-technologies-expected.md) |
-| 314 | [technologies-expected-disabled](./test-technologies-expected-disabled.md) |
-| 315 | [technologies-lowercase](./test-technologies-lowercase.md) |
-| 316 | [technologies-missing](./test-technologies-missing.md) |
-| 317 | [technologies-missing-disabled](./test-technologies-missing-disabled.md) |
-| 318 | [technologies-optimization](./test-technologies-optimization.md) |
-| 319 | [technologies-optimization-double](./test-technologies-optimization-double.md) |
-| 320 | [technologies-optimization-unsat](./test-technologies-optimization-unsat.md) |
-| 321 | [technologies-pruning](./test-technologies-pruning.md) |
-| 322 | [technologies-pruning-disabled](./test-technologies-pruning-disabled.md) |
-| 323 | [technologies-unique](./test-technologies-unique.md) |
-| 324 | [technologies-unique-disabled](./test-technologies-unique-disabled.md) |
+| 313 | [technologies-default-multiple](./test-technologies-default-multiple.md) |
+| 314 | [technologies-default-true](./test-technologies-default-true.md) |
+| 315 | [technologies-expected](./test-technologies-expected.md) |
+| 316 | [technologies-expected-disabled](./test-technologies-expected-disabled.md) |
+| 317 | [technologies-lowercase](./test-technologies-lowercase.md) |
+| 318 | [technologies-missing](./test-technologies-missing.md) |
+| 319 | [technologies-missing-disabled](./test-technologies-missing-disabled.md) |
+| 320 | [technologies-optimization](./test-technologies-optimization.md) |
+| 321 | [technologies-optimization-double](./test-technologies-optimization-double.md) |
+| 322 | [technologies-optimization-order](./test-technologies-optimization-order.md) |
+| 323 | [technologies-optimization-unsat](./test-technologies-optimization-unsat.md) |
+| 324 | [technologies-optimization-weight](./test-technologies-optimization-weight.md) |
+| 325 | [technologies-pruning](./test-technologies-pruning.md) |
+| 326 | [technologies-pruning-disabled](./test-technologies-pruning-disabled.md) |
+| 327 | [technologies-rules](./test-technologies-rules.md) |
+| 328 | [technologies-unique](./test-technologies-unique.md) |
+| 329 | [technologies-unique-disabled](./test-technologies-unique-disabled.md) |
 
 
 --8<-- "vacd.md"
