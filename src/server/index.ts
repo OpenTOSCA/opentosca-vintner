@@ -1,30 +1,33 @@
+import * as check from '#check'
 import std from '#std'
 import death from '#utils/death'
 import hae from '#utils/hae'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import type {ErrorRequestHandler} from 'express'
-import express from 'express'
+import express, {ErrorRequestHandler, Express} from 'express'
 import http from 'http'
 import createError from 'http-errors'
 import resolvers from './resolvers'
 
-export default {
-    create: function () {
+class Server {
+    private express?: Express
+    private http?: http.Server
+
+    create() {
         /**
          * Express Server
          */
-        const expressServer = express()
-        expressServer.use(cors())
-        expressServer.set('json spaces', 2)
-        expressServer.use(bodyParser.json())
-        expressServer.get('/favicon.ico', (req, res) => res.status(204))
-        expressServer.use(resolvers)
+        this.express = express()
+        this.express.use(cors())
+        this.express.set('json spaces', 2)
+        this.express.use(bodyParser.json())
+        this.express.get('/favicon.ico', (req, res) => res.status(204))
+        this.express.use(resolvers)
 
         /**
          * Catch Not Found Error
          */
-        expressServer.use(
+        this.express.use(
             '*',
             hae.express((req, res, next) => {
                 throw new createError.NotFound()
@@ -38,18 +41,31 @@ export default {
             std.log(error.stack)
             return res.status(error.status || 500).json({error: error.msg || error.message || error})
         }
-        expressServer.use(errorHandler)
+        this.express.use(errorHandler)
 
         /**
          * HTTP server
          */
-        const server = http.createServer(expressServer)
-        death.register({
-            stop: function () {
-                server.close()
-            },
-        })
+        this.http = http.createServer(this.express)
 
-        return server
-    },
+        /**
+         * Death
+         */
+        death.register(this)
+
+        return this.http
+    }
+
+    stop() {
+        if (check.isDefined(this.http)) {
+            return new Promise<void>((resolve, reject) => {
+                this.http!.close(error => {
+                    if (check.isDefined(error)) return reject(error)
+                    return resolve()
+                })
+            })
+        }
+    }
 }
+
+export default new Server()

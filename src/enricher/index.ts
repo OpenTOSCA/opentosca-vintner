@@ -5,51 +5,42 @@ import Transformer from '#enricher/transformer'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 
-export default {enrich}
+export default class Enricher {
+    private readonly serviceTemplate: ServiceTemplate
 
-type EnrichOptions = {
-    template: ServiceTemplate
-}
+    constructor(serviceTemplate: ServiceTemplate) {
+        this.serviceTemplate = serviceTemplate
+    }
 
-type EnrichResult = {
-    template: ServiceTemplate
-}
+    async run() {
+        /**
+         * Generate graph
+         */
+        let graph = new Graph(this.serviceTemplate)
 
-async function enrich(options: EnrichOptions): Promise<EnrichResult> {
-    /**
-     * Generate graph
-     */
-    let graph = new Graph(options.template)
+        /**
+         * Element Enricher
+         */
+        new ElementEnricher(graph).run()
 
-    /**
-     * Element Enricher
-     */
-    new ElementEnricher(graph).run()
+        /**
+         * Regenerate graph
+         */
+        graph = new Graph(this.serviceTemplate)
 
-    /**
-     * Regenerate graph
-     */
-    graph = new Graph(options.template)
+        /**
+         * Condition Enricher
+         */
+        new ConditionEnricher(graph).run()
 
-    /**
-     * Condition Enricher
-     */
-    new ConditionEnricher(graph).run()
+        /**
+         * Constraint Enricher
+         */
+        new ConstraintEnricher(graph).run()
 
-    /**
-     * Constraint Enricher
-     */
-    new ConstraintEnricher(graph).run()
-
-    /**
-     * Transformer
-     */
-    new Transformer(graph).run()
-
-    /**
-     * Return (in-place) enriched and transformed template
-     */
-    return {
-        template: options.template,
+        /**
+         * Transformer
+         */
+        new Transformer(graph).run()
     }
 }

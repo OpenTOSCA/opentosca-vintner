@@ -228,7 +228,7 @@ const orchestrators = program.command('orchestrators').description('configures o
 orchestrators
     .command('enable')
     .description('enables an orchestrator plugin')
-    .requiredOption('--orchestrator <string>', 'orchestrator plugin')
+    .requiredOption('--orchestrator <string>', 'orchestrator')
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.enable(options)
@@ -238,7 +238,7 @@ orchestrators
 orchestrators
     .command('attest')
     .description('attests an orchestrator plugin')
-    .requiredOption('--orchestrator <string>', 'orchestrator plugin')
+    .requiredOption('--orchestrator <string>', 'orchestrator')
     .action(
         hae.exit(async options => {
             await Controller.orchestrators.attest(options)

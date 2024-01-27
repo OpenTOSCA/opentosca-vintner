@@ -18,9 +18,9 @@ describe('minisat', () => {
 
 async function play(data: string) {
     const template = yaml.load(data) as ServiceTemplate
-    await Enricher.enrich({template})
+    await new Enricher(template).run()
 
-    const solver = new Solver(new Graph(template))
+    const solver = new Solver(new Graph(template), {})
     const results = solver.runAll().map(it => utils.sort(it))
     std.log(`Results: ${results.length}`)
     std.log(results)

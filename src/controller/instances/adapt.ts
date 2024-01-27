@@ -1,7 +1,7 @@
 import * as check from '#check'
 import Controller from '#controller'
 import {Instance} from '#repositories/instances'
-import Resolver from '#resolver'
+import * as Resolver from '#resolver'
 import {InputAssignmentMap} from '#spec/topology-template'
 import std from '#std'
 import * as utils from '#utils'
@@ -72,7 +72,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             /**
              * Analyze: Resolve variability
              */
-            const result = await Resolver.resolve({
+            const result = await Resolver.run({
                 template: instance.loadVariableServiceTemplate(),
                 inputs: cache[instance.getName()],
             })

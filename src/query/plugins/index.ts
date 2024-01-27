@@ -1,11 +1,11 @@
 import {ServiceTemplate} from '#spec/service-template'
-import {FilePlugin} from './file'
-import {VintnerPlugin} from './vintner'
-import {WineryPlugin} from './winery'
+import {FileTemplateRepository} from './file'
+import {VintnerTemplatesRepository} from './vintner'
+import {WineryTemplatesRepository} from './winery'
 
 type NamedServiceTemplate = {name: string; template: ServiceTemplate}
 
-export interface TemplatesRepositoryPlugin {
+export interface TemplatesRepository {
     getTemplate: (path: string) => Promise<NamedServiceTemplate>
     getTemplates: () => Promise<NamedServiceTemplate[]>
 }
@@ -19,13 +19,13 @@ export interface InstancesRepositoryPlugin {
 function getTemplateRepository(name: string) {
     switch (name) {
         case 'file':
-            return new FilePlugin()
+            return new FileTemplateRepository()
 
         case 'vintner':
-            return new VintnerPlugin()
+            return new VintnerTemplatesRepository()
 
         case 'winery':
-            return new WineryPlugin()
+            return new WineryTemplatesRepository()
 
         default:
             throw new Error(`Unknown templates plugin "${name}"`)
