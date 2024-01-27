@@ -189,24 +189,24 @@ Run the following command, to count the lines of code in the `src` folder.
 cloc src
 ```
 
-The following output has been generated for the commit `d28fbf54fcdc1ecae8abf7cdbdf2e04cb42e53a7` on January 1, 2024.
+The following output has been generated for the commit `e800c672edebf2d7338029680b58016244461736` on January 27, 2024.
 
 ```text linenums="1"
-     202 text files.
-     199 unique files.                                          
+     214 text files.
+     211 unique files.                                          
        3 files ignored.
 
-github.com/AlDanial/cloc v 1.98  T=0.89 s (223.7 files/s, 14234.5 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.84 s (251.0 files/s, 16058.7 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     170           1946            842           9443
-Bourne Shell                    16             55             46            176
-YAML                             7             11              0            103
+TypeScript                     181           2091            944          10017
+Bourne Shell                    16             56             47            180
+YAML                             8             12              0            111
 EJS                              5              7              0             34
 CSV                              1              0              0              1
 -------------------------------------------------------------------------------
-SUM:                           199           2019            888           9757
+SUM:                           211           2166            991          10343
 -------------------------------------------------------------------------------
 ```
 
