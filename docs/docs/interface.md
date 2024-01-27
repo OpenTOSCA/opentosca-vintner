@@ -1563,7 +1563,7 @@ attests an orchestrator plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| orchestrator |  true  | string | orchestrator plugin |
+| orchestrator |  true  | string | orchestrator |
 
 ## vintner orchestrators enable
 
@@ -1609,7 +1609,7 @@ enables an orchestrator plugin
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| orchestrator |  true  | string | orchestrator plugin |
+| orchestrator |  true  | string | orchestrator |
 
 ## vintner orchestrators init unfurl
 

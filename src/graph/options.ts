@@ -448,13 +448,13 @@ class ChecksOptions extends BaseOptions {
 
 class SolverOptions extends BaseOptions {
     readonly topology: SolverTopologyOptions
-    readonly technologies: SolverTechnologyOptions
+    readonly technologies: SolverTechnologiesOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         this.topology = new SolverTopologyOptions(serviceTemplate)
-        this.technologies = new SolverTechnologyOptions(serviceTemplate)
+        this.technologies = new SolverTechnologiesOptions(serviceTemplate)
     }
 }
 
@@ -493,7 +493,7 @@ class SolverTopologyOptions extends BaseOptions {
     }
 }
 
-class SolverTechnologyOptions extends BaseOptions {
+class SolverTechnologiesOptions extends BaseOptions {
     readonly min: boolean
     readonly max: boolean
     readonly optimize: boolean

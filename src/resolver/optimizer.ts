@@ -17,17 +17,17 @@ export default class Optimizer {
         if (this.graph.options.solver.topology.optimize) this.optimizeTopology()
 
         /**
-         * Check if there are multiple minimal/ maximal results considering the weight of the topology
+         * Check if there are multiple optimal topologies
          */
         if (this.graph.options.solver.topology.unique) this.ensureTopologyUniqueness()
 
         /**
-         * Minimize number of technologies
+         * Optimize technologies
          */
         if (this.graph.options.solver.technologies.optimize) this.optimizeTechnologies()
 
         /**
-         * Check if there are multiple minimal results considering the number of used technologies
+         * Check if there are multiple optimal technologies
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
