@@ -108,8 +108,8 @@ topology_template:
                     - variability_input: cloud
                     - true
         options:
-            optimization: true
-            unique: true
+            optimization_topology: true
+            optimization_topology_unique: true
         constraints:
             - implies:
                   - node.shop

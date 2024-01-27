@@ -13,7 +13,7 @@ topology_template:
 
             expected_incoming_relation_check: false
 
-            optimization: true
+            optimization_topology: true
     node_templates:
         source:
             type: source

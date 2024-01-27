@@ -223,12 +223,14 @@ _This is an experimental feature._
 
 The following options are used to configure the solver.
 
-| Keyname                   | Mandatory | Type                          | Default | Description                                              |
-|---------------------------|-----------|-------------------------------|---------|----------------------------------------------------------|
-| optimization              | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering nodes.                | 
-| unique                    | false     | Boolean                       | true    | Enable check for unique results considering nodes.       | 
-| optimization_technologies | false     | Boolean                       | false   | Enable optimization considering technologies.            | 
-| unique_technologies       | false     | Boolean                       | false   | Enable check for unique results considering technologies | 
+| Keyname                          | Mandatory | Type                          | Default | Description                                               |
+|----------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
+| optimization_topology            | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering topology.              | 
+| optimization_topology_unique     | false     | Boolean                       | true    | Enable check for unique results considering topology.     |
+| optimization_topology_mode       | false     | count &#124; weight           | weight  | Configure optimization mode considering topology.         |
+| optimization_technologies        | false     | Boolean &#124; min &#124; max | false   | Enable optimization considering technologies.             | 
+| optimization_technologies_unique | false     | Boolean                       | false   | Enable check for unique results considering technologies. | 
+| optimization_technologies_mode   | false     | count &#124; weight           | count   | Configure optimization mode considering technologies.     | 
 
 ### Constraints Options
 
@@ -337,6 +339,7 @@ A technology assignment rule is defined as follows.
 | component  | true      | String                                                 | The type of the component to which the technology can be assigned.                                |
 | host       | false     | String                                                 | The type of the host of the component which the technology requires (conflicts with "conditions") |
 | conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component (conflicts with "host").   |
+| weight     | false     | Number                                                 | The weight which is minimized (default is 1).                                                     |
 
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 

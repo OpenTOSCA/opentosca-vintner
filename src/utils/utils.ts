@@ -183,3 +183,7 @@ export function filter(unfiltered: {[key: string]: boolean}, filter: RegExp) {
         return obj
     }, {})
 }
+
+export function sum(values: number[]) {
+    return values.reduce((sum, value) => sum + value, 0)
+}

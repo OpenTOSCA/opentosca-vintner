@@ -18,8 +18,8 @@ topology_template:
       relation_default_condition_mode: source-target
       type_default_condition: true
       hosting_stack_constraint: true
-      optimization: true
-      unique: true
+      optimization_topology: true
+      optimization_topology_unique: true
     inputs:
       static:
         type: boolean

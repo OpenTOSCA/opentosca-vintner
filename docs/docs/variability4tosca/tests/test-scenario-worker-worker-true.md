@@ -21,7 +21,7 @@ topology_template:
   variability:
     options:
       mode: semantic-loose
-      optimization: true
+      optimization_topology: true
   node_templates:
     agent:
       type: agent

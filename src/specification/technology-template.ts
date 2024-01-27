@@ -7,7 +7,10 @@ import {
 
 export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate>
 
-export type TechnologyTemplate = VariabilityAlternative & {default_condition_mode?: TechnologyDefaultConditionMode}
+export type TechnologyTemplate = VariabilityAlternative & {
+    default_condition_mode?: TechnologyDefaultConditionMode
+    weight?: number
+}
 
 export type TechnologyAssignmentRulesMap = {[technoloy: string]: TechnologyAssignmentRule[]}
 
@@ -15,4 +18,5 @@ export type TechnologyAssignmentRule = {
     component: string
     host?: string
     conditions?: LogicExpression | LogicExpression[]
+    weight?: number
 }

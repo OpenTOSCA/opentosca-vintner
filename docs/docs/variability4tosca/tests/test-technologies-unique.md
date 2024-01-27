@@ -13,7 +13,7 @@ topology_template:
   variability:
     options:
       optimization_technologies: true
-      unique_technologies: true
+      optimization_technologies_unique: true
       technology_pruning: true
   node_templates:
     container:

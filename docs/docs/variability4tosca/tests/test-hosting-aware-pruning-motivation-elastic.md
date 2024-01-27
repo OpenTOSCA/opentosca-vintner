@@ -35,7 +35,7 @@ topology_template:
       mode: semantic-loose
       node_default_condition_mode: incoming
       hosting_stack_constraint: false
-      optimization: false
+      optimization_topology: false
   node_templates:
     shop:
       type: shop.component

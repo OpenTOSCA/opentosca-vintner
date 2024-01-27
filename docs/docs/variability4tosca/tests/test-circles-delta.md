@@ -27,7 +27,7 @@ topology_template:
       relation_default_condition: true
       type_default_condition: true
       expected_incoming_relation_check: false
-      optimization: true
+      optimization_topology: true
   node_templates:
     node_one:
       type: node_one

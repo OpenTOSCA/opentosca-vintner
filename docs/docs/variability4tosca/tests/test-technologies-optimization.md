@@ -13,14 +13,16 @@ topology_template:
   variability:
     options:
       optimization_technologies: true
+      optimization_technologies_unique: true
       technology_pruning: true
+      technology_constraint: true
   node_templates:
     container:
       type: container
       technology:
-        - ansible:
-            conditions: true
         - terraform:
+            conditions: true
+        - ansible:
             conditions: true
     another:
       type: another
