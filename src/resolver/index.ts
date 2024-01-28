@@ -67,7 +67,7 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     /**
      * Resolver
      */
-    new Resolver(graph, inputs).run()
+    new Resolver(graph, inputs.inputs).run()
 
     return {
         inputs: inputs.inputs,
