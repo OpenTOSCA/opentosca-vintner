@@ -1,14 +1,14 @@
 import Graph from '#graph/graph'
 import Checker from '#resolver/checker'
-import Inputs from '#resolver/inputs'
 import Solver from '#resolver/solver'
 import Transformer from '#resolver/transformer'
+import {InputAssignmentMap} from '#spec/topology-template'
 
 export default class Resolver {
     private readonly graph: Graph
-    private readonly inputs: Inputs
+    private readonly inputs: InputAssignmentMap
 
-    constructor(graph: Graph, inputs: Inputs) {
+    constructor(graph: Graph, inputs: InputAssignmentMap) {
         this.graph = graph
         this.inputs = inputs
     }
@@ -17,7 +17,7 @@ export default class Resolver {
         /**
          * Solver
          */
-        new Solver(this.graph, this.inputs.inputs).run()
+        new Solver(this.graph, this.inputs).run()
 
         /**
          * Checker

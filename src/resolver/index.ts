@@ -35,7 +35,7 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     await new Enricher(options.template).run()
 
     /**
-     * Graph
+     * Inputs
      */
     const inputs = new Inputs()
 
@@ -60,9 +60,14 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     inputs.setInputs(options.inputs)
 
     /**
+     * Graph
+     */
+    const graph = new Graph(options.template)
+
+    /**
      * Resolver
      */
-    new Resolver(new Graph(options.template), inputs).run()
+    new Resolver(graph, inputs.inputs).run()
 
     return {
         inputs: inputs.inputs,
