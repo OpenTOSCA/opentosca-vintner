@@ -98,7 +98,6 @@ export default class Graph {
 
         new Populator(this).run()
     }
-
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
         assert.isString(name)
 
@@ -519,5 +518,9 @@ export default class Graph {
             this.serviceTemplate.topology_template.variability.constraints = []
 
         this.serviceTemplate.topology_template.variability.constraints.push(constraint)
+    }
+
+    regenerate() {
+        return new Graph(this.serviceTemplate)
     }
 }
