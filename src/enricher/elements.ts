@@ -24,13 +24,12 @@ export class ElementEnricher {
         const map = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
         if (check.isUndefined(map)) return
 
-        for (const technology of Object.keys(map)) {
-            const rules = map[technology]
+        for (const node of this.graph.nodes) {
+            for (const technology of Object.keys(map)) {
+                const rules = map[technology]
 
-            for (const rule of rules) {
-                const nodes = this.graph.nodes.filter(it => it.getType().name === rule.component)
-
-                for (const node of nodes) {
+                for (const rule of rules) {
+                    if (rule.component !== node.getType().name) continue
                     if (check.isDefined(rule.host)) {
                         const hosts = node.hosts.filter(it => it.getType().name === rule.host)
                         for (const host of hosts) {
