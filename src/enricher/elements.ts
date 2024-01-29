@@ -26,14 +26,12 @@ export class ElementEnricher {
 
         for (const technology of Object.keys(map)) {
             const rules = map[technology]
-            assert.isArray(rules)
 
             for (const rule of rules) {
-                assert.isString(rule.component)
-
                 const nodes = this.graph.nodes.filter(it => it.getType().name === rule.component)
+
                 for (const node of nodes) {
-                    if (check.isString(rule.host)) {
+                    if (check.isDefined(rule.host)) {
                         const hosts = node.hosts.filter(it => it.getType().name === rule.host)
                         for (const host of hosts) {
                             this.addTechnology({
