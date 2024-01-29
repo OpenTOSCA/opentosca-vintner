@@ -2,8 +2,9 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import {andify, generatify} from '#graph/utils'
+import {andify, generatify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
+import * as utils from '#utils'
 
 export class ElementEnricher {
     private readonly graph: Graph
@@ -38,7 +39,7 @@ export class ElementEnricher {
                             this.addTechnology({
                                 node,
                                 technology,
-                                conditions: {node_presence: host.name},
+                                conditions: utils.filterNotNull([{node_presence: host.name}, rule.conditions]),
                                 weight: rule.weight,
                             })
                         }
@@ -64,7 +65,7 @@ export class ElementEnricher {
         if (check.isUndefined(node.raw.technology)) node.raw.technology = []
         assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
 
-        conditions = check.isArray(conditions) ? andify(conditions) : conditions
+        conditions = check.isArray(conditions) ? simplify(andify(conditions)) : conditions
         conditions = check.isDefined(conditions) ? generatify(conditions) : undefined
 
         node.raw.technology.push({[technology]: {conditions, weight}})

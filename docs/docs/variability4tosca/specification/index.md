@@ -334,12 +334,12 @@ _Conditional types conflict with this feature!_
 Technology assignment rules can be defined to automatically select a deployment technology for a component.
 A technology assignment rule is defined as follows.
 
-| Keyname    | Mandatory | Type                                                   | Description                                                                                       |
-|------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| component  | true      | String                                                 | The type of the component to which the technology can be assigned.                                |
-| host       | false     | String                                                 | The type of the host of the component which the technology requires (conflicts with "conditions") |
-| conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component (conflicts with "host").   |
-| weight     | false     | Number                                                 | The weight which is minimized (default is 1).                                                     |
+| Keyname    | Mandatory | Type                                                   | Description                                                             |
+|------------|-----------|--------------------------------------------------------|-------------------------------------------------------------------------|
+| component  | true      | String                                                 | The type of the component to which the technology can be assigned.      |
+| host       | false     | String                                                 | The type of the host of the component which the technology requires.    |
+| conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component. |
+| weight     | false     | Number                                                 | The weight which is minimized (default is 1).                           |
 
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 
