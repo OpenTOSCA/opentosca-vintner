@@ -24,7 +24,7 @@ export class ElementEnricher {
         const map = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
         if (check.isUndefined(map)) return
 
-        for (const node of this.graph.nodes) {
+        for (const node of this.graph.nodes.filter(it => utils.isEmpty(it.technologies))) {
             for (const technology of Object.keys(map)) {
                 const rules = map[technology]
 
