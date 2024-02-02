@@ -61,7 +61,7 @@ export default class Loader {
         }
 
         if (check.isUndefined(this.template.topology_template.variability))
-            this.template.topology_template.variability = {inputs: {}}
+            this.template.topology_template.variability = {}
         this.template.topology_template.variability.technology_assignment_rules = rules
     }
 }

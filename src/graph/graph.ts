@@ -516,7 +516,7 @@ export default class Graph {
         assert.isDefined(this.serviceTemplate.topology_template, 'Service template has no topology template')
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
-            this.serviceTemplate.topology_template.variability = {inputs: {}}
+            this.serviceTemplate.topology_template.variability = {}
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability.constraints))
             this.serviceTemplate.topology_template.variability.constraints = []

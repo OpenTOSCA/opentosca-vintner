@@ -3,7 +3,7 @@ import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
-    inputs: InputDefinitionMap
+    inputs?: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
     constraints?: LogicExpression[]
