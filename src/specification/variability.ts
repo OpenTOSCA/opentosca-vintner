@@ -9,7 +9,7 @@ export type VariabilityDefinition = {
     constraints?: LogicExpression[]
     options?: VariabilityOptions
     type_specific_conditions?: TypeSpecificLogicExpressions
-    technology_assignment_rules?: TechnologyAssignmentRulesMap
+    technology_assignment_rules?: string | TechnologyAssignmentRulesMap
 }
 
 export type VariabilityOptions = {

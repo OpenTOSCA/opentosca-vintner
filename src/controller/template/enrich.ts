@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import Enricher from '#enricher'
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 
 export type TemplateEnrichOptions = {
     template: string
@@ -13,7 +13,7 @@ export type TemplateEnrichOptions = {
 export default async function (options: TemplateEnrichOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isDefined(options.output, 'Output not defined')
-    const template = files.loadYAML<ServiceTemplate>(options.template)
+    const template = await new Loader(options.template).load()
     await new Enricher(template).run()
     files.storeYAML(options.output, template)
 }

@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
@@ -32,7 +33,10 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     getRules() {
-        return this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
+        const rules = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
+        if (check.isUndefined(rules)) return rules
+        assert.isObject(rules, 'Rules not loaded')
+        return rules
     }
 
     hasRules() {

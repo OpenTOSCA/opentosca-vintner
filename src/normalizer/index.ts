@@ -224,6 +224,7 @@ export default class Normalizer {
     private normalizeTechnologyRules() {
         const map = this.serviceTemplate.topology_template?.variability?.technology_assignment_rules
         if (check.isUndefined(map)) return
+        assert.isObject(map, 'Rules not loaded')
 
         for (const technology of Object.keys(map)) {
             const rules = map[technology]
