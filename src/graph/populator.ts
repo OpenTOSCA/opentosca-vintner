@@ -7,6 +7,7 @@ import Import from '#graph/import'
 import Input from '#graph/input'
 import Node from '#graph/node'
 import {Options} from '#graph/options'
+import {TechnologyRulePluginBuilder} from '#graph/plugin'
 import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
@@ -25,6 +26,9 @@ export class Populator {
     run() {
         // Options
         this.graph.options = new Options(this.graph.serviceTemplate)
+
+        // Plugins
+        this.populatePlugins()
 
         // Inputs
         this.populateInputs()
@@ -67,6 +71,16 @@ export class Populator {
                     )
             }
         }
+    }
+
+    private populatePlugins() {
+        // Technology Rule Plugin
+        const technologyRulePlugin = new TechnologyRulePluginBuilder().build(this.graph)
+        if (technologyRulePlugin.hasRules()) {
+            this.graph.plugins.technology.push(technologyRulePlugin)
+        }
+
+        // TODO: load plugins
     }
 
     private populateInputs() {

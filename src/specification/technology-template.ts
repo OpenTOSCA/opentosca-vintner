@@ -12,7 +12,7 @@ export type TechnologyTemplate = VariabilityAlternative & {
     weight?: number
 }
 
-export type TechnologyAssignmentRulesMap = {[technoloy: string]: TechnologyAssignmentRule[]}
+export type TechnologyAssignmentRulesMap = {[technology: string]: TechnologyAssignmentRule[]}
 
 export type TechnologyAssignmentRule = {
     component: string

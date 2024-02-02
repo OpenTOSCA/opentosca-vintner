@@ -2,8 +2,10 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
+import {ConditionalTechnologyAssignment, TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
+import {andify, generatify, simplify} from '#graph/utils'
 import Normalizer from '#normalizer'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
@@ -82,6 +84,8 @@ export default class Graph {
     technologies: Technology[] = []
 
     constraints: LogicExpression[] = []
+
+    plugins: {technology: TechnologyPlugin[]} = {technology: []}
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -518,6 +522,23 @@ export default class Graph {
             this.serviceTemplate.topology_template.variability.constraints = []
 
         this.serviceTemplate.topology_template.variability.constraints.push(constraint)
+    }
+
+    addTechnology(node: Node, assignment: ConditionalTechnologyAssignment) {
+        if (check.isUndefined(node.raw.technology)) node.raw.technology = []
+        assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
+
+        // Normalize
+        assignment.conditions = check.isArray(assignment.conditions)
+            ? simplify(andify(assignment.conditions))
+            : assignment.conditions
+
+        // Generatify
+        assignment.conditions = check.isDefined(assignment.conditions) ? generatify(assignment.conditions) : undefined
+
+        node.raw.technology.push({
+            [assignment.technology]: {conditions: assignment.conditions, weight: assignment.weight},
+        })
     }
 
     regenerate() {

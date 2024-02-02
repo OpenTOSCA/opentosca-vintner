@@ -1,9 +1,4 @@
-import * as assert from '#assert'
-import * as check from '#check'
 import Graph from '#graph/graph'
-import Node from '#graph/node'
-import {andify, generatify, simplify} from '#graph/utils'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
 export class ElementEnricher {
@@ -21,50 +16,15 @@ export class ElementEnricher {
     }
 
     private enrichTechnologies() {
-        const map = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
-        if (check.isUndefined(map)) return
+        for (const node of this.graph.nodes) {
+            if (!utils.isEmpty(node.technologies)) continue
 
-        for (const node of this.graph.nodes.filter(it => utils.isEmpty(it.technologies))) {
-            for (const technology of Object.keys(map)) {
-                const rules = map[technology]
-
-                for (const rule of rules) {
-                    if (rule.component !== node.getType().name) continue
-                    if (check.isDefined(rule.host)) {
-                        const hosts = node.hosts.filter(it => it.getType().name === rule.host)
-                        for (const host of hosts) {
-                            this.addTechnology({
-                                node,
-                                technology,
-                                conditions: utils.filterNotNull([{node_presence: host.name}, rule.conditions]),
-                                weight: rule.weight,
-                            })
-                        }
-                    } else {
-                        this.addTechnology({node, technology, conditions: rule.conditions, weight: rule.weight})
-                    }
+            for (const plugin of this.graph.plugins.technology) {
+                const assignments = plugin.assign(node)
+                for (const assignment of assignments) {
+                    this.graph.addTechnology(node, assignment)
                 }
             }
         }
-    }
-
-    private addTechnology({
-        node,
-        technology,
-        conditions,
-        weight,
-    }: {
-        node: Node
-        technology: string
-        conditions?: LogicExpression | LogicExpression[]
-        weight?: number
-    }) {
-        if (check.isUndefined(node.raw.technology)) node.raw.technology = []
-        assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
-
-        conditions = check.isArray(conditions) ? simplify(andify(conditions)) : conditions
-        conditions = check.isDefined(conditions) ? generatify(conditions) : undefined
-
-        node.raw.technology.push({[technology]: {conditions, weight}})
     }
 }
