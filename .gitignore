@@ -19,6 +19,9 @@ node_modules
 yarn-error.log
 .DS_STORE
 
+# e.g. node modules of plugins
+!tests/**/node_modules
+
 build-docs
 dist-docs
 

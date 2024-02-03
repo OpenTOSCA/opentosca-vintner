@@ -90,6 +90,9 @@ export default class Graph {
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
 
+        /**
+         * Ensure supported TOSCA version
+         */
         if (
             ![
                 TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
@@ -98,10 +101,17 @@ export default class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        new Normalizer(serviceTemplate).run()
+        /**
+         * Normalizer
+         */
+        new Normalizer(this.serviceTemplate).run()
 
+        /**
+         * Populator
+         */
         new Populator(this).run()
     }
+
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
         assert.isString(name)
 

@@ -74,13 +74,23 @@ export class Populator {
     }
 
     private populatePlugins() {
-        // Technology Rule Plugin
+        /**
+         * Technology Rule Plugin
+         */
         const technologyRulePlugin = new TechnologyRulePluginBuilder().build(this.graph)
         if (technologyRulePlugin.hasRules()) {
             this.graph.plugins.technology.push(technologyRulePlugin)
         }
 
-        // TODO: load plugins
+        /**
+         * Imported plugins
+         */
+        const builders = this.graph.serviceTemplate.topology_template?.variability?.plugins?.technology || []
+        for (const builder of builders) {
+            assert.isObject(builder)
+            console.log(builder)
+            this.graph.plugins.technology.push(builder.build(this.graph))
+        }
     }
 
     private populateInputs() {

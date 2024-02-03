@@ -100,6 +100,10 @@ export default class Transformer {
         if (check.isDefined(this.topology.variability.inputs) && utils.isEmpty(this.topology.variability.inputs))
             delete this.topology.variability.inputs
 
+        // Delete plugins
+        delete this.topology.variability.plugins
+
+        // Delete enricher options
         if (check.isDefined(this.topology.variability.options)) {
             // Delete pruning mode
             delete this.topology.variability.options.mode
