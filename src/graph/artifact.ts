@@ -67,9 +67,7 @@ export default class Artifact extends Element {
     }
 
     getTypeSpecificConditionWrapper() {
-        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.artifact_types?.[
-            this.raw.type
-        ]
+        return this.graph.getTypeSpecificConditions()?.artifact_types?.[this.raw.type]
     }
 
     getElementGenericCondition() {

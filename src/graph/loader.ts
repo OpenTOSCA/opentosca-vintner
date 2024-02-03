@@ -3,6 +3,7 @@ import * as check from '#check'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TypeSpecificLogicExpressions} from '#spec/variability'
 import path from 'path'
 
 export default class Loader {
@@ -24,6 +25,11 @@ export default class Loader {
         await this.loadTechnologyRules()
 
         /**
+         * Load type-specific conditions
+         */
+        await this.loadTypeSpecificConditions()
+
+        /**
          * Load technology plugins
          */
         await this.loadTechnologyPlugins()
@@ -37,7 +43,6 @@ export default class Loader {
 
     private async loadTechnologyRules() {
         assert.isDefined(this.template, 'Template not loaded')
-
         assert.isDefined(this.template.topology_template)
 
         let rules = this.template.topology_template.variability?.technology_assignment_rules
@@ -63,5 +68,36 @@ export default class Loader {
         if (check.isUndefined(this.template.topology_template.variability))
             this.template.topology_template.variability = {}
         this.template.topology_template.variability.technology_assignment_rules = rules
+    }
+
+    // TODO: test
+    // TODO: docs
+    private async loadTypeSpecificConditions() {
+        assert.isDefined(this.template, 'Template not loaded')
+        assert.isDefined(this.template.topology_template)
+
+        let conditions = this.template.topology_template.variability?.type_specific_conditions
+
+        /**
+         * Load rules from specified file
+         */
+        if (check.isString(conditions)) {
+            conditions = files.loadYAML<TypeSpecificLogicExpressions>(path.join(this.dir, conditions))
+        }
+
+        /**
+         * Load rules from default file
+         */
+        if (check.isUndefined(conditions)) {
+            if (files.exists(path.join(this.dir, 'type-specific-conditions.yaml'))) {
+                conditions = files.loadYAML<TypeSpecificLogicExpressions>(
+                    path.join(this.dir, 'type-specific-conditions.yaml')
+                )
+            }
+        }
+
+        if (check.isUndefined(this.template.topology_template.variability))
+            this.template.topology_template.variability = {}
+        this.template.topology_template.variability.type_specific_conditions = conditions
     }
 }

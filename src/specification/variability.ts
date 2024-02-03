@@ -8,7 +8,7 @@ export type VariabilityDefinition = {
     expressions?: VariabilityExpressionMap
     constraints?: LogicExpression[]
     options?: VariabilityOptions
-    type_specific_conditions?: TypeSpecificLogicExpressions
+    type_specific_conditions?: string | TypeSpecificLogicExpressions
     technology_assignment_rules?: string | TechnologyAssignmentRulesMap
 }
 

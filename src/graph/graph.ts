@@ -512,6 +512,12 @@ export default class Graph {
         return technology
     }
 
+    getTypeSpecificConditions() {
+        const conditions = this.serviceTemplate.topology_template?.variability?.type_specific_conditions
+        if (check.isString(conditions)) throw new Error(`Type-specific definitions not loaded`)
+        return conditions
+    }
+
     addConstraint(constraint: LogicExpression) {
         assert.isDefined(this.serviceTemplate.topology_template, 'Service template has no topology template')
 

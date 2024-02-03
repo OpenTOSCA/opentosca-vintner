@@ -108,8 +108,7 @@ export default class Relation extends Element {
         // Not supported when conditional types are used
         if (this.types.length > 1) return
         const type = this.types[0]
-        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions
-            ?.relationship_types?.[type.name]
+        return this.graph.getTypeSpecificConditions()?.relationship_types?.[type.name]
     }
 
     getElementGenericCondition() {
