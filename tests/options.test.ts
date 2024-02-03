@@ -6,7 +6,7 @@ describe('options', () => {
     it('mode: manual', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'manual'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual'}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -75,7 +75,7 @@ describe('options', () => {
     it('mode: consistent-strict', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'consistent-strict'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'consistent-strict'}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -144,7 +144,7 @@ describe('options', () => {
     it('mode: consistent-loose', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'consistent-loose'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'consistent-loose'}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -213,7 +213,7 @@ describe('options', () => {
     it('mode: default', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'default'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'default'}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.true
@@ -282,7 +282,7 @@ describe('options', () => {
     it('mode: semantic-loose', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'loose'}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'loose'}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -351,7 +351,7 @@ describe('options', () => {
     it('default_condition: false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {default_condition: false}, inputs: {}}},
+            topology_template: {variability: {options: {default_condition: false}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -420,7 +420,7 @@ describe('options', () => {
     it('default_condition: true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {default_condition: true}, inputs: {}}},
+            topology_template: {variability: {options: {default_condition: true}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.true
@@ -489,7 +489,7 @@ describe('options', () => {
     it('pruning: true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {pruning: true}, inputs: {}}},
+            topology_template: {variability: {options: {pruning: true}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -558,7 +558,7 @@ describe('options', () => {
     it('pruning: false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {pruning: false}, inputs: {}}},
+            topology_template: {variability: {options: {pruning: false}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -627,7 +627,7 @@ describe('options', () => {
     it('manual override: default_condition true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'manual', default_condition: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual', default_condition: true}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.true
@@ -696,7 +696,7 @@ describe('options', () => {
     it('manual override: pruning true', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'manual', pruning: true}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'manual', pruning: true}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -765,7 +765,7 @@ describe('options', () => {
     it('loose override: pruning false', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
-            topology_template: {variability: {options: {mode: 'loose', pruning: false}, inputs: {}}},
+            topology_template: {variability: {options: {mode: 'loose', pruning: false}}},
         })
 
         expect(graph.options.default.defaultCondition).to.be.false
@@ -834,7 +834,7 @@ describe('options', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
             topology_template: {
-                variability: {options: {default_condition: true, node_default_condition: false}, inputs: {}},
+                variability: {options: {default_condition: true, node_default_condition: false}},
             },
         })
 
@@ -905,7 +905,7 @@ describe('options', () => {
         const graph = new Graph({
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
             topology_template: {
-                variability: {options: {default_condition: false, node_default_condition: true}, inputs: {}},
+                variability: {options: {default_condition: false, node_default_condition: true}},
             },
         })
 
@@ -982,7 +982,6 @@ describe('options', () => {
                         node_default_condition: false,
                         node_default_semantic_condition: true,
                     },
-                    inputs: {},
                 },
             },
         })

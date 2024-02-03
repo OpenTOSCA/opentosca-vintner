@@ -119,9 +119,7 @@ export default class Node extends Element {
     getTypeSpecificConditionWrapper() {
         const type = this.getTypeSilent()
         if (check.isUndefined(type)) return
-        return this.graph.serviceTemplate.topology_template?.variability?.type_specific_conditions?.node_types?.[
-            type.name
-        ]
+        return this.graph.getTypeSpecificConditions()?.node_types?.[type.name]
     }
 
     getElementGenericCondition() {

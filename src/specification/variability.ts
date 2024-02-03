@@ -1,15 +1,17 @@
 import Element from '#/graph/element'
+import {TechnologyPluginBuilder} from '#graph/plugin'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
 
 export type VariabilityDefinition = {
-    inputs: InputDefinitionMap
+    inputs?: InputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
     constraints?: LogicExpression[]
     options?: VariabilityOptions
-    type_specific_conditions?: TypeSpecificLogicExpressions
-    technology_assignment_rules?: TechnologyAssignmentRulesMap
+    type_specific_conditions?: string | TypeSpecificLogicExpressions
+    technology_assignment_rules?: string | TechnologyAssignmentRulesMap
+    plugins?: PluginDefinitionMap
 }
 
 export type VariabilityOptions = {
@@ -465,4 +467,8 @@ export type TypeSpecificLogicExpressions = {
     node_types?: {[key: string]: ConditionsWrapper}
     group_types?: {[key: string]: ConditionsWrapper}
     policy_types?: {[key: string]: ConditionsWrapper}
+}
+
+export type PluginDefinitionMap = {
+    technology?: (string | TechnologyPluginBuilder)[]
 }

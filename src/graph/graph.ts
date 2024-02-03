@@ -2,8 +2,10 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
+import {ConditionalTechnologyAssignment, TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
+import {andify, generatify, simplify} from '#graph/utils'
 import Normalizer from '#normalizer'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
@@ -83,9 +85,14 @@ export default class Graph {
 
     constraints: LogicExpression[] = []
 
+    plugins: {technology: TechnologyPlugin[]} = {technology: []}
+
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
 
+        /**
+         * Ensure supported TOSCA version
+         */
         if (
             ![
                 TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
@@ -94,10 +101,17 @@ export default class Graph {
         )
             throw new Error('Unsupported TOSCA definitions version')
 
-        new Normalizer(serviceTemplate).run()
+        /**
+         * Normalizer
+         */
+        new Normalizer(this.serviceTemplate).run()
 
+        /**
+         * Populator
+         */
         new Populator(this).run()
     }
+
     getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
         assert.isString(name)
 
@@ -508,16 +522,39 @@ export default class Graph {
         return technology
     }
 
+    getTypeSpecificConditions() {
+        const conditions = this.serviceTemplate.topology_template?.variability?.type_specific_conditions
+        if (check.isString(conditions)) throw new Error(`Type-specific definitions not loaded`)
+        return conditions
+    }
+
     addConstraint(constraint: LogicExpression) {
         assert.isDefined(this.serviceTemplate.topology_template, 'Service template has no topology template')
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
-            this.serviceTemplate.topology_template.variability = {inputs: {}}
+            this.serviceTemplate.topology_template.variability = {}
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability.constraints))
             this.serviceTemplate.topology_template.variability.constraints = []
 
         this.serviceTemplate.topology_template.variability.constraints.push(constraint)
+    }
+
+    addTechnology(node: Node, assignment: ConditionalTechnologyAssignment) {
+        if (check.isUndefined(node.raw.technology)) node.raw.technology = []
+        assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
+
+        // Normalize
+        assignment.conditions = check.isArray(assignment.conditions)
+            ? simplify(andify(assignment.conditions))
+            : assignment.conditions
+
+        // Generatify
+        assignment.conditions = check.isDefined(assignment.conditions) ? generatify(assignment.conditions) : undefined
+
+        node.raw.technology.push({
+            [assignment.technology]: {conditions: assignment.conditions, weight: assignment.weight},
+        })
     }
 
     regenerate() {

@@ -1,0 +1,11 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        plugins:
+            technology:
+                - plugin
+
+    node_templates:
+        application:
+            type: application

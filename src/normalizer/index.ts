@@ -37,6 +37,9 @@ export default class Normalizer {
 
         // Relationship
         this.normalizeRelationships()
+
+        // Technology rules
+        this.normalizeTechnologyRules()
     }
 
     private normalizeInputs() {
@@ -216,5 +219,24 @@ export default class Normalizer {
             const entry = utils.firstEntry(it)
             return {[entry[0].toLowerCase()]: entry[1]}
         })
+    }
+
+    private normalizeTechnologyRules() {
+        const map = this.serviceTemplate.topology_template?.variability?.technology_assignment_rules
+        if (check.isUndefined(map)) return
+        assert.isObject(map, 'Rules not loaded')
+
+        for (const technology of Object.keys(map)) {
+            const rules = map[technology]
+            assert.isArray(rules)
+
+            for (const rule of rules) {
+                assert.isString(rule.component)
+
+                if (check.isDefined(rule.host)) assert.isString(rule.host)
+                if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
+                if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
+            }
+        }
     }
 }

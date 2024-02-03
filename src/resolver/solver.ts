@@ -255,7 +255,7 @@ export default class Solver {
         let value
 
         // Get variability input definition
-        const definition = this.options?.inputs[name]
+        const definition = (this.options?.inputs || {})[name]
         assert.isDefined(definition, `Variability input "${name}" is not defined`)
 
         // Return assigned value

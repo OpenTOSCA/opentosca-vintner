@@ -7,6 +7,7 @@ import Import from '#graph/import'
 import Input from '#graph/input'
 import Node from '#graph/node'
 import {Options} from '#graph/options'
+import {TechnologyRulePluginBuilder} from '#graph/plugin'
 import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
 import Relation, {Relationship} from '#graph/relation'
@@ -25,6 +26,9 @@ export class Populator {
     run() {
         // Options
         this.graph.options = new Options(this.graph.serviceTemplate)
+
+        // Plugins
+        this.populatePlugins()
 
         // Inputs
         this.populateInputs()
@@ -66,6 +70,25 @@ export class Populator {
                         `Node default condition mode "incoming-host" requires at least one persistent node template`
                     )
             }
+        }
+    }
+
+    private populatePlugins() {
+        /**
+         * Technology Rule Plugin
+         */
+        const technologyRulePlugin = new TechnologyRulePluginBuilder().build(this.graph)
+        if (technologyRulePlugin.hasRules()) {
+            this.graph.plugins.technology.push(technologyRulePlugin)
+        }
+
+        /**
+         * Imported plugins
+         */
+        const builders = this.graph.serviceTemplate.topology_template?.variability?.plugins?.technology || []
+        for (const builder of builders) {
+            assert.isObject(builder)
+            this.graph.plugins.technology.push(builder.build(this.graph))
         }
     }
 

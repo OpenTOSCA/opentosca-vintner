@@ -42,7 +42,7 @@ export function simplify(conditions: LogicExpression) {
         conditions.or.forEach(it => simplify(it))
 
         /**
-         // Remove duplicats
+         // Remove duplicates
 
         // If every element is "false", then "or" is "false"
         if (conditions.or.every(it => it === false)) return false

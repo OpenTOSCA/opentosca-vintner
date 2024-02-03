@@ -90,8 +90,20 @@ export default class Transformer {
     private cleanVariabilityDefinition() {
         if (check.isUndefined(this.topology.variability)) return
 
+        // Delete technology assignment rules
         delete this.topology.variability.technology_assignment_rules
 
+        // Delete type-specific conditions variability definition
+        delete this.topology.variability.type_specific_conditions
+
+        // Delete empty inputs
+        if (check.isDefined(this.topology.variability.inputs) && utils.isEmpty(this.topology.variability.inputs))
+            delete this.topology.variability.inputs
+
+        // Delete plugins
+        delete this.topology.variability.plugins
+
+        // Delete enricher options
         if (check.isDefined(this.topology.variability.options)) {
             // Delete pruning mode
             delete this.topology.variability.options.mode
@@ -173,9 +185,6 @@ export default class Transformer {
 
         // Remove empty options
         if (utils.isEmpty(this.topology.variability.options)) delete this.topology.variability.options
-
-        // Delete type-specific conditions variability definition
-        delete this.topology.variability.type_specific_conditions
 
         // Remove empty variability
         if (utils.isEmpty(this.topology.variability)) delete this.topology.variability
