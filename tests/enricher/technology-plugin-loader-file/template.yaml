@@ -4,7 +4,7 @@ topology_template:
     variability:
         plugins:
             technology:
-                - plugins/technology/terraform
+                - plugin
 
     node_templates:
         application:
