@@ -110,19 +110,31 @@ export default class Loader {
         if (check.isUndefined(this.serviceTemplate.topology_template.variability.plugins.technology))
             this.serviceTemplate.topology_template.variability.plugins.technology = []
 
-        const files = this.serviceTemplate.topology_template.variability.plugins.technology
+        /**
+         * User-defined plugins
+         */
+        const sources = this.serviceTemplate.topology_template.variability.plugins.technology
 
-        // TODO: add plugins from ./plugins/technology/<PLUGIN DIR>/index.js to files
+        /**
+         * Plugins from default location
+         */
+        const technologyPluginsDir = path.join(this.dir, 'plugins', 'technology')
+        if (files.isDirectory(technologyPluginsDir))
+            sources.push(...files.listDirectories(technologyPluginsDir).map(it => path.join(technologyPluginsDir, it)))
 
-        const plugins: TechnologyPluginBuilder[] = []
-        for (const file of files) {
-            assert.isString(file)
+        /**
+         * Load builders
+         */
+        const builders: TechnologyPluginBuilder[] = []
+        for (const source of sources) {
+            assert.isString(source)
             // eslint-disable-next-line @typescript-eslint/no-var-requires
-            const plugin: TechnologyPluginBuilder = require('.\\' + path.relative(__dirname, path.join(this.dir, file)))
-            console.log(plugin, path.join(this.dir, file), path.relative(__dirname, path.join(this.dir, file)))
-            plugins.push(plugin)
+            const builder: TechnologyPluginBuilder = require(path.isAbsolute(source)
+                ? source
+                : path.join(this.dir, source))
+            builders.push(builder)
         }
 
-        this.serviceTemplate.topology_template.variability.plugins.technology = plugins
+        this.serviceTemplate.topology_template.variability.plugins.technology = builders
     }
 }

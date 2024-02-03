@@ -49,14 +49,15 @@ Such a topology template is also called variable topology template.
 
 A variability definition defines variability inputs, variability presets, variability expressions, and variability options.
 
-| Keyname                         | Mandatory | Type                                                | Description                                                                                                                                                 |
-|---------------------------------|-----------|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| inputs                          | false     | Map(String, VariabilityInput)                       | An optional map of input parameters used inside variability expressions.                                                                                    |
-| presets                         | false     | Map(String, VariabilityPreset)                      | An optional map of variability preset definitions.                                                                                                          |
-| expressions                     | false     | Map(String, VariabilityExpression)                  | An optional map of variability expressions.                                                                                                                 |
-| options                         | false     | Map(String, Boolean)                                | An optional map of variability options.                                                                                                                     |
-| type_specific_conditions        | false     | String &#124; List(TypeSpecificDefaultCondition)    | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
-| technology_assignment_rules     | false     | String &#124; Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: "./rules.yaml").                        |
+| Keyname                     | Mandatory | Type                                                | Description                                                                                                                                                 |
+|-----------------------------|-----------|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| inputs                      | false     | Map(String, VariabilityInput)                       | An optional map of input parameters used inside variability expressions.                                                                                    |
+| presets                     | false     | Map(String, VariabilityPreset)                      | An optional map of variability preset definitions.                                                                                                          |
+| expressions                 | false     | Map(String, VariabilityExpression)                  | An optional map of variability expressions.                                                                                                                 |
+| options                     | false     | Map(String, Boolean)                                | An optional map of variability options.                                                                                                                     |
+| type_specific_conditions    | false     | String &#124; List(TypeSpecificDefaultCondition)    | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
+| technology_assignment_rules | false     | String &#124; Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: "./rules.yaml").                        |
+| plugins                     | false     | PluginDefinition                                    | An optional definition of plugins.                                                                                                                          |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
 input `mode` and  two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
@@ -940,6 +941,31 @@ The following date operators can be used inside a variability expression.
 | after          | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after the second date.             |
 | after_or_same  | Tuple(String &#124; Number, String &#124; Number)                              | Boolean | Returns if first date is after or same as the second date.  |
 | within         | Tuple(String &#124; Number, Tuple(String &#124; Number, String &#124; Number)) | Boolean | Returns if given date is within the given dates.            |
+
+## Plugin Definition 
+
+The following plugins can be defined.
+
+| Keyname                       | Mandatory | Type          | Description                                                                                                                                |
+|-------------------------------|-----------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| technology                    | false     | List(String)  | An optional list of technology rule plugins. Strings are treated as relative imports. Plugins are also loaded from "./plugins/technology". |
+
+
+## Technology Plugin
+
+A technology plugin must export the following interface.
+
+```typescript linenums="1"
+export type TechnologyPluginBuilder = {
+    build(graph: Graph): TechnologyPlugin
+}
+```
+
+```typescript linenums="1"
+export type TechnologyPlugin = {
+    assign: (node: Node) => ConditionalTechnologyAssignment[]
+}
+```
 
 ## Processing
 

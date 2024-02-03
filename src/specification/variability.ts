@@ -470,5 +470,5 @@ export type TypeSpecificLogicExpressions = {
 }
 
 export type PluginDefinitionMap = {
-    technology?: string[] | TechnologyPluginBuilder[]
+    technology?: (string | TechnologyPluginBuilder)[]
 }

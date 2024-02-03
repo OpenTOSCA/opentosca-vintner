@@ -88,7 +88,6 @@ export class Populator {
         const builders = this.graph.serviceTemplate.topology_template?.variability?.plugins?.technology || []
         for (const builder of builders) {
             assert.isObject(builder)
-            console.log(builder)
             this.graph.plugins.technology.push(builder.build(this.graph))
         }
     }
