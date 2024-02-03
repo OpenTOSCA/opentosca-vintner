@@ -577,6 +577,16 @@
 </nav>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#plugin-definition">
+    Plugin Definition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#technology-plugin">
+    Technology Plugin
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#processing">
     Processing
   </a>
@@ -2949,6 +2959,16 @@
 </nav>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#plugin-definition">
+    Plugin Definition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#technology-plugin">
+    Technology Plugin
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#processing">
     Processing
   </a>
@@ -3160,9 +3180,9 @@ Such a topology template is also called variable topology template.</p>
 <tbody>
 <tr>
 <td>inputs</td>
-<td>true</td>
+<td>false</td>
 <td>Map(String, VariabilityInput)</td>
-<td>A required map of input parameters used inside variability expressions.</td>
+<td>An optional map of input parameters used inside variability expressions.</td>
 </tr>
 <tr>
 <td>presets</td>
@@ -3185,14 +3205,20 @@ Such a topology template is also called variable topology template.</p>
 <tr>
 <td>type_specific_conditions</td>
 <td>false</td>
-<td>List(TypeSpecificDefaultCondition)</td>
-<td>An optional definition of type-specific default conditions.</td>
+<td>String | List(TypeSpecificDefaultCondition)</td>
+<td>An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml")</td>
 </tr>
 <tr>
 <td>technology_assignment_rules</td>
 <td>false</td>
-<td>Map(String, TechnologyAssignmentRule)</td>
-<td>An optional definition of technology assignment rules.</td>
+<td>String | Map(String, TechnologyAssignmentRule)</td>
+<td>An optional definition of technology assignment rules. If string, then treated as relative file to import (default: "./rules.yaml").</td>
+</tr>
+<tr>
+<td>plugins</td>
+<td>false</td>
+<td>PluginDefinition</td>
+<td>An optional definition of plugins.</td>
 </tr>
 </tbody>
 </table>
@@ -4200,13 +4226,13 @@ A technology assignment rule is defined as follows.</p>
 <td>host</td>
 <td>false</td>
 <td>String</td>
-<td>The type of the host of the component which the technology requires (conflicts with "conditions")</td>
+<td>The type of the host of the component which the technology requires.</td>
 </tr>
 <tr>
 <td>conditions</td>
 <td>false</td>
 <td>VariabilityCondition | List(VariabilityCondition)</td>
-<td>The conditions under which a technology can be assigned to a component (conflicts with "host").</td>
+<td>The conditions under which a technology can be assigned to a component.</td>
 </tr>
 <tr>
 <td>weight</td>
@@ -5823,6 +5849,40 @@ The definition is intended to be extended in other specifications, e.g., for bui
 </tr>
 </tbody>
 </table>
+<h2 id="plugin-definition">Plugin Definition<a class="headerlink" href="#plugin-definition" title="Permanent link">¶</a></h2>
+<p>The following plugins can be defined.</p>
+<table>
+<thead>
+<tr>
+<th>Keyname</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>technology</td>
+<td>false</td>
+<td>List(String)</td>
+<td>An optional list of technology rule plugins. Strings are treated as relative imports. Plugins are also loaded from "./plugins/technology".</td>
+</tr>
+</tbody>
+</table>
+<h2 id="technology-plugin">Technology Plugin<a class="headerlink" href="#technology-plugin" title="Permanent link">¶</a></h2>
+<p>A technology plugin must export the following interface.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span>
+<span class="normal"><a href="#__codelineno-23-2">2</a></span>
+<span class="normal"><a href="#__codelineno-23-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">TechnologyPluginBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="w">    </span><span class="nx">build</span><span class="p">(</span><span class="nx">graph</span><span class="o">:</span><span class="w"> </span><span class="kt">Graph</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">TechnologyPlugin</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
+<span class="normal"><a href="#__codelineno-24-2">2</a></span>
+<span class="normal"><a href="#__codelineno-24-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">TechnologyPlugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="w">    </span><span class="nx">assign</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">node</span><span class="o">:</span><span class="w"> </span><span class="kt">Node</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">ConditionalTechnologyAssignment</span><span class="p">[]</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
 <h2 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">¶</a></h2>
 <p>We describe on a high-level the steps to derive a variability-resolved service template from a variable service template.</p>
 <h3 id="resolve-variability">Resolve Variability<a class="headerlink" href="#resolve-variability" title="Permanent link">¶</a></h3>
@@ -5849,58 +5909,58 @@ Therefore, conduct the following steps: </p>
 <p>Thereby, inputs which are merged at a later step, override existing inputs.
 Thus, directly assigned variability inputs have the highest priority.
 For example, given the following variability definition.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-23-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-23-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-23-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-23-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-23-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-23-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-23-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-23-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-23-10">10</a></span>
-<span class="normal"><a href="#__codelineno-23-11">11</a></span>
-<span class="normal"><a href="#__codelineno-23-12">12</a></span>
-<span class="normal"><a href="#__codelineno-23-13">13</a></span>
-<span class="normal"><a href="#__codelineno-23-14">14</a></span>
-<span class="normal"><a href="#__codelineno-23-15">15</a></span>
-<span class="normal"><a href="#__codelineno-23-16">16</a></span>
-<span class="normal"><a href="#__codelineno-23-17">17</a></span>
-<span class="normal"><a href="#__codelineno-23-18">18</a></span>
-<span class="normal"><a href="#__codelineno-23-19">19</a></span>
-<span class="normal"><a href="#__codelineno-23-20">20</a></span>
-<span class="normal"><a href="#__codelineno-23-21">21</a></span>
-<span class="normal"><a href="#__codelineno-23-22">22</a></span>
-<span class="normal"><a href="#__codelineno-23-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nt">variability</span><span class="p">:</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
-<a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="w">        </span><span class="nt">mode</span><span class="p">:</span>
-<a id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="w">        </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span>
-<a id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="w">        </span><span class="nt">another_another_input</span><span class="p">:</span>
-<a id="__codelineno-23-8" name="__codelineno-23-8"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-23-9" name="__codelineno-23-9"></a>
-<a id="__codelineno-23-10" name="__codelineno-23-10"></a><span class="w">    </span><span class="nt">presets</span><span class="p">:</span>
-<a id="__codelineno-23-11" name="__codelineno-23-11"></a><span class="w">        </span><span class="nt">dev</span><span class="p">:</span>
-<a id="__codelineno-23-12" name="__codelineno-23-12"></a><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Development</span>
-<a id="__codelineno-23-13" name="__codelineno-23-13"></a><span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy the application on a private cloud</span>
-<a id="__codelineno-23-14" name="__codelineno-23-14"></a><span class="w">            </span><span class="nt">inputs</span><span class="p">:</span>
-<a id="__codelineno-23-15" name="__codelineno-23-15"></a><span class="w">                </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
-<a id="__codelineno-23-16" name="__codelineno-23-16"></a><span class="w">                </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
-<a id="__codelineno-23-17" name="__codelineno-23-17"></a><span class="w">                </span><span class="nt">another_another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
-<a id="__codelineno-23-18" name="__codelineno-23-18"></a><span class="w">        </span><span class="nt">prod</span><span class="p">:</span>
-<a id="__codelineno-23-19" name="__codelineno-23-19"></a><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Production</span>
-<a id="__codelineno-23-20" name="__codelineno-23-20"></a><span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy the application on a public cloud</span>
-<a id="__codelineno-23-21" name="__codelineno-23-21"></a><span class="w">            </span><span class="nt">inputs</span><span class="p">:</span>
-<a id="__codelineno-23-22" name="__codelineno-23-22"></a><span class="w">                </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-<a id="__codelineno-23-23" name="__codelineno-23-23"></a><span class="w">                </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-25-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-25-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-25-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-25-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-25-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-25-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-25-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-25-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-25-10">10</a></span>
+<span class="normal"><a href="#__codelineno-25-11">11</a></span>
+<span class="normal"><a href="#__codelineno-25-12">12</a></span>
+<span class="normal"><a href="#__codelineno-25-13">13</a></span>
+<span class="normal"><a href="#__codelineno-25-14">14</a></span>
+<span class="normal"><a href="#__codelineno-25-15">15</a></span>
+<span class="normal"><a href="#__codelineno-25-16">16</a></span>
+<span class="normal"><a href="#__codelineno-25-17">17</a></span>
+<span class="normal"><a href="#__codelineno-25-18">18</a></span>
+<span class="normal"><a href="#__codelineno-25-19">19</a></span>
+<span class="normal"><a href="#__codelineno-25-20">20</a></span>
+<span class="normal"><a href="#__codelineno-25-21">21</a></span>
+<span class="normal"><a href="#__codelineno-25-22">22</a></span>
+<span class="normal"><a href="#__codelineno-25-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="nt">variability</span><span class="p">:</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2"></a><span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3"></a><span class="w">        </span><span class="nt">mode</span><span class="p">:</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="w">        </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span>
+<a id="__codelineno-25-6" name="__codelineno-25-6"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7"></a><span class="w">        </span><span class="nt">another_another_input</span><span class="p">:</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9"></a>
+<a id="__codelineno-25-10" name="__codelineno-25-10"></a><span class="w">    </span><span class="nt">presets</span><span class="p">:</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11"></a><span class="w">        </span><span class="nt">dev</span><span class="p">:</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12"></a><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Development</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13"></a><span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy the application on a private cloud</span>
+<a id="__codelineno-25-14" name="__codelineno-25-14"></a><span class="w">            </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15"></a><span class="w">                </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16"></a><span class="w">                </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-25-17" name="__codelineno-25-17"></a><span class="w">                </span><span class="nt">another_another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-25-18" name="__codelineno-25-18"></a><span class="w">        </span><span class="nt">prod</span><span class="p">:</span>
+<a id="__codelineno-25-19" name="__codelineno-25-19"></a><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Production</span>
+<a id="__codelineno-25-20" name="__codelineno-25-20"></a><span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy the application on a public cloud</span>
+<a id="__codelineno-25-21" name="__codelineno-25-21"></a><span class="w">            </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-25-22" name="__codelineno-25-22"></a><span class="w">                </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+<a id="__codelineno-25-23" name="__codelineno-25-23"></a><span class="w">                </span><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
 </code></pre></div></td></tr></table></div>
 <p>When the presets <code>dev</code> and <code>prod</code> are applied and the variability input <code>mode</code> is directly assigned to <code>override</code>, then the following variability inputs are retrieved. </p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
-<span class="normal"><a href="#__codelineno-24-2">2</a></span>
-<span class="normal"><a href="#__codelineno-24-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">override</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="nt">another_another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span>
+<span class="normal"><a href="#__codelineno-26-2">2</a></span>
+<span class="normal"><a href="#__codelineno-26-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">override</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="nt">another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3"></a><span class="nt">another_another_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="check-element-presence">Check Element Presence<a class="headerlink" href="#check-element-presence" title="Permanent link">¶</a></h3>
 <p>To check if an element is present, check that all assigned conditions hold:</p>
@@ -6051,57 +6111,9 @@ This is directly related to the used collections.</p>
 <p>Each element has an identifier that is unique per (variable) service template.
 This identifier system is required since some conditional elements, such as artifacts, can have non-unique names.
 The identifier of an element is constructed as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>&lt;Element Type&gt;.&lt;Element Name&gt;[@&lt;Element Index&gt;][.&lt;Element Container ID&gt;]
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>&lt;Element Type&gt;.&lt;Element Name&gt;[@&lt;Element Index&gt;][.&lt;Element Container ID&gt;]
 </code></pre></div></td></tr></table></div>
 <p>Available element types are <code>node</code>, <code>relation</code>, <code>property</code>, <code>group</code>, <code>policy</code>, <code>artifact</code>, <code>input</code>, <code>type</code>, and <code>import</code>.</p>
-<p>For example, consider the given variable service template.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-26-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-26-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-26-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-26-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-26-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-26-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-26-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-26-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-26-10">10</a></span>
-<span class="normal"><a href="#__codelineno-26-11">11</a></span>
-<span class="normal"><a href="#__codelineno-26-12">12</a></span>
-<span class="normal"><a href="#__codelineno-26-13">13</a></span>
-<span class="normal"><a href="#__codelineno-26-14">14</a></span>
-<span class="normal"><a href="#__codelineno-26-15">15</a></span>
-<span class="normal"><a href="#__codelineno-26-16">16</a></span>
-<span class="normal"><a href="#__codelineno-26-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="w">    </span><span class="nt">my_node</span><span class="p">:</span>
-<a id="__codelineno-26-3" name="__codelineno-26-3"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my.node</span>
-<a id="__codelineno-26-4" name="__codelineno-26-4"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-26-5" name="__codelineno-26-5"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_property</span><span class="p">:</span>
-<a id="__codelineno-26-6" name="__codelineno-26-6"></a><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">first</span>
-<a id="__codelineno-26-7" name="__codelineno-26-7"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
-<a id="__codelineno-26-8" name="__codelineno-26-8"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_property</span><span class="p">:</span>
-<a id="__codelineno-26-9" name="__codelineno-26-9"></a><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
-<a id="__codelineno-26-11" name="__codelineno-26-11"></a><span class="w">        </span><span class="nt">artifacts</span><span class="p">:</span>
-<a id="__codelineno-26-12" name="__codelineno-26-12"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_artifact</span><span class="p">:</span>
-<a id="__codelineno-26-13" name="__codelineno-26-13"></a><span class="w">                </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/my_artifact_first</span>
-<a id="__codelineno-26-14" name="__codelineno-26-14"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
-<a id="__codelineno-26-15" name="__codelineno-26-15"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_artifact</span><span class="p">:</span>
-<a id="__codelineno-26-16" name="__codelineno-26-16"></a><span class="w">                </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/my_artifact_second</span>
-<a id="__codelineno-26-17" name="__codelineno-26-17"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
-</code></pre></div></td></tr></table></div>
-<p>Next, the following identifiers, among others, exist.</p>
-<ul>
-<li><code>node.my_node</code> for the node template <code>my_node</code>.</li>
-<li><code>property.my_property@0.node.my_node</code> for the first property <code>my_property</code> of the node template <code>my_node</code>.</li>
-<li><code>artifact.my_artifact@1.node.my_node</code> for the second artifact <code>my_artifact</code> of the node template <code>my_node</code>.</li>
-</ul>
-<h3 id="element-display-system">Element Display System<a class="headerlink" href="#element-display-system" title="Permanent link">¶</a></h3>
-<p>Each element has a display representation that is unique per (variable) service template.
-This display system is required since some conditional elements, such as artifacts, can have non-unique names.
-The display representation of an element is constructed as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>&lt;Element Type&gt; "&lt;Element Name&gt;[@&lt;Element Index&gt;]"[ of &lt;Element Container Display&gt;]
-</code></pre></div></td></tr></table></div>
-<p>Available element types are <code>Node</code>, <code>Relation</code>, <code>Property</code>, <code>Group</code>, <code>Policy</code>, <code>Artifact</code>, <code>Input</code>, <code>Type</code>, and <code>Import</code>.</p>
 <p>For example, consider the given variable service template.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-28-2"> 2</a></span>
@@ -6137,6 +6149,54 @@ The display representation of an element is constructed as follows.</p>
 <a id="__codelineno-28-16" name="__codelineno-28-16"></a><span class="w">                </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/my_artifact_second</span>
 <a id="__codelineno-28-17" name="__codelineno-28-17"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
 </code></pre></div></td></tr></table></div>
+<p>Next, the following identifiers, among others, exist.</p>
+<ul>
+<li><code>node.my_node</code> for the node template <code>my_node</code>.</li>
+<li><code>property.my_property@0.node.my_node</code> for the first property <code>my_property</code> of the node template <code>my_node</code>.</li>
+<li><code>artifact.my_artifact@1.node.my_node</code> for the second artifact <code>my_artifact</code> of the node template <code>my_node</code>.</li>
+</ul>
+<h3 id="element-display-system">Element Display System<a class="headerlink" href="#element-display-system" title="Permanent link">¶</a></h3>
+<p>Each element has a display representation that is unique per (variable) service template.
+This display system is required since some conditional elements, such as artifacts, can have non-unique names.
+The display representation of an element is constructed as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>&lt;Element Type&gt; "&lt;Element Name&gt;[@&lt;Element Index&gt;]"[ of &lt;Element Container Display&gt;]
+</code></pre></div></td></tr></table></div>
+<p>Available element types are <code>Node</code>, <code>Relation</code>, <code>Property</code>, <code>Group</code>, <code>Policy</code>, <code>Artifact</code>, <code>Input</code>, <code>Type</code>, and <code>Import</code>.</p>
+<p>For example, consider the given variable service template.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-30-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-30-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-30-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-30-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-30-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-30-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-30-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-30-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-30-10">10</a></span>
+<span class="normal"><a href="#__codelineno-30-11">11</a></span>
+<span class="normal"><a href="#__codelineno-30-12">12</a></span>
+<span class="normal"><a href="#__codelineno-30-13">13</a></span>
+<span class="normal"><a href="#__codelineno-30-14">14</a></span>
+<span class="normal"><a href="#__codelineno-30-15">15</a></span>
+<span class="normal"><a href="#__codelineno-30-16">16</a></span>
+<span class="normal"><a href="#__codelineno-30-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="w">    </span><span class="nt">my_node</span><span class="p">:</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my.node</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_property</span><span class="p">:</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6"></a><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">first</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_property</span><span class="p">:</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9"></a><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11"></a><span class="w">        </span><span class="nt">artifacts</span><span class="p">:</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_artifact</span><span class="p">:</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13"></a><span class="w">                </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/my_artifact_first</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15"></a><span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">my_artifact</span><span class="p">:</span>
+<a id="__codelineno-30-16" name="__codelineno-30-16"></a><span class="w">                </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/my_artifact_second</span>
+<a id="__codelineno-30-17" name="__codelineno-30-17"></a><span class="w">                </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;VariabilityCondition&gt;</span>
+</code></pre></div></td></tr></table></div>
 <p>Next, the following display representations, among others, exist.</p>
 <ul>
 <li><code>Node "my_node"</code> for the node template <code>my_node</code>.</li>
@@ -6163,7 +6223,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 27, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 3, 2024</span>
 </small>
 </div>
 </article>
