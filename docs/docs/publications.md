@@ -16,7 +16,7 @@ This document holds a list of selected publications.
 - CLOSER 2024
 - _Accepted_
 - [Step-by-Step Guide](variability4tosca/guides/modes/index.md){target=_blank}
-- {{ repo_link('examples/xopera-pruning-consistent-loose', 'Model of the Motivating Scenario') }}
+- {{ repo_link('examples/xopera-pruning-consistent-loose', 'Model of the Case Study') }}
 - [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "xOpera Pruning Mode")
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "xOpera Pruning Mode")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10363694){target=_blank}
