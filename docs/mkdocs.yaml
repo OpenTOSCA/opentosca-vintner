@@ -98,6 +98,7 @@ plugins:
 nav:
     - OpenTOSCA Vintner:
           - index.md
+          - publications.md
           - features.md
           - getting-started.md
           - installation.md
@@ -148,7 +149,6 @@ nav:
           - OpenTOSCA: https://www.opentosca.org
           - branding.md
           - resources.md
-          - publications.md
           - about-us
           - Legal Notice: https://www.uni-stuttgart.de/impressum
           - faq.md

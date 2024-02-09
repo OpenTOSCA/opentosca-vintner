@@ -26,8 +26,8 @@ This document holds a list of selected publications.
 
 - UCC 2023
 - _Accepted_
-- https://tosss.opentosca.org
-- https://github.com/OpenTOSCA/opentosca-tosss
+- [https://tosss.opentosca.org](https://tosss.opentosca.org)
+- [https://github.com/OpenTOSCA/opentosca-tosss](https://github.com/OpenTOSCA/opentosca-tosss)
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.7545278){target=_blank}
 
 
