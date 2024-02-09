@@ -22,9 +22,17 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10363694){target=_blank}
 - {{ tag_link('publication-stoetzner-2024-pruning-modes') }}
 
+## A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators
+
+- UCC 2023
+- _Accepted_
+- https://tosss.opentosca.org
+- https://github.com/OpenTOSCA/opentosca-tosss
+- [Assets on Zenodo](https://doi.org/10.5281/zenodo.7545278){target=_blank}
+
 
 ## Enhancing Deployment Variability Management by Pruning Elements in Deployment Models
-- 
+
 - UCC 2023
 - _Accepted_
 - [Step-by-Step Guide](variability4tosca/guides/pruning/index.md){target=_blank}
@@ -34,6 +42,7 @@ This document holds a list of selected publications.
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "xOpera Pruning")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10050260){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-pruning') }}
+
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 

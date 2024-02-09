@@ -8,7 +8,7 @@ tags:
 - xOpera
 ---
 
-# Pruning Modes Case Study
+# Pruning Modes
 
 
 This document holds a detailed step-by-step tutorial to deploy the medium-sized static deployment variant of a webshop application to showcase the Consistent-Loose Pruning Mode.
