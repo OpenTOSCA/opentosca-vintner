@@ -229,6 +229,7 @@ The following links are used in publications.
 - https://vintner.opentosca.org/variability4tosca/specification
 - https://vintner.opentosca.org/variability4tosca/guides/artifacts
 - https://vintner.opentosca.org/variability4tosca/guides/pruning
+- https://vintner.opentosca.org/variability4tosca/guides/modes
 
 
 ## Limitations
