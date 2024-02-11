@@ -11,6 +11,7 @@ This document holds a list of selected publications.
 
 [//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 
+
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
 
 - CLOSER 2024
@@ -74,6 +75,14 @@ This document holds a list of selected publications.
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Artifacts")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
+
+
+## Developing the Software of Future Cars: A Car DevOps Approach
+
+> Weller, M., Stötzner, M., Klinaku, F., & Becker, S. (2023). Developing the Software of Future Cars: A Car DevOps Approach. Softwaretechnik-Trends, 43(2).
+
+- Softwaretechnik-Trends 2024
+- [https://fb-swt.gi.de/publikationen/softwaretechnik-trends](https://fb-swt.gi.de/publikationen/softwaretechnik-trends){target=_blank}
 
 
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
