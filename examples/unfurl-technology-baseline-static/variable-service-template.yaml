@@ -1,0 +1,33 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    node_templates:
+        shop:
+            type: shop.component
+            technology: ansible
+            requirements:
+                - database:
+                      node: database
+
+                - host:
+                      node: os_compute
+
+        database:
+            type: mysql.database
+            technology: ansible
+            requirements:
+                - host:
+                      node: mysql_dbms
+
+        mysql_dbms:
+            type: mysql.dbms
+            technology: ansible
+            requirements:
+                - host:
+                      node: os_compute
+
+        os_compute:
+            type: os.compute
+            technology: terraform
+            properties:
+                - size: medium

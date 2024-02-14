@@ -1,0 +1,104 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            static:
+                type: boolean
+                default: true
+
+            medium:
+                type: boolean
+                default: true
+
+        presets:
+            static:
+                inputs:
+                    static: true
+
+            static-large:
+                inputs:
+                    static: true
+                    medium: false
+
+            elastic:
+                inputs:
+                    static: false
+
+        expressions:
+            is_static: {equal: [{variability_input: static}, true]}
+            is_elastic: {equal: [{variability_input: static}, false]}
+
+            is_medium: {variability_input: medium}
+            is_large: {not: {logic_expression: is_medium}}
+
+        options:
+            mode: semantic-loose
+            technology_pruning: true
+            technology_constraint: true
+
+            optimization_technologies: true
+            optimization_technologies_unique: true
+
+    node_templates:
+        shop:
+            type: shop.component
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_static}
+                - terraform:
+                      conditions: {logic_expression: is_elastic}
+            requirements:
+                - database:
+                      node: database
+
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_elastic}
+
+        database:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_static}
+                - terraform:
+                      conditions: {logic_expression: is_elastic}
+            requirements:
+                - host:
+                      node: mysql_dbms
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_dbms
+                      conditions: {logic_expression: is_elastic}
+
+        mysql_dbms:
+            type: mysql.dbms
+            technology: ansible
+            requirements:
+                - host:
+                      node: os_compute
+
+        os_compute:
+            type: os.compute
+            technology: terraform
+            properties:
+                - size:
+                      value: medium
+                      conditions: {logic_expression: is_medium}
+
+                - size:
+                      value: large
+                      conditions: {logic_expression: is_large}
+
+        gcp_runtime:
+            type: gcp.app_engine
+            technology: terraform
+
+        gcp_dbms:
+            type: gcp.cloud_sql
+            technology: terraform

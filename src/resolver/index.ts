@@ -1,8 +1,8 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Enricher from '#enricher'
-import * as files from '#files'
 import Graph from '#graph/graph'
+import Loader from '#graph/loader'
 import Inputs from '#resolver/inputs'
 import Resolver from '#resolver/resolver'
 import {ServiceTemplate} from '#spec/service-template'
@@ -27,7 +27,8 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     /**
      * Service template
      */
-    if (check.isString(options.template)) options.template = files.loadYAML<ServiceTemplate>(options.template)
+    // TODO: where to load? inside enricher?
+    if (check.isString(options.template)) options.template = await new Loader(options.template).load()
 
     /**
      * Enricher

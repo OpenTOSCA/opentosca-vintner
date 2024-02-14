@@ -43,7 +43,7 @@ export default class Loader {
 
     private async loadTypeSpecificConditions() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         let conditions = this.serviceTemplate.topology_template.variability?.type_specific_conditions
 
@@ -51,7 +51,9 @@ export default class Loader {
          * Load rules from specified file
          */
         if (check.isString(conditions)) {
+            console.log('going to load')
             conditions = files.loadYAML<TypeSpecificLogicExpressions>(path.join(this.dir, conditions))
+            console.log(conditions)
         }
 
         /**
@@ -72,7 +74,7 @@ export default class Loader {
 
     private async loadTechnologyRules() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         let rules = this.serviceTemplate.topology_template.variability?.technology_assignment_rules
 
@@ -99,7 +101,7 @@ export default class Loader {
 
     private async loadTechnologyPluginBuilders() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}
