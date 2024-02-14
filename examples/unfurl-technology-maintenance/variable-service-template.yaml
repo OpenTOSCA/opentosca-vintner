@@ -1,0 +1,110 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            env:
+                type: string
+                default: STATIC
+
+            medium:
+                type: boolean
+                default: true
+
+        presets:
+            static:
+                inputs:
+                    env: STATIC
+
+            static-large:
+                inputs:
+                    env: STATIC
+                    medium: false
+
+            elastic:
+                inputs:
+                    env: ELASTIC
+
+            kubernetes:
+                inputs:
+                    env: KUBERNETES
+
+        expressions:
+            is_static: {equal: [{variability_input: env}, STATIC]}
+            is_elastic: {equal: [{variability_input: env}, ELASTIC]}
+            is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
+
+            is_medium: {variability_input: medium}
+            is_large: {not: {logic_expression: is_medium}}
+
+        technology_assignment_rules: ../unfurl-technology-automated-weighted/rules.yaml
+
+        options:
+            mode: semantic-loose
+            technology_pruning: true
+            technology_constraint: false
+
+            optimization_technologies: max
+            optimization_technologies_mode: weight
+            optimization_technologies_unique: true
+
+    node_templates:
+        shop:
+            type: shop.component
+            requirements:
+                - database:
+                      node: database
+
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_elastic}
+
+                - host:
+                      node: kubernetes
+                      conditions: {logic_expression: is_kubernetes}
+
+        database:
+            type: mysql.database
+            requirements:
+                - host:
+                      node: mysql_dbms
+                      conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
+
+                - host:
+                      node: gcp_dbms
+                      conditions: {logic_expression: is_elastic}
+
+        mysql_dbms:
+            type: mysql.dbms
+            requirements:
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: kubernetes
+                      conditions: {logic_expression: is_kubernetes}
+
+        os_compute:
+            type: os.compute
+            properties:
+                - size:
+                      value: medium
+                      conditions: {logic_expression: is_medium}
+
+                - size:
+                      value: large
+                      conditions: {logic_expression: is_large}
+
+        gcp_runtime:
+            type: gcp.app_engine
+
+        gcp_dbms:
+            type: gcp.cloud_sql
+
+        kubernetes:
+            type: kubernetes
