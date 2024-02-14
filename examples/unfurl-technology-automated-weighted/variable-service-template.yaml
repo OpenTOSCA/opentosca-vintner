@@ -1,0 +1,93 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            static:
+                type: boolean
+                default: true
+
+            medium:
+                type: boolean
+                default: true
+
+        presets:
+            static:
+                inputs:
+                    static: true
+
+            static-large:
+                inputs:
+                    static: true
+                    medium: false
+
+            elastic:
+                inputs:
+                    static: false
+
+        expressions:
+            is_static: {equal: [{variability_input: static}, true]}
+            is_elastic: {equal: [{variability_input: static}, false]}
+
+            is_medium: {variability_input: medium}
+            is_large: {not: {logic_expression: is_medium}}
+
+        technology_assignment_rules: rules.yaml
+
+        options:
+            mode: semantic-loose
+            technology_pruning: true
+            technology_constraint: true
+
+            optimization_technologies: max
+            optimization_technologies_mode: weight
+            optimization_technologies_unique: true
+
+    node_templates:
+        shop:
+            type: shop.component
+            requirements:
+                - database:
+                      node: database
+
+                - host:
+                      node: os_compute
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_runtime
+                      conditions: {logic_expression: is_elastic}
+
+        database:
+            type: mysql.database
+            requirements:
+                - host:
+                      node: mysql_dbms
+                      conditions: {logic_expression: is_static}
+
+                - host:
+                      node: gcp_dbms
+                      conditions: {logic_expression: is_elastic}
+
+        mysql_dbms:
+            type: mysql.dbms
+            requirements:
+                - host:
+                      node: os_compute
+
+        os_compute:
+            type: os.compute
+            properties:
+                - size:
+                      value: medium
+                      conditions: {logic_expression: is_medium}
+
+                - size:
+                      value: large
+                      conditions: {logic_expression: is_large}
+
+        gcp_runtime:
+            type: gcp.app_engine
+
+        gcp_dbms:
+            type: gcp.cloud_sql
