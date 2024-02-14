@@ -3,10 +3,10 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
     node_templates:
         shop:
-            type: shop.component.ansible
+            type: shop.component.helm
             requirements:
                 - database: database
-                - host: os_compute
+                - host: kubernetes
 
         database:
             type: mysql.database.ansible
@@ -14,11 +14,9 @@ topology_template:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms.ansible
+            type: mysql.dbms.helm
             requirements:
-                - host: os_compute
+                - host: kubernetes
 
-        os_compute:
-            type: os.compute.terraform
-            properties:
-                size: medium
+        kubernetes:
+            type: kubernetes
