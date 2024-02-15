@@ -26,6 +26,7 @@ export type TemplateStats = {
     nrpat: number
     manual_at_nrpat: number
     generated_at_nrpat: number
+    loc: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -57,6 +58,7 @@ export default async function (options: TemplateStatsOptions) {
                     graph.technologies.length,
                 manual_at_nrpat: countManualAtNRPAT(graph),
                 generated_at_nrpat: countGeneratedAtNRPAT(graph),
+                loc: files.countLines(it),
             }
             return stats
         })

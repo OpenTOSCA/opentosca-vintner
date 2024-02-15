@@ -113,6 +113,7 @@ topology_template:
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
+                # TODO: {get_attribute: [database, database_address]}
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
             requirements:
                 - database:

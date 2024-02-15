@@ -100,7 +100,7 @@ topology_template:
             is_medium: {variability_input: medium}
             is_large: {not: {logic_expression: is_medium}}
 
-        technology_assignment_rules: ../unfurl-technology-automated-weighted/rules.yaml
+        #technology_assignment_rules: ../unfurl-technology-automated-weighted/rules.yaml
 
         options:
             mode: semantic-loose
