@@ -1,0 +1,75 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    gcp.app_engine:
+        derived_from: tosca.nodes.Root
+        properties:
+            service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            project:
+                type: string
+                default: {get_input: gcp_project}
+
+            region:
+                type: string
+                default: {get_input: gcp_region}
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    gcp.app_engine.ansible:
+        derived_from: gcp.app_engine
+        capabilities:
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: Activate service account
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}'
+
+                                    # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
+                                    - name: Enable Cloud Build API
+                                      shell: |
+                                          GCP_SERVICE=cloudbuild.googleapis.com
+
+                                          GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                                          if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
+                                              gcloud services enable ${GCP_SERVICE}
+                                          fi
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    - name: Enable appengine.googleapis.com
+                                      shell: |
+                                          GCP_SERVICE=appengine.googleapis.com
+
+                                          GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                                          if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
+                                              gcloud services enable ${GCP_SERVICE}
+                                          fi
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    # https://cloud.google.com/sdk/gcloud/reference/app/create
+                                    - name: Create App
+                                      shell: 'gcloud app create --region {{ SELF.region }}'
+                                      register: app_create_command
+                                      failed_when:
+                                          - "'Created' not in app_create_command.stderr"
+                                          - "'already contains' not in app_create_command.stderr"

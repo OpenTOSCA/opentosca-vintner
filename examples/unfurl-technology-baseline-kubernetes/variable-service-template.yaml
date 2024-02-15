@@ -3,7 +3,7 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
     node_templates:
         shop:
-            type: shop.component.helm
+            type: shop.component.kubernetes
             requirements:
                 - database: database
                 - host: kubernetes
@@ -14,7 +14,7 @@ topology_template:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms.helm
+            type: mysql.dbms.kubernetes
             requirements:
                 - host: kubernetes
 

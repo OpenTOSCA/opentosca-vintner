@@ -1,0 +1,9 @@
+tosca_service_template: tosca_simple_yaml_1_3
+
+import:
+    - gcp.app_engine.yaml
+    - gcp.cloud_sql.yaml
+    - mysql.database.yaml
+    - mysql.dbms.yaml
+    - os.compute.yaml
+    - shop.component.yaml
