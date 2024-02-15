@@ -3,7 +3,7 @@ import * as check from '#check'
 import * as files from '#files'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import * as utils from '#utils'
 
 export type TemplateStatsOptions = {
@@ -23,45 +23,48 @@ export type TemplateStats = {
     technologies: number
     elements: number
     // Nodes + Relations + Properties + Artifacts + (Manual) Technologies
-    nrpat: number
-    manual_at_nrpat: number
-    generated_at_nrpat: number
+    edmm_elements: number
+    manual_at_edmm_elements: number
+    generated_at_edmm_elements: number
     loc: number
 }
 
 export default async function (options: TemplateStatsOptions) {
     assert.isDefined(options.template, 'Template not defined')
 
+    // TODO: count technologies encoded in node type
+
     return utils.sumObjects(
-        options.template.map(it => {
-            const graph = new Graph(files.loadYAML<ServiceTemplate>(it))
+        await Promise.all(
+            options.template.map(async it => {
+                const template = await new Loader(it).load()
+                const graph = new Graph(template)
 
-            const nrpa = graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length
-
-            const stats: TemplateStats = {
-                nodes: graph.nodes.length,
-                relations: graph.relations.length,
-                properties: graph.properties.length,
-                types: graph.types.length,
-                policies: graph.policies.length,
-                groups: graph.groups.length,
-                inputs: graph.inputs.length,
-                artifacts: graph.artifacts.length,
-                imports: graph.imports.length,
-                technologies: graph.technologies.length,
-                elements: graph.elements.length,
-                nrpat:
-                    graph.nodes.length +
-                    graph.relations.length +
-                    graph.properties.length +
-                    graph.artifacts.length +
-                    graph.technologies.length,
-                manual_at_nrpat: countManualAtNRPAT(graph),
-                generated_at_nrpat: countGeneratedAtNRPAT(graph),
-                loc: files.countLines(it),
-            }
-            return stats
-        })
+                const stats: TemplateStats = {
+                    nodes: graph.nodes.length,
+                    relations: graph.relations.length,
+                    properties: graph.properties.length,
+                    types: graph.types.length,
+                    policies: graph.policies.length,
+                    groups: graph.groups.length,
+                    inputs: graph.inputs.length,
+                    artifacts: graph.artifacts.length,
+                    imports: graph.imports.length,
+                    technologies: graph.technologies.length,
+                    elements: graph.elements.length,
+                    edmm_elements:
+                        graph.nodes.length +
+                        graph.relations.length +
+                        graph.properties.length +
+                        graph.artifacts.length +
+                        graph.technologies.length,
+                    manual_at_edmm_elements: countManualAtNRPAT(graph),
+                    generated_at_edmm_elements: countGeneratedAtNRPAT(graph),
+                    loc: files.countLines(it),
+                }
+                return stats
+            })
+        )
     )
 }
 

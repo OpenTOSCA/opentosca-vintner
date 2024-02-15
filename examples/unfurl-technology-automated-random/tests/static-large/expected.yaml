@@ -1,0 +1,101 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+            default: password
+
+        os_network:
+            type: string
+            default: public-belwue
+
+        os_ssh_key_name:
+            type: string
+            default: default
+
+        os_ssh_user:
+            type: string
+            default: ubuntu
+
+        os_ssh_key_file:
+            type: string
+            default: /home/stoetzms/.ssh/bw-cloud--default
+
+        os_region_name:
+            type: string
+            default: Mannheim
+
+        os_auth_type:
+            type: string
+            default: v3applicationcredential
+
+        os_auth_url:
+            type: string
+            default: https://idm02.bw-cloud.org:5000/v3
+
+        os_identity_api_version:
+            type: string
+            default: '3'
+
+        os_interface:
+            type: string
+            default: public
+
+        os_application_credential_id:
+            type: string
+            default: 3f538f1823bd484e8238b2433de2f21a
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+            default: europe-west3
+
+        gcp_service_account_file:
+            type: string
+            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
+
+        gcp_project:
+            type: string
+            default: stoetzms-387808
+
+    node_templates:
+        shop:
+            type: shop.component.ansible
+            properties:
+                application_name: unfurl-technology
+                DB_NAME: unfurl-technology
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: database_password}
+                DB_DIALECT: mysql
+                DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
+            requirements:
+                - database: database
+                - host: os_compute
+
+        database:
+            type: mysql.database.terraform
+            properties:
+                database_name: unfurl-technology
+            requirements:
+                - host: mysql_dbms
+
+        mysql_dbms:
+            type: mysql.dbms.ansible
+            properties:
+                root_password: {get_input: database_password}
+            requirements:
+                - host: os_compute
+
+        os_compute:
+            type: os.compute.ansible
+            properties:
+                machine: unfurl-technology
+                port: 80
+                network: {get_input: os_network}
+                flavor: m1.large

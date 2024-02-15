@@ -92,7 +92,10 @@ export default class Optimizer {
     private ensureTechnologiesUniqueness() {
         if (this.results.length > 1) {
             if (this.graph.options.solver.technologies.optimize) {
-                if (this.first().technologies.count === this.second().technologies.count)
+                if (
+                    this.first().technologies[this.graph.options.solver.technologies.mode] ===
+                    this.second().technologies[this.graph.options.solver.technologies.mode]
+                )
                     throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
             } else {
                 throw new Error(`The result is ambiguous considering technologies (without optimization)`)

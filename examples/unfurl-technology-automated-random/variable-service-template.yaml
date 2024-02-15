@@ -66,9 +66,9 @@ topology_template:
 
     variability:
         inputs:
-            env:
-                type: string
-                default: STATIC
+            static:
+                type: boolean
+                default: true
 
             medium:
                 type: boolean
@@ -77,25 +77,20 @@ topology_template:
         presets:
             static:
                 inputs:
-                    env: STATIC
+                    static: true
 
             static-large:
                 inputs:
-                    env: STATIC
+                    static: true
                     medium: false
 
             elastic:
                 inputs:
-                    env: ELASTIC
-
-            kubernetes:
-                inputs:
-                    env: KUBERNETES
+                    static: false
 
         expressions:
-            is_static: {equal: [{variability_input: env}, STATIC]}
-            is_elastic: {equal: [{variability_input: env}, ELASTIC]}
-            is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
+            is_static: {equal: [{variability_input: static}, true]}
+            is_elastic: {equal: [{variability_input: static}, false]}
 
             is_medium: {variability_input: medium}
             is_large: {not: {logic_expression: is_medium}}
@@ -105,11 +100,11 @@ topology_template:
         options:
             mode: semantic-loose
             technology_pruning: true
-            technology_constraint: false
+            technology_constraint: true
 
-            optimization_technologies: max
-            optimization_technologies_mode: weight
-            optimization_technologies_unique: true
+            #optimization_technologies: min
+            #optimization_technologies_mode: count
+            #optimization_technologies_unique: true
 
     node_templates:
         shop:
@@ -120,6 +115,7 @@ topology_template:
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
+                # TODO: {get_attribute: [database, database_address]}
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
             requirements:
                 - database:
@@ -133,10 +129,6 @@ topology_template:
                       node: gcp_runtime
                       conditions: {logic_expression: is_elastic}
 
-                - host:
-                      node: kubernetes
-                      conditions: {logic_expression: is_kubernetes}
-
         database:
             type: mysql.database
             properties:
@@ -144,7 +136,7 @@ topology_template:
             requirements:
                 - host:
                       node: mysql_dbms
-                      conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
+                      conditions: {logic_expression: is_static}
 
                 - host:
                       node: gcp_dbms
@@ -157,11 +149,6 @@ topology_template:
             requirements:
                 - host:
                       node: os_compute
-                      conditions: {logic_expression: is_static}
-
-                - host:
-                      node: kubernetes
-                      conditions: {logic_expression: is_kubernetes}
 
         os_compute:
             type: os.compute
@@ -184,6 +171,3 @@ topology_template:
 
         gcp_runtime:
             type: gcp.app_engine
-
-        kubernetes:
-            type: kubernetes
