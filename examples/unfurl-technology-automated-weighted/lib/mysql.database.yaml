@@ -35,9 +35,6 @@ node_types:
         derived_from: mysql.database
 
         properties:
-            database_name:
-                type: string
-
             ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -70,11 +67,9 @@ node_types:
         derived_from: mysql.database
 
         properties:
-            database_name:
-                type: string
-
             gcp_dbms_name:
                 type: string
+                default: {eval: '.::.requirements[.name=host]::.target::instance_name'}
 
             gcp_service_account_file:
                 type: string

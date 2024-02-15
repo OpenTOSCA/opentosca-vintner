@@ -4,6 +4,9 @@ node_types:
     mysql.dbms:
         derived_from: tosca.nodes.Root
         properties:
+            root_password:
+                type: string
+
             ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}

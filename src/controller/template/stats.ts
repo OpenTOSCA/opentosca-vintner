@@ -20,11 +20,12 @@ export type TemplateStats = {
     inputs: number
     artifacts: number
     imports: number
+    technologies: number
     elements: number
-    // Nodes + Relations + Properties + Artifacts
-    nrpa: number
-    manual_at_nrpa: number
-    generated_at_nrpa: number
+    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies
+    nrpat: number
+    manual_at_nrpat: number
+    generated_at_nrpat: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -33,6 +34,9 @@ export default async function (options: TemplateStatsOptions) {
     return utils.sumObjects(
         options.template.map(it => {
             const graph = new Graph(files.loadYAML<ServiceTemplate>(it))
+
+            const nrpa = graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length
+
             const stats: TemplateStats = {
                 nodes: graph.nodes.length,
                 relations: graph.relations.length,
@@ -43,23 +47,30 @@ export default async function (options: TemplateStatsOptions) {
                 inputs: graph.inputs.length,
                 artifacts: graph.artifacts.length,
                 imports: graph.imports.length,
+                technologies: graph.technologies.length,
                 elements: graph.elements.length,
-                nrpa: graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length,
-                manual_at_nrpa: countManualAtNRPA(graph),
-                generated_at_nrpa: countGeneratedAtNRPA(graph),
+                nrpat:
+                    graph.nodes.length +
+                    graph.relations.length +
+                    graph.properties.length +
+                    graph.artifacts.length +
+                    graph.technologies.length,
+                manual_at_nrpat: countManualAtNRPAT(graph),
+                generated_at_nrpat: countGeneratedAtNRPAT(graph),
             }
             return stats
         })
     )
 }
 
-function countManualAtNRPA(graph: Graph) {
+function countManualAtNRPAT(graph: Graph) {
     let count = 0
 
     graph.nodes.forEach(it => (count += countManual(it)))
     graph.relations.forEach(it => (count += countManual(it)))
     graph.properties.forEach(it => (count += countManual(it)))
     graph.artifacts.forEach(it => (count += countManual(it)))
+    graph.technologies.forEach(it => (count += countManual(it)))
 
     return count
 }
@@ -87,13 +98,14 @@ function countManual(element: Element) {
     return count
 }
 
-function countGeneratedAtNRPA(graph: Graph) {
+function countGeneratedAtNRPAT(graph: Graph) {
     let count = 0
 
     graph.nodes.forEach(it => (count += countGenerated(it)))
     graph.relations.forEach(it => (count += countGenerated(it)))
     graph.properties.forEach(it => (count += countGenerated(it)))
     graph.artifacts.forEach(it => (count += countGenerated(it)))
+    graph.technologies.forEach(it => (count += countGenerated(it)))
 
     return count
 }
