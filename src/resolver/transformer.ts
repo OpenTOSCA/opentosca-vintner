@@ -233,12 +233,30 @@ export default class Transformer {
     }
 
     private transformTechnology(element: Node, template: NodeTemplate) {
+        assert.isString(template.type)
+
         // Ignore if previously had no technologies
         if (utils.isEmpty(element.technologies)) return
 
         const technology = element.technologies.find(it => it.present)
         if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
-        template.type += '.' + technology.name
+
+        if (check.isDefined(technology.assign)) {
+            template.type = technology.assign
+        } else {
+            let type = template.type
+            type += '.' + technology.name
+
+            // TODO: this will not work, e.g., for shop.component.ansible.gcp
+            const host = element.hosts.find(it => it.present)
+            if (check.isDefined(host)) {
+                type += '.' + host.getType().name.split('.')[0]
+            } else {
+                type += '.' + template.type.split('.')[0]
+            }
+
+            template.type = type
+        }
     }
 
     private transformProperties(

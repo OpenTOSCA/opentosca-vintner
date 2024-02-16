@@ -66,7 +66,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component.ansible
+            type: shop.component.ansible.gcp
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -79,16 +79,16 @@ topology_template:
                 - host: gcp_runtime
 
         database:
-            type: mysql.database.ansible
+            type: mysql.database.ansible.gcp
             properties:
                 database_name: unfurl-technology
             requirements:
                 - host: gcp_dbms
 
         gcp_dbms:
-            type: gcp.cloud_sql.ansible
+            type: gcp.cloud_sql.ansible.gcp
             properties:
                 root_password: {get_input: database_password}
 
         gcp_runtime:
-            type: gcp.app_engine.ansible
+            type: gcp.app_engine.ansible.gcp

@@ -66,7 +66,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component.ansible
+            type: shop.component.ansible.os
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -79,21 +79,21 @@ topology_template:
                 - host: os_compute
 
         database:
-            type: mysql.database.terraform
+            type: mysql.database.terraform.mysql
             properties:
                 database_name: unfurl-technology
             requirements:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms.ansible
+            type: mysql.dbms.ansible.os
             properties:
                 root_password: {get_input: database_password}
             requirements:
                 - host: os_compute
 
         os_compute:
-            type: os.compute.ansible
+            type: os.compute.ansible.os
             properties:
                 machine: unfurl-technology
                 port: 80

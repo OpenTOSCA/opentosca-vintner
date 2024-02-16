@@ -13,6 +13,7 @@ export default class Technology extends Element {
     readonly index: number
     readonly container: Node
     readonly weight: number
+    readonly assign?: string
 
     readonly defaultAlternative: boolean
 
@@ -24,6 +25,7 @@ export default class Technology extends Element {
         this.container = data.container
         this.index = data.index
         this.weight = data.raw.weight ?? 1
+        this.assign = data.raw.assign
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false

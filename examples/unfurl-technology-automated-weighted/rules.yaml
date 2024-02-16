@@ -1,4 +1,4 @@
-# TODO: implement "assign"
+# TODO: drop "assign"
 
 ansible:
     - component: shop.component
@@ -16,17 +16,17 @@ ansible:
     - component: os.compute
       weight: 0.5
       # TODO: implement this
-      assign: os.compute.ansible
+      assign: os.compute.ansible.os
 
     - component: gcp.app_engine
       weight: 0.5
       # TODO: implement this
-      assign: gcp.app_engine.ansible
+      assign: gcp.app_engine.ansible.gcp
 
     - component: gcp.cloud_sql
       weight: 0.5
       # TODO: implement this
-      assign: gcp.cloud_sql.ansible
+      assign: gcp.cloud_sql.ansible.gcp
 
     - component: mysql.database
       host: gcp.cloud_sql
@@ -62,17 +62,17 @@ terraform:
     - component: os.compute
       weight: 1
       # TODO: implement this
-      assign: os.compute.terraform
+      assign: os.compute.terraform.os
 
     - component: gcp.app_engine
       weight: 1
       # TODO: implement this
-      assign: gcp.app_engine.terraform
+      assign: gcp.app_engine.terraform.gcp
 
     - component: gcp.cloud_sql
       weight: 1
       # TODO: implement this
-      assign: gcp.cloud_sql.terraform
+      assign: gcp.cloud_sql.terraform.gcp
 
     - component: mysql.database
       host: gcp.cloud_sql
@@ -84,7 +84,7 @@ terraform:
       host: mysql.dbms
       weight: 0
       # TODO: implement this
-      assign: mysql.database.terraform.dbms
+      assign: mysql.database.terraform.mysql
 
     - component: mysql.dbms
       host: os.compute
@@ -97,10 +97,10 @@ kubernetes:
       host: kubernetes
       weight: 1
       # TODO: implement this
-      assign: shop.component.kubernetes
+      assign: shop.component.kubernetes.kubernetes
 
     - component: mysql.dbms
       host: kubernetes
       weight: 1
       # TODO: implement this
-      assign: mysql.dbms.kubernetes
+      assign: mysql.dbms.kubernetes.kubernetes

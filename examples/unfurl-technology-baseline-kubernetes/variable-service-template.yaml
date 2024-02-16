@@ -66,7 +66,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component.kubernetes
+            type: shop.component.kubernetes.kubernetes
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -79,14 +79,14 @@ topology_template:
                 - host: kubernetes
 
         database:
-            type: mysql.database.ansible
+            type: mysql.database.ansible.mysql
             properties:
                 database_name: unfurl-technology
             requirements:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms.kubernetes
+            type: mysql.dbms.kubernetes.kubernetes
             properties:
                 root_password: {get_input: database_password}
             requirements:

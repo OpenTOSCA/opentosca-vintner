@@ -963,7 +963,7 @@ export type TechnologyPluginBuilder = {
 
 ```typescript linenums="1"
 export type TechnologyPlugin = {
-    assign: (node: Node) => ConditionalTechnologyAssignment[]
+    assign: (node: Node) => {[technology: string]: TechnologyTemplate}[]
 }
 ```
 
