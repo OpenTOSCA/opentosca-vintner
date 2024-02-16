@@ -220,8 +220,6 @@ The following options are used to configure checks.
 
 ### Solver Options
 
-_This is an experimental feature._
-
 The following options are used to configure the solver.
 
 | Keyname                          | Mandatory | Type                          | Default | Description                                               |
@@ -251,8 +249,6 @@ The following options are used to configure constraints.
 | technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
 
 ### Pruning Modes
-
-_This is an experimental feature._
 
 There are several predefined pruning modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.
 
@@ -335,12 +331,13 @@ _Conditional types conflict with this feature!_
 Technology assignment rules can be defined to automatically select a deployment technology for a component.
 A technology assignment rule is defined as follows.
 
-| Keyname    | Mandatory | Type                                                   | Description                                                             |
-|------------|-----------|--------------------------------------------------------|-------------------------------------------------------------------------|
-| component  | true      | String                                                 | The type of the component to which the technology can be assigned.      |
-| host       | false     | String                                                 | The type of the host of the component which the technology requires.    |
-| conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component. |
-| weight     | false     | Number                                                 | The weight which is minimized (default is 1).                           |
+| Keyname     | Mandatory | Type                                                   | Description                                                                                                   |
+|-------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| component   | true      | String                                                 | The type of the component to which the technology can be assigned.                                            |
+| host        | false     | String                                                 | The type of the host of the component which the technology requires.                                          |
+| conditions  | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component.                                       |
+| weight      | false     | Number                                                 | The weight which is minimized (default is 1).                                                                 |
+| assign      | false     | String                                                 | Configure the node type that is assigned (default: `${current_type}.${technology_name}.${host_type_prefix}`). |                                                                                                                                             |                                                                                                                                                                               |
 
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 
@@ -451,7 +448,7 @@ A node template can also hold conditional types, artifact, and properties.
 | pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
 | consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
-| weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1). _This is an experimental feature._                                                                         |
+| weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
 | technology                    | false     | List(Map(String, TechnologyTemplate){single})                                        | An optional conditional assignment of deployment technologies.                                                                                                                           |
 
@@ -479,6 +476,8 @@ These conditions must hold otherwise the respective technology template is not p
 | pruning                       | false     | Boolean                                                | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
 | consistency_pruning           | false     | Boolean                                                | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
 | semantic_pruning              | false     | Boolean                                                | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
+| weight                        | false     | Boolean &#124; Non-Negative Number                     | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
+| assign                        | false     | String                                                 | Configure the node type that is assigned (default: `${current_type}.${technology_name}.${host_type_prefix}`).                                                                            |                                                                                                                                             |                                                                                                                                                                               |
 
 
 ## Type Assignment
@@ -1079,13 +1078,12 @@ However, type-specific default conditions are defined per type, e.g., node type,
 
 ### Optimization
 
-_This is an experimental feature._
-
-The variability-resolved service template can be optimized regarding minimal weight of node templates. 
+The variability-resolved service template can be optimized regarding the weight of node templates. 
 The default weight of a node template is 1.
-Thus, per default, the variability-resolved service template is optimized regarding the minimal number of node templates.
+Per default, the variability-resolved service template is optimized regarding the minimal weight/ number of node templates.
 The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
 The weight of a node template can be configured in its definition.
+Moreover, technology selection can be optimized.
 
 ## Element System
 
