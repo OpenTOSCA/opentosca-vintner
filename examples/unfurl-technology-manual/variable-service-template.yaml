@@ -97,6 +97,13 @@ topology_template:
 
         options:
             mode: semantic-loose
+
+            node_default_condition_mode: incomingnaive-host
+            hosting_stack_constraint: true
+
+            optimization_topology: true
+            optimization_topology_unique: true
+
             technology_pruning: true
             technology_constraint: true
 
@@ -106,6 +113,7 @@ topology_template:
     node_templates:
         shop:
             type: shop.component
+            persistent: true
             technology:
                 - ansible:
                       conditions: {logic_expression: is_static}
@@ -132,6 +140,7 @@ topology_template:
 
         database:
             type: mysql.database
+            persistent: true
             technology:
                 - ansible:
                       conditions: {logic_expression: is_static}
