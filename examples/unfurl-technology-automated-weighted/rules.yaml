@@ -4,13 +4,13 @@ ansible:
     - component: shop.component
       host: os.compute
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: shop.component.ansible.os
 
     - component: shop.component
       host: gcp.app_engine
       weight: 0.5
-      # TODO: implement this
+      # TODO: test this
       assign: shop.component.ansible.gcp
 
     - component: os.compute
@@ -50,13 +50,13 @@ terraform:
     - component: shop.component
       host: os.compute
       weight: 0
-      # TODO: implement this
+      # TODO: test this
       assign: shop.component.terraform.os
 
     - component: shop.component
       host: gcp.app_engine
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: shop.component.terraform.gcp
 
     - component: os.compute

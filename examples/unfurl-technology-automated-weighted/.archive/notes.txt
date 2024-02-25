@@ -1,0 +1,28 @@
+On GCP
+
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+
+
+On OS
+
+            os_ssh_user:
+                type: string
+                default: {get_input: os_ssh_user}
+
+            os_ssh_key_file:
+                type: string
+                default: {get_input: os_ssh_key_file}
+
+
+On K8s?
