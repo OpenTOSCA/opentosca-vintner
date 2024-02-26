@@ -39,9 +39,6 @@ node_types:
 
     gcp.app_engine.ansible.gcp:
         derived_from: gcp.app_engine
-        capabilities:
-            endpoint:
-                type: unfurl.capabilities.Endpoint.Ansible
         interfaces:
             Standard:
                 operations:

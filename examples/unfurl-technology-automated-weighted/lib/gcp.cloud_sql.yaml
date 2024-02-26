@@ -1,6 +1,12 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
     gcp.cloud_sql:
         derived_from: tosca.nodes.Root
         properties:
@@ -39,14 +45,23 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
-    gcp.cloud_sql.terraform:
-        # TODO: must inherit from unfurl.nodes.Installer.Terraform?
+    ###################################################
+    #
+    # Terraform GCP
+    #
+    ###################################################
+
+    gcp.cloud_sql.terraform.gcp:
         derived_from: gcp.cloud_sql
         interfaces:
             Standard:
                 operations:
                     configure:
+                        implementation:
+                            primary: Terraform
                     delete:
+                        implementation:
+                            primary: Terraform
             defaults:
                 outputs:
                     public_ip: public_address
@@ -142,3 +157,91 @@ node_types:
                          output "public_address" {
                            value = google_sql_database_instance.dbms.public_ip_address
                          }
+
+    ###################################################
+    #
+    # Ansible GCP
+    #
+    ###################################################
+
+    gcp.cloud_sql.ansible.gcp:
+        derived_from: gcp.cloud_sql
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: Activate service account
+                                      shell: gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    # https://cloud.google.com/sql/docs/mysql/connect-instance-cloud-shell
+                                    - name: Enable Cloud SQL Admin API
+                                      shell: |
+                                          GCP_SERVICE=sqladmin.googleapis.com
+
+                                          GCP_SERVICE_ENABLED=$(gcloud services list --filter ${GCP_SERVICE} --format json --enabled | jq length)
+                                          if [ ${GCP_SERVICE_ENABLED} = 0 ]; then
+                                              gcloud services enable ${GCP_SERVICE}
+                                          fi
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    # https://cloud.google.com/sql/docs/mysql/create-instance
+                                    # https://cloud.google.com/sdk/gcloud/reference/sql/instances/create
+                                    - name: Create Instance
+                                      shell: |
+                                          gcloud sql instances create {{ SELF.instance_name }} \
+                                              --tier db-f1-micro \
+                                              --region {{ SELF.region }} \
+                                              --database-version MYSQL_5_7 \
+                                              --authorized-networks "0.0.0.0/0" \
+                                              --availability-type REGIONAL \
+                                              --backup --enable-bin-log \
+                                              --timeout unlimited
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    # https://cloud.google.com/sql/docs/mysql/create-instance
+                                    - name: Set Root Password
+                                      shell: gcloud sql users set-password root --host=% --instance {{ SELF.instance_name }} --password {{ SELF.root_password }}
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    # https://cloud.google.com/sdk/gcloud/reference/sql/instances/describe
+                                    - name: Get Instance Information
+                                      shell: gcloud sql instances describe {{ SELF.instance_name }}
+                                      register: instance_info
+                                      args:
+                                          executable: /usr/bin/bash
+
+                                    - name: Set Attributes
+                                      set_stats:
+                                          public_address: '{{ (instance_info.stdout | from_yaml).ipAddresses[0].ipAddress }}'
+
+                            resultTemplate: |
+                                - name: SELF
+                                  attributes:
+                                    public_address: "{{ outputs.public_address | trim }}"
+
+                            outputs:
+                                public_address:
+
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: Activate service account
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}'
+
+                                    - name: Delete Instance
+                                      shell: 'gcloud sql instances delete {{ SELF.instance_name }} --quiet'

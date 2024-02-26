@@ -25,7 +25,7 @@ ansible:
 
     - component: gcp.cloud_sql
       weight: 0.5
-      # TODO: implement this
+      # TODO: test this
       assign: gcp.cloud_sql.ansible.gcp
 
     - component: mysql.database
@@ -71,7 +71,7 @@ terraform:
 
     - component: gcp.cloud_sql
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: gcp.cloud_sql.terraform.gcp
 
     - component: mysql.database

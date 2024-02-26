@@ -67,6 +67,7 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
+            # TODO: what is about this?
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
 
