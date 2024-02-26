@@ -43,7 +43,7 @@ ansible:
     - component: mysql.dbms
       host: os.compute
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.dbms.ansible.os
 
 terraform:
@@ -89,7 +89,7 @@ terraform:
     - component: mysql.dbms
       host: os.compute
       weight: 0
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.dbms.terraform.os
 
 kubernetes:

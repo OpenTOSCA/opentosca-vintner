@@ -694,13 +694,13 @@ node_types:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
-            artifact_script:
-                type: string
-                default: {eval: '.artifacts::artifact_script'}
-
             os_public_address:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+
+            artifact_script:
+                type: string
+                default: {eval: '.artifacts::artifact_script'}
 
         artifacts:
             artifact_script:
@@ -790,7 +790,7 @@ node_types:
 
                           provisioner "file" {
                             source      = var.application_script
-                            destination = "/tmp/shop.install.sh"
+                            destination = "/tmp/shop.create.sh"
                           }
 
                           provisioner "remote-exec" {
