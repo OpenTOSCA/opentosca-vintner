@@ -1,7 +1,5 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
-# TODO: expose 3306?
-
 node_types:
     ###################################################
     #
@@ -24,6 +22,7 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
 
+            # TODO: assign value
             database_address:
                 type: string
 
@@ -300,7 +299,7 @@ node_types:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
-            os_public_address:
+            os_ssh_host:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
 
@@ -324,7 +323,7 @@ node_types:
                     tfvars: |
                         ssh_user = "{{ SELF.os_ssh_user }}"
                         ssh_key_file = "{{ SELF.os_ssh_key_file }}"
-                        ssh_host = "{{ SELF.os_public_address }}"
+                        ssh_host = "{{ SELF.os_ssh_host }}"
 
                         script = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_script.attributes.file }}"
                         root_password = "{{ SELF.root_password }}"

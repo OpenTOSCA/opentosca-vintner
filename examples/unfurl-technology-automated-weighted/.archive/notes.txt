@@ -1,3 +1,14 @@
+
+are those local or remote reqs?
+
+
+https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_db_module.html#requirements
+
+https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html#requirements
+
+----
+
+
 On GCP
 
             gcp_service_account_file:
@@ -51,18 +62,3 @@ spec:
             context: {get_env: [UNFURL_TEST_KUBECONTEXT]}
             KUBECONFIG: {get_env: UNFURL_TEST_KUBECONFIG}
 
-
-
-
-
-
-
-
-
-
-
-                                # TODO: mv this to mysql.db
-                                - name: Creating database
-                                  community.mysql.mysql_db:
-                                      name: '{{db_name}}'
-                                      state: present

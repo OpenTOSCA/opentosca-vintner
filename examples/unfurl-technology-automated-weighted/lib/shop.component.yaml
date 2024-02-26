@@ -694,7 +694,7 @@ node_types:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
-            os_public_address:
+            os_ssh_host:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
 
@@ -718,7 +718,7 @@ node_types:
                     tfvars: |
                         ssh_user = "{{ SELF.os_ssh_user }}"
                         ssh_key_file = "{{ SELF.os_ssh_key_file }}"
-                        ssh_host = "{{ SELF.os_public_address }}"
+                        ssh_host = "{{ SELF.os_ssh_host }}"
 
                         application_name = "{{ SELF.application_name }}"
                         application_artifact = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_tar.attributes.file }}"

@@ -31,13 +31,13 @@ ansible:
     - component: mysql.database
       host: gcp.cloud_sql
       weight: 0.5
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.database.ansible.gcp
 
     - component: mysql.database
       host: mysql.dbms
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.database.ansible.mysql
 
     - component: mysql.dbms
@@ -77,13 +77,13 @@ terraform:
     - component: mysql.database
       host: gcp.cloud_sql
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.database.terraform.gcp
 
     - component: mysql.database
       host: mysql.dbms
       weight: 0
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.database.terraform.mysql
 
     - component: mysql.dbms
