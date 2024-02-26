@@ -47,11 +47,11 @@ node_types:
         derived_from: mysql.database
 
         properties:
-            ssh_user:
+            os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
@@ -71,8 +71,8 @@ node_types:
                                   shell: kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h mysql -ppassword -e "create database shop";
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
     ###################################################
@@ -212,15 +212,15 @@ node_types:
         derived_from: mysql.database
 
         properties:
-            ssh_user:
+            os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
-            ssh_host:
+            os_ssh_host:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
 
@@ -239,7 +239,7 @@ node_types:
                     tfvars: |
                         name = "{{ SELF.database_name }}"
                         root_password = "{{ SELF.root_password }}"
-                        host = "{{ SELF.ssh_host }}"
+                        host = "{{ SELF.os_ssh_host }}"
                     main: |
                         terraform {
                            required_providers {
@@ -282,11 +282,11 @@ node_types:
         derived_from: mysql.database
 
         properties:
-            ssh_user:
+            os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
@@ -306,3 +306,8 @@ node_types:
                                   community.mysql.mysql_db:
                                       name: '{{ var.database_name }}'
                                       state: present
+
+                        playbookArgs:
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
+                            - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

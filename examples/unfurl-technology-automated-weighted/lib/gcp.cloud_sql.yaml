@@ -16,15 +16,15 @@ node_types:
             root_password:
                 type: string
 
-            service_account_file:
+            gcp_service_account_file:
                 type: string
                 default: {get_input: gcp_service_account_file}
 
-            project:
+            gcp_project:
                 type: string
                 default: {get_input: gcp_project}
 
-            region:
+            gcp_region:
                 type: string
                 default: {get_input: gcp_region}
 
@@ -68,9 +68,9 @@ node_types:
                     public_address: public_address
                 inputs:
                     tfvars: |
-                        project = "{{ SELF.project }}"
-                        region = "{{ SELF.region }}"
-                        service_account_file = "{{ SELF.service_account_file }}"
+                        project = "{{ SELF.gcp_project }}"
+                        region = "{{ SELF.gcp_region }}"
+                        service_account_file = "{{ SELF.gcp_service_account_file }}"
 
                         name = "{{ SELF.instance_name}}"
                         password = "{{ SELF.root_password }}"
@@ -177,7 +177,7 @@ node_types:
                             playbook:
                                 q:
                                     - name: Activate service account
-                                      shell: gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}
+                                      shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                       args:
                                           executable: /usr/bin/bash
 
@@ -199,7 +199,7 @@ node_types:
                                       shell: |
                                           gcloud sql instances create {{ SELF.instance_name }} \
                                               --tier db-f1-micro \
-                                              --region {{ SELF.region }} \
+                                              --region {{ SELF.gcp_region }} \
                                               --database-version MYSQL_5_7 \
                                               --authorized-networks "0.0.0.0/0" \
                                               --availability-type REGIONAL \
@@ -241,7 +241,7 @@ node_types:
                             playbook:
                                 q:
                                     - name: Activate service account
-                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.service_account_file }} --project {{ SELF.project }}'
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
 
                                     - name: Delete Instance
                                       shell: 'gcloud sql instances delete {{ SELF.instance_name }} --quiet'

@@ -122,11 +122,11 @@ node_types:
     mysql.dbms.ansible.kubernetes:
         derived_from: tosca.nodes.Root
         properties:
-            ssh_user:
+            os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
 
-            ssh_key_file:
+            os_ssh_key_file:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
@@ -205,8 +205,8 @@ node_types:
                                       sleep 2m
 
                         playbookArgs:
-                            - --key-file={{ SELF.ssh_key_file }}
-                            - --user={{ SELF.ssh_user }}
+                            - --key-file={{ SELF.os_ssh_key_file }}
+                            - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
     ###################################################
