@@ -22,16 +22,12 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
 
-            # TODO: assign value
             database_address:
                 type: string
 
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-            # TODO: what is about this?
-            endpoint:
-                type: unfurl.capabilities.Endpoint.Ansible
 
         requirements:
             - host:
@@ -56,6 +52,11 @@ node_types:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
+        attributes:
+            database_address:
+                type: string
+                default: '127.0.0.1'
+
         interfaces:
             Standard:
                 create:
@@ -68,7 +69,6 @@ node_types:
                                 - name: Wait for ssh
                                   wait_for_connection:
 
-                                # TODO: install mysql ...
                                 - name: Installing mysql
                                   package:
                                       name: '{{item}}'
@@ -138,9 +138,6 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-            # TODO: what is about this?
-            endpoint:
-                type: unfurl.capabilities.Endpoint.Ansible
 
         requirements:
             - host:
@@ -218,18 +215,31 @@ node_types:
     #
     ###################################################
 
-    # TODO: inherit from mysql.dbms
+    # TODO: inherit from mysql.dbms?
     mysql.dbms.kubernetes.kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
+
+        attributes:
+            public_address:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+
+            public_ip:
+                type: string
+                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
+
+            database_address:
+                type: string
+                default: mysql
 
         capabilities:
             host:
                 type: tosca.capabilities.Compute
 
-        attributes:
-            database_address:
-                type: string
-                default: mysql
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
 
         properties:
             root_password:
@@ -261,7 +271,7 @@ node_types:
                                       - containerPort: 3306
                                         name: mysql
 
-    # TODO: what is about this?!
+    # TODO: how to expose ...
     mysql.dbms.expose.kubernetes.kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
 
@@ -311,6 +321,11 @@ node_types:
             artifact_script:
                 type: tosca.artifacts.File
                 file: files/mysql.dbms.create.sh
+
+        attributes:
+            database_address:
+                type: string
+                default: '127.0.0.1'
 
         interfaces:
             Standard:

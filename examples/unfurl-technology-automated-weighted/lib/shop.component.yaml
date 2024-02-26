@@ -204,7 +204,7 @@ node_types:
     #
     ###################################################
 
-    # TODO: inherit from shop.component
+    # TODO: inherit from shop.component?
     shop.component.kubernetes.kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
 
@@ -269,7 +269,7 @@ node_types:
                   capability: tosca.capabilities.Endpoint.Database
                   relationship: tosca.relationships.ConnectsTo
 
-    # TODO: what is about this?
+    # TODO: how to expose ...
     shop.component.expose.kubernetes.kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
         properties:

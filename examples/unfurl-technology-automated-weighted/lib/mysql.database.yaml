@@ -42,7 +42,7 @@ node_types:
     #
     ###################################################
 
-    # TODO: this is in reality mysql.database.ansible.kubernetes ...
+    # TODO: not required ...
     mysql.database.ansible.kubernetes:
         derived_from: mysql.database
 
@@ -207,8 +207,6 @@ node_types:
     # Terraform MySQL
     #
     ###################################################
-
-    # TODO: expose database or ssh?
 
     mysql.database.terraform.mysql:
         derived_from: mysql.database

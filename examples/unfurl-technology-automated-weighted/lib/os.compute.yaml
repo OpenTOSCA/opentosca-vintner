@@ -10,8 +10,8 @@ node_types:
     os.compute:
         derived_from: tosca.nodes.Root
         properties:
-            port:
-                type: string
+            ports:
+                type: list
 
             machine:
                 type: string
@@ -91,7 +91,6 @@ node_types:
                                   openstack.cloud.security_group:
                                       name: '{{ SELF.machine }}'
 
-                                # TODO: ports vs port
                                 - name: Open ports
                                   openstack.cloud.security_group_rule:
                                       security_group: '{{ SELF.name }}'
@@ -101,7 +100,7 @@ node_types:
                                       remote_ip_prefix: '0.0.0.0/0'
                                       direction: ingress
                                       ethertype: IPv4
-                                  loop: '{{ ports }}'
+                                  loop: '{{ SELF.ports }}'
 
                                 - name: Create VM
                                   openstack.cloud.server:
@@ -175,7 +174,7 @@ node_types:
                         os_application_credential_id = "{{ SELF.os_application_credential_id}}"
                         os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
 
-                        port = {{ SELF.port }}
+                        ports = {{ SELF.ports }}
                         machine = "{{ SELF.machine }}"
                         flavor = "{{ SELF.flavor }}"
                         network = "{{ SELF.network }}"
@@ -214,8 +213,8 @@ node_types:
                           type        = string
                         }
 
-                        variable "port" {
-                          type        = string
+                        variable "ports" {
+                          type        = list(string)
                         }
 
                         variable "machine" {
@@ -236,11 +235,13 @@ node_types:
                         }
 
                         resource "openstack_networking_secgroup_rule_v2" "port" {
+                            for_each = toset(var.ports)
+
                             direction         = "ingress"
                             ethertype         = "IPv4"
                             protocol          = "tcp"
-                            port_range_min    = var.port
-                            port_range_max    = var.port
+                            port_range_min    = each.value
+                            port_range_max    = each.value
                             remote_ip_prefix  = "0.0.0.0/0"
                             security_group_id = openstack_networking_secgroup_v2.ports.id
                         }
