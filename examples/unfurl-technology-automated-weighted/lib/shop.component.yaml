@@ -65,6 +65,7 @@ node_types:
     #
     ###################################################
 
+    # TODO: not required ...
     shop.component.ansible.kubernetes:
         derived_from: shop.component
 
@@ -196,6 +197,93 @@ node_types:
                             - --key-file={{ SELF.ssh_key_file }}
                             - --user={{ SELF.ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    ###################################################
+    #
+    # Kubernetes Kubernetes
+    #
+    ###################################################
+
+    # TODO: inherit from shop.component
+    shop.component.kubernetes.kubernetes:
+        derived_from: unfurl.nodes.K8sRawResource
+
+        properties:
+            application_name:
+                type: string
+
+            DB_DIALECT:
+                type: string
+
+            DB_NAME:
+                type: string
+
+            DB_USERNAME:
+                type: string
+
+            DB_PASSWORD:
+                type: string
+
+            DB_ADDRESS:
+                type: string
+
+            definition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                    name: shop
+                spec:
+                    selector:
+                        matchLabels:
+                            app: shop
+                    template:
+                        metadata:
+                            labels:
+                                app: shop
+                        spec:
+                            containers:
+                                # TODO: upload image
+                                - image: ghcr.io/milesstoetzner/express-attest-db-demo:unfurl-technology
+                                  name: shop
+                                  env:
+                                      - name: DB_NAME
+                                        value: '{{ SELF.DB_NAME }}'
+
+                                      - name: DB_PASSWORD
+                                        value: '{{ SELF.DB_PASSWORD }}'
+
+                                      - name: DB_USERNAME
+                                        value: '{{ SELF.DB_USERNAME }}'
+
+                                      - name: DB_ADDRESS
+                                        value: '{{ SELF.DB_ADDRESS }}'
+
+                                      - name: DB_DIALECT
+                                        value: '{{ SELF.DB_DIALECT }}'
+
+                                  ports:
+                                      - containerPort: 80
+
+        requirements:
+            - database:
+                  capability: tosca.capabilities.Endpoint.Database
+                  relationship: tosca.relationships.ConnectsTo
+
+    # TODO: what is about this?
+    shop.component.expose.kubernetes.kubernetes:
+        derived_from: unfurl.nodes.K8sRawResource
+        properties:
+            definition:
+                apiVersion: v1
+                kind: Service
+                metadata:
+                    name: shop
+                spec:
+                    ports:
+                        - port: 80
+                    selector:
+                        app: shop
+                    type: NodePort
 
     ###################################################
     #

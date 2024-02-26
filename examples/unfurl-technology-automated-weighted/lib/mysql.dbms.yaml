@@ -1,19 +1,17 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
     mysql.dbms:
         derived_from: tosca.nodes.Root
         properties:
             root_password:
                 type: string
-
-            ssh_user:
-                type: string
-                default: {get_input: os_ssh_user}
-
-            ssh_key_file:
-                type: string
-                default: {get_input: os_ssh_key_file}
 
         attributes:
             public_address:
@@ -26,7 +24,6 @@ node_types:
 
             database_address:
                 type: string
-                default: mysql
 
         capabilities:
             host:
@@ -34,10 +31,17 @@ node_types:
             # TODO: what is about this?
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
+
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+
+    ###################################################
+    #
+    # Ansible Kubernetes
+    #
+    ###################################################
 
     # TODO: not required ...
     mysql.dbms.ansible.kubernetes:
@@ -52,14 +56,6 @@ node_types:
                 default: {get_input: os_ssh_key_file}
 
         attributes:
-            public_address:
-                type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
-
-            public_ip:
-                type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
-
             database_address:
                 type: string
                 default: mysql
@@ -140,3 +136,72 @@ node_types:
                             - --key-file={{ SELF.ssh_key_file }}
                             - --user={{ SELF.ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    ###################################################
+    #
+    # Ansible Kubernetes
+    #
+    ###################################################
+
+    # TODO: inherit from mysql.dbms
+    mysql.dbms.kubernetes.kubernetes:
+        derived_from: unfurl.nodes.K8sRawResource
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        attributes:
+            database_address:
+                type: string
+                default: mysql
+
+        properties:
+            root_password:
+                type: string
+
+            definition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                    name: mysql
+                spec:
+                    selector:
+                        matchLabels:
+                            app: mysql
+                    strategy:
+                        type: Recreate
+                    template:
+                        metadata:
+                            labels:
+                                app: mysql
+                        spec:
+                            containers:
+                                - image: mysql:5.6
+                                  name: mysql
+                                  env:
+                                      - name: MYSQL_ROOT_PASSWORD
+                                        value: password
+                                  ports:
+                                      - containerPort: 3306
+                                        name: mysql
+
+    # TODO: what is about this?!
+    mysql.dbms.expose.kubernetes.kubernetes:
+        derived_from: unfurl.nodes.K8sRawResource
+
+        properties:
+            root_password:
+                type: string
+
+            definition:
+                apiVersion: v1
+                kind: Service
+                metadata:
+                    name: mysql
+                spec:
+                    ports:
+                        - port: 3306
+                    selector:
+                        app: mysql
+                    type: NodePort

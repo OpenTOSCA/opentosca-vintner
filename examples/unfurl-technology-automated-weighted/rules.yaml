@@ -96,11 +96,11 @@ kubernetes:
     - component: shop.component
       host: kubernetes
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: shop.component.kubernetes.kubernetes
 
     - component: mysql.dbms
       host: kubernetes
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: mysql.dbms.kubernetes.kubernetes
