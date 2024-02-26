@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND="noninteractive"
 
 DBMS_ROOT_PASSWORD=$1
 
+# Set password
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DBMS_ROOT_PASSWORD}"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DBMS_ROOT_PASSWORD}"
 
