@@ -20,7 +20,7 @@ ansible:
 
     - component: gcp.app_engine
       weight: 0.5
-      # TODO: implement this
+      # TODO: test this
       assign: gcp.app_engine.ansible.gcp
 
     - component: gcp.cloud_sql
@@ -66,7 +66,7 @@ terraform:
 
     - component: gcp.app_engine
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: gcp.app_engine.terraform.gcp
 
     - component: gcp.cloud_sql

@@ -1,6 +1,12 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
     gcp.app_engine:
         derived_from: tosca.nodes.Root
         properties:
@@ -25,7 +31,13 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
-    gcp.app_engine.ansible:
+    ###################################################
+    #
+    # Ansible GCP
+    #
+    ###################################################
+
+    gcp.app_engine.ansible.gcp:
         derived_from: gcp.app_engine
         capabilities:
             endpoint:
@@ -73,3 +85,63 @@ node_types:
                                       failed_when:
                                           - "'Created' not in app_create_command.stderr"
                                           - "'already contains' not in app_create_command.stderr"
+
+    ###################################################
+    #
+    # Terraform OS
+    #
+    ###################################################
+
+    gcp.app_engine.terraform.gcp:
+        derived_from: gcp.app_engine
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    tfvars: |
+                        project = "{{ SELF.project }}"
+                        region = "{{ SELF.region }}"
+                        credentials = "{{ SELF.service_account_file }}"
+                    main: |
+                        terraform {
+                           required_providers {
+                             google = {
+                               source = "hashicorp/google"
+                               version = "4.67.0"
+                             }
+                           }
+                         }
+
+                         provider "google" {
+                           project = var.project
+                           region = var.region
+                           credentials = var.credentials
+                         }
+
+                         variable "credentials" {
+                           type        = string
+                         }
+
+                         variable "project" {
+                           type        = string
+                         }
+
+                         variable "region" {
+                           type        = string
+                         }
+
+                         resource "google_project_service" "app_engine_reporting" {
+                           project  = var.project
+                           service = "appenginereporting.googleapis.com"
+                           disable_on_destroy = false
+                         }
+
+                         resource "google_project_service" "app_engine_admin" {
+                           project  = var.project
+                           service = "appengine.googleapis.com"
+                           disable_on_destroy = false
+                         }
