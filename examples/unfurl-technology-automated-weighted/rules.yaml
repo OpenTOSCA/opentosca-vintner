@@ -15,7 +15,7 @@ ansible:
 
     - component: os.compute
       weight: 0.5
-      # TODO: implement this
+      # TODO: test this
       assign: os.compute.ansible.os
 
     - component: gcp.app_engine
@@ -61,7 +61,7 @@ terraform:
 
     - component: os.compute
       weight: 1
-      # TODO: implement this
+      # TODO: test this
       assign: os.compute.terraform.os
 
     - component: gcp.app_engine

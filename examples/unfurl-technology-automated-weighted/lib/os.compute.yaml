@@ -1,6 +1,12 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
     os.compute:
         derived_from: tosca.nodes.Root
         properties:
@@ -55,14 +61,108 @@ node_types:
             host:
                 type: tosca.capabilities.Compute
 
-    # TODO: should derived from unfurl.nodes.Installer.Terraform
-    os.compute.terraform:
+    ###################################################
+    #
+    # Ansible OS
+    #
+    ###################################################
+
+    os.compute.ansible.os:
+        derived_from: os.compute
+
+        interfaces:
+            Standard:
+                create:
+                    implementation:
+                        primary: Ansible
+                        operation_host: ORCHESTRATOR
+                    inputs:
+                        environment:
+                            OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                            OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                            OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                            OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                            OS_INTERFACE: '{{ SELF.os_interface }}'
+                            OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                            OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
+                        playbook:
+                            q:
+                                - name: Create security group
+                                  openstack.cloud.security_group:
+                                      name: '{{ SELF.machine }}'
+
+                                # TODO: ports vs port
+                                - name: Open ports
+                                  openstack.cloud.security_group_rule:
+                                      security_group: '{{ SELF.name }}'
+                                      protocol: tcp
+                                      port_range_min: '{{ item }}'
+                                      port_range_max: '{{ item }}'
+                                      remote_ip_prefix: '0.0.0.0/0'
+                                      direction: ingress
+                                      ethertype: IPv4
+                                  loop: '{{ ports }}'
+
+                                - name: Create VM
+                                  openstack.cloud.server:
+                                      state: present
+                                      name: '{{ SELF.machine }}'
+                                      image: 'Ubuntu 22.04'
+                                      key_name: 'default'
+                                      flavor: '{{ SELF.flavor }}'
+                                      network: '{{ SELF.network }}'
+                                      security_groups: "{{ 'default,' + SELF.machine }}"
+                                      auto_ip: false
+                                  register: server_info
+
+                                - name: Set attributes
+                                  set_stats:
+                                      public_address: '{{ server_info.server.addresses[network][0].addr }}'
+
+                        resultTemplate: |
+                            - name: SELF
+                              attributes:
+                                public_address: "{{ outputs.public_address | trim }}"
+                                public_ip: "{{ outputs.public_address | trim }}"
+
+                        outputs:
+                            public_address:
+
+                delete:
+                    implementation:
+                        primary: Ansible
+                        operation_host: HOST
+                    inputs:
+                        playbook:
+                            q:
+                                - name: Delete VM
+                                  openstack.cloud.server:
+                                      state: absent
+                                      name: '{{ SELF.machine }}'
+                                      delete_fip: true
+
+                                - name: Delete security group
+                                  openstack.cloud.security_group:
+                                      state: absent
+                                      name: '{{ SELF.machine }}'
+
+    ###################################################
+    #
+    # Terraform OS
+    #
+    ###################################################
+
+    os.compute.terraform.os:
         derived_from: os.compute
         interfaces:
             Standard:
                 operations:
                     configure:
+                        implementation:
+                            primary: Terraform
                     delete:
+                        implementation:
+                            primary: Terraform
             defaults:
                 outputs:
                     public_ip: public_ip
