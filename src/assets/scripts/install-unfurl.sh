@@ -27,4 +27,4 @@ cd "${VENV_DIR}"
 python3 -m venv .venv && . .venv/bin/activate
 
 # Install Unfurl
-pip install unfurl==0.9.1 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0
+pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0
