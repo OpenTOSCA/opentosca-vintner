@@ -777,7 +777,7 @@ node_types:
                           connection {
                             type        = "ssh"
                             user        = var.ssh_user
-                            private_key = var.ssh_key_file
+                            private_key = file(var.ssh_key_file)
                             host        = var.ssh_host
                           }
 
@@ -793,7 +793,7 @@ node_types:
 
                           provisioner "remote-exec" {
                             inline = [
-                              "/tmp/shop.install.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address}",
+                              "sudo /tmp/shop.create.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address}",
                             ]
                           }
                         }

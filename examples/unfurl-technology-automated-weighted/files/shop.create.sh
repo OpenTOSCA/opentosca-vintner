@@ -13,6 +13,11 @@ DB_USERNAME="$5"
 DB_PASSWORD="$6"
 DB_ADDRESS="$7"
 
+# Ensure artifact exists
+if [ ! -f ${APPLICATION_ARTIFACT} ]; then
+  echo "Application artifact \"${APPLICATION_ARTIFACT}\" not found"
+  exit 1
+fi
 
 # Install Node.js
 if [ ! -f /usr/bin/node ]; then
@@ -21,7 +26,7 @@ if [ ! -f /usr/bin/node ]; then
 fi
 
 # Create applications directory
-mkdir -p /usr/lib/node-applications
+mkdir -p /var/lib/node-applications
 
 # Create application directory
 mkdir -p ${APPLICATION_DIRECTORY}

@@ -374,7 +374,7 @@ node_types:
                           connection {
                             type        = "ssh"
                             user        = var.ssh_user
-                            private_key = var.ssh_key_file
+                            private_key = file(var.ssh_key_file)
                             host        = var.ssh_host
                           }
 
