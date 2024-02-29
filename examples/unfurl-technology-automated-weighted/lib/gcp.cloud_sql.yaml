@@ -64,7 +64,6 @@ node_types:
                             primary: Terraform
             defaults:
                 outputs:
-                    public_ip: public_address
                     public_address: public_address
                 inputs:
                     tfvars: |
@@ -222,7 +221,7 @@ node_types:
                                           executable: /usr/bin/bash
 
                                     - name: Set Attributes
-                                      set_stats:
+                                      set_fact:
                                           public_address: '{{ (instance_info.stdout | from_yaml).ipAddresses[0].ipAddress }}'
 
                             resultTemplate: |
@@ -230,8 +229,8 @@ node_types:
                                   attributes:
                                     public_address: "{{ outputs.public_address | trim }}"
 
-                            outputs:
-                                public_address:
+                        outputs:
+                            public_address:
 
                     delete:
                         implementation:

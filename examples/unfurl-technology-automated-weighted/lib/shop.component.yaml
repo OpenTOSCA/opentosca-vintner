@@ -543,9 +543,7 @@ node_types:
                             primary: Terraform
             defaults:
                 outputs:
-                    public_ip: public_address
                     public_address: public_address
-
                 inputs:
                     tfvars: |
                         project = "{{ SELF.gcp_project }}"

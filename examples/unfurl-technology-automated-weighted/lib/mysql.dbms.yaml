@@ -18,10 +18,6 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
 
-            public_ip:
-                type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
-
             database_address:
                 type: string
 
@@ -56,6 +52,14 @@ node_types:
             database_address:
                 type: string
                 default: '127.0.0.1'
+
+        capabilities:
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection:
+                        {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
+                    host: {eval: '.::..::.requirements[.name=host]::.target::public_address'}
 
         interfaces:
             Standard:
@@ -138,6 +142,12 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection:
+                        {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
+                    host: {eval: '.::..::.requirements[.name=host]::.target::public_address'}
 
         requirements:
             - host:
@@ -223,10 +233,6 @@ node_types:
             public_address:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::public_address'}
-
-            public_ip:
-                type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_ip'}
 
             database_address:
                 type: string

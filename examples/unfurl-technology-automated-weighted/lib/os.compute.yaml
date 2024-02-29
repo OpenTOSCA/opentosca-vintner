@@ -54,12 +54,15 @@ node_types:
         attributes:
             public_address:
                 type: string
-            public_ip:
-                type: string
 
         capabilities:
             host:
                 type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection: ssh
+                    host: {eval: '.::..::public_address'}
 
     ###################################################
     #
@@ -115,17 +118,16 @@ node_types:
                                   register: server_info
 
                                 - name: Set attributes
-                                  set_stats:
+                                  set_fact:
                                       public_address: '{{ server_info.server.addresses[network][0].addr }}'
 
                         resultTemplate: |
                             - name: SELF
                               attributes:
                                 public_address: "{{ outputs.public_address | trim }}"
-                                public_ip: "{{ outputs.public_address | trim }}"
 
-                        outputs:
-                            public_address:
+                    outputs:
+                        public_address:
 
                 delete:
                     implementation:
@@ -164,7 +166,6 @@ node_types:
                             primary: Terraform
             defaults:
                 outputs:
-                    public_ip: public_ip
                     public_address: public_address
                 inputs:
                     tfvars: |
@@ -259,9 +260,5 @@ node_types:
                         }
 
                         output "public_address" {
-                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
-                        }
-
-                        output "public_ip" {
                           value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
                         }
