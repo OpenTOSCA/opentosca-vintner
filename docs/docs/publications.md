@@ -11,6 +11,17 @@ This document holds a list of selected publications.
 
 [//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 
+## Hosting-Aware Pruning of Components in Deployment Models
+
+- CLOSER 2024
+- _Accepted_
+- [Step-by-Step Guide](variability4tosca/guides/aware/index.md){target=_blank}
+- {{ repo_link('tests/hosting-aware-pruning ', 'Models of the Case Study') }}
+- [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Aware")
+- [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Aware")
+- [Assets on Zenodo](https://doi.org/10.5281/zenodo.10452506){target=_blank}
+- {{ tag_link('publication-stoetzner-2024-pruning-modes') }}
+
 
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
 
