@@ -7,7 +7,7 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="https://vintner.opentosca.org/variability4tosca/guides/modes/" rel="canonical"/>
 <link href="../pruning/" rel="prev"/>
-<link href="../../../queries4tosca/getting-started/" rel="next"/>
+<link href="../aware/" rel="next"/>
 <link href="../../../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.1.21" name="generator"/>
 <title>Pruning Modes - OpenTOSCA Vintner</title>
@@ -2115,6 +2115,11 @@
 </ul>
 </nav>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../aware/">
+        Hosting-Aware Pruning
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -2519,7 +2524,7 @@
 <a class="md-tag" href="../../../tags/#xopera">xOpera</a>
 </nav>
 <h1 id="pruning-modes">Pruning Modes<a class="headerlink" href="#pruning-modes" title="Permanent link">¶</a></h1>
-<p>This document holds a detailed step-by-step tutorial to deploy the medium-sized static deployment variant of a webshop application to showcase the Consistent-Loose Pruning Mode.
+<p>This document holds a detailed step-by-step guide to deploy the medium-sized static deployment variant of a webshop application to showcase the Consistent-Loose Pruning Mode.
 The webshop application can be deployed in the following deployment variants.</p>
 <ul>
 <li>static with medium resources on a single virtual machine on a local OpenStack (OS) instance</li>
@@ -2527,7 +2532,7 @@ The webshop application can be deployed in the following deployment variants.</p
 <li>elastic with high availability and backups on Google Cloud Platform (GCP)</li>
 </ul>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
-<p>We need to fulfill the following requirements to follow this step-by-step tutorial.</p>
+<p>We need to fulfill the following requirements to follow this step-by-step guide.</p>
 <ul>
 <li>Linux machine, e.g., Ubuntu 22.04</li>
 <li>Access to an OpenStack instance</li>
@@ -2538,33 +2543,31 @@ For more information see <a href="../../../installation/" target="_blank">Instal
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
 </code></pre></div></td></tr></table></div>
 <p>Next, install xOpera.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--xopera
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>vintner<span class="w"> </span>setup<span class="w"> </span>install<span class="w"> </span>--xopera
 </code></pre></div></td></tr></table></div>
 <p>Next, we configure xOpera as the orchestrator that should be used for the deployment.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera<span class="w"> </span>--no-venv
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span>attest<span class="w"> </span>--orchestrator<span class="w"> </span>xopera
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>init<span class="w"> </span>xopera<span class="w"> </span>--no-venv
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>vintner<span class="w"> </span>orchestrators<span class="w"> </span>attest<span class="w"> </span>--orchestrator<span class="w"> </span>xopera
 </code></pre></div></td></tr></table></div>
 <h2 id="import-the-template">Import the Template<a class="headerlink" href="#import-the-template" title="Permanent link">¶</a></h2>
 <figure>
 <a class="glightbox" href="variable-service-template.png"><img src="variable-service-template.png" width="700"/></a>
 <figcaption>Figure 1: The Variability4TOSCA model of our webshop.</figcaption>
 </figure>
-<p><br/>
-<br/></p>
 <p>First, we import the Variability4TOSCA template.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>pruning-mode<span class="w"> </span>--path<span class="w"> </span>examples/xopera-pruning-consistent-loose
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>pruning-mode<span class="w"> </span>--path<span class="w"> </span>examples/xopera-pruning-consistent-loose
 </code></pre></div></td></tr></table></div>
 <p>Then, we initialize an application instance.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--template<span class="w"> </span>pruning-mode
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>init<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--template<span class="w"> </span>pruning-mode
 </code></pre></div></td></tr></table></div>
 <p>We can optionally inspect the Variability4TOSCA model.
 This model contains all possible elements having conditions assigned.
 However, due to pruning, only a handful of condition must be modeled, e.g., the condition checking if a medium or large virtual machine is required.
 This is shown in Figure 1.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>templates<span class="w"> </span>inspect<span class="w"> </span>--template<span class="w"> </span>pruning-mode
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>inspect<span class="w"> </span>--template<span class="w"> </span>pruning-mode
 </code></pre></div></td></tr></table></div>
 <h2 id="resolve-variability">Resolve Variability<a class="headerlink" href="#resolve-variability" title="Permanent link">¶</a></h2>
 <figure>
@@ -2573,12 +2576,12 @@ This is shown in Figure 1.</p>
 </figure>
 <p>We want to deploy the medium-sized static variant of the webshop application using GCP.
 We specify this when resolving variability as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--presets<span class="w"> </span>static
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>resolve<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--presets<span class="w"> </span>static
 </code></pre></div></td></tr></table></div>
 <p>You can optionally inspect the generated TOSCA-compliant model.
 This template contains only the elements required for the elastic variant, e.g., the MySQL database.
 This is shown in Figure 2.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>inspect<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
 </code></pre></div></td></tr></table></div>
 <h2 id="deploy-the-application">Deploy the Application<a class="headerlink" href="#deploy-the-application" title="Permanent link">¶</a></h2>
 <p>Finally, we can deploy the elastic variant.
@@ -2625,7 +2628,7 @@ The following inputs must be defined.</p>
 </code></pre></div></td></tr></table></div>
 <p>Next, start the deployment. 
 The deployment will take around 5 minutes.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>deploy<span class="w"> </span>--instance<span class="w"> </span>pruning-mode<span class="w"> </span>--inputs<span class="w"> </span><span class="si">${</span><span class="nv">INPUTS_PATH</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="test-the-application">Test the Application<a class="headerlink" href="#test-the-application" title="Permanent link">¶</a></h2>
 <p>Next, we can test that the application is correctly working. 
@@ -2663,18 +2666,18 @@ Therefore, find out the hostname of the provisioned virtual machine.</p>
 <p>Thus, we conclude that the application has been deployed as desired.</p>
 <h2 id="undeploy-the-application">Undeploy the Application<a class="headerlink" href="#undeploy-the-application" title="Permanent link">¶</a></h2>
 <p>Afterward, we can undeploy the application.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>undeploy<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
 </code></pre></div></td></tr></table></div>
 <p>We can also optionally remove the instance or cleanup the filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a>yarn<span class="w"> </span>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
+<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>vintner<span class="w"> </span>instances<span class="w"> </span>delete<span class="w"> </span>--instance<span class="w"> </span>pruning-mode
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a>vintner<span class="w"> </span>setup<span class="w"> </span>clean<span class="w"> </span>--force
 </code></pre></div></td></tr></table></div>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">¶</a></h2>
 <p>This deployment is also executed in our integration pipeline, which is executed once a week.
 The logs of the corresponding GitHub action can be accessed <a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">here</a>.
-Relevant jobs start with "Unfurl Artifacts".
+Relevant jobs start with "xOpera Pruning Mode".
 Note, a GitHub account is required to access these logs.
 The raw logs are <a href="../../../assets/documents/night.zip" target="_blank">available</a> without requiring an GitHub account.</p>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
@@ -2687,7 +2690,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 9, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 29, 2024</span>
 </small>
 </div>
 </article>
@@ -2709,13 +2712,13 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
               </div>
 </div>
 </a>
-<a aria-label="Next: Getting Started" class="md-footer__link md-footer__link--next" href="../../../queries4tosca/getting-started/" rel="next">
+<a aria-label="Next: Hosting-Aware Pruning" class="md-footer__link md-footer__link--next" href="../aware/" rel="next">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 Next
               </span>
 <div class="md-ellipsis">
-                Getting Started
+                Hosting-Aware Pruning
               </div>
 </div>
 <div class="md-footer__button md-icon">
