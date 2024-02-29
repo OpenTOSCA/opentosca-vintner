@@ -302,6 +302,7 @@ node_types:
                                   community.mysql.mysql_db:
                                       name: '{{ var.database_name }}'
                                       state: present
+                                  become: true
 
                         playbookArgs:
                             - --key-file={{ SELF.os_ssh_key_file }}

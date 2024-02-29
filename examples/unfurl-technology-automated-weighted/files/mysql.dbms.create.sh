@@ -5,19 +5,28 @@ export DEBIAN_FRONTEND="noninteractive"
 DBMS_ROOT_PASSWORD=$1
 
 # Set password
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DBMS_ROOT_PASSWORD}"
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DBMS_ROOT_PASSWORD}"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DBMS_ROOT_PASSWORD}"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DBMS_ROOT_PASSWORD}"
 
 # Install mysql
 apt-get update -y
-apt-get -y install mysql-server-5.7
+apt-get -y install mysql-server-5.8
 
-# mysql_secure_installation
+# Password-less auth
+cat <<EOF > /root/.my.cnf
+[client]
+user=root
+password=${DBMS_ROOT_PASSWORD}
+EOF
 
-# All interfaces
-sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/my.cnf
-mysql -uroot -p -e 'USE mysql; UPDATE `user` SET `Host`="%" WHERE `User`="root" AND `Host`="localhost"; DELETE FROM `user` WHERE `Host` != "%" AND `User`="root"; FLUSH PRIVILEGES;'
+# Listen on all interfaces
+sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-# Systemd
+# Configure any hots for root
+mysql -u root -e 'USE mysql; UPDATE `user` SET `Host`="%" WHERE `User`="root"; FLUSH PRIVILEGES;'
+
+# Enable service
 systemctl enable mysql
+
+# Restart service
 systemctl restart mysql
