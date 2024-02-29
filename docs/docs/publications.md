@@ -20,7 +20,7 @@ This document holds a list of selected publications.
 - [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Aware")
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Aware")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10452506){target=_blank}
-- {{ tag_link('publication-stoetzner-2024-pruning-modes') }}
+- {{ tag_link('publication-stoetzner-2024-hosting-aware-pruning') }}
 
 
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
