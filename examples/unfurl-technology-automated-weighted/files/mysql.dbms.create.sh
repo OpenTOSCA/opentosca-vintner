@@ -22,8 +22,9 @@ EOF
 # Listen on all interfaces
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-# Configure any hots for root
-mysql -u root -e 'USE mysql; UPDATE `user` SET `Host`="%" WHERE `User`="root"; FLUSH PRIVILEGES;'
+# Configure any host for root
+mysql -u root -e 'USE mysql; UPDATE user SET host = "%" WHERE user = "root"; FLUSH PRIVILEGES;'
+mysql -u root -e 'USE mysql; DELETE FROM user WHERE user = "root" and host = "localhost"; FLUSH PRIVILEGES;'
 
 # Enable service
 systemctl enable mysql

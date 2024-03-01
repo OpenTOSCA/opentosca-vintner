@@ -177,7 +177,7 @@ node_types:
                         os_application_credential_id = "{{ SELF.os_application_credential_id}}"
                         os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
 
-                        ports = {{ SELF.ports }}
+                        ports = [{{ SELF.ports | join(", ") }}]
                         machine = "{{ SELF.machine }}"
                         flavor = "{{ SELF.flavor }}"
                         network = "{{ SELF.network }}"

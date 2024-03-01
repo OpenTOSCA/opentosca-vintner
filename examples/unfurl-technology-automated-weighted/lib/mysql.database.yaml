@@ -300,7 +300,7 @@ node_types:
 
                                 - name: Creating database
                                   community.mysql.mysql_db:
-                                      name: '{{ var.database_name }}'
+                                      name: '{{ SELF.database_name }}'
                                       state: present
                                   become: true
 

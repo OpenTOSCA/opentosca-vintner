@@ -98,6 +98,12 @@ node_types:
                                       host: '%'
                                       state: present
 
+                                - name: Delete localhost root
+                                  community.mysql.mysql_user:
+                                      name: root
+                                      host: localhost
+                                      state: absent
+
                                 - name: Enable remote login to mysql
                                   lineinfile:
                                       path: /etc/mysql/mysql.conf.d/mysqld.cnf

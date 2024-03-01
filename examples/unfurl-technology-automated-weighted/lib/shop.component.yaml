@@ -183,7 +183,6 @@ node_types:
 
                                           [Install]
                                           WantedBy=multi-user.target
-                                  become: true
 
                                 - name: start service
                                   systemd:
@@ -191,9 +190,9 @@ node_types:
                                       state: started
                                       enabled: yes
                                       daemon_reload: yes
-                                  become: true
 
                         playbookArgs:
+                            - --become
                             - --key-file={{ SELF.ssh_key_file }}
                             - --user={{ SELF.ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
@@ -337,13 +336,11 @@ node_types:
                                   file:
                                       path: '{{ SELF.application_directory }}'
                                       state: directory
-                                  become: true
 
                                 - name: Extract deployment artifact in application directory
                                   unarchive:
                                       src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_tar.attributes.file }}"
                                       dest: '{{ SELF.application_directory }}'
-                                  become: true
 
                                 - name: Install dependencies
                                   shell: /usr/bin/npm ci
@@ -354,16 +351,13 @@ node_types:
                                   copy:
                                       dest: '{{ SELF.application_directory }}/.env'
                                       content: |
-                                          PORT=3000
+                                          PORT=80
                                           INTERFACE="0.0.0.0"
-                                          DB_DIALECT={{ SELF.DB_DIALECT}}
+                                          DB_DIALECT={{ SELF.DB_DIALECT }}
                                           DB_NAME={{ SELF.DB_NAME }}
                                           DB_USERNAME={{ SELF.DB_USERNAME }}
                                           DB_PASSWORD={{ SELF.DB_PASSWORD }}
                                           DB_ADDRESS={{ SELF.DB_ADDRESS }}
-                                          APPLICATION_LANGUAGE={{ SELF.APPLICATION_LANGUAGE }}
-                                      mode: a+x
-                                  become: true
 
                                 - name: Create service
                                   copy:
@@ -380,7 +374,6 @@ node_types:
 
                                           [Install]
                                           WantedBy=multi-user.target
-                                  become: true
 
                                 - name: Start service
                                   systemd:
@@ -388,9 +381,9 @@ node_types:
                                       state: started
                                       enabled: yes
                                       daemon_reload: yes
-                                  become: true
 
                         playbookArgs:
+                            - --become
                             - --key-file={{ SELF.os_ssh_key_file }}
                             - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
@@ -409,26 +402,23 @@ node_types:
                                   systemd:
                                       name: '{{ SELF.application_name }}'
                                       state: stopped
-                                  become: true
 
                                 - name: Delete systemd service
                                   file:
                                       path: '/etc/systemd/system/{{ SELF.application_name }}.service'
                                       state: absent
-                                  become: true
 
                                 - name: Reload daemon
                                   systemd:
                                       daemon_reload: true
-                                  become: true
 
                                 - name: Delete application directory
                                   file:
                                       path: '{{ SELF.application_directory }}'
                                       state: absent
-                                  become: true
 
                         playbookArgs:
+                            - --become
                             - --key-file={{ SELF.os_ssh_key_file }}
                             - --user={{ SELF.os_ssh_user }}
                             - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
