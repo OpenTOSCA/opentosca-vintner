@@ -133,6 +133,7 @@ node_types:
         properties:
             instance_name:
                 type: string
+                default: {eval: '.::.requirements[.name=host]::.target::instance_name'}
 
             gcp_service_account_file:
                 type: string

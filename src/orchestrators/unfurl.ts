@@ -56,8 +56,8 @@ export class Unfurl implements Orchestrator {
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
 
-        // TODO: Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
-        // TODO: files.deleteDirectory(tmp)
+        // TODO: Seems like on windows there is a problem when deleting some files created by Unfurl: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
+        // files.deleteDirectory(tmp)
     }
 
     /**
