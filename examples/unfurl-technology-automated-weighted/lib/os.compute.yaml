@@ -12,6 +12,8 @@ node_types:
         properties:
             ports:
                 type: list
+                entry_schema:
+                    type: integer
 
             machine:
                 type: string

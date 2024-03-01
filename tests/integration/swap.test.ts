@@ -1,7 +1,6 @@
 import Controller from '#controller'
-import * as files from '#files'
+import Loader from '#graph/loader'
 import {Instance} from '#repositories/instances'
-import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import {expect} from 'chai'
 import path from 'path'
@@ -20,9 +19,7 @@ if (!integrationTestsEnabled) {
             // Alpha Template
             const alphaName = 'xopera-test-swap-template-alpha'
             const alphaDirectoy = path.join(examplesDir, alphaName)
-            const alphaTemplate = files.loadYAML<ServiceTemplate>(
-                path.join(alphaDirectoy, 'variable-service-template.yaml')
-            )
+            const alphaTemplate = new Loader(path.join(alphaDirectoy, 'variable-service-template.yaml')).raw()
             await Controller.templates.import({
                 template: alphaName,
                 path: alphaDirectoy,
@@ -31,9 +28,7 @@ if (!integrationTestsEnabled) {
             // Bravo Template
             const bravoName = 'xopera-test-swap-template-bravo'
             const bravoDirectoy = path.join(examplesDir, bravoName)
-            const bravoTemplate = files.loadYAML<ServiceTemplate>(
-                path.join(bravoDirectoy, 'variable-service-template.yaml')
-            )
+            const bravoTemplate = new Loader(path.join(bravoDirectoy, 'variable-service-template.yaml')).raw()
             await Controller.templates.import({
                 template: bravoName,
                 path: bravoDirectoy,
@@ -48,7 +43,7 @@ if (!integrationTestsEnabled) {
             })
 
             // Expect that initial vst matches alpha
-            expect(instance.loadVariableServiceTemplate()).to.deep.equal(alphaTemplate)
+            expect(instance.loadRawVariableServiceTemplate()).to.deep.equal(alphaTemplate)
 
             // Check that can be deployed
             await Controller.instances.resolve({instance: instanceName})
@@ -62,7 +57,7 @@ if (!integrationTestsEnabled) {
             })
 
             // Expect that new vst matches bravo
-            expect(instance.loadVariableServiceTemplate()).to.deep.equal(bravoTemplate)
+            expect(instance.loadRawVariableServiceTemplate()).to.deep.equal(bravoTemplate)
 
             // Check that instance can be updated
             await Controller.instances.resolve({instance: instanceName})

@@ -20,8 +20,12 @@ export default class Loader {
         this.dir = files.getDirectory(file)
     }
 
+    raw() {
+        return files.loadYAML<ServiceTemplate>(this.file)
+    }
+
     async load() {
-        this.serviceTemplate = files.loadYAML<ServiceTemplate>(this.file)
+        this.serviceTemplate = this.raw()
 
         /**
          * Load type-specific conditions

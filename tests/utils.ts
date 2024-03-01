@@ -7,7 +7,7 @@ import {
     loadExpected,
 } from '#controller/template/test'
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import std from '#std'
 import {toList} from '#utils/utils'
 import {expect} from 'chai'
@@ -78,7 +78,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
             await expectAsyncThrow(fn, config.error)
         } else {
             await fn()
-            const result = files.loadYAML<ServiceTemplate>(output)
+            const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
             expect(result).to.deep.equal(expected)
         }

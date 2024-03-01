@@ -3,8 +3,6 @@ import {Assets} from '#repositories/assets'
 import {Instances} from '#repositories/instances'
 import {Templates} from '#repositories/templates'
 import env from '#utils/env'
-import * as os from 'os'
-import path from 'path'
 
 export type SetupCleanOptions = {force: Boolean}
 
@@ -20,6 +18,7 @@ export default async function (options: SetupCleanOptions) {
     // Delete home directory
     files.deleteDirectory(env.home)
 
+    /**
     // Delete tmp directories
     files
         .listFiles(os.tmpdir())
@@ -31,4 +30,5 @@ export default async function (options: SetupCleanOptions) {
         .listDirectories(os.tmpdir())
         .filter(it => it.startsWith(files.TMP_PREFIX))
         .forEach(it => files.deleteDirectory(path.join(os.tmpdir(), it)))
+        **/
 }

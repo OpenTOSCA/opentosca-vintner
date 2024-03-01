@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
@@ -18,7 +18,7 @@ export default async function (options: TemplatePUMLTopologyOptions) {
     const output = options.output ?? options.path.replace(/(\.yaml|\.yml)/, '.topology.puml')
     if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 
-    const graph = new Graph(files.loadYAML<ServiceTemplate>(options.path))
+    const graph = new Graph(new Loader(options.path).raw())
     validate(graph)
 
     const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'topology', 'template.template.ejs'), {
