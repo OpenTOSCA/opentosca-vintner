@@ -176,7 +176,7 @@ topology_template:
             type: os.compute
             properties:
                 - machine: unfurl-technology
-                - port: [80, 3306]
+                - ports: [80, 3306]
                 - network: {get_input: os_network}
                 - flavor:
                       value: m1.medium
@@ -189,6 +189,7 @@ topology_template:
         gcp_dbms:
             type: gcp.cloud_sql
             properties:
+                - instance_name: unfurl-technology
                 - root_password: {get_input: database_password}
 
         gcp_runtime:

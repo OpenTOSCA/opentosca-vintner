@@ -649,6 +649,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
     .option('--verbose [boolean]', 'verbose')
+    .option('--dry [boolean]', 'dry run')
     .action(
         hae.exit(async options => {
             await Controller.instances.validate(options)
