@@ -29,6 +29,9 @@ node_types:
             DB_ADDRESS:
                 type: string
 
+            DB_PORT:
+                type: integer
+
             artifact_tar:
                 type: string
                 default: {eval: '.artifacts::artifact_tar '}
@@ -145,6 +148,9 @@ node_types:
                                                                 - name: DB_ADDRESS
                                                                   value: {{ SELF.DB_ADDRESS }}
 
+                                                                - name: DB_PORT
+                                                                  value: {{ SELF.DB_PORT }}
+
                                                                 - name: DB_DIALECT
                                                                   value: {{ SELF.DB_DIALECT }}
 
@@ -226,6 +232,9 @@ node_types:
             DB_ADDRESS:
                 type: string
 
+            DB_PORT:
+                type: integer
+
             definition:
                 apiVersion: apps/v1
                 kind: Deployment
@@ -256,6 +265,9 @@ node_types:
 
                                       - name: DB_ADDRESS
                                         value: '{{ SELF.DB_ADDRESS }}'
+
+                                      - name: DB_PORT
+                                        value: '{{ SELF.DB_PORT }}'
 
                                       - name: DB_DIALECT
                                         value: '{{ SELF.DB_DIALECT }}'
@@ -358,6 +370,7 @@ node_types:
                                           DB_USERNAME={{ SELF.DB_USERNAME }}
                                           DB_PASSWORD={{ SELF.DB_PASSWORD }}
                                           DB_ADDRESS={{ SELF.DB_ADDRESS }}
+                                          DB_PORT={{ SELF.DB_PORT }}
 
                                 - name: Create service
                                   copy:
@@ -481,6 +494,7 @@ node_types:
                                               DB_USERNAME: {{ SELF.DB_USERNAME }}
                                               DB_PASSWORD: {{ SELF.DB_PASSWORD }}
                                               DB_ADDRESS: {{ SELF.DB_ADDRESS }}
+                                              DB_PORT: {{ SELF.DB_PORT }}
 
                                 # https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                 - name: Create App
@@ -545,6 +559,7 @@ node_types:
                         db_username="{{ SELF.DB_USERNAME }}"
                         db_password="{{ SELF.DB_PASSWORD }}"
                         db_address="{{ SELF.DB_ADDRESS }}"
+                        db_port="{{ SELF.DB_PORT }}"
 
                         application_name = "{{ SELF.application_name }}"
                         artifact = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_zip.attributes.file }}"
@@ -604,6 +619,10 @@ node_types:
                            type        = string
                          }
 
+                         variable "db_port" {
+                           type        = number
+                         }
+
                          variable "try" {
                            type = string
                            default = "try-8"
@@ -631,6 +650,7 @@ node_types:
                              DB_USERNAME = var.db_username
                              DB_PASSWORD = var.db_password
                              DB_ADDRESS  = var.db_address
+                             DB_PORT     = var.db_port
                            }
 
                            service_account = google_service_account.custom_service_account.email
@@ -717,6 +737,7 @@ node_types:
                         db_username="{{ SELF.DB_USERNAME }}"
                         db_password="{{ SELF.DB_PASSWORD }}"
                         db_address="{{ SELF.DB_ADDRESS }}"
+                        db_port="{{ SELF.DB_PORT }}"
                     main: |
                         variable "ssh_user" {
                           type = string
@@ -762,6 +783,10 @@ node_types:
                           type = string
                         }
 
+                        variable "db_port" {
+                          type = number
+                        }
+
                         resource "terraform_data" "os" {
 
                           connection {
@@ -783,7 +808,7 @@ node_types:
 
                           provisioner "remote-exec" {
                             inline = [
-                              "sudo /tmp/shop.create.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address}",
+                              "sudo /tmp/shop.create.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address} ${var.db_port}",
                             ]
                           }
                         }

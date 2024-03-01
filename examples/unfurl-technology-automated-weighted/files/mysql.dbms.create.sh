@@ -2,25 +2,29 @@
 set -e
 export DEBIAN_FRONTEND="noninteractive"
 
-DBMS_ROOT_PASSWORD=$1
+DBMS_PASSWORD=$1
+DBMS_PORT=$2
 
 # Set password
-debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DBMS_ROOT_PASSWORD}"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DBMS_ROOT_PASSWORD}"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DBMS_PASSWORD}"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DBMS_PASSWORD}"
 
 # Install mysql
 apt-get update -y
 apt-get -y install mysql-server-5.8
 
-# Password-less auth
+# Passwordless auth
 cat <<EOF > /root/.my.cnf
 [client]
 user=root
-password=${DBMS_ROOT_PASSWORD}
+password=${DBMS_PASSWORD}
 EOF
 
 # Listen on all interfaces
-sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+sed -i "s/127\.0\.0\.1/0\.0\.0\.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# Listen on custom port
+sed -i "s/# port = 3306/port = ${DBMS_PORT}/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Configure any host for root
 mysql -u root -e 'USE mysql; UPDATE user SET host = "%" WHERE user = "root"; FLUSH PRIVILEGES;'

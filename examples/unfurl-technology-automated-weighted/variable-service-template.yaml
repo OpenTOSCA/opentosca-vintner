@@ -123,6 +123,7 @@ topology_template:
                 - DB_DIALECT: mysql
                 # TODO: {get_attribute: [database, database_address]}
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::database_port'}
             requirements:
                 - database:
                       node: database
@@ -161,7 +162,7 @@ topology_template:
             type: os.compute
             properties:
                 - machine: unfurl-technology
-                - ports: [80, 3306]
+                - ports: [80, 3000]
                 - network: {get_input: os_network}
                 - flavor:
                       value: m1.medium

@@ -21,6 +21,9 @@ node_types:
             database_address:
                 type: string
 
+            database_port:
+                type: string
+
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -52,6 +55,10 @@ node_types:
             database_address:
                 type: string
                 default: '127.0.0.1'
+
+            database_port:
+                type: integer
+                default: 3000
 
         capabilities:
             endpoint:
@@ -104,11 +111,26 @@ node_types:
                                       host: localhost
                                       state: absent
 
-                                - name: Enable remote login to mysql
+                                - name: Enable passwordless login
+                                  copy:
+                                      dest: /root/.my.cnf
+                                      content: |
+                                          [client]
+                                          user=root
+                                          password={{ SELF.root_password }}
+
+                                - name: Enable remote login
                                   lineinfile:
                                       path: /etc/mysql/mysql.conf.d/mysqld.cnf
                                       regexp: '^bind-address'
                                       line: 'bind-address = 0.0.0.0'
+                                      backup: yes
+
+                                - name: Configure port (e.g., since 3306 is blocked by the provider)
+                                  lineinfile:
+                                      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+                                      regexp: '^# port'
+                                      line: 'port = 3000'
                                       backup: yes
 
                                 - name: Restart mysql
@@ -144,6 +166,10 @@ node_types:
             database_address:
                 type: string
                 default: mysql
+
+            database_port:
+                type: integer
+                default: 3306
 
         capabilities:
             host:
@@ -197,7 +223,7 @@ node_types:
                                                             name: mysql
                                                             env:
                                                                 - name: MYSQL_ROOT_PASSWORD
-                                                                  value: password
+                                                                  value: {{ SELF.root_password }}
                                                             ports:
                                                                 - containerPort: 3306
                                                                   name: mysql
@@ -244,6 +270,10 @@ node_types:
                 type: string
                 default: mysql
 
+            database_port:
+                type: integer
+                default: 3306
+
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -278,7 +308,7 @@ node_types:
                                   name: mysql
                                   env:
                                       - name: MYSQL_ROOT_PASSWORD
-                                        value: password
+                                        value: password # TODO: hardcoded
                                   ports:
                                       - containerPort: 3306
                                         name: mysql
@@ -339,6 +369,10 @@ node_types:
                 type: string
                 default: '127.0.0.1'
 
+            database_port:
+                type: integer
+                default: 3000
+
         interfaces:
             Standard:
                 operations:
@@ -353,7 +387,8 @@ node_types:
                         ssh_host = "{{ SELF.os_ssh_host }}"
 
                         script = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_script.attributes.file }}"
-                        root_password = "{{ SELF.root_password }}"
+                        password = "{{ SELF.root_password }}"
+                        port = 3000
                     main: |
                         variable "ssh_user" {
                           type = string
@@ -371,8 +406,12 @@ node_types:
                           type = string
                         }
 
-                        variable "root_password" {
+                        variable "password" {
                           type = string
+                        }
+
+                        variable "port" {
+                          type = number
                         }
 
                         resource "terraform_data" "os" {
@@ -391,7 +430,7 @@ node_types:
 
                           provisioner "remote-exec" {
                             inline = [
-                              "/tmp/mysql.dbms.create.sh ${var.root_password}",
+                              "/tmp/mysql.dbms.create.sh ${var.password} ${var.port}",
                             ]
                           }
                         }

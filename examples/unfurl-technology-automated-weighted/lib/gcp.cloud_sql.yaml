@@ -36,6 +36,10 @@ node_types:
                 type: string
                 default: {eval: '.::public_address'}
 
+            database_port:
+                type: integer
+                default: 3306
+
         capabilities:
             host:
                 type: tosca.capabilities.Compute

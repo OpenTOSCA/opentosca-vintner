@@ -74,6 +74,7 @@ topology_template:
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
                 DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
+                DB_PORT: {eval: '.::.requirements[.name=database]::.target::database_port'}
             requirements:
                 - database: database
                 - host: kubernetes

@@ -105,7 +105,7 @@ node_types:
                                       remote_ip_prefix: '0.0.0.0/0'
                                       direction: ingress
                                       ethertype: IPv4
-                                  loop: '{{ SELF.ports }}'
+                                  loop: '{{ SELF.ports | join("::") | split("::") | map("int") }}'
 
                                 - name: Create VM
                                   openstack.cloud.server:
@@ -177,7 +177,7 @@ node_types:
                         os_application_credential_id = "{{ SELF.os_application_credential_id}}"
                         os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
 
-                        ports = [{{ SELF.ports | join(", ") }}]
+                        ports = {{ SELF.ports | join("::") | split("::") | map("int") }}
                         machine = "{{ SELF.machine }}"
                         flavor = "{{ SELF.flavor }}"
                         network = "{{ SELF.network }}"

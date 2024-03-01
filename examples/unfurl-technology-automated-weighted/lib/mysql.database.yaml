@@ -23,6 +23,10 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements[.name=host]::.target::database_address'}
 
+            database_port:
+                type: integer
+                default: {eval: '.::.requirements[.name=host]::.target::database_port'}
+
         capabilities:
             database:
                 type: tosca.capabilities.Endpoint.Database
@@ -259,7 +263,7 @@ node_types:
                         }
 
                         provider "mysql" {
-                            endpoint = concat([var.host, ":3306"])
+                            endpoint = concat([var.host, ":3000"])
                             username = root
                             password = var.root_password
                         }
@@ -301,6 +305,7 @@ node_types:
                                 - name: Creating database
                                   community.mysql.mysql_db:
                                       name: '{{ SELF.database_name }}'
+                                      login_unix_socket: /var/run/mysqld/mysqld.sock
                                       state: present
                                   become: true
 

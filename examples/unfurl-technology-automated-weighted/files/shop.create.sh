@@ -12,6 +12,7 @@ DB_NAME="$4"
 DB_USERNAME="$5"
 DB_PASSWORD="$6"
 DB_ADDRESS="$7"
+DB_PORT="$8"
 
 # Ensure artifact exists
 if [ ! -f ${APPLICATION_ARTIFACT} ]; then
@@ -47,6 +48,7 @@ DB_NAME=${DB_NAME}
 DB_USERNAME=${DB_USERNAME}
 DB_PASSWORD=${DB_PASSWORD}
 DB_ADDRESS=${DB_ADDRESS}
+DB_PORT=${DB_PORT}
 EOF
 
 # Create service

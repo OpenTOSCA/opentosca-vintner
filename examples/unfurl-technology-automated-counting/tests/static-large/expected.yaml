@@ -96,6 +96,6 @@ topology_template:
             type: os.compute.ansible.os
             properties:
                 machine: unfurl-technology
-                ports: [80, 3306]
+                ports: [80, 3000]
                 network: {get_input: os_network}
                 flavor: m1.large

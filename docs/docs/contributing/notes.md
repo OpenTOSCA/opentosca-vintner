@@ -157,6 +157,10 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 git update-index --chmod=+x <path to file>
 ```
 
+## bwCloud Blocked Ports
+
+Some ports are blocked when using bwCloud: https://www.bw-cloud.org/de/bwcloud_scope/netzwerk
+
 ## Naming Convention
 
 Types should be named according to the following pattern.
