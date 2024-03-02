@@ -47,11 +47,11 @@ node_types:
         artifacts:
             artifact_tar:
                 type: tosca.artifacts.File
-                file: files/shop.code.tar.gz
+                file: files/shop.source.tar.gz
 
             artifact_zip:
                 type: tosca.artifacts.File
-                file: files/shop.code.zip
+                file: files/shop.source.zip
 
             artifact_docker:
                 type: tosca.artifacts.File
@@ -250,8 +250,7 @@ node_types:
                                 app: shop
                         spec:
                             containers:
-                                # TODO: upload image
-                                - image: ghcr.io/milesstoetzner/express-attest-db-demo:unfurl-technology
+                                - image: ghcr.io/opentosca/opentosca-shop-demo:latest
                                   name: shop
                                   env:
                                       - name: DB_NAME
