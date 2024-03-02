@@ -204,11 +204,11 @@ node_types:
                     public_address: public_address
                 inputs:
                     tfvars: |
-                        os_region_name = "{{ SELF.os_region_name}}"
-                        os_auth_url = "{{ SELF.os_auth_url}}"
+                        os_region_name = "{{ SELF.os_region_name }}"
+                        os_auth_url = "{{ SELF.os_auth_url }}"
 
-                        os_application_credential_id = "{{ SELF.os_application_credential_id}}"
-                        os_application_credential_secret = "{{ SELF.os_application_credential_secret}}"
+                        os_application_credential_id = "{{ SELF.os_application_credential_id }}"
+                        os_application_credential_secret = "{{ SELF.os_application_credential_secret }}"
 
                         ports = {{ SELF.ports | join("::") | split("::") | map("int") }}
                         machine = "{{ SELF.machine }}"
