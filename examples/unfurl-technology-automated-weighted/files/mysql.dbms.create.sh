@@ -11,7 +11,7 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 
 # Install mysql
 apt-get update -y
-apt-get -y install mysql-server-5.8
+apt-get -y install mysql-server
 
 # Passwordless auth
 cat <<EOF > /root/.my.cnf
@@ -24,7 +24,7 @@ EOF
 sed -i "s/127\.0\.0\.1/0\.0\.0\.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Listen on custom port
-sed -i "s/# port = 3306/port = ${DBMS_PORT}/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+sed -i "s/# port.*/port = ${DBMS_PORT}/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Configure any host for root
 mysql -u root -e 'USE mysql; UPDATE user SET host = "%" WHERE user = "root"; FLUSH PRIVILEGES;'

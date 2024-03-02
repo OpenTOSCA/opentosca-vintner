@@ -82,23 +82,23 @@ node_types:
                         primary: Ansible
                         operation_host: ORCHESTRATOR
                     inputs:
-                        environment:
-                            OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
-                            OS_AUTH_URL: '{{ SELF.os_auth_url }}'
-                            OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
-                            OS_REGION_NAME: '{{ SELF.os_region_name }}'
-                            OS_INTERFACE: '{{ SELF.os_interface }}'
-                            OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
-                            OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
                         playbook:
                             q:
                                 - name: Create security group
                                   openstack.cloud.security_group:
                                       name: '{{ SELF.machine }}'
+                                  environment:
+                                      OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                                      OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                                      OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                                      OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                                      OS_INTERFACE: '{{ SELF.os_interface }}'
+                                      OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                                      OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
 
                                 - name: Open ports
                                   openstack.cloud.security_group_rule:
-                                      security_group: '{{ SELF.name }}'
+                                      security_group: '{{ SELF.machine }}'
                                       protocol: tcp
                                       port_range_min: '{{ item }}'
                                       port_range_max: '{{ item }}'
@@ -106,6 +106,14 @@ node_types:
                                       direction: ingress
                                       ethertype: IPv4
                                   loop: '{{ SELF.ports | join("::") | split("::") | map("int") }}'
+                                  environment:
+                                      OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                                      OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                                      OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                                      OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                                      OS_INTERFACE: '{{ SELF.os_interface }}'
+                                      OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                                      OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
 
                                 - name: Create VM
                                   openstack.cloud.server:
@@ -118,23 +126,32 @@ node_types:
                                       security_groups: "{{ 'default,' + SELF.machine }}"
                                       auto_ip: false
                                   register: server_info
+                                  environment:
+                                      OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                                      OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                                      OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                                      OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                                      OS_INTERFACE: '{{ SELF.os_interface }}'
+                                      OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                                      OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
 
                                 - name: Set attributes
                                   set_fact:
-                                      public_address: '{{ server_info.server.addresses[network][0].addr }}'
+                                      public_address: '{{ server_info.server.accessIPv4 }}'
 
                         resultTemplate: |
                             - name: SELF
                               attributes:
                                 public_address: "{{ outputs.public_address | trim }}"
 
+                    # TODO: this is on the wrong level ...
                     outputs:
                         public_address:
 
                 delete:
                     implementation:
                         primary: Ansible
-                        operation_host: HOST
+                        operation_host: ORCHESTRATOR
                     inputs:
                         playbook:
                             q:
@@ -143,11 +160,27 @@ node_types:
                                       state: absent
                                       name: '{{ SELF.machine }}'
                                       delete_fip: true
+                                  environment:
+                                      OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                                      OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                                      OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                                      OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                                      OS_INTERFACE: '{{ SELF.os_interface }}'
+                                      OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                                      OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
 
                                 - name: Delete security group
                                   openstack.cloud.security_group:
                                       state: absent
                                       name: '{{ SELF.machine }}'
+                                  environment:
+                                      OS_AUTH_TYPE: '{{ SELF.os_auth_type }}'
+                                      OS_AUTH_URL: '{{ SELF.os_auth_url }}'
+                                      OS_IDENTITY_API_VERSION: '{{ SELF.os_identity_api_version }}'
+                                      OS_REGION_NAME: '{{ SELF.os_region_name }}'
+                                      OS_INTERFACE: '{{ SELF.os_interface }}'
+                                      OS_APPLICATION_CREDENTIAL_ID: '{{ SELF.os_application_credential_id }}'
+                                      OS_APPLICATION_CREDENTIAL_SECRET: '{{ SELF.os_application_credential_secret }}'
 
     ###################################################
     #
@@ -233,8 +266,7 @@ node_types:
                         }
 
                         resource "openstack_networking_secgroup_v2" "ports" {
-                            name        = "${var.machine}-ports"
-                            description = "ports for ${var.machine}"
+                            name        = var.machine
                         }
 
                         resource "openstack_networking_secgroup_rule_v2" "port" {

@@ -22,7 +22,7 @@ node_types:
                 type: string
 
             database_port:
-                type: string
+                type: integer
 
         capabilities:
             host:
@@ -430,7 +430,7 @@ node_types:
 
                           provisioner "remote-exec" {
                             inline = [
-                              "/tmp/mysql.dbms.create.sh ${var.password} ${var.port}",
+                              "sudo bash /tmp/mysql.dbms.create.sh ${var.password} ${var.port}",
                             ]
                           }
                         }

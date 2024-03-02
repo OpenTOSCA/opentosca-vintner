@@ -462,7 +462,7 @@ node_types:
                 create:
                     implementation:
                         primary: Ansible
-                        operation_host: HOST
+                        operation_host: ORCHESTRATOR
                     inputs:
                         playbook:
                             q:
@@ -502,7 +502,7 @@ node_types:
                 delete:
                     implementation:
                         primary: Ansible
-                        operation_host: HOST
+                        operation_host: ORCHESTRATOR
                     inputs:
                         playbook:
                             q:
@@ -725,7 +725,7 @@ node_types:
                     tfvars: |
                         ssh_user = "{{ SELF.os_ssh_user }}"
                         ssh_key_file = "{{ SELF.os_ssh_key_file }}"
-                        ssh_host = "{{ SELF.os_ssh_host }}"
+                        ssh_host = "{{ SELF.os_ssh_host | frist }}"
 
                         application_name = "{{ SELF.application_name }}"
                         application_artifact = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_tar.attributes.file }}"
@@ -807,7 +807,7 @@ node_types:
 
                           provisioner "remote-exec" {
                             inline = [
-                              "sudo /tmp/shop.create.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address} ${var.db_port}",
+                              "sudo bash /tmp/shop.create.sh ${var.application_name} /tmp/shop.tar.gz ${var.db_dialect} ${var.db_name} ${var.db_username} ${var.db_password} ${var.db_address} ${var.db_port}",
                             ]
                           }
                         }

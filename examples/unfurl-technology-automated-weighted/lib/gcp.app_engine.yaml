@@ -76,7 +76,7 @@ node_types:
                                           executable: /usr/bin/bash
 
                                     # https://cloud.google.com/sdk/gcloud/reference/app/create
-                                    - name: Create App
+                                    - name: Create GCP AppEngine
                                       shell: 'gcloud app create --region {{ SELF.gcp_region }}'
                                       register: app_create_command
                                       failed_when:

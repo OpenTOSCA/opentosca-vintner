@@ -1,47 +1,5 @@
 # TODO: delete me
 
----
-
-are those local or remote reqs?
-
-
-https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_db_module.html#requirements
-
-https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html#requirements
-
-----
-
-
-On GCP
-
-            gcp_service_account_file:
-                type: string
-                default: {get_input: gcp_service_account_file}
-
-            gcp_region:
-                type: string
-                default: {get_input: gcp_region}
-
-            gcp_project:
-                type: string
-                default: {get_input: gcp_project}
-
-
-
-On OS
-
-            os_ssh_user:
-                type: string
-                default: {get_input: os_ssh_user}
-
-            os_ssh_key_file:
-                type: string
-                default: {get_input: os_ssh_key_file}
-
-
-On K8s?
-
-
 https://github.com/onecommons/unfurl/blob/main/tests/test_k8s.py
 
 
