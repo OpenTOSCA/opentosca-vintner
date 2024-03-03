@@ -98,6 +98,15 @@ export default class Loader {
             }
         }
 
+        /**
+         * Load rules from other default file
+         */
+        if (check.isUndefined(rules)) {
+            if (files.exists(path.join(this.dir, 'lib', 'rules.yaml'))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'lib', 'rules.yaml'))
+            }
+        }
+
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}
         this.serviceTemplate.topology_template.variability.technology_assignment_rules = rules

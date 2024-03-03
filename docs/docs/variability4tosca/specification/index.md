@@ -56,7 +56,7 @@ A variability definition defines variability inputs, variability presets, variab
 | expressions                 | false     | Map(String, VariabilityExpression)                  | An optional map of variability expressions.                                                                                                                 |
 | options                     | false     | Map(String, Boolean)                                | An optional map of variability options.                                                                                                                     |
 | type_specific_conditions    | false     | String &#124; List(TypeSpecificDefaultCondition)    | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
-| technology_assignment_rules | false     | String &#124; Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: "./rules.yaml").                        |
+| technology_assignment_rules | false     | String &#124; Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).  |
 | plugins                     | false     | PluginDefinition                                    | An optional definition of plugins.                                                                                                                          |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
