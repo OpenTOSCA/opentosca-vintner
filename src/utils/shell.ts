@@ -4,7 +4,7 @@ import * as files from '#files'
 import std from '#std'
 import * as utils from '#utils'
 import death from '#utils/death'
-import wsl from '#utils/wsl'
+import platform from '#utils/platform'
 import {ChildProcessByStdio, spawn} from 'child_process'
 import path from 'path'
 import * as stream from 'stream'
@@ -21,7 +21,7 @@ export class Shell {
      * For example, C:\a\b returns /mnt/c/a/b if WSL is used.
      */
     resolve(file: string) {
-        if (this.wsl) return wsl.win2wsl(file)
+        if (this.wsl) return platform.win2wsl(file)
         return path.resolve(file)
     }
 

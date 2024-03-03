@@ -1,6 +1,12 @@
 import {exec} from 'child_process'
 import wsl from 'is-wsl'
 import path from 'path'
+import process from 'process'
+
+const platform = wsl ? 'wsl' : process.platform
+
+const windows = process.platform === 'win32'
+const linux = process.platform === 'linux'
 
 /**
  * Transforms windows path to WSL path.
@@ -28,7 +34,10 @@ async function wsl2win(file: string) {
 }
 
 export default {
+    platform,
     win2wsl,
     wsl2win,
     wsl,
+    linux,
+    windows,
 }
