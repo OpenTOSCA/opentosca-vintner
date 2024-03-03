@@ -7,7 +7,7 @@ node_types:
         attributes:
             api_server:
                 type: string
-                default: {get_input: k8s_api_server}
+                default: {concat: [{get_input: k8s_api_address}, ':', {get_input_k8s_api_port}]}
 
         capabilities:
             endpoint:

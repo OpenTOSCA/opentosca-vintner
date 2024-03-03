@@ -64,9 +64,13 @@ topology_template:
             type: string
             default: stoetzms-387808
 
-        k8s_api_server:
+        k8s_api_address:
             type: string
-            default: 192.168.85.2:8443
+            default: 192.168.85.2
+
+        k8s_api_port:
+            type: string
+            default: '8443'
 
         k8s_ca_cert_file:
             type: string

@@ -253,7 +253,7 @@ node_types:
 
     ###################################################
     #
-    # Ansible Kubernetes
+    # Kubernetes Kubernetes
     #
     ###################################################
 
@@ -264,7 +264,7 @@ node_types:
         attributes:
             public_address:
                 type: string
-                default: 192.168.85.2 # TODO: hat port {eval: '.::.requirements[.name=host]::.target::api_server'}
+                default: {get_input: k8s_api_address}
 
             database_address:
                 type: string
