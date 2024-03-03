@@ -122,8 +122,8 @@ topology_template:
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
                 # TODO: {get_attribute: [database, database_address]}
-                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
-                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::database_port'}
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database:
                       node: database

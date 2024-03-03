@@ -29,14 +29,10 @@ node_types:
                 default: {get_input: gcp_region}
 
         attributes:
-            public_address:
+            application_address:
                 type: string
 
-            database_address:
-                type: string
-                default: {eval: '.::public_address'}
-
-            database_port:
+            application_port:
                 type: integer
                 default: 3306
 
@@ -68,7 +64,7 @@ node_types:
                             primary: Terraform
             defaults:
                 outputs:
-                    public_address: public_address
+                    application_address: application_address
                 inputs:
                     tfvars: |
                         project = "{{ SELF.gcp_project }}"
@@ -157,7 +153,7 @@ node_types:
                            password = var.password
                          }
 
-                         output "public_address" {
+                         output "application_address" {
                            value = google_sql_database_instance.dbms.public_ip_address
                          }
 
@@ -226,15 +222,15 @@ node_types:
 
                                     - name: Set Attributes
                                       set_fact:
-                                          public_address: '{{ (instance_info.stdout | from_yaml).ipAddresses[0].ipAddress }}'
+                                          application_address: '{{ (instance_info.stdout | from_yaml).ipAddresses[0].ipAddress }}'
 
                             resultTemplate: |
                                 - name: SELF
                                   attributes:
-                                    public_address: "{{ outputs.public_address | trim }}"
+                                    application_address: "{{ outputs.application_address | trim }}"
 
                         outputs:
-                            public_address:
+                            application_address:
 
                     delete:
                         implementation:

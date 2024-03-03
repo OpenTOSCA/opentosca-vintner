@@ -93,8 +93,8 @@ topology_template:
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
-                DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
-                DB_PORT: 3306 # TODO: {eval: '.::.requirements[.name=database]::.target::database_port'}
+                DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
                 - host: kubernetes_namespace
