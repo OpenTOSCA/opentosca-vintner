@@ -211,7 +211,7 @@ node_types:
 
     # TODO: inherit from shop.component?
     shop.component.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sRawResource
+        derived_from: unfurl.nodes.K8sResource
 
         properties:
             application_name:
@@ -242,6 +242,7 @@ node_types:
                     kind: Deployment
                     metadata:
                         name: shop
+                        namespace: default
                     spec:
                         selector:
                             matchLabels:
@@ -268,7 +269,7 @@ node_types:
                                             value: '{{ SELF.DB_ADDRESS }}'
 
                                           - name: DB_PORT
-                                            value: '{{ SELF.DB_PORT }}'
+                                            value: "'{{ SELF.DB_PORT }}'"
 
                                           - name: DB_DIALECT
                                             value: '{{ SELF.DB_DIALECT }}'
@@ -281,9 +282,8 @@ node_types:
                   capability: tosca.capabilities.Endpoint.Database
                   relationship: tosca.relationships.ConnectsTo
 
-    # TODO: how to expose ...
     shop.component.expose.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sRawResource
+        derived_from: unfurl.nodes.K8sResource
         properties:
             definition:
                 type: any
@@ -292,9 +292,11 @@ node_types:
                     kind: Service
                     metadata:
                         name: shop
+                        namespace: default
                     spec:
                         ports:
                             - port: 80
+                              nodePort: 30080
                         selector:
                             app: shop
                         type: NodePort

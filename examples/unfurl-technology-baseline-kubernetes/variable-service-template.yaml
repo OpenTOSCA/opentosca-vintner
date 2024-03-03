@@ -90,10 +90,16 @@ topology_template:
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
                 DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
-                DB_PORT: {eval: '.::.requirements[.name=database]::.target::database_port'}
+                DB_PORT: 3306 # TODO: {eval: '.::.requirements[.name=database]::.target::database_port'}
             requirements:
                 - database: database
-                - host: kubernetes
+                - host: kubernetes_namespace
+
+        shop_expose:
+            type: shop.component.expose.kubernetes.kubernetes
+            requirements:
+                - host: kubernetes_namespace
+                - depends: shop
 
         database:
             type: mysql.database.ansible.mysql
@@ -101,11 +107,23 @@ topology_template:
                 database_name: unfurl-technology
             requirements:
                 - host: mysql_dbms
+                - depends: mysql_dbms_expose
 
         mysql_dbms:
             type: mysql.dbms.kubernetes.kubernetes
             properties:
                 root_password: {get_input: database_password}
+            requirements:
+                - host: kubernetes_namespace
+
+        mysql_dbms_expose:
+            type: mysql.dbms.expose.kubernetes.kubernetes
+            requirements:
+                - host: kubernetes_namespace
+                - depends: mysql_dbms
+
+        kubernetes_namespace:
+            type: kubernetes.namespace
             requirements:
                 - host: kubernetes
 

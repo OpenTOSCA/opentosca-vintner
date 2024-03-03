@@ -259,12 +259,12 @@ node_types:
 
     # TODO: inherit from mysql.dbms?
     mysql.dbms.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sRawResource
+        derived_from: unfurl.nodes.K8sResource
 
         attributes:
             public_address:
                 type: string
-                default: {eval: '.::.requirements[.name=host]::.target::public_address'}
+                default: 192.168.85.2 # TODO: hat port {eval: '.::.requirements[.name=host]::.target::api_server'}
 
             database_address:
                 type: string
@@ -272,7 +272,7 @@ node_types:
 
             database_port:
                 type: integer
-                default: 3306
+                default: 30081 # TODO: internal vs external
 
         capabilities:
             host:
@@ -311,19 +311,14 @@ node_types:
                                       name: mysql
                                       env:
                                           - name: MYSQL_ROOT_PASSWORD
-                                            value: password # TODO: hardcoded
+                                            value: '{{ SELF.root_password }}'
                                       ports:
                                           - containerPort: 3306
                                             name: mysql
 
-    # TODO: how to expose ...
     mysql.dbms.expose.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sRawResource
-
+        derived_from: unfurl.nodes.K8sResource
         properties:
-            root_password:
-                type: string
-
             definition:
                 type: any
                 default:
@@ -331,9 +326,11 @@ node_types:
                     kind: Service
                     metadata:
                         name: mysql
+                        namespace: default
                     spec:
                         ports:
-                            - port: 3306
+                            - port: 3306 # TODO: {{ SELF.database_port }}
+                              nodePort: 30081 # TODO: {{ SELF.database_port }}
                         selector:
                             app: mysql
                         type: NodePort
