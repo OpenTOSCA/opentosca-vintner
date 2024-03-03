@@ -1,6 +1,6 @@
 import {exec} from 'child_process'
 import path from 'path'
-import wsl from './wsl'
+import platform from './platform'
 
 const executables: {[key: string]: string} = {
     darwin: 'open',
@@ -9,15 +9,13 @@ const executables: {[key: string]: string} = {
     wsl: 'explorer.exe',
 }
 
-const platform = wsl.wsl ? 'wsl' : process.platform
-
-const executable = executables[platform]
+const executable = executables[platform.platform]
 if (!executable) throw new Error(`Platform not supported`)
 
 async function resolve(file: string) {
     const resolved = path.resolve(file)
-    if (wsl.wsl) {
-        return "'" + (await wsl.wsl2win(resolved)) + "'"
+    if (platform.wsl) {
+        return "'" + (await platform.wsl2win(resolved)) + "'"
     }
     return resolved
 }

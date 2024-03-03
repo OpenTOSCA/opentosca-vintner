@@ -1,4 +1,5 @@
 import day from '#utils/day'
+import platform from '#utils/platform'
 import {Dayjs} from 'dayjs'
 
 export function isTrue(element?: unknown): element is true {
@@ -46,5 +47,5 @@ export function isName(name: string) {
 }
 
 export function isLinux() {
-    return process.platform === 'linux'
+    return platform.linux
 }

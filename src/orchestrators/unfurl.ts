@@ -3,6 +3,7 @@ import * as files from '#files'
 import {Instance} from '#repositories/instances'
 import {Shell} from '#shell'
 import * as utils from '#utils'
+import platform from '#utils/platform'
 import path from 'path'
 import {Orchestrator, OrchestratorOperationOptions, OrchestratorValidateOptions} from './index'
 
@@ -56,8 +57,12 @@ export class Unfurl implements Orchestrator {
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
 
-        // TODO: Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
-        // TODO: files.deleteDirectory(tmp)
+        /**
+         * Clean up only on Linux.
+         * On Windows the following error is thrown:
+         * Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
+         */
+        if (platform.linux) files.deleteDirectory(tmp)
     }
 
     /**
