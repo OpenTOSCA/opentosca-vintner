@@ -1,0 +1,107 @@
+# TODO: delete me
+# TODO: drop "assign"
+
+ansible:
+    - component: shop.component
+      host: os.compute
+      weight: 1
+      # TODO: test this
+      assign: shop.component.ansible.os
+
+    - component: shop.component
+      host: gcp.app_engine
+      weight: 0.5
+      # TODO: test this
+      assign: shop.component.ansible.gcp
+
+    - component: os.compute
+      weight: 0.5
+      # TODO: test this
+      assign: os.compute.ansible.os
+
+    - component: gcp.app_engine
+      weight: 0.5
+      # TODO: test this
+      assign: gcp.app_engine.ansible.gcp
+
+    - component: gcp.cloud_sql
+      weight: 0.5
+      # TODO: test this
+      assign: gcp.cloud_sql.ansible.gcp
+
+    - component: mysql.database
+      host: gcp.cloud_sql
+      weight: 0.5
+      # TODO: test this
+      assign: mysql.database.ansible.gcp
+
+    - component: mysql.database
+      host: mysql.dbms
+      weight: 1
+      # TODO: test this
+      assign: mysql.database.ansible.mysql
+
+    - component: mysql.dbms
+      host: os.compute
+      weight: 1
+      # TODO: test this
+      assign: mysql.dbms.ansible.os
+
+terraform:
+    - component: shop.component
+      host: os.compute
+      weight: 0
+      # TODO: test this
+      assign: shop.component.terraform.os
+
+    - component: shop.component
+      host: gcp.app_engine
+      weight: 1
+      # TODO: test this
+      assign: shop.component.terraform.gcp
+
+    - component: os.compute
+      weight: 1
+      # TODO: test this
+      assign: os.compute.terraform.os
+
+    - component: gcp.app_engine
+      weight: 1
+      # TODO: test this
+      assign: gcp.app_engine.terraform.gcp
+
+    - component: gcp.cloud_sql
+      weight: 1
+      # TODO: test this
+      assign: gcp.cloud_sql.terraform.gcp
+
+    - component: mysql.database
+      host: gcp.cloud_sql
+      weight: 1
+      # TODO: test this
+      assign: mysql.database.terraform.gcp
+
+    - component: mysql.database
+      host: mysql.dbms
+      weight: 0
+      # TODO: test this
+      assign: mysql.database.terraform.mysql
+
+    - component: mysql.dbms
+      host: os.compute
+      weight: 0
+      # TODO: test this
+      assign: mysql.dbms.terraform.os
+
+kubernetes:
+    - component: shop.component
+      host: kubernetes
+      weight: 1
+      # TODO: test this
+      assign: shop.component.kubernetes.kubernetes
+
+    - component: mysql.dbms
+      host: kubernetes
+      weight: 1
+      # TODO: test this
+      assign: mysql.dbms.kubernetes.kubernetes

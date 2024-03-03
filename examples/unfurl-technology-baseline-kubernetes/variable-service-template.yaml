@@ -64,6 +64,26 @@ topology_template:
             type: string
             default: stoetzms-387808
 
+        k8s_context:
+            type: string
+            default: minikube
+
+        k8s_config_file:
+            type: string
+            default: /home/stoetzms/.kube/config.json
+
+    # TODO: somehow move this into type import? cap?
+    #  relationship_templates:
+    #      k8sConnection:
+    #          # if a template defines node or capability it will be used
+    #          # as the default relationship when connecting to that node
+    #          default_for: ANY
+    #          #target: kubernetes
+    #          type: unfurl.relationships.ConnectsTo.K8sCluster
+    #          properties:
+    #              context: {get_input: k8s_context}
+    #              KUBECONFIG: {get_input: k8s_config_file}
+
     node_templates:
         shop:
             type: shop.component.kubernetes.kubernetes
@@ -72,7 +92,7 @@ topology_template:
                 DB_NAME: unfurl-technology
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
-                DB_DIALECT: mysql
+                DB_DIALECT: mysqlkubernetes_context
                 DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::database_address'}
                 DB_PORT: {eval: '.::.requirements[.name=database]::.target::database_port'}
             requirements:
@@ -95,3 +115,9 @@ topology_template:
 
         kubernetes:
             type: kubernetes
+#            directives:
+#                - discover
+#            requirements:
+#                - endpoint:
+#                      relationship: k8sConnection
+#                      node: kubernetes

@@ -236,43 +236,45 @@ node_types:
                 type: integer
 
             definition:
-                apiVersion: apps/v1
-                kind: Deployment
-                metadata:
-                    name: shop
-                spec:
-                    selector:
-                        matchLabels:
-                            app: shop
-                    template:
-                        metadata:
-                            labels:
+                type: any
+                default:
+                    apiVersion: apps/v1
+                    kind: Deployment
+                    metadata:
+                        name: shop
+                    spec:
+                        selector:
+                            matchLabels:
                                 app: shop
-                        spec:
-                            containers:
-                                - image: ghcr.io/opentosca/opentosca-shop-demo:latest
-                                  name: shop
-                                  env:
-                                      - name: DB_NAME
-                                        value: '{{ SELF.DB_NAME }}'
+                        template:
+                            metadata:
+                                labels:
+                                    app: shop
+                            spec:
+                                containers:
+                                    - image: ghcr.io/opentosca/opentosca-shop-demo:latest
+                                      name: shop
+                                      env:
+                                          - name: DB_NAME
+                                            value: '{{ SELF.DB_NAME }}'
 
-                                      - name: DB_PASSWORD
-                                        value: '{{ SELF.DB_PASSWORD }}'
+                                          - name: DB_PASSWORD
+                                            value: '{{ SELF.DB_PASSWORD }}'
 
-                                      - name: DB_USERNAME
-                                        value: '{{ SELF.DB_USERNAME }}'
+                                          - name: DB_USERNAME
+                                            value: '{{ SELF.DB_USERNAME }}'
 
-                                      - name: DB_ADDRESS
-                                        value: '{{ SELF.DB_ADDRESS }}'
+                                          - name: DB_ADDRESS
+                                            value: '{{ SELF.DB_ADDRESS }}'
 
-                                      - name: DB_PORT
-                                        value: '{{ SELF.DB_PORT }}'
+                                          - name: DB_PORT
+                                            value: '{{ SELF.DB_PORT }}'
 
-                                      - name: DB_DIALECT
-                                        value: '{{ SELF.DB_DIALECT }}'
+                                          - name: DB_DIALECT
+                                            value: '{{ SELF.DB_DIALECT }}'
 
-                                  ports:
-                                      - containerPort: 80
+                                      ports:
+                                          - containerPort: 80
 
         requirements:
             - database:
@@ -284,16 +286,18 @@ node_types:
         derived_from: unfurl.nodes.K8sRawResource
         properties:
             definition:
-                apiVersion: v1
-                kind: Service
-                metadata:
-                    name: shop
-                spec:
-                    ports:
-                        - port: 80
-                    selector:
-                        app: shop
-                    type: NodePort
+                type: any
+                default:
+                    apiVersion: v1
+                    kind: Service
+                    metadata:
+                        name: shop
+                    spec:
+                        ports:
+                            - port: 80
+                        selector:
+                            app: shop
+                        type: NodePort
 
     ###################################################
     #

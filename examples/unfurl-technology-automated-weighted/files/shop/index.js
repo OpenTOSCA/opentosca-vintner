@@ -5,6 +5,11 @@ const {Sequelize} = require('sequelize');
 const crypto = require('crypto');
 // See https://github.com/vercel/pkg/issues/141#issuecomment-311746512
 require('sqlite3')
+require('mysql2')
+
+
+const APP_PORT = Number(process.env.PORT) || 80
+const APP_INTERFACE = process.env.INTERFACE || '0.0.0.0'
 
 const DB_DIALECT = process.env.DB_DIALECT || "memory"
 if (!['memory', 'sqlite', 'mysql'].includes(DB_DIALECT)) throw `DB_DIALECT ${DB_DIALECT} is not supported`
@@ -13,6 +18,7 @@ const DB_NAME = process.env.DB_NAME
 const DB_USERNAME = process.env.DB_USERNAME
 const DB_PASSWORD = process.env.DB_PASSWORD
 const DB_ADDRESS = process.env.DB_ADDRESS
+const DB_PORT = process.env.DB_PORT
 
 let sequelize;
 
@@ -30,7 +36,8 @@ if (DB_DIALECT === 'sqlite') {
 if (DB_DIALECT === 'mysql') {
     sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
         dialect: DB_DIALECT,
-        host: DB_ADDRESS
+        host: DB_ADDRESS,
+        port: Number(DB_PORT)
     })
 }
 
@@ -53,8 +60,9 @@ index.get('/', async (req, res) => {
         QUERY,
         ERROR: error,
         DB_DIALECT,
-        DB_NAME,
         DB_ADDRESS,
+        DB_PORT,
+        DB_NAME,
         DB_USERNAME,
         DB_PASSWORD: anonymize(DB_PASSWORD),
     })
@@ -70,10 +78,8 @@ function anonymize(password) {
     }
 }
 
-const PORT = parseInt(process.env.PORT) || 80;
-const INTERFACE = process.env.INTERFACE || '0.0.0.0'
-index.listen(PORT, INTERFACE, () => {
-    console.log(`Listening on ${INTERFACE}:${PORT}`);
+index.listen(APP_PORT, APP_INTERFACE, () => {
+    console.log(`Listening on ${APP_INTERFACE}:${APP_PORT}`);
 });
 
 module.exports = index;
