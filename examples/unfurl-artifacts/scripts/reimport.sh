@@ -9,5 +9,6 @@ $VINTNER templates delete --template ${TEMPLATE_NAME}
 
 $VINTNER templates import --template ${TEMPLATE_NAME}  --path ${TEMPLATE_DIR}
 $VINTNER instances init --instance ${TEMPLATE_NAME}  --template ${TEMPLATE_NAME}
-$VINTNER instances resolve --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/tests/${DEPLOYMENT_VARIANT}/inputs.yaml
-$VINTNER instances deploy --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/deployment-inputs.ignored.yaml
+$VINTNER instances resolve --instance ${TEMPLATE_NAME} --presets ${DEPLOYMENT_VARIANT}
+$VINTNER instances validate --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/deployment-inputs.ignored.yaml
+#$VINTNER instances deploy --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/deployment-inputs.ignored.yaml

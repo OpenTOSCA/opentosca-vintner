@@ -3,16 +3,13 @@ tosca_definitions_version: tosca_variability_1_0
 imports:
     - repository: unfurl
       file: tosca_plugins/artifacts.yaml
-
-    - file: lib/shop_app.yaml
-
-    - file: lib/node_runtime.yaml
-    - file: lib/sqlite.yaml
-    - file: lib/os_vm.yaml
-
-    - file: lib/gcp_runtime.yaml
-    - file: lib/gcp_database.yaml
-    - file: lib/gcp_dbms.yaml
+    - lib/shop_app.yaml
+    - lib/node_runtime.yaml
+    - lib/sqlite.yaml
+    - lib/os_vm.yaml
+    - lib/gcp_runtime.yaml
+    - lib/gcp_database.yaml
+    - lib/gcp_dbms.yaml
 
 topology_template:
     variability:

@@ -54,7 +54,7 @@ vintner orchestrators attest --orchestrator xopera-wsl
 ## Unfurl
 
 We install Unfurl using the following command.
-This will install Unfurl v0.9.1 in a virtual environment.
+This will install Unfurl v1.0.0 in a virtual environment.
 For a manual installation see [the documentation](https://docs.unfurl.run/README.html#installation){target=_blank}.
 
 ```shell linenums="1"

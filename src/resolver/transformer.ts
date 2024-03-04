@@ -288,7 +288,6 @@ export default class Transformer {
                     this.clean(definition)
 
                     // Minimize
-                    // TODO: is this dirty?
                     if (
                         !check.isString(definition) &&
                         Object.keys(definition).length === 1 &&

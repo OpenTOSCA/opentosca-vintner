@@ -28,4 +28,4 @@ python3 -m venv .venv && . .venv/bin/activate
 
 # Install Unfurl
 # See also https://github.com/onecommons/unfurl/blob/main/full-requirements.txt
-pip install unfurl==0.9.1 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2
+pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2
