@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {SensorBaseOptions, human2cron, prefix, submit} from '#controller/sensors/utils'
 import std from '#std'
@@ -46,8 +47,7 @@ class SensorCompute {
     async start() {
         this.time = utils.now()
 
-        const system = await si.osInfo()
-        if (system.platform.toLowerCase().includes('win')) throw new Error(`Windows is not supported`)
+        assert.isLinux()
 
         await this.collect()
         this.collector = cron.schedule(
