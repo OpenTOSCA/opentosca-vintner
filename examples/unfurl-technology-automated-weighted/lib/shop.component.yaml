@@ -212,7 +212,7 @@ node_types:
 
     # TODO: inherit from shop.component?
     shop.component.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sResource
+        derived_from: unfurl.nodes.K8sRawResource
 
         properties:
             application_name:
@@ -284,7 +284,7 @@ node_types:
                   relationship: tosca.relationships.ConnectsTo
 
     shop.component.expose.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sResource
+        derived_from: unfurl.nodes.K8sRawResource
         properties:
             definition:
                 type: any

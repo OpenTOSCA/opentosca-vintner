@@ -18,10 +18,3 @@ node_types:
                         cert_file: {get_input: k8s_ca_cert_file}
                         ca_cert: {get_input: k8s_client_cert_file}
                         key_file: {get_input: k8s_client_key_file}
-
-    kubernetes.namespace:
-        derived_from: unfurl.nodes.K8sNamespace
-
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute

@@ -272,7 +272,7 @@ node_types:
 
     # TODO: inherit from mysql.dbms?
     mysql.dbms.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sResource
+        derived_from: unfurl.nodes.K8sRawResource
 
         attributes:
             management_address:
@@ -334,7 +334,7 @@ node_types:
                                             name: mysql
 
     mysql.dbms.expose.kubernetes.kubernetes:
-        derived_from: unfurl.nodes.K8sResource
+        derived_from: unfurl.nodes.K8sRawResource
         properties:
             definition:
                 type: any
