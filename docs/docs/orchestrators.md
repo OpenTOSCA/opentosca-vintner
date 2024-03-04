@@ -118,8 +118,6 @@ Under the scene, we are using the following deployment technologies.
 | terraform (apt)              | 1.4.6   |
 
 
-google-cloud-cli=432.0.0-0
-
 ## Known Limitations
 - xOpera version 0.6.9 should be used. xOpera version 0.7.0 does not parse the templates as expected, see issues
   [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
