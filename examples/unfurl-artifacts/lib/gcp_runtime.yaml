@@ -1,5 +1,9 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+imports:
+    - repository: unfurl
+      file: tosca_plugins/artifacts.yaml
+
 node_types:
     gcp.runtime:
         derived_from: unfurl.nodes.Installer.Terraform
