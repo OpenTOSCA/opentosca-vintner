@@ -103,6 +103,23 @@ The orchestrators provide more features, see [TOSSS](https://tosss.opentosca.org
 | Access node instance attributes               | :material-check: | :material-close: |
 
 
+## Deployment Technologies 
+
+Under the scene, we are using the following deployment technologies.
+
+| Technology                   | Version |
+|------------------------------|---------|
+| ansible (pip)                | 4.10.0  |
+| google-cloud-cli (apt)       | 432.0.0 | 
+| kubernetes (pip)             | 24.2.0  |
+| openshift (pip)              | 0.13.2  |
+| openstacksdk (pip)           | 0.61    |
+| python-openstackclient (pip) | 6.0.0   |
+| terraform (apt)              | 1.4.6   |
+
+
+google-cloud-cli=432.0.0-0
+
 ## Known Limitations
 - xOpera version 0.6.9 should be used. xOpera version 0.7.0 does not parse the templates as expected, see issues
   [#257](https://github.com/xlab-si/xopera-opera/issues/257){target=_blank},
