@@ -3,7 +3,7 @@ import _init from './init'
 import _inputs from './inputs'
 import _normalize from './normalize'
 import _package from './package'
-import _preload from './preload'
+import _pull from './pull'
 import PUMLController from './puml'
 import _query from './query'
 import _resolve from './resolve'
@@ -27,5 +27,5 @@ export default {
     normalize: _normalize,
     sign: _sign,
     verify: _verify,
-    preload: _preload,
+    pull: _pull,
 }
