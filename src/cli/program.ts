@@ -452,6 +452,16 @@ template
         })
     )
 
+template
+    .command('pull')
+    .description('pull template dependencies')
+    .requiredOption('--template <string>', 'path to service template')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.pull(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 const pumlTopology = puml

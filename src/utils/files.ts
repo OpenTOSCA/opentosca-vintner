@@ -11,6 +11,7 @@ import * as yaml from 'js-yaml'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
+import * as syncDirectory from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
 
@@ -136,6 +137,14 @@ export function toENV(obj: {[key: string]: string | number | boolean}) {
 
 export function copy(source: string, target: string) {
     fse.copySync(path.resolve(source), path.resolve(target))
+}
+
+export async function sync(source: string, target: string) {
+    await syncDirectory.async(source, target, {
+        onError(error): any {
+            throw error
+        },
+    })
 }
 
 export function listDirectories(directory: string): string[] {

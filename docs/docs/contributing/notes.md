@@ -50,6 +50,21 @@ ${vintner_home}/
 | template_timestamp        | true      | Number | ISO milliseconds of latest variable service template                                   |
 | service_inputs_timestamp  | false     | Number | ISO milliseconds of latest service inputs                                              |
 
+## Template Config 
+
+A template might have a `config.yaml` at root of the following type.
+
+```typescript linenums="1"
+export type Config = {
+    dependencies: Dependencies
+}
+
+export type Dependencies = TemplateDependency[]
+export type TemplateDependency = {
+    source: string
+    target: string
+}
+```
 
 ## Workflows
 
