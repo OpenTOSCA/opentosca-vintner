@@ -25,6 +25,7 @@ export default async function (options: TemplateQualityOptions): Promise<Templat
     assert.isDefined(options.template, 'Template not defined')
 
     if (check.isDefined(options.presets) || check.isDefined(options.inputs)) {
+        // TODO: this makes only randomized or non unique results sense?
         const results = await Resolver.optimize({
             template: options.template,
             inputs: options.inputs,
