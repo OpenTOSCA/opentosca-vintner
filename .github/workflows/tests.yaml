@@ -48,6 +48,17 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: ./src/assets/scripts/install-xopera.sh
 
+            # TODO: split this up
+            # Before "yarn build" since "dependencies.csv" is packaged
+            - name: (PREPARE) Generate Dependencies Page
+              run: yarn docs:generate:dependencies
+
+            - name: (PREPARE) Build Project
+              run: yarn build
+
+            - name: (PREPARE) Pull Example Dependencies
+              run: yarn examples:pull
+
             ###################################################
             #
             # Test
@@ -71,23 +82,17 @@ jobs:
 
             ###################################################
             #
-            # Build
+            # Package
             #
             ###################################################
 
-            - name: (DOCS) Generate Dependencies Page
-              run: yarn docs:generate:dependencies
-
-            - name: (BUILD) Build Project
-              run: yarn build
-
-            - name: (BUILD) Setup Packaging Cache
+            - name: (PACKAGE) Setup Packaging Cache
               uses: actions/cache@v3
               with:
                   path: ~/.pkg-cache
                   key: pkg
 
-            - name: (BUILD) Package Binaries
+            - name: (PACKAGE) Package Binaries
               run: yarn package
 
             ###################################################

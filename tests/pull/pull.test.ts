@@ -3,8 +3,8 @@ import * as files from '#files'
 import {expect} from 'chai'
 import path from 'path'
 
-describe('preload', () => {
-    it('preload', async () => {
+describe('pull', () => {
+    it('pull', async () => {
         const file = path.join(__dirname, 'template', 'lib', 'file.yaml')
         expect(files.exists(file), 'File already exists ...').to.be.false
 
