@@ -455,10 +455,26 @@ template
 template
     .command('pull')
     .description('pull template dependencies')
-    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--template <string>', 'path to service template directory')
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
+        })
+    )
+
+template
+    .command('quality')
+    .description('get quality of template')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--dir [string]', 'override dir')
+    .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
+    )
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.template.quality(options))
         })
     )
 

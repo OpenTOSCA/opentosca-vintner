@@ -15,9 +15,9 @@ export default class Loader {
     private serviceTemplate?: ServiceTemplate
     private graph?: Graph
 
-    constructor(file: string) {
+    constructor(file: string, dir?: string) {
         this.file = file
-        this.dir = files.getDirectory(file)
+        this.dir = dir ?? files.getDirectory(file)
     }
 
     raw() {

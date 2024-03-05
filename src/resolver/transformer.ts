@@ -232,6 +232,8 @@ export default class Transformer {
         template.type = type.name
     }
 
+    private getTypeName() {}
+
     private transformTechnology(element: Node, template: NodeTemplate) {
         assert.isString(template.type)
 

@@ -1,4 +1,5 @@
 import * as check from '#check'
+import {TemplateQuality} from '#controller/template/quality'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import * as utils from '#utils'
@@ -12,6 +13,7 @@ export class Result {
     private readonly result: MiniSat.Solution
     readonly topology: {count: number; weight: number}
     readonly technologies: {count: number; weight: number}
+    readonly quality: TemplateQuality
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
@@ -19,6 +21,7 @@ export class Result {
 
         this.topology = this.weightTopology()
         this.technologies = this.weightTechnologies()
+        this.quality = this.assessQuality()
     }
 
     private _map?: ResultMap
@@ -52,6 +55,16 @@ export class Result {
         return {
             count: Object.values(weights).length,
             weight: utils.sum(Object.values(weights)),
+        }
+    }
+
+    private assessQuality(): TemplateQuality {
+        const values = this.weightTechnologies()
+        const count = this.graph.technologies.filter(it => this.isPresent(it)).length
+        return {
+            quality: values.weight,
+            count,
+            normalized: values.weight / count,
         }
     }
 
