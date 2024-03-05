@@ -32,6 +32,14 @@ export default async function (options: TemplateQualityOptions): Promise<Templat
             presets: options.presets,
         })
 
+        /**
+         * TODO: checker does not run on these results!
+         * should resolve it twice: once for best and once for worst
+         *
+         * but due to topology optimization and uniqueness we can assume that nodes at fixed and therefore their technologies?
+         *
+         */
+
         if (results.length === 0) return []
 
         if (results.length === 1) return [results[0].quality]
