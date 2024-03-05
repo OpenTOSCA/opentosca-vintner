@@ -15,6 +15,7 @@ runs:
         - name: (VINTNER) Resolve variability
           shell: bash
           run: |
+              vintner template pull --template examples/${EXAMPLE}
               vintner templates import --template template --path examples/${EXAMPLE}
               vintner instances init --instance instance --template template
               vintner instances resolve --instance instance --presets ${PRESET}

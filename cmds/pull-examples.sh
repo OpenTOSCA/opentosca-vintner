@@ -5,6 +5,7 @@ set -e
 cd "$(dirname "$0")"
 cd ../
 
+
 # Check that vintner has been built
 ENTRYPOINT="build/cli/index.js"
 VINTNER="node build/cli/index.js"
@@ -12,6 +13,7 @@ if [ ! -f "${ENTRYPOINT}" ]; then
     echo "Entrypoint not found"
     exit 1
 fi
+
 
 # Pull dependencies of each example
 for e in examples/*/; do
