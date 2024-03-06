@@ -195,7 +195,7 @@ export function getDirectory(file: string) {
     return path.parse(path.resolve(file)).dir
 }
 
-export function getFilename(file: string) {
+export function getBase(file: string) {
     return path.parse(path.resolve(file)).base
 }
 
