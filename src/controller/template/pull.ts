@@ -32,11 +32,13 @@ export default async function (options: TemplatePullOptions) {
         const source = path.isAbsolute(dependency.source)
             ? dependency.source
             : path.join(options.template, dependency.source)
-        const target = path.join(options.template, dependency.target || '.')
 
         if (options.link) {
+            const target = path.join(options.template, dependency.target || '.')
+
             await files.link(source, target)
         } else {
+            const target = path.join(options.template, dependency.target || files.getBase(source))
             await files.sync(source, target)
         }
     }

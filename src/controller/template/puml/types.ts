@@ -35,7 +35,7 @@ export default async function (options: TemplatePUMLTypesOptions) {
     for (const [type, plot] of Object.entries(result)) {
         const output = path.join(
             outputDir,
-            files.getFilename(options.path).replace(/(\.yaml|\.yml)/, '.' + type.replace('_', '-') + '.puml')
+            files.getBase(options.path).replace(/(\.yaml|\.yml)/, '.' + type.replace('_', '-') + '.puml')
         )
         if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 

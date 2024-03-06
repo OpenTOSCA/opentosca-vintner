@@ -115,3 +115,7 @@ runs:
         - name: (PREPARE) Install Vintner
           shell: bash
           run: curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -
+
+        - name: (PREPARE) Vintner version
+          shell: bash
+          run: vintner --version
