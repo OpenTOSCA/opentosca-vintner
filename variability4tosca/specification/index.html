@@ -3222,7 +3222,7 @@ Such a topology template is also called variable topology template.</p>
 <td>technology_assignment_rules</td>
 <td>false</td>
 <td>String | Map(String, TechnologyAssignmentRule)</td>
-<td>An optional definition of technology assignment rules. If string, then treated as relative file to import (default: "./rules.yaml").</td>
+<td>An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).</td>
 </tr>
 <tr>
 <td>plugins</td>
@@ -3881,7 +3881,6 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tbody>
 </table>
 <h3 id="solver-options">Solver Options<a class="headerlink" href="#solver-options" title="Permanent link">¶</a></h3>
-<p><em>This is an experimental feature.</em></p>
 <p>The following options are used to configure the solver.</p>
 <table>
 <thead>
@@ -4011,7 +4010,6 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tbody>
 </table>
 <h3 id="pruning-modes">Pruning Modes<a class="headerlink" href="#pruning-modes" title="Permanent link">¶</a></h3>
-<p><em>This is an experimental feature.</em></p>
 <p>There are several predefined pruning modes which provide different useful combinations of default conditions and the pruning of elements that can be directly used.</p>
 <ul>
 <li><code>manual</code>: no default or pruning conditions are enabled at all</li>
@@ -4250,6 +4248,12 @@ A technology assignment rule is defined as follows.</p>
 <td>Number</td>
 <td>The weight which is minimized (default is 1).</td>
 </tr>
+<tr>
+<td>assign</td>
+<td>false</td>
+<td>String</td>
+<td>Configure the node type that is assigned (default: <code>${current_type}.${technology_name}.${host_type_prefix}</code>).</td>
+</tr>
 </tbody>
 </table>
 <p>For example, the node type <code>application</code> can be deployed using the deployment technology <code>terraform</code> if the host is of type <code>terraform_host</code>.</p>
@@ -4470,7 +4474,7 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>weight</td>
 <td>false</td>
 <td>Boolean | Non-Negative Number</td>
-<td>Configure the weight of this element used during optimization (default is 1). <em>This is an experimental feature.</em></td>
+<td>Configure the weight of this element used during optimization (default is 1).</td>
 </tr>
 <tr>
 <td>implies</td>
@@ -4559,6 +4563,18 @@ These conditions must hold otherwise the respective technology template is not p
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>false</td>
+<td>Boolean | Non-Negative Number</td>
+<td>Configure the weight of this element used during optimization (default is 1).</td>
+</tr>
+<tr>
+<td>assign</td>
+<td>false</td>
+<td>String</td>
+<td>Configure the node type that is assigned (default: <code>${current_type}.${technology_name}.${host_type_prefix}</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -5890,7 +5906,7 @@ The definition is intended to be extended in other specifications, e.g., for bui
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
 <span class="normal"><a href="#__codelineno-24-2">2</a></span>
 <span class="normal"><a href="#__codelineno-24-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">TechnologyPlugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="w">    </span><span class="nx">assign</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">node</span><span class="o">:</span><span class="w"> </span><span class="kt">Node</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">ConditionalTechnologyAssignment</span><span class="p">[]</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="w">    </span><span class="nx">assign</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">node</span><span class="o">:</span><span class="w"> </span><span class="kt">Node</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{[</span><span class="nx">technology</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">]</span><span class="o">:</span><span class="w"> </span><span class="nx">TechnologyTemplate</span><span class="p">}[]</span>
 <a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">¶</a></h2>
@@ -6010,12 +6026,12 @@ For example, the properties of a relationship template used in a requirement ass
 Element-generic default conditions are generic default conditions defined per element. 
 However, type-specific default conditions are defined per type, e.g., node type, and, thus, override element-generic default conditions.</p>
 <h3 id="optimization">Optimization<a class="headerlink" href="#optimization" title="Permanent link">¶</a></h3>
-<p><em>This is an experimental feature.</em></p>
-<p>The variability-resolved service template can be optimized regarding minimal weight of node templates. 
+<p>The variability-resolved service template can be optimized regarding the weight of node templates. 
 The default weight of a node template is 1.
-Thus, per default, the variability-resolved service template is optimized regarding the minimal number of node templates.
+Per default, the variability-resolved service template is optimized regarding the minimal weight/ number of node templates.
 The primary intention is to minimize the deployment complexity, but optimization could be also used, e.g., to minimize overall costs.
-The weight of a node template can be configured in its definition.</p>
+The weight of a node template can be configured in its definition.
+Moreover, technology selection can be optimized.</p>
 <h2 id="element-system">Element System<a class="headerlink" href="#element-system" title="Permanent link">¶</a></h2>
 <p>When introducing conditional elements, we follow typically the approach of using a list whose entries are maps that contain a single element.
 Thus, elements can just be defined as usual but in a list (instead of a map) and can even share the same names. 
@@ -6233,7 +6249,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 3, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 6, 2024</span>
 </small>
 </div>
 </article>
