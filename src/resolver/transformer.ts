@@ -247,7 +247,6 @@ export default class Transformer {
             let type = template.type
             type += '.' + technology.name
 
-            // TODO: this will not work, e.g., for shop.component.ansible.gcp
             const host = element.hosts.find(it => it.present)
             if (check.isDefined(host)) {
                 type += '.' + host.getType().name.split('.')[0]

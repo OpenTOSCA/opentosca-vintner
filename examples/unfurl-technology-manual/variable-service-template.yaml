@@ -122,7 +122,6 @@ topology_template:
             technology_constraint: true
 
             optimization_technologies: true
-            optimization_technologies_unique: true
 
     node_templates:
         shop:

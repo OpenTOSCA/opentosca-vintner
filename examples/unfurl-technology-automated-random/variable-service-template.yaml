@@ -121,10 +121,6 @@ topology_template:
             technology_pruning: true
             technology_constraint: true
 
-            #optimization_technologies: min
-            #optimization_technologies_mode: count
-            #optimization_technologies_unique: true
-
     node_templates:
         shop:
             type: shop.component

@@ -123,7 +123,6 @@ topology_template:
 
             optimization_technologies: max
             optimization_technologies_mode: weight
-            optimization_technologies_unique: true
 
     node_templates:
         shop:
