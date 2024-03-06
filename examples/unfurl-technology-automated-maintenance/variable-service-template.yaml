@@ -107,50 +107,24 @@ topology_template:
         inputs:
             env:
                 type: string
-                default: STATIC
-
             medium:
                 type: boolean
-                default: true
-
-        presets:
-            static:
-                inputs:
-                    env: STATIC
-
-            static-large:
-                inputs:
-                    env: STATIC
-                    medium: false
-
-            elastic:
-                inputs:
-                    env: ELASTIC
-
-            kubernetes:
-                inputs:
-                    env: KUBERNETES
 
         expressions:
             is_static: {equal: [{variability_input: env}, STATIC]}
             is_elastic: {equal: [{variability_input: env}, ELASTIC]}
             is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
-
             is_medium: {variability_input: medium}
             is_large: {not: {logic_expression: is_medium}}
 
         options:
             mode: semantic-loose
-
             node_default_condition_mode: incomingnaive-host
             hosting_stack_constraint: true
-
             optimization_topology: true
             optimization_topology_unique: true
-
             technology_pruning: true
             technology_constraint: false
-
             optimization_technologies: max
             optimization_technologies_mode: weight
 
@@ -167,17 +141,13 @@ topology_template:
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
-                - database:
-                      node: database
-
+                - database: database
                 - host:
                       node: os_compute
                       conditions: {logic_expression: is_static}
-
                 - host:
                       node: gcp_runtime
                       conditions: {logic_expression: is_elastic}
-
                 - host:
                       node: kubernetes
                       conditions: {logic_expression: is_kubernetes}
@@ -197,11 +167,9 @@ topology_template:
                 - host:
                       node: mysql_dbms
                       conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
-
                 - host:
                       node: gcp_dbms
                       conditions: {logic_expression: is_elastic}
-
                 - depends:
                       node: mysql_dbms_expose
                       implied: true
@@ -215,7 +183,6 @@ topology_template:
                 - host:
                       node: os_compute
                       conditions: {logic_expression: is_static}
-
                 - host:
                       node: kubernetes
                       conditions: {logic_expression: is_kubernetes}
@@ -234,7 +201,6 @@ topology_template:
                 - flavor:
                       value: m1.medium
                       conditions: {logic_expression: is_medium}
-
                 - flavor:
                       value: m1.large
                       conditions: {logic_expression: is_large}

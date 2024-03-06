@@ -1,2 +1,1 @@
 expected: ../../../unfurl-technology-baseline-kubernetes/tests/tau/expected.yaml
-presets: kubernetes

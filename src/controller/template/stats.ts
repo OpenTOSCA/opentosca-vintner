@@ -27,6 +27,7 @@ export type TemplateStats = {
     edmm_elements_conditions_manual: number
     edmm_elements_conditions_generated: number
     loc: number
+    locp: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -60,6 +61,7 @@ export default async function (options: TemplateStatsOptions) {
                     edmm_elements_conditions_manual: countManualAtEDMM(graph),
                     edmm_elements_conditions_generated: countGeneratedAtEDMM(graph),
                     loc: files.countLines(it),
+                    locp: files.countNotBlankLines(it),
                 }
                 return stats
             })

@@ -65,6 +65,14 @@ export function countLines(file: string) {
     return fss.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
 }
 
+export function countNotBlankLines(file: string) {
+    assertFile(file)
+    return fss
+        .readFileSync(path.resolve(file), 'utf-8')
+        .split(/\r?\n/)
+        .filter(it => it).length
+}
+
 export function isLink(path: string) {
     return path.startsWith('http://') || path.startsWith('https://')
 }

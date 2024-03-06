@@ -82,45 +82,23 @@ topology_template:
         inputs:
             env:
                 type: string
-                default: STATIC
-
             medium:
                 type: boolean
-                default: true
-
-        presets:
-            static:
-                inputs:
-                    env: STATIC
-
-            static-large:
-                inputs:
-                    env: STATIC
-                    medium: false
-
-            elastic:
-                inputs:
-                    env: ELASTIC
 
         expressions:
             is_static: {equal: [{variability_input: env}, STATIC]}
             is_elastic: {equal: [{variability_input: env}, ELASTIC]}
-
             is_medium: {variability_input: medium}
             is_large: {not: {logic_expression: is_medium}}
 
         options:
             mode: semantic-loose
-
             node_default_condition_mode: incomingnaive-host
             hosting_stack_constraint: true
-
             optimization_topology: true
             optimization_topology_unique: true
-
             technology_pruning: true
             technology_constraint: true
-
             optimization_technologies: max
             optimization_technologies_mode: weight
 
@@ -137,13 +115,10 @@ topology_template:
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
-                - database:
-                      node: database
-
+                - database: database
                 - host:
                       node: os_compute
                       conditions: {logic_expression: is_static}
-
                 - host:
                       node: gcp_runtime
                       conditions: {logic_expression: is_elastic}
@@ -157,7 +132,6 @@ topology_template:
                 - host:
                       node: mysql_dbms
                       conditions: {logic_expression: is_static}
-
                 - host:
                       node: gcp_dbms
                       conditions: {logic_expression: is_elastic}
@@ -167,8 +141,7 @@ topology_template:
             properties:
                 - root_password: {get_input: database_password}
             requirements:
-                - host:
-                      node: os_compute
+                - host: os_compute
 
         os_compute:
             type: os.compute
@@ -179,7 +152,6 @@ topology_template:
                 - flavor:
                       value: m1.medium
                       conditions: {logic_expression: is_medium}
-
                 - flavor:
                       value: m1.large
                       conditions: {logic_expression: is_large}
