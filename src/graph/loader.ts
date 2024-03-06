@@ -24,6 +24,10 @@ export default class Loader {
         return files.loadYAML<ServiceTemplate>(this.file)
     }
 
+    raw() {
+        return files.loadYAML<ServiceTemplate>(this.file)
+    }
+
     async load() {
         this.serviceTemplate = this.raw()
 

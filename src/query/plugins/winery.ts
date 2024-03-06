@@ -1,5 +1,5 @@
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import glob from 'glob'
 import os from 'os'
 import path from 'path'
@@ -24,7 +24,7 @@ export class WineryTemplatesRepository implements TemplatesRepository {
         // use glob to recursively search all files named 'ServiceTemplate.tosca' within the repo
         return glob.sync(searchPattern).map(v => ({
             name: v.split('/')[v.split('/').length - 2],
-            template: files.loadYAML<ServiceTemplate>(v),
+            template: new Loader(v).raw(),
         }))
     }
 
@@ -33,7 +33,7 @@ export class WineryTemplatesRepository implements TemplatesRepository {
      * @param name The name of the template
      */
     async getTemplate(name: string) {
-        return {name, template: files.loadYAML<ServiceTemplate>(this.getTemplatePath(name))}
+        return {name, template: new Loader(this.getTemplatePath(name)).raw()}
     }
 
     getTemplatePath(name: string) {

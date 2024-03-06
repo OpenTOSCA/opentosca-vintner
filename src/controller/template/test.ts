@@ -1,7 +1,7 @@
 import * as check from '#check'
 import Controller from '#controller'
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import std from '#std'
 import * as utils from '#utils'
 import jsonDiff from 'json-diff'
@@ -78,7 +78,7 @@ async function runTest(dir: string, vstdir: string) {
         throw new Error(`Expected to throw error "${config.error}"`)
     } else {
         await fn()
-        const result = files.loadYAML<ServiceTemplate>(output)
+        const result = new Loader(output).raw()
         const expected = loadExpected({dir, file: config.expected})
 
         const diff = jsonDiff.diffString(expected, result)
@@ -108,11 +108,11 @@ export function getDefaultInputs(dir: string) {
 }
 
 export function loadExpected(data: {dir: string; file?: string}) {
-    if (check.isDefined(data.file)) return files.loadYAML<ServiceTemplate>(path.join(data.dir, data.file))
+    if (check.isDefined(data.file)) return new Loader(path.join(data.dir, data.file)).raw()
 
     for (const name of ['est.yaml', 'expected.yaml']) {
         const file = path.join(data.dir, name)
-        if (files.isFile(file)) return files.loadYAML<ServiceTemplate>(file)
+        if (files.isFile(file)) return new Loader(file).raw()
     }
 
     throw new Error(`Did not find expected service template in directory "${data.dir}"`)

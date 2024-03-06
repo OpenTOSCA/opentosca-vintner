@@ -1,5 +1,6 @@
 import * as check from '#check'
 import * as files from '#files'
+import Loader from '#graph/loader'
 import {Query} from '#query/query'
 import {getParentNode} from '#query/utils'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
@@ -10,7 +11,7 @@ export type TemplateQueryOptions = {
 }
 
 export default function (options: TemplateQueryOptions) {
-    const template = files.loadYAML<ServiceTemplate>(options.template)
+    const template = new Loader(options.template).raw()
     if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
         throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
 

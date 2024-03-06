@@ -3,8 +3,8 @@ import Controller from '#controller'
 import * as crypto from '#crypto'
 import * as files from '#files'
 import * as git from '#git'
+import Loader from '#graph/loader'
 import {Asset} from '#repositories/assets'
-import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
 import env from '#utils/env'
 import path from 'path'
@@ -104,7 +104,7 @@ export class Template {
     }
 
     loadVariableServiceTemplate() {
-        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplatePath())
+        return new Loader(this.getVariableServiceTemplatePath()).raw()
     }
 
     delete() {

@@ -48,7 +48,7 @@ export type OrchestratorOperationOptions = {
     time?: number
 }
 
-export type OrchestratorValidateOptions = {inputs?: string} & OrchestratorOperationOptions
+export type OrchestratorValidateOptions = {inputs?: string; dry?: boolean} & OrchestratorOperationOptions
 
 export interface Orchestrator {
     attest: () => Promise<void>

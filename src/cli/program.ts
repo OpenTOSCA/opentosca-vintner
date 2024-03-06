@@ -455,7 +455,8 @@ template
 template
     .command('pull')
     .description('pull template dependencies')
-    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--template <string>', 'path to service template directory')
+    .option('--link [boolean]', 'create symbolic links instead of copying files', false)
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
@@ -676,6 +677,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
     .option('--verbose [boolean]', 'verbose')
+    .option('--dry [boolean]', 'dry run')
     .action(
         hae.exit(async options => {
             await Controller.instances.validate(options)

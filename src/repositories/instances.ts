@@ -1,5 +1,6 @@
 import * as check from '#check'
 import * as files from '#files'
+import Loader from '#graph/loader'
 import orchestrators from '#orchestrators'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
@@ -182,7 +183,7 @@ export class Instance {
     }
 
     loadServiceTemplate() {
-        return files.loadYAML<ServiceTemplate>(this.getServiceTemplate())
+        return new Loader(this.getServiceTemplate()).raw()
     }
 
     setServiceTemplate(template: ServiceTemplate, time: number) {
@@ -193,8 +194,12 @@ export class Instance {
         return path.join(this.getTemplateDirectory(), 'variable-service-template.yaml')
     }
 
-    loadVariableServiceTemplate() {
-        return files.loadYAML<ServiceTemplate>(this.getVariableServiceTemplate())
+    async loadVariableServiceTemplate() {
+        return await new Loader(this.getVariableServiceTemplate()).load()
+    }
+
+    loadRawVariableServiceTemplate() {
+        return new Loader(this.getVariableServiceTemplate()).raw()
     }
 
     hasVariabilityInputs() {

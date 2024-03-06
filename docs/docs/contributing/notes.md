@@ -62,7 +62,7 @@ export type Config = {
 export type Dependencies = TemplateDependency[]
 export type TemplateDependency = {
     source: string
-    target: string
+    target?: string
 }
 ```
 
@@ -171,6 +171,10 @@ ssh -N -R 2999:192.168.178.46:3001 pi
 ```shell linenums="1"
 git update-index --chmod=+x <path to file>
 ```
+
+## bwCloud Blocked Ports
+
+Some ports are blocked when using bwCloud: https://www.bw-cloud.org/de/bwcloud_scope/netzwerk
 
 ## Naming Convention
 

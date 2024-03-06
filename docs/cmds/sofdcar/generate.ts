@@ -1,11 +1,11 @@
 import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import * as utils from '#utils'
 import * as path from 'path'
 
 async function run(name: string, id: string, variant: string) {
     const dir = path.join('docs', 'docs', 'sofdcar')
-    const template = files.loadYAML<ServiceTemplate>(path.join(dir, name + '.yaml'))
+    const template = new Loader(path.join(dir, name + '.yaml')).raw()
     await files.renderFile(
         path.join(__dirname, 'profile.template.ejs'),
         {

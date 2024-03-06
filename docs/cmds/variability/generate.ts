@@ -7,6 +7,7 @@ import {
     VariabilityTestConfig,
 } from '#controller/template/test'
 import * as files from '#files'
+import Loader from '#graph/loader'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as path from 'path'
@@ -35,7 +36,7 @@ async function main() {
             const dir = path.join(groupDir, test)
             const id = `${group}-${test}`
             const config = loadConfig(dir)
-            const template = files.loadYAML<ServiceTemplate>(getVariableServiceTemplate({dir, file: config.template}))
+            const template = new Loader(getVariableServiceTemplate({dir, file: config.template})).raw()
             const inputs = getDefaultInputs(dir)
                 ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
                 : undefined

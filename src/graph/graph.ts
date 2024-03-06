@@ -2,12 +2,13 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
-import {ConditionalTechnologyAssignment, TechnologyPlugin} from '#graph/plugin'
+import {TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
 import {andify, generatify, simplify} from '#graph/utils'
 import Normalizer from '#normalizer'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {TechnologyTemplateMap} from '#spec/technology-template'
 import {
     ArtifactPropertyPresenceArguments,
     GroupPropertyPresenceArguments,
@@ -540,20 +541,22 @@ export default class Graph {
         this.serviceTemplate.topology_template.variability.constraints.push(constraint)
     }
 
-    addTechnology(node: Node, assignment: ConditionalTechnologyAssignment) {
+    addTechnology(node: Node, map: TechnologyTemplateMap) {
         if (check.isUndefined(node.raw.technology)) node.raw.technology = []
         assert.isArray(node.raw.technology, `Technology of ${node.display} not normalized`)
 
+        const [technology, template] = utils.firstEntry(map)
+
         // Normalize
-        assignment.conditions = check.isArray(assignment.conditions)
-            ? simplify(andify(assignment.conditions))
-            : assignment.conditions
+        template.conditions = check.isArray(template.conditions)
+            ? simplify(andify(template.conditions))
+            : template.conditions
 
         // Generatify
-        assignment.conditions = check.isDefined(assignment.conditions) ? generatify(assignment.conditions) : undefined
+        template.conditions = check.isDefined(template.conditions) ? generatify(template.conditions) : undefined
 
         node.raw.technology.push({
-            [assignment.technology]: {conditions: assignment.conditions, weight: assignment.weight},
+            [technology]: {conditions: template.conditions, weight: template.weight, assign: template.assign},
         })
     }
 

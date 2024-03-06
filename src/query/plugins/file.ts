@@ -1,12 +1,11 @@
-import * as files from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import {TemplatesRepository} from './index'
 
 export class FileTemplateRepository implements TemplatesRepository {
     async getTemplate(name: string) {
         return {
             name,
-            template: files.loadYAML<ServiceTemplate>(name),
+            template: new Loader(name).raw(),
         }
     }
 
