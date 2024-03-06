@@ -40,6 +40,7 @@ cd opentosca-vintner
 git lfs install
 git lfs pull
 yarn --immutable
+yarn build
 yarn examples:pull:link
 ```
 
