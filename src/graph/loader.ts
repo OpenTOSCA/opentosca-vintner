@@ -15,13 +15,17 @@ export default class Loader {
     private serviceTemplate?: ServiceTemplate
     private graph?: Graph
 
-    constructor(file: string) {
+    constructor(file: string, dir?: string) {
         this.file = file
-        this.dir = files.getDirectory(file)
+        this.dir = dir ?? files.getDirectory(file)
+    }
+
+    raw() {
+        return files.loadYAML<ServiceTemplate>(this.file)
     }
 
     async load() {
-        this.serviceTemplate = files.loadYAML<ServiceTemplate>(this.file)
+        this.serviceTemplate = this.raw()
 
         /**
          * Load type-specific conditions
@@ -43,7 +47,7 @@ export default class Loader {
 
     private async loadTypeSpecificConditions() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         let conditions = this.serviceTemplate.topology_template.variability?.type_specific_conditions
 
@@ -51,7 +55,9 @@ export default class Loader {
          * Load rules from specified file
          */
         if (check.isString(conditions)) {
+            console.log('going to load')
             conditions = files.loadYAML<TypeSpecificLogicExpressions>(path.join(this.dir, conditions))
+            console.log(conditions)
         }
 
         /**
@@ -72,7 +78,7 @@ export default class Loader {
 
     private async loadTechnologyRules() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         let rules = this.serviceTemplate.topology_template.variability?.technology_assignment_rules
 
@@ -92,6 +98,15 @@ export default class Loader {
             }
         }
 
+        /**
+         * Load rules from other default file
+         */
+        if (check.isUndefined(rules)) {
+            if (files.exists(path.join(this.dir, 'lib', 'rules.yaml'))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'lib', 'rules.yaml'))
+            }
+        }
+
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}
         this.serviceTemplate.topology_template.variability.technology_assignment_rules = rules
@@ -99,7 +114,7 @@ export default class Loader {
 
     private async loadTechnologyPluginBuilders() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        assert.isDefined(this.serviceTemplate.topology_template)
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}

@@ -3,6 +3,7 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import * as utils from '#utils'
 import MiniSat from 'logic-solver'
+import {TemplateQuality} from '#controller/template/quality'
 
 export type ResultMap = Record<string, boolean>
 
@@ -12,6 +13,7 @@ export class Result {
     private readonly result: MiniSat.Solution
     readonly topology: {count: number; weight: number}
     readonly technologies: {count: number; weight: number}
+    readonly quality: TemplateQuality
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
@@ -19,6 +21,8 @@ export class Result {
 
         this.topology = this.weightTopology()
         this.technologies = this.weightTechnologies()
+        this.quality = this.assessQuality()
+
     }
 
     private _map?: ResultMap
@@ -51,6 +55,23 @@ export class Result {
             count: Object.values(weights).filter(it => it !== 0).length,
             weight: utils.sum(Object.values(weights)),
         }
+    }
+
+    private assessQuality(): TemplateQuality {
+        const values = this.weightTechnologies()
+        const count = this.graph.technologies.filter(it => this.isPresent(it)).length
+        return {
+            quality: values.weight,
+            count,
+            normalized: values.weight / count,
+        }
+    }
+
+    /**
+     * Can not use element.present yet since we are currently selecting the result!
+     */
+    isPresent(element: Element) {
+        return check.isTrue(this.map[element.id])
     }
 
     equals(result: Result): boolean {

@@ -4,13 +4,24 @@ import {Result} from '#resolver/result'
 export default class Optimizer {
     private readonly graph: Graph
     private results: Result[]
+    private transformed = false
 
     constructor(graph: Graph, results: Result[]) {
         this.graph = graph
         this.results = results
     }
 
+
     run() {
+        this.optimize()
+
+        return this.first()
+    }
+
+    optimize() {
+        if (this.transformed) return this.results
+        this.transformed = true
+
         /**
          * Optimize topology
          */
@@ -31,9 +42,8 @@ export default class Optimizer {
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
-        return this.first()
+        return this.results
     }
-
     private optimizeTopology() {
         /**
          * Minimize

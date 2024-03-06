@@ -12,6 +12,7 @@ import _stats from './stats'
 import _test from './test'
 import _unpackage from './unpackage'
 import _verify from './verify'
+import _quality from './quality'
 
 export default {
     init: _init,
@@ -28,4 +29,5 @@ export default {
     sign: _sign,
     verify: _verify,
     pull: _pull,
+    quality: _quality,
 }
