@@ -21,18 +21,16 @@ export type TemplateStats = {
     artifacts: number
     imports: number
     technologies: number
-    elements: number
-    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies
+    vdmm_elements: number
+    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies + Inputs
     edmm_elements: number
-    manual_at_edmm_elements: number
-    generated_at_edmm_elements: number
+    edmm_elements_conditions_manual: number
+    edmm_elements_conditions_generated: number
     loc: number
 }
 
 export default async function (options: TemplateStatsOptions) {
     assert.isDefined(options.template, 'Template not defined')
-
-    // TODO: count technologies encoded in node type
 
     return utils.sumObjects(
         await Promise.all(
@@ -51,15 +49,16 @@ export default async function (options: TemplateStatsOptions) {
                     artifacts: graph.artifacts.length,
                     imports: graph.imports.length,
                     technologies: graph.technologies.length,
-                    elements: graph.elements.length,
+                    vdmm_elements: graph.elements.length,
                     edmm_elements:
                         graph.nodes.length +
                         graph.relations.length +
                         graph.properties.length +
                         graph.artifacts.length +
-                        graph.technologies.length,
-                    manual_at_edmm_elements: countManualAtNRPAT(graph),
-                    generated_at_edmm_elements: countGeneratedAtNRPAT(graph),
+                        graph.technologies.length +
+                        graph.inputs.length,
+                    edmm_elements_conditions_manual: countManualAtEDMM(graph),
+                    edmm_elements_conditions_generated: countGeneratedAtEDMM(graph),
                     loc: files.countLines(it),
                 }
                 return stats
@@ -68,7 +67,7 @@ export default async function (options: TemplateStatsOptions) {
     )
 }
 
-function countManualAtNRPAT(graph: Graph) {
+function countManualAtEDMM(graph: Graph) {
     let count = 0
 
     graph.nodes.forEach(it => (count += countManual(it)))
@@ -76,6 +75,7 @@ function countManualAtNRPAT(graph: Graph) {
     graph.properties.forEach(it => (count += countManual(it)))
     graph.artifacts.forEach(it => (count += countManual(it)))
     graph.technologies.forEach(it => (count += countManual(it)))
+    graph.inputs.forEach(it => (count += countManual(it)))
 
     return count
 }
@@ -103,7 +103,7 @@ function countManual(element: Element) {
     return count
 }
 
-function countGeneratedAtNRPAT(graph: Graph) {
+function countGeneratedAtEDMM(graph: Graph) {
     let count = 0
 
     graph.nodes.forEach(it => (count += countGenerated(it)))
@@ -111,6 +111,7 @@ function countGeneratedAtNRPAT(graph: Graph) {
     graph.properties.forEach(it => (count += countGenerated(it)))
     graph.artifacts.forEach(it => (count += countGenerated(it)))
     graph.technologies.forEach(it => (count += countGenerated(it)))
+    graph.inputs.forEach(it => (count += countGenerated(it)))
 
     return count
 }
