@@ -456,6 +456,7 @@ template
     .command('pull')
     .description('pull template dependencies')
     .requiredOption('--template <string>', 'path to service template directory')
+    .option('--link [boolean]', 'create symbolic links instead of copying files', false)
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
