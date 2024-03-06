@@ -40,11 +40,6 @@ node_types:
             host:
                 type: tosca.capabilities.Compute
 
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     ###################################################
     #
     # Terraform GCP
