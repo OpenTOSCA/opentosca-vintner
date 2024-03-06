@@ -14,7 +14,7 @@ export type Config = {
 export type Dependencies = TemplateDependency[]
 export type TemplateDependency = {
     source: string
-    target: string
+    target?: string
 }
 
 export default async function (options: TemplatePullOptions) {
@@ -28,12 +28,11 @@ export default async function (options: TemplatePullOptions) {
 
     for (const dependency of config.dependencies) {
         assert.isString(dependency.source)
-        assert.isString(dependency.target)
 
         const source = path.isAbsolute(dependency.source)
             ? dependency.source
             : path.join(options.template, dependency.source)
-        const target = path.join(options.template, dependency.target)
+        const target = path.join(options.template, dependency.target || '.')
 
         if (options.link) {
             await files.link(source, target)

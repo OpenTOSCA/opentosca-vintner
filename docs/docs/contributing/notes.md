@@ -62,7 +62,7 @@ export type Config = {
 export type Dependencies = TemplateDependency[]
 export type TemplateDependency = {
     source: string
-    target: string
+    target?: string
 }
 ```
 
