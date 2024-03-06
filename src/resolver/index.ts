@@ -21,36 +21,6 @@ export type ResolveResult = {
 }
 
 export async function run(options: ResolveOptions): Promise<ResolveResult> {
-    /**
-     * Graph
-     */
-    const {graph, inputs} = await load(options)
-
-    /**
-     * Resolver
-     */
-    new Resolver(graph, inputs).run()
-
-    return {
-        inputs: inputs,
-        template: graph.serviceTemplate,
-    }
-}
-
-// TODO: rename this
-export async function optimize(options: ResolveOptions) {
-    /**
-     * Graph
-     */
-    const {graph, inputs} = await load(options)
-
-    /**
-     * Resolver
-     */
-    return new Resolver(graph, inputs).optimize()
-}
-
-async function load(options: ResolveOptions) {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
@@ -95,5 +65,13 @@ async function load(options: ResolveOptions) {
      */
     const graph = new Graph(options.template)
 
-    return {graph, inputs: inputs.inputs}
+    /**
+     * Resolver
+     */
+    new Resolver(graph, inputs.inputs).run()
+
+    return {
+        inputs: inputs.inputs,
+        template: options.template,
+    }
 }

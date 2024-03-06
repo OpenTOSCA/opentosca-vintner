@@ -29,8 +29,4 @@ export default class Resolver {
          */
         new Transformer(this.graph).run()
     }
-
-    optimize() {
-        return new Solver(this.graph, this.inputs).optimize()
-    }
 }

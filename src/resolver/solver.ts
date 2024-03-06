@@ -91,24 +91,6 @@ export default class Solver {
         return result.map
     }
 
-    optimize() {
-        if (this.solved) throw new Error('Has been already solved')
-        this.solved = true
-
-        this.transform()
-
-        /**
-         * Get all results
-         */
-        const results = this.solveAll()
-        if (utils.isEmpty(results)) throw new Error('Could not solve')
-
-        /**
-         * Optimizer
-         */
-        return new Optimizer(this.graph, results).optimize()
-    }
-
     runAll(): ResultMap[] {
         if (this.solved) throw new Error(`Has been already solved`)
         this.solved = true
