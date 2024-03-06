@@ -4,7 +4,7 @@ import path from 'path'
 
 export type TemplatePullOptions = {
     template: string
-    link: boolean
+    link?: boolean
 }
 
 export type Config = {
