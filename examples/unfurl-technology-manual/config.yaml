@@ -1,0 +1,3 @@
+dependencies:
+    - source: ../unfurl-technology-automated-weighted/lib
+    - source: ../unfurl-technology-automated-weighted/files

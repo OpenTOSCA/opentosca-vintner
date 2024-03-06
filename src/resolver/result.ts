@@ -34,23 +34,32 @@ export class Result {
     }
 
     private weightTopology() {
+        let count = 0
         let weight = 0
-        for (const node of this.graph.nodes) {
-            if (check.isTrue(this.map[node.id])) weight += node.weight
+        for (const node of this.graph.nodes.filter(it => this.isPresent(it))) {
+            count++
+            weight += node.weight
         }
-        return {count: this.graph.nodes.length, weight}
+        return {count, weight}
     }
 
     private weightTechnologies() {
         const weights: {[key: string]: number} = {}
-        for (const technology of this.graph.technologies) {
+        for (const technology of this.graph.technologies.filter(it => this.isPresent(it))) {
             if (check.isUndefined(weights[technology.name])) weights[technology.name] = 0
-            if (check.isTrue(this.map[technology.id])) weights[technology.name] += technology.weight
+            weights[technology.name] += technology.weight
         }
         return {
-            count: Object.values(weights).filter(it => it !== 0).length,
+            count: Object.values(weights).length,
             weight: utils.sum(Object.values(weights)),
         }
+    }
+
+    /**
+     * Can not use element.present yet since we are currently selecting the result!
+     */
+    isPresent(element: Element) {
+        return check.isTrue(this.map[element.id])
     }
 
     equals(result: Result): boolean {

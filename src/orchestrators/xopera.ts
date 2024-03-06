@@ -5,7 +5,12 @@ import {Shell} from '#shell'
 import std from '#std'
 import * as utils from '#utils'
 import _ from 'lodash'
-import {NodeTemplateAttributesMap, Orchestrator, OrchestratorOperationOptions} from './index'
+import {
+    NodeTemplateAttributesMap,
+    Orchestrator,
+    OrchestratorOperationOptions,
+    OrchestratorValidateOptions,
+} from './index'
 
 export type xOperaConfig = (xOperaNativeConfig & {wsl: false}) | (xOperaWSLConfig & {wsl: true})
 
@@ -45,7 +50,7 @@ export class xOpera implements Orchestrator {
         await this.shell.execute([this.binary, '--version'])
     }
 
-    async validate(instance: Instance, options?: {inputs?: string} & OrchestratorOperationOptions) {
+    async validate(instance: Instance, options?: OrchestratorValidateOptions) {
         const command = [
             this.binary,
             'validate',
@@ -58,6 +63,7 @@ export class xOpera implements Orchestrator {
             command.push('--inputs', this.shell.resolve(options.inputs))
 
         if (options?.verbose) command.push('--verbose')
+        if (options?.dry) command.push('--executors')
 
         await this.shell.execute(command)
     }

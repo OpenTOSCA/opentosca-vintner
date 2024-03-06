@@ -236,6 +236,7 @@ export default class Normalizer {
                 if (check.isDefined(rule.host)) assert.isString(rule.host)
                 if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
                 if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
+                if (check.isDefined(rule.assign)) assert.isString(rule.assign)
             }
         }
     }

@@ -1518,6 +1518,7 @@ validates variability-resolved service template
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
+| dry |  false  | boolean | dry run |
 
 ## vintner orchestrators attest
 
@@ -2430,7 +2431,8 @@ pull template dependencies
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| template |  true  | string | path to service template |
+| template |  true  | string | path to service template directory |
+| link |  false  | boolean | create symbolic links instead of copying files (default: false) |
 
 ## vintner template puml topology
 

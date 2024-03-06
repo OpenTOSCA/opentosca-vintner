@@ -1,6 +1,5 @@
-import * as files from '#files'
+import Loader from '#graph/loader'
 import {Instance} from '#repositories/instances'
-import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
 import * as utils from '#utils'
 import {expect} from 'chai'
@@ -21,12 +20,8 @@ if (!integrationTestsEnabled) {
             // Import template
             const template = 'xopera-getting-started-template'
             const templateDirectory = path.join(examplesDir, 'xopera-getting-started')
-            const firstTemplate = files.loadYAML<ServiceTemplate>(
-                path.join(templateDirectory, 'tests', 'first', 'expected.yaml')
-            )
-            const secondTemplate = files.loadYAML<ServiceTemplate>(
-                path.join(templateDirectory, 'tests', 'second', 'expected.yaml')
-            )
+            const firstTemplate = new Loader(path.join(templateDirectory, 'tests', 'first', 'expected.yaml')).raw()
+            const secondTemplate = new Loader(path.join(templateDirectory, 'tests', 'second', 'expected.yaml')).raw()
 
             await Controller.templates.import({
                 template,

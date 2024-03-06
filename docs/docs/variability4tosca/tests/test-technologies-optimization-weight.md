@@ -44,8 +44,8 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
   node_templates:
     container:
-      type: container.terraform
+      type: container.terraform.container
     another:
-      type: another.ansible
+      type: another.ansible.another
 ```
 

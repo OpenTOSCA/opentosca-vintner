@@ -4,10 +4,11 @@ import archiver from 'archiver'
 import axios from 'axios'
 import * as ejs from 'ejs'
 import extract from 'extract-zip'
-import * as fs from 'fs'
+import * as fss from 'fs'
 import * as fse from 'fs-extra'
 import Glob from 'glob'
 import * as yaml from 'js-yaml'
+import lnk from 'lnk'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
@@ -21,7 +22,7 @@ export const SCRIPTS_DIR = path.resolve(ASSETS_DIR, 'scripts')
 export const TMP_PREFIX = 'opentosca-vintner--'
 
 export function exists(file: string) {
-    return fs.existsSync(file)
+    return fss.existsSync(file)
 }
 
 export function assertFile(file: string) {
@@ -38,7 +39,7 @@ export function assertDirectory(dir: string, file = false) {
 
 export function isEmpty(dir: string) {
     const resolved = path.resolve(dir)
-    return fs.readdirSync(resolved).length === 0
+    return fss.readdirSync(resolved).length === 0
 }
 
 export function assertEmpty(dir: string) {
@@ -47,21 +48,21 @@ export function assertEmpty(dir: string) {
 }
 
 export function isFile(path: string) {
-    return exists(path) && fs.lstatSync(path).isFile()
+    return exists(path) && fss.lstatSync(path).isFile()
 }
 
 export function isDirectory(path: string) {
-    return exists(path) && fs.lstatSync(path).isDirectory()
+    return exists(path) && fss.lstatSync(path).isDirectory()
 }
 
 export function getSize(file: string) {
     assertFile(file)
-    return fs.lstatSync(file).size
+    return fss.lstatSync(file).size
 }
 
 export function countLines(file: string) {
     assertFile(file)
-    return fs.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
+    return fss.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
 }
 
 export function isLink(path: string) {
@@ -70,7 +71,7 @@ export function isLink(path: string) {
 
 export function loadFile(file: string) {
     assertFile(file)
-    return fs.readFileSync(path.resolve(file), 'utf-8')
+    return fss.readFileSync(path.resolve(file), 'utf-8')
 }
 
 export function loadYAML<T>(file: string) {
@@ -87,22 +88,22 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
         }
     }
 
-    fs.writeFileSync(path.resolve(file), data)
+    fss.writeFileSync(path.resolve(file), data)
     return file
 }
 
 export function storeYAML(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toYAML(data))
+    fss.writeFileSync(path.resolve(file), check.isString(data) ? data : toYAML(data))
     return file
 }
 
 export function storeJSON(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toJSON(data))
+    fss.writeFileSync(path.resolve(file), check.isString(data) ? data : toJSON(data))
     return file
 }
 
 export function storeENV(file: string, data: any | string) {
-    fs.writeFileSync(path.resolve(file), check.isString(data) ? data : toENV(data))
+    fss.writeFileSync(path.resolve(file), check.isString(data) ? data : toENV(data))
     return file
 }
 
@@ -147,15 +148,24 @@ export async function sync(source: string, target: string) {
     })
 }
 
+export async function link(source: string, target: string) {
+    try {
+        await lnk(source, target, {force: true})
+    } catch (e) {
+        if ((e.message || '').includes('are the same')) return
+        throw e
+    }
+}
+
 export function listDirectories(directory: string): string[] {
-    return fs
+    return fss
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name.toString())
 }
 
 export function listFiles(directory: string): string[] {
-    return fs
+    return fss
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isFile())
         .map(dirent => dirent.name.toString())
@@ -163,8 +173,8 @@ export function listFiles(directory: string): string[] {
 
 export function createDirectory(directory: string) {
     const resolved = path.resolve(directory)
-    if (!fs.existsSync(resolved)) {
-        fs.mkdirSync(resolved, {recursive: true})
+    if (!fss.existsSync(resolved)) {
+        fss.mkdirSync(resolved, {recursive: true})
     }
 }
 
@@ -174,11 +184,11 @@ export function deleteDirectory(directory: string) {
     if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved))
         throw new Error(`Deleting directory "${resolved}" not allowed`)
 
-    fs.rmSync(resolved, {recursive: true, force: true})
+    fss.rmSync(resolved, {recursive: true, force: true})
 }
 
 export async function deleteFile(file: string) {
-    fs.unlinkSync(path.resolve(file))
+    fss.unlinkSync(path.resolve(file))
 }
 
 export function getDirectory(file: string) {
@@ -202,7 +212,7 @@ export async function createArchive(source: string, target: string) {
     assertDirectory(target, true)
     return new Promise<void>((resolve, reject) => {
         const archive = archiver('zip', {zlib: {level: 9}})
-        const stream = fs.createWriteStream(target)
+        const stream = fss.createWriteStream(target)
 
         archive
             .directory(source, false)
@@ -221,7 +231,7 @@ export async function download(source: string, target: string = temporary()): Pr
                 responseType: 'stream',
             })
             .then(response => {
-                const file = fs.createWriteStream(target)
+                const file = fss.createWriteStream(target)
                 response.data.pipe(file)
                 file.on('error', error => {
                     file.close()
@@ -251,7 +261,7 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 }
 
 export function stat(file: string) {
-    return fs.statSync(file)
+    return fss.statSync(file)
 }
 
 export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {

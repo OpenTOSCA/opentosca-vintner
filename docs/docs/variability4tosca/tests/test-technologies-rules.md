@@ -76,17 +76,17 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
   node_templates:
     application:
-      type: application.terraform
+      type: application.terraform.ansible_terraform_host
       requirements:
         - host: ansible_terraform_host
         - database: database
     ansible_terraform_host:
       type: ansible_terraform_host
     database:
-      type: database.terraform
+      type: database.terraform.dbms
       requirements:
         - host: dbms
     dbms:
-      type: dbms.terraform
+      type: dbms.terraform.dbms
 ```
 

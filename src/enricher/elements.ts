@@ -20,9 +20,8 @@ export class ElementEnricher {
             if (!utils.isEmpty(node.technologies)) continue
 
             for (const plugin of this.graph.plugins.technology) {
-                const assignments = plugin.assign(node)
-                for (const assignment of assignments) {
-                    this.graph.addTechnology(node, assignment)
+                for (const map of plugin.assign(node)) {
+                    this.graph.addTechnology(node, map)
                 }
             }
         }

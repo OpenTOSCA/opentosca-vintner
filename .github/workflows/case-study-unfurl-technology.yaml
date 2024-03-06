@@ -1,0 +1,222 @@
+name: Case Study "Unfurl Technology"
+on:
+    workflow_dispatch:
+
+jobs:
+    ###################################################
+    #
+    # Kubernetes
+    #
+    ###################################################
+
+    kubernetes:
+        name: Kubernetes
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-technology-maintenance
+            PRESET: kubernetes
+            ENV: K8S
+            PORT: 30080
+        steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Start minikube
+              uses: medyagh/setup-minikube@v0.0.15
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  k8s_api_port: $(minikube ip)
+                  k8s_ca_cert_file: /home/runner/.minikube/ca.crt
+                  k8s_client_cert_file: /home/runner/.minikube/profiles/minikube/client.crt
+                  k8s_client_key_file: /home/runner/.minikube/profiles/minikube/client.key
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # GCP
+    #
+    ###################################################
+
+    gcp:
+        name: GCP
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-technology-maintenance
+            PRESET: elastic
+            ENV: GCP
+            PORT: 80
+        steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  gcp_service_account_file: /tmp/gcp-service-account-file.json
+                  EOF
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()
+
+    ###################################################
+    #
+    # OpenStack
+    #
+    ###################################################
+
+    openstack:
+        name: OpenStack
+        runs-on: ubuntu-22.04
+        env:
+            ORCHESTRATOR: unfurl
+            EXAMPLE: unfurl-technology-maintenance
+            PRESET: static
+            ENV: OS
+            PORT: 80
+        steps:
+            ###################################################
+            #
+            # Prepare
+            #
+            ###################################################
+
+            - name: (PREPARE) Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: (PREPARE) Install Vintner
+              uses: ./.github/actions/vintner-install
+              with:
+                  gcp_service_account_file: ${{ secrets.GCP_SERVICE_ACCOUNT_FILE }}
+                  os_ssh_key_file: ${{ secrets.OS_SSH_KEY_FILE }}
+                  os_application_credential_id: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  os_application_credential_secret: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Configure setup
+              uses: ./.github/actions/vintner-setup
+              with:
+                  orchestrator: ${{ env.ORCHESTRATOR }}
+
+            - name: (VINTNER) Resolve variability
+              uses: ./.github/actions/vintner-resolve
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  preset: ${{ env.PRESET }}
+
+            - name: (VINTNER) Assign deployment inputs
+              run: |
+                  cat << EOF > /tmp/deployment-inputs.yaml
+                  os_application_credential_id: ${OS_APPLICATION_CREDENTIAL_ID}
+                  os_application_credential_secret: ${OS_APPLICATION_CREDENTIAL_SECRET}
+                  os_ssh_key_file: /tmp/os-ssh-key-file
+                  EOF
+              env:
+                  OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+                  OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
+
+            - name: (VINTNER) Validate application
+              uses: ./.github/actions/vintner-validate
+
+            - name: (VINTNER) Deploy application
+              uses: ./.github/actions/vintner-deploy
+
+            - name: (VINTNER) Test application
+              uses: ./.github/actions/vintner-test
+              with:
+                  example: ${{ env.EXAMPLE }}
+                  env: ${{ env.ENV }}
+                  port: ${{ env.PORT }}
+
+            - name: (VINTNER) Undeploy application
+              uses: ./.github/actions/vintner-undeploy
+              if: always()

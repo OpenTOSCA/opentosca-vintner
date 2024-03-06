@@ -16,7 +16,7 @@ export default async function (options: InstanceResolveOptions) {
     await lock.try(instance.getLockKey(), async () => {
         // Resolve variability
         const result = await Resolver.run({
-            template: instance.loadVariableServiceTemplate(),
+            template: instance.getVariableServiceTemplate(),
             inputs: options.inputs,
             presets: options.presets,
         })

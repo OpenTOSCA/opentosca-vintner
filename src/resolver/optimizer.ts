@@ -4,6 +4,7 @@ import {Result} from '#resolver/result'
 export default class Optimizer {
     private readonly graph: Graph
     private results: Result[]
+    private transformed = false
 
     constructor(graph: Graph, results: Result[]) {
         this.graph = graph
@@ -11,6 +12,15 @@ export default class Optimizer {
     }
 
     run() {
+        this.optimize()
+
+        return this.first()
+    }
+
+    optimize() {
+        if (this.transformed) return this.results
+        this.transformed = true
+
         /**
          * Optimize topology
          */
@@ -31,7 +41,7 @@ export default class Optimizer {
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
-        return this.first()
+        return this.results
     }
 
     private optimizeTopology() {
@@ -92,7 +102,10 @@ export default class Optimizer {
     private ensureTechnologiesUniqueness() {
         if (this.results.length > 1) {
             if (this.graph.options.solver.technologies.optimize) {
-                if (this.first().technologies.count === this.second().technologies.count)
+                if (
+                    this.first().technologies[this.graph.options.solver.technologies.mode] ===
+                    this.second().technologies[this.graph.options.solver.technologies.mode]
+                )
                     throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
             } else {
                 throw new Error(`The result is ambiguous considering technologies (without optimization)`)

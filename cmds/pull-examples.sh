@@ -14,21 +14,23 @@ if [ ! -f "${ENTRYPOINT}" ]; then
     exit 1
 fi
 
+# Symbolic
+LINK=${1:-false}
 
 # Pull dependencies of each example
-for e in examples/*/; do
+for example in examples/*/; do
 
   # Ignore directories starting with a dot
-  if [[  "${e}" == "\."* ]]; then
+  if [[  "${example}" == "\."* ]]; then
     continue
   fi
 
   # Ignore directories without config.yaml
-  if [ ! -f "${e}/config.yaml" ]; then
+  if [ ! -f "${example}/config.yaml" ]; then
     continue
   fi
 
-  # Pull dependencies
-  echo "Pulling ${e}"
-  $VINTNER template pull --template "${e}"
+  # Pull dependenciess
+  echo "Pulling ${example}"
+  $VINTNER template pull --template "$(realpath ${example})" --link ${LINK}
 done

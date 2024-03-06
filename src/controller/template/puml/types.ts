@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
-import {ServiceTemplate} from '#spec/service-template'
+import Loader from '#graph/loader'
 import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
@@ -19,7 +19,7 @@ export default async function (options: TemplatePUMLTypesOptions) {
     const outputDir = options.output ?? files.getDirectory(options.path)
     files.assertDirectory(outputDir)
 
-    const graph = new Graph(files.loadYAML<ServiceTemplate>(options.path))
+    const graph = new Graph(new Loader(options.path).raw())
 
     const types = options.types ?? Object.keys(graph.serviceTemplate).filter(it => it.endsWith('_types'))
 

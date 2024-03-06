@@ -2,21 +2,15 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import {LogicExpression} from '#spec/variability'
+import {TechnologyTemplateMap} from '#spec/technology-template'
 import * as utils from '#utils'
-
-export type ConditionalTechnologyAssignment = {
-    technology: string
-    conditions?: LogicExpression | LogicExpression[]
-    weight?: number
-}
 
 export type TechnologyPluginBuilder = {
     build(graph: Graph): TechnologyPlugin
 }
 
 export type TechnologyPlugin = {
-    assign: (node: Node) => ConditionalTechnologyAssignment[]
+    assign: (node: Node) => TechnologyTemplateMap[]
 }
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
@@ -43,11 +37,11 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return check.isDefined(this.getRules())
     }
 
-    assign(node: Node): ConditionalTechnologyAssignment[] {
-        const assignments: ConditionalTechnologyAssignment[] = []
+    assign(node: Node): TechnologyTemplateMap[] {
+        const maps: TechnologyTemplateMap[] = []
 
         const map = this.getRules()
-        if (check.isUndefined(map)) return assignments
+        if (check.isUndefined(map)) return maps
 
         for (const technology of Object.keys(map)) {
             const rules = map[technology]
@@ -57,22 +51,26 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 if (check.isDefined(rule.host)) {
                     const hosts = node.hosts.filter(it => it.getType().name === rule.host)
                     for (const host of hosts) {
-                        assignments.push({
-                            technology,
-                            conditions: utils.filterNotNull([{node_presence: host.name}, rule.conditions]),
-                            weight: rule.weight,
+                        maps.push({
+                            [technology]: {
+                                conditions: utils.filterNotNull([{node_presence: host.name}, rule.conditions]),
+                                weight: rule.weight,
+                                assign: rule.assign,
+                            },
                         })
                     }
                 } else {
-                    assignments.push({
-                        technology,
-                        conditions: rule.conditions,
-                        weight: rule.weight,
+                    maps.push({
+                        [technology]: {
+                            conditions: rule.conditions,
+                            weight: rule.weight,
+                            assign: rule.assign,
+                        },
                     })
                 }
             }
         }
 
-        return assignments
+        return maps
     }
 }
