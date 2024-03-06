@@ -350,8 +350,8 @@ node_types:
                         namespace: default
                     spec:
                         ports:
-                            - port: '{{ SELF.application_port }}'
-                              nodePort: '{{ SELF.management_port }}'
+                            - port: 3306
+                              nodePort: 30081
                         selector:
                             app: mysql
                         type: NodePort

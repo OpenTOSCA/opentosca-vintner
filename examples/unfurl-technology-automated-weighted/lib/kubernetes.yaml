@@ -25,3 +25,8 @@ node_types:
                         cert_file: {get_input: k8s_ca_cert_file}
                         ca_cert: {get_input: k8s_client_cert_file}
                         key_file: {get_input: k8s_client_key_file}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: exit 0

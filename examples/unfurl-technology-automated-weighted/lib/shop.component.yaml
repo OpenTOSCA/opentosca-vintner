@@ -639,10 +639,9 @@ node_types:
                          }
 
                          resource "google_app_engine_standard_app_version" "app" {
-                           version_id      = "v2"
+                           version_id      = "v1"
                            service         = var.application_name
                            runtime         = "nodejs18"
-                           app_engine_apis = true
 
                            entrypoint {
                              shell = "node ./index.js"
@@ -663,11 +662,12 @@ node_types:
                              DB_PORT     = var.db_port
                            }
 
+                           delete_service_on_destroy = true
                            service_account = google_service_account.custom_service_account.email
                          }
 
                          resource "google_storage_bucket" "bucket" {
-                           name     = "${var.project}-appengine-static-content-${var.try}"
+                           name     = "${var.project}-${var.application_name}-${var.try}"
                            location = "EU"
                          }
 
