@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_simple_yaml_1_3
+tosca_definitions_version: tosca_variability_1_0
 
 imports:
     - lib/types.yaml
@@ -54,7 +54,8 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component.ansible.os
+            type: shop.component
+            technology: ansible
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -68,21 +69,24 @@ topology_template:
                 - host: os_compute
 
         database:
-            type: mysql.database.ansible.mysql
+            type: mysql.database
+            technology: ansible
             properties:
                 database_name: unfurl-technology
             requirements:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms.ansible.os
+            type: mysql.dbms
+            technology: ansible
             properties:
                 root_password: {get_input: database_password}
             requirements:
                 - host: os_compute
 
         os_compute:
-            type: os.compute.terraform.os
+            type: os.compute
+            technology: terraform
             properties:
                 machine: unfurl-technology
                 ports: [80, 3000]

@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - lib/types.yaml
@@ -31,8 +31,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component
-            technology: kubernetes
+            type: shop.component.kubernetes.kubernetes
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -46,14 +45,12 @@ topology_template:
                 - host: kubernetes
 
         shop_expose:
-            type: shop.component.expose
-            technology: kubernetes
+            type: shop.component.expose.kubernetes.kubernetes
             requirements:
                 - host: kubernetes
 
         database:
-            type: mysql.database
-            technology: ansible
+            type: mysql.database.ansible.mysql
             properties:
                 database_name: unfurl-technology
             requirements:
@@ -61,16 +58,14 @@ topology_template:
                 - depends: mysql_dbms_expose
 
         mysql_dbms:
-            type: mysql.dbms
-            technology: kubernetes
+            type: mysql.dbms.kubernetes.kubernetes
             properties:
                 root_password: {get_input: database_password}
             requirements:
                 - host: kubernetes
 
         mysql_dbms_expose:
-            type: mysql.dbms.expose
-            technology: kubernetes
+            type: mysql.dbms.expose.kubernetes.kubernetes
             requirements:
                 - host: kubernetes
 

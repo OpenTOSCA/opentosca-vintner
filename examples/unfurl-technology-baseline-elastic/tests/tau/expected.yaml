@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - lib/types.yaml
@@ -23,8 +23,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component
-            technology: terraform
+            type: shop.component.terraform.gcp
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -38,20 +37,17 @@ topology_template:
                 - host: gcp_runtime
 
         database:
-            type: mysql.database
-            technology: terraform
+            type: mysql.database.terraform.gcp
             properties:
                 database_name: unfurl-technology
             requirements:
                 - host: gcp_dbms
 
         gcp_dbms:
-            type: gcp.cloud_sql
-            technology: terraform
+            type: gcp.cloud_sql.terraform.gcp
             properties:
                 instance_name: unfurl-technology
                 root_password: {get_input: database_password}
 
         gcp_runtime:
-            type: gcp.app_engine
-            technology: terraform
+            type: gcp.app_engine.terraform.gcp

@@ -1,2 +1,2 @@
-expected: ../../../unfurl-technology-baseline-static-large/variable-service-template.yaml
+expected: ../../../unfurl-technology-baseline-static-large/tests/tau/expected.yaml
 presets: static-large

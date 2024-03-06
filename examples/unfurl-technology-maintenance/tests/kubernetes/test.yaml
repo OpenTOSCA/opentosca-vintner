@@ -1,2 +1,2 @@
-expected: ../../../unfurl-technology-baseline-kubernetes/variable-service-template.yaml
+expected: ../../../unfurl-technology-baseline-kubernetes/tests/tau/expected.yaml
 presets: kubernetes
