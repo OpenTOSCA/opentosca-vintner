@@ -8,6 +8,7 @@ import * as utils from '#utils'
 
 export type TemplateStatsOptions = {
     template: string[]
+    experimental: boolean
 }
 
 export type TemplateStats = {
@@ -31,6 +32,7 @@ export type TemplateStats = {
 
 export default async function (options: TemplateStatsOptions) {
     assert.isDefined(options.template, 'Template not defined')
+    assert.isTrue(options.experimental)
 
     // TODO: count technologies encoded in node type
 

@@ -15,9 +15,9 @@ yarn cli template stats \
 echo
 
 echo "VDMMv1"
-yarn cli template stats --template examples/unfurl-artifacts/stats/variable-service-template-v1.yaml
+yarn cli template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v1.yaml
 echo
 
 echo "VDMMv2"
-yarn cli template stats --template examples/unfurl-artifacts/stats/variable-service-template-v2.yaml
+yarn cli template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v2.yaml
 echo

@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 set -e
 
-yarn cli template stats --template ${PWD}/variable-service-template.yaml
+yarn cli template stats --experimental --template ${PWD}/variable-service-template.yaml
