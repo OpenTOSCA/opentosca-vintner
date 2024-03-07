@@ -7225,7 +7225,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="69:5"><input checked="checked" id="__tabbed_69_1" name="__tabbed_69" type="radio"/><input id="__tabbed_69_2" name="__tabbed_69" type="radio"/><input id="__tabbed_69_3" name="__tabbed_69" type="radio"/><input id="__tabbed_69_4" name="__tabbed_69" type="radio"/><input id="__tabbed_69_5" name="__tabbed_69" type="radio"/><div class="tabbed-labels"><label for="__tabbed_69_1">CLI</label><label for="__tabbed_69_2">cURL</label><label for="__tabbed_69_3">JavaScript</label><label for="__tabbed_69_4">Python</label><label for="__tabbed_69_5">Kotlin</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-302-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-302-1" name="__codelineno-302-1"></a>vintner<span class="w"> </span>template<span class="w"> </span>stats<span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-302-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-302-1" name="__codelineno-302-1"></a>vintner<span class="w"> </span>template<span class="w"> </span>stats<span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span><span class="w"> </span>--experimental<span class="w"> </span><span class="si">${</span><span class="nv">EXPERIMENTAL</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -7234,7 +7234,7 @@
 <span class="normal"><a href="#__codelineno-303-3">3</a></span>
 <span class="normal"><a href="#__codelineno-303-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-303-1" name="__codelineno-303-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-303-2" name="__codelineno-303-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-303-3" name="__codelineno-303-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"template": "${TEMPLATE}"}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-303-3" name="__codelineno-303-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">'{"template": "${TEMPLATE}", "experimental": "${EXPERIMENTAL}"}'</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-303-4" name="__codelineno-303-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/template/stats
 </code></pre></div></td></tr></table></div>
 </div>
@@ -7242,30 +7242,36 @@
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-304-1">1</a></span>
 <span class="normal"><a href="#__codelineno-304-2">2</a></span>
 <span class="normal"><a href="#__codelineno-304-3">3</a></span>
-<span class="normal"><a href="#__codelineno-304-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-304-1" name="__codelineno-304-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
+<span class="normal"><a href="#__codelineno-304-4">4</a></span>
+<span class="normal"><a href="#__codelineno-304-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-304-1" name="__codelineno-304-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"axios"</span><span class="p">)</span>
 <a id="__codelineno-304-2" name="__codelineno-304-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"/template/stats"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-304-3" name="__codelineno-304-3"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span>
-<a id="__codelineno-304-4" name="__codelineno-304-4"></a><span class="p">})</span>
+<a id="__codelineno-304-3" name="__codelineno-304-3"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-304-4" name="__codelineno-304-4"></a><span class="w">    </span><span class="nx">experimental</span><span class="o">:</span><span class="w"> </span><span class="nx">EXPERIMENTAL</span>
+<a id="__codelineno-304-5" name="__codelineno-304-5"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-305-1">1</a></span>
 <span class="normal"><a href="#__codelineno-305-2">2</a></span>
 <span class="normal"><a href="#__codelineno-305-3">3</a></span>
-<span class="normal"><a href="#__codelineno-305-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-305-1" name="__codelineno-305-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<span class="normal"><a href="#__codelineno-305-4">4</a></span>
+<span class="normal"><a href="#__codelineno-305-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-305-1" name="__codelineno-305-1"></a><span class="kn">import</span> <span class="nn">requests</span>
 <a id="__codelineno-305-2" name="__codelineno-305-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">"/template/stats"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-305-3" name="__codelineno-305-3"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span>
-<a id="__codelineno-305-4" name="__codelineno-305-4"></a><span class="p">})</span>
+<a id="__codelineno-305-3" name="__codelineno-305-3"></a>    <span class="s2">"template"</span><span class="p">:</span> <span class="n">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-305-4" name="__codelineno-305-4"></a>    <span class="s2">"experimental"</span><span class="p">:</span> <span class="n">EXPERIMENTAL</span>
+<a id="__codelineno-305-5" name="__codelineno-305-5"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-306-1">1</a></span>
 <span class="normal"><a href="#__codelineno-306-2">2</a></span>
 <span class="normal"><a href="#__codelineno-306-3">3</a></span>
-<span class="normal"><a href="#__codelineno-306-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-306-1" name="__codelineno-306-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
+<span class="normal"><a href="#__codelineno-306-4">4</a></span>
+<span class="normal"><a href="#__codelineno-306-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-306-1" name="__codelineno-306-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
 <a id="__codelineno-306-2" name="__codelineno-306-2"></a><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"/template/stats"</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="o">=</span><span class="n">mapOf</span><span class="p">(</span>
-<a id="__codelineno-306-3" name="__codelineno-306-3"></a><span class="w">    </span><span class="s">"template"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">TEMPLATE</span>
-<a id="__codelineno-306-4" name="__codelineno-306-4"></a><span class="p">))</span>
+<a id="__codelineno-306-3" name="__codelineno-306-3"></a><span class="w">    </span><span class="s">"template"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-306-4" name="__codelineno-306-4"></a><span class="w">    </span><span class="s">"experimental"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">EXPERIMENTAL</span>
+<a id="__codelineno-306-5" name="__codelineno-306-5"></a><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -7285,6 +7291,12 @@
 <td>true</td>
 <td>strings...</td>
 <td>path to service template</td>
+</tr>
+<tr>
+<td>experimental</td>
+<td>true</td>
+<td></td>
+<td>enable experimental feature</td>
 </tr>
 </tbody>
 </table>
@@ -8073,7 +8085,7 @@
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 6, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 7, 2024</span>
 </small>
 </div>
 </article>
