@@ -7,56 +7,45 @@ topology_template:
     inputs:
         database_password:
             type: string
-            default: password
 
         os_network:
             type: string
-            default: public-belwue
             conditions: {logic_expression: is_static}
 
         os_ssh_key_name:
             type: string
-            default: default
             conditions: {logic_expression: is_static}
 
         os_ssh_user:
             type: string
-            default: ubuntu
             conditions: {logic_expression: is_static}
 
         os_ssh_key_file:
             type: string
-            default: /home/stoetzms/.ssh/bw-cloud--default
             conditions: {logic_expression: is_static}
 
         os_region_name:
             type: string
-            default: Mannheim
             conditions: {logic_expression: is_static}
 
         os_auth_type:
             type: string
-            default: v3applicationcredential
             conditions: {logic_expression: is_static}
 
         os_auth_url:
             type: string
-            default: https://idm02.bw-cloud.org:5000/v3
             conditions: {logic_expression: is_static}
 
         os_identity_api_version:
             type: string
-            default: '3'
             conditions: {logic_expression: is_static}
 
         os_interface:
             type: string
-            default: public
             conditions: {logic_expression: is_static}
 
         os_application_credential_id:
             type: string
-            default: 3f538f1823bd484e8238b2433de2f21a
             conditions: {logic_expression: is_static}
 
         os_application_credential_secret:
@@ -65,42 +54,34 @@ topology_template:
 
         gcp_region:
             type: string
-            default: europe-west3
             conditions: {logic_expression: is_elastic}
 
         gcp_service_account_file:
             type: string
-            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
             conditions: {logic_expression: is_elastic}
 
         gcp_project:
             type: string
-            default: stoetzms-387808
             conditions: {logic_expression: is_elastic}
 
         k8s_api_address:
             type: string
-            default: 192.168.85.2
             conditions: {logic_expression: is_kubernetes}
 
         k8s_api_port:
             type: string
-            default: '8443'
             conditions: {logic_expression: is_kubernetes}
 
         k8s_ca_cert_file:
             type: string
-            default: /home/stoetzms/.minikube/ca.crt
             conditions: {logic_expression: is_kubernetes}
 
         k8s_client_cert_file:
             type: string
-            default: /home/stoetzms/.minikube/profiles/minikube/client.crt
             conditions: {logic_expression: is_kubernetes}
 
         k8s_client_key_file:
             type: string
-            default: /home/stoetzms/.minikube/profiles/minikube/client.key
             conditions: {logic_expression: is_kubernetes}
 
     variability:

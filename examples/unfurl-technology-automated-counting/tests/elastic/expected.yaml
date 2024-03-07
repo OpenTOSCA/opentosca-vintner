@@ -7,19 +7,15 @@ topology_template:
     inputs:
         database_password:
             type: string
-            default: password
 
         gcp_region:
             type: string
-            default: europe-west3
 
         gcp_service_account_file:
             type: string
-            default: /home/stoetzms/gcp/stoetzms-387808-2ec1cf865c76.json
 
         gcp_project:
             type: string
-            default: stoetzms-387808
 
     node_templates:
         shop:
