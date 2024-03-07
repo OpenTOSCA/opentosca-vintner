@@ -1,8 +1,8 @@
-import * as assert from '#utils/assert'
-import * as check from '#utils/check'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import * as Resolver from '#resolver'
+import * as assert from '#utils/assert'
+import * as check from '#utils/check'
 import path from 'path'
 
 export type TemplateQualityOptions = {
@@ -10,6 +10,7 @@ export type TemplateQualityOptions = {
     dir?: string
     presets?: string[]
     inputs?: string
+    experimental: boolean
 }
 
 export type TemplateQualityResult = TemplateQuality[]
@@ -23,6 +24,7 @@ export type TemplateQuality = {
 // TODO: this is so dirty
 export default async function (options: TemplateQualityOptions): Promise<TemplateQualityResult> {
     assert.isDefined(options.template, 'Template not defined')
+    assert.isTrue(options.experimental)
 
     if (check.isDefined(options.presets) || check.isDefined(options.inputs)) {
         // TODO: this makes only randomized or non unique results sense?

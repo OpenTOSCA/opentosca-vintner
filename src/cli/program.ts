@@ -464,10 +464,10 @@ template
         })
     )
 
-
 template
     .command('quality')
-    .description('get quality of template')
+    .description('get quality of template (experimental)')
+    .requiredOption('--experimental', 'enable experimental feature')
     .requiredOption('--template <string>', 'path to service template')
     .option('--dir [string]', 'override dir')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
