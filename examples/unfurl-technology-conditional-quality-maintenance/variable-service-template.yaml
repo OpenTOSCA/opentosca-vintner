@@ -124,13 +124,11 @@ topology_template:
 
         shop_expose:
             type: shop.component.expose.kubernetes.kubernetes
-            conditions: {logic_expression: is_kubernetes}
             requirements:
                 - host: kubernetes
 
         database:
             type: mysql.database
-            persistent: true
             properties:
                 - database_name: unfurl-technology
             requirements:

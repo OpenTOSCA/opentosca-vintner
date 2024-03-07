@@ -105,7 +105,6 @@ topology_template:
 
         database:
             type: mysql.database
-            persistent: true
             technology:
                 - ansible:
                       conditions: {logic_expression: is_static}

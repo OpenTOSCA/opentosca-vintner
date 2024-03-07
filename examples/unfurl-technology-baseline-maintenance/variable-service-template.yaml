@@ -153,14 +153,11 @@ topology_template:
         shop_expose:
             type: shop.component.expose
             technology: kubernetes
-            conditions: {logic_expression: is_kubernetes}
             requirements:
                 - host: kubernetes
 
         database_ansible:
             type: mysql.database
-            persistent: true
-            conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
             technology: ansible
             properties:
                 - database_name: unfurl-technology
@@ -177,8 +174,6 @@ topology_template:
 
         database_terraform:
             type: mysql.database
-            persistent: true
-            conditions: {logic_expression: is_elastic}
             technology: terraform
             properties:
                 - database_name: unfurl-technology
@@ -187,7 +182,6 @@ topology_template:
 
         mysql_dbms_ansible:
             type: mysql.dbms
-            conditions: {logic_expression: is_static}
             technology: ansible
             properties:
                 - root_password: {get_input: database_password}
@@ -196,7 +190,6 @@ topology_template:
 
         mysql_dbms_kubernetes:
             type: mysql.dbms
-            conditions: {logic_expression: is_kubernetes}
             technology: kubernetes
             properties:
                 - root_password: {get_input: database_password}

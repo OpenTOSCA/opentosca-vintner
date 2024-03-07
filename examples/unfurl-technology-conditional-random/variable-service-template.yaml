@@ -103,7 +103,6 @@ topology_template:
 
         database:
             type: mysql.database
-            persistent: true
             properties:
                 - database_name: unfurl-technology
             requirements:

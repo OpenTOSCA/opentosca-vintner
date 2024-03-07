@@ -114,8 +114,6 @@ topology_template:
 
         database_ansible:
             type: mysql.database
-            persistent: true
-            conditions: {logic_expression: is_static}
             technology: ansible
             properties:
                 - database_name: unfurl-technology
@@ -124,8 +122,6 @@ topology_template:
 
         database_terraform:
             type: mysql.database
-            persistent: true
-            conditions: {logic_expression: is_elastic}
             technology: terraform
             properties:
                 - database_name: unfurl-technology
