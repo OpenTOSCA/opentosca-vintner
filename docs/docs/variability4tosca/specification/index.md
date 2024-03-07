@@ -267,7 +267,7 @@ There are several predefined pruning modes which provide different useful combin
 ```yaml linenums="1"
 mode: semantic-loose
 node_default_condition_mode: incomingnaive-artifact-host
-optimization_topology: true
+optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
 optimization_technologies_mode: weight

@@ -11,7 +11,9 @@ import {
 
 abstract class BaseOptions {
     protected readonly serviceTemplate: ServiceTemplate
-    protected readonly raw: VariabilityOptions
+
+    // TODO: protected
+    readonly raw: VariabilityOptions
 
     protected readonly v1: boolean
     protected readonly v2: boolean
@@ -98,11 +100,17 @@ class DefaultOptions extends BaseOptions {
             this.raw.node_default_condition ?? mode.node_default_condition ?? this.defaultCondition
         assert.isBoolean(this.nodeDefaultCondition)
 
-        this.nodeDefaultConditionMode =
-            this.raw.node_default_condition_mode ??
-            mode.node_default_condition_mode ??
-            (this.v1 ? 'incoming-artifact' : 'incomingnaive-artifact-host')
-        assert.isString(this.nodeDefaultConditionMode)
+        if (this.v1) {
+            this.nodeDefaultConditionMode =
+                this.raw.node_default_condition_mode ?? mode.node_default_condition_mode ?? 'incoming-artifact'
+            assert.isString(this.nodeDefaultConditionMode)
+        } else {
+            this.nodeDefaultConditionMode =
+                this.raw.node_default_condition_mode ??
+                mode.node_default_condition_mode ??
+                'incomingnaive-artifact-host'
+            assert.isString(this.nodeDefaultConditionMode)
+        }
 
         this.nodeDefaultConsistencyCondition =
             this.raw.node_default_consistency_condition ??
@@ -527,10 +535,10 @@ class SolverTopologyOptions extends BaseOptions {
             this.optimize = optimization !== false
             assert.isBoolean(this.optimize)
 
-            this.max = optimization === 'max' || optimization === true
+            this.max = optimization === 'max'
             assert.isBoolean(this.max)
 
-            this.min = optimization === 'min'
+            this.min = optimization === 'min' || optimization === true
             assert.isBoolean(this.min)
 
             this.unique = this.raw.optimization_topology_unique ?? true
@@ -599,7 +607,7 @@ class SolverTechnologiesOptions extends BaseOptions {
             this.min = optimization === 'min'
             assert.isBoolean(this.min)
 
-            this.unique = this.raw.optimization_technologies_unique ?? true
+            this.unique = this.raw.optimization_technologies_unique ?? false
             assert.isBoolean(this.unique)
 
             const mode = this.raw.optimization_technologies_mode ?? 'weight'
