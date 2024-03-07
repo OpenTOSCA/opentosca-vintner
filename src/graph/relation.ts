@@ -161,6 +161,10 @@ export default class Relation extends Element {
     isRelation() {
         return true
     }
+
+    get implied() {
+        return this.raw.implied ?? this.graph.options.default.relationDefaultImplied
+    }
 }
 
 export class Relationship {

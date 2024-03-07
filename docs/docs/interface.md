@@ -2692,7 +2692,7 @@ collects stats of a given service template (experimental)
 
 === "CLI"
     ```shell linenums="1"
-    vintner template stats --template ${TEMPLATE}
+    vintner template stats --experimental --template ${TEMPLATE}
     ```
 
 === "cURL"

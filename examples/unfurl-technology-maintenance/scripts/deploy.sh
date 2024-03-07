@@ -1,9 +1,13 @@
 #! /usr/bin/bash
 set -e
 
+# Set working directory
+cd "$(dirname "$0")"
+
 # Load configuration
 source configuration.sh
 
+$VINTNER template pull --template ${TEMPLATE_DIR}
 $VINTNER templates import --template ${TEMPLATE_NAME} --path ${TEMPLATE_DIR}
 $VINTNER instances init --instance ${TEMPLATE_NAME} --template ${TEMPLATE_NAME}
 $VINTNER instances resolve --instance ${TEMPLATE_NAME} --presets ${DEPLOYMENT_VARIANT}

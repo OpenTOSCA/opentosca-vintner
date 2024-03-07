@@ -400,6 +400,7 @@ template
     .command('stats')
     .description('collects stats of a given service template (experimental)')
     .requiredOption('--template <strings...>', 'path to service template')
+    .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
             const result = await Controller.template.stats(options)

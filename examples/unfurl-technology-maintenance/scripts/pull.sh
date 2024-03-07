@@ -4,4 +4,6 @@ set -e
 # Load configuration
 source configuration.sh
 
-$VINTNER setup clean --force
+# Pull dependencies
+$VINTNER template pull --template ${TEMPLATE_DIR}
+

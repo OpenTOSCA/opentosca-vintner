@@ -4,6 +4,7 @@ set -e
 # Load configuration
 source configuration.sh
 
+$VINTNER template pull --template ${TEMPLATE_DIR}
 $VINTNER templates import --template ${TEMPLATE_NAME} --path ${TEMPLATE_DIR}
 $VINTNER instances init --instance ${TEMPLATE_NAME} --template ${TEMPLATE_NAME}
 $VINTNER instances resolve --instance ${TEMPLATE_NAME} --inputs ${TEMPLATE_DIR}/tests/first/inputs.yaml

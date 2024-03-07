@@ -55,9 +55,7 @@ export default class Loader {
          * Load rules from specified file
          */
         if (check.isString(conditions)) {
-            console.log('going to load')
             conditions = files.loadYAML<TypeSpecificLogicExpressions>(path.join(this.dir, conditions))
-            console.log(conditions)
         }
 
         /**
