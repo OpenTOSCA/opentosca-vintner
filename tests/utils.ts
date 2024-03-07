@@ -78,8 +78,18 @@ export function getDefaultTest(dir: string, vstdir?: string) {
             await expectAsyncThrow(fn, config.error)
         } else {
             await fn()
+
+            /**
+             * TODO: Hotfix
+             *  search and replace some strings in the result, e.g., to align node template names restricted in case studies
+             */
+            for (const rename of config.renames || []) {
+                files.replace(output, rename[0], rename[1])
+            }
+
             const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
+
             expect(result).to.deep.equal(expected)
         }
     }

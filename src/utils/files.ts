@@ -275,3 +275,9 @@ export function stat(file: string) {
 export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {
     return Glob.glob(pattern, options)
 }
+
+export function replace(file: string, find: string, replace: string) {
+    const data = loadFile(file)
+    const replaced = data.replaceAll(find, replace)
+    storeFile(file, replaced, {onlyIfChanged: true})
+}

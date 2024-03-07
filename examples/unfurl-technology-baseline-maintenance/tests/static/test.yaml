@@ -1,1 +1,10 @@
 expected: ../../../unfurl-technology-variant-static/tests/tau/expected.yaml
+renames:
+    - - database_ansible
+      - database
+
+    - - mysql_dbms_ansible
+      - mysql_dbms
+
+    - - shop_ansible
+      - shop

@@ -33,6 +33,7 @@ export type VariabilityTestConfig = {
     error?: string
     template?: string
     expected?: string
+    renames?: [string, string][]
 }
 
 export default async function (options: TemplateTestOptions) {

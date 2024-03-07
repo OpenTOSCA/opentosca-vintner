@@ -1,1 +1,10 @@
 expected: ../../../unfurl-technology-variant-kubernetes/tests/tau/expected.yaml
+renames:
+    - - database_ansible
+      - database
+
+    - - mysql_dbms_kubernetes
+      - mysql_dbms
+
+    - - shop_kubernetes
+      - shop
