@@ -28,18 +28,14 @@ export class ConstraintEnricher {
      */
     private enrichImplications(element: Element) {
         if (check.isUndefined(element.container)) return
-
-        // TODO: move this up into class?
-        const implied = element.raw.implied
-        if (check.isUndefined(implied)) return
-        if (check.isFalse(implied)) return
+        if (!element.implied) return
 
         let left
-        if (implied === 'TARGET') {
+        if (element.implied === 'TARGET') {
             assert.isRelation(element)
             left = element.target.id
         }
-        if (implied === 'SOURCE' || implied === 'CONTAINER' || check.isTrue(implied)) {
+        if (element.implied === 'SOURCE' || element.implied === 'CONTAINER' || check.isTrue(element.implied)) {
             left = element.container.id
         }
         assert.isDefined(left, 'Left not defined')

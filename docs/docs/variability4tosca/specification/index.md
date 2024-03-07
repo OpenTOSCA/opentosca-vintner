@@ -141,6 +141,7 @@ The following options are used to configure the default conditions of elements.
 | relation_default_condition_mode          | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                                     |
 | relation_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                                   |
 | relation_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for relations.                                |
+| relation_default_implied                 | false     | Boolean                                                                                               | false             | Enable default implication for relations.                                          |
 | policy_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for policies (consistency and semantic).                  |
 | policy_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for policies.                                 |
 | policy_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for policies.                                    |
@@ -259,6 +260,21 @@ There are several predefined pruning modes which provide different useful combin
 - `semantic-strict`: consistency pruning is enabled and semantic defaults
 - `semantic-loose`: pruning is enabled everywhere (consistency and semantic)
 
+### v2
+
+`tosca_variability_1_0_rc_2` has the following default values.
+
+```yaml linenums="1"
+mode: semantic-loose
+node_default_condition_mode: incomingnaive-artifact-host
+optimization_topology: true
+optimization_topology_unique: true
+optimization_technologies: max
+optimization_technologies_mode: weight
+technology_constraint: true
+hosting_stack_constraint: true
+relation_default_implied: true
+```
 
 ## Default Conditions
 
@@ -513,19 +529,19 @@ database:
 A requirement assignment is a conditional element, thus, variability conditions and other options can be assigned. 
 These conditions must hold otherwise the respective relationship is not present.
 
-| Keyname                       | Mandatory | Type                                                                        | Description                                                                                                                                                                              |
-|-------------------------------|-----------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                       |
-| default_alternative           | false     | Boolean                                                                     | Declare the requirement assignment as default. This overwrites assigned conditions. There must be only one default assignment.                                                           |                                                                                                       |
-| default_condition             | false     | Boolean                                                                     | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                 |
-| default_consistency_condition | false     | Boolean                                                                     | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
-| default_semantic_condition    | false     | Boolean                                                                     | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
-| default_condition_mode        | false     | source-target &#124; source &#124; target                                   | Configure the default condition for this element.                                                                                                                                        |
-| pruning                       | false     | Boolean                                                                     | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
-| consistency_pruning           | false     | Boolean                                                                     | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
-| semantic_pruning              | false     | Boolean                                                                     | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
-| implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
-| implied                       | false     | Boolean &#124; SOURCE &#124; TARGET &#124; CONTAINER                        | Enables that the manual conditions are used to imply the element when the source/ target (depending on the configuration) is present.                                                    |                                                                                    |
+| Keyname                       | Mandatory | Type                                                                        | Description                                                                                                                                                                                                      |
+|-------------------------------|-----------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                                               |
+| default_alternative           | false     | Boolean                                                                     | Declare the requirement assignment as default. This overwrites assigned conditions. There must be only one default assignment.                                                                                   |                                                                                                       |
+| default_condition             | false     | Boolean                                                                     | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                                         |
+| default_consistency_condition | false     | Boolean                                                                     | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.                         |
+| default_semantic_condition    | false     | Boolean                                                                     | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.                            |
+| default_condition_mode        | false     | source-target &#124; source &#124; target                                   | Configure the default condition for this element.                                                                                                                                                                |
+| pruning                       | false     | Boolean                                                                     | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                                                   |
+| consistency_pruning           | false     | Boolean                                                                     | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                             |
+| semantic_pruning              | false     | Boolean                                                                     | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                                                |
+| implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                                                     |
+| implied                       | false     | Boolean &#124; SOURCE &#124; TARGET &#124; CONTAINER                        | Enables that the manual conditions are used to imply the element when the source/ target (depending on the configuration) is present. This overrides the variability options of the variable topology template.  |                                                                                    |
 
 For example, the following requirement assignment `host` has a variability condition assigned.
 

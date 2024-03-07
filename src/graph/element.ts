@@ -155,6 +155,10 @@ export default abstract class Element {
         return this._graph
     }
 
+    get implied() {
+        return this.raw.implied ?? false
+    }
+
     isInput(): this is Input {
         return false
     }
