@@ -11,6 +11,7 @@ export default class Optimizer {
         this.results = results
     }
 
+
     run() {
         this.optimize()
 
@@ -43,7 +44,6 @@ export default class Optimizer {
 
         return this.results
     }
-
     private optimizeTopology() {
         /**
          * Minimize

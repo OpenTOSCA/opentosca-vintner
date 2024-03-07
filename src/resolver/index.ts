@@ -21,6 +21,36 @@ export type ResolveResult = {
 }
 
 export async function run(options: ResolveOptions): Promise<ResolveResult> {
+    /**
+     * Graph
+     */
+    const {graph, inputs} = await load(options)
+
+    /**
+     * Resolver
+     */
+    new Resolver(graph, inputs).run()
+
+    return {
+        inputs: inputs,
+        template: graph.serviceTemplate,
+    }
+}
+
+// TODO: rename this
+export async function optimize(options: ResolveOptions) {
+    /**
+     * Graph
+     */
+    const {graph, inputs} = await load(options)
+
+    /**
+     * Resolver
+     */
+    return new Resolver(graph, inputs).optimize()
+}
+
+async function load(options: ResolveOptions) {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
@@ -47,7 +77,7 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     for (const preset of options.presets) {
         const set: InputAssignmentPreset | undefined = (options.template.topology_template?.variability?.presets || {})[
             preset
-        ]
+            ]
         assert.isDefined(set, `Did not find variability preset "${preset}"`)
         inputs.setInputs(set.inputs)
     }
@@ -84,13 +114,5 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
      */
     const graph = new Graph(options.template)
 
-    /**
-     * Resolver
-     */
-    new Resolver(graph, inputs.inputs).run()
-
-    return {
-        inputs: inputs.inputs,
-        template: options.template,
-    }
+    return {graph, inputs: inputs.inputs}
 }
