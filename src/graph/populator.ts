@@ -59,7 +59,7 @@ export class Populator {
             ...this.graph.technologies,
         ]
 
-        // Ensure that at least one node template is persistent if "incoming-host" is used
+        // Ensure that at least one node template is persistent if "incoming(naive)-host" is used
         if (this.graph.options.checks.persistent) {
             if (
                 this.graph.options.default.nodeDefaultConditionMode.includes('incoming') &&
@@ -67,7 +67,7 @@ export class Populator {
             ) {
                 if (check.isUndefined(this.graph.nodes.find(it => it.persistent)))
                     throw new Error(
-                        `Node default condition mode "incoming-host" requires at least one persistent node template`
+                        `Node default condition mode "incoming(naive)-host" requires at least one persistent node template`
                     )
             }
         }

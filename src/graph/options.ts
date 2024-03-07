@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {ServiceTemplate} from '#spec/service-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
@@ -11,11 +11,23 @@ import {
 
 abstract class BaseOptions {
     protected readonly serviceTemplate: ServiceTemplate
-    protected readonly raw: VariabilityOptions
+
+    // TODO: protected
+    readonly raw: VariabilityOptions
+
+    protected readonly v1: boolean
+    protected readonly v2: boolean
 
     protected constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
         this.raw = serviceTemplate.topology_template?.variability?.options || {}
+
+        this.v1 = [
+            TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
+        ].includes(serviceTemplate.tosca_definitions_version)
+
+        this.v2 = serviceTemplate.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2
     }
 }
 
@@ -49,6 +61,7 @@ class DefaultOptions extends BaseOptions {
     readonly relationDefaultConditionMode: RelationDefaultConditionMode
     readonly relationDefaultConsistencyCondition: boolean
     readonly relationDefaultSemanticCondition: boolean
+    readonly relationDefaultImplied: boolean
 
     readonly policyDefaultCondition: boolean
     readonly policyDefaultConsistencyCondition: boolean
@@ -78,7 +91,7 @@ class DefaultOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const mode = getPruningMode(this.raw)
+        const mode = getPruningMode(serviceTemplate, this.raw)
 
         this.defaultCondition = this.raw.default_condition ?? mode.default_condition ?? false
         assert.isBoolean(this.defaultCondition)
@@ -87,9 +100,17 @@ class DefaultOptions extends BaseOptions {
             this.raw.node_default_condition ?? mode.node_default_condition ?? this.defaultCondition
         assert.isBoolean(this.nodeDefaultCondition)
 
-        this.nodeDefaultConditionMode =
-            this.raw.node_default_condition_mode ?? mode.node_default_condition_mode ?? 'incoming-artifact'
-        assert.isString(this.nodeDefaultConditionMode)
+        if (this.v1) {
+            this.nodeDefaultConditionMode =
+                this.raw.node_default_condition_mode ?? mode.node_default_condition_mode ?? 'incoming-artifact'
+            assert.isString(this.nodeDefaultConditionMode)
+        } else {
+            this.nodeDefaultConditionMode =
+                this.raw.node_default_condition_mode ??
+                mode.node_default_condition_mode ??
+                'incomingnaive-artifact-host'
+            assert.isString(this.nodeDefaultConditionMode)
+        }
 
         this.nodeDefaultConsistencyCondition =
             this.raw.node_default_consistency_condition ??
@@ -122,6 +143,14 @@ class DefaultOptions extends BaseOptions {
             mode.relation_default_semantic_condition ??
             this.relationDefaultCondition
         assert.isBoolean(this.relationDefaultSemanticCondition)
+
+        if (this.v1) {
+            this.relationDefaultImplied = this.raw.relation_default_implied ?? false
+            assert.isBoolean(this.relationDefaultImplied)
+        } else {
+            this.relationDefaultImplied = this.raw.relation_default_implied ?? true
+            assert.isBoolean(this.relationDefaultImplied)
+        }
 
         this.policyDefaultCondition =
             this.raw.policy_default_condition ?? mode.policy_default_condition ?? this.defaultCondition
@@ -263,7 +292,7 @@ class PruningOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const mode = getPruningMode(this.raw)
+        const mode = getPruningMode(serviceTemplate, this.raw)
 
         this.pruning = this.raw.pruning ?? mode.pruning ?? false
         assert.isBoolean(this.pruning)
@@ -468,28 +497,59 @@ class SolverTopologyOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const optimization = this.raw.optimization_topology ?? false
-        if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
-            throw new Error(`Option optimization_topology must be a boolean, "min", or "max"`)
+        if (this.v1) {
+            /**
+             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             */
+            const optimization = this.raw.optimization_topology ?? false
+            if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+                throw new Error(`Option optimization_topology must be a boolean, "min", or "max"`)
+            }
+
+            this.optimize = optimization !== false
+            assert.isBoolean(this.optimize)
+
+            this.max = optimization === 'max'
+            assert.isBoolean(this.max)
+
+            this.min = optimization === 'min' || optimization === true
+            assert.isBoolean(this.min)
+
+            this.unique = this.raw.optimization_topology_unique ?? true
+            assert.isBoolean(this.unique)
+
+            const mode = this.raw.optimization_topology_mode ?? 'weight'
+            if (!['weight', 'count'].includes(mode)) {
+                throw new Error(`Option optimization_topology_mode must be "weight" or "count"`)
+            }
+            this.mode = mode
+        } else {
+            /**
+             * Case: tosca_variability_1_1
+             */
+            const optimization = this.raw.optimization_topology ?? true
+            if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+                throw new Error(`Option optimization_topology must be a boolean, "min", or "max"`)
+            }
+
+            this.optimize = optimization !== false
+            assert.isBoolean(this.optimize)
+
+            this.max = optimization === 'max'
+            assert.isBoolean(this.max)
+
+            this.min = optimization === 'min' || optimization === true
+            assert.isBoolean(this.min)
+
+            this.unique = this.raw.optimization_topology_unique ?? true
+            assert.isBoolean(this.unique)
+
+            const mode = this.raw.optimization_topology_mode ?? 'weight'
+            if (!['weight', 'count'].includes(mode)) {
+                throw new Error(`Option optimization_topology_mode must be "weight" or "count"`)
+            }
+            this.mode = mode
         }
-
-        this.optimize = optimization !== false
-        assert.isBoolean(this.optimize)
-
-        this.max = optimization === 'max'
-        assert.isBoolean(this.max)
-
-        this.min = optimization === 'min' || optimization === true
-        assert.isBoolean(this.min)
-
-        this.unique = this.raw.optimization_topology_unique ?? true
-        assert.isBoolean(this.unique)
-
-        const mode = this.raw.optimization_topology_mode ?? 'weight'
-        if (!['weight', 'count'].includes(mode)) {
-            throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
-        }
-        this.mode = mode
     }
 }
 
@@ -503,28 +563,59 @@ class SolverTechnologiesOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const optimization = this.raw.optimization_technologies ?? false
-        if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
-            throw new Error(`Option optimization_technologies must be a boolean, "min", or "max"`)
+        if (this.v1) {
+            /**
+             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             */
+            const optimization = this.raw.optimization_technologies ?? false
+            if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+                throw new Error(`Option optimization_technologies must be a boolean, "min", or "max"`)
+            }
+
+            this.optimize = optimization !== false
+            assert.isBoolean(this.optimize)
+
+            this.max = optimization === 'max'
+            assert.isBoolean(this.max)
+
+            this.min = optimization === 'min' || optimization === true
+            assert.isBoolean(this.min)
+
+            this.unique = this.raw.optimization_technologies_unique ?? false
+            assert.isBoolean(this.unique)
+
+            const mode = this.raw.optimization_technologies_mode ?? 'count'
+            if (!['weight', 'count'].includes(mode)) {
+                throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+            }
+            this.mode = mode
+        } else {
+            /**
+             * Case: tosca_variability_1_1
+             */
+            const optimization = this.raw.optimization_technologies ?? true
+            if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
+                throw new Error(`Option optimization_technologies must be a boolean, "min", or "max"`)
+            }
+
+            this.optimize = optimization !== false
+            assert.isBoolean(this.optimize)
+
+            this.max = optimization === 'max' || optimization === true
+            assert.isBoolean(this.max)
+
+            this.min = optimization === 'min'
+            assert.isBoolean(this.min)
+
+            this.unique = this.raw.optimization_technologies_unique ?? false
+            assert.isBoolean(this.unique)
+
+            const mode = this.raw.optimization_technologies_mode ?? 'weight'
+            if (!['weight', 'count'].includes(mode)) {
+                throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+            }
+            this.mode = mode
         }
-
-        this.optimize = optimization !== false
-        assert.isBoolean(this.optimize)
-
-        this.max = optimization === 'max'
-        assert.isBoolean(this.max)
-
-        this.min = optimization === 'min' || optimization === true
-        assert.isBoolean(this.min)
-
-        this.unique = this.raw.optimization_technologies_unique ?? false
-        assert.isBoolean(this.unique)
-
-        const mode = this.raw.optimization_technologies_mode ?? 'count'
-        if (!['weight', 'count'].includes(mode)) {
-            throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
-        }
-        this.mode = mode
     }
 }
 
@@ -561,16 +652,38 @@ class ConstraintsOptions extends BaseOptions {
         this.typeContainer = this.raw.type_container_constraint ?? this.constraints
         assert.isBoolean(this.typeContainer)
 
-        this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
-        assert.isBoolean(this.hostingStack)
+        if (this.v1) {
+            /**
+             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             */
+            this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
+            assert.isBoolean(this.hostingStack)
 
-        this.technology = this.raw.technology_constraint ?? this.constraints
-        assert.isBoolean(this.technology)
+            this.technology = this.raw.technology_constraint ?? this.constraints
+            assert.isBoolean(this.technology)
+        } else {
+            /**
+             * Case: tosca_variability_1_1
+             */
+            this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.hostingStack)
+
+            this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.technology)
+        }
     }
 }
 
-function getPruningMode(raw: VariabilityOptions) {
-    const mode = raw.mode ?? 'manual'
+function getPruningMode(serviceTemplate: ServiceTemplate, raw: VariabilityOptions) {
+    const defaultModes = {
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3]: 'manual',
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0]: 'manual',
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2]: 'semantic-loose',
+    }
+    const defaultMode = defaultModes[serviceTemplate.tosca_definitions_version]
+    assert.isDefined(defaultMode, `Default mode for "${serviceTemplate.tosca_definitions_version}" unknown`)
+
+    const mode = raw.mode ?? defaultMode
     const map = ResolverModes[mode]
     assert.isDefined(map, `Pruning mode "${mode}" unknown`)
     return map
