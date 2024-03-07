@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_variability_1_0_rc_2
 
 imports:
     - lib/types.yaml
@@ -90,17 +90,6 @@ topology_template:
             is_elastic: {equal: [{variability_input: env}, ELASTIC]}
             is_medium: {variability_input: medium}
             is_large: {not: {logic_expression: is_medium}}
-
-        options:
-            mode: semantic-loose
-            node_default_condition_mode: incomingnaive-host
-            hosting_stack_constraint: true
-            optimization_topology: true
-            optimization_topology_unique: true
-            technology_pruning: true
-            technology_constraint: true
-            optimization_technologies: max
-            optimization_technologies_mode: weight
 
     node_templates:
         shop:

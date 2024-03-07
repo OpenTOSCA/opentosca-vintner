@@ -42,6 +42,6 @@ The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
 >-
-  Node default condition mode "incoming-host" requires at least one persistent
+  Node default condition mode "incoming(naive)-host" requires at least one persistent
   node template
 ```

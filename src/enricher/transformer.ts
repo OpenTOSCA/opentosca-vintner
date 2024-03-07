@@ -120,6 +120,7 @@ export default class Transformer {
             delete this.topology.variability.options.relation_default_condition_mode
             delete this.topology.variability.options.relation_default_consistency_condition
             delete this.topology.variability.options.relation_default_semantic_condition
+            delete this.topology.variability.options.relation_default_implied
 
             delete this.topology.variability.options.policy_default_condition
             delete this.topology.variability.options.policy_default_consistency_condition

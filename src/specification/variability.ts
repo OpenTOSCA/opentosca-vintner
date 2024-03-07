@@ -58,6 +58,7 @@ export type NodeDefaultConditionMode =
     | 'incoming-artifact'
     | 'outgoing'
     | 'outgoingnaive'
+    | 'incomingnaive-artifact-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
 
@@ -73,6 +74,7 @@ export type DefaultOptions = {
     relation_default_condition_mode?: RelationDefaultConditionMode
     relation_default_consistency_condition?: boolean
     relation_default_semantic_condition?: boolean
+    relation_default_implied?: boolean
 
     policy_default_condition?: boolean
     policy_default_consistency_condition?: boolean

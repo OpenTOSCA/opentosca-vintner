@@ -61,6 +61,25 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     inputs.setInputs(options.inputs)
 
     /**
+     * TODO: Hotfix:
+     *  rc2 sets "incomingnaive-aritfact-host"
+     *  this triggers the persistent component check
+     *  however, this check is only relevant during enriching
+     *  also can not set version to rc1 since we require, e.g., the rc2 optimization defaults
+     */
+    if (check.isDefined(options.template.topology_template)) {
+        if (check.isUndefined(options.template.topology_template.variability)) {
+            options.template.topology_template.variability = {}
+        }
+
+        if (check.isUndefined(options.template.topology_template.variability.options)) {
+            options.template.topology_template.variability.options = {}
+        }
+
+        options.template.topology_template.variability.options.persistent_check = false
+    }
+
+    /**
      * Graph
      */
     const graph = new Graph(options.template)
