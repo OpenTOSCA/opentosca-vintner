@@ -102,6 +102,13 @@ topology_template:
         shop:
             type: shop.component
             persistent: true
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_static}
+                - terraform:
+                      conditions: {logic_expression: is_elastic}
+                - kubernetes:
+                      conditions: {logic_expression: is_kubernetes}
             properties:
                 - application_name: unfurl-technology
                 - DB_NAME: unfurl-technology
@@ -124,11 +131,17 @@ topology_template:
 
         shop_expose:
             type: shop.component.expose
+            technology: kubernetes
             requirements:
                 - host: kubernetes
 
         database:
             type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
+                - terraform:
+                      conditions: {logic_expression: is_elastic}
             properties:
                 - database_name: unfurl-technology
             requirements:
@@ -144,6 +157,13 @@ topology_template:
 
         mysql_dbms:
             type: mysql.dbms
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_static}
+                - terraform:
+                      conditions: {logic_expression: is_elastic}
+                - kubernetes:
+                      conditions: {logic_expression: is_kubernetes}
             properties:
                 - root_password: {get_input: database_password}
             requirements:
@@ -156,11 +176,13 @@ topology_template:
 
         mysql_dbms_expose:
             type: mysql.dbms.expose
+            technology: kubernetes
             requirements:
                 - host: kubernetes
 
         os_compute:
             type: os.compute
+            technology: terraform
             properties:
                 - machine: unfurl-technology
                 - ports: [80, 3000]
@@ -174,12 +196,14 @@ topology_template:
 
         gcp_dbms:
             type: gcp.cloud_sql
+            technology: terraform
             properties:
                 - instance_name: unfurl-technology
                 - root_password: {get_input: database_password}
 
         gcp_runtime:
             type: gcp.app_engine
+            technology: terraform
 
         kubernetes:
             type: kubernetes
