@@ -160,8 +160,6 @@ topology_template:
             technology:
                 - ansible:
                       conditions: {logic_expression: is_static}
-                - terraform:
-                      conditions: {logic_expression: is_elastic}
                 - kubernetes:
                       conditions: {logic_expression: is_kubernetes}
             properties:

@@ -63,6 +63,14 @@ kubernetes:
       host: kubernetes
       weight: 1
 
+    - component: shop.component.expose
+      host: kubernetes
+      weight: 1
+
     - component: mysql.dbms
+      host: kubernetes
+      weight: 1
+
+    - component: mysql.dbms.expose
       host: kubernetes
       weight: 1
