@@ -75,8 +75,7 @@ node_types:
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
                 properties:
-                    connection:
-                        {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
+                    connection: {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
                     host: {eval: '.::..::.requirements[.name=host]::.target::management_address'}
 
         interfaces:
@@ -193,8 +192,7 @@ node_types:
             endpoint:
                 type: unfurl.capabilities.Endpoint.Ansible
                 properties:
-                    connection:
-                        {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
+                    connection: {eval: '.::..::.requirements[.name=host]::.target::.capabilities[.name=endpoint]::connection'}
                     host: {eval: '.::..::.requirements[.name=host]::.target::management_address'}
 
         requirements:
