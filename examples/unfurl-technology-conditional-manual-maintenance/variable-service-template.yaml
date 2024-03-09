@@ -10,79 +10,79 @@ topology_template:
 
         os_network:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_name:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_user:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_file:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_region_name:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_type:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_url:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_identity_api_version:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_interface:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_id:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_secret:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         gcp_region:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_service_account_file:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_project:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         k8s_api_address:
             type: string
-            conditions: {logic_expression: is_kubernetes}
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_api_port:
             type: string
-            conditions: {logic_expression: is_kubernetes}
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_ca_cert_file:
             type: string
-            conditions: {logic_expression: is_kubernetes}
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_cert_file:
             type: string
-            conditions: {logic_expression: is_kubernetes}
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_key_file:
             type: string
-            conditions: {logic_expression: is_kubernetes}
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
     variability:
         inputs:
@@ -90,13 +90,17 @@ topology_template:
                 type: string
             medium:
                 type: boolean
+            premium:
+                type: boolean
 
         expressions:
             is_static: {equal: [{variability_input: env}, STATIC]}
             is_elastic: {equal: [{variability_input: env}, ELASTIC]}
             is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
             is_medium: {variability_input: medium}
-            is_large: {not: {logic_expression: is_medium}}
+            is_large: {not: {variability_input: medium}}
+            is_premium: {equal: [{variability_input: premium}, true]}
+            is_not_premium: {not: {equal: [{variability_input: premium}, true]}}
 
     node_templates:
         shop:
@@ -104,11 +108,11 @@ topology_template:
             persistent: true
             technology:
                 - ansible:
-                      conditions: {logic_expression: is_static}
+                      conditions: {equal: [{variability_input: env}, STATIC]}
                 - terraform:
-                      conditions: {logic_expression: is_elastic}
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
                 - kubernetes:
-                      conditions: {logic_expression: is_kubernetes}
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - application_name: unfurl-technology
                 - DB_NAME: unfurl-technology
@@ -117,17 +121,23 @@ topology_template:
                 - DB_DIALECT: mysql
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+                - premium:
+                      value: true
+                      conditions: {equal: [{variability_input: premium}, true]}
+                - premium:
+                      value: false
+                      conditions: {not: {equal: [{variability_input: premium}, true]}}
             requirements:
                 - database: database
                 - host:
                       node: os_compute
-                      conditions: {logic_expression: is_static}
+                      conditions: {equal: [{variability_input: env}, STATIC]}
                 - host:
                       node: gcp_runtime
-                      conditions: {logic_expression: is_elastic}
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
                 - host:
                       node: kubernetes
-                      conditions: {logic_expression: is_kubernetes}
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         shop_expose:
             type: shop.component.expose
@@ -139,38 +149,38 @@ topology_template:
             type: mysql.database
             technology:
                 - ansible:
-                      conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
+                      conditions: {or: [{equal: [{variability_input: env}, STATIC]}, {equal: [{variability_input: env}, KUBERNETES]}]}
                 - terraform:
-                      conditions: {logic_expression: is_elastic}
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
             properties:
                 - database_name: unfurl-technology
             requirements:
                 - host:
                       node: mysql_dbms
-                      conditions: {or: [{logic_expression: is_static}, {logic_expression: is_kubernetes}]}
+                      conditions: {or: [{equal: [{variability_input: env}, STATIC]}, {equal: [{variability_input: env}, KUBERNETES]}]}
                 - host:
                       node: gcp_dbms
-                      conditions: {logic_expression: is_elastic}
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
                 - depends:
                       node: mysql_dbms_expose
-                      conditions: {logic_expression: is_kubernetes}
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         mysql_dbms:
             type: mysql.dbms
             technology:
                 - ansible:
-                      conditions: {logic_expression: is_static}
+                      conditions: {equal: [{variability_input: env}, STATIC]}
                 - kubernetes:
-                      conditions: {logic_expression: is_kubernetes}
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - root_password: {get_input: database_password}
             requirements:
                 - host:
                       node: os_compute
-                      conditions: {logic_expression: is_static}
+                      conditions: {equal: [{variability_input: env}, STATIC]}
                 - host:
                       node: kubernetes
-                      conditions: {logic_expression: is_kubernetes}
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         mysql_dbms_expose:
             type: mysql.dbms.expose
@@ -187,10 +197,10 @@ topology_template:
                 - network: {get_input: os_network}
                 - flavor:
                       value: m1.medium
-                      conditions: {logic_expression: is_medium}
+                      conditions: {variability_input: medium}
                 - flavor:
                       value: m1.large
-                      conditions: {logic_expression: is_large}
+                      conditions: {not: {variability_input: medium}}
 
         gcp_dbms:
             type: gcp.cloud_sql

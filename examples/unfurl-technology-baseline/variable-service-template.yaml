@@ -10,59 +10,59 @@ topology_template:
 
         os_network:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_name:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_user:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_file:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_region_name:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_type:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_url:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_identity_api_version:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_interface:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_id:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_secret:
             type: string
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         gcp_region:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_service_account_file:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_project:
             type: string
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
     variability:
         inputs:
@@ -71,16 +71,10 @@ topology_template:
             medium:
                 type: boolean
 
-        expressions:
-            is_static: {equal: [{variability_input: env}, STATIC]}
-            is_elastic: {equal: [{variability_input: env}, ELASTIC]}
-            is_medium: {variability_input: medium}
-            is_large: {not: {logic_expression: is_medium}}
-
     node_templates:
         shop_ansible:
             type: shop.component
-            conditions: {logic_expression: is_static}
+            conditions: {equal: [{variability_input: env}, STATIC]}
             persistent: true
             technology: ansible
             properties:
@@ -98,7 +92,7 @@ topology_template:
         shop_terraform:
             type: shop.component
             persistent: true
-            conditions: {logic_expression: is_elastic}
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
             technology: terraform
             properties:
                 - application_name: unfurl-technology
@@ -145,10 +139,10 @@ topology_template:
                 - network: {get_input: os_network}
                 - flavor:
                       value: m1.medium
-                      conditions: {logic_expression: is_medium}
+                      conditions: {variability_input: medium}
                 - flavor:
                       value: m1.large
-                      conditions: {logic_expression: is_large}
+                      conditions: {not: {variability_input: medium}}
 
         gcp_dbms:
             type: gcp.cloud_sql
