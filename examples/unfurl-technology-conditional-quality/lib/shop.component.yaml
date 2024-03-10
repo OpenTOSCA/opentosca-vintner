@@ -258,7 +258,7 @@ node_types:
                                     app: shop
                             spec:
                                 containers:
-                                    - image: ghcr.io/opentosca/opentosca-shop-demo:latest
+                                    - image: ghcr.io/opentosca/opentosca-shop-demo@sha256:afa4cba143bd2bbb406bb6e03e34b3b3ff683465aca0fe0ea1f816e0333963e1
                                       name: shop
                                       env:
                                           - name: DB_NAME

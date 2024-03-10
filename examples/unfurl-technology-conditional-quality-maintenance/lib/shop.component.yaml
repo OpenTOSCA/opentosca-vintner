@@ -253,6 +253,12 @@ node_types:
             DB_PORT:
                 type: integer
 
+            optional_feature:
+                type: boolean
+
+            premium_feature:
+                type: boolean
+
             definition:
                 type: any
                 default:
@@ -271,7 +277,7 @@ node_types:
                                     app: shop
                             spec:
                                 containers:
-                                    - image: ghcr.io/opentosca/opentosca-shop-demo:latest
+                                    - image: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
                                       name: shop
                                       env:
                                           - name: DB_NAME
