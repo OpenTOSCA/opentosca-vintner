@@ -71,12 +71,6 @@ topology_template:
             medium:
                 type: boolean
 
-        expressions:
-            is_static: {equal: [{variability_input: env}, STATIC]}
-            is_elastic: {equal: [{variability_input: env}, ELASTIC]}
-            is_medium: {variability_input: medium}
-            is_large: {not: {variability_input: medium}}
-
         options:
             optimization_technologies: false
 

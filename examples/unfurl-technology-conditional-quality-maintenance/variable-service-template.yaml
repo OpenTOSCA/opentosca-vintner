@@ -90,17 +90,10 @@ topology_template:
                 type: string
             medium:
                 type: boolean
-            premium:
+            premium_feature:
                 type: boolean
-
-        expressions:
-            is_static: {equal: [{variability_input: env}, STATIC]}
-            is_elastic: {equal: [{variability_input: env}, ELASTIC]}
-            is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
-            is_medium: {variability_input: medium}
-            is_large: {not: {variability_input: medium}}
-            is_premium: {equal: [{variability_input: premium}, true]}
-            is_not_premium: {not: {equal: [{variability_input: premium}, true]}}
+            optional_feature:
+                type: boolean
 
     node_templates:
         shop:
@@ -114,12 +107,18 @@ topology_template:
                 - DB_DIALECT: mysql
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
-                - premium:
+                - premium_feature:
                       value: true
-                      conditions: {equal: [{variability_input: premium}, true]}
-                - premium:
+                      conditions: {equal: [{variability_input: premium_feature}, true]}
+                - premium_feature:
                       value: false
-                      conditions: {not: {equal: [{variability_input: premium}, true]}}
+                      conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
+                - optional_feature:
+                      value: true
+                      conditions: {equal: [{variability_input: optional_feature}, true]}
+                - optional_feature:
+                      value: false
+                      conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
                 - host:
