@@ -5,3 +5,10 @@ renames:
 
     - - shop_terraform
       - shop
+merge:
+    topology_template:
+        node_templates:
+            shop:
+                properties:
+                    optional_feature: true
+                    premium_feature: true

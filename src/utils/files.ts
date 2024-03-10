@@ -189,8 +189,7 @@ export function createDirectory(directory: string) {
 export function deleteDirectory(directory: string) {
     const resolved = path.resolve(directory)
 
-    if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved))
-        throw new Error(`Deleting directory "${resolved}" not allowed`)
+    if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved)) throw new Error(`Deleting directory "${resolved}" not allowed`)
 
     fss.rmSync(resolved, {recursive: true, force: true})
 }
@@ -280,4 +279,10 @@ export function replace(file: string, find: string, replace: string) {
     const data = loadFile(file)
     const replaced = data.replaceAll(find, replace)
     storeFile(file, replaced, {onlyIfChanged: true})
+}
+
+export function merge(file: string, merge: any) {
+    const data = loadYAML(file)
+    const merged = _.merge(data, merge)
+    storeFile(file, merged, {onlyIfChanged: true})
 }

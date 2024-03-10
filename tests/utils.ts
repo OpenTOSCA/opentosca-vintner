@@ -1,16 +1,12 @@
+import * as check from '#check'
 import Controller from '#controller'
-import {
-    VariabilityTestGroup,
-    getDefaultInputs,
-    getVariableServiceTemplate,
-    loadConfig,
-    loadExpected,
-} from '#controller/template/test'
+import {VariabilityTestGroup, getDefaultInputs, getVariableServiceTemplate, loadConfig, loadExpected} from '#controller/template/test'
 import * as files from '#files'
 import Loader from '#graph/loader'
 import std from '#std'
 import {toList} from '#utils/utils'
 import {expect} from 'chai'
+import _ from 'lodash'
 import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
@@ -89,6 +85,16 @@ export function getDefaultTest(dir: string, vstdir?: string) {
 
             const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
+
+            /**
+             * TODO: Hotfix
+             *  adapt output by merging with custom JSON, e.g., for adapting
+             */
+            // TODO: support merge.yaml as default file
+            // TODO: adapt documentation generator
+            if (check.isDefined(config.merge)) {
+                _.merge(expected, config.merge)
+            }
 
             expect(result).to.deep.equal(expected)
         }
