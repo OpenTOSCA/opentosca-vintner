@@ -30,14 +30,7 @@ export class Unfurl implements Orchestrator {
 
     constructor(config: UnfurlConfig) {
         this.config = config
-        this.binary = utils.joinNotNull(
-            [
-                this.config.venv ? `cd ${this.config.dir}` : undefined,
-                this.config.venv ? '. .venv/bin/activate' : undefined,
-                'unfurl',
-            ],
-            ' && '
-        )
+        this.binary = utils.joinNotNull([this.config.venv ? `cd ${this.config.dir}` : undefined, this.config.venv ? '. .venv/bin/activate' : undefined, 'unfurl'], ' && ')
         this.shell = new Shell(config.wsl)
     }
 
@@ -62,7 +55,7 @@ export class Unfurl implements Orchestrator {
          * On Windows the following error is thrown:
          * Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
          */
-        if (platform.linux) files.deleteDirectory(tmp)
+        if (platform.linux) files.removeDirectory(tmp)
     }
 
     /**
@@ -70,13 +63,7 @@ export class Unfurl implements Orchestrator {
      */
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         await this.createEnsemble(instance)
-        const command = [
-            this.binary,
-            'deploy',
-            '--approve',
-            '--jobexitcode error',
-            this.shell.resolve(instance.getDataDirectory()),
-        ]
+        const command = [this.binary, 'deploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -89,13 +76,7 @@ export class Unfurl implements Orchestrator {
      * https://docs.unfurl.run/cli.html#unfurl-undeploy
      */
     async undeploy(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [
-            this.binary,
-            'undeploy',
-            '--approve',
-            '--jobexitcode error',
-            this.shell.resolve(instance.getDataDirectory()),
-        ]
+        const command = [this.binary, 'undeploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -108,13 +89,7 @@ export class Unfurl implements Orchestrator {
      * https://docs.unfurl.run/cli.html#unfurl-deploy
      */
     async continue(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [
-            this.binary,
-            'deploy',
-            '--approve',
-            '--jobexitcode error',
-            this.shell.resolve(instance.getDataDirectory()),
-        ]
+        const command = [this.binary, 'deploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }

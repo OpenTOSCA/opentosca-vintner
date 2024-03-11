@@ -18,17 +18,17 @@ export default async function (options: SetupCleanOptions) {
     }
 
     // Delete home directory
-    files.deleteDirectory(env.home)
+    files.removeDirectory(env.home)
 
     // Delete tmp directories
     files
         .listFiles(os.tmpdir())
         .filter(it => it.startsWith(files.TMP_PREFIX))
-        .forEach(it => files.deleteFile(path.join(os.tmpdir(), it)))
+        .forEach(it => files.removeFile(path.join(os.tmpdir(), it)))
 
     // Delete tmp files
     files
         .listDirectories(os.tmpdir())
         .filter(it => it.startsWith(files.TMP_PREFIX))
-        .forEach(it => files.deleteDirectory(path.join(os.tmpdir(), it)))
+        .forEach(it => files.removeDirectory(path.join(os.tmpdir(), it)))
 }

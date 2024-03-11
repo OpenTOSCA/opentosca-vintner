@@ -186,7 +186,15 @@ export function createDirectory(directory: string) {
     }
 }
 
-export function deleteDirectory(directory: string) {
+export async function remove(it: string) {
+    if (isDirectory(it)) {
+        removeDirectory(it)
+    } else {
+        await removeFile(it)
+    }
+}
+
+export function removeDirectory(directory: string) {
     const resolved = path.resolve(directory)
 
     if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved)) throw new Error(`Deleting directory "${resolved}" not allowed`)
@@ -194,7 +202,7 @@ export function deleteDirectory(directory: string) {
     fss.rmSync(resolved, {recursive: true, force: true})
 }
 
-export async function deleteFile(file: string) {
+export async function removeFile(file: string) {
     fss.unlinkSync(path.resolve(file))
 }
 

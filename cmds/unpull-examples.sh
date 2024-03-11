@@ -13,10 +13,7 @@ if [ ! -f "${ENTRYPOINT}" ]; then
     exit 1
 fi
 
-# Symbolic
-LINK=${1:-false}
-
-# Pull dependencies of each example
+# Unpull dependencies of each example
 for EXAMPLE in examples/*/; do
 
   # Ignore directories starting with a dot
@@ -29,7 +26,7 @@ for EXAMPLE in examples/*/; do
     continue
   fi
 
-  # Pull dependenciess
+  # Unpull dependenciess
   echo "${COMMAND}ing ${EXAMPLE}"
-  $VINTNER template pull --dir "$(realpath ${EXAMPLE})" --link ${LINK}
+  $VINTNER template unpull --dir "$(realpath ${EXAMPLE})"
 done

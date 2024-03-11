@@ -460,7 +460,6 @@ template
     .command('unpull')
     .description('unpull template dependencies')
     .requiredOption('--dir <string>', 'path to service template directory')
-    .option('--link [boolean]', 'unlink symbolic links instead removing directories', false)
     .action(
         hae.exit(async options => {
             await Controller.template.unpull(options)

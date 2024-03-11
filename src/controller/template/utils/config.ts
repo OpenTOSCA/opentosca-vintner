@@ -80,10 +80,7 @@ export class Dependency {
     }
 
     async unpull() {
-        if (this.config.options.link) {
-            files.deleteDirectory(this.target)
-        } else {
-            await files.deleteFile(this.target)
-        }
+        // We assume that link is false. Otherwise, target is missing the base.
+        await files.remove(this.target)
     }
 }

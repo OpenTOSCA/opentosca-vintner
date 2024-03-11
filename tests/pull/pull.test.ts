@@ -12,6 +12,6 @@ describe('pull', () => {
 
         expect(files.exists(file), 'File does not exists ...').to.be.true
 
-        files.deleteDirectory(path.join(__dirname, 'template', 'lib'))
+        files.removeDirectory(path.join(__dirname, 'template', 'lib'))
     })
 })

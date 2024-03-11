@@ -40,12 +40,8 @@ export default async function (options: BenchmarkOptions) {
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
-                const input = files.temporary(
-                    `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input_${crypto.generateNonce()}.yaml`
-                )
-                const output = files.temporary(
-                    `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output_${crypto.generateNonce()}.yaml`
-                )
+                const input = files.temporary(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input_${crypto.generateNonce()}.yaml`)
+                const output = files.temporary(`vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output_${crypto.generateNonce()}.yaml`)
 
                 const start = process.hrtime()
 
@@ -64,8 +60,8 @@ export default async function (options: BenchmarkOptions) {
                 if (io) {
                     size = files.getSize(input)
                     lines = files.countLines(input)
-                    await files.deleteFile(input)
-                    await files.deleteFile(output)
+                    await files.removeFile(input)
+                    await files.removeFile(output)
                 }
 
                 std.log(`Finished`, {io, seed, run, duration})
@@ -167,11 +163,7 @@ export function benchmark2markdown(results: BenchmarkResults, options: Benchmark
     results
         .filter(it => !it.IO)
         .forEach((result, index) => {
-            data.push(
-                '| ' +
-                    [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(' | ') +
-                    ' |'
-            )
+            data.push('| ' + [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(' | ') + ' |')
         })
 
     if (options.io) {
@@ -183,13 +175,7 @@ export function benchmark2markdown(results: BenchmarkResults, options: Benchmark
         results
             .filter(it => it.IO)
             .forEach((result, index) => {
-                data.push(
-                    '| ' +
-                        [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(
-                            ' | '
-                        ) +
-                        ' |'
-                )
+                data.push('| ' + [index + 1, result.seed, result.templates, result.median, result.median_per_template].join(' | ') + ' |')
             })
 
         data.push('')
@@ -200,9 +186,7 @@ export function benchmark2markdown(results: BenchmarkResults, options: Benchmark
         results
             .filter(it => it.IO)
             .forEach((result, index) => {
-                data.push(
-                    '| ' + [index + 1, result.seed, result.file_size || '', result.file_lines || ''].join(' | ') + ' |'
-                )
+                data.push('| ' + [index + 1, result.seed, result.file_size || '', result.file_lines || ''].join(' | ') + ' |')
             })
     }
 
@@ -216,16 +200,7 @@ export function benchmark2latex(results: BenchmarkResults, options: BenchmarkOpt
 
     results.forEach((result, index) => {
         data.push(
-            [
-                index + 1,
-                result.seed,
-                result.templates,
-                result.median,
-                result.median_per_template,
-                result.IO,
-                result.file_size || '',
-                result.file_lines || '',
-            ].join(' & ') + '\\\\'
+            [index + 1, result.seed, result.templates, result.median, result.median_per_template, result.IO, result.file_size || '', result.file_lines || ''].join(' & ') + '\\\\'
         )
 
         if (options.io && index + 1 == options.seeds.length) data.push('\\midrule')

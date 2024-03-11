@@ -1,11 +1,5 @@
 import * as check from '#check'
-import {
-    getDefaultInputs,
-    getVariableServiceTemplate,
-    loadConfig,
-    loadExpected,
-    VariabilityTestConfig,
-} from '#controller/template/test'
+import {getDefaultInputs, getVariableServiceTemplate, loadConfig, loadExpected, VariabilityTestConfig} from '#controller/template/test'
 import * as files from '#files'
 import Loader from '#graph/loader'
 import {ServiceTemplate} from '#spec/service-template'
@@ -23,7 +17,7 @@ type Test = {
 
 async function main() {
     const documentationDirectory = path.join('docs', 'docs', 'variability4tosca', 'tests')
-    files.deleteDirectory(documentationDirectory)
+    files.removeDirectory(documentationDirectory)
     files.createDirectory(documentationDirectory)
 
     const testsDirectory = path.join('tests', 'conformance')
@@ -37,9 +31,7 @@ async function main() {
             const id = `${group}-${test}`
             const config = loadConfig(dir)
             const template = new Loader(getVariableServiceTemplate({dir, file: config.template})).raw()
-            const inputs = getDefaultInputs(dir)
-                ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
-                : undefined
+            const inputs = getDefaultInputs(dir) ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!) : undefined
             tests.push({
                 id,
                 config,
@@ -51,18 +43,10 @@ async function main() {
         })
     }
 
-    await files.renderFile(
-        path.join(__dirname, 'introduction.template.ejs'),
-        {tests},
-        path.join(documentationDirectory, 'introduction.md')
-    )
+    await files.renderFile(path.join(__dirname, 'introduction.template.ejs'), {tests}, path.join(documentationDirectory, 'introduction.md'))
 
     for (const test of tests) {
-        await files.renderFile(
-            path.join(__dirname, 'test.template.ejs'),
-            {test, utils: {toYAML: files.toYAML}},
-            path.join(documentationDirectory, test.file)
-        )
+        await files.renderFile(path.join(__dirname, 'test.template.ejs'), {test, utils: {toYAML: files.toYAML}}, path.join(documentationDirectory, test.file))
     }
 }
 
