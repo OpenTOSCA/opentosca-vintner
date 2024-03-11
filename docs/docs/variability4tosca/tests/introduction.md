@@ -207,8 +207,8 @@ processing.
 | 182 | [other-preset](./test-other-preset.md) |
 | 183 | [other-presets](./test-other-presets.md) |
 | 184 | [other-throw-CONTAINER](./test-other-throw-CONTAINER.md) |
-| 185 | [other-throw-SELF](./test-other-throw-SELF.md) |
-| 186 | [other-throw-not-unique](./test-other-throw-not-unique.md) |
+| 185 | [other-throw-not-unique](./test-other-throw-not-unique.md) |
+| 186 | [other-throw-SELF](./test-other-throw-SELF.md) |
 | 187 | [Operator "concat"](./test-other-token.md) |
 | 188 | [Get Variability Expression](./test-other-value-expression.md) |
 | 189 | [Get Variability Input](./test-other-variability-input.md) |

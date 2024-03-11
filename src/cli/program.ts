@@ -684,6 +684,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
+    .option('--retry [boolean]', 'retry', true)
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
