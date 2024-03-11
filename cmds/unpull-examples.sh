@@ -26,7 +26,7 @@ for EXAMPLE in examples/*/; do
     continue
   fi
 
-  # Unpull dependenciess
+  # Unpull dependencies
   echo "$Unpulling ${EXAMPLE}"
   $VINTNER template unpull --dir "$(realpath ${EXAMPLE})"
 done
