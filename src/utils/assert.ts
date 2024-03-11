@@ -37,6 +37,10 @@ export function isBoolean(element: unknown): asserts element is boolean {
     if (!check.isBoolean(element)) throw new Error(`Element "${utils.stringify(element)}" is not a boolean`)
 }
 
+export function isTrue(element: unknown): asserts element is true {
+    if (!check.isTrue(element)) throw new Error(`Element "${utils.stringify(element)} is not "true"`)
+}
+
 export function isStatement(boolean: boolean, msg: string) {
     if (!boolean) throw new Error(msg)
 }

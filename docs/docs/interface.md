@@ -950,6 +950,7 @@ deploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
+| retry |  false  | boolean | retry (default: true) |
 | verbose |  false  | boolean | verbose |
 
 ## vintner instances info
@@ -2692,14 +2693,14 @@ collects stats of a given service template (experimental)
 
 === "CLI"
     ```shell linenums="1"
-    vintner template stats --template ${TEMPLATE}
+    vintner template stats --template ${TEMPLATE} --experimental ${EXPERIMENTAL}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"template": "${TEMPLATE}"}' \
+            --data '{"template": "${TEMPLATE}", "experimental": "${EXPERIMENTAL}"}' \
             ${SERVER_ADDRESS}/template/stats
     ```
 
@@ -2707,7 +2708,8 @@ collects stats of a given service template (experimental)
     ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/stats", {
-		template: TEMPLATE
+		template: TEMPLATE,
+		experimental: EXPERIMENTAL
     })
     ```
 
@@ -2715,7 +2717,8 @@ collects stats of a given service template (experimental)
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/stats", json={
-		"template": TEMPLATE
+		"template": TEMPLATE,
+		"experimental": EXPERIMENTAL
     })
     ```
 
@@ -2723,13 +2726,15 @@ collects stats of a given service template (experimental)
     ```kotlin linenums="1"
     import khttp.post
     post(SERVER_ADDRESS + "/template/stats", json=mapOf(
-		"template" to TEMPLATE
+		"template" to TEMPLATE,
+		"experimental" to EXPERIMENTAL
     ))
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | template |  true  | strings... | path to service template |
+| experimental |  true  |  | enable experimental feature |
 
 ## vintner template test
 

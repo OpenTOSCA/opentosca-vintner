@@ -393,6 +393,7 @@ template
     .command('stats')
     .description('collects stats of a given service template (experimental)')
     .requiredOption('--template <strings...>', 'path to service template')
+    .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
             const result = await Controller.template.stats(options)
@@ -683,6 +684,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
+    .option('--retry [boolean]', 'retry', true)
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
