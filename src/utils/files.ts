@@ -187,6 +187,8 @@ export function createDirectory(directory: string) {
 }
 
 export async function remove(it: string) {
+    if (!exists(it)) return
+
     if (isDirectory(it)) {
         removeDirectory(it)
     } else {

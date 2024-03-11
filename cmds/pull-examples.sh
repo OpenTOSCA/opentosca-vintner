@@ -30,6 +30,6 @@ for EXAMPLE in examples/*/; do
   fi
 
   # Pull dependenciess
-  echo "${COMMAND}ing ${EXAMPLE}"
+  echo "Pulling ${EXAMPLE}"
   $VINTNER template pull --dir "$(realpath ${EXAMPLE})" --link ${LINK}
 done
