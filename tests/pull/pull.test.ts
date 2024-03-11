@@ -8,7 +8,7 @@ describe('pull', () => {
         const file = path.join(__dirname, 'template', 'lib', 'file.yaml')
         expect(files.exists(file), 'File already exists ...').to.be.false
 
-        await Controller.template.pull({template: path.join(__dirname, 'template')})
+        await Controller.template.pull({dir: path.join(__dirname, 'template')})
 
         expect(files.exists(file), 'File does not exists ...').to.be.true
 

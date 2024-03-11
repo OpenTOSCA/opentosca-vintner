@@ -79,11 +79,7 @@ setup
     .description('benchmarks the variability resolver')
     .option('--io [boolean]', 'enable read and writes to the filesystem')
     .option('--no-io [boolean]', 'disable read and writes to the filesystem')
-    .addOption(
-        new Option('--seeds [numbers...]', 'seed for generating service templates').default([
-            10, 250, 500, 1000, 2500, 5000, 10000,
-        ])
-    )
+    .addOption(new Option('--seeds [numbers...]', 'seed for generating service templates').default([10, 250, 500, 1000, 2500, 5000, 10000]))
     .addOption(new Option('--runs [number]', 'number of measurements for each test').default(10))
     .option('--latex [boolean]', 'plot results as latex', false)
     .option('--markdown [boolean]', 'plot results as markdown', false)
@@ -374,10 +370,7 @@ template
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
     .option('--presets [strings...]', 'names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
-    .option(
-        '--inputs [string]',
-        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
-    )
+    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)')
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
@@ -455,11 +448,22 @@ template
 template
     .command('pull')
     .description('pull template dependencies')
-    .requiredOption('--template <string>', 'path to service template directory')
+    .requiredOption('--dir <string>', 'path to service template directory')
     .option('--link [boolean]', 'create symbolic links instead of copying files', false)
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
+        })
+    )
+
+template
+    .command('unpull')
+    .description('unpull template dependencies')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .option('--link [boolean]', 'unlink symbolic links instead removing directories', false)
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unpull(options)
         })
     )
 
@@ -644,10 +648,7 @@ instances
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
-    .option(
-        '--inputs [string]',
-        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
-    )
+    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})')
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
