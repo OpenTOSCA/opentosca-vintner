@@ -18,6 +18,10 @@ inputs:
 runs:
     using: 'composite'
     steps:
+        - name: (VINTNER) Sleep
+          shell: bash
+          run: sleep 5
+
         - name: (VINTNER) Test application
           if: ${{ inputs.env == 'OS' }}
           shell: bash
