@@ -2613,6 +2613,18 @@ Each test is defined inside its own directory of <code>/tests</code> and might c
 <td>String</td>
 <td>Path (relative to <code>test.yaml</code>) to the expected service template after resolving variability.</td>
 </tr>
+<tr>
+<td>renames</td>
+<td>false</td>
+<td>List(Tuple(Find: String, Replace: String))</td>
+<td>An optional list of strings to search and replace for in the generated service template.</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>false</td>
+<td>Object</td>
+<td>An optional object that is merged into the expected service template.</td>
+</tr>
 </tbody>
 </table>
 <p>There are the following special cases considering test directory names.</p>
@@ -2714,7 +2726,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 12, 2024</span>
 </small>
 </div>
 </article>
