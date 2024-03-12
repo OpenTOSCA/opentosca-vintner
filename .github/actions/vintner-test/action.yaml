@@ -54,6 +54,6 @@ runs:
 
               echo "minikube ip: ${MINIKUBE_IP}"
 
-              curl --fail-with-body https://${MINIKUBE_IP}:${PORT}
+              curl --fail-with-body http://${MINIKUBE_IP}:${PORT}
           env:
               PORT: ${{ inputs.port }}
