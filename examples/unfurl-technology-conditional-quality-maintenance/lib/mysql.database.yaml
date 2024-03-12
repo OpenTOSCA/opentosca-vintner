@@ -226,6 +226,11 @@ node_types:
                     main: |
                         terraform {
                            required_providers {
+                             time = {
+                               source = "hashicorp/time"
+                               version = "0.11.1"
+                             }
+
                              mysql  = {
                                source = "petoju/mysql"
                                version = "3.0.48"
@@ -249,13 +254,21 @@ node_types:
                            type        = number
                         }
 
+                        provider "time" {
+                        }
+
                         provider "mysql" {
                             endpoint = "${var.host}:${var.port}"
                             username = "root"
                             password = var.root_password
                         }
 
+                        resource "time_sleep" "pause" {
+                            create_duration = "5s"
+                        }
+
                         resource "mysql_database" "app" {
+                            depends_on = [time_sleep.pause]
                             name = var.name
                         }
 
@@ -277,6 +290,10 @@ node_types:
                         inputs:
                             playbook:
                                 q:
+                                    - name: Give DBMS some time
+                                      ansible.builtin.pause:
+                                          seconds: 7
+
                                     - name: Creating database
                                       community.mysql.mysql_db:
                                           name: '{{ SELF.database_name }}'

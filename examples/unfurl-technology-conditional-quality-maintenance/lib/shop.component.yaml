@@ -160,16 +160,16 @@ node_types:
                                                                       value: {{ SELF.DB_ADDRESS }}
 
                                                                     - name: DB_PORT
-                                                                      value: {{ SELF.DB_PORT }}
+                                                                      value: "{{ SELF.DB_PORT }}"
 
                                                                     - name: DB_DIALECT
                                                                       value: {{ SELF.DB_DIALECT }}
 
                                                                     - name: FEATURE_OPTIONAL
-                                                                      value: {{ SELF.premium_optional }}
+                                                                      value: "{{ SELF.feature_optional }}"
 
                                                                     - name: FEATURE_PREMIUM
-                                                                      value: {{ SELF.premium_feature }}
+                                                                      value: "{{ SELF.premium_feature }}"
 
 
                                                                 ports:
@@ -293,16 +293,16 @@ node_types:
                                             value: '{{ SELF.DB_ADDRESS }}'
 
                                           - name: DB_PORT
-                                            value: "'{{ SELF.DB_PORT }}'"
+                                            value: '"{{ SELF.DB_PORT }}"'
 
                                           - name: DB_DIALECT
                                             value: '{{ SELF.DB_DIALECT }}'
 
                                           - name: FEATURE_OPTIONAL
-                                            value: '{{SELF.premium_optional}}'
+                                            value: '"{{ SELF.optional_feature }}"'
 
                                           - name: FEATURE_PREMIUM
-                                            value: '{{SELF.premium_feature}}'
+                                            value: '"{{ SELF.premium_feature }}"'
 
                                       ports:
                                           - containerPort: 80

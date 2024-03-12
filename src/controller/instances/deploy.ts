@@ -20,6 +20,7 @@ export default async function (options: InstancesDeployOptions) {
         } catch (e) {
             if (!options.retry) throw e
             std.log(e)
+            await utils.sleep(10 * 1000)
             await orchestrator.continue(instance, {verbose: options.verbose})
         }
     })

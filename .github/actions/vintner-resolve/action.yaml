@@ -14,7 +14,7 @@ runs:
     steps:
         - name: (VINTNER) Pull dependencies
           shell: bash
-          run: vintner template pull --template examples/${EXAMPLE}
+          run: vintner template pull --dir examples/${EXAMPLE}
           env:
               EXAMPLE: ${{ inputs.example }}
 

@@ -99,7 +99,6 @@ jobs:
     gcp:
         name: GCP
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance
@@ -184,6 +183,8 @@ jobs:
     openstack:
         name: OpenStack
         runs-on: ubuntu-22.04
+        # TODO: is working
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance

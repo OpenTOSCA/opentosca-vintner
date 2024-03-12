@@ -7,7 +7,7 @@ source configuration.sh
 $VINTNER instances delete --instance ${TEMPLATE_NAME}
 $VINTNER templates delete --template ${TEMPLATE_NAME}
 
-$VINTNER template pull --template ${TEMPLATE_DIR}
+$VINTNER template pull --dir ${TEMPLATE_DIR}
 $VINTNER templates import --template ${TEMPLATE_NAME}  --path ${TEMPLATE_DIR}
 $VINTNER instances init --instance ${TEMPLATE_NAME}  --template ${TEMPLATE_NAME}
 $VINTNER instances resolve --instance ${TEMPLATE_NAME}  --inputs ${TEMPLATE_DIR}/tests/first/inputs.yaml

@@ -5,5 +5,5 @@ set -e
 source configuration.sh
 
 # Pull dependencies
-$VINTNER template pull --template ${TEMPLATE_DIR}
+$VINTNER template pull --dir ${TEMPLATE_DIR}
 
