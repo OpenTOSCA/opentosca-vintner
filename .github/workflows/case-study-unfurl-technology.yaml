@@ -15,6 +15,7 @@ jobs:
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE_OVERRIDE: unfurl-technology
             ENV: K8S
             PORT: 30080
         steps:
@@ -63,7 +64,8 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
-                  k8s_api_port: $(minikube ip)
+                  k8s_api_address: $(minikube ip)
+                  k8s_api_port: '8843'
                   k8s_ca_cert_file: /home/runner/.minikube/ca.crt
                   k8s_client_cert_file: /home/runner/.minikube/profiles/minikube/client.crt
                   k8s_client_key_file: /home/runner/.minikube/profiles/minikube/client.key
@@ -80,7 +82,7 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE }}
+                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
@@ -101,6 +103,7 @@ jobs:
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE_OVERRIDE: unfurl-technology
             ENV: GCP
             PORT: 80
         steps:
@@ -164,7 +167,7 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE }}
+                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
@@ -184,6 +187,7 @@ jobs:
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE_OVERRIDE: unfurl-technology
             ENV: OS
             PORT: 80
         steps:
@@ -264,7 +268,7 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE }}
+                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   env: ${{ env.ENV }}
                   port: ${{ env.PORT }}
 
