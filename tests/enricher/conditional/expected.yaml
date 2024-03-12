@@ -14,14 +14,7 @@ topology_template:
                   - relation:
                         node: target
                         conditions:
-                            - {
-                                  and:
-                                      [
-                                          {node_presence: source, _generated: true},
-                                          {node_presence: target, _generated: true},
-                                      ],
-                                  _generated: true,
-                              }
+                            - {and: [{node_presence: source, _generated: true}, {node_presence: target, _generated: true}], _generated: true}
 
         - target:
               type:

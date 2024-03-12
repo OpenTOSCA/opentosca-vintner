@@ -1,3 +1,4 @@
+import * as check from '#check'
 import Controller from '#controller'
 import {
     VariabilityTestGroup,
@@ -11,6 +12,7 @@ import Loader from '#graph/loader'
 import std from '#std'
 import {toList} from '#utils/utils'
 import {expect} from 'chai'
+import _ from 'lodash'
 import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
@@ -78,8 +80,28 @@ export function getDefaultTest(dir: string, vstdir?: string) {
             await expectAsyncThrow(fn, config.error)
         } else {
             await fn()
+
+            /**
+             * TODO: Hotfix
+             *  search and replace some strings in the result, e.g., to align node template names restricted in case studies
+             */
+            for (const rename of config.renames || []) {
+                files.replace(output, rename[0], rename[1])
+            }
+
             const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
+
+            /**
+             * TODO: Hotfix
+             *  adapt output by merging with custom JSON, e.g., for adapting
+             */
+            // TODO: support merge.yaml as default file
+            // TODO: adapt documentation generator
+            if (check.isDefined(config.merge)) {
+                _.merge(expected, config.merge)
+            }
+
             expect(result).to.deep.equal(expected)
         }
     }

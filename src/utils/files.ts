@@ -65,6 +65,14 @@ export function countLines(file: string) {
     return fss.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
 }
 
+export function countNotBlankLines(file: string) {
+    assertFile(file)
+    return fss
+        .readFileSync(path.resolve(file), 'utf-8')
+        .split(/\r?\n/)
+        .filter(it => it).length
+}
+
 export function isLink(path: string) {
     return path.startsWith('http://') || path.startsWith('https://')
 }
@@ -178,7 +186,17 @@ export function createDirectory(directory: string) {
     }
 }
 
-export function deleteDirectory(directory: string) {
+export async function remove(it: string) {
+    if (!exists(it)) return
+
+    if (isDirectory(it)) {
+        removeDirectory(it)
+    } else {
+        await removeFile(it)
+    }
+}
+
+export function removeDirectory(directory: string) {
     const resolved = path.resolve(directory)
 
     if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved))
@@ -187,7 +205,7 @@ export function deleteDirectory(directory: string) {
     fss.rmSync(resolved, {recursive: true, force: true})
 }
 
-export async function deleteFile(file: string) {
+export async function removeFile(file: string) {
     fss.unlinkSync(path.resolve(file))
 }
 
@@ -266,4 +284,16 @@ export function stat(file: string) {
 
 export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {
     return Glob.glob(pattern, options)
+}
+
+export function replace(file: string, find: string, replace: string) {
+    const data = loadFile(file)
+    const replaced = data.replaceAll(find, replace)
+    storeFile(file, replaced, {onlyIfChanged: true})
+}
+
+export function merge(file: string, merge: any) {
+    const data = loadYAML(file)
+    const merged = _.merge(data, merge)
+    storeFile(file, merged, {onlyIfChanged: true})
 }

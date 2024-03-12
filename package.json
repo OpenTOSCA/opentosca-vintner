@@ -160,6 +160,7 @@
         "docs:export:local": "bash docs/cmds/export/generate.sh http://localhost:8000",
         "examples:pull": "bash cmds/pull-examples.sh",
         "examples:pull:link": "bash cmds/pull-examples.sh true",
+        "examples:pull:unlink": "bash cmds/unpull-examples.sh",
         "examples:generate:getting-started": "yarn cli template init --path examples/xopera-getting-started --force",
         "examples:xopera": "bash examples/xopera-motivation/demo.sh",
         "examples:unfurl": "bash examples/unfurl-motivation/demo.sh",

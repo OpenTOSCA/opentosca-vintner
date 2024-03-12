@@ -108,7 +108,7 @@ export class Template {
     }
 
     delete() {
-        files.deleteDirectory(this.getTemplateDirectory())
+        files.removeDirectory(this.getTemplateDirectory())
         return this
     }
 }

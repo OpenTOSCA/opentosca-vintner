@@ -11,6 +11,7 @@ import _sign from './sign'
 import _stats from './stats'
 import _test from './test'
 import _unpackage from './unpackage'
+import _unpull from './unpull'
 import _verify from './verify'
 
 export default {
@@ -28,4 +29,5 @@ export default {
     sign: _sign,
     verify: _verify,
     pull: _pull,
+    unpull: _unpull,
 }

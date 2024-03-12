@@ -456,11 +456,21 @@ template
 template
     .command('pull')
     .description('pull template dependencies')
-    .requiredOption('--template <string>', 'path to service template directory')
+    .requiredOption('--dir <string>', 'path to service template directory')
     .option('--link [boolean]', 'create symbolic links instead of copying files', false)
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
+        })
+    )
+
+template
+    .command('unpull')
+    .description('unpull template dependencies')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unpull(options)
         })
     )
 

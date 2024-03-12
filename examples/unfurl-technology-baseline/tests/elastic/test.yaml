@@ -1,0 +1,7 @@
+expected: ../../../unfurl-technology-variant-elastic/tests/tau/expected.yaml
+renames:
+    - - database_terraform
+      - database
+
+    - - shop_terraform
+      - shop

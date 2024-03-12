@@ -1,0 +1,4 @@
+env: STATIC
+medium: true
+optional_feature: true
+premium_feature: true

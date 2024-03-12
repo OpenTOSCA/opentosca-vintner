@@ -39,14 +39,16 @@ Here is an exemplary structure of a CSAR that has one variability test.
 
 The following configurations can be configured in the test configuration file.
 
-| Keyname     | Mandatory | Type                       | Description                                                                                  |
-|-------------|-----------|----------------------------|----------------------------------------------------------------------------------------------|
-| name        | false     | String                     | Display name of the test case (default is the directory name).                               | 
-| description | false     | String                     | Description of the test case.                                                                | 
-| presets     | false     | String &#124; List(String) | Variability presets to use when resolving variability.                                       | 
-| error       | false     | String                     | The expected error that is thrown.                                                           | 
-| template    | false     | String                     | Path (relative to `test.yaml`) to the variable service template.                             | 
-| expected    | false     | String                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
+| Keyname     | Mandatory | Type                                       | Description                                                                                  |
+|-------------|-----------|--------------------------------------------|----------------------------------------------------------------------------------------------|
+| name        | false     | String                                     | Display name of the test case (default is the directory name).                               | 
+| description | false     | String                                     | Description of the test case.                                                                | 
+| presets     | false     | String &#124; List(String)                 | Variability presets to use when resolving variability.                                       | 
+| error       | false     | String                                     | The expected error that is thrown.                                                           | 
+| template    | false     | String                                     | Path (relative to `test.yaml`) to the variable service template.                             | 
+| expected    | false     | String                                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
+| renames     | false     | List(Tuple(Find: String, Replace: String)) | An optional list of strings to search and replace for in the generated service template.     | 
+| merge       | false     | Object                                     | An optional object that is merged into the expected service template.                        | 
 
 
 There are the following special cases considering test directory names.

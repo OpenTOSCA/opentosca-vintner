@@ -2395,14 +2395,14 @@ pull template dependencies
 
 === "CLI"
     ```shell linenums="1"
-    vintner template pull --template ${TEMPLATE}
+    vintner template pull --dir ${DIR}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"template": "${TEMPLATE}"}' \
+            --data '{"dir": "${DIR}"}' \
             ${SERVER_ADDRESS}/template/pull
     ```
 
@@ -2410,7 +2410,7 @@ pull template dependencies
     ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/pull", {
-		template: TEMPLATE
+		dir: DIR
     })
     ```
 
@@ -2418,7 +2418,7 @@ pull template dependencies
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/pull", json={
-		"template": TEMPLATE
+		"dir": DIR
     })
     ```
 
@@ -2426,13 +2426,13 @@ pull template dependencies
     ```kotlin linenums="1"
     import khttp.post
     post(SERVER_ADDRESS + "/template/pull", json=mapOf(
-		"template" to TEMPLATE
+		"dir" to DIR
     ))
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| template |  true  | string | path to service template directory |
+| dir |  true  | string | path to service template directory |
 | link |  false  | boolean | create symbolic links instead of copying files (default: false) |
 
 ## vintner template puml topology
@@ -2831,6 +2831,52 @@ unpackages a CSAR
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
+
+## vintner template unpull
+
+unpull template dependencies
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template unpull --dir ${DIR}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"dir": "${DIR}"}' \
+            ${SERVER_ADDRESS}/template/unpull
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/unpull", {
+		dir: DIR
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/unpull", json={
+		"dir": DIR
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/unpull", json=mapOf(
+		"dir" to DIR
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| dir |  true  | string | path to service template directory |
 
 ## vintner template verify
 

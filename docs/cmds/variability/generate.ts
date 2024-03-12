@@ -23,7 +23,7 @@ type Test = {
 
 async function main() {
     const documentationDirectory = path.join('docs', 'docs', 'variability4tosca', 'tests')
-    files.deleteDirectory(documentationDirectory)
+    files.removeDirectory(documentationDirectory)
     files.createDirectory(documentationDirectory)
 
     const testsDirectory = path.join('tests', 'conformance')

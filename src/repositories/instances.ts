@@ -68,7 +68,7 @@ export class Instance {
     }
 
     delete() {
-        files.deleteDirectory(this.getInstanceDirectory())
+        files.removeDirectory(this.getInstanceDirectory())
         return this
     }
 

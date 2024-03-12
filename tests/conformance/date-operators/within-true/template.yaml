@@ -6,5 +6,4 @@ topology_template:
             type: container
             properties:
                 - value:
-                      expression:
-                          {within: [2023-01-02T00:00:00.000Z, [2023-01-01T00:00:00.000Z, 2023-01-03T00:00:00.000Z]]}
+                      expression: {within: [2023-01-02T00:00:00.000Z, [2023-01-01T00:00:00.000Z, 2023-01-03T00:00:00.000Z]]}

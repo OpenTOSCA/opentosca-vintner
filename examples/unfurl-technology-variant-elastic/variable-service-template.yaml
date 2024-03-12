@@ -1,0 +1,53 @@
+tosca_definitions_version: tosca_variability_1_0
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
+
+    node_templates:
+        shop:
+            type: shop.component
+            technology: terraform
+            properties:
+                application_name: unfurl-technology
+                DB_NAME: unfurl-technology
+                DB_USERNAME: root
+                DB_PASSWORD: {get_input: database_password}
+                DB_DIALECT: mysql
+                DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+            requirements:
+                - database: database
+                - host: gcp_runtime
+
+        database:
+            type: mysql.database
+            technology: terraform
+            properties:
+                database_name: unfurl-technology
+            requirements:
+                - host: gcp_dbms
+
+        gcp_dbms:
+            type: gcp.cloud_sql
+            technology: terraform
+            properties:
+                instance_name: unfurl-technology
+                root_password: {get_input: database_password}
+
+        gcp_runtime:
+            type: gcp.app_engine
+            technology: terraform

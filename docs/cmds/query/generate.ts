@@ -4,7 +4,7 @@ import {loadAllTests} from '../../../tests/query/query-test'
 
 async function main() {
     const documentationDirectory = path.join('docs', 'docs', 'queries4tosca', 'tests')
-    files.deleteDirectory(documentationDirectory)
+    files.removeDirectory(documentationDirectory)
     files.createDirectory(documentationDirectory)
 
     const tests = loadAllTests()

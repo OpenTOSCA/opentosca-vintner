@@ -5,7 +5,6 @@ set -e
 cd "$(dirname "$0")"
 cd ../
 
-
 # Check that vintner has been built
 ENTRYPOINT="build/cli/index.js"
 VINTNER="node build/cli/index.js"
@@ -18,19 +17,19 @@ fi
 LINK=${1:-false}
 
 # Pull dependencies of each example
-for example in examples/*/; do
+for EXAMPLE in examples/*/; do
 
   # Ignore directories starting with a dot
-  if [[  "${example}" == "\."* ]]; then
+  if [[  "${EXAMPLE}" == "\."* ]]; then
     continue
   fi
 
   # Ignore directories without config.yaml
-  if [ ! -f "${example}/config.yaml" ]; then
+  if [ ! -f "${EXAMPLE}/config.yaml" ]; then
     continue
   fi
 
-  # Pull dependenciess
-  echo "Pulling ${example}"
-  $VINTNER template pull --template "$(realpath ${example})" --link ${LINK}
+  # Pull dependencies
+  echo "Pulling ${EXAMPLE}"
+  $VINTNER template pull --dir "$(realpath ${EXAMPLE})" --link ${LINK}
 done

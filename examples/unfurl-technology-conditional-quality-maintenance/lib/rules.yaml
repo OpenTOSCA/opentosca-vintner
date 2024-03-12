@@ -1,0 +1,76 @@
+ansible:
+    - component: shop.component
+      host: os.compute
+      weight: 1
+
+    - component: shop.component
+      host: gcp.app_engine
+      weight: 0.5
+
+    - component: os.compute
+      weight: 0.5
+
+    - component: gcp.app_engine
+      weight: 0.5
+
+    - component: gcp.cloud_sql
+      weight: 0.5
+
+    - component: mysql.database
+      host: gcp.cloud_sql
+      weight: 0.5
+
+    - component: mysql.database
+      host: mysql.dbms
+      weight: 1
+
+    - component: mysql.dbms
+      host: os.compute
+      weight: 1
+
+terraform:
+    - component: shop.component
+      host: os.compute
+      weight: 0
+
+    - component: shop.component
+      host: gcp.app_engine
+      weight: 1
+
+    - component: os.compute
+      weight: 1
+
+    - component: gcp.app_engine
+      weight: 1
+
+    - component: gcp.cloud_sql
+      weight: 1
+
+    - component: mysql.database
+      host: gcp.cloud_sql
+      weight: 1
+
+    - component: mysql.database
+      host: mysql.dbms
+      weight: 0
+
+    - component: mysql.dbms
+      host: os.compute
+      weight: 0
+
+kubernetes:
+    - component: shop.component
+      host: kubernetes
+      weight: 1
+
+    - component: shop.component.expose
+      host: kubernetes
+      weight: 1
+
+    - component: mysql.dbms
+      host: kubernetes
+      weight: 1
+
+    - component: mysql.dbms.expose
+      host: kubernetes
+      weight: 1
