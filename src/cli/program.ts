@@ -79,7 +79,11 @@ setup
     .description('benchmarks the variability resolver')
     .option('--io [boolean]', 'enable read and writes to the filesystem')
     .option('--no-io [boolean]', 'disable read and writes to the filesystem')
-    .addOption(new Option('--seeds [numbers...]', 'seed for generating service templates').default([10, 250, 500, 1000, 2500, 5000, 10000]))
+    .addOption(
+        new Option('--seeds [numbers...]', 'seed for generating service templates').default([
+            10, 250, 500, 1000, 2500, 5000, 10000,
+        ])
+    )
     .addOption(new Option('--runs [number]', 'number of measurements for each test').default(10))
     .option('--latex [boolean]', 'plot results as latex', false)
     .option('--markdown [boolean]', 'plot results as markdown', false)
@@ -370,7 +374,10 @@ template
     .description('resolves variability')
     .requiredOption('--template <string>', 'path to variable service template')
     .option('--presets [strings...]', 'names of variability presets (env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)')
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
+    )
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
@@ -648,7 +655,10 @@ instances
     .description('resolves variability')
     .requiredOption('--instance <string>', 'instance name')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
-    .option('--inputs [string]', 'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})')
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
+    )
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)

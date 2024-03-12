@@ -51,7 +51,13 @@ export class Template {
         return path.join(Templates.getTemplatesDirectory(), this._name)
     }
 
-    async importTemplate(options: {path: string; gitRepository?: string; gitCheckout?: string; signature?: string; key?: string}) {
+    async importTemplate(options: {
+        path: string
+        gitRepository?: string
+        gitCheckout?: string
+        signature?: string
+        key?: string
+    }) {
         if (check.isDefined(options.gitRepository)) {
             const repoDir = files.temporary()
 

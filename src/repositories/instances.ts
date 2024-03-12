@@ -104,7 +104,8 @@ export class Instance {
 
     loadResolvedTimestamp() {
         const info = this.loadInfo()
-        if (check.isUndefined(info.resolved_timestamp)) throw new Error(`Instance "${this.getName()}" does not have a service template`)
+        if (check.isUndefined(info.resolved_timestamp))
+            throw new Error(`Instance "${this.getName()}" does not have a service template`)
         return info.resolved_timestamp
     }
 

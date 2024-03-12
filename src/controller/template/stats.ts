@@ -54,8 +54,19 @@ export default async function (options: TemplateStatsOptions) {
                     imports: graph.imports.length,
                     technologies: graph.technologies.length,
                     vdmm_elements: graph.elements.length,
-                    edmm_elements: graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length + graph.technologies.length + graph.inputs.length,
-                    edmm_elements_without_technologies: graph.nodes.length + graph.relations.length + graph.properties.length + graph.artifacts.length + graph.inputs.length,
+                    edmm_elements:
+                        graph.nodes.length +
+                        graph.relations.length +
+                        graph.properties.length +
+                        graph.artifacts.length +
+                        graph.technologies.length +
+                        graph.inputs.length,
+                    edmm_elements_without_technologies:
+                        graph.nodes.length +
+                        graph.relations.length +
+                        graph.properties.length +
+                        graph.artifacts.length +
+                        graph.inputs.length,
                     edmm_elements_conditions_manual: countManualAtEDMM(graph),
                     edmm_elements_conditions_generated: countGeneratedAtEDMM(graph),
                     loc: files.countLines(it),

@@ -1,6 +1,12 @@
 import * as check from '#check'
 import Controller from '#controller'
-import {VariabilityTestGroup, getDefaultInputs, getVariableServiceTemplate, loadConfig, loadExpected} from '#controller/template/test'
+import {
+    VariabilityTestGroup,
+    getDefaultInputs,
+    getVariableServiceTemplate,
+    loadConfig,
+    loadExpected,
+} from '#controller/template/test'
 import * as files from '#files'
 import Loader from '#graph/loader'
 import std from '#std'

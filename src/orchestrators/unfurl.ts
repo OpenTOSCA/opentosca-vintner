@@ -30,7 +30,14 @@ export class Unfurl implements Orchestrator {
 
     constructor(config: UnfurlConfig) {
         this.config = config
-        this.binary = utils.joinNotNull([this.config.venv ? `cd ${this.config.dir}` : undefined, this.config.venv ? '. .venv/bin/activate' : undefined, 'unfurl'], ' && ')
+        this.binary = utils.joinNotNull(
+            [
+                this.config.venv ? `cd ${this.config.dir}` : undefined,
+                this.config.venv ? '. .venv/bin/activate' : undefined,
+                'unfurl',
+            ],
+            ' && '
+        )
         this.shell = new Shell(config.wsl)
     }
 
@@ -63,7 +70,13 @@ export class Unfurl implements Orchestrator {
      */
     async deploy(instance: Instance, options?: OrchestratorOperationOptions) {
         await this.createEnsemble(instance)
-        const command = [this.binary, 'deploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
+        const command = [
+            this.binary,
+            'deploy',
+            '--approve',
+            '--jobexitcode error',
+            this.shell.resolve(instance.getDataDirectory()),
+        ]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -76,7 +89,13 @@ export class Unfurl implements Orchestrator {
      * https://docs.unfurl.run/cli.html#unfurl-undeploy
      */
     async undeploy(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [this.binary, 'undeploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
+        const command = [
+            this.binary,
+            'undeploy',
+            '--approve',
+            '--jobexitcode error',
+            this.shell.resolve(instance.getDataDirectory()),
+        ]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
@@ -89,7 +108,13 @@ export class Unfurl implements Orchestrator {
      * https://docs.unfurl.run/cli.html#unfurl-deploy
      */
     async continue(instance: Instance, options?: OrchestratorOperationOptions) {
-        const command = [this.binary, 'deploy', '--approve', '--jobexitcode error', this.shell.resolve(instance.getDataDirectory())]
+        const command = [
+            this.binary,
+            'deploy',
+            '--approve',
+            '--jobexitcode error',
+            this.shell.resolve(instance.getDataDirectory()),
+        ]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
     }
