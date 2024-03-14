@@ -1,7 +1,7 @@
 name: Case Study "Unfurl Technology"
 on:
     workflow_dispatch:
-
+concurrency: unfurl-technology
 jobs:
     ###################################################
     #
@@ -183,8 +183,6 @@ jobs:
     openstack:
         name: OpenStack
         runs-on: ubuntu-22.04
-        # TODO: is working
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology-conditional-quality-maintenance
