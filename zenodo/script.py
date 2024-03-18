@@ -3,24 +3,25 @@ import requests
 import datetime
 import os
 
-access_token = os.getenv('ZENODO_ACCESS_TOKEN')
-original_id = int(os.getenv('ZENODO_ORIGINAL_ID'))
+zenodo_access_token = os.getenv('ZENODO_ACCESS_TOKEN')
+zenodo_original_id = int(os.getenv('ZENODO_ORIGINAL_ID'))
 zenodo_url = os.getenv('ZENODO_URL', 'https://zenodo.org')
 zenodo_files = '/tmp/opentosca-vintner-zenodo-files'
 zenodo_publish = os.getenv('ZENODO_PUBLISH', 'False').lower() == 'true'
-vintner_version = os.getenv('VINTNER_VERSION', 'asdfasdf')
+vintner_version = os.getenv('VINTNER_VERSION')
+
 log_line = '--------------------------------------------------'
 
-if access_token is None:
+if zenodo_access_token is None:
     raise Exception('ZENODO_ACCESS_TOKEN not defined')
 
 if vintner_version is None:
-    raise Exception('ZENODO_ACCESS_TOKEN not defined')
+    raise Exception('VINTNER_VERSION not defined')
 
 def create_version(id):
     print(log_line)
     print('Creating a new version')
-    r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(id) + '/actions/newversion', params={'access_token': access_token})
+    r = requests.post(zenodo_url + '/api/deposit/depositions/' + str(id) + '/actions/newversion', params={'access_token': zenodo_access_token})
     print(r.status_code)
     print(r.json())
     print('Version created')
@@ -29,7 +30,7 @@ def create_version(id):
 def get_version(deposition):
     print(log_line)
     print('Fetching version')
-    r = requests.get(deposition['links']['latest_draft'], params={'access_token': access_token})
+    r = requests.get(deposition['links']['latest_draft'], params={'access_token': zenodo_access_token})
     print(r.status_code)
     print(r.json())
     print('Fetched')
@@ -45,7 +46,7 @@ def delete_files(version):
 def delete_file(version, file):
     print(log_line)
     print('Deleting file ' + file['filename'])
-    r = requests.delete(file['links']['self'], params={'access_token': access_token})
+    r = requests.delete(file['links']['self'], params={'access_token': zenodo_access_token})
     print(r.status_code)
     print(r.content)
     print('File deleted')
@@ -53,7 +54,7 @@ def delete_file(version, file):
 def publish_version(version):
     print(log_line)
     print('Publishing version ' + str(version['id']))
-    r = requests.post(version['links']['publish'], params={'access_token': access_token})
+    r = requests.post(version['links']['publish'], params={'access_token': zenodo_access_token})
     print(r.status_code)
     print(r.json())
     print('Version published')
@@ -83,7 +84,7 @@ def set_metadata(version):
          }
     headers = {"Content-Type": "application/json"}
 
-    r = requests.put(version['links']['self'], data=json.dumps(data), headers=headers, params={'access_token': access_token})
+    r = requests.put(version['links']['self'], data=json.dumps(data), headers=headers, params={'access_token': zenodo_access_token})
     print(r.status_code)
     print(r.json())
     print('Metadata set')
@@ -104,7 +105,7 @@ def upload_file(version, file):
         r = requests.put(
             "%s/%s" % (version['links']['bucket'], file),
             data=fp,
-            params={'access_token': access_token},
+            params={'access_token': zenodo_access_token},
         )
 
     print(r.status_code)
@@ -117,7 +118,7 @@ def current_date():
 def main():
     print('Publishing new Zenodo release')
 
-    deposition = create_version(original_id)
+    deposition = create_version(zenodo_original_id)
     version = get_version(deposition)
     delete_files(version)
     set_metadata(version)
