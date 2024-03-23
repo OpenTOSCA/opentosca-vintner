@@ -118,7 +118,7 @@
         "typescript": "^5.0.4"
     },
     "scripts": {
-        "prepack": "task build",
+        "prepack": "yarn build",
         "postinstall": "patch-package",
         "build": "bash cmds/build.sh"
     }
