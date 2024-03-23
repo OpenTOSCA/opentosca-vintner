@@ -46,10 +46,10 @@ tasks:
     #
     ###################################################
 
-    vintner: node build/cli/index
-    cli: yarn ts-node -r tsconfig-paths/register src/cli/index
+    vintner: node build/cli/index {{.CLI_ARGS}}
+    cli: ts-node -r tsconfig-paths/register src/cli/index {{.CLI_ARGS}}
 
-    benchmark: yarn cli setup benchmark --latex --markdown --io
+    benchmark: task cli -- setup benchmark --latex --markdown --io
 
     ###################################################
     #
@@ -57,8 +57,8 @@ tasks:
     #
     ###################################################
 
-    test: yarn test:local
-    test:all: cross-env ENABLE_INTEGRATION_TESTS=true yarn test:local
+    test: task test:local
+    test:all: cross-env ENABLE_INTEGRATION_TESTS=true task test:local
     test:local: nyc mocha "tests/**/*.ts"
     test:integration: cross-env ENABLE_INTEGRATION_TESTS=true nyc mocha "tests/integration/**/*.ts"
 
@@ -92,7 +92,9 @@ tasks:
     docs:generate:sofdcar: bash docs/cmds/command.sh sofdcar
     docs:generate:puml: bash docs/cmds/puml/generate.sh
     docs:plot:puml: bash docs/cmds/puml/plot.sh
-    docs:record: yarn docs:record:home && yarn docs:record:getting-started
+    docs:record:
+        - task docs:record:home
+        - task docs:record:getting-started
     docs:record:home: cd docs/cmds/casts && bash record.sh home
     docs:record:getting-started: cd docs/cmds/casts && bash record.sh getting-started
     docs:export: bash docs/cmds/export/generate.sh
@@ -107,7 +109,7 @@ tasks:
     examples:pull: bash cmds/pull-examples.sh
     examples:pull:link: bash cmds/pull-examples.sh true
     examples:pull:unlink: bash cmds/unpull-examples.sh
-    examples:generate:getting-started: yarn cli template init --path examples/xopera-getting-started --force
+    examples:generate:getting-started: task cli -- template init --path examples/xopera-getting-started --force
     examples:xopera: bash examples/xopera-motivation/demo.sh
     examples:unfurl: bash examples/unfurl-motivation/demo.sh
 
@@ -126,7 +128,7 @@ tasks:
     ###################################################
 
     puccini:check: bash docs/cmds/puccini/check-all.sh
-    puccini:check:single: bash docs/cmds/puccini/check.sh
+    puccini:check:single: bash docs/cmds/puccini/check.sh {{.CLI_ARGS}}
 
     ###################################################
     #
@@ -154,4 +156,3 @@ tasks:
     ###################################################
 
     install: yarn install --immutable
-    deploy:local: sudo cp ./dist/vintner-linux-x64 /usr/bin/vintner

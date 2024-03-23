@@ -317,7 +317,7 @@ template
     .description('initializes a CSAR')
     .requiredOption('--path <string>', 'path of the directory')
     .option('--template <string>', 'template name (default: directory name of --path)')
-    .option('--vintner <string>', 'vintner binary to execute', 'task cli')
+    .option('--vintner <string>', 'vintner binary to execute', 'task cli --')
     .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
     .action(
         hae.exit(async options => {

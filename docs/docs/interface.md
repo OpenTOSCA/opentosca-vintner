@@ -2231,11 +2231,11 @@ initializes a CSAR
     ))
     ```
 
-| Option | Mandatory | Type | Description |
-| --- | --- | --- | --- |
-| path |  true  | string | path of the directory |
-| template |  true  | string | template name (default: directory name of --path) |
-| vintner |  true  | string | vintner binary to execute (default: "task cli") |
+| Option | Mandatory | Type | Description                                          |
+| --- | --- | --- |------------------------------------------------------|
+| path |  true  | string | path of the directory                                |
+| template |  true  | string | template name (default: directory name of --path)    |
+| vintner |  true  | string | vintner binary to execute (default: "task cli --")   |
 | force |  false  | boolean | force initialization, e.g., on non-empty directories |
 
 ## vintner template inputs

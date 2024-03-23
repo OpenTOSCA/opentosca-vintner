@@ -21,7 +21,7 @@ export default async function (options: TemplateInitOptions) {
     options.template = options.template ?? files.getName(options.path)
     assert.isName(options.template)
 
-    options.vintner = options.vintner ?? 'task cli'
+    options.vintner = options.vintner ?? 'task cli --'
 
     files.copy(path.join(files.TEMPLATES_DIR, 'template-init'), options.path)
     files.storeENV(path.join(options.path, 'scripts', 'configuration.env'), {

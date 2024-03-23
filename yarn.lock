@@ -438,24 +438,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@go-task/cli@npm:^3.35.1":
-  version: 3.35.1
-  resolution: "@go-task/cli@npm:3.35.1"
-  dependencies:
-    "@go-task/go-npm": ^0.2.0
-  checksum: b542ba8fa7803738bad91c8c01259604ca152e678fc884c7a0a67c09c4e6334941b3690a928b7bb4634e89ee437a9d31fa3825690a58e1c33a2e63ec94f44e3c
-  languageName: node
-  linkType: hard
-
-"@go-task/go-npm@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@go-task/go-npm@npm:0.2.0"
-  bin:
-    go-npm: bin/index.js
-  checksum: fa876aebbc2656334695592b2259e845fde757a764de41e69e0d7c49624891122b51febf0b0294d6ca43e446ed4a1e43cff8cff677ca14385f8016eecd033a23
-  languageName: node
-  linkType: hard
-
 "@humanwhocodes/config-array@npm:^0.11.8":
   version: 0.11.8
   resolution: "@humanwhocodes/config-array@npm:0.11.8"
@@ -5445,7 +5427,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "opentosca-vintner@workspace:."
   dependencies:
-    "@go-task/cli": ^3.35.1
     "@istanbuljs/nyc-config-typescript": ^1.0.2
     "@tsconfig/node18": ^18.2.2
     "@types/archiver": ^5.3.2
