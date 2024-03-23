@@ -13,7 +13,7 @@ yarn tsc-alias -p tsconfig.build.json
 sed -i "s/__VERSION__/$(git rev-parse HEAD)/" build/utils/env.js
 
 # Copy assets
-syncdir src/assets build/assets --quiet
+yarn syncdir src/assets build/assets --quiet
 
 # Copy license
 cp LICENSE build/assets
