@@ -35,7 +35,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: rm -rf node_modules && task install
+              run: task install
 
             - name: (PREPARE) Generate Dependencies Page
               run: task docs:generate:dependencies

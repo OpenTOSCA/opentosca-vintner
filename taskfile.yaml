@@ -20,7 +20,7 @@ tasks:
 
     git:fix: git add . && git commit -m fix && git push
     git:open: open-cli https://github.com/opentosca/opentosca-vintner
-    git:check-large-files: bash cmds/check-large-files.sh
+    git:check-large-files: bash cmds/git/check-large-files.sh
 
     ###################################################
     #
@@ -28,7 +28,7 @@ tasks:
     #
     ###################################################
 
-    install: yarn install --immutable
+    install: rm -rf node_modules && yarn install --immutable
 
     lint:check: eslint .
     lint:fix: eslint . --fix
@@ -43,7 +43,7 @@ tasks:
     ###################################################
 
     vintner: node build/cli/index {{.CLI_ARGS}}
-    cli: ts-node -r tsconfig-paths/register src/cli/index {{.CLI_ARGS}}
+    cli: yarn ts-node -r tsconfig-paths/register src/cli/index {{.CLI_ARGS}}
 
     benchmark: task cli -- setup benchmark --latex --markdown --io
 
@@ -102,9 +102,9 @@ tasks:
     #
     ###################################################
 
-    examples:pull: bash cmds/pull-examples.sh
-    examples:pull:link: bash cmds/pull-examples.sh true
-    examples:pull:unlink: bash cmds/unpull-examples.sh
+    examples:pull: bash cmds/examples/pull.sh
+    examples:pull:link: bash cmds/examples/pull.sh true
+    examples:unpull: bash cmds/examples/unpull.sh
     examples:generate:getting-started: task cli -- template init --path examples/xopera-getting-started --force
     examples:xopera: bash examples/xopera-motivation/demo.sh
     examples:unfurl: bash examples/unfurl-motivation/demo.sh

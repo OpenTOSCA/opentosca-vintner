@@ -3,7 +3,7 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../
+cd ../../
 
 # Check that vintner has been built
 ENTRYPOINT="build/cli/index.js"
@@ -13,7 +13,10 @@ if [ ! -f "${ENTRYPOINT}" ]; then
     exit 1
 fi
 
-# Unpull dependencies of each example
+# Symbolic
+LINK=${1:-false}
+
+# Pull dependencies of each example
 for EXAMPLE in examples/*/; do
 
   # Ignore directories starting with a dot
@@ -26,7 +29,7 @@ for EXAMPLE in examples/*/; do
     continue
   fi
 
-  # Unpull dependencies
-  echo "$Unpulling ${EXAMPLE}"
-  $VINTNER template unpull --dir "$(realpath ${EXAMPLE})"
+  # Pull dependencies
+  echo "Pulling ${EXAMPLE}"
+  $VINTNER template pull --dir "$(realpath ${EXAMPLE})" --link ${LINK}
 done

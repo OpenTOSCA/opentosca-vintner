@@ -35,7 +35,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Node Dependencies
-              run: rm -rf node_modules && task install
+              run: task install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
