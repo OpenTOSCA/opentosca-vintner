@@ -6,8 +6,8 @@ cd "$(dirname "$0")"
 cd ../
 
 # Build
-tsc -p tsconfig.build.json
-tsc-alias -p tsconfig.build.json
+yarn tsc -p tsconfig.build.json
+yarn tsc-alias -p tsconfig.build.json
 
 # Set version
 sed -i "s/__VERSION__/$(git rev-parse HEAD)/" build/utils/env.js
