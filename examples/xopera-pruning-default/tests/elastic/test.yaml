@@ -1,0 +1,2 @@
+presets: elastic
+expected: ../../../xopera-pruning/tests/elastic/expected.yaml
