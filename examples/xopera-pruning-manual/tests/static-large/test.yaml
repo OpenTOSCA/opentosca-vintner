@@ -1,0 +1,2 @@
+presets: static-large
+expected: ../../../xopera-pruning/tests/static-large/expected.yaml

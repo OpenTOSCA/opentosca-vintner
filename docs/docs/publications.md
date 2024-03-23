@@ -16,7 +16,7 @@ This document holds a list of selected publications.
 - CLOSER 2024
 - _Accepted_
 - [Step-by-Step Guide](variability4tosca/guides/aware/index.md){target=_blank}
-- {{ repo_link('tests/hosting-aware-pruning ', 'Models of the Case Study') }}
+- {{ repo_link('examples ', 'Models of the Case Study') }} (Relevant models start with "unfurl-aware")
 - [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Aware")
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Aware")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10452506){target=_blank}
@@ -29,7 +29,7 @@ This document holds a list of selected publications.
 - _Accepted_
 - [Step-by-Step Guide](variability4tosca/guides/modes/index.md){target=_blank}
 - {{ repo_link('tests/enricher', 'Models of the Experiments') }}
-- {{ repo_link('tests/pruning-modes', 'Models of the Case Study') }}
+- {{ repo_link('examples ', 'Models of the Case Study') }} (Relevant models start with "xopera-pruning")
 - [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "xOpera Pruning Mode")
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "xOpera Pruning Mode")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10363694){target=_blank}
