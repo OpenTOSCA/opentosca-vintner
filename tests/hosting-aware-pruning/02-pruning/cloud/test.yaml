@@ -1,3 +1,0 @@
-template: ../../../../examples/unfurl-aware/variable-service-template.yaml
-expected: ../../cloud.expected.yaml
-presets: cloud
