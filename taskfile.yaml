@@ -28,7 +28,7 @@ tasks:
     #
     ###################################################
 
-    install: rm -rf node_modules && yarn install --immutable
+    install: rm -rf node_modules && yarn --immutable
 
     lint:check: eslint .
     lint:fix: eslint . --fix
