@@ -119,6 +119,7 @@
     },
     "scripts": {
         "prepack": "task build",
-        "postinstall": "patch-package"
+        "postinstall": "patch-package",
+        "build": "bash cmds/build.sh"
     }
 }
