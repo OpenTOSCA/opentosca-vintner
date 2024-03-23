@@ -13,6 +13,7 @@ tosca_definitions_version: tosca_variability_1_0
 
 
 
+
 ## Variability-Resolved Service Template
 
 The following variability-resolved service template is expected.

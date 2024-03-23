@@ -32,6 +32,7 @@ some_input: some_value
 ```
 
 
+
 ## Variability-Resolved Service Template
 
 The following variability-resolved service template is expected.
