@@ -23,6 +23,11 @@ jobs:
               with:
                   lfs: true
 
+            - name: (PREPARE) Install Task
+              uses: arduino/setup-task@v1
+              with:
+                  version: 3.34.1
+
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
@@ -30,16 +35,16 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: rm -rf node_modules && yarn --immutable
+              run: rm -rf node_modules && task install
 
             - name: (PREPARE) Generate Dependencies Page
-              run: yarn docs:generate:dependencies
+              run: task docs:generate:dependencies
 
             - name: (PREPARE) Build Project
-              run: yarn build
+              run: task build
 
             - name: (PREPARE) Pull Example Dependencies
-              run: yarn examples:pull
+              run: task examples:pull
 
             ###################################################
             #
@@ -54,7 +59,7 @@ jobs:
                   key: pkg
 
             - name: (PACKAGE) Package Binaries
-              run: yarn package
+              run: task package
 
             - name: (BUILD) Import Signing Key
               uses: crazy-max/ghaction-import-gpg@v5
@@ -111,28 +116,28 @@ jobs:
             ###################################################
 
             - name: (DOCS) Install Dependencies
-              run: yarn docs:install
+              run: task docs:install
 
             - name: (DOCS) Build Documentation Commands
-              run: yarn docs:build:commands
+              run: task docs:build:commands
 
             - name: (DOCS) Generate Interface Page
-              run: yarn docs:generate:interface
+              run: task docs:generate:interface
 
             - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
-              run: yarn docs:generate:tests:variability
+              run: task docs:generate:tests:variability
 
             - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
-              run: yarn docs:generate:tests:query
+              run: task docs:generate:tests:query
 
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
-              run: yarn docs:generate:sofdcar
+              run: task docs:generate:sofdcar
 
             - name: (DOCS) Generate PlantUML of Service Templates
-              run: yarn docs:generate:puml
+              run: task docs:generate:puml
 
             - name: (DOCS) Build Docs
-              run: yarn docs:build
+              run: task docs:build
 
             - name: (RELEASE) Archive docs
               run: tar -czvf docs.tar.gz -C docs/site/ .

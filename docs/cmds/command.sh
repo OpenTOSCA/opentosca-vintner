@@ -18,5 +18,5 @@ if [ -d "build-docs" ]; then
   node build-docs/docs/cmds/${COMMAND}/generate.js
 else
   # Default way to execute command is using ts-node which takes long
-  yarn ts-node -r tsconfig-paths/register docs/cmds/${COMMAND}/generate.ts
+  ts-node -r tsconfig-paths/register docs/cmds/${COMMAND}/generate.ts
 fi

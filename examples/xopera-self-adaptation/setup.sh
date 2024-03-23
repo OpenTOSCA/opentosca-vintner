@@ -1,13 +1,13 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli setup clean --force
+task cli setup clean --force
 
-yarn cli setup init
-yarn cli orchestrators init xopera-wsl
-yarn cli orchestrators enable --orchestrator xopera-wsl
+task cli setup init
+task cli orchestrators init xopera-wsl
+task cli orchestrators enable --orchestrator xopera-wsl
 
-yarn cli templates import --template motivation --path examples/xopera-self-adaptation
-yarn cli instances init --instance motivation --template motivation
-yarn cli instances resolve --instance motivation --presets raspberry
-yarn cli instances deploy --instance motivation --inputs examples/xopera-self-adaptation/deployment-inputs.ignored.yaml
+task cli templates import --template motivation --path examples/xopera-self-adaptation
+task cli instances init --instance motivation --template motivation
+task cli instances resolve --instance motivation --presets raspberry
+task cli instances deploy --instance motivation --inputs examples/xopera-self-adaptation/deployment-inputs.ignored.yaml

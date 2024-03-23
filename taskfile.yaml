@@ -1,0 +1,157 @@
+version: 3
+
+silent: true
+
+tasks:
+    ###################################################
+    #
+    # Build
+    #
+    ###################################################
+
+    build: bash cmds/build.sh
+    package: pkg --config .pkgrc.json build/cli/index.js
+
+    ###################################################
+    #
+    # Git
+    #
+    ###################################################
+
+    git:fix: git add . && git commit -m fix && git push
+    git:open: open-cli https://github.com/opentosca/opentosca-vintner
+    git:check-large-files: bash cmds/check-large-files.sh
+
+    ###################################################
+    #
+    # Lint
+    #
+    ###################################################
+
+    lint:check: eslint .
+    lint:fix: eslint . --fix
+
+    ###################################################
+    #
+    # Style
+    #
+    ###################################################
+
+    style:check: prettier --check --end-of-line auto "./**/*.{ts,json,yaml,yml}"
+    style:fix: prettier --write --end-of-line auto "./**/*.{ts,json,yaml,yml}"
+
+    ###################################################
+    #
+    # Vintner
+    #
+    ###################################################
+
+    vintner: node build/cli/index
+    cli: yarn ts-node -r tsconfig-paths/register src/cli/index
+
+    benchmark: yarn cli setup benchmark --latex --markdown --io
+
+    ###################################################
+    #
+    # Test
+    #
+    ###################################################
+
+    test: yarn test:local
+    test:all: cross-env ENABLE_INTEGRATION_TESTS=true yarn test:local
+    test:local: nyc mocha "tests/**/*.ts"
+    test:integration: cross-env ENABLE_INTEGRATION_TESTS=true nyc mocha "tests/integration/**/*.ts"
+
+    ###################################################
+    #
+    # Server
+    #
+    ###################################################
+
+    server:start: node -r dotenv/config -r ts-node/register -r tsconfig-paths/register src/cli/index.ts server start
+    server:serve: nodemon -r dotenv/config -r tsconfig-paths/register --ext "ts,json" src/cli/index.ts server start
+
+    ###################################################
+    #
+    # Docs
+    #
+    ###################################################
+
+    docs:install: bash docs/install.sh
+    docs:serve: MKDOCS_IS_DEV=true MKDOCS_REVISION_ENABLED=false bash docs/cmds/mkdocs serve --watch-theme
+    docs:open: open-cli http://localhost:8000
+    docs:build: bash docs/cmds/mkdocs build --strict
+    docs:clean: cd docs && rm -rf site
+    docs:deploy: bash docs/cmds/mkdocs gh-deploy --force --strict
+    docs:generate: bash docs/cmds/generate.sh
+    docs:build:commands: tsc -p tsconfig.docs.json && tsc-alias -p tsconfig.docs.json && syncdir docs/cmds build-docs/docs/cmds --quiet && syncdir src/assets build-docs/src/assets --quiet && syncdir tests build-docs/tests --quiet
+    docs:generate:interface: echo 'dont forget to run docs:build:commands in advance ...' && bash docs/cmds/command.sh interface
+    docs:generate:dependencies: bash docs/cmds/command.sh dependencies
+    docs:generate:tests:variability: bash docs/cmds/command.sh variability
+    docs:generate:tests:query: bash docs/cmds/command.sh query
+    docs:generate:sofdcar: bash docs/cmds/command.sh sofdcar
+    docs:generate:puml: bash docs/cmds/puml/generate.sh
+    docs:plot:puml: bash docs/cmds/puml/plot.sh
+    docs:record: yarn docs:record:home && yarn docs:record:getting-started
+    docs:record:home: cd docs/cmds/casts && bash record.sh home
+    docs:record:getting-started: cd docs/cmds/casts && bash record.sh getting-started
+    docs:export: bash docs/cmds/export/generate.sh
+    docs:export:local: bash docs/cmds/export/generate.sh http://localhost:8000
+
+    ###################################################
+    #
+    # Examples
+    #
+    ###################################################
+
+    examples:pull: bash cmds/pull-examples.sh
+    examples:pull:link: bash cmds/pull-examples.sh true
+    examples:pull:unlink: bash cmds/unpull-examples.sh
+    examples:generate:getting-started: yarn cli template init --path examples/xopera-getting-started --force
+    examples:xopera: bash examples/xopera-motivation/demo.sh
+    examples:unfurl: bash examples/unfurl-motivation/demo.sh
+
+    ###################################################
+    #
+    # Dependencies
+    #
+    ###################################################
+
+    dependencies:check: license-checker --production --summary --onlyAllow "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0;Public Domain"
+
+    ###################################################
+    #
+    # Puccini
+    #
+    ###################################################
+
+    puccini:check: bash docs/cmds/puccini/check-all.sh
+    puccini:check:single: bash docs/cmds/puccini/check.sh
+
+    ###################################################
+    #
+    # PUML
+    #
+    ###################################################
+
+    puml:up: cd docs && docker-compose up -d
+    puml:down: cd docs && docker-compose down
+
+    ###################################################
+    #
+    # Release
+    #
+    ###################################################
+
+    release:npm: npm publish
+    release:zenodo: python zenodo/script.py
+    release:choco: bash choco/release.sh
+
+    ###################################################
+    #
+    # Misc
+    #
+    ###################################################
+
+    install: yarn install --immutable
+    deploy:local: sudo cp ./dist/vintner-linux-x64 /usr/bin/vintner

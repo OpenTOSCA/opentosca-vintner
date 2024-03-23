@@ -42,15 +42,15 @@ git push origin publication-stoetzner-2022-vdmm
 ## Command Line Interface
 
 !!! Info
-    `yarn cli` uses `src/cli/index.ts` while `yarn vintner` uses `build/cli/index.js`.
-    Therefore, run `yarn cli` to execute the current code without building it first.
+    `task cli` uses `src/cli/index.ts` while `task vintner` uses `build/cli/index.js`.
+    Therefore, run `task cli` to execute the current code without building it first.
 
 We use [commander.js](https://github.com/tj/commander.js){target=_blank} to implement the CLI.
 The entry point is `src/cli/index.ts`.
 Execute a CLI command during development as follows.
 
 ```shell linenums="1"
-yarn cli [command] [options]
+task cli [command] [options]
 ```
 
 ## Server

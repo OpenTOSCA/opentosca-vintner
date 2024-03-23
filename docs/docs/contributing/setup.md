@@ -7,6 +7,20 @@ tags:
 
 This document holds instructions on the development setup.
 
+## Task
+
+We use [Task](https://taskfile.dev/){target=_blank} version `v3.34.1`.
+
+=== "Linux"
+    ```shell linenums="1"
+    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- v3.34.1
+    ```
+
+=== "Windows"
+    ```shell linenums="1"
+    choco install go-task --version 3.34.1
+    ```
+
 ## Node.js
 
 We use [Node.js](https://nodejs.org){target=_blank} version `18.15.0`.
@@ -39,8 +53,8 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-yarn --immutable
-yarn examples:pull:link
+task install
+task examples:pull:link
 ```
 
 ## Large Files

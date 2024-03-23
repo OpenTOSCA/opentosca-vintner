@@ -2,12 +2,12 @@
 set -e
 
 echo "Building commands ..."
-yarn docs:build:commands
+task docs:build:commands
 
 echo "Generating docs ..."
-yarn docs:generate:interface
-yarn docs:generate:dependencies
-yarn docs:generate:tests:variability
-yarn docs:generate:tests:query
-yarn docs:generate:sofdcar
-yarn docs:generate:puml
+task docs:generate:interface
+task docs:generate:dependencies
+task docs:generate:tests:variability
+task docs:generate:tests:query
+task docs:generate:sofdcar
+task docs:generate:puml

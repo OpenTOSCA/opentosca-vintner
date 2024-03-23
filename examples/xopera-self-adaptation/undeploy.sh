@@ -1,5 +1,5 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli instances undeploy --instance motivation
-yarn cli setup clean --force
+task cli instances undeploy --instance motivation
+task cli setup clean --force
