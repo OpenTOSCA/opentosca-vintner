@@ -528,6 +528,7 @@ export default class Solver {
                     if (it.isNode()) return it.id
 
                     // Group
+                    assert.isGroup(it)
                     return MiniSat.or(it.members.map(it => it.id))
                 })
             )
