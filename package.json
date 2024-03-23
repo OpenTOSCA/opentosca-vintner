@@ -95,6 +95,7 @@
         "chai": "^4.3.7",
         "chai-datetime": "^1.8.0",
         "cloc": "^1.98.0-cloc",
+        "cross-env": "^7.0.3",
         "dotenv": "^16.0.3",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
