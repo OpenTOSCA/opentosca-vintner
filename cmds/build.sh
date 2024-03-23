@@ -6,14 +6,14 @@ cd "$(dirname "$0")"
 cd ../
 
 # Build
-yarn tsc -p tsconfig.build.json
-yarn tsc-alias -p tsconfig.build.json
+bash node_modules/.bin/tsc -p tsconfig.build.json
+bash node_modules/.bin/tsc-alias -p tsconfig.build.json
 
 # Set version
 sed -i "s/__VERSION__/$(git rev-parse HEAD)/" build/utils/env.js
 
 # Copy assets
-yarn syncdir src/assets build/assets --quiet
+bash node_modules/.bin/syncdir src/assets build/assets --quiet
 
 # Copy license
 cp LICENSE build/assets

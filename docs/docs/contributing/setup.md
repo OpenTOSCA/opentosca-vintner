@@ -13,7 +13,7 @@ We use [Task](https://taskfile.dev/){target=_blank} version `v3.34.1`.
 
 === "Linux"
     ```shell linenums="1"
-    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- v3.34.1
+    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.34.1
     ```
 
 === "Windows"
