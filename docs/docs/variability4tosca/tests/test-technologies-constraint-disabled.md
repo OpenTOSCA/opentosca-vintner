@@ -26,6 +26,7 @@ topology_template:
 
 
 
+
 ## Expected Error
 
 The following error is expected to be thrown, when resolving variability.

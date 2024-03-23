@@ -1,5 +1,5 @@
 expected: ../../../unfurl-technology-variant-elastic/tests/tau/expected.yaml
-renames:
+replace:
     - - database_terraform
       - database
 

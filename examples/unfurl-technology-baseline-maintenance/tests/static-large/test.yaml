@@ -1,5 +1,5 @@
 expected: ../../../unfurl-technology-variant-static-large/tests/tau/expected.yaml
-renames:
+replace:
     - - database_ansible
       - database
 
