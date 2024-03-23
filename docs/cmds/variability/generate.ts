@@ -10,6 +10,7 @@ import * as files from '#files'
 import Loader from '#graph/loader'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
+import _ from 'lodash'
 import * as path from 'path'
 
 type Test = {
@@ -40,12 +41,21 @@ async function main() {
             const inputs = getDefaultInputs(dir)
                 ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
                 : undefined
+
+            let expected
+            if (!check.isDefined(config.error)) {
+                expected = loadExpected({dir, file: config.expected})
+                if (check.isDefined(config.merge)) {
+                    expected = _.merge(expected, config.merge)
+                }
+            }
+
             tests.push({
                 id,
                 config,
                 inputs,
                 template,
-                expected: check.isDefined(config.error) ? undefined : loadExpected({dir, file: config.expected}),
+                expected,
                 file: `test-${id}.md`,
             })
         })

@@ -33,7 +33,7 @@ export type VariabilityTestConfig = {
     error?: string
     template?: string
     expected?: string
-    renames?: [string, string][]
+    replace?: [string, string][]
     merge?: any
 }
 

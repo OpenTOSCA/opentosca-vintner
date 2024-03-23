@@ -1,0 +1,2 @@
+expected: ../../../unfurl-aware/tests/cloud/expected.yaml
+presets: cloud

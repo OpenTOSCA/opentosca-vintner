@@ -47,7 +47,7 @@ The following configurations can be configured in the test configuration file.
 | error       | false     | String                                     | The expected error that is thrown.                                                           | 
 | template    | false     | String                                     | Path (relative to `test.yaml`) to the variable service template.                             | 
 | expected    | false     | String                                     | Path (relative to `test.yaml`) to the expected service template after resolving variability. | 
-| renames     | false     | List(Tuple(Find: String, Replace: String)) | An optional list of strings to search and replace for in the generated service template.     | 
+| replace     | false     | List(Tuple(Find: String, Replace: String)) | An optional list of strings to search and replace for in the generated service template.     | 
 | merge       | false     | Object                                     | An optional object that is merged into the expected service template.                        | 
 
 

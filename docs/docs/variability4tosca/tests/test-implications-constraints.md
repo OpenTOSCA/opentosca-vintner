@@ -90,6 +90,7 @@ topology_template:
 
 
 
+
 ## Variability-Resolved Service Template
 
 The following variability-resolved service template is expected.
