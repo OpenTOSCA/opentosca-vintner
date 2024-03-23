@@ -9,16 +9,16 @@ This document holds instructions on the development setup.
 
 ## Task
 
-We use [Task](https://taskfile.dev/){target=_blank} version `v3.34.1`.
+We use [Task](https://taskfile.dev/){target=_blank} version `v3.35.0`.
 
 === "Linux"
     ```shell linenums="1"
-    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.34.1
+    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.35.0
     ```
 
 === "Windows"
     ```shell linenums="1"
-    choco install go-task --version 3.34.1
+    choco install go-task --version 3.35.0
     ```
 
 ## Node.js
@@ -53,7 +53,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-task install
+task code:install
 task examples:pull:link
 ```
 

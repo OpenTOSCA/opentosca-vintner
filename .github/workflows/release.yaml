@@ -30,7 +30,7 @@ jobs:
             - name: (PREPARE) Install Task
               uses: arduino/setup-task@v1
               with:
-                  version: 3.34.1
+                  version: 3.35.0
 
             - name: (PREPARE) Setup Apt Packages
               uses: awalsh128/cache-apt-pkgs-action@v1.3.0
@@ -44,7 +44,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: task install
+              run: task code:install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -65,7 +65,7 @@ jobs:
               run: task docs:generate:dependencies
 
             - name: (PREPARE) Build Project
-              run: task build
+              run: task code:build
 
             - name: (PREPARE) Pull Example Dependencies
               run: task examples:pull
@@ -110,7 +110,7 @@ jobs:
                   key: pkg
 
             - name: (PACKAGE) Package Binaries
-              run: task package
+              run: task code:package
 
             - name: (PACKAGE) Import Signing Key
               uses: crazy-max/ghaction-import-gpg@v5

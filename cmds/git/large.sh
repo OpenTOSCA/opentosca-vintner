@@ -5,9 +5,10 @@ set -e
 cd "$(dirname "$0")"
 cd ../../
 
-# Set path
+# Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
+# Check large files
 # See https://stackoverflow.com/a/42544963
 git rev-list --objects --all |
   git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' |

@@ -1,39 +1,37 @@
-version: 3
+version: '3'
 
 silent: true
 
 tasks:
     ###################################################
     #
-    # Build
+    # Default
     #
     ###################################################
 
-    install: bash cmds/code/install.sh
-    build: bash cmds/code/build.sh
-    package: bash cmds/code/package.sh
+    '*:*':
+        vars:
+            NAMESPACE: '{{index .MATCH 0}}'
+            COMMAND: '{{index .MATCH 1}}'
+        cmd: bash cmds/{{.NAMESPACE}}/{{.COMMAND}}.sh {{.CLI_ARGS}}
 
     ###################################################
     #
-    # Git
-    #
-    ###################################################
-
-    git:fix: bash cmds/git/fix.sh
-    git:open: bash cmds/git/open.sh
-    git:check-large-files: bash cmds/git/check-large-files.sh
-
-    ###################################################
-    #
-    # Source Code
+    # Lint
     #
     ###################################################
 
     lint:check: node_modules/.bin/eslint .
     lint:fix: node_modules/.bin/eslint . --fix
 
-    style:check: bash node_modules/.bin/prettier --check --end-of-line auto "./**/*.{ts,json,yaml,yml}"
-    style:fix: bash node_modules/.bin/prettier --write --end-of-line auto "./**/*.{ts,json,yaml,yml}"
+    ###################################################
+    #
+    # Style
+    #
+    ###################################################
+
+    style:check: node_modules/.bin/prettier --check --end-of-line auto "./**/*.{ts,json,yaml,yml}"
+    style:fix: node_modules/.bin/prettier --write --end-of-line auto "./**/*.{ts,json,yaml,yml}"
 
     ###################################################
     #
@@ -107,18 +105,8 @@ tasks:
     #
     ###################################################
 
-    examples:pull: bash cmds/examples/pull.sh
     examples:pull:link: bash cmds/examples/pull.sh true
-    examples:unpull: bash cmds/examples/unpull.sh
     examples:generate:getting-started: task cli -- template init --path examples/xopera-getting-started --force
-
-    ###################################################
-    #
-    # Dependencies
-    #
-    ###################################################
-
-    dependencies:check: bash node_modules/.bin/license-checker --production --summary --onlyAllow "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0;Public Domain"
 
     ###################################################
     #

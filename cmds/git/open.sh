@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 cd ../../
 
-# Set path
+# Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 open-cli https://github.com/opentosca/opentosca-vintner

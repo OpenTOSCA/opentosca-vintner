@@ -26,7 +26,7 @@ jobs:
             - name: (PREPARE) Install Task
               uses: arduino/setup-task@v1
               with:
-                  version: 3.34.1
+                  version: 3.35.0
 
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
@@ -35,7 +35,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Node Dependencies
-              run: task install
+              run: task code:install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
