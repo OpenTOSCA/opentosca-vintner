@@ -8,9 +8,10 @@ import {
     loadExpected,
 } from '#controller/template/test'
 import * as files from '#files'
+import {loadFile, storeFile} from '#files'
 import Loader from '#graph/loader'
 import std from '#std'
-import {toList} from '#utils/utils'
+import * as utils from '#utils/utils'
 import {expect} from 'chai'
 import _ from 'lodash'
 import path from 'path'
@@ -72,7 +73,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 template: getVariableServiceTemplate({dir: vstdir ?? dir, file: config.template}),
                 inputs: getDefaultInputs(dir),
                 output,
-                presets: toList(config.presets),
+                presets: utils.toList(config.presets),
             })
         }
 
@@ -82,22 +83,20 @@ export function getDefaultTest(dir: string, vstdir?: string) {
             await fn()
 
             /**
-             * TODO: Hotfix
-             *  search and replace some strings in the result, e.g., to align node template names restricted in case studies
+             * Search and replace string in result, e.g., to align node template names restricted in case studies
              */
-            for (const rename of config.renames || []) {
-                files.replace(output, rename[0], rename[1])
+            if (check.isDefined(config.replace)) {
+                let data = loadFile(output)
+                data = utils.replace(data, config.replace)
+                storeFile(output, data, {onlyIfChanged: true})
             }
 
             const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
 
             /**
-             * TODO: Hotfix
-             *  adapt output by merging with custom JSON, e.g., for adapting
+             * Adapt output by merging with custom JSON, e.g., for patching additional properties in case studies
              */
-            // TODO: support merge.yaml as default file
-            // TODO: adapt documentation generator
             if (check.isDefined(config.merge)) {
                 _.merge(expected, config.merge)
             }

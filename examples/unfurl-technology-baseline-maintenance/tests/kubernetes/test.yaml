@@ -1,5 +1,5 @@
 expected: ../../../unfurl-technology-variant-kubernetes/tests/tau/expected.yaml
-renames:
+replace:
     - - database_ansible
       - database
 

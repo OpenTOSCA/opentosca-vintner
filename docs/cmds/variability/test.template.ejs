@@ -35,6 +35,16 @@ The following variability preset is used.
 ```
 <% } -%>
 
+<% if (config.replace?) { -%>
+## Replace
+
+The following strings are searched and replaced in the variability-resolved service template.
+
+```yaml linenums="1"
+<%- utils.toYAML(test.config.replace) -%>
+```
+<% } -%>
+
 <% if (test.expected) { -%>
 ## Variability-Resolved Service Template
 

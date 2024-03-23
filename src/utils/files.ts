@@ -6,7 +6,6 @@ import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fss from 'fs'
 import * as fse from 'fs-extra'
-import Glob from 'glob'
 import * as yaml from 'js-yaml'
 import lnk from 'lnk'
 import _ from 'lodash'
@@ -280,20 +279,4 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 
 export function stat(file: string) {
     return fss.statSync(file)
-}
-
-export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {
-    return Glob.glob(pattern, options)
-}
-
-export function replace(file: string, find: string, replace: string) {
-    const data = loadFile(file)
-    const replaced = data.replaceAll(find, replace)
-    storeFile(file, replaced, {onlyIfChanged: true})
-}
-
-export function merge(file: string, merge: any) {
-    const data = loadYAML(file)
-    const merged = _.merge(data, merge)
-    storeFile(file, merged, {onlyIfChanged: true})
 }
