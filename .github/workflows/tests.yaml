@@ -36,7 +36,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Node Modules
-              run: task install
+              run: yarn --immutable # task install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -59,7 +59,7 @@ jobs:
               run: task docs:generate:dependencies
 
             - name: (PREPARE) Build Project
-              run: task build
+              run: bash cmds/build.sh # task build
 
             - name: (PREPARE) Pull Example Dependencies
               run: task examples:pull
