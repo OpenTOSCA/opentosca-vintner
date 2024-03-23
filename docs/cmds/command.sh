@@ -18,6 +18,6 @@ if [ -d "build-docs" ]; then
   node build-docs/docs/cmds/${COMMAND}/generate.js
 else
   # Default way to execute command is using ts-node which takes long
-  # TODO: why does  not work in github action?
+  # TODO: why does "bash node_modules/.bin/ts-node" not work in github workflow?
   yarn ts-node -r tsconfig-paths/register docs/cmds/${COMMAND}/generate.ts
 fi
