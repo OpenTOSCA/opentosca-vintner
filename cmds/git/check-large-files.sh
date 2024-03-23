@@ -1,6 +1,13 @@
 #!/usr/bin/bash
 set -e
 
+# Set working directory
+cd "$(dirname "$0")"
+cd ../../
+
+# Set path
+PATH="$(pwd)/node_modules/.bin:$PATH"
+
 # See https://stackoverflow.com/a/42544963
 git rev-list --objects --all |
   git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' |

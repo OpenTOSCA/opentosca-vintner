@@ -119,7 +119,7 @@
     "scripts": {
         "prepack": "yarn build",
         "postinstall": "patch-package",
-        "build": "bash cmds/build.sh"
+        "build": "bash cmds/code/build.sh"
     },
     "packageManager": "yarn@3.6.3"
 }

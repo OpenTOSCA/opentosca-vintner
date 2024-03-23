@@ -5,6 +5,9 @@ set -e
 cd "$(dirname "$0")"
 cd ../../
 
+# Set path
+PATH="$(pwd)/node_modules/.bin:$PATH"
+
 # Check that vintner has been built
 ENTRYPOINT="build/cli/index.js"
 VINTNER="node build/cli/index.js"

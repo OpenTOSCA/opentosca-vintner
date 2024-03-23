@@ -9,8 +9,9 @@ tasks:
     #
     ###################################################
 
-    build: bash cmds/build.sh
-    package: bash node_modules/.bin/pkg --config .pkgrc.json build/cli/index.js
+    install: bash cmds/code/install.sh
+    build: bash cmds/code/build.sh
+    package: bash cmds/code/package.sh
 
     ###################################################
     #
@@ -18,8 +19,8 @@ tasks:
     #
     ###################################################
 
-    git:fix: git add . && git commit -m fix && git push
-    git:open: bash node_modules/.bin/open-cli https://github.com/opentosca/opentosca-vintner
+    git:fix: bash cmds/git/fix.sh
+    git:open: bash cmds/git/open.sh
     git:check-large-files: bash cmds/git/check-large-files.sh
 
     ###################################################
@@ -28,10 +29,8 @@ tasks:
     #
     ###################################################
 
-    install: yarn --immutable
-
-    lint:check: bash node_modules/.bin/eslint .
-    lint:fix: bash node_modules/.bin/eslint . --fix
+    lint:check: node_modules/.bin/eslint .
+    lint:fix: node_modules/.bin/eslint . --fix
 
     style:check: bash node_modules/.bin/prettier --check --end-of-line auto "./**/*.{ts,json,yaml,yml}"
     style:fix: bash node_modules/.bin/prettier --write --end-of-line auto "./**/*.{ts,json,yaml,yml}"
