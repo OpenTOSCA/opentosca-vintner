@@ -123,7 +123,7 @@ The following directories should be excluded from search by the IDE.
 - `.nyc_output`
 - `docs/.venv`
 - `build`
-- `build-docs`
+- `build-tasks`
 - `coverage`
 - `yarn`
 - `dist`

@@ -11,17 +11,13 @@ tasks:
 
     # TODO: set base directory ...
 
-    '*:*':
-        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/task.sh {{.CLI_ARGS}}
-
     '*:*:*':
         cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}/task.sh {{.CLI_ARGS}}
 
-    'docs:*:*':
-        cmd: bash docs/cmds/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
+    # TODO: does not work. just have "*" and split it ...
 
-    'docs:*:*:*':
-        cmd: bash docs/cmds/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}.sh {{.CLI_ARGS}}
+    '*:*':
+        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/task.sh {{.CLI_ARGS}}
 
     ###################################################
     #
@@ -29,19 +25,13 @@ tasks:
     #
     ###################################################
 
-    docs:install: bash docs/install.sh
-    docs:serve: MKDOCS_IS_DEV=true MKDOCS_REVISION_ENABLED=false bash docs/cmds/mkdocs serve --watch-theme
-    docs:open: bash node_modules/.bin/open-cli http://localhost:8000
-    docs:build: bash docs/cmds/mkdocs build --strict
-    docs:clean: cd docs && rm -rf site
-    docs:deploy: bash docs/cmds/mkdocs gh-deploy --force --strict
-    docs:generate: bash docs/cmds/generate.sh
     docs:build:commands:
-        - bash node_modules/.bin/tsc -p tsconfig.docs.json
-        - bash node_modules/.bin/tsc-alias -p tsconfig.docs.json
-        - bash node_modules/.bin/syncdir docs/cmds build-docs/docs/cmds --quiet
-        - bash node_modules/.bin/syncdir src/assets build-docs/src/assets --quiet
-        - bash node_modules/.bin/syncdir tests build-docs/tests --quiet
+        - bash node_modules/.bin/tsc -p tsconfig.tasks.json
+        - bash node_modules/.bin/tsc-alias -p tsconfig.tasks.json
+        - bash node_modules/.bin/syncdir tests build-tasks/tests --quiet
+        - bash node_modules/.bin/syncdir src/assets build-tasks/src/assets --quiet
+        - bash node_modules/.bin/syncdir tests build-tasks/tests --quiet
+        - bash node_modules/.bin/syncdir tasks build-tasks/tasks --quiet
     docs:generate:interface: echo 'dont forget to run docs:build:commands in advance ...' && bash docs/cmds/command.sh interface
     docs:generate:dependencies: bash docs/cmds/command.sh dependencies
     docs:generate:tests:variability: bash docs/cmds/command.sh variability

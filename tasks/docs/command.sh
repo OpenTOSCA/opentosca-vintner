@@ -14,8 +14,8 @@ fi
 
 # Optimize executing command by using node
 # Note, this might not be the latest build, e.g., when executed locally
-if [ -d "build-docs" ]; then
-  node build-docs/docs/cmds/${COMMAND}/generate.js
+if [ -d "build-tasks" ]; then
+  node build-tasks/docs/cmds/${COMMAND}/generate.js
 else
   # Default way to execute command is using ts-node which takes long
   # TODO: why does "bash node_modules/.bin/ts-node" not work in github workflow?

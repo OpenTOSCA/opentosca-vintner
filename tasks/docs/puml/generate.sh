@@ -10,8 +10,8 @@ VINTNER="task cli --"
 
 # Optimize executing vintner by using node
 # Note, this might not be the latest build, e.g., when executed locally
-if [ -f "build-docs/src/cli/index.js" ]; then
-    VINTNER="node build-docs/src/cli/index.js"
+if [ -f "build-tasks/src/cli/index.js" ]; then
+    VINTNER="node build-tasks/src/cli/index.js"
 fi
 
 $VINTNER template puml topology --path docs/docs/sofdcar/guides/location/service-template.yaml
