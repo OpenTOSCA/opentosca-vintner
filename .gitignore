@@ -71,4 +71,4 @@ choco/tools/vintner.exe
 choco/tools/vintner.exe.asc
 
 # Tasks
-!tasks/docs/build
+!tasks/**/build
