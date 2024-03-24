@@ -195,7 +195,7 @@ To generate the conformance tests for Queries4TOSCA, run the following command.
 This command is also executed during the Release workflow and overwrites committed files.
 
 ```shell linenums="1"
-task docs:generate:tests:query
+task  docs:generate:query
 ```
 
 ## TOSCA SofDCar Profile
@@ -204,7 +204,7 @@ To generate the TOSCA SofDCar Profile, run the following command.
 This command is also executed during the Release workflow and overwrites committed files.
 
 ```shell linenums="1"
-task docs:generate:tests:query
+task  docs:generate:query
 ```
 
 ## Variability4TOSCA
@@ -213,7 +213,7 @@ To generate the conformance tests for Variability4TOSCA, run the following comma
 This command is also executed during the Release workflow and overwrites committed files.
 
 ```shell linenums="1"
-task docs:generate:tests:query
+task  docs:generate:query
 ```
 
 

@@ -141,10 +141,10 @@ jobs:
               run: task docs:generate:interface
 
             - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
-              run: task docs:generate:tests:variability
+              run: task  docs:generate:variability
 
             - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
-              run: task docs:generate:tests:query
+              run: task  docs:generate:query
 
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
               run: task docs:generate:sofdcar
