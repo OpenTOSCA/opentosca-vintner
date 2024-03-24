@@ -69,3 +69,6 @@ opentosca-vintner-*.tgz
 *.nupkg
 choco/tools/vintner.exe
 choco/tools/vintner.exe.asc
+
+# Tasks
+!tasks/docs/build
