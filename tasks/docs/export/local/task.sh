@@ -9,4 +9,4 @@ cd ../../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Export docs from localhost
-task docs:export -- http://localhost:8000
+./task docs:export http://localhost:8000

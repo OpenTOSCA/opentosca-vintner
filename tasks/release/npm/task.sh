@@ -8,5 +8,8 @@ cd ../../../
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
+# Prepack
+./task code:build
+
 # Publish on NPM
 npm publish

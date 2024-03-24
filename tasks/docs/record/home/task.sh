@@ -9,4 +9,4 @@ cd ../../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Record home cast
-task docs:record -- home
+./task docs:record home

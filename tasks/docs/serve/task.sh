@@ -9,4 +9,4 @@ cd ../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Serve mkdocs (hot-reload)
-MKDOCS_IS_DEV=true MKDOCS_REVISION_ENABLED=false bash docs/mkdocs serve --watch-theme
+MKDOCS_IS_DEV=true MKDOCS_REVISION_ENABLED=false bash tasks/.bin/mkdocs serve --watch-theme

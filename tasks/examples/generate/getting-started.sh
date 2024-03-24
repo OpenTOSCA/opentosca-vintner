@@ -9,4 +9,4 @@ cd ../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Generate CSAR of getting started guide
-task cli -- template init --path examples/xopera-getting-started --force
+./task cli template init --path examples/xopera-getting-started --force

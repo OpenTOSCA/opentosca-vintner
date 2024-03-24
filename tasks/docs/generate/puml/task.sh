@@ -9,7 +9,7 @@ cd ../../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Default way to execute vintner is using ts-node which takes long
-VINTNER="task cli --"
+VINTNER="./task cli"
 
 # Optimize executing vintner by using node
 # Note, this might not be the latest build, e.g., when executed locally

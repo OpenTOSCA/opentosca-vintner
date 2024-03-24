@@ -9,4 +9,4 @@ cd ../../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Record getting-started cast
-task docs:record -- getting-started
+./task docs:record getting-started

@@ -117,9 +117,7 @@
         "typescript": "^5.0.4"
     },
     "scripts": {
-        "prepack": "yarn build",
-        "postinstall": "patch-package",
-        "build": "bash cmds/code/build.sh"
+        "postinstall": "patch-package"
     },
     "packageManager": "yarn@3.6.3"
 }

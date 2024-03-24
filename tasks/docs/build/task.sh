@@ -9,4 +9,4 @@ cd ../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Build mkdocs
-bash docs/mkdocs build --strict
+bash tasks/.bin/mkdocs build --strict

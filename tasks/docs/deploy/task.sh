@@ -9,4 +9,4 @@ cd ../../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Build and deploy mkdocs
-bash docs/mkdocs gh-deploy --force --strict
+bash tasks/.bin/mkdocs gh-deploy --force --strict

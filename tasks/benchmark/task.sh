@@ -9,4 +9,4 @@ cd ../../
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Benchmark
-task cli -- setup benchmark --latex --markdown --io
+./task cli setup benchmark --latex --markdown --io
