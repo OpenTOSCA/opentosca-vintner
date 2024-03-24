@@ -10,10 +10,10 @@ tasks:
     ###################################################
 
     '*:*':
-        cmd: bash cmds/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
+        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
 
     '*:*:*':
-        cmd: bash cmds/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}.sh {{.CLI_ARGS}}
+        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}.sh {{.CLI_ARGS}}
 
     'docs:*:*':
         cmd: bash docs/cmds/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
