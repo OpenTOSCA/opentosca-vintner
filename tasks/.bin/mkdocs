@@ -3,6 +3,7 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
+cd ../../docs
 
 if [ -f ".env" ]; then
   source .env
