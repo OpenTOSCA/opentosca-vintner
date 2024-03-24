@@ -7,3 +7,6 @@ cd ../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Fix
+prettier --write --end-of-line auto "./**/*.{ts,json,yaml,yml}"

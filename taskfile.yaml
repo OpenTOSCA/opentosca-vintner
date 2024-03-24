@@ -9,11 +9,13 @@ tasks:
     #
     ###################################################
 
+    # TODO: set base directory ...
+
     '*:*':
-        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
+        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/task.sh {{.CLI_ARGS}}
 
     '*:*:*':
-        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}.sh {{.CLI_ARGS}}
+        cmd: bash tasks/{{index .MATCH 0}}/{{index .MATCH 1}}/{{index .MATCH 2}}/task.sh {{.CLI_ARGS}}
 
     'docs:*:*':
         cmd: bash docs/cmds/{{index .MATCH 0}}/{{index .MATCH 1}}.sh {{.CLI_ARGS}}
@@ -55,15 +57,6 @@ tasks:
 
     docs:export: bash docs/cmds/export/generate.sh
     docs:export:local: bash docs/cmds/export/generate.sh http://localhost:8000
-
-    ###################################################
-    #
-    # Puccini
-    #
-    ###################################################
-
-    puccini:check: bash docs/cmds/puccini/check-all.sh
-    puccini:check:single: bash docs/cmds/puccini/check.sh {{.CLI_ARGS}}
 
     ###################################################
     #

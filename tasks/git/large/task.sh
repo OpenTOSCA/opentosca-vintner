@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+set -e
+
+# Set working directory
+cd "$(dirname "$0")"
+cd ../../../
+
+# Set PATH
+PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Check large files
+# See https://stackoverflow.com/a/42544963
+git rev-list --objects --all |
+  git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' |
+  sed -n 's/^blob //p' |
+  awk '$2 >= 2^20' |
+  sort --numeric-sort --key=2 |
+  cut -c 1-12,41- |
+  $(command -v gnumfmt || echo numfmt) --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest

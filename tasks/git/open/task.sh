@@ -7,3 +7,6 @@ cd ../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Open repository in browser
+open-cli https://github.com/opentosca/opentosca-vintner

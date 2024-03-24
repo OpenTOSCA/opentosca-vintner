@@ -7,3 +7,6 @@ cd ../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Publish on Choco
+bash choco/release.sh

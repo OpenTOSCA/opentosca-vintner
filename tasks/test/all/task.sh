@@ -7,3 +7,6 @@ cd ../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Test all
+ENABLE_INTEGRATION_TESTS=true task test:local

@@ -7,3 +7,6 @@ cd ../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Start server
+node -r dotenv/config -r ts-node/register -r tsconfig-paths/register src/cli/index.ts server start
