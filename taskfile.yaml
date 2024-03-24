@@ -57,12 +57,3 @@ tasks:
 
     docs:export: bash docs/cmds/export/generate.sh
     docs:export:local: bash docs/cmds/export/generate.sh http://localhost:8000
-
-    ###################################################
-    #
-    # PUML
-    #
-    ###################################################
-
-    puml:up: cd docs && docker-compose up -d
-    puml:down: cd docs && docker-compose down
