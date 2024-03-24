@@ -15,8 +15,9 @@ type CommandInformation = {
 }
 type OptionInformation = {option: string; type: string; description: string; mandatory: boolean}
 
+const data: CommandInformation[] = []
+
 async function main() {
-    const data: CommandInformation[] = []
     run(program, [])
 
     // Server-only commands must be added manually
@@ -55,43 +56,43 @@ async function main() {
     data.sort((a, b) => a.usage.localeCompare(b.usage))
 
     await files.renderFile(path.join(__dirname, 'template.ejs'), {data}, path.join('docs', 'docs', 'interface.md'))
+}
 
-    function run(command: Command, commands: string[]) {
-        if (command.name() !== 'vintner') commands.push(command.name())
+function run(command: Command, commands: string[]) {
+    if (command.name() !== 'vintner') commands.push(command.name())
 
-        const options = (command as any).options.map((option: Option) => {
-            let description = option.description
+    const options = (command as any).options.map((option: Option) => {
+        let description = option.description
 
-            const defaultDescription = check.isDefined(option.defaultValue)
-                ? `default: ${utils.stringify(option.defaultValue)}`
-                : undefined
+        const defaultDescription = check.isDefined(option.defaultValue)
+            ? `default: ${utils.stringify(option.defaultValue)}`
+            : undefined
 
-            const choicesDescription = check.isDefined(option.argChoices)
-                ? `choices: ${utils.stringify(option.argChoices)}`
-                : undefined
+        const choicesDescription = check.isDefined(option.argChoices)
+            ? `choices: ${utils.stringify(option.argChoices)}`
+            : undefined
 
-            const additionalDescription = utils.joinNotNull([choicesDescription, defaultDescription], ', ')
-            if (additionalDescription !== '') description += ' (' + additionalDescription + ')'
+        const additionalDescription = utils.joinNotNull([choicesDescription, defaultDescription], ', ')
+        if (additionalDescription !== '') description += ' (' + additionalDescription + ')'
 
-            return {
-                option: option.long?.slice(2),
-                type: option.flags?.split(' ')[1]?.slice(1, -1),
-                description,
-                mandatory: option.required || option.mandatory || false,
-            }
+        return {
+            option: option.long?.slice(2),
+            type: option.flags?.split(' ')[1]?.slice(1, -1),
+            description,
+            mandatory: option.required || option.mandatory || false,
+        }
+    })
+
+    if (utils.isEmpty(command.commands))
+        data.push({
+            commands,
+            usage: 'vintner ' + commands.join(' '),
+            description: command.description(),
+            options,
+            cli: true,
+            server: !isCLIOnly(commands),
         })
-
-        if (utils.isEmpty(command.commands))
-            data.push({
-                commands,
-                usage: 'vintner ' + commands.join(' '),
-                description: command.description(),
-                options,
-                cli: true,
-                server: !isCLIOnly(commands),
-            })
-        command.commands.forEach(it => run(it, [...commands]))
-    }
+    command.commands.forEach(it => run(it, [...commands]))
 }
 
 function isCLIOnly(commands: string[]) {

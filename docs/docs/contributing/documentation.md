@@ -189,14 +189,6 @@ To stop the local PlantUML server, run the following command.
 task puml:down
 ```
 
-There is also a deprecated way to plot PlantUML to SVG.
-Therefore, run the following command.
-This considers all `.puml` files.
-
-```shell linenums="1"
-task docs:plot:puml
-```
-
 ## Queries4TOSCA
 
 To generate the conformance tests for Queries4TOSCA, run the following command.

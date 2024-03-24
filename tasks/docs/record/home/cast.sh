@@ -1,7 +1,11 @@
 #!/usr/bin/bash
 set -e
 
-. magic.sh -n
+# Set working directory
+cd "$(dirname "$0")"
+
+# Load magic
+. ../magic.sh -n
 TYPE_SPEED=100
 
 p 'vintner setup init'

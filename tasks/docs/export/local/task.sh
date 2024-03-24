@@ -3,10 +3,10 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../
+cd ../../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
-# Test
-./task test:local
+# Export docs from localhost
+task docs:export -- http://localhost:8000

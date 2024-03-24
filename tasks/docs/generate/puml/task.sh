@@ -3,7 +3,10 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../../
+cd ../../../../
+
+# Set PATH
+PATH="$(pwd)/node_modules/.bin:$PATH"
 
 # Default way to execute vintner is using ts-node which takes long
 VINTNER="task cli --"

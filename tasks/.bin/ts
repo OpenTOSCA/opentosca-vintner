@@ -5,6 +5,9 @@ set -e
 cd "$(dirname "$0")"
 cd ../../
 
+# Set PATH
+PATH="$(pwd)/node_modules/.bin:$PATH"
+
 # Ensure that first argument exists
 COMMAND="$1"
 if [ -z "${COMMAND}" ]; then
@@ -15,9 +18,8 @@ fi
 # Optimize executing command by using node
 # Note, this might not be the latest build, e.g., when executed locally
 if [ -d "build-tasks" ]; then
-  node build-tasks/docs/cmds/${COMMAND}/generate.js
+  node build-tasks/tasks/${COMMAND}/task.js
 else
   # Default way to execute command is using ts-node which takes long
-  # TODO: why does "bash node_modules/.bin/ts-node" not work in github workflow?
-  yarn ts-node -r tsconfig-paths/register docs/cmds/${COMMAND}/generate.ts
+  ts-node -r tsconfig-paths/register tasks/${COMMAND}/task.ts
 fi

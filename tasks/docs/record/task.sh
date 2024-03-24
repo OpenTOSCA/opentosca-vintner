@@ -5,8 +5,8 @@ set -e
 cd "$(dirname "$0")"
 
 CAST_NAME=$1
-CAST_INPUT="./${CAST_NAME}.sh"
-CAST_OUTPUT="../../docs/assets/casts/${CAST_NAME}.cast"
+CAST_INPUT="./${CAST_NAME}/cast.sh"
+CAST_OUTPUT="../../../docs/docs/assets/casts/${CAST_NAME}.cast"
 
 if [ -z "${CAST_NAME}" ]; then
   echo "Cast name not defined"

@@ -3,10 +3,10 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../../
+cd ../../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
-# Stop PUML server
-cd docs && docker-compose up -d
+# Generate dependencies
+tasks/.bin/ts docs/generate/sofdcar

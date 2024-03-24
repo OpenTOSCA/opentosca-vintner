@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+set -e
+
+# Set working directory
+cd "$(dirname "$0")"
+
+# Set PATH
+PATH="$(pwd)/node_modules/.bin:$PATH"
+
+# Ensure that first argument exists
+COMMAND="$1"
+if [ -z "${COMMAND}" ]; then
+  echo "First argument must be the command to execute"
+  exit 1
+fi
+
+# Run task
+bash tasks/"${COMMAND//://}"/task.sh "${@:2}"

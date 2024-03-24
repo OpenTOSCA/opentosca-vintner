@@ -7,12 +7,16 @@ if ! which vintner &>/dev/null; then
     exit 1
 fi
 
-. magic.sh -n
-TYPE_SPEED=100
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../../
+
+# Load magic
+. ../magic.sh -n
+TYPE_SPEED=100
+
+# Set working directory
+cd ../../../../
 
 echo '# Installation'
 p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'

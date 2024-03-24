@@ -3,10 +3,10 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../../
+cd ../../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
-# Start PUML server
-cd docs && docker-compose down
+# Record getting-started cast
+task docs:record -- getting-started

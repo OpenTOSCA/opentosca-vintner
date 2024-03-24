@@ -133,6 +133,7 @@ export function removeDependencyVersionsWithSameLicense(data: DependencyList): v
 export function formatSourceCodeUrl(url: string): string {
     if (url.endsWith('.git')) url = url.slice(0, -4)
     if (url.startsWith('http')) return url
+    if (url.startsWith('https')) return url
     if (url.startsWith('git://')) return url.replace('git://', 'https://')
     if (url.startsWith('git+ssh://git@')) return url.replace('git+ssh://git@', 'https://')
     if (url.startsWith('git+')) return url.slice(4)

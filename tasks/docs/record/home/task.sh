@@ -3,10 +3,10 @@ set -e
 
 # Set working directory
 cd "$(dirname "$0")"
-cd ../../
+cd ../../../../
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
 
-# Test
-./task test:local
+# Record home cast
+task docs:record -- home
