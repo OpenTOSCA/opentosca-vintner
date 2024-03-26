@@ -1,11 +1,5 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
-cd "$(dirname "$0")"
-
 # Load magic
-. ../magic.sh -n
+. "${TASK_TASK_DIR}"/../magic.sh -n
 TYPE_SPEED=100
 
 p 'vintner setup init'

@@ -1,12 +1,6 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
-cd "$(dirname "$0")"
-
 CAST_NAME=$1
-CAST_INPUT="./${CAST_NAME}/cast.sh"
-CAST_OUTPUT="../../../docs/docs/assets/casts/${CAST_NAME}.cast"
+CAST_INPUT="${TASK_TASK_DIR}/${CAST_NAME}/cast.sh"
+CAST_OUTPUT="docs/docs/assets/casts/${CAST_NAME}.cast"
 
 if [ -z "${CAST_NAME}" ]; then
   echo "Cast name not defined"
@@ -31,4 +25,4 @@ if ! which pv &>/dev/null; then
 fi
 
 echo "Recoding cast \"${CAST_NAME}\" ..."
-asciinema rec -c "bash ${CAST_INPUT}" --overwrite "${CAST_OUTPUT}"
+asciinema rec -c "bash -e ${CAST_INPUT}" --overwrite "${CAST_OUTPUT}"

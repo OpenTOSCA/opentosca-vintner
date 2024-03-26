@@ -1,10 +1,3 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
-cd "$(dirname "$0")"
-cd ../../../
-
 # Check that vintner has been built
 ENTRYPOINT="build/cli/index.js"
 VINTNER="node build/cli/index.js"

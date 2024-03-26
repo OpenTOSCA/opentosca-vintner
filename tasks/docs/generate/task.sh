@@ -1,10 +1,3 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
-cd "$(dirname "$0")"
-cd ../../../
-
 echo "Building commands ..."
 ./task docs:build:commands
 

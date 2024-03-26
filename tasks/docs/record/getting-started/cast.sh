@@ -1,21 +1,12 @@
-#!/usr/bin/bash
-set -e
-
 # Ensure that vintner is installed
 if ! which vintner &>/dev/null; then
     echo "\"vintner\" not installed"
     exit 1
 fi
 
-# Set working directory
-cd "$(dirname "$0")"
-
 # Load magic
-. ../magic.sh -n
+. "${TASK_TASK_DIR}"/../magic.sh -n
 TYPE_SPEED=100
-
-# Set working directory
-cd ../../../../
 
 echo '# Installation'
 p 'curl -fsSL https://vintner.opentosca.org/install.sh | sudo bash -'
