@@ -1,11 +1,15 @@
 #!/usr/bin/bash
 set -e
 
-# Set TASK_ROOT_DIR, i.e., the root directory of the project
+# Set TASK_BINARY, i.e., the absolute path of this script
+TASK_BINARY="$(realpath "$0")"
+export TASK_BINARY
+
+# Set TASK_ROOT_DIR, i.e., the absolute path of the root directory of the project
 TASK_ROOT_DIR="$(dirname "$(realpath "$0")")"
 export TASK_ROOT_DIR
 
-# Set TASK_TASK_DIR, i.e., the directory in which the task is located
+# Set TASK_TASK_DIR, i.e., the absolute path of the directory in which the task is located
 # Caution: Should not be used in transpiled JS
 TASK_TASK_DIR="${TASK_ROOT_DIR}/tasks/${REPLACED}"
 export TASK_TASK_DIR
