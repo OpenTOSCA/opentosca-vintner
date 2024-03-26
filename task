@@ -14,5 +14,33 @@ if [ -z "${COMMAND}" ]; then
   exit 1
 fi
 
-# Run task
-bash tasks/"${COMMAND//://}"/task.sh "${@:2}"
+# Replace ":" with "/"
+REPLACED="${COMMAND//://}"
+
+# Run task.sh
+TASK_SH=tasks/${REPLACED}/task.sh
+if [ -f "${TASK_SH}" ]; then
+  bash ${TASK_SH} "${@:2}"
+  exit 0
+fi
+
+# Run task.js
+TASK_JS=build-tasks/tasks/${REPLACED}/task.js
+if [ -f "${TASK_JS}" ]; then
+  node ${TASK_JS} "${@:2}"
+  exit 0
+fi
+
+# Run task.ts
+TASK_SH=tasks/${REPLACED}/task.ts
+if [ -f "${TASK_TS}" ]; then
+  ts-node -r tsconfig-paths/register ${TASK_TS} "${@:2}"
+  exit 0
+fi
+
+# Run task.py
+TASK_PY=tasks/${REPLACED}/task.py
+if [ -f "${TASK_PY}" ]; then
+  python ${TASK_PY} "${@:2}"
+  exit 0
+fi
