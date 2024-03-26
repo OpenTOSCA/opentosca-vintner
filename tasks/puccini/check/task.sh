@@ -1,9 +1,6 @@
 #!/usr/bin/bash
 set -e
 
-# Set working directory
-cd "$(dirname "$0")"
-cd ../../../
 
 DOCS_DIR="docs/docs"
 

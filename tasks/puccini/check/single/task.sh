@@ -1,6 +1,3 @@
-DIR="$(dirname "$0")"
-cd "${DIR}"
-
 # Ensure that first argument exists
 TEMPLATE="$1"
 echo "Validating \"${TEMPLATE}\""
@@ -17,13 +14,13 @@ if [ ! -f "$TEMPLATE_PATH" ]; then
 fi
 
 # Determine binary
-BINARY="${DIR}/puccini-tosca"
+BINARY="${TASK_TASK_DIR}/puccini-tosca"
 if which wsl &>/dev/null; then
     BINARY="wsl ${BINARY}"
 fi
 
 # Ensure that Puccini is installed
-if [ ! -f puccini-tosca ]; then
+if [ ! -f "${BINARY}" ]; then
 
     # Ensure that wget is installed
     if ! which wget &>/dev/null; then
