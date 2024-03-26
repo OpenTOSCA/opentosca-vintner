@@ -43,7 +43,7 @@ if [ -f "${TASK_JS}" ]; then
 fi
 
 # Run task.ts
-TASK_SH=tasks/${REPLACED}/task.ts
+TASK_TS=tasks/${REPLACED}/task.ts
 if [ -f "${TASK_TS}" ]; then
   ts-node -r tsconfig-paths/register ${TASK_TS} "${@:2}"
   exit 0
