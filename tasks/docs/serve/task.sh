@@ -5,10 +5,11 @@ set -e
 cd "$(dirname "$0")"
 cd ../../../
 
-# Set PATH
-PATH="$(pwd)/node_modules/.bin:$PATH"
-
 # Serve mkdocs (hot-reload)
-export MKDOCS_IS_DEV=true
-export MKDOCS_REVISION_ENABLED=false
+MKDOCS_IS_DEV=true
+export MKDOCS_IS_DEV
+
+MKDOCS_REVISION_ENABLED=false
+export MKDOCS_REVISION_ENABLED
+
 bash docs/mkdocs serve --watch-theme

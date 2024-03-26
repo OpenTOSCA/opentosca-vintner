@@ -5,8 +5,5 @@ set -e
 cd "$(dirname "$0")"
 cd ../../../
 
-# Set PATH
-PATH="$(pwd)/node_modules/.bin:$PATH"
-
 # Install dependencies
 bash docs/install.sh

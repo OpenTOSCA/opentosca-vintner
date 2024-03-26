@@ -1,9 +1,3 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
-cd "$(dirname "$0")"
-
 # Set docs server
 DOCS_SERVER="$1"
 if [ -z "${DOCS_SERVER}" ]; then

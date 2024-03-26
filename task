@@ -1,11 +1,22 @@
 #!/usr/bin/bash
 set -e
 
+# Set TASK_ROOT_DIR, i.e., the root directory of the project
+TASK_ROOT_DIR="$(dirname "$(realpath "$0")")"
+export TASK_ROOT_DIR
+
+# Set TASK_TASK_DIR, i.e., the directory in which the task is located
+# Caution: Should not be used in transpiled JS
+TASK_TASK_DIR="${TASK_ROOT_DIR}/tasks/${REPLACED}"
+export TASK_TASK_DIR
+
 # Set working directory
-cd "$(dirname "$0")"
+cd "$TASK_ROOT_DIR"
 
 # Set PATH
 PATH="$(pwd)/node_modules/.bin:$PATH"
+export PATH
+
 
 # Ensure that first argument exists
 COMMAND="$1"
@@ -20,7 +31,7 @@ REPLACED="${COMMAND//://}"
 # Run task.sh
 TASK_SH=tasks/${REPLACED}/task.sh
 if [ -f "${TASK_SH}" ]; then
-  bash ${TASK_SH} "${@:2}"
+  bash -e ${TASK_SH} "${@:2}"
   exit 0
 fi
 
@@ -44,3 +55,7 @@ if [ -f "${TASK_PY}" ]; then
   python ${TASK_PY} "${@:2}"
   exit 0
 fi
+
+# Throw
+echo Did not find command "${COMMAND}"
+exit 1

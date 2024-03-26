@@ -1,10 +1,5 @@
-#!/usr/bin/bash
-set -e
-
-# Set working directory
 DIR="$(dirname "$0")"
 cd "${DIR}"
-cd ../../../../
 
 # Ensure that first argument exists
 TEMPLATE="$1"

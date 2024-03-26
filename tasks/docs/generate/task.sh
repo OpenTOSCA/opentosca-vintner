@@ -5,9 +5,6 @@ set -e
 cd "$(dirname "$0")"
 cd ../../../
 
-# Set PATH
-PATH="$(pwd)/node_modules/.bin:$PATH"
-
 echo "Building commands ..."
 ./task docs:build:commands
 

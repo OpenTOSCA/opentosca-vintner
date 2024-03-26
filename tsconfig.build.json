@@ -1,4 +1,4 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["node_modules", "tests", "docs/cmds"]
+    "exclude": ["node_modules", "tests", "tasks"]
 }

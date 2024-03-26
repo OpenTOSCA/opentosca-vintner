@@ -39,6 +39,6 @@
         "sourceMap": true,
         "downlevelIteration": true
     },
-    "include": ["src", "tests", "docs/cmds"],
+    "include": ["src", "tests", "tasks"],
     "exclude": ["node_modules"]
 }

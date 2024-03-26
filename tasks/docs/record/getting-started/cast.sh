@@ -7,7 +7,6 @@ if ! which vintner &>/dev/null; then
     exit 1
 fi
 
-
 # Set working directory
 cd "$(dirname "$0")"
 
