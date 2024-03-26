@@ -7,20 +7,6 @@ tags:
 
 This document holds instructions on the development setup.
 
-## Task
-
-We use [Task](https://taskfile.dev/){target=_blank} version `v3.35.0`.
-
-=== "Linux"
-    ```shell linenums="1"
-    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.35.0
-    ```
-
-=== "Windows"
-    ```shell linenums="1"
-    choco install go-task --version 3.35.0
-    ```
-
 ## Node.js
 
 We use [Node.js](https://nodejs.org){target=_blank} version `18.15.0`.
@@ -53,8 +39,8 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-task code:install
-task examples:pull:link
+./task code:install
+./task examples:pull:link
 ```
 
 ## Large Files
@@ -123,7 +109,7 @@ The following directories should be excluded from search by the IDE.
 - `.nyc_output`
 - `docs/.venv`
 - `build`
-- `build-tasks`
+- `build-./tasks`
 - `coverage`
 - `yarn`
 - `dist`

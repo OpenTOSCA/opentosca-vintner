@@ -27,11 +27,6 @@ jobs:
                   lfs: true
                   fetch-depth: 0
 
-            - name: (PREPARE) Install Task
-              uses: arduino/setup-task@v1
-              with:
-                  version: 3.35.0
-
             - name: (PREPARE) Setup Apt Packages
               uses: awalsh128/cache-apt-pkgs-action@v1.3.0
               with:
@@ -44,7 +39,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Dependencies
-              run: task code:install
+              run: ./task code:install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -62,13 +57,13 @@ jobs:
               run: ./src/assets/scripts/install-xopera.sh
 
             - name: (PREPARE) Generate Dependencies Page
-              run: task docs:generate:dependencies
+              run: ./task docs:generate:dependencies
 
             - name: (PREPARE) Build Project
-              run: task code:build
+              run: ./task code:build
 
             - name: (PREPARE) Pull Example Dependencies
-              run: task examples:pull
+              run: ./task examples:pull
 
             ###################################################
             #
@@ -77,19 +72,19 @@ jobs:
             ###################################################
 
             - name: (TEST) Check ESLint
-              run: task lint:check
+              run: ./task lint:check
 
             - name: (TEST) Check Prettier
-              run: task style:check
+              run: ./task style:check
 
             - name: (TEST) Check Dependencies
-              run: task dependencies:check
+              run: ./task dependencies:check
 
             - name: (TEST) Check Service Templates
-              run: task puccini:check
+              run: ./task puccini:check
 
             - name: (TEST) Run Tests
-              run: task test
+              run: ./task test
 
             - name: (TEST) Upload Tests to Codacy
               uses: codacy/codacy-coverage-reporter-action@v1
@@ -110,7 +105,7 @@ jobs:
                   key: pkg
 
             - name: (PACKAGE) Package Binaries
-              run: task code:package
+              run: ./task code:package
 
             - name: (PACKAGE) Import Signing Key
               uses: crazy-max/ghaction-import-gpg@v5
@@ -172,28 +167,28 @@ jobs:
                   git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
 
             - name: (DOCS) Install Dependencies
-              run: task docs:install
+              run: ./task docs:install
 
             - name: (DOCS) Build Documentation Commands
-              run: task docs:build:commands
+              run: ./task docs:build:commands
 
             - name: (DOCS) Generate Interface Page
-              run: task docs:generate:interface
+              run: ./task docs:generate:interface
 
             - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
-              run: task  docs:generate:variability
+              run: ./task docs:generate:variability
 
             - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
-              run: task  docs:generate:query
+              run: ./task docs:generate:query
 
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
-              run: task docs:generate:sofdcar
+              run: ./task docs:generate:sofdcar
 
             - name: (DOCS) Generate PlantUML of Service Templates
-              run: task docs:generate:puml
+              run: ./task docs:generate:puml
 
             - name: (DOCS) Build and Deploy Docs
-              run: task docs:deploy
+              run: ./task docs:deploy
 
             - name: (RELEASE) Archive docs
               run: tar -czvf docs.tar.gz -C docs/site/ .

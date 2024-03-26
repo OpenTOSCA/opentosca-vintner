@@ -23,11 +23,6 @@ jobs:
                   lfs: true
                   fetch-depth: 0
 
-            - name: (PREPARE) Install Task
-              uses: arduino/setup-task@v1
-              with:
-                  version: 3.35.0
-
             - name: (PREPARE) Setup Node
               uses: actions/setup-node@v3
               with:
@@ -35,7 +30,7 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Node Dependencies
-              run: task code:install
+              run: ./task code:install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -64,7 +59,7 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: (ZENODO) Create new Zenodo version
-              run: task release:zenodo
+              run: ./task release:zenodo
               env:
                   ZENODO_ACCESS_TOKEN: ${{ secrets.ZENODO_ACCESS_TOKEN }}
                   ZENODO_ORIGINAL_ID: ${{ secrets.ZENODO_ORIGINAL_ID }}
