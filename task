@@ -18,7 +18,7 @@ export TASK_TASK_DIR
 cd "$TASK_ROOT_DIR"
 
 # Set PATH
-PATH="$(pwd)/node_modules/.bin:$PATH"
+PATH="${TASK_ROOT_DIR}/node_modules/.bin:$PATH"
 export PATH
 
 
