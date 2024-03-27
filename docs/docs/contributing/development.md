@@ -42,15 +42,15 @@ git push origin publication-stoetzner-2022-vdmm
 ## Command Line Interface
 
 !!! Info
-    `yarn cli` uses `src/cli/index.ts` while `yarn vintner` uses `build/cli/index.js`.
-    Therefore, run `yarn cli` to execute the current code without building it first.
+    `./task cli` uses `src/cli/index.ts` while `./task vintner` uses `build/cli/index.js`.
+    Therefore, run `./task cli` to execute the current code without building it first.
 
 We use [commander.js](https://github.com/tj/commander.js){target=_blank} to implement the CLI.
 The entry point is `src/cli/index.ts`.
 Execute a CLI command during development as follows.
 
 ```shell linenums="1"
-yarn cli [command] [options]
+./task cli -- [command] [options]
 ```
 
 ## Server
@@ -60,7 +60,7 @@ The entry point is `src/server/index.ts`.
 Run a development server on [http://localhost:3000](http://localhost:3000){target=_blank} with live-reload as follows.
 
 ```shell linenums="1"
-yarn server:serve
+./task server:serve
 ```
 
 ## Tests
@@ -70,7 +70,7 @@ Respective tests are inside the `tests` directory.
 Run the tests as follows.
 
 ```shell linenums="1"
-yarn test
+./task test
 ```
 
 On pushes to the `main` branch or on pull requests, the `tests` workflow is triggered. 
@@ -82,13 +82,13 @@ We use [ESLint](https://eslint.org){target=_blank} for code linting.
 Lint typescript as follows.
 
 ```shell linenums="1"
-yarn lint:check
+./task lint:check
 ```
 
 Fix lint problems as follows.
 
 ```shell linenums="1"
-yarn lint:fix
+./task lint:fix
 ```
 
 ## Code Style
@@ -97,13 +97,13 @@ We use [Prettier](https://prettier.io){target=_blank} for code formatting.
 Check the code style as follows.
 
 ```shell linenums="1"
-yarn style:check
+./task style:check
 ```
 
 Fix code style problems as follows.
 
 ```shell linenums="1"
-yarn style:fix
+./task style:fix
 ```
 
 ## Benchmark
@@ -111,7 +111,7 @@ yarn style:fix
 Run the following command, to run to benchmark the variability resolving.
 
 ```shell linenums="1"
-yarn benchmark
+./task benchmark
 ```
 
 ## Dependencies
@@ -121,7 +121,7 @@ Check that (transitive) dependencies are licensed as expected as follows.
 This check is also executed inside workflows.
 
 ```shell linenums="1"
-yarn dependencies:check
+./task dependencies:check
 ```
 
 ## Patch Packages 
@@ -134,5 +134,5 @@ First, make changes to the package inside `node_modules`.
 Then, create the patch.
 
 ```shell linenums="1"
-yarn patch-package --exclude 'nothing' ${package-name}
+./task patch-package --exclude 'nothing' ${package-name}
 ```

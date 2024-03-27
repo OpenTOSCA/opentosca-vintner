@@ -1,0 +1,1 @@
+./task examples:pull true

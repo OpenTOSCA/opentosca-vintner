@@ -39,8 +39,8 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-yarn --immutable
-yarn examples:pull:link
+./task code:install
+./task examples:pull:link
 ```
 
 ## Large Files
@@ -109,7 +109,7 @@ The following directories should be excluded from search by the IDE.
 - `.nyc_output`
 - `docs/.venv`
 - `build`
-- `build-docs`
+- `build-./tasks`
 - `coverage`
 - `yarn`
 - `dist`

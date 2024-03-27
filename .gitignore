@@ -22,7 +22,7 @@ yarn-error.log
 # e.g. node modules of plugins
 !tests/**/node_modules
 
-build-docs
+build-tasks
 dist-docs
 
 # xopera
@@ -69,3 +69,6 @@ opentosca-vintner-*.tgz
 *.nupkg
 choco/tools/vintner.exe
 choco/tools/vintner.exe.asc
+
+# Tasks
+!tasks/**/build

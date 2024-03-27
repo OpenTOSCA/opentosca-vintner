@@ -15,7 +15,7 @@ During the build, the string `__VERSION__` inside a Javascript file is replace w
 The current version can be checked using `vintner --version`.
 
 ```shell linenums="1"
-yarn build
+task code:build
 ```
 
 ## Package
@@ -27,7 +27,7 @@ This will package the previously transpiled Javascript using [`pkg`](https://git
 generate binaries inside the `/dist` directory.
 
 ```shell linenums="1"
-yarn package
+task code:package
 ```
 
 The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.
@@ -56,7 +56,7 @@ New versions are published manually.
 To publish a new version, first update the version number in `package.json` and then run
 
 ````shell linenums="1"
-yarn release:npm
+task release:npm
 ````
 
 ## Docker
@@ -86,7 +86,7 @@ Publish a new version as follows.
 This will use the latest release.
 
 ````shell linenums="1"
-yarn release:choco
+task release:choco
 ````
 
 ## Zenodo
