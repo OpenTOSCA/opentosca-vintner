@@ -2566,53 +2566,53 @@ For example, the following commands create and push the tag for the publication 
 <h2 id="command-line-interface">Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permanent link">¶</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p><code>yarn cli</code> uses <code>src/cli/index.ts</code> while <code>yarn vintner</code> uses <code>build/cli/index.js</code>.
-Therefore, run <code>yarn cli</code> to execute the current code without building it first.</p>
+<p><code>./task cli</code> uses <code>src/cli/index.ts</code> while <code>./task vintner</code> uses <code>build/cli/index.js</code>.
+Therefore, run <code>./task cli</code> to execute the current code without building it first.</p>
 </div>
 <p>We use <a href="https://github.com/tj/commander.js" target="_blank">commander.js</a> to implement the CLI.
 The entry point is <code>src/cli/index.ts</code>.
 Execute a CLI command during development as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>yarn<span class="w"> </span>cli<span class="w"> </span><span class="o">[</span>command<span class="o">]</span><span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>./task<span class="w"> </span>cli<span class="w"> </span>--<span class="w"> </span><span class="o">[</span>command<span class="o">]</span><span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="server">Server<a class="headerlink" href="#server" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://github.com/expressjs/express" target="_blank">express</a> to implement the server.
 The entry point is <code>src/server/index.ts</code>.
 Run a development server on <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> with live-reload as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>yarn<span class="w"> </span>server:serve
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>./task<span class="w"> </span>server:serve
 </code></pre></div></td></tr></table></div>
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://mochajs.org" target="_blank">mocha</a>, <a href="https://www.chaijs.com" target="_blank">chai</a>, and <a href="https://istanbul.js.org" target="_blank">nyc</a> for testing.
 Respective tests are inside the <code>tests</code> directory.
 Run the tests as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>yarn<span class="w"> </span><span class="nb">test</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>./task<span class="w"> </span><span class="nb">test</span>
 </code></pre></div></td></tr></table></div>
 <p>On pushes to the <code>main</code> branch or on pull requests, the <code>tests</code> workflow is triggered. 
 This workflow runs the tests.</p>
 <h2 id="lint">Lint<a class="headerlink" href="#lint" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://eslint.org" target="_blank">ESLint</a> for code linting.
 Lint typescript as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>yarn<span class="w"> </span>lint:check
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>./task<span class="w"> </span>lint:check
 </code></pre></div></td></tr></table></div>
 <p>Fix lint problems as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>yarn<span class="w"> </span>lint:fix
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>./task<span class="w"> </span>lint:fix
 </code></pre></div></td></tr></table></div>
 <h2 id="code-style">Code Style<a class="headerlink" href="#code-style" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://prettier.io" target="_blank">Prettier</a> for code formatting.
 Check the code style as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>yarn<span class="w"> </span>style:check
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>./task<span class="w"> </span>style:check
 </code></pre></div></td></tr></table></div>
 <p>Fix code style problems as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>yarn<span class="w"> </span>style:fix
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>./task<span class="w"> </span>style:fix
 </code></pre></div></td></tr></table></div>
 <h2 id="benchmark">Benchmark<a class="headerlink" href="#benchmark" title="Permanent link">¶</a></h2>
 <p>Run the following command, to run to benchmark the variability resolving.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>yarn<span class="w"> </span>benchmark
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>./task<span class="w"> </span>benchmark
 </code></pre></div></td></tr></table></div>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://github.com/davglass/license-checker" target="_blank">license-checker</a> to handle licenses of (transitive) dependencies.
 Check that (transitive) dependencies are licensed as expected as follows.
 This check is also executed inside workflows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>yarn<span class="w"> </span>dependencies:check
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>./task<span class="w"> </span>dependencies:check
 </code></pre></div></td></tr></table></div>
 <h2 id="patch-packages">Patch Packages<a class="headerlink" href="#patch-packages" title="Permanent link">¶</a></h2>
 <p>We use <a href="https://github.com/ds300/patch-package" target="_blank"><code>patch-package</code></a> to fix dependencies.
@@ -2620,14 +2620,14 @@ For example, adding <code>logic-solver.d.ts</code> to <a href="https://github.co
 Therefore, proceed as follows.</p>
 <p>First, make changes to the package inside <code>node_modules</code>. 
 Then, create the patch.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>yarn<span class="w"> </span>patch-package<span class="w"> </span>--exclude<span class="w"> </span><span class="s1">'nothing'</span><span class="w"> </span><span class="si">${</span><span class="nv">package</span><span class="p">-name</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>./task<span class="w"> </span>patch-package<span class="w"> </span>--exclude<span class="w"> </span><span class="s1">'nothing'</span><span class="w"> </span><span class="si">${</span><span class="nv">package</span><span class="p">-name</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 13, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 27, 2024</span>
 </small>
 </div>
 </article>
