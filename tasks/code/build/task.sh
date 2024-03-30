@@ -11,5 +11,5 @@ syncdir src/assets build/assets --quiet
 # Copy license
 cp LICENSE build/assets
 
-# Generate dependencies
-./task dependencies:generate >  build/assets/dependencies.csv
+# Generate dependency licenses report
+license-checker --production --csv > build/assets/dependencies.csv

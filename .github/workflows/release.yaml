@@ -56,9 +56,6 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: ./src/assets/scripts/install-xopera.sh
 
-            - name: (PREPARE) Generate Dependencies Page
-              run: ./task docs:generate:dependencies
-
             - name: (PREPARE) Build Project
               run: ./task code:build
 
@@ -169,8 +166,11 @@ jobs:
             - name: (DOCS) Install Dependencies
               run: ./task docs:install
 
-            - name: (DOCS) Build Documentation Commands
+            - name: (DOCS) Build Documentation Tasks
               run: ./task docs:build:tasks
+
+            - name: (DOCS) Generate Dependencies Page
+              run: ./task docs:generate:dependencies
 
             - name: (DOCS) Generate Interface Page
               run: ./task docs:generate:interface

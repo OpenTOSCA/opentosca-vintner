@@ -1,8 +1,3 @@
-/**
- * This script gathers the licences from all dependencies
- * and stores information in a CSV file.
- * At the same time the documentation page is generated.
- */
 import * as files from '#files'
 import std from '#std'
 import * as path from 'path'
