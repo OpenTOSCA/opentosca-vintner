@@ -44,7 +44,7 @@ The following environment variables are available.
 | TASK_TASK_DIR | The absolute path of the directory in which the task is located. |
 
 Note, there is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
-Also, Bash tasks are executed from the Project root directory.
+Also, Bash tasks are executed from the project root directory.
 
 ## Repository
 

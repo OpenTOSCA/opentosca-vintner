@@ -1,6 +1,17 @@
-ENTRIES=$(find ./tasks -depth -type d | awk -F / 'NF>=p; {p=NF}')
+DIRS=$(find ./tasks -depth -type d | awk -F / 'NF>=p; {p=NF}')
+while IFS= read -r DIR; do
+    CUT=${DIR:8}
+    TASK=${CUT////:}
 
-while IFS= read -r ENTRY; do
-    CUT=${ENTRY:8}
-    echo "${CUT////:}"
-done <<< "${ENTRIES}"
+    SUMMARY=""
+    SUMMARY_FILE=${DIR}/SUMMARY
+    if [ -f "${SUMMARY_FILE}" ]; then
+      SUMMARY=$(awk 'NR==1' "${SUMMARY_FILE}")
+      echo "${TASK} (${SUMMARY})"
+    else
+      echo "${TASK}"
+    fi
+
+
+done <<< "${DIRS}"
+
