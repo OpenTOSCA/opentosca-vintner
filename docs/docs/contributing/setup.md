@@ -32,9 +32,25 @@ corepack enable
 ## Tasks
 
 We use `./task` as build tool.
+
+### Using Tasks
+
+Execute a task as follows.
 On Windows, execute it using, e.g., Git Bash.
-Tasks written in Bash, Typescript, and Python are supported.
-Thereby, `./task some:command` executes `./tasks/some/command/task{.sh,.ts,.py}`.
+
+```shell linenums="1"
+./task [command]
+```
+
+Get an overview of tasks as follows.
+
+```shell linenums="1"
+./task list
+```
+
+### Writing Tasks
+
+Tasks can be written in Bash, Typescript, and Python and are located in `./tasks/some/command/task{.sh,.ts,.py}`.
 The following environment variables are available.
 
 | Environment   | Description                                                      | 
@@ -43,8 +59,13 @@ The following environment variables are available.
 | TASK_ROOT_DIR | The absolute path of the root directory of the project.          | 
 | TASK_TASK_DIR | The absolute path of the directory in which the task is located. |
 
-Note, there is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
-Also, Bash tasks are executed from the project root directory.
+Some hints:
+
+- There is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
+- Bash tasks are executed from `TASK_ROOT_DIR`.
+- To add a summary, place a single line in creating `${TASK_TASK_DIR}/summary`.
+- To add a help text for a task, place the text in creating `${TASK_TASK_DIR}/help`.
+
 
 ## Repository
 
@@ -126,7 +147,7 @@ The following directories should be excluded from search by the IDE.
 - `.nyc_output`
 - `docs/.venv`
 - `build`
-- `build-./tasks`
+- `build-tasks`
 - `coverage`
 - `yarn`
 - `dist`
