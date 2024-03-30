@@ -69,8 +69,8 @@ Some hints:
 
 - There is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
 - Bash tasks are executed from `TASK_ROOT_DIR`.
-- To add a summary, place a single line in creating `${TASK_TASK_DIR}/summary`.
-- To add a help text for a task, place the text in creating `${TASK_TASK_DIR}/help`.
+- To add a summary, place a single line in `${TASK_TASK_DIR}/summary`.
+- To add a help text for a task, place the text in `${TASK_TASK_DIR}/help`.
 - Always add a new line at the end of every file.
 
 
