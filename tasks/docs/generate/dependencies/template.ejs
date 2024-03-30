@@ -9,15 +9,12 @@ tags:
 
 This document holds the dependencies used in production.
 The list is available as [CSV](assets/documents/dependencies.csv).
-We ensure, that only the licenses <%- "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0;Public Domain".split(";").sort().map(license => `[${license}](${licenses[license]}){target=_blank}`).join(", ") -%> are used.
+We ensure, that only the licenses <%- "MIT;Apache-2.0;Python-2.0;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;PSF;0BSD;BlueOak-1.0.0;Public Domain".split(";").sort().join(", ") -%> are used.
 
-| ID | Dependency | Version | License |
-| --- | --- | --- | --- |
-<% data.forEach(({name, version, url, license}, index) => { -%>
-| <%- index + 1 %>  | [<%- name -%>](<%- url -%>){target=_blank} | <%- version -%> | <% license.split(' ').forEach( (value) => {
-  if(value.match('OR') || value.match('AND')) { -%><%- value -%> | <% } else { -%> [<%- value -%>](<%- licenses[value] -%>){target=_blank} |
-<% } -%>
-<% }) -%>
+| ID | Dependency | License | URL |
+| --- | --- | --- | ---  |
+<% data.forEach((row, index) => { -%>
+| <%- index + 1 %>  | <%= row[0] -%> | <%= row[1] -%> | [<%= row[2] -%>](<%= row[2] -%>){target=_blank} |
 <% }) %>
 
 We fixed the following issues by patching the dependencies.
