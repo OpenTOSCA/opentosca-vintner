@@ -6,6 +6,7 @@
     "tabWidth": 4,
     "printWidth": 120,
     "semi": false,
+    "endOfLine": "lf",
     "overrides": [
         {
             "files": ["*.yaml", "*.yml"],

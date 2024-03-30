@@ -170,7 +170,7 @@ jobs:
               run: ./task docs:install
 
             - name: (DOCS) Build Documentation Commands
-              run: ./task docs:build:commands
+              run: ./task docs:build:tasks
 
             - name: (DOCS) Generate Interface Page
               run: ./task docs:generate:interface

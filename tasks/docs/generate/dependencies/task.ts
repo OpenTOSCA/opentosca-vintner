@@ -6,36 +6,33 @@
 import * as files from '#files'
 import std from '#std'
 import * as path from 'path'
-import * as utils from './utils'
 
-const CSV_FILE = path.join('docs', 'docs', 'assets', 'documents', 'dependencies.csv')
+const SOURCE = path.join('build', 'assets', 'dependencies.csv')
+
+const TARGET_CSV = path.join('docs', 'docs', 'assets', 'documents', 'dependencies.csv')
+const TARGET_MD = path.join('docs', 'docs', 'dependencies.md')
+const TEMPLATE = path.join(__dirname, 'template.ejs')
 
 async function main() {
     /**
-     * Read current dependencies
+     * Copy dependencies
      */
-    const dependencies = await utils.gatherFromLicenseChecker()
-    std.log('Current dependencies retrieved. There are ', dependencies.length, ' Entries')
+    files.copy(SOURCE, TARGET_CSV)
 
     /**
-     * Remove older version if a newer version with the same license exists
+     * Current dependencies
      */
-    utils.removeDependencyVersionsWithSameLicense(dependencies)
-
-    /**
-     * Write list to file
-     */
-    std.log('Store CSV')
-    utils.storeData(dependencies, CSV_FILE)
+    const dependencies = files
+        .loadFile(SOURCE)
+        .split(/\r?\n/)
+        .filter(it => it != '')
+        .map(it => it.split(',').map(it => it.slice(1, -1)))
+        .slice(1)
 
     /**
      * Generate documentation page for dependency table
      */
-    await files.renderFile(
-        path.join(__dirname, 'template.ejs'),
-        {data: dependencies, licenses: utils.LICENSES},
-        path.join('docs', 'docs', 'dependencies.md')
-    )
+    await files.renderFile(TEMPLATE, {data: dependencies}, TARGET_MD)
     std.log('Documentation page generated')
 }
 
