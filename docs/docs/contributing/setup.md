@@ -39,13 +39,19 @@ Execute a task as follows.
 On Windows, execute it using, e.g., Git Bash.
 
 ```shell linenums="1"
-./task [command]
+./task [task]
 ```
 
 Get an overview of tasks as follows.
 
 ```shell linenums="1"
 ./task list
+```
+
+Get help for a specific task as follows.
+
+```shell linenums="1"
+./task help [task]
 ```
 
 ### Writing Tasks
