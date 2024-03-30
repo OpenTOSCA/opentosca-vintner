@@ -29,11 +29,11 @@ jobs:
                   node-version: 18.15.0
                   cache: yarn
 
-            - name: (PREPARE) Build Tasks
-              run: ./task tasks:build
-
             - name: (PREPARE) Install Dependencies
               run: ./task install
+
+            - name: (PREPARE) Build Tasks
+              run: ./task tasks:build
 
             - name: (PREPARE) Build Project
               run: ./task build
