@@ -29,6 +29,23 @@ Install it as follows.
 corepack enable
 ```
 
+## Tasks
+
+We use `./task` as build tool.
+On Windows, execute it using, e.g., Git Bash.
+Tasks written in Bash, Typescript, and Python are supported.
+Thereby, `./task some:command` executes `./tasks/some/command/task{.sh,.ts,.py}`.
+The following environment variables are available.
+
+| Environment   | Description                                                      | 
+|---------------|------------------------------------------------------------------| 
+| TASK_BINARY   | The absolute path of `./task`.                                   | 
+| TASK_ROOT_DIR | The absolute path of the root directory of the project.          | 
+| TASK_TASK_DIR | The absolute path of the directory in which the task is located. |
+
+Note, there is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
+Also, Bash tasks are executed from the Project root directory.
+
 ## Repository
 
 The repository is a monorepo consisting of the CLI, server, docs, tests, etc.
