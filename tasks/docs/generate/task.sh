@@ -1,5 +1,5 @@
 echo "Building commands ..."
-./task docs:build:tasks
+./task build:tasks
 
 echo "Generating docs ..."
 ./task docs:generate:interface

@@ -15,7 +15,7 @@ During the build, the string `__VERSION__` inside a Javascript file is replace w
 The current version can be checked using `vintner --version`.
 
 ```shell linenums="1"
-task code:build
+task build
 ```
 
 ## Package
@@ -27,7 +27,7 @@ This will package the previously transpiled Javascript using [`pkg`](https://git
 generate binaries inside the `/dist` directory.
 
 ```shell linenums="1"
-task code:package
+task package
 ```
 
 The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.

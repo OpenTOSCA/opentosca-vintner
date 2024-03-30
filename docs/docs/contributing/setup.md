@@ -29,6 +29,51 @@ Install it as follows.
 corepack enable
 ```
 
+## Tasks
+
+We use `./task` as build tool.
+
+### Using Tasks
+
+Execute a task as follows.
+On Windows, execute it using, e.g., Git Bash.
+
+```shell linenums="1"
+./task [task]
+```
+
+Get an overview of tasks as follows.
+
+```shell linenums="1"
+./task tasks:list
+```
+
+Get help for a specific task as follows.
+
+```shell linenums="1"
+./task tasks:help [task]
+```
+
+### Writing Tasks
+
+Tasks can be written in Bash, Typescript, and Python and are located in `./tasks/some/command/task{.sh,.ts,.py}`.
+The following environment variables are available.
+
+| Environment   | Description                                                      | 
+|---------------|------------------------------------------------------------------| 
+| TASK_BINARY   | The absolute path of `./task`.                                   | 
+| TASK_ROOT_DIR | The absolute path of the root directory of the project.          | 
+| TASK_TASK_DIR | The absolute path of the directory in which the task is located. |
+
+Some hints:
+
+- There is no need to include `#!/usr/bin/bash` or `set -e` in Bash tasks.
+- Bash tasks are executed from `TASK_ROOT_DIR`.
+- To add a summary, place a single line in `${TASK_TASK_DIR}/summary`.
+- To add a help text for a task, place the text in `${TASK_TASK_DIR}/help`.
+- Always add a new line at the end of every file.
+
+
 ## Repository
 
 The repository is a monorepo consisting of the CLI, server, docs, tests, etc.
@@ -39,7 +84,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-./task code:install
+./task install
 ./task examples:pull:link
 ```
 
@@ -109,7 +154,7 @@ The following directories should be excluded from search by the IDE.
 - `.nyc_output`
 - `docs/.venv`
 - `build`
-- `build-./tasks`
+- `build-tasks`
 - `coverage`
 - `yarn`
 - `dist`

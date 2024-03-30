@@ -21,16 +21,15 @@ cd "$TASK_ROOT_DIR"
 PATH="${TASK_ROOT_DIR}/node_modules/.bin:$PATH"
 export PATH
 
-
 # Ensure that first argument exists
-COMMAND="$1"
-if [ -z "${COMMAND}" ]; then
-  echo "First argument must be the command to execute"
+TASK="$1"
+if [ -z "${TASK}" ]; then
+  echo "First argument must be the task to execute"
   exit 1
 fi
 
 # Replace ":" with "/"
-REPLACED="${COMMAND//://}"
+REPLACED="${TASK//://}"
 
 # Run task.sh
 TASK_SH=tasks/${REPLACED}/task.sh
@@ -61,5 +60,5 @@ if [ -f "${TASK_PY}" ]; then
 fi
 
 # Throw
-echo Did not find command "${COMMAND}"
+echo Did not find task "${TASK}"
 exit 1
