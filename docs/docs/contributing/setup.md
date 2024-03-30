@@ -65,6 +65,7 @@ Some hints:
 - Bash tasks are executed from `TASK_ROOT_DIR`.
 - To add a summary, place a single line in creating `${TASK_TASK_DIR}/summary`.
 - To add a help text for a task, place the text in creating `${TASK_TASK_DIR}/help`.
+- Always add a new line at the end of every file.
 
 
 ## Repository

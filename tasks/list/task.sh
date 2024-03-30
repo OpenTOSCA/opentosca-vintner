@@ -12,6 +12,4 @@ while IFS= read -r DIR; do
       echo "${TASK}"
     fi
 
-
 done <<< "${DIRS}"
-
