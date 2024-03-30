@@ -29,11 +29,14 @@ jobs:
                   node-version: 18.15.0
                   cache: yarn
 
+            - name: (PREPARE) Build Tasks
+              run: ./task tasks:build
+
             - name: (PREPARE) Install Dependencies
-              run: ./task code:install
+              run: ./task build
 
             - name: (PREPARE) Build Project
-              run: ./task code:build
+              run: ./task build
 
             - name: (PREPARE) Pull Example Dependencies
               run: ./task examples:pull
@@ -51,7 +54,7 @@ jobs:
                   key: pkg
 
             - name: (PACKAGE) Package Binaries
-              run: ./task code:package
+              run: ./task package
 
             - name: (BUILD) Import Signing Key
               uses: crazy-max/ghaction-import-gpg@v5
@@ -109,9 +112,6 @@ jobs:
 
             - name: (DOCS) Install Dependencies
               run: ./task docs:install
-
-            - name: (DOCS) Build Documentation Tasks
-              run: ./task docs:build:tasks
 
             - name: (DOCS) Generate Dependencies Page
               run: ./task docs:generate:dependencies

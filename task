@@ -21,7 +21,6 @@ cd "$TASK_ROOT_DIR"
 PATH="${TASK_ROOT_DIR}/node_modules/.bin:$PATH"
 export PATH
 
-
 # Ensure that first argument exists
 TASK="$1"
 if [ -z "${TASK}" ]; then

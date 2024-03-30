@@ -45,13 +45,13 @@ On Windows, execute it using, e.g., Git Bash.
 Get an overview of tasks as follows.
 
 ```shell linenums="1"
-./task list
+./task tasks:list
 ```
 
 Get help for a specific task as follows.
 
 ```shell linenums="1"
-./task help [task]
+./task tasks:help [task]
 ```
 
 ### Writing Tasks
@@ -84,7 +84,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-./task code:install
+./task build
 ./task examples:pull:link
 ```
 

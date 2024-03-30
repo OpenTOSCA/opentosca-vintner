@@ -1,5 +1,5 @@
 # Prepack
-./task code:build
+./task build
 
 # Publish on NPM
 npm publish
