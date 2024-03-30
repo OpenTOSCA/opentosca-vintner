@@ -78,7 +78,7 @@ jobs:
               run: ./task style:check
 
             - name: (TEST) Check Dependencies
-              run: ./task dependencies:check
+              run: ./task licenses:check
 
             - name: (TEST) Check Service Templates
               run: ./task puccini:check

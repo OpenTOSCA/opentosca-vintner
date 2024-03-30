@@ -1,2 +1,2 @@
 # Install dependencies
-./task dependencies:install
+yarn --immutable

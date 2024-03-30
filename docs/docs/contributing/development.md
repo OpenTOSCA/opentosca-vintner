@@ -121,7 +121,7 @@ Check that (transitive) dependencies are licensed as expected as follows.
 This check is also executed inside workflows.
 
 ```shell linenums="1"
-./task dependencies:check
+./task licenses:check
 ```
 
 ## Patch Packages 
