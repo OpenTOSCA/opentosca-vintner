@@ -33,7 +33,7 @@ jobs:
               run: ./task tasks:build
 
             - name: (PREPARE) Install Dependencies
-              run: ./task build
+              run: ./task install
 
             - name: (PREPARE) Build Project
               run: ./task build

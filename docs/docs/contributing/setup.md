@@ -84,7 +84,7 @@ git clone https://github.com/opentosca/opentosca-vintner.git
 cd opentosca-vintner
 git lfs install
 git lfs pull
-./task build
+./task install
 ./task examples:pull:link
 ```
 

@@ -42,7 +42,7 @@ jobs:
               run: ./task tasks:build
 
             - name: (PREPARE) Install Dependencies
-              run: ./task build
+              run: ./task install
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
