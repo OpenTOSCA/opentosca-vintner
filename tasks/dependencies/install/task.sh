@@ -1,0 +1,2 @@
+# Install dependencies
+yarn --immutable
