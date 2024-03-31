@@ -77,7 +77,7 @@ async function load(options: ResolveOptions) {
     for (const preset of options.presets) {
         const set: InputAssignmentPreset | undefined = (options.template.topology_template?.variability?.presets || {})[
             preset
-            ]
+        ]
         assert.isDefined(set, `Did not find variability preset "${preset}"`)
         inputs.setInputs(set.inputs)
     }

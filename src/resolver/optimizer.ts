@@ -11,7 +11,6 @@ export default class Optimizer {
         this.results = results
     }
 
-
     run() {
         this.optimize()
 

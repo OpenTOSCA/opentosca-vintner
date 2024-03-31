@@ -1,9 +1,9 @@
 import * as check from '#check'
+import {TemplateQuality} from '#controller/template/quality'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import * as utils from '#utils'
 import MiniSat from 'logic-solver'
-import {TemplateQuality} from '#controller/template/quality'
 
 export type ResultMap = Record<string, boolean>
 
@@ -22,7 +22,6 @@ export class Result {
         this.topology = this.weightTopology()
         this.technologies = this.weightTechnologies()
         this.quality = this.assessQuality()
-
     }
 
     private _map?: ResultMap
