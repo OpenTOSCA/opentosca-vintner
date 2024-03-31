@@ -474,7 +474,6 @@ template
         })
     )
 
-
 template
     .command('quality')
     .description('get quality of template (experimental)')
@@ -489,6 +488,8 @@ template
     .action(
         hae.exit(async options => {
             std.out(await Controller.template.quality(options))
+        })
+    )
 
 const puml = template.command('puml').description('generate puml')
 
