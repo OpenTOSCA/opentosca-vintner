@@ -1,0 +1,2 @@
+# Test
+./task test:local

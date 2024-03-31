@@ -62,7 +62,7 @@ export class Unfurl implements Orchestrator {
          * On Windows the following error is thrown:
          * Error: EPERM: operation not permitted, unlink '\\?\C:\Users\stoetzms\AppData\Local\Temp\opentosca-vintner--07c9d77e-07ac-4431-9621-1ff61e8f7dc3\tosca_repositories\spec'
          */
-        if (platform.linux) files.deleteDirectory(tmp)
+        if (platform.linux) files.removeDirectory(tmp)
     }
 
     /**

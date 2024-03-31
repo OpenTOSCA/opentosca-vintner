@@ -4,5 +4,5 @@ import {Instances} from '#repositories/instances'
 export type InstancesCleanOptions = {}
 
 export default async function (options: InstancesCleanOptions) {
-    files.deleteDirectory(Instances.getInstancesDirectory())
+    files.removeDirectory(Instances.getInstancesDirectory())
 }

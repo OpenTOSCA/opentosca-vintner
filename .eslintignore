@@ -1,6 +1,6 @@
 dist
 build
-build-docs
+build-tasks
 node_modules
 
 **/*.min.js

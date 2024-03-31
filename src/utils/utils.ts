@@ -187,3 +187,10 @@ export function filter(unfiltered: {[key: string]: boolean}, filter: RegExp) {
 export function sum(values: number[]) {
     return values.reduce((sum, value) => sum + value, 0)
 }
+
+export function replace(data: string, entries: [find: string, replace: string][]) {
+    for (const entry of entries) {
+        data = data.replaceAll(entry[0], entry[1])
+    }
+    return data
+}

@@ -1,6 +1,0 @@
-version: '3.5'
-services:
-    puml:
-        image: plantuml/plantuml-server
-        ports:
-            - 8080:8080

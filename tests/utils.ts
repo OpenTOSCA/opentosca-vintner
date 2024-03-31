@@ -1,3 +1,4 @@
+import * as check from '#check'
 import Controller from '#controller'
 import {
     VariabilityTestGroup,
@@ -7,10 +8,12 @@ import {
     loadExpected,
 } from '#controller/template/test'
 import * as files from '#files'
+import {loadFile, storeFile} from '#files'
 import Loader from '#graph/loader'
 import std from '#std'
-import {toList} from '#utils/utils'
+import * as utils from '#utils/utils'
 import {expect} from 'chai'
+import _ from 'lodash'
 import path from 'path'
 
 export async function expectAsyncThrow(fn: () => Promise<unknown>, error: string) {
@@ -70,7 +73,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 template: getVariableServiceTemplate({dir: vstdir ?? dir, file: config.template}),
                 inputs: getDefaultInputs(dir),
                 output,
-                presets: toList(config.presets),
+                presets: utils.toList(config.presets),
             })
         }
 
@@ -78,8 +81,26 @@ export function getDefaultTest(dir: string, vstdir?: string) {
             await expectAsyncThrow(fn, config.error)
         } else {
             await fn()
+
+            /**
+             * Search and replace string in result, e.g., to align node template names restricted in case studies
+             */
+            if (check.isDefined(config.replace)) {
+                let data = loadFile(output)
+                data = utils.replace(data, config.replace)
+                storeFile(output, data, {onlyIfChanged: true})
+            }
+
             const result = new Loader(output).raw()
             const expected = loadExpected({dir, file: config.expected})
+
+            /**
+             * Adapt output by merging with custom JSON, e.g., for patching additional properties in case studies
+             */
+            if (check.isDefined(config.merge)) {
+                _.merge(expected, config.merge)
+            }
+
             expect(result).to.deep.equal(expected)
         }
     }

@@ -1,0 +1,148 @@
+tosca_definitions_version: tosca_variability_1_0_rc_2
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        os_network:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_key_name:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_user:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_key_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_region_name:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_auth_type:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_auth_url:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_identity_api_version:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_interface:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_application_credential_id:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_application_credential_secret:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        gcp_region:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        gcp_service_account_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        gcp_project:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+    variability:
+        inputs:
+            env:
+                type: string
+            medium:
+                type: boolean
+
+    node_templates:
+        shop:
+            type: shop.component
+            persistent: true
+            technology:
+                - ansible:
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - terraform:
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+            properties:
+                - application_name: unfurl-technology
+                - DB_NAME: unfurl-technology
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: database_password}
+                - DB_DIALECT: mysql
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+            requirements:
+                - database: database
+                - host:
+                      node: os_compute
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - host:
+                      node: gcp_runtime
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        database:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - terraform:
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+            properties:
+                - database_name: unfurl-technology
+            requirements:
+                - host:
+                      node: mysql_dbms
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - host:
+                      node: gcp_dbms
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        mysql_dbms:
+            type: mysql.dbms
+            technology: ansible
+            properties:
+                - root_password: {get_input: database_password}
+            requirements:
+                - host: os_compute
+
+        os_compute:
+            type: os.compute
+            technology: terraform
+            properties:
+                - machine: unfurl-technology
+                - ports: [80, 3000]
+                - network: {get_input: os_network}
+                - flavor:
+                      value: m1.medium
+                      conditions: {variability_input: medium}
+                - flavor:
+                      value: m1.large
+                      conditions: {not: {variability_input: medium}}
+
+        gcp_dbms:
+            type: gcp.cloud_sql
+            technology: terraform
+            properties:
+                - instance_name: unfurl-technology
+                - root_password: {get_input: database_password}
+
+        gcp_runtime:
+            type: gcp.app_engine
+            technology: terraform

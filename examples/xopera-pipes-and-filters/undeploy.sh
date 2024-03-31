@@ -1,5 +1,5 @@
 #! /usr/bin/bash
 set -e
 
-yarn cli instances undeploy --instance pipes-and-filters
-yarn cli setup clean --force
+task cli -- instances undeploy --instance pipes-and-filters
+task cli -- setup clean --force

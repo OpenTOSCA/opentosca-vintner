@@ -2,7 +2,7 @@
 set -e
 
 echo "TOSCA"
-yarn cli template stats \
+task cli -- template stats \
   --template examples/unfurl-artifacts/stats/service-template-business-de.yaml \
   --template examples/unfurl-artifacts/stats/service-template-business-en.yaml \
   --template examples/unfurl-artifacts/stats/service-template-business-es.yaml \
@@ -15,9 +15,9 @@ yarn cli template stats \
 echo
 
 echo "VDMMv1"
-yarn cli template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v1.yaml
+task cli -- template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v1.yaml
 echo
 
 echo "VDMMv2"
-yarn cli template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v2.yaml
+task cli -- template stats --experimental --template examples/unfurl-artifacts/stats/variable-service-template-v2.yaml
 echo

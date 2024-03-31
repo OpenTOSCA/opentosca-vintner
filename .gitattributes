@@ -18,4 +18,4 @@
 *.png  binary
 *.jpeg binary
 
-docs/cmds/mkdocs text eol=lf
+docs/mkdocs text eol=lf

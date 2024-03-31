@@ -1,0 +1,3 @@
+dependencies:
+    - source: ../unfurl-technology-conditional-quality-maintenance/lib
+    - source: ../unfurl-technology-conditional-quality-maintenance/files

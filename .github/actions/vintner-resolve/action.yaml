@@ -4,7 +4,7 @@ inputs:
         required: true
 
     preset:
-        required: true
+        required: false
 
     orchestrator:
         required: true
@@ -12,13 +12,34 @@ inputs:
 runs:
     using: 'composite'
     steps:
+        - name: (VINTNER) Pull dependencies
+          shell: bash
+          run: vintner template pull --dir examples/${EXAMPLE}
+          env:
+              EXAMPLE: ${{ inputs.example }}
+
+        - name: (VINTNER) Import template
+          shell: bash
+          run: vintner templates import --template template --path examples/${EXAMPLE}
+          env:
+              EXAMPLE: ${{ inputs.example }}
+
+        - name: (VINTNER) Init instance
+          shell: bash
+          run: vintner instances init --instance instance --template template
+
         - name: (VINTNER) Resolve variability
           shell: bash
           run: |
-              vintner template pull --template examples/${EXAMPLE}
-              vintner templates import --template template --path examples/${EXAMPLE}
-              vintner instances init --instance instance --template template
-              vintner instances resolve --instance instance --presets ${PRESET}
+              VINTNER_ARGS=""
+              if [ -f "/tmp/variability-inputs.yaml" ]; then
+                VINTNER_ARGS="${VINTNER_ARGS} --inputs /tmp/variability-inputs.yaml"
+              fi
+
+              if [ -n "${PRESET}" ]; then
+                VINTNER_ARGS="${VINTNER_ARGS} --presets ${PRESET}"
+              fi
+
+              vintner instances resolve --instance instance ${VINTNER_ARGS}
           env:
-              EXAMPLE: ${{ inputs.example }}
               PRESET: ${{ inputs.preset }}

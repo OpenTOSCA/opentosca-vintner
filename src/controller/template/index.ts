@@ -5,14 +5,15 @@ import _normalize from './normalize'
 import _package from './package'
 import _pull from './pull'
 import PUMLController from './puml'
+import _quality from './quality'
 import _query from './query'
 import _resolve from './resolve'
 import _sign from './sign'
 import _stats from './stats'
 import _test from './test'
 import _unpackage from './unpackage'
+import _unpull from './unpull'
 import _verify from './verify'
-import _quality from './quality'
 
 export default {
     init: _init,
@@ -30,4 +31,5 @@ export default {
     verify: _verify,
     pull: _pull,
     quality: _quality,
+    unpull: _unpull,
 }

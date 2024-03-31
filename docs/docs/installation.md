@@ -191,7 +191,7 @@ docker logs -f vintner
 
 ### Debugging the Container
 
-In case we need to debug something inside the container or perform any administrative tasks, we can exec into the container as follows. 
+In case we need to debug something inside the container or perform any administrative ./tasks, we can exec into the container as follows. 
 This starts a shell inside the container.
 
 ```shell linenums="1"

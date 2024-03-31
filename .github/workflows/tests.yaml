@@ -31,7 +31,10 @@ jobs:
                   cache: yarn
 
             - name: (PREPARE) Install Node Modules
-              run: rm -rf node_modules && yarn --immutable
+              run: ./task install
+
+            - name: (PREPARE) Build Tasks
+              run: ./task tasks:build
 
             - name: (PREPARE) Setup Python
               uses: actions/setup-python@v4
@@ -48,16 +51,11 @@ jobs:
             - name: (PREPARE) Install xOpera
               run: ./src/assets/scripts/install-xopera.sh
 
-            # TODO: split this up
-            # Before "yarn build" since "dependencies.csv" is packaged
-            - name: (PREPARE) Generate Dependencies Page
-              run: yarn docs:generate:dependencies
-
             - name: (PREPARE) Build Project
-              run: yarn build
+              run: ./task build
 
             - name: (PREPARE) Pull Example Dependencies
-              run: yarn examples:pull
+              run: ./task examples:pull
 
             ###################################################
             #
@@ -66,19 +64,19 @@ jobs:
             ###################################################
 
             - name: (TEST) Check ESLint
-              run: yarn lint:check
+              run: ./task lint:check
 
             - name: (TEST) Check Prettier
-              run: yarn style:check
+              run: ./task style:check
 
             - name: (TEST) Check Dependencies
-              run: yarn dependencies:check
+              run: ./task licenses:check
 
             - name: (TEST) Check Service Templates
-              run: yarn puccini:check
+              run: ./task puccini:check
 
             - name: (TEST) Run Tests
-              run: yarn test
+              run: ./task test
 
             ###################################################
             #
@@ -93,7 +91,7 @@ jobs:
                   key: pkg
 
             - name: (PACKAGE) Package Binaries
-              run: yarn package
+              run: ./task package
 
             ###################################################
             #
@@ -127,25 +125,25 @@ jobs:
             ###################################################
 
             - name: (DOCS) Install Dependencies
-              run: yarn docs:install
+              run: ./task docs:install
 
-            - name: (DOCS) Build Documentation Commands
-              run: yarn docs:build:commands
+            - name: (DOCS) Generate Dependencies Page
+              run: ./task docs:generate:dependencies
 
             - name: (DOCS) Generate Interface Page
-              run: yarn docs:generate:interface
+              run: ./task docs:generate:interface
 
             - name: (DOCS) Generate Variability4TOSCA Conformance Test Pages
-              run: yarn docs:generate:tests:variability
+              run: ./task docs:generate:variability
 
             - name: (DOCS) Generate Queries4TOSCA Conformance Test Pages
-              run: yarn docs:generate:tests:query
+              run: ./task docs:generate:query
 
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
-              run: yarn docs:generate:sofdcar
+              run: ./task docs:generate:sofdcar
 
             - name: (DOCS) Generate PlantUML of Service Templates
-              run: yarn docs:generate:puml
+              run: ./task docs:generate:puml
 
             - name: (DOCS) Build Docs
-              run: yarn docs:build
+              run: ./task docs:build

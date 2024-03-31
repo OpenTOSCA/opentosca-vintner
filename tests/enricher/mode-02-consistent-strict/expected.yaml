@@ -12,14 +12,7 @@ topology_template:
                   - host:
                         node: virtual_machine
                         conditions:
-                            - {
-                                  and:
-                                      [
-                                          {node_presence: application, _generated: true},
-                                          {node_presence: virtual_machine, _generated: true},
-                                      ],
-                                  _generated: true,
-                              }
+                            - {and: [{node_presence: application, _generated: true}, {node_presence: virtual_machine, _generated: true}], _generated: true}
 
         - virtual_machine:
               type:
@@ -32,14 +25,7 @@ topology_template:
                   - host:
                         node: private_cloud
                         conditions:
-                            - {
-                                  and:
-                                      [
-                                          {node_presence: virtual_machine, _generated: true},
-                                          {node_presence: private_cloud, _generated: true},
-                                      ],
-                                  _generated: true,
-                              }
+                            - {and: [{node_presence: virtual_machine, _generated: true}, {node_presence: private_cloud, _generated: true}], _generated: true}
 
         - private_cloud:
               type:

@@ -6,7 +6,6 @@ import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fss from 'fs'
 import * as fse from 'fs-extra'
-import Glob from 'glob'
 import * as yaml from 'js-yaml'
 import lnk from 'lnk'
 import _ from 'lodash'
@@ -63,6 +62,14 @@ export function getSize(file: string) {
 export function countLines(file: string) {
     assertFile(file)
     return fss.readFileSync(path.resolve(file), 'utf-8').split(/\r?\n/).length
+}
+
+export function countNotBlankLines(file: string) {
+    assertFile(file)
+    return fss
+        .readFileSync(path.resolve(file), 'utf-8')
+        .split(/\r?\n/)
+        .filter(it => it).length
 }
 
 export function isLink(path: string) {
@@ -178,7 +185,17 @@ export function createDirectory(directory: string) {
     }
 }
 
-export function deleteDirectory(directory: string) {
+export async function remove(it: string) {
+    if (!exists(it)) return
+
+    if (isDirectory(it)) {
+        removeDirectory(it)
+    } else {
+        await removeFile(it)
+    }
+}
+
+export function removeDirectory(directory: string) {
     const resolved = path.resolve(directory)
 
     if (['/', '/etc', '/c', '/mnt', '/mnt/c', 'C:\\Windows\\system32', 'C:\\'].includes(resolved))
@@ -187,7 +204,7 @@ export function deleteDirectory(directory: string) {
     fss.rmSync(resolved, {recursive: true, force: true})
 }
 
-export async function deleteFile(file: string) {
+export async function removeFile(file: string) {
     fss.unlinkSync(path.resolve(file))
 }
 
@@ -262,8 +279,4 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
 
 export function stat(file: string) {
     return fss.statSync(file)
-}
-
-export async function glob(pattern: string | string[], options?: Glob.GlobOptionsWithFileTypesUnset) {
-    return Glob.glob(pattern, options)
 }

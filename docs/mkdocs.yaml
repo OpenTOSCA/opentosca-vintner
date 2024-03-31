@@ -84,11 +84,9 @@ plugins:
           enabled: !ENV [MKDOCS_REVISION_ENABLED, true]
           strict: false
     - build_plantuml:
-          #render: 'local'
-          #bin_path: 'cmds/puml/plantuml'
           render: 'server'
-          server: !ENV [MKDOCS_PUML_SERVER, https://www.plantuml.com/plantuml]
-          disable_ssl_certificate_validation: !ENV [MKDOCS_PUML_SERVER_SSL, false]
+          server: https://www.plantuml.com/plantuml
+          disable_ssl_certificate_validation: false
           output_format: 'svg'
           diagram_root: 'docs'
           output_folder: '.'

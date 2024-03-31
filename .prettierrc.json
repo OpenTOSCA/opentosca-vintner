@@ -5,5 +5,20 @@
     "arrowParens": "avoid",
     "tabWidth": 4,
     "printWidth": 120,
-    "semi": false
+    "semi": false,
+    "endOfLine": "lf",
+    "overrides": [
+        {
+            "files": ["*.yaml", "*.yml"],
+            "options": {
+                "bracketSpacing": false,
+                "singleQuote": true,
+                "trailingComma": "es5",
+                "arrowParens": "avoid",
+                "tabWidth": 4,
+                "printWidth": 160,
+                "semi": false
+            }
+        }
+    ]
 }

@@ -16,6 +16,9 @@ program.name('vintner').version(env.version)
 
 Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.`)
 
+/**
+ * Setup
+ */
 const setup = program.command('setup').description('setups the filesystem')
 
 setup
@@ -96,6 +99,9 @@ setup
         })
     )
 
+/**
+ * Info
+ */
 const info = program.command('info').description('infos about vintner')
 
 info.command('about')
@@ -158,6 +164,9 @@ info.command('dependencies')
         })
     )
 
+/**
+ * Install
+ */
 const install = program.command('install').description('installs utils (Linux is required)')
 
 install
@@ -223,6 +232,9 @@ install
         })
     )
 
+/**
+ * Orchestrators
+ */
 const orchestrators = program.command('orchestrators').description('configures orchestrators')
 
 orchestrators
@@ -295,21 +307,9 @@ initOrchestrators
         })
     )
 
-program
-    .command('query')
-    .description('runs a query and returns the result')
-    .requiredOption('--query <string>', 'path to query or query string')
-    .option('--source [string]', 'specifies where to search for template to query', 'vintner')
-    .option('--output [string]', 'path of the output')
-    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
-    .action(
-        hae.exit(async options => {
-            const result = await Controller.query.run(options)
-            if (options.format === 'yaml') std.out(files.toYAML(result))
-            if (options.format === 'json') std.out(files.toJSON(result))
-        })
-    )
-
+/**
+ * Template
+ */
 const template = program.command('template').description('handles stand-alone variable service templates')
 
 template
@@ -317,7 +317,7 @@ template
     .description('initializes a CSAR')
     .requiredOption('--path <string>', 'path of the directory')
     .option('--template <string>', 'template name (default: directory name of --path)')
-    .option('--vintner <string>', 'vintner binary to execute', 'yarn cli')
+    .option('--vintner <string>', 'vintner binary to execute', 'task cli --')
     .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
     .action(
         hae.exit(async options => {
@@ -456,13 +456,24 @@ template
 template
     .command('pull')
     .description('pull template dependencies')
-    .requiredOption('--template <string>', 'path to service template directory')
+    .requiredOption('--dir <string>', 'path to service template directory')
     .option('--link [boolean]', 'create symbolic links instead of copying files', false)
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
         })
     )
+
+template
+    .command('unpull')
+    .description('unpull template dependencies')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unpull(options)
+        })
+    )
+
 
 template
     .command('quality')
@@ -478,8 +489,6 @@ template
     .action(
         hae.exit(async options => {
             std.out(await Controller.template.quality(options))
-        })
-    )
 
 const puml = template.command('puml').description('generate puml')
 
@@ -506,6 +515,9 @@ const pumlTypes = puml
         })
     )
 
+/**
+ * Templates
+ */
 const templates = program.command('templates').description('handles templates repository')
 
 templates
@@ -593,6 +605,9 @@ templates
         })
     )
 
+/**
+ * Instances
+ */
 const instances = program.command('instances').description('handles instances')
 
 instances
@@ -701,6 +716,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
+    .option('--retry [boolean]', 'retry', true)
     .option('--verbose [boolean]', 'verbose')
     .action(
         hae.exit(async options => {
@@ -783,6 +799,9 @@ instances
         })
     )
 
+/**
+ * Server
+ */
 const server = program.command('server').description('handles the server')
 
 server
@@ -796,6 +815,9 @@ server
         })
     )
 
+/**
+ * Sensors
+ */
 const sensors = program.command('sensors').description('handles sensors')
 
 sensors
@@ -855,6 +877,9 @@ sensors
         })
     )
 
+/**
+ * Assets
+ */
 const assets = program.command('assets').description('manages assets')
 
 assets
@@ -909,6 +934,9 @@ assets
         })
     )
 
+/**
+ * Utils
+ */
 const utils = program.command('utils').description('some utilities')
 
 utils
@@ -928,5 +956,23 @@ utils
     .action(
         hae.exit(async options => {
             await Controller.utils.key(options)
+        })
+    )
+
+/**
+ * Query
+ */
+program
+    .command('query')
+    .description('runs a query and returns the result')
+    .requiredOption('--query <string>', 'path to query or query string')
+    .option('--source [string]', 'specifies where to search for template to query', 'vintner')
+    .option('--output [string]', 'path of the output')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
+    .action(
+        hae.exit(async options => {
+            const result = await Controller.query.run(options)
+            if (options.format === 'yaml') std.out(files.toYAML(result))
+            if (options.format === 'json') std.out(files.toJSON(result))
         })
     )
