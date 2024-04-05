@@ -23,6 +23,7 @@ This document holds a list of selected publications.
 - {{ tag_link('publication-stoetzner-2024-hosting-aware-pruning') }}
 
 
+
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
 
 - CLOSER 2024
@@ -35,19 +36,44 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10363694){target=_blank}
 - {{ tag_link('publication-stoetzner-2024-pruning-modes') }}
 
+
 ## A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators
 
+> Stötzner, M., Becker, S., Harzenetter, L., Leymann, F., Weder, B., Breitenbücher, U., Kopp, O., Klein, K., & Soldani, J. (2023, December). A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632130
+
 - UCC 2023
-- _Accepted_
 - [https://tosss.opentosca.org](https://tosss.opentosca.org)
 - [https://github.com/OpenTOSCA/opentosca-tosss](https://github.com/OpenTOSCA/opentosca-tosss)
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.7545278){target=_blank}
 
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2023_TOSSS,
+    Title         = {{A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators}},
+    Author        = {St\"{o}tzner, Miles and Becker, Steffen and Harzenetter, Lukas and Leymann, Frank and Weder, Benjamin and Breitenb\"{u}cher, Uwe and Kopp, Oliver and Klein, Kevin and Soldani, Jacopo},
+    Year          = 2023,
+    Month         = dec,
+    Booktitle     = {Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)},
+    Publisher     = {ACM},
+    Address       = {New York, NY, USA},
+    Pages         = {1--11},
+    articleno     = {6},
+    Doi           = {10.1145/3603166.3632130},
+    isbn          = {9798400702341},
+    url           = {https://doi.org/10.1145/3603166.3632130},
+    projects      = {SofDCar,OpenTOSCA,EniQmA},
+    numpages      = {11},
+    keywords      = {TOSCA, orchestrator, systematic technology review, classification framework, general-purpose, open-source},
+}
+```
+{% endraw %}
+
 
 ## Enhancing Deployment Variability Management by Pruning Elements in Deployment Models
 
+> Stötzner, M., Klinaku, F., Pesl, R. D., & Becker, S. (2023, December). Enhancing Deployment Variability Management by Pruning Elements in Deployment Models. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632143
+
 - UCC 2023
-- _Accepted_
 - [Step-by-Step Guide](variability4tosca/guides/pruning/index.md){target=_blank}
 - {{ repo_link('examples/xopera-pruning', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/xopera-pruning/stats', 'Models of the Complexity Evaluation') }}
@@ -56,6 +82,27 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10050260){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-pruning') }}
 
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2023_Pruning,
+    Title         = {{Enhancing Deployment Variability Management by Pruning Elements in Deployment Models}},
+    Author        = {St\"{o}tzner, Miles and Klinaku, Floriment and Pesl, Robin Dominic and Becker, Steffen},
+    Year          = 2023,
+    Month         = dec,
+    Booktitle     = {Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)},
+    Publisher     = {ACM},
+    Address       = {New York, NY, USA},
+    Pages         = {1--11},
+    articleno     = {18},
+    Doi           = {10.1145/3603166.3632143},
+    isbn          = {9798400702341},
+    url           = {https://doi.org/10.1145/3603166.3632143},
+    projects      = {SofDCar,OpenTOSCA},
+    numpages      = {11},
+    keywords      = {pruning, deployment models, variability management, TOSCA},
+}
+```
+{% endraw %}
 
 ## Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability
 
@@ -72,6 +119,24 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2-demo') }}
 
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2023_VDMMv2Demo,
+    Title         = {{Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability}},
+    Author        = {St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen},
+    Year          = 2023,
+    Month         = oct,
+    Booktitle     = {Proceedings of the Demonstration Track at International Conference on Cooperative Information Systems 2023},
+    Publisher     = {{CEUR-WS.org}},
+    Pages         = {36--40},
+    Series        = {CEUR Workshop Proceedings},
+    Volume        = {3552},
+    url           = {https://ceur-ws.org/Vol-3552/paper-8.pdf},
+    type          = {Demonstration},
+    projects      = {SofDCar,OpenTOSCA},
+}
+```
+{% endraw %}
 
 ## Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies
 
@@ -87,6 +152,24 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445089){target=_blank}
 - {{ tag_link('publication-stoetzner-2023-vdmm-v2') }}
 
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2023_VDMMv2,
+    Title         = {{Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies}},
+    Author        = {St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen},
+    Year          = 2023,
+    Month         = oct,
+    Booktitle     = {Cooperative Information Systems},
+    Publisher     = {Springer Nature Switzerland},
+    Address       = {Cham},
+    Pages         = {61--78},
+    Doi           = {10.1007/978-3-031-46846-9_4},
+    isbn          = {978-3-031-46846-9},
+    url           = {https://link.springer.com/chapter/10.1007/978-3-031-46846-9_4},
+    projects      = {SofDCar,OpenTOSCA},
+}
+```
+{% endraw %}
 
 ## Developing the Software of Future Cars: A Car DevOps Approach
 
@@ -95,6 +178,23 @@ This document holds a list of selected publications.
 - Softwaretechnik-Trends 2024
 - [https://fb-swt.gi.de/publikationen/softwaretechnik-trends](https://fb-swt.gi.de/publikationen/softwaretechnik-trends){target=_blank}
 
+{% raw %}
+```bibtex linenums="1"
+@article{Weller2023_SofDCar,
+    Title         = {{Developing the Software of Future Cars: A Car DevOps Approach}},
+    Author        = {Weller, Marcel and St{\"o}tzner, Miles and Klinaku, Floriment and Becker, Steffen},
+    Year          = 2023,
+    Month         = may,
+    Journal       = {Softwaretechnik-Trends},
+    Publisher     = {Gesellschaft f{\"u}r Informatik},
+    Pages         = {3--10},
+    Volume        = {43},
+    Number        = {2},
+    issn          = {0720-8928},
+    projects      = {SofDCar,OpenTOSCA},
+}
+```
+{% endraw %}
 
 ## Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model
 
@@ -109,3 +209,23 @@ This document holds a list of selected publications.
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "Unfurl Motivation" and "xOpera Motivation")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10445186){target=_blank}
 - {{ tag_link('publication-stoetzner-2022-vdmm') }}
+
+{% raw %}
+```bibtex linenums="1"
+@article{Stoetzner2022_VDMM,
+    Title         = {{Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model}},
+    Author        = {St{\"o}tzner, Miles and Becker, Steffen and Breitenb{\"u}cher, Uwe and K{\'a}lm{\'a}n, K{\'e}pes and Leymann, Frank},
+    Year          = 2022,
+    Month         = oct,
+    Journal       = {Algorithms},
+    Publisher     = {MDPI},
+    Pages         = {1--25},
+    articleno     = {382},
+    Volume        = {15},
+    Number        = {10},
+    Doi           = {10.3390/a15100382},
+    url           = {https://www.mdpi.com/1999-4893/15/10/382},
+    projects      = {SofDCar,OpenTOSCA},
+}
+```
+{% endraw %}
