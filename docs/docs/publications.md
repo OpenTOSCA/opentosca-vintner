@@ -42,6 +42,7 @@ This document holds a list of selected publications.
 > Stötzner, M., Becker, S., Harzenetter, L., Leymann, F., Weder, B., Breitenbücher, U., Kopp, O., Klein, K., & Soldani, J. (2023, December). A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632130
 
 - UCC 2023
+- [https://doi.org/10.1145/3603166.3632130](https://doi.org/10.1145/3603166.3632130){target=_blank}
 - [https://tosss.opentosca.org](https://tosss.opentosca.org)
 - [https://github.com/OpenTOSCA/opentosca-tosss](https://github.com/OpenTOSCA/opentosca-tosss)
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.7545278){target=_blank}
@@ -74,6 +75,7 @@ This document holds a list of selected publications.
 > Stötzner, M., Klinaku, F., Pesl, R. D., & Becker, S. (2023, December). Enhancing Deployment Variability Management by Pruning Elements in Deployment Models. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632143
 
 - UCC 2023
+- [https://doi.org/10.1145/3603166.3632143](https://doi.org/10.1145/3603166.3632143){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/pruning/index.md){target=_blank}
 - {{ repo_link('examples/xopera-pruning', 'Model of the Motivating Scenario') }}
 - {{ repo_link('examples/xopera-pruning/stats', 'Models of the Complexity Evaluation') }}
