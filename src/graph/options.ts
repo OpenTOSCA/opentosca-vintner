@@ -390,6 +390,7 @@ class ChecksOptions extends BaseOptions {
     readonly consistency: boolean
     readonly relationSource: boolean
     readonly relationTarget: boolean
+    readonly ambiguousRelation: boolean
 
     readonly ambiguousHosting: boolean
 
@@ -412,6 +413,8 @@ class ChecksOptions extends BaseOptions {
     readonly expectedTechnology: boolean
     readonly missingTechnologyContainer: boolean
     readonly ambiguousTechnology: boolean
+
+    readonly ambiguousInput: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -472,6 +475,12 @@ class ChecksOptions extends BaseOptions {
 
         this.ambiguousTechnology = this.raw.ambiguous_technology_check ?? this.consistency
         assert.isBoolean(this.ambiguousTechnology)
+
+        this.ambiguousRelation = this.raw.ambiguous_relation_check ?? this.consistency
+        assert.isBoolean(this.ambiguousRelation)
+
+        this.ambiguousInput = this.raw.ambiguous_input_check ?? this.consistency
+        assert.isBoolean(this.ambiguousInput)
     }
 }
 

@@ -146,6 +146,7 @@ export type ChecksOptions = {
     consistency_checks?: boolean
     relation_source_check?: boolean
     relation_target_check?: boolean
+
     ambiguous_hosting_check?: boolean
     missing_artifact_container_check?: boolean
     ambiguous_artifact_check?: boolean
@@ -164,6 +165,9 @@ export type ChecksOptions = {
     expected_technology_check?: boolean
     missing_technology_container_check?: boolean
     ambiguous_technology_check?: boolean
+
+    ambiguous_relation_check?: boolean
+    ambiguous_input_check?: boolean
 }
 
 export const ResolverModes: {[mode: string]: VariabilityOptions} = {

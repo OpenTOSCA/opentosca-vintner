@@ -219,6 +219,8 @@ The following options are used to configure checks.
 | expected_technology_check          | false     | Boolean   | true    | Enable the consistency check regarding present technologies.                    |
 | missing_technology_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of technologies.       |
 | ambiguous_technology_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present technologies.          |
+| ambiguous_relation_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present relations.             |
+| ambiguous_input_check              | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present inputs.                |
 
 ### Solver Options
 
