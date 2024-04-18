@@ -96,6 +96,7 @@ export default class Technology extends Element {
         }
     }
 
+    // Check if no other technology is present
     constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.technologies.filter(it => it !== this))
     }

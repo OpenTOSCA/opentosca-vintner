@@ -372,7 +372,7 @@ export type LogicExpression =
           has_present_member?: string | 'SELF' | 'CONTAINER'
 
           // Input functions
-          input_presence?: string
+          input_presence?: string | number
 
           // Import functions
           import_presence?: number
