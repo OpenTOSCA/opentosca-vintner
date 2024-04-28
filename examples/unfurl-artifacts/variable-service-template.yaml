@@ -80,7 +80,7 @@ topology_template:
 
         os_auth_url:
             type: string
-            default: https://idm02.bw-cloud.org:5000/v3
+            default: https://idm01.bw-cloud.org:5000/v3
             conditions: {logic_expression: is_community}
 
         os_identity_api_version:

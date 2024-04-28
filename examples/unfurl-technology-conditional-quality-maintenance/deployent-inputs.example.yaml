@@ -6,7 +6,7 @@ os_ssh_user: ubuntu
 os_ssh_key_file: /home/stoetzms/.ssh/bw-cloud--default
 os_region_name: Mannheim
 os_auth_type: v3applicationcredential
-os_auth_url: https://idm02.bw-cloud.org:5000/v3
+os_auth_url: https://idm01.bw-cloud.org:5000/v3
 os_identity_api_version: '3'
 os_interface: public
 os_application_credential_id: 3f538f1823bd484e8238b2433de2f21a
