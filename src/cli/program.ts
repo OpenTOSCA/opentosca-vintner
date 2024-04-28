@@ -232,6 +232,15 @@ install
         })
     )
 
+install
+    .command('platformio')
+    .description('installs PlatformIO Core CLI')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.platformio(options)
+        })
+    )
+
 /**
  * Orchestrators
  */
