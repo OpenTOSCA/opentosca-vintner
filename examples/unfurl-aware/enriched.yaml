@@ -57,7 +57,7 @@ topology_template:
               conditions: []
         - os_auth_url:
               type: string
-              default: https://idm02.bw-cloud.org:5000/v3
+              default: https://idm01.bw-cloud.org:5000/v3
               conditions: []
         - os_identity_api_version:
               type: string
