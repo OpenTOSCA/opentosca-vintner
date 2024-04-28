@@ -15,6 +15,7 @@ export default class Checker {
         const properties = this.graph.properties.filter(it => it.present)
         const types = this.graph.types.filter(it => it.present)
         const technologies = this.graph.technologies.filter(it => it.present)
+        const inputs = this.graph.inputs.filter(it => it.present)
 
         // Ensure that each relation source exists
         if (this.graph.options.checks.relationSource) {
@@ -148,6 +149,26 @@ export default class Checker {
             for (const node of nodes) {
                 const technologies = node.technologies.filter(it => it.present)
                 if (technologies.length > 1) throw new Error(`${node.Display} has more than one technology`)
+            }
+        }
+
+        // Ensure that inputs are unique per name
+        if (this.graph.options.checks.ambiguousInput) {
+            const names = new Set()
+            for (const input of inputs) {
+                if (names.has(input.name)) throw new Error(`${input.Display} is ambiguous`)
+                names.add(input.name)
+            }
+        }
+
+        // Ensure that relations are unique per name
+        if (this.graph.options.checks.ambiguousRelation) {
+            for (const node of nodes) {
+                const names = new Set()
+                for (const relation of node.outgoing.filter(it => it.present)) {
+                    if (names.has(relation.name)) throw new Error(`${relation.Display} is ambiguous`)
+                    names.add(relation.name)
+                }
             }
         }
     }

@@ -97,15 +97,22 @@ export class Populator {
         if (check.isUndefined(inputs)) return
         assert.isArray(inputs, 'Inputs not normalized')
 
-        inputs.forEach(map => {
+        for (const [index, map] of inputs.entries()) {
             const [name, raw] = utils.firstEntry(map)
             if (this.graph.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
-            const input = new Input({name, raw})
+            const input = new Input({name, raw, index})
             input.graph = this.graph
 
+            if (!this.graph.inputsMap.has(input.name)) this.graph.inputsMap.set(input.name, [])
+            this.graph.inputsMap.get(input.name)!.push(input)
             this.graph.inputs.push(input)
-            this.graph.inputsMap.set(name, input)
+        }
+
+        // Ensure that there is only one default input per input name
+        this.graph.inputsMap.forEach(list => {
+            const candidates = list.filter(it => it.defaultAlternative)
+            if (candidates.length > 1) throw new Error(`${list[0].Display} has multiple defaults`)
         })
     }
 

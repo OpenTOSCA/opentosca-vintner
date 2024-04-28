@@ -76,7 +76,7 @@ export default class Graph {
     groupsMap = new Map<string, Group>()
 
     inputs: Input[] = []
-    inputsMap = new Map<string, Input>()
+    inputsMap = new Map<string, Input[]>()
 
     artifacts: Artifact[] = []
 
@@ -114,7 +114,7 @@ export default class Graph {
         new Populator(this).run()
     }
 
-    getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}): Node {
         assert.isString(name)
 
         if (check.isDefined(context.cached)) {
@@ -139,7 +139,7 @@ export default class Graph {
         return node
     }
 
-    getNodeType(data: NodeTypePresenceArguments, context: Context = {}) {
+    getNodeType(data: NodeTypePresenceArguments, context: Context = {}): Type {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -153,7 +153,7 @@ export default class Graph {
         return this.getType(node, data)
     }
 
-    getRelationType(data: RelationTypePresenceArguments, context: Context = {}) {
+    getRelationType(data: RelationTypePresenceArguments, context: Context = {}): Type {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
         assert.isStringOrNumber(data[2])
@@ -168,7 +168,7 @@ export default class Graph {
         return this.getType(relation, data)
     }
 
-    getGroupType(data: GroupTypePresenceArguments, context: Context = {}) {
+    getGroupType(data: GroupTypePresenceArguments, context: Context = {}): Type {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -182,7 +182,7 @@ export default class Graph {
         return this.getType(group, data)
     }
 
-    getPolicyType(data: PolicyTypePresenceArguments, context: Context = {}) {
+    getPolicyType(data: PolicyTypePresenceArguments, context: Context = {}): Type {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -196,7 +196,7 @@ export default class Graph {
         return this.getType(policy, data)
     }
 
-    private getType(container: Node | Relation | Group | Policy, data: (string | number)[]) {
+    private getType(container: Node | Relation | Group | Policy, data: (string | number)[]): Type {
         let type
         const toscaId = utils.last(data)
 
@@ -212,14 +212,14 @@ export default class Graph {
         return type
     }
 
-    getContainer(element?: Element) {
+    getContainer(element?: Element): Element {
         assert.isDefined(element, `Element is not defined`)
         const container = element.container
         assert.isDefined(container, `${element.Display} has no container`)
         return container
     }
 
-    getRelation(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getRelation(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}): Relation {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isRelation(element)
@@ -258,7 +258,7 @@ export default class Graph {
         return relation
     }
 
-    getGroup(name: string | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getGroup(name: string | 'SELF' | 'CONTAINER', context: Context = {}): Group {
         assert.isString(name)
 
         if (check.isDefined(context.cached)) {
@@ -283,7 +283,7 @@ export default class Graph {
         return group
     }
 
-    getPolicy(element: string | number | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getPolicy(element: string | number | 'SELF' | 'CONTAINER', context: Context = {}): Policy {
         assert.isStringOrNumber(element)
 
         if (check.isDefined(context.cached)) {
@@ -319,7 +319,7 @@ export default class Graph {
         return policy
     }
 
-    getArtifact(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getArtifact(member: [string, string | number] | 'SELF' | 'CONTAINER', context: Context = {}): Artifact {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isArtifact(element)
@@ -355,7 +355,7 @@ export default class Graph {
         return artifact
     }
 
-    getImport(index: number | 'SELF' | 'CONTAINER', context: Context = {}) {
+    getImport(index: number | 'SELF' | 'CONTAINER', context: Context = {}): Import {
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isImport(element)
@@ -380,7 +380,7 @@ export default class Graph {
         return imp
     }
 
-    getNodeProperty(data: NodePropertyPresenceArguments, context: Context = {}) {
+    getNodeProperty(data: NodePropertyPresenceArguments, context: Context = {}): Property {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -394,7 +394,7 @@ export default class Graph {
         return this.getProperty(node, data)
     }
 
-    getRelationProperty(data: RelationPropertyPresenceArguments, context: Context = {}) {
+    getRelationProperty(data: RelationPropertyPresenceArguments, context: Context = {}): Property {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
         assert.isStringOrNumber(data[2])
@@ -409,7 +409,7 @@ export default class Graph {
         return this.getProperty(relation, data)
     }
 
-    getGroupProperty(data: GroupPropertyPresenceArguments, context: Context = {}) {
+    getGroupProperty(data: GroupPropertyPresenceArguments, context: Context = {}): Property {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -423,7 +423,7 @@ export default class Graph {
         return this.getProperty(group, data)
     }
 
-    getPolicyProperty(data: PolicyPropertyPresenceArguments, context: Context = {}) {
+    getPolicyProperty(data: PolicyPropertyPresenceArguments, context: Context = {}): Property {
         assert.isStringOrNumber(data[0])
         assert.isStringOrNumber(data[1])
 
@@ -437,7 +437,7 @@ export default class Graph {
         return this.getProperty(policy, data)
     }
 
-    getArtifactProperty(data: ArtifactPropertyPresenceArguments, context: Context = {}) {
+    getArtifactProperty(data: ArtifactPropertyPresenceArguments, context: Context = {}): Property {
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
         assert.isStringOrNumber(data[2])
@@ -468,7 +468,7 @@ export default class Graph {
         return property
     }
 
-    getInput(name: string, context: Context = {}) {
+    getInput(name: string | number, context: Context = {}): Input {
         assert.isString(name)
 
         if (check.isDefined(context.cached)) {
@@ -488,12 +488,23 @@ export default class Graph {
             return container
         }
 
-        const input = this.inputsMap.get(name)
+        assert.isStringOrNumber(name)
+
+        let input
+
+        if (check.isString(name)) {
+            const inputs = this.inputsMap.get(name) || []
+            if (inputs.length > 1) throw new Error(`Input "${name}" is ambiguous`)
+            input = inputs[0]
+        }
+
+        if (check.isNumber(name)) input = this.inputs[name]
+
         assert.isDefined(input, `Input "${name}" not found`)
         return input
     }
 
-    getTechnology(data: TechnologyPresenceArguments, context: Context = {}) {
+    getTechnology(data: TechnologyPresenceArguments, context: Context = {}): Technology {
         assert.isArray(data)
         assert.isString(data[0])
         assert.isStringOrNumber(data[1])
