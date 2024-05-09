@@ -2,7 +2,7 @@ import * as check from '#check'
 import Controller from '#controller'
 import {
     VariabilityTestGroup,
-    getDefaultInputs,
+    getInputs,
     getVariableServiceTemplate,
     loadConfig,
     loadExpected,
@@ -71,7 +71,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
         async function fn() {
             await Controller.template.resolve({
                 template: getVariableServiceTemplate({dir: vstdir ?? dir, file: config.template}),
-                inputs: getDefaultInputs(dir),
+                inputs: getInputs(dir, config.inputs),
                 output,
                 presets: utils.toList(config.presets),
             })

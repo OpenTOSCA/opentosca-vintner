@@ -42,7 +42,7 @@ export class ConstraintEnricher {
 
         // Sanity check
         if (!(element.isRelation() || element.isArtifact()))
-            throw new Error(`${element.Display} is not issued a manual id by the Condition Enricher`)
+            throw new Error(`${element.Display} is not issued a manual id`)
 
         this.graph.addConstraint({
             implies: [{and: [element.container.id, element.manualId]}, element.id],

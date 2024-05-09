@@ -1,6 +1,6 @@
 import * as check from '#check'
 import {
-    getDefaultInputs,
+    getInputs,
     getVariableServiceTemplate,
     loadConfig,
     loadExpected,
@@ -38,9 +38,7 @@ async function main() {
             const id = `${group}-${test}`
             const config = loadConfig(dir)
             const template = new Loader(getVariableServiceTemplate({dir, file: config.template})).raw()
-            const inputs = getDefaultInputs(dir)
-                ? files.loadYAML<InputAssignmentMap>(getDefaultInputs(dir)!)
-                : undefined
+            const inputs = loadInputs(dir, config.inputs)
 
             let expected
             if (!check.isDefined(config.error)) {
@@ -74,6 +72,12 @@ async function main() {
             path.join(documentationDirectory, test.file)
         )
     }
+}
+
+function loadInputs(dir: string, override?: string) {
+    const file = getInputs(dir, override)
+    if (check.isDefined(file)) return files.loadYAML<InputAssignmentMap>(file)
+    return {}
 }
 
 main()

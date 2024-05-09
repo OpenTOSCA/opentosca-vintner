@@ -1,6 +1,7 @@
 import Enricher from '#enricher'
 import * as files from '#files'
 import Graph from '#graph/graph'
+import {hotfixPersistentCheck} from '#resolver'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
@@ -19,6 +20,8 @@ describe('minisat', () => {
 async function play(data: string) {
     const template = yaml.load(data) as ServiceTemplate
     await new Enricher(template).run()
+
+    hotfixPersistentCheck(template)
 
     const solver = new Solver(new Graph(template), {})
     const results = solver.runAll().map(it => utils.sort(it))

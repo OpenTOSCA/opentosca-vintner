@@ -33,6 +33,7 @@ export type VariabilityTestConfig = {
     error?: string
     template?: string
     expected?: string
+    inputs?: string
     replace?: [string, string][]
     merge?: any
 }
@@ -64,7 +65,7 @@ async function runTest(dir: string, vstdir: string) {
     async function fn() {
         await Controller.template.resolve({
             template: getVariableServiceTemplate({dir: vstdir, file: config.template}),
-            inputs: getDefaultInputs(dir),
+            inputs: getInputs(dir, config.inputs),
             output,
             presets: utils.toList(config.presets),
         })
@@ -102,7 +103,9 @@ export function getVariableServiceTemplate(data: {dir: string; file?: string}) {
     throw new Error(`Did not find variable service template in directory "${data.dir}"`)
 }
 
-export function getDefaultInputs(dir: string) {
+export function getInputs(dir: string, override?: string) {
+    if (check.isDefined(override)) return path.join(dir, override)
+
     for (const name of ['inputs.yaml', 'inputs.xml']) {
         const file = path.join(dir, name)
         if (files.isFile(file)) return file

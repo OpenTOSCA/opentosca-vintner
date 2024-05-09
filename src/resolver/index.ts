@@ -61,23 +61,9 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     inputs.setInputs(options.inputs)
 
     /**
-     * TODO: Hotfix:
-     *  rc2 sets "incomingnaive-aritfact-host"
-     *  this triggers the persistent component check
-     *  however, this check is only relevant during enriching
-     *  also can not set version to rc1 since we require, e.g., the rc2 optimization defaults
+     * Hotfix
      */
-    if (check.isDefined(options.template.topology_template)) {
-        if (check.isUndefined(options.template.topology_template.variability)) {
-            options.template.topology_template.variability = {}
-        }
-
-        if (check.isUndefined(options.template.topology_template.variability.options)) {
-            options.template.topology_template.variability.options = {}
-        }
-
-        options.template.topology_template.variability.options.persistent_check = false
-    }
+    hotfixPersistentCheck(options.template)
 
     /**
      * Graph
@@ -92,5 +78,26 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     return {
         inputs: inputs.inputs,
         template: options.template,
+    }
+}
+
+/**
+ * TODO: Hotfix Persistent Check
+ *  rc2 sets "incomingnaive-aritfact-host"
+ *  this triggers the persistent component check
+ *  however, this check is only relevant during enriching
+ *  also can not set version to rc1 since we require, e.g., the rc2 optimization defaults
+ */
+export function hotfixPersistentCheck(template: ServiceTemplate) {
+    if (check.isDefined(template.topology_template)) {
+        if (check.isUndefined(template.topology_template.variability)) {
+            template.topology_template.variability = {}
+        }
+
+        if (check.isUndefined(template.topology_template.variability.options)) {
+            template.topology_template.variability.options = {}
+        }
+
+        template.topology_template.variability.options.persistent_check = false
     }
 }

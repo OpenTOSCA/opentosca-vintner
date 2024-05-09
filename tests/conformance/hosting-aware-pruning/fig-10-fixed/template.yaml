@@ -6,12 +6,8 @@ topology_template:
             mode: semantic-loose
             node_default_condition_mode: incomingnaive-artifact-host
             optimization_topology: min
-            optimization_topology_unique: true
-            optimization_technologies: max
-            optimization_technologies_mode: weight
-            technology_constraint: true
+            optimization_topology_unique: false
             hosting_stack_constraint: true
-            relation_default_implied: true
 
     node_templates:
         app:
@@ -20,7 +16,9 @@ topology_template:
             requirements:
                 - host: elastic
                 - host: static
-                - database: database
+                - database:
+                      node: database
+                      implied: true
 
         database:
             type: database

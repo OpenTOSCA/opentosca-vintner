@@ -7,6 +7,7 @@ export function bratify(bratans: Element[]) {
         not: {
             or: bratans.map(it => it.presenceCondition),
         },
+        _bratan: true,
     }
 }
 
