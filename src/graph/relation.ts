@@ -163,7 +163,14 @@ export default class Relation extends Element {
     }
 
     get implied() {
-        return this.raw.implied ?? this.graph.options.default.relationDefaultImplied
+        // Implied if manually defined
+        if (check.isDefined(this.raw.implied)) return this.raw.implied
+
+        // Hosting relations are not implied by default (since this would conflict with hosting constraint)
+        if (this.isHostedOn()) return false
+
+        // Implied according to options
+        return this.graph.options.default.relationDefaultImplied
     }
 }
 
