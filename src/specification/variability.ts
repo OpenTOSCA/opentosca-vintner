@@ -398,6 +398,7 @@ export type LogicExpression =
 
           // Generated
           _generated?: boolean
+          _bratan?: boolean
       }
     | string
     | boolean

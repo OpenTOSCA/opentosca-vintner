@@ -20,4 +20,4 @@ topology_template:
                         file: file_one
                         conditions:
                             - {node_presence: node, _generated: true}
-                            - {not: {or: [artifact_presence: [node, 0]]}, _generated: true}
+                            - {not: {or: [artifact_presence: [node, 0]]}, _bratan: true}

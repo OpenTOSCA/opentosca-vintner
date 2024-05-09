@@ -203,7 +203,7 @@ export default class Solver {
         const conditions: LogicExpression[] = utils.toList(element.conditions)
 
         // Add manual conditions of a relation separately as own variable into the sat solver.
-        // Manual conditions are referenced by has_incoming_relation and has_artifact.
+        // Manual conditions are referenced by has_incoming_relation and has_artifact as well as by implied relations.
         if (element.isRelation() || element.isArtifact()) {
             // Optimization if manual conditions are empty, thus, "true" is fallback
             if (utils.isEmpty(conditions)) {

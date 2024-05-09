@@ -34,7 +34,8 @@ export class ConditionEnricher {
         if (element.defaultAlternative) {
             if (check.isUndefined(element.defaultAlternativeCondition))
                 throw new Error(`${element.Display} has no default alternative condition`)
-            conditions = [generatify(element.defaultAlternativeCondition)]
+            // Note, do not generatify this since this condition is implied when implying a relation
+            conditions = [element.defaultAlternativeCondition]
         }
 
         // Enrich pruning
