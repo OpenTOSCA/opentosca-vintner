@@ -1,2 +1,2 @@
 error: Could not solve
-description: Only one hosting relation must be present. Hence, there is a conflict between implied relations and hosting constraints.
+description: Implying a default relation which should not be present if another relation is present results in a conflict.
