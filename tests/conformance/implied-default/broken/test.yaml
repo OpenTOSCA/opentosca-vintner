@@ -1,0 +1,2 @@
+error: Could not solve
+description: Only one hosting relation must be present. Hence, there is a conflict between implied relations and hosting constraints.
