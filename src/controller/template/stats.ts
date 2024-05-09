@@ -100,7 +100,7 @@ function countManual(element: Element) {
         if (!check.isObject(it)) {
             count++
         } else {
-            if (!check.isTrue(it._generated)) {
+            if (!check.isTrue(it._generated) && !check.isTrue(it._bratan)) {
                 const [key, value] = utils.firstEntry(it)
                 if (['and', 'or'].includes(key) && check.isArray(value)) {
                     count += value.length
@@ -134,7 +134,7 @@ function countGenerated(element: Element) {
 
     element.conditions.forEach(it => {
         if (check.isObject(it)) {
-            if (check.isTrue(it._generated)) {
+            if (check.isTrue(it._generated) || check.isTrue(it._bratan)) {
                 const [key, value] = utils.firstEntry(it)
                 if (['and', 'or'].includes(key) && check.isArray(value)) {
                     count += value.length

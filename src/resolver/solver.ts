@@ -215,6 +215,7 @@ export default class Solver {
                         this.transformLogicExpression(
                             andify(
                                 conditions.filter(it => {
+                                    // This also includes _bratan
                                     if (check.isObject(it)) return !it._generated
                                     return true
                                 })
