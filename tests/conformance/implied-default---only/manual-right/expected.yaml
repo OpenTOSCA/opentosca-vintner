@@ -9,3 +9,6 @@ topology_template:
 
         right:
             type: Right
+
+        left:
+            type: Left

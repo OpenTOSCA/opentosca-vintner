@@ -1,3 +1,3 @@
 template: ../fixed-left/template.yaml
-expected: ../manual-right/template.yaml
+expected: ../manual-right/expected.yaml
 inputs: ../manual-right/inputs.yaml

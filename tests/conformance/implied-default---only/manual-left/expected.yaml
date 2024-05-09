@@ -7,5 +7,8 @@ topology_template:
             requirements:
                 - connection: left
 
+        right:
+            type: Right
+
         left:
             type: Left
