@@ -380,7 +380,6 @@ export type LogicExpression =
           // Input functions
           input_presence?: string | number
 
-          // TODO: doc this
           // Output functions
           output_presence?: string | number
 

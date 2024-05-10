@@ -104,7 +104,6 @@ export class Populator {
 
         for (const [index, map] of inputs.entries()) {
             const [name, raw] = utils.firstEntry(map)
-            if (this.graph.inputsMap.has(name)) throw new Error(`Input "${name}" defined multiple times`)
 
             const input = new Input({name, raw, index})
             input.graph = this.graph
@@ -124,13 +123,10 @@ export class Populator {
     private populateOutputs() {
         const outputs = this.graph.serviceTemplate.topology_template?.outputs
         if (check.isUndefined(outputs)) return
-        // TODO: normalize
         assert.isArray(outputs, 'Outputs not normalized')
 
         for (const [index, map] of outputs.entries()) {
             const [name, raw] = utils.firstEntry(map)
-            // TODO: why?!
-            if (this.graph.outputsMap.has(name)) throw new Error(`Output "${name}" defined multiple times`)
 
             const output = new Output({name, raw, index})
             output.graph = this.graph

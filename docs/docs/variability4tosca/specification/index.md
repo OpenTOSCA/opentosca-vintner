@@ -221,6 +221,7 @@ The following options are used to configure checks.
 | ambiguous_technology_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present technologies.          |
 | ambiguous_relation_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present relations.             |
 | ambiguous_input_check              | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present inputs.                |
+| ambiguous_output_check             | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present outputs.               |
 
 ### Solver Options
 
@@ -770,6 +771,27 @@ inputs:
        conditions: <VariabilityCondition>
 ```
 
+## Topology Template Output
+
+A topology template output is a conditional element, thus, variability conditions and other options can be assigned.
+These conditions must hold otherwise the respective output is not present.
+
+| Keyname              | Mandatory | Type                                                                        | Description                                                                                                                  |
+|----------------------|-----------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.           |
+| implies              | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`. |
+| default_alternative  | false     | Boolean                                                                     | Declare the output as default. This overwrites assigned conditions. There must be only one default assignment.               |                                                                                                       |
+
+For example, the topology template output has a variability condition assigned.
+
+```yaml linenums="1"
+outputs:
+   vm_address:
+       type: string
+       conditions: <VariabilityCondition>
+```
+
+
 ## Import Definition
 
 An import definition is a conditional element, thus, variability conditions and other options can be assigned.
@@ -882,6 +904,7 @@ The following presence operators can be used inside a logic expression.
 | policy_presence             | Policy: String &#124; Number                                                        | Boolean | Returns if policy is present.                                                                                                                                                    |
 | group_presence              | Group: String                                                                       | Boolean | Returns if group is present.                                                                                                                                                     |
 | input_presence              | Input: String &#124; Number                                                         | Boolean | Returns if input is present.                                                                                                                                                     |
+| output_presence             | Output: String &#124; Number                                                        | Boolean | Returns if output is present.                                                                                                                                                    |
 | source_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | target_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | has_present_target          | Policy: String &#124; Number &#124; SELF &#124; CONTAINER                           | Boolean | Returns if any target of the given policy is present.                                                                                                                            |
@@ -1118,6 +1141,7 @@ As an overview, the following table shows the collections that are used in TOSCA
 | Element    | TOSCA  | Variability4TOSCA |
 |------------|--------|-------------------|
 | Inputs     | Map    | Map, List         |
+| Outputs    | Map    | Map, List         |
 | Nodes      | Map    | Map, List         |
 | Relations  | List   | List              |
 | Properties | Map    | Map, List         |
@@ -1130,15 +1154,16 @@ As an overview, the following table shows the collections that are used in TOSCA
 As an overview, the following table shows the uniqueness of elements in TOSCA and in Variability4TOSCA in terms of identifiers, such as the key in a map.
 This is directly related to the used collections.
 
-| Element    | TOSCA            | Variability4TOSCA   |
-|------------|------------------|---------------------|
-| Inputs     | :material-check: | :material-check:    |
-| Nodes      | :material-check: | :material-check:    |
-| Relations  | :material-close: | :material-close:    |
-| Properties | :material-check: | :material-close:    |
-| Policies   | :material-close: | :material-close:    |
-| Groups     | :material-check: | :material-check:    |
-| Artifacts  | :material-check: | :material-close:    |
+| Element    | TOSCA            | Variability4TOSCA |
+|------------|------------------|-------------------|
+| Inputs     | :material-check: | :material-close:  |
+| Outputs    | :material-check: | :material-close:  |
+| Nodes      | :material-check: | :material-check:  |
+| Relations  | :material-close: | :material-close:  |
+| Properties | :material-check: | :material-close:  |
+| Policies   | :material-close: | :material-close:  |
+| Groups     | :material-check: | :material-check:  |
+| Artifacts  | :material-check: | :material-close:  |
 
 ### Element Identifier System
 
@@ -1150,7 +1175,7 @@ The identifier of an element is constructed as follows.
 <Element Type>.<Element Name>[@<Element Index>][.<Element Container ID>]
 ```
 
-Available element types are `node`, `relation`, `property`, `group`, `policy`, `artifact`, `input`, `type`, and `import`.
+Available element types are `node`, `relation`, `property`, `group`, `policy`, `artifact`, `input`, `output`, `technology`, `type`, and `import`.
 
 For example, consider the given variable service template.
 
@@ -1192,7 +1217,7 @@ The display representation of an element is constructed as follows.
 <Element Type> "<Element Name>[@<Element Index>]"[ of <Element Container Display>]
 ```
 
-Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, `Type`, and `Import`.
+Available element types are `Node`, `Relation`, `Property`, `Group`, `Policy`, `Artifact`, `Input`, `Output`, `Technology`, `Type`, and `Import`.
 
 For example, consider the given variable service template.
 
