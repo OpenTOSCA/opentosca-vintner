@@ -44,7 +44,7 @@ export default class Checker {
         if (this.graph.options.checks.ambiguousArtifact) {
             for (const node of nodes) {
                 const names = new Set()
-                for (const artifact of artifacts) {
+                for (const artifact of node.artifacts.filter(it => it.present)) {
                     if (names.has(artifact.name)) throw new Error(`${artifact.Display} is ambiguous`)
                     names.add(artifact.name)
                 }
@@ -94,9 +94,7 @@ export default class Checker {
         // Ensure that every component has at maximum one hosting relation
         if (this.graph.options.checks.ambiguousHosting) {
             for (const node of nodes) {
-                const relations = node.outgoing.filter(
-                    it => it.source.name === node.name && it.isHostedOn() && it.present
-                )
+                const relations = node.outgoing.filter(it => it.isHostedOn()).filter(it => it.present)
                 if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
         }
