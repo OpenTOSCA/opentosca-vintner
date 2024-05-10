@@ -168,7 +168,6 @@ export type ChecksOptions = {
 
     ambiguous_relation_check?: boolean
     ambiguous_input_check?: boolean
-    // TODO: doc this
     ambiguous_output_check?: boolean
 }
 

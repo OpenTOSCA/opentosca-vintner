@@ -40,7 +40,7 @@ export default class Transformer {
         // Transform inputs
         this.transformInputs()
 
-        // Transform inputs
+        // Transform outputs
         this.transformOutputs()
 
         // Transform imports

@@ -17,7 +17,6 @@ import {
 export type TopologyTemplate = {
     description?: string
     inputs?: VariabilityPointObject<InputDefinition>
-    // TODO: doc this
     outputs?: VariabilityPointObject<OutputDefinition>
     node_templates?: VariabilityPointObject<NodeTemplate>
     relationship_templates?: RelationshipTemplateMap
