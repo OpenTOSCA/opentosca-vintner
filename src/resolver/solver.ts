@@ -607,6 +607,14 @@ export default class Solver {
         }
 
         /**
+         * output_presence
+         */
+        if (check.isDefined(expression.output_presence)) {
+            const output = this.graph.getOutput(expression.output_presence, {element, cached})
+            return output.id
+        }
+
+        /**
          * import_presence
          */
         if (check.isDefined(expression.import_presence)) {

@@ -5,6 +5,7 @@ import Group from '#graph/group'
 import Import from '#graph/import'
 import Input from '#graph/input'
 import Node from '#graph/node'
+import Output from '#graph/output'
 import Policy from '#graph/policy'
 import Property from '#graph/property'
 import Relation from '#graph/relation'
@@ -99,6 +100,11 @@ export function isImport(element?: Element): asserts element is Import {
 export function isInput(element?: Element): asserts element is Input {
     isDefined(element, 'Element not defined')
     if (!element.isInput()) throw new Error(`${element.Display} is not a input`)
+}
+
+export function isOutput(element?: Element): asserts element is Output {
+    isDefined(element, 'Element not defined')
+    if (!element.isOutput()) throw new Error(`${element.Display} is not an output`)
 }
 
 export function isProperty(element?: Element): asserts element is Property {
