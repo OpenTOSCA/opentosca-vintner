@@ -416,6 +416,8 @@ class ChecksOptions extends BaseOptions {
 
     readonly ambiguousInput: boolean
 
+    readonly ambiguousOutput: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
@@ -481,6 +483,9 @@ class ChecksOptions extends BaseOptions {
 
         this.ambiguousInput = this.raw.ambiguous_input_check ?? this.consistency
         assert.isBoolean(this.ambiguousInput)
+
+        this.ambiguousOutput = this.raw.ambiguous_output_check ?? this.consistency
+        assert.isBoolean(this.ambiguousOutput)
     }
 }
 

@@ -168,6 +168,8 @@ export type ChecksOptions = {
 
     ambiguous_relation_check?: boolean
     ambiguous_input_check?: boolean
+    // TODO: doc this
+    ambiguous_output_check?: boolean
 }
 
 export const ResolverModes: {[mode: string]: VariabilityOptions} = {
@@ -377,6 +379,10 @@ export type LogicExpression =
 
           // Input functions
           input_presence?: string | number
+
+          // TODO: doc this
+          // Output functions
+          output_presence?: string | number
 
           // Import functions
           import_presence?: number

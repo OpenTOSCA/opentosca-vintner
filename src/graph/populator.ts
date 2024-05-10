@@ -7,6 +7,7 @@ import Import from '#graph/import'
 import Input from '#graph/input'
 import Node from '#graph/node'
 import {Options} from '#graph/options'
+import Output from '#graph/output'
 import {TechnologyRulePluginBuilder} from '#graph/plugin'
 import Policy from '#graph/policy'
 import Property, {PropertyContainer, PropertyContainerTemplate} from '#graph/property'
@@ -33,6 +34,9 @@ export class Populator {
         // Inputs
         this.populateInputs()
 
+        // Outputs
+        this.populateOutputs()
+
         // Nodes
         this.populateNodes()
 
@@ -57,6 +61,7 @@ export class Populator {
             ...this.graph.artifacts,
             ...this.graph.imports,
             ...this.graph.technologies,
+            ...this.graph.outputs,
         ]
 
         // Ensure that at least one node template is persistent if "incoming(naive)-host" is used
@@ -111,6 +116,32 @@ export class Populator {
 
         // Ensure that there is only one default input per input name
         this.graph.inputsMap.forEach(list => {
+            const candidates = list.filter(it => it.defaultAlternative)
+            if (candidates.length > 1) throw new Error(`${list[0].Display} has multiple defaults`)
+        })
+    }
+
+    private populateOutputs() {
+        const outputs = this.graph.serviceTemplate.topology_template?.outputs
+        if (check.isUndefined(outputs)) return
+        // TODO: normalize
+        assert.isArray(outputs, 'Outputs not normalized')
+
+        for (const [index, map] of outputs.entries()) {
+            const [name, raw] = utils.firstEntry(map)
+            // TODO: why?!
+            if (this.graph.outputsMap.has(name)) throw new Error(`Output "${name}" defined multiple times`)
+
+            const output = new Output({name, raw, index})
+            output.graph = this.graph
+
+            if (!this.graph.outputsMap.has(output.name)) this.graph.outputsMap.set(output.name, [])
+            this.graph.outputsMap.get(output.name)!.push(output)
+            this.graph.outputs.push(output)
+        }
+
+        // Ensure that there is only one default output per output name
+        this.graph.outputsMap.forEach(list => {
             const candidates = list.filter(it => it.defaultAlternative)
             if (candidates.length > 1) throw new Error(`${list[0].Display} has multiple defaults`)
         })

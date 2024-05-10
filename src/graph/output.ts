@@ -1,16 +1,16 @@
 import {bratify} from '#graph/utils'
-import {InputDefinition} from '#spec/topology-template'
+import {OutputDefinition} from '#spec/topology-template'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 
-export default class Input extends Element {
-    readonly type = 'input'
+export default class Output extends Element {
+    readonly type = 'output'
     readonly name: string
-    readonly raw: InputDefinition
+    readonly raw: OutputDefinition
     readonly index: number
 
-    constructor(data: {name: string; raw: InputDefinition; index: number}) {
+    constructor(data: {name: string; raw: OutputDefinition; index: number}) {
         super()
 
         this.name = data.name
@@ -25,15 +25,15 @@ export default class Input extends Element {
     }
 
     constructPresenceCondition() {
-        return {input_presence: this.toscaId, _cached_element: this}
+        return {output_presence: this.toscaId, _cached_element: this}
     }
 
-    // Check if no other input having the same name is present
+    // Check if no other output having the same name is present
     constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.graph.inputsMap.get(this.name)!.filter(it => it !== this))
+        return bratify(this.graph.outputsMap.get(this.name)!.filter(it => it !== this))
     }
 
-    isInput() {
+    isOutput() {
         return true
     }
 }

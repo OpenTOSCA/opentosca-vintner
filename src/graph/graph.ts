@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
+import Output from '#graph/output'
 import {TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
@@ -77,6 +78,9 @@ export default class Graph {
 
     inputs: Input[] = []
     inputsMap = new Map<string, Input[]>()
+
+    outputs: Output[] = []
+    outputsMap = new Map<string, Output[]>()
 
     artifacts: Artifact[] = []
 
@@ -469,8 +473,6 @@ export default class Graph {
     }
 
     getInput(name: string | number, context: Context = {}): Input {
-        assert.isString(name)
-
         if (check.isDefined(context.cached)) {
             const element = context.cached
             assert.isInput(element)
@@ -502,6 +504,40 @@ export default class Graph {
 
         assert.isDefined(input, `Input "${name}" not found`)
         return input
+    }
+
+    getOutput(name: string | number, context: Context = {}): Output {
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isOutput(element)
+            return element
+        }
+
+        if (name === 'SELF') {
+            assert.isOutput(context.element)
+            return context.element
+        }
+
+        if (name === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isOutput(container)
+            return container
+        }
+
+        assert.isStringOrNumber(name)
+
+        let output
+
+        if (check.isString(name)) {
+            const outputs = this.outputsMap.get(name) || []
+            if (outputs.length > 1) throw new Error(`Output "${name}" is ambiguous`)
+            output = outputs[0]
+        }
+
+        if (check.isNumber(name)) output = this.outputs[name]
+
+        assert.isDefined(output, `Output "${name}" not found`)
+        return output
     }
 
     getTechnology(data: TechnologyPresenceArguments, context: Context = {}): Technology {

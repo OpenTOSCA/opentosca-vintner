@@ -11,7 +11,7 @@ import {GroupMember} from '#spec/group-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {InputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
+import {InputDefinitionMap, OutputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {ElementType} from '#spec/type-assignment'
 import * as utils from '#utils'
 
@@ -39,6 +39,9 @@ export default class Transformer {
 
         // Transform inputs
         this.transformInputs()
+
+        // Transform inputs
+        this.transformOutputs()
 
         // Transform imports
         this.transformImports()
@@ -212,7 +215,7 @@ export default class Transformer {
         // Delete all topology template inputs which are not present
         if (check.isDefined(this.topology.inputs)) {
             this.topology.inputs = this.graph.inputs
-                .filter(input => input.present)
+                .filter(it => it.present)
                 .reduce<InputDefinitionMap>((map, input) => {
                     const template = input.raw
                     this.clean(template)
@@ -222,6 +225,24 @@ export default class Transformer {
 
             if (utils.isEmpty(this.topology.inputs)) {
                 delete this.topology.inputs
+            }
+        }
+    }
+
+    private transformOutputs() {
+        // Delete all topology template outputs which are not present
+        if (check.isDefined(this.topology.outputs)) {
+            this.topology.outputs = this.graph.outputs
+                .filter(it => it.present)
+                .reduce<OutputDefinitionMap>((map, output) => {
+                    const template = output.raw
+                    this.clean(template)
+                    map[output.name] = template
+                    return map
+                }, {})
+
+            if (utils.isEmpty(this.topology.outputs)) {
+                delete this.topology.outputs
             }
         }
     }

@@ -7,7 +7,7 @@ import {GroupTemplateMap} from '#spec/group-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
-import {InputDefinitionMap} from '#spec/topology-template'
+import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
 import * as utils from '#utils'
@@ -29,6 +29,9 @@ export default class Normalizer {
         // Nodes
         this.normalizeNodes()
 
+        // Outputs
+        this.normalizeOutputs()
+
         // Policies
         this.normalizePolicies()
 
@@ -48,6 +51,17 @@ export default class Normalizer {
         this.serviceTemplate.topology_template!.inputs = this.getFromVariabilityPointMap(
             this.serviceTemplate.topology_template!.inputs
         ).reduce<InputDefinitionMap[]>((list, map) => {
+            list.push(map)
+            return list
+        }, [])
+    }
+
+    private normalizeOutputs() {
+        if (check.isUndefined(this.serviceTemplate.topology_template?.outputs)) return
+
+        this.serviceTemplate.topology_template!.outputs = this.getFromVariabilityPointMap(
+            this.serviceTemplate.topology_template!.outputs
+        ).reduce<OutputDefinitionMap[]>((list, map) => {
             list.push(map)
             return list
         }, [])

@@ -17,6 +17,8 @@ import {
 export type TopologyTemplate = {
     description?: string
     inputs?: VariabilityPointObject<InputDefinition>
+    // TODO: doc this
+    outputs?: VariabilityPointObject<OutputDefinition>
     node_templates?: VariabilityPointObject<NodeTemplate>
     relationship_templates?: RelationshipTemplateMap
     variability?: VariabilityDefinition
@@ -37,3 +39,6 @@ export type InputAssignmentMap = {[key: string]: InputAssignmentValue}
 // TODO: allow hash map and use PropertyAssignmentValue instead
 export type InputAssignmentValue = string | number | boolean | InputAssignmentValue[]
 // | {[key: string]: InputAssignmentValue}
+
+export type OutputDefinitionMap = {[key: string]: OutputDefinition}
+export type OutputDefinition = {} & VariabilityAlternative
