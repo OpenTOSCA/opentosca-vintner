@@ -1,0 +1,1 @@
+description: Artifacts are not ambiguous since unique check is based on name scoped by node.
