@@ -50,10 +50,13 @@ export default async function (options: TemplateTestOptions) {
     const nonDisabledTests = tests.filter(test => !test.name.endsWith('---disabled'))
     const effectiveTests = onlyTests.length ? onlyTests : nonDisabledTests
 
+    let failed = false
     for (const test of effectiveTests) {
         std.log(`Running test "${test.name}"`)
-        await runTest(test.dir, options.path)
+        const result = await runTest(test.dir, options.path)
+        if (!result) failed = true
     }
+    if (failed) throw new Error(`Some tests failed`)
 }
 
 async function runTest(dir: string, vstdir: string) {
@@ -75,10 +78,14 @@ async function runTest(dir: string, vstdir: string) {
         try {
             await fn()
         } catch (e) {
-            if (e.message !== config.error) throw new Error(`Expected error "${config.error}" but got "${e.message}"`)
-            return
+            if (e.message !== config.error) {
+                std.log(`Expected error "${config.error}" but got "${e.message}"`)
+                return false
+            }
+            return true
         }
-        throw new Error(`Expected to throw error "${config.error}"`)
+        std.log(`Expected to throw error "${config.error}"`)
+        return false
     } else {
         await fn()
         const result = new Loader(output).raw()
@@ -88,7 +95,9 @@ async function runTest(dir: string, vstdir: string) {
         if (diff) {
             std.log('Resolving failed')
             std.log(diff)
+            return false
         }
+        return true
     }
 }
 
