@@ -53,7 +53,14 @@ export default async function (options: TemplateTestOptions) {
     let failed = false
     for (const test of effectiveTests) {
         std.log(`Running test "${test.name}"`)
-        const result = await runTest(test.dir, options.path)
+
+        let result = false
+        try {
+            result = await runTest(test.dir, options.path)
+        } catch (e) {
+            std.log(e)
+        }
+
         if (!result) failed = true
     }
     if (failed) throw new Error(`Some tests failed`)
