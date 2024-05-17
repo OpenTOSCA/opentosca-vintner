@@ -607,11 +607,27 @@ export default class Solver {
         }
 
         /**
+         * is_consumed
+         */
+        if (check.isDefined(expression.is_consumed)) {
+            const input = this.graph.getInput(expression.is_consumed, {element, cached})
+            return MiniSat.and(input.consumers.map(it => it.id))
+        }
+
+        /**
          * output_presence
          */
         if (check.isDefined(expression.output_presence)) {
             const output = this.graph.getOutput(expression.output_presence, {element, cached})
             return output.id
+        }
+
+        /**
+         * is_produced
+         */
+        if (check.isDefined(expression.is_produced)) {
+            const output = this.graph.getOutput(expression.is_produced, {element, cached})
+            return MiniSat.and(output.producers.map(it => it.id))
         }
 
         /**

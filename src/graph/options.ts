@@ -57,6 +57,14 @@ class DefaultOptions extends BaseOptions {
     readonly nodeDefaultConsistencyCondition: boolean
     readonly nodeDefaultSemanticCondition: boolean
 
+    readonly inputDefaultCondition: boolean
+    readonly inputDefaultConsistencyCondition: boolean
+    readonly inputDefaultSemanticCondition: boolean
+
+    readonly outputDefaultCondition: boolean
+    readonly outputDefaultConsistencyCondition: boolean
+    readonly outputDefaultSemanticCondition: boolean
+
     readonly relationDefaultCondition: boolean
     readonly relationDefaultConditionMode: RelationDefaultConditionMode
     readonly relationDefaultConsistencyCondition: boolean
@@ -93,9 +101,34 @@ class DefaultOptions extends BaseOptions {
 
         const mode = getPruningMode(serviceTemplate, this.raw)
 
+        /**
+         * Default Condition
+         */
         this.defaultCondition = this.raw.default_condition ?? mode.default_condition ?? false
         assert.isBoolean(this.defaultCondition)
 
+        /**
+         * Input
+         */
+        this.inputDefaultCondition =
+            this.raw.input_default_condition ?? mode.input_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.inputDefaultCondition)
+
+        this.inputDefaultConsistencyCondition =
+            this.raw.input_default_consistency_condition ??
+            mode.input_default_consistency_condition ??
+            this.inputDefaultCondition
+        assert.isBoolean(this.inputDefaultConsistencyCondition)
+
+        this.inputDefaultSemanticCondition =
+            this.raw.input_default_semantic_condition ??
+            mode.input_default_semantic_condition ??
+            this.inputDefaultCondition
+        assert.isBoolean(this.inputDefaultSemanticCondition)
+
+        /**
+         * Node
+         */
         this.nodeDefaultCondition =
             this.raw.node_default_condition ?? mode.node_default_condition ?? this.defaultCondition
         assert.isBoolean(this.nodeDefaultCondition)
@@ -124,6 +157,28 @@ class DefaultOptions extends BaseOptions {
             this.nodeDefaultCondition
         assert.isBoolean(this.nodeDefaultSemanticCondition)
 
+        /**
+         * Output
+         */
+        this.outputDefaultCondition =
+            this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.outputDefaultCondition)
+
+        this.outputDefaultConsistencyCondition =
+            this.raw.output_default_consistency_condition ??
+            mode.output_default_consistency_condition ??
+            this.outputDefaultCondition
+        assert.isBoolean(this.outputDefaultConsistencyCondition)
+
+        this.outputDefaultSemanticCondition =
+            this.raw.output_default_semantic_condition ??
+            mode.output_default_semantic_condition ??
+            this.outputDefaultCondition
+        assert.isBoolean(this.outputDefaultSemanticCondition)
+
+        /**
+         * Relation
+         */
         this.relationDefaultCondition =
             this.raw.relation_default_condition ?? mode.relation_default_condition ?? this.defaultCondition
         assert.isBoolean(this.relationDefaultCondition)
@@ -152,6 +207,9 @@ class DefaultOptions extends BaseOptions {
             assert.isBoolean(this.relationDefaultImplied)
         }
 
+        /**
+         * Policy
+         */
         this.policyDefaultCondition =
             this.raw.policy_default_condition ?? mode.policy_default_condition ?? this.defaultCondition
         assert.isBoolean(this.policyDefaultCondition)
@@ -168,6 +226,9 @@ class DefaultOptions extends BaseOptions {
             this.policyDefaultCondition
         assert.isBoolean(this.policyDefaultSemanticCondition)
 
+        /**
+         * Group
+         */
         this.groupDefaultCondition =
             this.raw.group_default_condition ?? mode.group_default_condition ?? this.defaultCondition
         assert.isBoolean(this.groupDefaultCondition)
@@ -184,6 +245,9 @@ class DefaultOptions extends BaseOptions {
             this.groupDefaultCondition
         assert.isBoolean(this.groupDefaultSemanticCondition)
 
+        /**
+         * Artifact
+         */
         this.artifactDefaultCondition =
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
         assert.isBoolean(this.artifactDefaultCondition)
@@ -200,6 +264,9 @@ class DefaultOptions extends BaseOptions {
             this.artifactDefaultCondition
         assert.isBoolean(this.artifactDefaultSemanticCondition)
 
+        /**
+         * Property
+         */
         this.propertyDefaultCondition =
             this.raw.property_default_condition ?? mode.property_default_condition ?? this.defaultCondition
         assert.isBoolean(this.propertyDefaultCondition)
@@ -216,6 +283,9 @@ class DefaultOptions extends BaseOptions {
             this.propertyDefaultCondition
         assert.isBoolean(this.propertyDefaultSemanticCondition)
 
+        /**
+         * Type
+         */
         this.typeDefaultCondition =
             this.raw.type_default_condition ?? mode.type_default_condition ?? this.defaultCondition
         assert.isBoolean(this.typeDefaultCondition)
@@ -232,6 +302,9 @@ class DefaultOptions extends BaseOptions {
             this.typeDefaultCondition
         assert.isBoolean(this.typeDefaultSemanticCondition)
 
+        /**
+         * Technology
+         */
         this.technologyDefaultCondition =
             this.raw.technology_default_condition ?? mode.technology_default_condition ?? this.defaultCondition
         assert.isBoolean(this.technologyDefaultCondition)
@@ -257,9 +330,17 @@ class DefaultOptions extends BaseOptions {
 class PruningOptions extends BaseOptions {
     readonly pruning: boolean
 
+    readonly inputPruning: boolean
+    readonly inputConsistencyPruning: boolean
+    readonly inputSemanticPruning: boolean
+
     readonly nodePruning: boolean
     readonly nodeConsistencyPruning: boolean
     readonly nodeSemanticPruning: boolean
+
+    readonly outputPruning: boolean
+    readonly outputConsistencyPruning: boolean
+    readonly outputSemanticPruning: boolean
 
     readonly relationPruning: boolean
     readonly relationConsistencyPruning: boolean
@@ -294,9 +375,28 @@ class PruningOptions extends BaseOptions {
 
         const mode = getPruningMode(serviceTemplate, this.raw)
 
+        /**
+         * Pruning
+         */
         this.pruning = this.raw.pruning ?? mode.pruning ?? false
         assert.isBoolean(this.pruning)
 
+        /**
+         * Input
+         */
+        this.inputPruning = this.raw.input_pruning ?? mode.input_pruning ?? this.pruning
+        assert.isBoolean(this.inputPruning)
+
+        this.inputConsistencyPruning =
+            this.raw.input_consistency_pruning ?? mode.input_consistency_pruning ?? this.inputPruning
+        assert.isBoolean(this.inputConsistencyPruning)
+
+        this.inputSemanticPruning = this.raw.input_semantic_pruning ?? mode.input_semantic_pruning ?? this.inputPruning
+        assert.isBoolean(this.inputSemanticPruning)
+
+        /**
+         * Node
+         */
         this.nodePruning = this.raw.node_pruning ?? mode.node_pruning ?? this.pruning
         assert.isBoolean(this.nodePruning)
 
@@ -307,6 +407,23 @@ class PruningOptions extends BaseOptions {
         this.nodeSemanticPruning = this.raw.node_semantic_pruning ?? mode.node_semantic_pruning ?? this.nodePruning
         assert.isBoolean(this.nodeSemanticPruning)
 
+        /**
+         * Output
+         */
+        this.outputPruning = this.raw.output_pruning ?? mode.output_pruning ?? this.pruning
+        assert.isBoolean(this.outputPruning)
+
+        this.outputConsistencyPruning =
+            this.raw.output_consistency_pruning ?? mode.output_consistency_pruning ?? this.outputPruning
+        assert.isBoolean(this.outputConsistencyPruning)
+
+        this.outputSemanticPruning =
+            this.raw.output_semantic_pruning ?? mode.output_semantic_pruning ?? this.outputPruning
+        assert.isBoolean(this.outputSemanticPruning)
+
+        /**
+         * Relation
+         */
         this.relationPruning = this.raw.relation_pruning ?? mode.relation_pruning ?? this.pruning
         assert.isBoolean(this.relationPruning)
 
@@ -318,6 +435,9 @@ class PruningOptions extends BaseOptions {
             this.raw.relation_semantic_pruning ?? mode.relation_semantic_pruning ?? this.relationPruning
         assert.isBoolean(this.relationSemanticPruning)
 
+        /**
+         * Policy
+         */
         this.policyPruning = this.raw.policy_pruning ?? mode.policy_pruning ?? this.pruning
         assert.isBoolean(this.policyPruning)
 
@@ -329,6 +449,9 @@ class PruningOptions extends BaseOptions {
             this.raw.policy_semantic_pruning ?? mode.policy_semantic_pruning ?? this.policyPruning
         assert.isBoolean(this.policySemanticPruning)
 
+        /**
+         * Group
+         */
         this.groupPruning = this.raw.group_pruning ?? mode.group_pruning ?? this.pruning
         assert.isBoolean(this.groupPruning)
 
@@ -339,6 +462,9 @@ class PruningOptions extends BaseOptions {
         this.groupSemanticPruning = this.raw.group_semantic_pruning ?? mode.group_semantic_pruning ?? this.groupPruning
         assert.isBoolean(this.groupSemanticPruning)
 
+        /**
+         * Artifact
+         */
         this.artifactPruning = this.raw.artifact_pruning ?? mode.artifact_pruning ?? this.pruning
         assert.isBoolean(this.artifactPruning)
 
@@ -350,6 +476,9 @@ class PruningOptions extends BaseOptions {
             this.raw.artifact_semantic_pruning ?? mode.artifact_semantic_pruning ?? this.artifactPruning
         assert.isBoolean(this.artifactSemanticPruning)
 
+        /**
+         * Property
+         */
         this.propertyPruning = this.raw.property_pruning ?? mode.property_pruning ?? this.pruning
         assert.isBoolean(this.propertyPruning)
 
@@ -361,6 +490,9 @@ class PruningOptions extends BaseOptions {
             this.raw.property_semantic_pruning ?? mode.property_semantic_pruning ?? this.propertyPruning
         assert.isBoolean(this.propertySemanticPruning)
 
+        /**
+         * Type
+         */
         this.typePruning = this.raw.type_pruning ?? mode.type_pruning ?? this.pruning
         assert.isBoolean(this.typePruning)
 
@@ -371,6 +503,9 @@ class PruningOptions extends BaseOptions {
         this.typeSemanticPruning = this.raw.type_semantic_pruning ?? mode.type_semantic_pruning ?? this.typePruning
         assert.isBoolean(this.typeSemanticPruning)
 
+        /**
+         * Technology
+         */
         this.technologyPruning = this.raw.technology_pruning ?? mode.technology_pruning ?? this.pruning
         assert.isBoolean(this.technologyPruning)
 
@@ -379,7 +514,7 @@ class PruningOptions extends BaseOptions {
         assert.isBoolean(this.technologyConsistencyPruning)
 
         this.technologySemanticPruning =
-            this.raw.technology_semantic_pruning ?? mode.technology_semantic_pruning ?? this.typePruning
+            this.raw.technology_semantic_pruning ?? mode.technology_semantic_pruning ?? this.technologyPruning
         assert.isBoolean(this.technologySemanticPruning)
     }
 }
@@ -415,8 +550,10 @@ class ChecksOptions extends BaseOptions {
     readonly ambiguousTechnology: boolean
 
     readonly ambiguousInput: boolean
+    readonly unconsumedInput: boolean
 
     readonly ambiguousOutput: boolean
+    readonly unproducedOutput: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -484,8 +621,14 @@ class ChecksOptions extends BaseOptions {
         this.ambiguousInput = this.raw.ambiguous_input_check ?? this.consistency
         assert.isBoolean(this.ambiguousInput)
 
+        this.unconsumedInput = this.raw.unconsumed_input_check ?? this.semantic
+        assert.isBoolean(this.unconsumedInput)
+
         this.ambiguousOutput = this.raw.ambiguous_output_check ?? this.consistency
         assert.isBoolean(this.ambiguousOutput)
+
+        this.unproducedOutput = this.raw.unproduced_output_check ?? this.consistency
+        assert.isBoolean(this.unproducedOutput)
     }
 }
 

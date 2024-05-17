@@ -65,10 +65,20 @@ export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-
 export type DefaultOptions = {
     default_condition?: boolean
 
+    // TODO: docs
+    input_default_condition?: boolean
+    input_default_consistency_condition?: boolean
+    input_default_semantic_condition?: boolean
+
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
     node_default_consistency_condition?: boolean
     node_default_semantic_condition?: boolean
+
+    // TODO: docs
+    output_default_condition?: boolean
+    output_default_consistency_condition?: boolean
+    output_default_semantic_condition?: boolean
 
     relation_default_condition?: boolean
     relation_default_condition_mode?: RelationDefaultConditionMode
@@ -107,9 +117,19 @@ export type PruningOptions = {
     consistency_pruning?: boolean
     semantic_pruning?: boolean
 
+    // TODO: docs
+    input_pruning?: boolean
+    input_consistency_pruning?: boolean
+    input_semantic_pruning?: boolean
+
     node_pruning?: boolean
     node_consistency_pruning?: boolean
     node_semantic_pruning?: boolean
+
+    // TODO: docs
+    output_pruning?: boolean
+    output_consistency_pruning?: boolean
+    output_semantic_pruning?: boolean
 
     relation_pruning?: boolean
     relation_consistency_pruning?: boolean
@@ -169,15 +189,27 @@ export type ChecksOptions = {
     ambiguous_relation_check?: boolean
     ambiguous_input_check?: boolean
     ambiguous_output_check?: boolean
+
+    // TODO: docs
+    unconsumed_input_check?: boolean
+    unproduced_output_check?: boolean
 }
 
 export const ResolverModes: {[mode: string]: VariabilityOptions} = {
     strict: {},
     manual: {},
     'consistent-strict': {
+        input_default_condition: true,
+        input_default_consistency_condition: true,
+        input_default_semantic_condition: false,
+
         node_default_condition: true,
         node_default_consistency_condition: true,
         node_default_semantic_condition: false,
+
+        output_default_condition: true,
+        output_default_consistency_condition: true,
+        output_default_semantic_condition: false,
 
         relation_default_condition: true,
         relation_default_consistency_condition: true,
@@ -208,9 +240,17 @@ export const ResolverModes: {[mode: string]: VariabilityOptions} = {
         technology_default_semantic_condition: false,
     },
     'consistent-loose': {
+        input_pruning: true,
+        input_consistency_pruning: true,
+        input_semantic_pruning: false,
+
         node_pruning: true,
         node_consistency_pruning: true,
         node_semantic_pruning: false,
+
+        output_pruning: true,
+        output_consistency_pruning: true,
+        output_semantic_pruning: false,
 
         relation_pruning: true,
         relation_consistency_pruning: true,
@@ -246,9 +286,17 @@ export const ResolverModes: {[mode: string]: VariabilityOptions} = {
     'semantic-strict': {
         default_condition: true,
 
+        input_pruning: true,
+        input_consistency_pruning: true,
+        input_semantic_pruning: false,
+
         node_pruning: true,
         node_consistency_pruning: true,
         node_semantic_pruning: false,
+
+        output_pruning: true,
+        output_consistency_pruning: true,
+        output_semantic_pruning: false,
 
         relation_pruning: true,
         relation_consistency_pruning: true,
@@ -378,9 +426,11 @@ export type LogicExpression =
 
           // Input functions
           input_presence?: string | number
+          is_consumed?: string | number
 
           // Output functions
           output_presence?: string | number
+          is_produced?: string | number
 
           // Import functions
           import_presence?: number
