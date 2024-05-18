@@ -83,13 +83,6 @@ topology_template:
         logic_expression: is_elastic
 ```
 
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-{}
-```
 
 
 

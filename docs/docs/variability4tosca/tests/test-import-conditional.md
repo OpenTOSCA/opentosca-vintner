@@ -16,13 +16,6 @@ imports:
     conditions: false
 ```
 
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-{}
-```
 
 
 

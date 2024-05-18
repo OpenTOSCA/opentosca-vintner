@@ -62,13 +62,6 @@ topology_template:
       type: far.right
 ```
 
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-{}
-```
 
 
 

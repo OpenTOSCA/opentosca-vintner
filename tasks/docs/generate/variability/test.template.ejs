@@ -15,7 +15,7 @@ The variability of the following variable service template shall be resolved.
 <%- utils.toYAML(test.template) -%>
 ```
 
-<% if (test.inputs) { -%>
+<% if (!utils.isEmpty(test.inputs)) { -%>
 ## Variability Inputs
 
 When resolving variability, the following variability inputs shall be used.

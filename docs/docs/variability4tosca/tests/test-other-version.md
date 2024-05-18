@@ -11,13 +11,6 @@ The variability of the following variable service template shall be resolved.
 tosca_definitions_version: tosca_variability_1_0
 ```
 
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-{}
-```
 
 
 

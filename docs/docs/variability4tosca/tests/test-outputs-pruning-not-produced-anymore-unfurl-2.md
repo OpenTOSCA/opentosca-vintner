@@ -30,13 +30,6 @@ topology_template:
         some_property: some_value
 ```
 
-## Variability Inputs
-
-When resolving variability, the following variability inputs shall be used.
-
-```yaml linenums="1"
-{}
-```
 
 
 
