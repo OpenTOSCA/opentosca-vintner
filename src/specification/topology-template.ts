@@ -40,4 +40,6 @@ export type InputAssignmentValue = string | number | boolean | InputAssignmentVa
 // | {[key: string]: InputAssignmentValue}
 
 export type OutputDefinitionMap = {[key: string]: OutputDefinition}
-export type OutputDefinition = {} & VariabilityAlternative
+export type OutputDefinition = {
+    value: any
+} & VariabilityAlternative

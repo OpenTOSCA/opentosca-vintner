@@ -10,7 +10,6 @@ export default class Input extends Element {
     readonly raw: InputDefinition
     readonly index: number
 
-    // TODO: fill this
     readonly consumers: Element[] = []
 
     constructor(data: {name: string; raw: InputDefinition; index: number}) {

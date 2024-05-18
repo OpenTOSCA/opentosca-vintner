@@ -10,7 +10,6 @@ export default class Output extends Element {
     readonly raw: OutputDefinition
     readonly index: number
 
-    // TODO: fill this
     readonly producers: Element[] = []
 
     constructor(data: {name: string; raw: OutputDefinition; index: number}) {
