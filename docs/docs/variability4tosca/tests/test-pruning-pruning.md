@@ -46,6 +46,13 @@ topology_template:
         - relation_six_one: node_five
 ```
 
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+{}
+```
 
 
 

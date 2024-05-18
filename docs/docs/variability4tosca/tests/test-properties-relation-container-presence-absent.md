@@ -32,6 +32,13 @@ topology_template:
             value: 69
 ```
 
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+{}
+```
 
 
 

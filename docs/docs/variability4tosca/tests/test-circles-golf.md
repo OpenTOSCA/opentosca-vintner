@@ -44,6 +44,13 @@ topology_template:
         - relation_three_one: node_one
 ```
 
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+{}
+```
 
 
 

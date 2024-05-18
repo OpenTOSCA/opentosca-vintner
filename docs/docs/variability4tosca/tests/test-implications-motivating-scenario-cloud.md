@@ -94,6 +94,13 @@ topology_template:
       type: gcp.cloud
 ```
 
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+{}
+```
 
 
 

@@ -35,6 +35,13 @@ topology_template:
       type: prod_host
 ```
 
+## Variability Inputs
+
+When resolving variability, the following variability inputs shall be used.
+
+```yaml linenums="1"
+{}
+```
 
 
 
