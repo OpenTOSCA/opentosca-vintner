@@ -59,7 +59,6 @@ export default class Output extends Element {
     }
 
     getElementGenericCondition() {
-        // {and: this.producers.map(it => it.presenceCondition)}
         return {
             conditions: {is_produced: this.toscaId, _cached_element: this},
             consistency: false,

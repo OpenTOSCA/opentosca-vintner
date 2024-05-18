@@ -240,8 +240,9 @@ export default class Solver {
             if (conditions[0] === false) return this.minisat.forbid(element.id)
 
             // Add the only assigned condition without "and"
-            const t = this.transformLogicExpression(conditions[0], {element})
-            return this.minisat.require(MiniSat.equiv(element.id, t))
+            return this.minisat.require(
+                MiniSat.equiv(element.id, this.transformLogicExpression(conditions[0], {element}))
+            )
         }
 
         // Normalize conditions to a single 'and' condition

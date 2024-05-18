@@ -179,7 +179,7 @@ export default class Checker {
         // Ensure that outputs are produced
         if (this.graph.options.checks.unproducedOutput) {
             for (const output of outputs) {
-                if (output.producers.every(it => !it.present)) throw new Error(`${output.Display} is not produced`)
+                if (output.producers.some(it => !it.present)) throw new Error(`${output.Display} is not produced`)
             }
         }
 

@@ -110,7 +110,6 @@ class DefaultOptions extends BaseOptions {
         /**
          * Input
          */
-
         this.inputDefaultCondition =
             this.raw.input_default_condition ?? mode.input_default_condition ?? this.defaultCondition
         assert.isBoolean(this.inputDefaultCondition)
@@ -161,7 +160,6 @@ class DefaultOptions extends BaseOptions {
         /**
          * Output
          */
-
         this.outputDefaultCondition =
             this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
         assert.isBoolean(this.outputDefaultCondition)
