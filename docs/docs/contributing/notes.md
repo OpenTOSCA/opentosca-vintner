@@ -259,3 +259,5 @@ We briefly discuss limitations of our prototypical implementation.
 1. We expect that `relationship` at requirement assignments is a string.
 1. We expect that names of hosting relations match `/^(.*_)?host(_.*)?$/` since we do not implement the TOSCA type system.
 1. We expect that names of connection relations match `/^(.*_)?connection(_.*)?$/` since we do not implement the TOSCA type system.
+1. We only support simple consumers, i.e., directly accessed by properties.
+1. We only support simple producers, i.e., directly accessing the property of a node, using Unfurl `eval` Jinja filter, Unfurl `eval` intrinsic function, and TOSCA `get_property` intrinsic function.

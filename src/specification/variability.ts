@@ -65,7 +65,6 @@ export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-
 export type DefaultOptions = {
     default_condition?: boolean
 
-    // TODO: docs
     input_default_condition?: boolean
     input_default_consistency_condition?: boolean
     input_default_semantic_condition?: boolean
@@ -75,7 +74,6 @@ export type DefaultOptions = {
     node_default_consistency_condition?: boolean
     node_default_semantic_condition?: boolean
 
-    // TODO: docs
     output_default_condition?: boolean
     output_default_consistency_condition?: boolean
     output_default_semantic_condition?: boolean
@@ -117,7 +115,6 @@ export type PruningOptions = {
     consistency_pruning?: boolean
     semantic_pruning?: boolean
 
-    // TODO: docs
     input_pruning?: boolean
     input_consistency_pruning?: boolean
     input_semantic_pruning?: boolean
@@ -126,7 +123,6 @@ export type PruningOptions = {
     node_consistency_pruning?: boolean
     node_semantic_pruning?: boolean
 
-    // TODO: docs
     output_pruning?: boolean
     output_consistency_pruning?: boolean
     output_semantic_pruning?: boolean
@@ -190,7 +186,6 @@ export type ChecksOptions = {
     ambiguous_input_check?: boolean
     ambiguous_output_check?: boolean
 
-    // TODO: docs
     unconsumed_input_check?: boolean
     unproduced_output_check?: boolean
 }
