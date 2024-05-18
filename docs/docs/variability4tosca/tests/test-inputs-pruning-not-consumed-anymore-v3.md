@@ -8,6 +8,7 @@
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_3
 topology_template:
   inputs:
@@ -21,6 +22,7 @@ topology_template:
       properties:
         some_property:
           get_input: some_input
+{% endraw %}
 ```
 
 
@@ -31,6 +33,8 @@ topology_template:
 The following variability-resolved service template is expected.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
+{% endraw %}
 ```
 

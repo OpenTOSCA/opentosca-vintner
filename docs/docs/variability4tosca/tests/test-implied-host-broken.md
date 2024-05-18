@@ -11,6 +11,7 @@ Only one hosting relation must be present. Hence, there is a conflict between im
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_2
 topology_template:
   variability:
@@ -45,6 +46,7 @@ topology_template:
       type: Left
       conditions:
         logic_expression: is_l
+{% endraw %}
 ```
 
 ## Variability Inputs

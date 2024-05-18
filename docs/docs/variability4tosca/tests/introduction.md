@@ -225,8 +225,8 @@ processing.
 | 200 | [other-preset](./test-other-preset.md) |
 | 201 | [other-presets](./test-other-presets.md) |
 | 202 | [other-throw-CONTAINER](./test-other-throw-CONTAINER.md) |
-| 203 | [other-throw-not-unique](./test-other-throw-not-unique.md) |
-| 204 | [other-throw-SELF](./test-other-throw-SELF.md) |
+| 203 | [other-throw-SELF](./test-other-throw-SELF.md) |
+| 204 | [other-throw-not-unique](./test-other-throw-not-unique.md) |
 | 205 | [Operator "concat"](./test-other-token.md) |
 | 206 | [Get Variability Expression](./test-other-value-expression.md) |
 | 207 | [Get Variability Input](./test-other-variability-input.md) |

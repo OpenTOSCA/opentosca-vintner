@@ -11,6 +11,7 @@ Do not remove policy "policy_one" since pruning is not forced.
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
   variability:
@@ -34,6 +35,7 @@ topology_template:
         targets:
           - node_one
           - node_two
+{% endraw %}
 ```
 
 
@@ -44,6 +46,7 @@ topology_template:
 The following variability-resolved service template is expected.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
   node_templates:
@@ -57,5 +60,6 @@ topology_template:
         type: policy_two
         targets:
           - node_two
+{% endraw %}
 ```
 

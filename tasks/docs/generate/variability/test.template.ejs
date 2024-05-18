@@ -12,7 +12,9 @@
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 <%- utils.toYAML(test.template) -%>
+{% endraw %}
 ```
 
 <% if (!utils.isEmpty(test.inputs)) { -%>
@@ -51,7 +53,9 @@ The following strings are searched and replaced in the variability-resolved serv
 The following variability-resolved service template is expected.
 
 ```yaml linenums="1"
+{% raw %}
 <%- utils.toYAML(test.expected) -%>
+{% endraw %}
 ```
 <% } -%>
 

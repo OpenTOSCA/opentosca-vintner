@@ -8,6 +8,7 @@
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
   node_templates:
@@ -20,6 +21,7 @@ topology_template:
         - artifact_one_one:
             type: artifact_b
             default_alternative: true
+{% endraw %}
 ```
 
 
