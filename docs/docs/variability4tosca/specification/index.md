@@ -300,6 +300,7 @@ relation_default_implied: true
 
 `tosca_variability_1_0_rc_3` has the same default values as `tosca_variability_1_0_rc_2`.
 But pruning modes also consider input and output pruning.
+Also, semantic checks are disabled by default.
 
 
 ## Default Conditions
