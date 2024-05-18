@@ -5,6 +5,8 @@ topology_template:
         options:
             type_default_condition: true
             output_default_condition: true
+            output_default_consistency_condition: true
+            output_default_semantic_condition: true
             property_default_condition: true
 
     outputs:

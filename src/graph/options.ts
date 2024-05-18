@@ -110,6 +110,7 @@ class DefaultOptions extends BaseOptions {
         /**
          * Input
          */
+
         this.inputDefaultCondition =
             this.raw.input_default_condition ?? mode.input_default_condition ?? this.defaultCondition
         assert.isBoolean(this.inputDefaultCondition)
@@ -160,6 +161,7 @@ class DefaultOptions extends BaseOptions {
         /**
          * Output
          */
+
         this.outputDefaultCondition =
             this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
         assert.isBoolean(this.outputDefaultCondition)
@@ -874,8 +876,40 @@ function getPruningMode(options: BaseOptions) {
 }
 
 const PruningModesV1: {[mode: string]: VariabilityOptions} = {
-    strict: {},
-    manual: {},
+    strict: {
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+    manual: {
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
     'consistent-strict': {
         input_default_condition: false,
         input_default_consistency_condition: false,
@@ -960,21 +994,45 @@ const PruningModesV1: {[mode: string]: VariabilityOptions} = {
     },
     default: {
         default_condition: true,
-    },
-    'semantic-strict': {
-        default_condition: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
 
         input_pruning: false,
         input_consistency_pruning: false,
         input_semantic_pruning: false,
 
-        node_pruning: true,
-        node_consistency_pruning: true,
-        node_semantic_pruning: false,
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
 
         output_pruning: false,
         output_consistency_pruning: false,
         output_semantic_pruning: false,
+    },
+    'semantic-strict': {
+        default_condition: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+
+        node_pruning: true,
+        node_consistency_pruning: true,
+        node_semantic_pruning: false,
 
         relation_pruning: true,
         relation_consistency_pruning: true,
@@ -1006,9 +1064,41 @@ const PruningModesV1: {[mode: string]: VariabilityOptions} = {
     },
     'semantic-loose': {
         pruning: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
     },
     loose: {
         pruning: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
     },
 }
 
