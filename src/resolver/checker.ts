@@ -160,12 +160,26 @@ export default class Checker {
             }
         }
 
+        // Ensure that inputs are consumed
+        if (this.graph.options.checks.unproducedOutput) {
+            for (const input of inputs) {
+                if (input.consumers.every(it => !it.present)) throw new Error(`${input.Display} is not consumed`)
+            }
+        }
+
         // Ensure that outputs are unique per name
         if (this.graph.options.checks.ambiguousOutput) {
             const names = new Set()
             for (const output of outputs) {
                 if (names.has(output.name)) throw new Error(`${output.Display} is ambiguous`)
                 names.add(output.name)
+            }
+        }
+
+        // Ensure that outputs are produced
+        if (this.graph.options.checks.unproducedOutput) {
+            for (const output of outputs) {
+                if (output.producers.some(it => !it.present)) throw new Error(`${output.Display} is not produced`)
             }
         }
 

@@ -134,10 +134,16 @@ The following options are used to configure the default conditions of elements.
 | Keyname                                  | Mandatory | Type                                                                                                  | Default           | Description                                                                        |
 |------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------|-------------------|------------------------------------------------------------------------------------|
 | default_condition                        | false     | Boolean                                                                                               | false             | Enable all default conditions (consistency and semantic).                          |
+| input_default_condition                  | false     | Boolean                                                                                               | false             | Enable default condition for inputs (consistency and semantic).                    |
+| input_default_consistency_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for inputs.                                   |
+| input_default_semantic_condition         | false     | Boolean                                                                                               | false             | Enable default semantic condition for inputs.                                      |
 | node_default_condition                   | false     | Boolean                                                                                               | false             | Enable default condition for nodes (consistency and semantic).                     |
 | node_default_condition_mode              | false     | List(source &#124; incoming &#124; incomingnaive &#124; host &#124; artifact &#124; artifactnaive, -) | incoming-artifact | Configure the default condition for nodes.                                         |
 | node_default_consistency_condition       | false     | Boolean                                                                                               | false             | Enable default consistency condition for nodes.                                    |
 | node_default_semantic_condition          | false     | Boolean                                                                                               | false             | Enable default semantic condition for nodes.                                       |
+| output_default_condition                 | false     | Boolean                                                                                               | false             | Enable default condition for outputs (consistency and semantic).                   |
+| output_default_consistency_condition     | false     | Boolean                                                                                               | false             | Enable default consistency condition for outputs.                                  |
+| output_default_semantic_condition        | false     | Boolean                                                                                               | false             | Enable default semantic condition for outputs.                                     |
 | relation_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for relations (consistency and semantic).                 |
 | relation_default_condition_mode          | false     | List(source &#124; target, -)                                                                         | source-target     | Configure the default condition for relations.                                     |
 | relation_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default semantic condition for relations.                                   |
@@ -170,9 +176,15 @@ The following options are used to configure the pruning of elements.
 | Keyname                        | Mandatory | Type                                      | Default       | Description                                                             |
 |--------------------------------|-----------|-------------------------------------------|---------------|-------------------------------------------------------------------------|
 | pruning                        | false     | Boolean                                   | false         | Enable pruning of all elements  (consistency and semantic).             |
+| input_pruning                  | false     | Boolean                                   | false         | Enable pruning of inputs (consistency and semantic).                    |
+| input_consistency_pruning      | false     | Boolean                                   | false         | Enable consistency pruning of inputs.                                   |
+| input_semantic_pruning         | false     | Boolean                                   | false         | Enable semantic pruning of inputs.                                      |
 | node_pruning                   | false     | Boolean                                   | false         | Enable pruning of nodes (consistency and semantic).                     |
 | node_consistency_pruning       | false     | Boolean                                   | false         | Enable consistency pruning of nodes.                                    |
 | node_semantic_pruning          | false     | Boolean                                   | false         | Enable semantic pruning of nodes.                                       |
+| output_pruning                 | false     | Boolean                                   | false         | Enable pruning of output (consistency and semantic).                    |
+| output_consistency_pruning     | false     | Boolean                                   | false         | Enable consistency pruning of output.                                   |
+| output_semantic_pruning        | false     | Boolean                                   | false         | Enable semantic pruning of output.                                      |
 | relation_pruning               | false     | Boolean                                   | false         | Enable pruning of relations (consistency and semantic).                 |
 | relation_consistency_pruning   | false     | Boolean                                   | false         | Enable consistency pruning of relations.                                |
 | relation_semantic_pruning      | false     | Boolean                                   | false         | Enable semantic pruning of relations.                                   |
@@ -222,6 +234,8 @@ The following options are used to configure checks.
 | ambiguous_relation_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present relations.             |
 | ambiguous_input_check              | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present inputs.                |
 | ambiguous_output_check             | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present outputs.               |
+| unconsumed_input_check             | false     | Boolean   | true    | Enable the semantic check regarding not consumed inputs.                        |
+| unproduced_output_check            | false     | Boolean   | true    | Enable the consistency check regarding not produced outputs.                    |
 
 ### Solver Options
 
@@ -264,7 +278,9 @@ There are several predefined pruning modes which provide different useful combin
 - `semantic-strict`: consistency pruning is enabled and semantic defaults
 - `semantic-loose`: pruning is enabled everywhere (consistency and semantic)
 
-### v2
+Note, pruning modes do not consider input and output pruning in `tosca_variability_1_0_rc_2` but in `tosca_variability_1_0_rc_3`.
+
+### RC v2
 
 `tosca_variability_1_0_rc_2` has the following default values.
 
@@ -279,6 +295,12 @@ technology_constraint: true
 hosting_stack_constraint: true
 relation_default_implied: true
 ```
+
+### RC v3
+
+`tosca_variability_1_0_rc_3` has the same default values as `tosca_variability_1_0_rc_2`.
+But pruning modes also consider input and output pruning.
+
 
 ## Default Conditions
 
@@ -295,6 +317,8 @@ The following element-generic default conditions can be assigned to elements.
 | Node with Incoming Relations (incoming) | false       | true     | Check if any incoming relation is present.                                         |
 | Node with Artifacts (artifact)          | false       | true     | Check if any artifact is present.                                                  |
 | Property                                | true        | false    | Check if the container, e.g., node template or policy, of the property is present. |
+| Input                                   | false       | true     | Check if the input is consumed.                                                    |
+| Output                                  | true        | false    | Check if the output is produced.                                                   |
 | Relation                                | true        | false    | Check if the source and target of the relation is present.                         |
 | Policy                                  | false       | true     | Check if the policy has any targets which are present.                             |
 | Group                                   | false       | true     | Check if the group has any members which are present.                              |
@@ -756,11 +780,19 @@ my_node:
 A topology template input is a conditional element, thus, variability conditions and other options can be assigned.
 These conditions must hold otherwise the respective input is not present.
 
-| Keyname              | Mandatory | Type                                                                        | Description                                                                                                                  |
-|----------------------|-----------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.           |
-| implies              | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`. |
-| default_alternative  | false     | Boolean                                                                     | Declare the input as default. This overwrites assigned conditions. There must be only one default assignment.                |                                                                                                       |
+| Keyname                       | Mandatory | Type                                                                        | Description                                                                                                                                                                               |
+|-------------------------------|-----------|-----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions                    | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                        |
+| implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                              |
+| default_alternative           | false     | Boolean                                                                     | Declare the input as default. This overwrites assigned conditions. There must be only one default assignment.                                                                             |                                                                                                       |
+| default_condition             | false     | Boolean                                                                     | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                  |
+| default_consistency_condition | false     | Boolean                                                                     | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.  |
+| default_semantic_condition    | false     | Boolean                                                                     | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.     |
+| default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host  | Configure the default condition for this element.                                                                                                                                         |
+| pruning                       | false     | Boolean                                                                     | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                            |
+| consistency_pruning           | false     | Boolean                                                                     | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                      |
+| semantic_pruning              | false     | Boolean                                                                     | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                         |
+
 
 For example, the topology template input has a variability condition assigned.
 
@@ -776,11 +808,18 @@ inputs:
 A topology template output is a conditional element, thus, variability conditions and other options can be assigned.
 These conditions must hold otherwise the respective output is not present.
 
-| Keyname              | Mandatory | Type                                                                        | Description                                                                                                                  |
-|----------------------|-----------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| conditions           | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.           |
-| implies              | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`. |
-| default_alternative  | false     | Boolean                                                                     | Declare the output as default. This overwrites assigned conditions. There must be only one default assignment.               |                                                                                                       |
+| Keyname                         | Mandatory | Type                                                                        | Description                                                                                                                                                                                 |
+|---------------------------------|-----------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| conditions                      | false     | VariabilityCondition &#124; List(VariabilityCondition)                      | An optional variability condition. If a list is given, then the conditions are combined using the _and_ operation.                                                                          |
+| implies                         | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition)) | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                                |
+| default_alternative             | false     | Boolean                                                                     | Declare the output as default. This overwrites assigned conditions. There must be only one default assignment.                                                                              |                                                                                                       |
+| default_condition               | false     | Boolean                                                                     | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                    |
+| default_consistency_condition   | false     | Boolean                                                                     | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
+| default_semantic_condition      | false     | Boolean                                                                     | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.       |
+| default_condition_mode          | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host  | Configure the default condition for this element.                                                                                                                                           |
+| pruning                         | false     | Boolean                                                                     | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                              |
+| consistency_pruning             | false     | Boolean                                                                     | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
+| semantic_pruning                | false     | Boolean                                                                     | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                           |
 
 For example, the topology template output has a variability condition assigned.
 
@@ -904,7 +943,9 @@ The following presence operators can be used inside a logic expression.
 | policy_presence             | Policy: String &#124; Number                                                        | Boolean | Returns if policy is present.                                                                                                                                                    |
 | group_presence              | Group: String                                                                       | Boolean | Returns if group is present.                                                                                                                                                     |
 | input_presence              | Input: String &#124; Number                                                         | Boolean | Returns if input is present.                                                                                                                                                     |
+| is_consumed                 | Input: String &#124; Number                                                         | Boolean | Returns if input is consumed by a property.                                                                                                                                      |
 | output_presence             | Output: String &#124; Number                                                        | Boolean | Returns if output is present.                                                                                                                                                    |
+| is_produced                 | Output: String &#124; Number                                                        | Boolean | Returns if output is produced by a property.                                                                                                                                     |
 | source_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if source node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | target_presence             | SELF &#124; CONTAINER                                                               | Boolean | Returns if target node of relation is present. Can only be used inside a relation. Otherwise use `node_presence`.                                                                |
 | has_present_target          | Policy: String &#124; Number &#124; SELF &#124; CONTAINER                           | Boolean | Returns if any target of the given policy is present.                                                                                                                            |

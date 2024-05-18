@@ -65,10 +65,18 @@ export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-
 export type DefaultOptions = {
     default_condition?: boolean
 
+    input_default_condition?: boolean
+    input_default_consistency_condition?: boolean
+    input_default_semantic_condition?: boolean
+
     node_default_condition?: boolean
     node_default_condition_mode?: NodeDefaultConditionMode
     node_default_consistency_condition?: boolean
     node_default_semantic_condition?: boolean
+
+    output_default_condition?: boolean
+    output_default_consistency_condition?: boolean
+    output_default_semantic_condition?: boolean
 
     relation_default_condition?: boolean
     relation_default_condition_mode?: RelationDefaultConditionMode
@@ -107,9 +115,17 @@ export type PruningOptions = {
     consistency_pruning?: boolean
     semantic_pruning?: boolean
 
+    input_pruning?: boolean
+    input_consistency_pruning?: boolean
+    input_semantic_pruning?: boolean
+
     node_pruning?: boolean
     node_consistency_pruning?: boolean
     node_semantic_pruning?: boolean
+
+    output_pruning?: boolean
+    output_consistency_pruning?: boolean
+    output_semantic_pruning?: boolean
 
     relation_pruning?: boolean
     relation_consistency_pruning?: boolean
@@ -169,121 +185,9 @@ export type ChecksOptions = {
     ambiguous_relation_check?: boolean
     ambiguous_input_check?: boolean
     ambiguous_output_check?: boolean
-}
 
-export const ResolverModes: {[mode: string]: VariabilityOptions} = {
-    strict: {},
-    manual: {},
-    'consistent-strict': {
-        node_default_condition: true,
-        node_default_consistency_condition: true,
-        node_default_semantic_condition: false,
-
-        relation_default_condition: true,
-        relation_default_consistency_condition: true,
-        relation_default_semantic_condition: false,
-
-        policy_default_condition: true,
-        policy_default_consistency_condition: true,
-        policy_default_semantic_condition: false,
-
-        group_default_condition: true,
-        group_default_consistency_condition: true,
-        group_default_semantic_condition: false,
-
-        artifact_default_condition: true,
-        artifact_default_consistency_condition: true,
-        artifact_default_semantic_condition: false,
-
-        property_default_condition: true,
-        property_default_consistency_condition: true,
-        property_default_semantic_condition: false,
-
-        type_default_condition: true,
-        type_default_consistency_condition: true,
-        type_default_semantic_condition: false,
-
-        technology_default_condition: true,
-        technology_default_consistency_condition: true,
-        technology_default_semantic_condition: false,
-    },
-    'consistent-loose': {
-        node_pruning: true,
-        node_consistency_pruning: true,
-        node_semantic_pruning: false,
-
-        relation_pruning: true,
-        relation_consistency_pruning: true,
-        relation_semantic_pruning: false,
-
-        policy_pruning: true,
-        policy_consistency_pruning: true,
-        policy_semantic_pruning: false,
-
-        group_pruning: true,
-        group_consistency_pruning: true,
-        group_semantic_pruning: false,
-
-        artifact_pruning: true,
-        artifact_consistency_pruning: true,
-        artifact_semantic_pruning: false,
-
-        property_pruning: true,
-        property_consistency_pruning: true,
-        property_semantic_pruning: false,
-
-        type_pruning: true,
-        type_consistency_pruning: true,
-        type_semantic_pruning: false,
-
-        technology_pruning: true,
-        technology_consistency_pruning: true,
-        technology_semantic_pruning: false,
-    },
-    default: {
-        default_condition: true,
-    },
-    'semantic-strict': {
-        default_condition: true,
-
-        node_pruning: true,
-        node_consistency_pruning: true,
-        node_semantic_pruning: false,
-
-        relation_pruning: true,
-        relation_consistency_pruning: true,
-        relation_semantic_pruning: false,
-
-        policy_pruning: true,
-        policy_consistency_pruning: true,
-        policy_semantic_pruning: false,
-
-        group_pruning: true,
-        group_consistency_pruning: true,
-        group_semantic_pruning: false,
-
-        artifact_pruning: true,
-        artifact_consistency_pruning: true,
-        artifact_semantic_pruning: false,
-
-        property_pruning: true,
-        property_consistency_pruning: true,
-        property_semantic_pruning: false,
-
-        type_pruning: true,
-        type_consistency_pruning: true,
-        type_semantic_pruning: false,
-
-        technology_pruning: true,
-        technology_consistency_pruning: true,
-        technology_semantic_pruning: false,
-    },
-    'semantic-loose': {
-        pruning: true,
-    },
-    loose: {
-        pruning: true,
-    },
+    unconsumed_input_check?: boolean
+    unproduced_output_check?: boolean
 }
 
 export type InputAssignmentPresetMap = {[key: string]: InputAssignmentPreset}
@@ -378,9 +282,11 @@ export type LogicExpression =
 
           // Input functions
           input_presence?: string | number
+          is_consumed?: string | number
 
           // Output functions
           output_presence?: string | number
+          is_produced?: string | number
 
           // Import functions
           import_presence?: number

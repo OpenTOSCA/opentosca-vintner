@@ -10,6 +10,8 @@ export default class Input extends Element {
     readonly raw: InputDefinition
     readonly index: number
 
+    readonly consumers: Element[] = []
+
     constructor(data: {name: string; raw: InputDefinition; index: number}) {
         super()
 
@@ -22,6 +24,46 @@ export default class Input extends Element {
 
     get toscaId() {
         return this.index
+    }
+
+    get defaultEnabled() {
+        return this.raw.default_condition ?? this.graph.options.default.inputDefaultCondition
+    }
+
+    get pruningEnabled() {
+        return this.raw.pruning ?? this.graph.options.pruning.inputPruning
+    }
+
+    get defaultConsistencyCondition() {
+        return (
+            this.raw.default_consistency_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.inputDefaultConsistencyCondition
+        )
+    }
+
+    get defaultSemanticCondition() {
+        return (
+            this.raw.default_semantic_condition ??
+            this.raw.default_condition ??
+            this.graph.options.default.inputDefaultSemanticCondition
+        )
+    }
+
+    get consistencyPruning() {
+        return this.raw.consistency_pruning ?? this.raw.pruning ?? this.graph.options.pruning.inputConsistencyPruning
+    }
+
+    get semanticPruning() {
+        return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.inputSemanticPruning
+    }
+
+    getElementGenericCondition() {
+        return {
+            conditions: {is_consumed: this.toscaId, _cached_element: this},
+            consistency: false,
+            semantic: true,
+        }
     }
 
     constructPresenceCondition() {

@@ -4,19 +4,17 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
-    ResolverModes,
     TechnologyDefaultConditionMode,
     VariabilityOptions,
 } from '#spec/variability'
 
 abstract class BaseOptions {
-    protected readonly serviceTemplate: ServiceTemplate
-
-    // TODO: protected
+    readonly serviceTemplate: ServiceTemplate
     readonly raw: VariabilityOptions
 
-    protected readonly v1: boolean
-    protected readonly v2: boolean
+    readonly v1: boolean
+    readonly v2: boolean
+    readonly v3: boolean
 
     protected constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -24,10 +22,12 @@ abstract class BaseOptions {
 
         this.v1 = [
             TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0,
+            TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_1,
             TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
         ].includes(serviceTemplate.tosca_definitions_version)
 
         this.v2 = serviceTemplate.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2
+        this.v3 = serviceTemplate.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_3
     }
 }
 
@@ -56,6 +56,14 @@ class DefaultOptions extends BaseOptions {
     readonly nodeDefaultConditionMode: NodeDefaultConditionMode
     readonly nodeDefaultConsistencyCondition: boolean
     readonly nodeDefaultSemanticCondition: boolean
+
+    readonly inputDefaultCondition: boolean
+    readonly inputDefaultConsistencyCondition: boolean
+    readonly inputDefaultSemanticCondition: boolean
+
+    readonly outputDefaultCondition: boolean
+    readonly outputDefaultConsistencyCondition: boolean
+    readonly outputDefaultSemanticCondition: boolean
 
     readonly relationDefaultCondition: boolean
     readonly relationDefaultConditionMode: RelationDefaultConditionMode
@@ -91,11 +99,36 @@ class DefaultOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const mode = getPruningMode(serviceTemplate, this.raw)
+        const mode = getPruningMode(this)
 
+        /**
+         * Default Condition
+         */
         this.defaultCondition = this.raw.default_condition ?? mode.default_condition ?? false
         assert.isBoolean(this.defaultCondition)
 
+        /**
+         * Input
+         */
+        this.inputDefaultCondition =
+            this.raw.input_default_condition ?? mode.input_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.inputDefaultCondition)
+
+        this.inputDefaultConsistencyCondition =
+            this.raw.input_default_consistency_condition ??
+            mode.input_default_consistency_condition ??
+            this.inputDefaultCondition
+        assert.isBoolean(this.inputDefaultConsistencyCondition)
+
+        this.inputDefaultSemanticCondition =
+            this.raw.input_default_semantic_condition ??
+            mode.input_default_semantic_condition ??
+            this.inputDefaultCondition
+        assert.isBoolean(this.inputDefaultSemanticCondition)
+
+        /**
+         * Node
+         */
         this.nodeDefaultCondition =
             this.raw.node_default_condition ?? mode.node_default_condition ?? this.defaultCondition
         assert.isBoolean(this.nodeDefaultCondition)
@@ -124,6 +157,28 @@ class DefaultOptions extends BaseOptions {
             this.nodeDefaultCondition
         assert.isBoolean(this.nodeDefaultSemanticCondition)
 
+        /**
+         * Output
+         */
+        this.outputDefaultCondition =
+            this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
+        assert.isBoolean(this.outputDefaultCondition)
+
+        this.outputDefaultConsistencyCondition =
+            this.raw.output_default_consistency_condition ??
+            mode.output_default_consistency_condition ??
+            this.outputDefaultCondition
+        assert.isBoolean(this.outputDefaultConsistencyCondition)
+
+        this.outputDefaultSemanticCondition =
+            this.raw.output_default_semantic_condition ??
+            mode.output_default_semantic_condition ??
+            this.outputDefaultCondition
+        assert.isBoolean(this.outputDefaultSemanticCondition)
+
+        /**
+         * Relation
+         */
         this.relationDefaultCondition =
             this.raw.relation_default_condition ?? mode.relation_default_condition ?? this.defaultCondition
         assert.isBoolean(this.relationDefaultCondition)
@@ -152,6 +207,9 @@ class DefaultOptions extends BaseOptions {
             assert.isBoolean(this.relationDefaultImplied)
         }
 
+        /**
+         * Policy
+         */
         this.policyDefaultCondition =
             this.raw.policy_default_condition ?? mode.policy_default_condition ?? this.defaultCondition
         assert.isBoolean(this.policyDefaultCondition)
@@ -168,6 +226,9 @@ class DefaultOptions extends BaseOptions {
             this.policyDefaultCondition
         assert.isBoolean(this.policyDefaultSemanticCondition)
 
+        /**
+         * Group
+         */
         this.groupDefaultCondition =
             this.raw.group_default_condition ?? mode.group_default_condition ?? this.defaultCondition
         assert.isBoolean(this.groupDefaultCondition)
@@ -184,6 +245,9 @@ class DefaultOptions extends BaseOptions {
             this.groupDefaultCondition
         assert.isBoolean(this.groupDefaultSemanticCondition)
 
+        /**
+         * Artifact
+         */
         this.artifactDefaultCondition =
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
         assert.isBoolean(this.artifactDefaultCondition)
@@ -200,6 +264,9 @@ class DefaultOptions extends BaseOptions {
             this.artifactDefaultCondition
         assert.isBoolean(this.artifactDefaultSemanticCondition)
 
+        /**
+         * Property
+         */
         this.propertyDefaultCondition =
             this.raw.property_default_condition ?? mode.property_default_condition ?? this.defaultCondition
         assert.isBoolean(this.propertyDefaultCondition)
@@ -216,6 +283,9 @@ class DefaultOptions extends BaseOptions {
             this.propertyDefaultCondition
         assert.isBoolean(this.propertyDefaultSemanticCondition)
 
+        /**
+         * Type
+         */
         this.typeDefaultCondition =
             this.raw.type_default_condition ?? mode.type_default_condition ?? this.defaultCondition
         assert.isBoolean(this.typeDefaultCondition)
@@ -232,6 +302,9 @@ class DefaultOptions extends BaseOptions {
             this.typeDefaultCondition
         assert.isBoolean(this.typeDefaultSemanticCondition)
 
+        /**
+         * Technology
+         */
         this.technologyDefaultCondition =
             this.raw.technology_default_condition ?? mode.technology_default_condition ?? this.defaultCondition
         assert.isBoolean(this.technologyDefaultCondition)
@@ -257,9 +330,17 @@ class DefaultOptions extends BaseOptions {
 class PruningOptions extends BaseOptions {
     readonly pruning: boolean
 
+    readonly inputPruning: boolean
+    readonly inputConsistencyPruning: boolean
+    readonly inputSemanticPruning: boolean
+
     readonly nodePruning: boolean
     readonly nodeConsistencyPruning: boolean
     readonly nodeSemanticPruning: boolean
+
+    readonly outputPruning: boolean
+    readonly outputConsistencyPruning: boolean
+    readonly outputSemanticPruning: boolean
 
     readonly relationPruning: boolean
     readonly relationConsistencyPruning: boolean
@@ -292,11 +373,30 @@ class PruningOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        const mode = getPruningMode(serviceTemplate, this.raw)
+        const mode = getPruningMode(this)
 
+        /**
+         * Pruning
+         */
         this.pruning = this.raw.pruning ?? mode.pruning ?? false
         assert.isBoolean(this.pruning)
 
+        /**
+         * Input
+         */
+        this.inputPruning = this.raw.input_pruning ?? mode.input_pruning ?? this.pruning
+        assert.isBoolean(this.inputPruning)
+
+        this.inputConsistencyPruning =
+            this.raw.input_consistency_pruning ?? mode.input_consistency_pruning ?? this.inputPruning
+        assert.isBoolean(this.inputConsistencyPruning)
+
+        this.inputSemanticPruning = this.raw.input_semantic_pruning ?? mode.input_semantic_pruning ?? this.inputPruning
+        assert.isBoolean(this.inputSemanticPruning)
+
+        /**
+         * Node
+         */
         this.nodePruning = this.raw.node_pruning ?? mode.node_pruning ?? this.pruning
         assert.isBoolean(this.nodePruning)
 
@@ -307,6 +407,23 @@ class PruningOptions extends BaseOptions {
         this.nodeSemanticPruning = this.raw.node_semantic_pruning ?? mode.node_semantic_pruning ?? this.nodePruning
         assert.isBoolean(this.nodeSemanticPruning)
 
+        /**
+         * Output
+         */
+        this.outputPruning = this.raw.output_pruning ?? mode.output_pruning ?? this.pruning
+        assert.isBoolean(this.outputPruning)
+
+        this.outputConsistencyPruning =
+            this.raw.output_consistency_pruning ?? mode.output_consistency_pruning ?? this.outputPruning
+        assert.isBoolean(this.outputConsistencyPruning)
+
+        this.outputSemanticPruning =
+            this.raw.output_semantic_pruning ?? mode.output_semantic_pruning ?? this.outputPruning
+        assert.isBoolean(this.outputSemanticPruning)
+
+        /**
+         * Relation
+         */
         this.relationPruning = this.raw.relation_pruning ?? mode.relation_pruning ?? this.pruning
         assert.isBoolean(this.relationPruning)
 
@@ -318,6 +435,9 @@ class PruningOptions extends BaseOptions {
             this.raw.relation_semantic_pruning ?? mode.relation_semantic_pruning ?? this.relationPruning
         assert.isBoolean(this.relationSemanticPruning)
 
+        /**
+         * Policy
+         */
         this.policyPruning = this.raw.policy_pruning ?? mode.policy_pruning ?? this.pruning
         assert.isBoolean(this.policyPruning)
 
@@ -329,6 +449,9 @@ class PruningOptions extends BaseOptions {
             this.raw.policy_semantic_pruning ?? mode.policy_semantic_pruning ?? this.policyPruning
         assert.isBoolean(this.policySemanticPruning)
 
+        /**
+         * Group
+         */
         this.groupPruning = this.raw.group_pruning ?? mode.group_pruning ?? this.pruning
         assert.isBoolean(this.groupPruning)
 
@@ -339,6 +462,9 @@ class PruningOptions extends BaseOptions {
         this.groupSemanticPruning = this.raw.group_semantic_pruning ?? mode.group_semantic_pruning ?? this.groupPruning
         assert.isBoolean(this.groupSemanticPruning)
 
+        /**
+         * Artifact
+         */
         this.artifactPruning = this.raw.artifact_pruning ?? mode.artifact_pruning ?? this.pruning
         assert.isBoolean(this.artifactPruning)
 
@@ -350,6 +476,9 @@ class PruningOptions extends BaseOptions {
             this.raw.artifact_semantic_pruning ?? mode.artifact_semantic_pruning ?? this.artifactPruning
         assert.isBoolean(this.artifactSemanticPruning)
 
+        /**
+         * Property
+         */
         this.propertyPruning = this.raw.property_pruning ?? mode.property_pruning ?? this.pruning
         assert.isBoolean(this.propertyPruning)
 
@@ -361,6 +490,9 @@ class PruningOptions extends BaseOptions {
             this.raw.property_semantic_pruning ?? mode.property_semantic_pruning ?? this.propertyPruning
         assert.isBoolean(this.propertySemanticPruning)
 
+        /**
+         * Type
+         */
         this.typePruning = this.raw.type_pruning ?? mode.type_pruning ?? this.pruning
         assert.isBoolean(this.typePruning)
 
@@ -371,6 +503,9 @@ class PruningOptions extends BaseOptions {
         this.typeSemanticPruning = this.raw.type_semantic_pruning ?? mode.type_semantic_pruning ?? this.typePruning
         assert.isBoolean(this.typeSemanticPruning)
 
+        /**
+         * Technology
+         */
         this.technologyPruning = this.raw.technology_pruning ?? mode.technology_pruning ?? this.pruning
         assert.isBoolean(this.technologyPruning)
 
@@ -379,7 +514,7 @@ class PruningOptions extends BaseOptions {
         assert.isBoolean(this.technologyConsistencyPruning)
 
         this.technologySemanticPruning =
-            this.raw.technology_semantic_pruning ?? mode.technology_semantic_pruning ?? this.typePruning
+            this.raw.technology_semantic_pruning ?? mode.technology_semantic_pruning ?? this.technologyPruning
         assert.isBoolean(this.technologySemanticPruning)
     }
 }
@@ -415,8 +550,10 @@ class ChecksOptions extends BaseOptions {
     readonly ambiguousTechnology: boolean
 
     readonly ambiguousInput: boolean
+    readonly unconsumedInput: boolean
 
     readonly ambiguousOutput: boolean
+    readonly unproducedOutput: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -486,6 +623,26 @@ class ChecksOptions extends BaseOptions {
 
         this.ambiguousOutput = this.raw.ambiguous_output_check ?? this.consistency
         assert.isBoolean(this.ambiguousOutput)
+
+        if (this.v1 || this.v2) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
+             */
+            this.unconsumedInput = this.raw.unconsumed_input_check ?? false
+            assert.isBoolean(this.unconsumedInput)
+
+            this.unproducedOutput = this.raw.unproduced_output_check ?? false
+            assert.isBoolean(this.unproducedOutput)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_3
+             */
+            this.unconsumedInput = this.raw.unconsumed_input_check ?? this.semantic
+            assert.isBoolean(this.unconsumedInput)
+
+            this.unproducedOutput = this.raw.unproduced_output_check ?? this.consistency
+            assert.isBoolean(this.unproducedOutput)
+        }
     }
 }
 
@@ -513,7 +670,7 @@ class SolverTopologyOptions extends BaseOptions {
 
         if (this.v1) {
             /**
-             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
             const optimization = this.raw.optimization_topology ?? false
             if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
@@ -539,7 +696,7 @@ class SolverTopologyOptions extends BaseOptions {
             this.mode = mode
         } else {
             /**
-             * Case: tosca_variability_1_1
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
             const optimization = this.raw.optimization_topology ?? true
             if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
@@ -579,7 +736,7 @@ class SolverTechnologiesOptions extends BaseOptions {
 
         if (this.v1) {
             /**
-             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
             const optimization = this.raw.optimization_technologies ?? false
             if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
@@ -605,7 +762,7 @@ class SolverTechnologiesOptions extends BaseOptions {
             this.mode = mode
         } else {
             /**
-             * Case: tosca_variability_1_1
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
             const optimization = this.raw.optimization_technologies ?? true
             if (!check.isBoolean(optimization) && !['min', 'max'].includes(optimization)) {
@@ -647,7 +804,6 @@ class ConstraintsOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        // TODO: set this by default to true (check backwards compatibility first)
         this.constraints = this.raw.constraints ?? false
         assert.isBoolean(this.constraints)
 
@@ -668,7 +824,7 @@ class ConstraintsOptions extends BaseOptions {
 
         if (this.v1) {
             /**
-             * Case: tosca_variability_1_0, tosca_simple_yaml_1_3
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
             this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
             assert.isBoolean(this.hostingStack)
@@ -677,7 +833,7 @@ class ConstraintsOptions extends BaseOptions {
             assert.isBoolean(this.technology)
         } else {
             /**
-             * Case: tosca_variability_1_1
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
             this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.hostingStack)
@@ -688,17 +844,397 @@ class ConstraintsOptions extends BaseOptions {
     }
 }
 
-function getPruningMode(serviceTemplate: ServiceTemplate, raw: VariabilityOptions) {
+function getPruningMode(options: BaseOptions) {
     const defaultModes = {
         [TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3]: 'manual',
         [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0]: 'manual',
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_1]: 'manual',
         [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2]: 'semantic-loose',
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_3]: 'semantic-loose',
     }
-    const defaultMode = defaultModes[serviceTemplate.tosca_definitions_version]
-    assert.isDefined(defaultMode, `Default mode for "${serviceTemplate.tosca_definitions_version}" unknown`)
+    const defaultMode = defaultModes[options.serviceTemplate.tosca_definitions_version]
+    assert.isDefined(defaultMode, `Default mode for "${options.serviceTemplate.tosca_definitions_version}" unknown`)
 
-    const mode = raw.mode ?? defaultMode
-    const map = ResolverModes[mode]
+    const mode = options.raw.mode ?? defaultMode
+
+    let map
+    if (options.v3) {
+        /**
+         * Case: tosca_variability_1_0_rc_3
+         */
+        map = PruningModesV2[mode]
+    } else {
+        /**
+         * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2,
+         */
+        map = PruningModesV1[mode]
+    }
     assert.isDefined(map, `Pruning mode "${mode}" unknown`)
     return map
+}
+
+const PruningModesV1: {[mode: string]: VariabilityOptions} = {
+    strict: {
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+    manual: {
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+    'consistent-strict': {
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        node_default_condition: true,
+        node_default_consistency_condition: true,
+        node_default_semantic_condition: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        relation_default_condition: true,
+        relation_default_consistency_condition: true,
+        relation_default_semantic_condition: false,
+
+        policy_default_condition: true,
+        policy_default_consistency_condition: true,
+        policy_default_semantic_condition: false,
+
+        group_default_condition: true,
+        group_default_consistency_condition: true,
+        group_default_semantic_condition: false,
+
+        artifact_default_condition: true,
+        artifact_default_consistency_condition: true,
+        artifact_default_semantic_condition: false,
+
+        property_default_condition: true,
+        property_default_consistency_condition: true,
+        property_default_semantic_condition: false,
+
+        type_default_condition: true,
+        type_default_consistency_condition: true,
+        type_default_semantic_condition: false,
+
+        technology_default_condition: true,
+        technology_default_consistency_condition: true,
+        technology_default_semantic_condition: false,
+    },
+    'consistent-loose': {
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        node_pruning: true,
+        node_consistency_pruning: true,
+        node_semantic_pruning: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+
+        relation_pruning: true,
+        relation_consistency_pruning: true,
+        relation_semantic_pruning: false,
+
+        policy_pruning: true,
+        policy_consistency_pruning: true,
+        policy_semantic_pruning: false,
+
+        group_pruning: true,
+        group_consistency_pruning: true,
+        group_semantic_pruning: false,
+
+        artifact_pruning: true,
+        artifact_consistency_pruning: true,
+        artifact_semantic_pruning: false,
+
+        property_pruning: true,
+        property_consistency_pruning: true,
+        property_semantic_pruning: false,
+
+        type_pruning: true,
+        type_consistency_pruning: true,
+        type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
+    },
+    default: {
+        default_condition: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+    'semantic-strict': {
+        default_condition: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+
+        node_pruning: true,
+        node_consistency_pruning: true,
+        node_semantic_pruning: false,
+
+        relation_pruning: true,
+        relation_consistency_pruning: true,
+        relation_semantic_pruning: false,
+
+        policy_pruning: true,
+        policy_consistency_pruning: true,
+        policy_semantic_pruning: false,
+
+        group_pruning: true,
+        group_consistency_pruning: true,
+        group_semantic_pruning: false,
+
+        artifact_pruning: true,
+        artifact_consistency_pruning: true,
+        artifact_semantic_pruning: false,
+
+        property_pruning: true,
+        property_consistency_pruning: true,
+        property_semantic_pruning: false,
+
+        type_pruning: true,
+        type_consistency_pruning: true,
+        type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
+    },
+    'semantic-loose': {
+        pruning: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+    loose: {
+        pruning: true,
+
+        input_default_condition: false,
+        input_default_consistency_condition: false,
+        input_default_semantic_condition: false,
+
+        input_pruning: false,
+        input_consistency_pruning: false,
+        input_semantic_pruning: false,
+
+        output_default_condition: false,
+        output_default_consistency_condition: false,
+        output_default_semantic_condition: false,
+
+        output_pruning: false,
+        output_consistency_pruning: false,
+        output_semantic_pruning: false,
+    },
+}
+
+const PruningModesV2: {[mode: string]: VariabilityOptions} = {
+    strict: {},
+    manual: {},
+    'consistent-strict': {
+        input_default_condition: true,
+        input_default_consistency_condition: true,
+        input_default_semantic_condition: false,
+
+        node_default_condition: true,
+        node_default_consistency_condition: true,
+        node_default_semantic_condition: false,
+
+        output_default_condition: true,
+        output_default_consistency_condition: true,
+        output_default_semantic_condition: false,
+
+        relation_default_condition: true,
+        relation_default_consistency_condition: true,
+        relation_default_semantic_condition: false,
+
+        policy_default_condition: true,
+        policy_default_consistency_condition: true,
+        policy_default_semantic_condition: false,
+
+        group_default_condition: true,
+        group_default_consistency_condition: true,
+        group_default_semantic_condition: false,
+
+        artifact_default_condition: true,
+        artifact_default_consistency_condition: true,
+        artifact_default_semantic_condition: false,
+
+        property_default_condition: true,
+        property_default_consistency_condition: true,
+        property_default_semantic_condition: false,
+
+        type_default_condition: true,
+        type_default_consistency_condition: true,
+        type_default_semantic_condition: false,
+
+        technology_default_condition: true,
+        technology_default_consistency_condition: true,
+        technology_default_semantic_condition: false,
+    },
+    'consistent-loose': {
+        input_pruning: true,
+        input_consistency_pruning: true,
+        input_semantic_pruning: false,
+
+        node_pruning: true,
+        node_consistency_pruning: true,
+        node_semantic_pruning: false,
+
+        output_pruning: true,
+        output_consistency_pruning: true,
+        output_semantic_pruning: false,
+
+        relation_pruning: true,
+        relation_consistency_pruning: true,
+        relation_semantic_pruning: false,
+
+        policy_pruning: true,
+        policy_consistency_pruning: true,
+        policy_semantic_pruning: false,
+
+        group_pruning: true,
+        group_consistency_pruning: true,
+        group_semantic_pruning: false,
+
+        artifact_pruning: true,
+        artifact_consistency_pruning: true,
+        artifact_semantic_pruning: false,
+
+        property_pruning: true,
+        property_consistency_pruning: true,
+        property_semantic_pruning: false,
+
+        type_pruning: true,
+        type_consistency_pruning: true,
+        type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
+    },
+    default: {
+        default_condition: true,
+    },
+    'semantic-strict': {
+        default_condition: true,
+
+        input_pruning: true,
+        input_consistency_pruning: true,
+        input_semantic_pruning: false,
+
+        node_pruning: true,
+        node_consistency_pruning: true,
+        node_semantic_pruning: false,
+
+        output_pruning: true,
+        output_consistency_pruning: true,
+        output_semantic_pruning: false,
+
+        relation_pruning: true,
+        relation_consistency_pruning: true,
+        relation_semantic_pruning: false,
+
+        policy_pruning: true,
+        policy_consistency_pruning: true,
+        policy_semantic_pruning: false,
+
+        group_pruning: true,
+        group_consistency_pruning: true,
+        group_semantic_pruning: false,
+
+        artifact_pruning: true,
+        artifact_consistency_pruning: true,
+        artifact_semantic_pruning: false,
+
+        property_pruning: true,
+        property_consistency_pruning: true,
+        property_semantic_pruning: false,
+
+        type_pruning: true,
+        type_consistency_pruning: true,
+        type_semantic_pruning: false,
+
+        technology_pruning: true,
+        technology_consistency_pruning: true,
+        technology_semantic_pruning: false,
+    },
+    'semantic-loose': {
+        pruning: true,
+    },
+    loose: {
+        pruning: true,
+    },
 }

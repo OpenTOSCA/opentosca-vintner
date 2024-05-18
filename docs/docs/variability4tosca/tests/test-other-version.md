@@ -8,7 +8,9 @@
 The variability of the following variable service template shall be resolved.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_variability_1_0
+{% endraw %}
 ```
 
 
@@ -19,6 +21,8 @@ tosca_definitions_version: tosca_variability_1_0
 The following variability-resolved service template is expected.
 
 ```yaml linenums="1"
+{% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
+{% endraw %}
 ```
 

@@ -49,6 +49,12 @@ export class Populator {
         // Imports
         this.populateImports()
 
+        // Input Consumers
+        this.populateConsumers()
+
+        // Output Producers
+        this.populateProducers()
+
         // Elements
         this.graph.elements = [
             ...this.graph.types,
@@ -463,6 +469,66 @@ export class Populator {
 
             // Properties
             this.populateProperties(policy, raw)
+        }
+    }
+
+    /**
+     * We only support simple consumers, i.e., directly accessed by properties
+     */
+    private populateConsumers() {
+        for (const input of this.graph.inputs) {
+            for (const property of this.graph.properties) {
+                const value = property.value
+                if (check.isObject(value) && !check.isArray(value) && check.isDefined(value.get_input)) {
+                    if (value.get_input === input.name) input.consumers.push(property)
+                }
+            }
+        }
+    }
+
+    /**
+     * We only support simple producers, i.e., directly accessing the property of a node
+     */
+    private populateProducers() {
+        for (const output of this.graph.outputs) {
+            const value: string | {eval?: string; get_property?: [string, string]} | undefined = output.raw.value
+
+            let nodeName: string | undefined
+            let propertyName: string | undefined
+
+            /**
+             * Unfurl eval Jinja filter
+             */
+            if (check.isString(value)) {
+                const regex = new RegExp(/\{\{ ['"]::(?<node>.*)::(?<property>.*)['"] \| eval \}\}/)
+                const found = value.match(regex)
+                if (check.isDefined(found)) {
+                    nodeName = found.groups!.node
+                    propertyName = found.groups!.property
+                }
+            }
+
+            /**
+             * Unfurl eval intrinsic function
+             */
+            if (check.isObject(value) && check.isDefined(value.eval)) {
+                const split = value.eval.split('::')
+                nodeName = split[1]
+                propertyName = split[2]
+            }
+
+            /**
+             * TOSCA get_property intrinsic function
+             */
+            if (check.isObject(value) && check.isDefined(value.get_property)) {
+                nodeName = value.get_property[0]
+                propertyName = value.get_property[1]
+            }
+
+            if (check.isDefined(nodeName) && check && check.isDefined(propertyName)) {
+                const node = this.graph.getNode(nodeName)
+                node.properties.filter(it => it.name === propertyName).forEach(it => output.producers.push(it))
+            }
         }
     }
 }

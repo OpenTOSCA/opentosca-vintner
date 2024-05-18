@@ -541,6 +541,41 @@ installs GCloud
     post(SERVER_ADDRESS + "/install/gcloud")
     ```
 
+## vintner install platformio
+
+installs PlatformIO Core CLI
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install platformio 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/platformio
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/platformio")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/platformio")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/platformio")
+    ```
+
 ## vintner install python
 
 installs Python
