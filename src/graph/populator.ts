@@ -478,7 +478,7 @@ export class Populator {
     }
 
     /**
-     * We only support simple scenario of directly accessing the property of a node
+     * We only support simple producers, i.e., directly accessing the property of a node
      */
     private populateProducers() {
         for (const output of this.graph.outputs) {
