@@ -240,9 +240,8 @@ export default class Solver {
             if (conditions[0] === false) return this.minisat.forbid(element.id)
 
             // Add the only assigned condition without "and"
-            return this.minisat.require(
-                MiniSat.equiv(element.id, this.transformLogicExpression(conditions[0], {element}))
-            )
+            const t = this.transformLogicExpression(conditions[0], {element})
+            return this.minisat.require(MiniSat.equiv(element.id, t))
         }
 
         // Normalize conditions to a single 'and' condition
@@ -611,7 +610,7 @@ export default class Solver {
          */
         if (check.isDefined(expression.is_consumed)) {
             const input = this.graph.getInput(expression.is_consumed, {element, cached})
-            return MiniSat.and(input.consumers.map(it => it.id))
+            return MiniSat.or(input.consumers.map(it => it.id))
         }
 
         /**

@@ -472,9 +472,18 @@ export class Populator {
         }
     }
 
-    // TODO: this
+    /**
+     * We only support simple consumers, i.e., directly accessed by properties
+     */
     private populateConsumers() {
-        // nil
+        for (const input of this.graph.inputs) {
+            for (const property of this.graph.properties) {
+                const value = property.value
+                if (check.isObject(value) && !check.isArray(value) && check.isDefined(value.get_input)) {
+                    if (value.get_input === input.name) input.consumers.push(property)
+                }
+            }
+        }
     }
 
     /**
