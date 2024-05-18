@@ -591,8 +591,19 @@ class ChecksOptions extends BaseOptions {
         this.ambiguousType = this.raw.ambiguous_type_check ?? this.consistency
         assert.isBoolean(this.ambiguousType)
 
-        this.semantic = this.raw.semantic_checks ?? this.checks
-        assert.isBoolean(this.semantic)
+        if (this.v1 || this.v2) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
+             */
+            this.semantic = this.raw.semantic_checks ?? this.checks
+            assert.isBoolean(this.semantic)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_3
+             */
+            this.semantic = this.raw.semantic_checks ?? false
+            assert.isBoolean(this.semantic)
+        }
 
         this.expectedHosting = this.raw.expected_hosting_check ?? this.semantic
         assert.isBoolean(this.expectedHosting)
