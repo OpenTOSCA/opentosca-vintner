@@ -67,8 +67,14 @@ export class Shell {
         await this.execute(command)
     }
 
-    async execute(parts: string[], options: {cwd?: string} = {}) {
+    async execute(parts: string[], options: {cwd?: string; env?: {[key: string]: string}} = {}) {
         return new Promise((resolve, reject) => {
+            // Set environment
+            options.env = options.env ?? {}
+            for (const env of Object.entries(options.env)) {
+                parts.unshift(`${env[0]}=${env[1]}`)
+            }
+
             const command = parts.join(' ')
 
             std.log(

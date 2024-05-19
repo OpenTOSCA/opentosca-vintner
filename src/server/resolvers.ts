@@ -549,6 +549,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/instances/debug',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.debug(req.body)
+        res.json({})
+    })
+)
+
 /**
  * Assets
  */

@@ -2,6 +2,7 @@ import _adapt from './adapt'
 import _clean from './clean'
 import _code from './code'
 import _continue from './continue'
+import _debug from './debug'
 import _delete from './delete'
 import _deploy from './deploy'
 import _info from './info'
@@ -20,6 +21,7 @@ import _validate from './validate'
 
 export default {
     init: _init,
+    debug: _debug,
     delete: _delete,
     deploy: _deploy,
     outputs: _outputs,
