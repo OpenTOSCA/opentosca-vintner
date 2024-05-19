@@ -50,6 +50,11 @@ export type OrchestratorOperationOptions = {
 
 export type OrchestratorValidateOptions = {inputs?: string; dry?: boolean} & OrchestratorOperationOptions
 
+export type OrchestratorDebugOptions = {
+    command: string
+    args?: string
+} & OrchestratorOperationOptions
+
 export interface Orchestrator {
     attest: () => Promise<void>
     validate: (instance: Instance, options?: OrchestratorValidateOptions) => Promise<void>
@@ -59,6 +64,8 @@ export interface Orchestrator {
     update: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     undeploy: (instance: Instance, options?: OrchestratorOperationOptions) => Promise<void>
     getAttributes: (instance: Instance) => Promise<NodeTemplateAttributesMap>
+    // TODO: implement this
+    debug: (instance: Instance, options?: OrchestratorDebugOptions) => Promise<void>
 }
 
 export type OrchestratorsConfig = {
