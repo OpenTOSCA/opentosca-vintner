@@ -5,7 +5,7 @@ import {
     VariabilityPointList,
 } from '#spec/variability'
 
-export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate>
+export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate> | boolean
 
 export type TechnologyTemplateMap = {[technology: string]: TechnologyTemplate}
 

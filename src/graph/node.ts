@@ -29,6 +29,8 @@ export default class Node extends Element {
     readonly propertiesMap: Map<String, Property[]> = new Map()
     readonly technologies: Technology[] = []
 
+    readonly technologyRequired: boolean
+
     readonly weight: number = 1
 
     constructor(data: {name: string; raw: NodeTemplate}) {
@@ -37,6 +39,18 @@ export default class Node extends Element {
         this.name = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
+
+        // TODO: what is the default? if undefined, then it will later search for candidates but will not throw?
+
+        /**
+         * If an empty technology array has been modeled, then the node requires a technology
+         */
+        if (check.isDefined(data.raw.technology)) {
+            assert.isArray(data.raw.technology, `Technology of ${this.display} not normalized`)
+            this.technologyRequired = utils.isEmpty(data.raw.technology)
+        } else {
+            this.technologyRequired = false
+        }
 
         /**
          * Get weight

@@ -20,7 +20,8 @@ export type VariabilityOptions = {
     PruningOptions &
     ChecksOptions &
     SolverOptions &
-    ConstraintsOptions
+    ConstraintsOptions &
+    NormalizationOptions
 
 export type PruningMode = 'manual' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
@@ -34,6 +35,10 @@ export type SolverOptions = {
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
     optimization_technologies_mode?: 'weight' | 'count'
+}
+
+export type NormalizationOptions = {
+    technology_required?: boolean
 }
 
 export type ConstraintsOptions = {
@@ -181,6 +186,8 @@ export type ChecksOptions = {
     expected_technology_check?: boolean
     missing_technology_container_check?: boolean
     ambiguous_technology_check?: boolean
+    // TODO: docs
+    required_technology_check?: boolean
 
     ambiguous_relation_check?: boolean
     ambiguous_input_check?: boolean
