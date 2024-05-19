@@ -792,6 +792,17 @@ instances
         })
     )
 
+instances
+    .command('debug')
+    .description('debug utility that passes a command into the orchestrator in scope of the instance')
+    .requiredOption('--instance <string>', 'instance name')
+    .requiredOption('--command <string>', 'command')
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.debug(options)
+        })
+    )
+
 /**
  * Server
  */

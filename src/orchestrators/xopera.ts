@@ -8,6 +8,7 @@ import _ from 'lodash'
 import {
     NodeTemplateAttributesMap,
     Orchestrator,
+    OrchestratorDebugOptions,
     OrchestratorOperationOptions,
     OrchestratorValidateOptions,
 } from './index'
@@ -148,6 +149,14 @@ export class xOpera implements Orchestrator {
         ]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
+    }
+
+    async debug(instance: Instance, options: OrchestratorDebugOptions) {
+        const command = [this.binary, options.command]
+        const env = {
+            INSTANCE_DATA_DIR: this.shell.resolve(instance.getDataDirectory()),
+        }
+        await this.shell.execute(command, {env})
     }
 
     /**

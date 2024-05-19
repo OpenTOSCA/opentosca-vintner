@@ -5,7 +5,12 @@ import {Shell} from '#shell'
 import * as utils from '#utils'
 import platform from '#utils/platform'
 import path from 'path'
-import {Orchestrator, OrchestratorOperationOptions, OrchestratorValidateOptions} from './index'
+import {
+    Orchestrator,
+    OrchestratorDebugOptions,
+    OrchestratorOperationOptions,
+    OrchestratorValidateOptions,
+} from './index'
 
 export type UnfurlConfig = (UnfurlNativeConfig & {wsl: false}) | (UnfurlWSLConfig & {wsl: true})
 
@@ -117,6 +122,14 @@ export class Unfurl implements Orchestrator {
         ]
         if (options?.verbose) command.push('--verbose')
         await this.shell.execute(command)
+    }
+
+    async debug(instance: Instance, options: OrchestratorDebugOptions) {
+        const command = [this.binary, options.command]
+        const env = {
+            INSTANCE_DATA_DIR: this.shell.resolve(instance.getDataDirectory()),
+        }
+        await this.shell.execute(command, {env})
     }
 
     getAttributes(instance: Instance) {
