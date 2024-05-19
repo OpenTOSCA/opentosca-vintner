@@ -1,10 +1,10 @@
 import Element from '#/graph/element'
 import {TechnologyPluginBuilder} from '#graph/plugin'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
-import {InputAssignmentMap, InputAssignmentValue, InputDefinitionMap} from './topology-template'
+import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
 export type VariabilityDefinition = {
-    inputs?: InputDefinitionMap
+    inputs?: VariabilityInputDefinitionMap
     presets?: InputAssignmentPresetMap
     expressions?: VariabilityExpressionMap
     constraints?: LogicExpression[]
@@ -12,6 +12,20 @@ export type VariabilityDefinition = {
     type_specific_conditions?: string | TypeSpecificLogicExpressions
     technology_assignment_rules?: string | TechnologyAssignmentRulesMap
     plugins?: PluginDefinitionMap
+}
+
+export type VariabilityInputDefinitionMap = {[key: string]: VariabilityInputDefinition}
+export type VariabilityInputDefinition = {
+    type: string
+    description?: string
+    default?: InputAssignmentValue
+    default_expression?: ValueExpression
+
+    // TODO: docs
+    implies?: string | string[]
+    excludes?: string | string[]
+    alternatives?: string[]
+    choices?: string[]
 }
 
 export type VariabilityOptions = {

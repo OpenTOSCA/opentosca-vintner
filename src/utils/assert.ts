@@ -34,8 +34,8 @@ export function isStringOrNumber(element: unknown): asserts element is string | 
         throw new Error(`Element "${utils.stringify(element)}" is neither a string nor a number`)
 }
 
-export function isBoolean(element: unknown): asserts element is boolean {
-    if (!check.isBoolean(element)) throw new Error(`Element "${utils.stringify(element)}" is not a boolean`)
+export function isBoolean(element: unknown, msg?: string): asserts element is boolean {
+    if (!check.isBoolean(element)) throw new Error(msg ?? `Element "${utils.stringify(element)}" is not a boolean`)
 }
 
 export function isTrue(element: unknown): asserts element is true {
