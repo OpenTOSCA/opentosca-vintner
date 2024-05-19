@@ -240,11 +240,29 @@ export type RelationTypePresenceArguments = [node: string, relation: string | nu
 export type GroupTypePresenceArguments = [group: string, type: string | number]
 export type PolicyTypePresenceArguments = [policy: string | number, type: string | number]
 
-export type NodePropertyPresenceArguments = [node: string, property: string | number]
-export type RelationPropertyPresenceArguments = [node: string, relation: string | number, property: string | number]
-export type GroupPropertyPresenceArguments = [group: string, property: string | number]
-export type PolicyPropertyPresenceArguments = [policy: string | number, property: string | number]
-export type ArtifactPropertyPresenceArguments = [node: string, artifact: string | number, property: string | number]
+// TODO: this
+export type NodePropertyPresenceArguments = [
+    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    property: string | number
+]
+export type RelationPropertyPresenceArguments = [
+    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    relation: string | number,
+    property: string | number
+]
+export type GroupPropertyPresenceArguments = [
+    group: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    property: string | number
+]
+export type PolicyPropertyPresenceArguments = [
+    policy: string | number | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    property: string | number
+]
+export type ArtifactPropertyPresenceArguments = [
+    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    artifact: string | number,
+    property: string | number
+]
 
 export type TechnologyPresenceArguments = [node: string, technology: string | number]
 

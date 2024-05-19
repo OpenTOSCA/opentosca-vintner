@@ -387,8 +387,11 @@ export default class Graph {
     }
 
     getNodeProperty(data: NodePropertyPresenceArguments, context: Context = {}): Property {
-        assert.isString(data[0])
-        assert.isStringOrNumber(data[1])
+        const nodeRef = data[0]
+        const propertyRef = data[1]
+
+        assert.isString(nodeRef)
+        assert.isStringOrNumber(propertyRef)
 
         if (check.isDefined(context.cached)) {
             const element = context.cached
@@ -396,7 +399,35 @@ export default class Graph {
             return element
         }
 
-        const node = this.getNode(data[0], {element: context.element})
+        let node: Node | undefined
+        if (nodeRef === 'SELF') {
+            assert.isNode(context.element)
+            node = context.element
+        }
+
+        if (nodeRef === 'CONTAINER') {
+            const container = this.getContainer(context.element)
+            assert.isNode(container)
+            node = container
+        }
+
+        if (nodeRef === 'TARGET') {
+            const relation = context.element
+            assert.isRelation(relation)
+            node = relation.target
+        }
+
+        if (nodeRef === 'SOURCE') {
+            const relation = context.element
+            assert.isRelation(relation)
+            node = relation.source
+        }
+
+        if (check.isUndefined(node)) {
+            node = this.getNode(nodeRef, {element: context.element})
+        }
+
+        assert.isNode(node)
         return this.getProperty(node, data)
     }
 
