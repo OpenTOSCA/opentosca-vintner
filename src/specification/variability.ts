@@ -186,7 +186,6 @@ export type ChecksOptions = {
     expected_technology_check?: boolean
     missing_technology_container_check?: boolean
     ambiguous_technology_check?: boolean
-    // TODO: docs
     required_technology_check?: boolean
 
     ambiguous_relation_check?: boolean

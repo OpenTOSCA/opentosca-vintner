@@ -40,8 +40,6 @@ export default class Node extends Element {
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
 
-        // TODO: what is the default? if undefined, then it will later search for candidates but will not throw?
-
         /**
          * If an empty technology array has been modeled, then the node requires a technology
          */
