@@ -2,6 +2,7 @@ import Graph from '#graph/graph'
 import Checker from '#resolver/checker'
 import Solver from '#resolver/solver'
 import Transformer from '#resolver/transformer'
+import Validator from '#resolver/validator'
 import {InputAssignmentMap} from '#spec/topology-template'
 
 export default class Resolver {
@@ -14,6 +15,11 @@ export default class Resolver {
     }
 
     run() {
+        /**
+         * Validator
+         */
+        new Validator(this.graph, this.inputs).run()
+
         /**
          * Solver
          */
