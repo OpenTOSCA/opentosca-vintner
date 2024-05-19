@@ -250,6 +250,15 @@ The following options are used to configure the solver.
 | optimization_technologies_unique | false     | Boolean                       | false   | Enable check for unique results considering technologies. | 
 | optimization_technologies_mode   | false     | count &#124; weight           | count   | Configure optimization mode considering technologies.     | 
 
+### Normalization Options
+
+The following options are used to configure the normalizer.
+
+| Keyname              | Mandatory | Type                          | Default | Description                                               |
+|----------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
+| technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
+
+
 ### Constraints Options
 
 _This is an experimental feature._
@@ -294,13 +303,32 @@ optimization_technologies_mode: weight
 technology_constraint: true
 hosting_stack_constraint: true
 relation_default_implied: true
+technology_required: false
+unconsumed_input_check: false
+unproduced_output_check: false
 ```
 
 ### RC v3
 
-`tosca_variability_1_0_rc_3` has the same default values as `tosca_variability_1_0_rc_2`.
-But pruning modes also consider input and output pruning.
-Also, semantic checks are disabled by default.
+`tosca_variability_1_0_rc_3` has the following default values.
+Also, pruning modes also consider input and output pruning.
+
+```yaml linenums="1"
+mode: semantic-loose
+node_default_condition_mode: incomingnaive-artifact-host
+optimization_topology: min
+optimization_topology_unique: true
+optimization_technologies: max
+optimization_technologies_mode: weight
+technology_constraint: true
+hosting_stack_constraint: true
+relation_default_implied: true
+technology_required: true
+semantic_checks: false
+unconsumed_input_check: true
+unproduced_output_check: true
+```
+
 
 
 ## Default Conditions
@@ -495,7 +523,7 @@ A node template can also hold conditional types, artifact, and properties.
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 | weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
-| technology                    | false     | List(Map(String, TechnologyTemplate){single})                                        | An optional conditional assignment of deployment technologies.                                                                                                                           |
+| technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single}) &#124; Boolean           | An optional conditional assignment of deployment technologies.                                                                                                                           |
 
 For example, the following node template has a variability condition assigned.
 

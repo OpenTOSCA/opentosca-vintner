@@ -1,5 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import {NormalizationOptions} from '#graph/options'
 import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
@@ -14,9 +15,11 @@ import * as utils from '#utils'
 
 export default class Normalizer {
     private readonly serviceTemplate: ServiceTemplate
+    private readonly options: NormalizationOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
+        this.options = new NormalizationOptions(serviceTemplate)
     }
 
     run() {
@@ -43,6 +46,9 @@ export default class Normalizer {
 
         // Technology rules
         this.normalizeTechnologyRules()
+
+        // Clean variability definition
+        this.cleanVariabilityDefinition()
     }
 
     private normalizeInputs() {
@@ -216,19 +222,36 @@ export default class Normalizer {
         this.normalizeProperties(map[name])
     }
 
+    /**
+     * Transform technologies to array of extended notation
+     */
     private normalizeTechnologies(template: NodeTemplate) {
-        if (check.isUndefined(template.technology)) return
+        // No technology is required (implicitly modeled)
+        if (check.isUndefined(template.technology)) template.technology = this.options.technologyRequired
 
+        // No technology is required (manually modeled)
+        if (check.isFalse(template.technology)) {
+            delete template.technology
+            return
+        }
+
+        // Technology is required (will later throw if no technology candidates are found)
+        if (check.isTrue(template.technology)) template.technology = []
+
+        // Technology is directly assigned but in its short notation
         if (check.isString(template.technology)) {
             template.technology = [{[template.technology]: {}}]
         }
 
+        // No, one, or multiple technologies are assigned but already as array
         if (check.isArray(template.technology)) {
             // Do nothing
         }
 
+        // Sanity check
         assert.isArray(template.technology)
 
+        // Lowercase technology names
         template.technology = template.technology.map(it => {
             const entry = utils.firstEntry(it)
             return {[entry[0].toLowerCase()]: entry[1]}
@@ -253,5 +276,23 @@ export default class Normalizer {
                 if (check.isDefined(rule.assign)) assert.isString(rule.assign)
             }
         }
+    }
+
+    private cleanVariabilityDefinition() {
+        const topology = this.serviceTemplate.topology_template
+
+        if (check.isUndefined(topology)) return
+        if (check.isUndefined(topology.variability)) return
+
+        // Delete normalization options
+        if (check.isDefined(topology.variability.options)) {
+            delete topology.variability.options.technology_required
+        }
+
+        // Remove empty options
+        if (utils.isEmpty(topology.variability.options)) delete topology.variability.options
+
+        // Remove empty variability
+        if (utils.isEmpty(topology.variability)) delete topology.variability
     }
 }

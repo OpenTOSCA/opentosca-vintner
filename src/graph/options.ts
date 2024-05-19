@@ -37,6 +37,8 @@ export class Options extends BaseOptions {
     readonly checks: ChecksOptions
     readonly solver: SolverOptions
     readonly constraints: ConstraintsOptions
+    // Note, actually this is not of use since normalization does not use Graph.ts and the options are cleaned during normalization
+    readonly normalization: NormalizationOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -46,6 +48,7 @@ export class Options extends BaseOptions {
         this.checks = new ChecksOptions(serviceTemplate)
         this.solver = new SolverOptions(serviceTemplate)
         this.constraints = new ConstraintsOptions(serviceTemplate)
+        this.normalization = new NormalizationOptions(serviceTemplate)
     }
 }
 
@@ -548,6 +551,7 @@ class ChecksOptions extends BaseOptions {
     readonly expectedTechnology: boolean
     readonly missingTechnologyContainer: boolean
     readonly ambiguousTechnology: boolean
+    readonly requiredTechnology: boolean
 
     readonly ambiguousInput: boolean
     readonly unconsumedInput: boolean
@@ -625,6 +629,20 @@ class ChecksOptions extends BaseOptions {
 
         this.ambiguousTechnology = this.raw.ambiguous_technology_check ?? this.consistency
         assert.isBoolean(this.ambiguousTechnology)
+
+        if (this.v1 || this.v2) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
+             */
+            this.requiredTechnology = this.raw.required_technology_check ?? this.semantic
+            assert.isBoolean(this.expectedTechnology)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_3
+             */
+            this.requiredTechnology = this.raw.required_technology_check ?? true
+            assert.isBoolean(this.expectedTechnology)
+        }
 
         this.ambiguousRelation = this.raw.ambiguous_relation_check ?? this.consistency
         assert.isBoolean(this.ambiguousRelation)
@@ -851,6 +869,28 @@ class ConstraintsOptions extends BaseOptions {
 
             this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.technology)
+        }
+    }
+}
+
+export class NormalizationOptions extends BaseOptions {
+    readonly technologyRequired: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
+
+        if (this.v1 || this.v2) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
+             */
+            this.technologyRequired = this.raw.technology_required ?? false
+            assert.isBoolean(this.technologyRequired)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_3
+             */
+            this.technologyRequired = this.raw.technology_required ?? true
+            assert.isBoolean(this.technologyRequired)
         }
     }
 }

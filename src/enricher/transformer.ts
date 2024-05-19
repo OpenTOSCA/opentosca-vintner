@@ -182,6 +182,9 @@ export default class Transformer {
             delete this.topology.variability.options.property_container_constraint
             delete this.topology.variability.options.type_container_constraint
             delete this.topology.variability.options.hosting_stack_constraint
+
+            // Delete check options
+            delete this.topology.variability.options.required_technology_check
         }
 
         // Remove empty options
