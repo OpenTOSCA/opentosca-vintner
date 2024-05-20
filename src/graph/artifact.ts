@@ -1,8 +1,8 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
+import Type from '#graph/type'
 import {bratify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {LogicExpression} from '#spec/variability'
@@ -18,9 +18,11 @@ export default class Artifact extends Element {
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
 
+    readonly types: Type[] = []
+    readonly typesMap: Map<String, Type[]> = new Map()
+
     constructor(data: {name: string; raw: ExtendedArtifactDefinition; container: Node; index: number}) {
         super()
-        assert.isString(data.raw.type)
 
         this.name = data.name
         this.raw = data.raw
@@ -81,6 +83,10 @@ export default class Artifact extends Element {
     // Check if no other artifact having the same name is present
     constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
+    }
+
+    getTypeCondition(type: Type): LogicExpression {
+        return {artifact_type_presence: [...this.toscaId, type.index], _cached_element: type}
     }
 
     getPropertyCondition(property: Property): LogicExpression {

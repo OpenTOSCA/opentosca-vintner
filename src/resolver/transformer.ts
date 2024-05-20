@@ -108,6 +108,10 @@ export default class Transformer {
                         .reduce<ArtifactDefinitionMap>((map, artifact) => {
                             if (!check.isString(artifact.raw)) this.clean(artifact.raw)
 
+                            // Select present type
+                            this.transformType(artifact, artifact.raw)
+
+                            // Select present properties
                             this.transformProperties(artifact, artifact.raw)
 
                             map[artifact.name] = artifact.raw
