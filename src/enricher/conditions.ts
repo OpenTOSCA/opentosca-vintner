@@ -38,11 +38,19 @@ export class ConditionEnricher {
             conditions = [element.defaultAlternativeCondition]
         }
 
+        // Enrich input condition
+        if (this.graph.options.enricher.inputCondition) this.enrichInputCondition(element, conditions)
+
         // Enrich pruning
         this.enrichPruning(element, conditions)
 
         // Store enriched conditions
         element.conditions = conditions
+    }
+
+    private enrichInputCondition(element: Element, conditions: LogicExpression[]) {
+        const input = (this.graph.serviceTemplate.topology_template?.variability?.inputs || {})[element.id]
+        if (check.isDefined(input)) conditions.push({variability_input: element.id})
     }
 
     private enrichPruning(element: Element, conditions: LogicExpression[]) {

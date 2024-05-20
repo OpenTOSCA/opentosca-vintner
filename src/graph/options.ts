@@ -39,6 +39,7 @@ export class Options extends BaseOptions {
     readonly constraints: ConstraintsOptions
     // Note, actually this is not of use since normalization does not use Graph.ts and the options are cleaned during normalization
     readonly normalization: NormalizationOptions
+    readonly enricher: EnricherOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -49,6 +50,7 @@ export class Options extends BaseOptions {
         this.solver = new SolverOptions(serviceTemplate)
         this.constraints = new ConstraintsOptions(serviceTemplate)
         this.normalization = new NormalizationOptions(serviceTemplate)
+        this.enricher = new EnricherOptions(serviceTemplate)
     }
 }
 
@@ -892,6 +894,17 @@ export class NormalizationOptions extends BaseOptions {
             this.technologyRequired = this.raw.technology_required ?? true
             assert.isBoolean(this.technologyRequired)
         }
+    }
+}
+
+export class EnricherOptions extends BaseOptions {
+    readonly inputCondition: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
+
+        this.inputCondition = this.raw.enrich_input_condition ?? true
+        assert.isBoolean(this.inputCondition)
     }
 }
 

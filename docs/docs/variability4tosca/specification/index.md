@@ -263,6 +263,15 @@ The following options are used to configure the normalizer.
 | technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
 
 
+### Normalization Options
+
+The following options are used to configure the enricher.
+
+| Keyname                   | Mandatory | Type                          | Default | Description                                                                                                           |
+|---------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
+| enrich_input_condition    | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+
+
 ### Constraints Options
 
 _This is an experimental feature._
@@ -1087,6 +1096,8 @@ export type TechnologyPlugin = {
 ```
 
 ## Processing
+
+_This section is outdated._
 
 We describe on a high-level the steps to derive a variability-resolved service template from a variable service template.
 
