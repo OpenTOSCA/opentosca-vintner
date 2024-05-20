@@ -49,7 +49,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             for (const rule of rules) {
                 if (rule.component !== node.getType().name) continue
-
                 if (check.isDefined(rule.hosting)) {
                     assert.isArray(rule.hosting)
                     const output: LogicExpression[][] = []
@@ -92,7 +91,10 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             historyCopy.push({node_presence: host.name})
 
             // Done if no more hosting must be found
-            if (utils.isEmpty(hosting)) return output.push(historyCopy)
+            if (utils.isEmpty(hosting)) {
+                output.push(historyCopy)
+                return
+            }
 
             // Deep copy since every child call changes the state of hosting
             const hostingCopy = utils.copy(hosting)
