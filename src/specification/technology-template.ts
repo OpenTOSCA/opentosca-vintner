@@ -19,7 +19,9 @@ export type TechnologyAssignmentRulesMap = {[technology: string]: TechnologyAssi
 
 export type TechnologyAssignmentRule = {
     component: string
+    // Deprecated
     host?: string
+    hosting?: string | string[]
     conditions?: LogicExpression | LogicExpression[]
     weight?: number
     assign?: string

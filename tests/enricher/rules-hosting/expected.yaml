@@ -1,0 +1,79 @@
+tosca_definitions_version: tosca_variability_1_0
+topology_template:
+    node_templates:
+        - application:
+              type:
+                  - application:
+                        conditions: []
+              requirements:
+                  - host:
+                        node: first_host
+                        conditions: []
+                  - host:
+                        node: second_host
+                        conditions: []
+                  - host:
+                        node: third_host
+                        conditions: []
+                  - host:
+                        node: fourth_host
+                        conditions: []
+              technology:
+                  - terraform:
+                        conditions:
+                            - and:
+                                  - node_presence: first_host
+                                  - node_presence: first_host_host
+                                  - node_presence: first_host_host_second_host
+                              _generated: true
+                  - terraform:
+                        conditions:
+                            - node_presence: second_host
+                              _generated: true
+              conditions: []
+        - first_host:
+              type:
+                  - first_host:
+                        conditions: []
+              requirements:
+                  - host:
+                        node: first_host_host
+                        conditions: []
+              conditions: []
+        - first_host_host:
+              type:
+                  - first_host_host:
+                        conditions: []
+              requirements:
+                  - host:
+                        node: first_host_host_first_host
+                        conditions: []
+                  - host:
+                        node: first_host_host_second_host
+                        conditions: []
+              conditions: []
+        - first_host_host_first_host:
+              type:
+                  - first_host_host_first_host:
+                        conditions: []
+              conditions: []
+        - first_host_host_second_host:
+              type:
+                  - first_host_host_second_host:
+                        conditions: []
+              conditions: []
+        - second_host:
+              type:
+                  - second_host:
+                        conditions: []
+              conditions: []
+        - third_host:
+              type:
+                  - third_host:
+                        conditions: []
+              conditions: []
+        - fourth_host:
+              type:
+                  - forth_host:
+                        conditions: []
+              conditions: []

@@ -276,7 +276,25 @@ export default class Normalizer {
             for (const rule of rules) {
                 assert.isString(rule.component)
 
-                if (check.isDefined(rule.host)) assert.isString(rule.host)
+                /**
+                 * "host" is replaced in favor of "hosting"
+                 */
+                if (check.isDefined(rule.host)) {
+                    if (check.isDefined(rule.hosting))
+                        throw new Error(`Technology rule must not define both "host" and "hosting"`)
+
+                    assert.isString(rule.host)
+                    rule.hosting = [rule.host]
+                    delete rule.host
+                }
+
+                if (check.isDefined(rule.hosting)) {
+                    if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
+
+                    assert.isArray(rule.hosting)
+                    rule.hosting.forEach(it => assert.isString(it))
+                }
+
                 if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
                 if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
                 if (check.isDefined(rule.assign)) assert.isString(rule.assign)

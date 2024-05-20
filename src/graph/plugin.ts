@@ -3,6 +3,7 @@ import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import {TechnologyTemplateMap} from '#spec/technology-template'
+import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
 export type TechnologyPluginBuilder = {
@@ -48,17 +49,19 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             for (const rule of rules) {
                 if (rule.component !== node.getType().name) continue
-                if (check.isDefined(rule.host)) {
-                    const hosts = node.hosts.filter(it => it.getType().name === rule.host)
-                    for (const host of hosts) {
+                if (check.isDefined(rule.hosting)) {
+                    assert.isArray(rule.hosting)
+                    const output: LogicExpression[][] = []
+                    this.search(node, rule.hosting, [], output)
+                    output.forEach(it => {
                         maps.push({
                             [technology]: {
-                                conditions: utils.filterNotNull([{node_presence: host.name}, rule.conditions]),
+                                conditions: it,
                                 weight: rule.weight,
                                 assign: rule.assign,
                             },
                         })
-                    }
+                    })
                 } else {
                     maps.push({
                         [technology]: {
@@ -72,5 +75,32 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         }
 
         return maps
+    }
+
+    private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
+        // Searching for next hosting
+        const search = hosting.shift()
+        // Must be defined since else we would have aborted in the parent call
+        assert.isDefined(search)
+
+        // Conditional recursive breadth-first search
+        const hosts = node.hosts.filter(it => it.getType().name === search)
+        for (const host of hosts) {
+            // Deep copy since every child call changes the state of history
+            const historyCopy = utils.copy(history)
+            historyCopy.push({node_presence: host.name})
+
+            // Done if no more hosting must be found
+            if (utils.isEmpty(hosting)) {
+                output.push(historyCopy)
+                return
+            }
+
+            // Deep copy since every child call changes the state of hosting
+            const hostingCopy = utils.copy(hosting)
+
+            // Recursive search
+            this.search(host, hostingCopy, historyCopy, output)
+        }
     }
 }
