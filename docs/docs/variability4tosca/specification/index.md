@@ -408,13 +408,14 @@ _Conditional types conflict with this feature!_
 Technology assignment rules can be defined to automatically select a deployment technology for a component.
 A technology assignment rule is defined as follows.
 
-| Keyname     | Mandatory | Type                                                   | Description                                                                                                   |
-|-------------|-----------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| component   | true      | String                                                 | The type of the component to which the technology can be assigned.                                            |
-| host        | false     | String                                                 | The type of the host of the component which the technology requires.                                          |
-| conditions  | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component.                                       |
-| weight      | false     | Number                                                 | The weight which is minimized (default is 1).                                                                 |
-| assign      | false     | String                                                 | Configure the node type that is assigned (default: `${current_type}.${technology_name}.${host_type_prefix}`). |                                                                                                                                             |                                                                                                                                                                               |
+| Keyname    | Mandatory | Type                                                   | Description                                                                                                     |
+|------------|-----------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| component  | true      | String                                                 | The type of the component to which the technology can be assigned.                                              |
+| host       | false     | String                                                 | The type of the host of the component which the technology requires (deprecated).                               |
+| hosting    | false     | String &#124; List(String)                             | The type of the host of the component which the technology requires. If list, then refers to the hosting stack. |
+| conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component.                                         |
+| weight     | false     | Number                                                 | The weight which is minimized (default is 1).                                                                   |
+| assign     | false     | String                                                 | Configure the node type that is assigned (default: `${current_type}.${technology_name}.${host_type_prefix}`).   |                                                                                                                                             |                                                                                                                                                                               |
 
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 
@@ -422,7 +423,7 @@ For example, the node type `application` can be deployed using the deployment te
 technology_assignment_rules:
     terraform:
         - component: application
-          host: terraform_host
+          hosting: terraform_host
 ```
 
 
