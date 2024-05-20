@@ -17,6 +17,8 @@ export default class Checker {
         const technologies = this.graph.technologies.filter(it => it.present)
         const inputs = this.graph.inputs.filter(it => it.present)
         const outputs = this.graph.outputs.filter(it => it.present)
+        const groups = this.graph.groups.filter(it => it.present)
+        const policies = this.graph.policies.filter(it => it.present)
 
         // Ensure that each relation source exists
         if (this.graph.options.checks.relationSource) {
@@ -79,16 +81,18 @@ export default class Checker {
             }
         }
 
-        // Ensure that each node has exactly one type
+        // Ensure that each type container has exactly one type
         if (this.graph.options.checks.ambiguousType) {
-            // TODO: not only for nodes
-            for (const node of nodes) {
-                const names = new Set()
-                const types = node.types.filter(it => it.present)
-                if (utils.isEmpty(types)) throw new Error(`${node.Display} has no type`)
-                for (const type of types) {
-                    if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
-                    names.add(type.name)
+            // TODO: relations (but this would currently require relationship templates with type declarations)
+            for (const list of [nodes, groups, policies, artifacts]) {
+                for (const element of list) {
+                    const names = new Set()
+                    const types = element.types.filter(it => it.present)
+                    if (utils.isEmpty(types)) throw new Error(`${element.Display} has no type`)
+                    for (const type of types) {
+                        if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
+                        names.add(type.name)
+                    }
                 }
             }
         }
