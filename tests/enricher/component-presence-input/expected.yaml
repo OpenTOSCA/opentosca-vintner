@@ -1,0 +1,17 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        inputs:
+            node.node:
+                type: boolean
+
+    node_templates:
+        - node:
+              type:
+                  - node:
+                        conditions:
+                            - {node_presence: node, _generated: true}
+              conditions:
+                  - {and: [], _generated: true}
+                  - {variability_input: node.node}

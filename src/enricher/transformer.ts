@@ -185,6 +185,9 @@ export default class Transformer {
 
             // Delete check options
             delete this.topology.variability.options.required_technology_check
+
+            // Delete enricher options
+            delete this.topology.variability.options.enrich_input_condition
         }
 
         // Remove empty options

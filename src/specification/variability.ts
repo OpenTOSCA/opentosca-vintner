@@ -33,7 +33,8 @@ export type VariabilityOptions = {
     ChecksOptions &
     SolverOptions &
     ConstraintsOptions &
-    NormalizationOptions
+    NormalizationOptions &
+    EnricherOptions
 
 export type PruningMode = 'manual' | 'consistent-strict' | 'consistent-loose' | 'default' | 'default-loose' | 'loose'
 
@@ -51,6 +52,10 @@ export type SolverOptions = {
 
 export type NormalizationOptions = {
     technology_required?: boolean
+}
+
+export type EnricherOptions = {
+    enrich_input_condition?: boolean
 }
 
 export type ConstraintsOptions = {
