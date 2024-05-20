@@ -10,6 +10,7 @@ import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
 import * as utils from '#utils'
 import day from '#utils/day'
+import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
 import regression from 'regression'
@@ -505,8 +506,18 @@ export default class Solver {
          * container_presence
          */
         if (check.isDefined(expression.container_presence)) {
-            const container = this.graph.getContainer(context.element)
-            return container.id
+            if (expression.container_presence === 'SELF') {
+                const container = this.graph.getContainer(context.element)
+                return container.id
+            }
+
+            if (expression.container_presence === 'CONTAINER') {
+                const container = this.graph.getContainer(context.element)
+                const containerContainer = this.graph.getContainer(container)
+                return containerContainer.id
+            }
+
+            throw new UnexpectedError()
         }
 
         /**

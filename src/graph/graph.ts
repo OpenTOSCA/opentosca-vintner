@@ -120,7 +120,7 @@ export default class Graph {
         new Populator(this).run()
     }
 
-    getNode(name: string | 'SELF' | 'CONTAINER', context: Context = {}): Node {
+    getNode(name: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', context: Context = {}): Node {
         assert.isString(name)
 
         if (check.isDefined(context.cached)) {
@@ -138,6 +138,18 @@ export default class Graph {
             const container = this.getContainer(context.element)
             assert.isNode(container)
             return container
+        }
+
+        if (name === 'TARGET') {
+            const relation = context.element
+            assert.isRelation(relation)
+            return relation.target
+        }
+
+        if (name === 'SOURCE') {
+            const relation = context.element
+            assert.isRelation(relation)
+            return relation.source
         }
 
         const node = this.nodesMap.get(name)
@@ -387,11 +399,8 @@ export default class Graph {
     }
 
     getNodeProperty(data: NodePropertyPresenceArguments, context: Context = {}): Property {
-        const nodeRef = data[0]
-        const propertyRef = data[1]
-
-        assert.isString(nodeRef)
-        assert.isStringOrNumber(propertyRef)
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
 
         if (check.isDefined(context.cached)) {
             const element = context.cached
@@ -399,35 +408,7 @@ export default class Graph {
             return element
         }
 
-        let node: Node | undefined
-        if (nodeRef === 'SELF') {
-            assert.isNode(context.element)
-            node = context.element
-        }
-
-        if (nodeRef === 'CONTAINER') {
-            const container = this.getContainer(context.element)
-            assert.isNode(container)
-            node = container
-        }
-
-        if (nodeRef === 'TARGET') {
-            const relation = context.element
-            assert.isRelation(relation)
-            node = relation.target
-        }
-
-        if (nodeRef === 'SOURCE') {
-            const relation = context.element
-            assert.isRelation(relation)
-            node = relation.source
-        }
-
-        if (check.isUndefined(node)) {
-            node = this.getNode(nodeRef, {element: context.element})
-        }
-
-        assert.isNode(node)
+        const node = this.getNode(data[0], {element: context.element})
         return this.getProperty(node, data)
     }
 

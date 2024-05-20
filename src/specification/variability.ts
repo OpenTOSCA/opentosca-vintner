@@ -235,36 +235,51 @@ export type VariabilityAlternative = {
     semantic_pruning?: boolean
 }
 
-export type NodeTypePresenceArguments = [node: string, type: string | number]
-export type RelationTypePresenceArguments = [node: string, relation: string | number, type: string | number]
-export type GroupTypePresenceArguments = [group: string, type: string | number]
-export type PolicyTypePresenceArguments = [policy: string | number, type: string | number]
+export type NodeTypePresenceArguments = [
+    node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
+    type: string | number
+]
 
-// TODO: this
+export type RelationTypePresenceArguments = [
+    node: string | 'SELF' | 'CONTAINER',
+    relation: string | number,
+    type: string | number
+]
+
+export type GroupTypePresenceArguments = [group: string | 'SELF' | 'CONTAINER', type: string | number]
+
+export type PolicyTypePresenceArguments = [policy: string | number | 'SELF' | 'CONTAINER', type: string | number]
+
 export type NodePropertyPresenceArguments = [
-    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
     property: string | number
 ]
+
 export type RelationPropertyPresenceArguments = [
-    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    node: string | 'SELF' | 'CONTAINER',
     relation: string | number,
     property: string | number
 ]
-export type GroupPropertyPresenceArguments = [
-    group: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
-    property: string | number
-]
+
+export type GroupPropertyPresenceArguments = [group: string | 'SELF' | 'CONTAINER', property: string | number]
+
 export type PolicyPropertyPresenceArguments = [
-    policy: string | number | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    policy: string | number | 'SELF' | 'CONTAINER',
     property: string | number
 ]
+
 export type ArtifactPropertyPresenceArguments = [
-    node: string | 'SELF' | 'TARGET' | 'SOURCE' | 'CONTAINER',
+    node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
     artifact: string | number,
     property: string | number
 ]
 
-export type TechnologyPresenceArguments = [node: string, technology: string | number]
+export type TechnologyPresenceArguments = [
+    node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
+    technology: string | number
+]
+
+// TODO: artifact_type_presence
 
 export type LogicExpression =
     | {
@@ -283,15 +298,15 @@ export type LogicExpression =
           policy_type_presence?: PolicyTypePresenceArguments
 
           // Node functions
-          node_presence?: string | 'CONTAINER'
-          host_presence?: string | 'SELF' | 'CONTAINER'
-          has_source?: string | 'SELF' | 'CONTAINER'
-          has_incoming_relation?: string | 'SELF' | 'CONTAINER'
-          has_incoming_relation_naive?: string | 'SELF' | 'CONTAINER'
-          has_outgoing_relation?: string | 'SELF' | 'CONTAINER'
-          has_outgoing_relation_naive?: string | 'SELF' | 'CONTAINER'
-          has_artifact?: string | 'SELF' | 'CONTAINER'
-          has_artifact_naive?: string | 'SELF' | 'CONTAINER'
+          node_presence?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          host_presence?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_source?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_incoming_relation?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_incoming_relation_naive?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_outgoing_relation?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_outgoing_relation_naive?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_artifact?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
+          has_artifact_naive?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'
 
           // Relation functions
           relation_presence?: [node: string | 'SELF' | 'CONTAINER', relation: string | number]
@@ -306,11 +321,11 @@ export type LogicExpression =
           artifact_property_presence?: ArtifactPropertyPresenceArguments
 
           // Artifact functions
-          artifact_presence?: [node: string, artifact: string | number]
+          artifact_presence?: [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
 
           // Policy functions
-          policy_presence?: string | number
-          has_present_target?: string | number
+          policy_presence?: string | number | 'SELF' | 'CONTAINER'
+          has_present_target?: string | number | 'SELF' | 'CONTAINER'
 
           // Group functions
           group_presence?: string | 'SELF' | 'CONTAINER'
@@ -335,7 +350,7 @@ export type LogicExpression =
           variability_input?: string
 
           // Some more functions
-          container_presence?: 'SELF'
+          container_presence?: 'SELF' | 'CONTAINER'
 
           // Cache
           _cached_element?: Element
