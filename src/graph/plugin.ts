@@ -93,7 +93,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             // Done if no more hosting must be found
             if (utils.isEmpty(hosting)) {
                 output.push(historyCopy)
-                return
+                continue
             }
 
             // Deep copy since every child call changes the state of hosting
