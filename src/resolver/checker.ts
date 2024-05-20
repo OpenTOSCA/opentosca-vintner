@@ -81,6 +81,7 @@ export default class Checker {
 
         // Ensure that each node has exactly one type
         if (this.graph.options.checks.ambiguousType) {
+            // TODO: not only for nodes
             for (const node of nodes) {
                 const names = new Set()
                 const types = node.types.filter(it => it.present)

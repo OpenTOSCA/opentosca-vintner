@@ -250,6 +250,12 @@ export type GroupTypePresenceArguments = [group: string | 'SELF' | 'CONTAINER', 
 
 export type PolicyTypePresenceArguments = [policy: string | number | 'SELF' | 'CONTAINER', type: string | number]
 
+export type ArtifactTypePresenceArguments = [
+    node: string | number | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
+    artifact: string | number,
+    type: string | number
+]
+
 export type NodePropertyPresenceArguments = [
     node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET',
     property: string | number
@@ -296,6 +302,7 @@ export type LogicExpression =
           relation_type_presence?: RelationTypePresenceArguments
           group_type_presence?: GroupTypePresenceArguments
           policy_type_presence?: PolicyTypePresenceArguments
+          artifact_type_presence?: ArtifactTypePresenceArguments
 
           // Node functions
           node_presence?: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET'

@@ -11,13 +11,19 @@ topology_template:
                   - {has_artifact: node, _generated: true}
               artifacts:
                   - artifact_one:
-                        type: tosca.artifacts.File
+                        type:
+                            - tosca.artifacts.File:
+                                  conditions:
+                                      - {artifact_presence: [node, 0], _generated: true}
                         file: file_one
                         conditions:
                             - {node_presence: node, _generated: true}
                   - artifact_one:
-                        type: tosca.artifacts.File
+                        type:
+                            - tosca.artifacts.File:
+                                  conditions:
+                                      - {artifact_presence: [node, 1], _generated: true}
                         file: file_one
                         conditions:
                             - {node_presence: node, _generated: true}
-                            - {not: {or: [artifact_presence: [node, 0]]}, _bratan: true}
+                            - {not: {or: [{artifact_presence: [node, 0], _generated: true}]}, _bratan: true}

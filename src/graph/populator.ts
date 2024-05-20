@@ -322,6 +322,10 @@ export class Populator {
             })
             artifact.graph = this.graph
 
+            // Type
+            this.populateTypes(artifact, raw)
+
+            // Properties
             this.populateProperties(artifact, raw)
 
             if (!node.artifactsMap.has(artifact.name)) node.artifactsMap.set(artifact.name, [])

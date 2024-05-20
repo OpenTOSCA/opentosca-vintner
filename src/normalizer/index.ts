@@ -217,9 +217,15 @@ export default class Normalizer {
 
     private normalizeArtifact(map: ArtifactDefinitionMap) {
         const [name, template] = utils.firstEntry(map)
+
         if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
         if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
-        this.normalizeProperties(map[name])
+
+        const updated = map[name]
+        assert.isObject(updated)
+
+        this.normalizeProperties(updated)
+        this.normalizeTypes(updated)
     }
 
     /**

@@ -1,5 +1,7 @@
 import * as check from '#check'
+import Artifact from '#graph/artifact'
 import {bratify} from '#graph/utils'
+import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
@@ -13,8 +15,13 @@ import Node from './node'
 import Policy from './policy'
 import Relation from './relation'
 
-export type TypeContainer = Node | Relation | Policy | Group
-export type TypeContainerTemplate = NodeTemplate | RelationshipTemplate | PolicyTemplate | GroupTemplate
+export type TypeContainer = Node | Relation | Policy | Group | Artifact
+export type TypeContainerTemplate =
+    | NodeTemplate
+    | RelationshipTemplate
+    | PolicyTemplate
+    | GroupTemplate
+    | ExtendedArtifactDefinition
 
 export default class Type extends Element {
     readonly type = 'type'

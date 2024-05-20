@@ -690,6 +690,14 @@ export default class Solver {
         }
 
         /**
+         * artifact_type_presence
+         */
+        if (check.isDefined(expression.artifact_type_presence)) {
+            const type = this.graph.getArtifactType(expression.artifact_type_presence, {element, cached})
+            return type.id
+        }
+
+        /**
          * Assume that expression is a value expression that returns a boolean
          * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */

@@ -12,6 +12,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {
     ArtifactPropertyPresenceArguments,
+    ArtifactTypePresenceArguments,
     GroupPropertyPresenceArguments,
     GroupTypePresenceArguments,
     LogicExpression,
@@ -214,7 +215,22 @@ export default class Graph {
         return this.getType(policy, data)
     }
 
-    private getType(container: Node | Relation | Group | Policy, data: (string | number)[]): Type {
+    getArtifactType(data: ArtifactTypePresenceArguments, context: Context = {}): Type {
+        assert.isString(data[0])
+        assert.isStringOrNumber(data[1])
+        assert.isStringOrNumber(data[2])
+
+        if (check.isDefined(context.cached)) {
+            const element = context.cached
+            assert.isType(element)
+            return element
+        }
+
+        const artifact = this.getArtifact([data[0], data[1]], {element: context.element})
+        return this.getType(artifact, data)
+    }
+
+    private getType(container: Node | Relation | Group | Policy | Artifact, data: (string | number)[]): Type {
         let type
         const toscaId = utils.last(data)
 
