@@ -142,7 +142,9 @@ node_types:
                             export OS_APPLICATION_CREDENTIAL_ID={{ SELF.application_credential_id }}
                             export OS_APPLICATION_CREDENTIAL_SECRET={{ SELF.application_credential_secret }}
 
-                            openstack server delete --wait {{ SELF.instance_name }}
-                            openstack security group delete {{ SELF.instance_name }}
+                            has_error=0
+                            openstack server delete --wait {{ SELF.instance_name }} || has_error=1
+                            openstack security group delete {{ SELF.instance_name }} || has_error=1
+                            exit $has_error
                         inputs:
                             keeplines: true
