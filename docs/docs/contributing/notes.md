@@ -260,6 +260,6 @@ We briefly discuss limitations of our prototypical implementation.
 1. We expect that names of hosting relations match `/^(.*_)?host(_.*)?$/` since we do not implement the TOSCA type system.
 1. We expect that names of connection relations match `/^(.*_)?connection(_.*)?$/` since we do not implement the TOSCA type system.
 1. We only support simple consumers, i.e., directly accessed by properties.
-1. We only support simple producers, i.e., directly accessing the property of a node, using Unfurl `eval` Jinja filter, Unfurl `eval` intrinsic function, and TOSCA `get_property` intrinsic function.
+1. We only support simple producers, i.e., directly accessing the property of a node, using Unfurl `eval` Jinja filter, Unfurl `eval` intrinsic function, and TOSCA `get_property` intrinsic function, and assume that if the property is not found that it is either produced by an undefined property with a default value or by an attribute.
 1. We only support Boolean variability inputs in variability input constraints.
 1. We do not support default expressions of variability inputs in variability input constraints.
