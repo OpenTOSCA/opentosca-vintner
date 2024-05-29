@@ -367,6 +367,8 @@ export class Populator {
         }
     }
 
+    // TODO: consider undefined properties with default values?
+    // TODO: consider attributes?
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
         assert.isObject(template, `${element.Display} not normalized`)
         if (check.isUndefined(template.properties)) return
@@ -529,9 +531,17 @@ export class Populator {
                 propertyName = value.get_property[1]
             }
 
+            /**
+             * Find producers
+             */
             if (check.isDefined(nodeName) && check && check.isDefined(propertyName)) {
                 const node = this.graph.getNode(nodeName)
                 node.properties.filter(it => it.name === propertyName).forEach(it => output.producers.push(it))
+
+                /**
+                 * Hotfix: Simply assume that output is produced by an attribute or an undefined property with default values and, hence, just add the node itself as producer
+                 */
+                if (utils.isEmpty(output.producers)) output.producers.push(node)
             }
         }
     }
