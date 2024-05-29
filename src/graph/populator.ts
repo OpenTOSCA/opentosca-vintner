@@ -368,6 +368,7 @@ export class Populator {
     }
 
     // TODO: consider undefined properties with default values?
+    // TODO: consider attributes?
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
         assert.isObject(template, `${element.Display} not normalized`)
         if (check.isUndefined(template.properties)) return
