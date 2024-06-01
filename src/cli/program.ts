@@ -618,6 +618,7 @@ instances
     .description('initializes a new instance')
     .requiredOption('--instance <string>', 'instance name (must match /^[a-z\\-]+$/)')
     .requiredOption('--template <string>', 'template name')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.init(options)
@@ -674,6 +675,7 @@ instances
         '--inputs [string]',
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
     )
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
@@ -687,6 +689,7 @@ instances
     .option('--inputs [string]', 'path to the deployment inputs')
     .option('--verbose [boolean]', 'verbose')
     .option('--dry [boolean]', 'dry run')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.validate(options)
@@ -711,6 +714,7 @@ instances
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--retry [boolean]', 'retry', true)
     .option('--verbose [boolean]', 'verbose')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.deploy(options)
@@ -733,6 +737,7 @@ instances
     .description('continue instance (deployment)')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.continue(options)
@@ -745,6 +750,7 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.update(options)
@@ -756,6 +762,7 @@ instances
     .description('swap instance template')
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--template <string>', 'template name')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.swap(options)
@@ -767,6 +774,7 @@ instances
     .description('undeploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.undeploy(options)
@@ -777,6 +785,7 @@ instances
     .command('delete')
     .description('deletes instance')
     .requiredOption('--instance <string>', 'instance name')
+    .option('--lock [boolean]', 'enable locking', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.delete(options)

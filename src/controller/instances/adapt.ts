@@ -95,6 +95,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             await Controller.instances.update({
                 instance: instance.getName(),
                 time,
+                lock: false,
             })
         })
     )

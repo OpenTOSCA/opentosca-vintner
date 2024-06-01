@@ -4,24 +4,35 @@ import std from '#std'
 import * as utils from '#utils'
 import lock from '#utils/lock'
 
-export type InstancesDeployOptions = {instance: string; inputs?: string; verbose?: boolean; retry?: boolean}
+export type InstancesDeployOptions = {
+    instance: string
+    inputs?: string
+    verbose?: boolean
+    retry?: boolean
+    lock?: boolean
+}
 
 export default async function (options: InstancesDeployOptions) {
     options.retry = options.retry ?? true
+    options.lock = options.lock ?? true
 
     const instance = new Instance(options.instance)
-    await lock.try(instance.getLockKey(), async () => {
-        if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
-        instance.setServiceInputs(utils.now(), options.inputs)
+    await lock.try(
+        instance.getLockKey(),
+        async () => {
+            if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+            instance.setServiceInputs(utils.now(), options.inputs)
 
-        const orchestrator = orchestrators.get()
-        try {
-            await orchestrator.deploy(instance, {verbose: options.verbose})
-        } catch (e) {
-            if (!options.retry) throw e
-            std.log(e)
-            await utils.sleep(10 * 1000)
-            await orchestrator.continue(instance, {verbose: options.verbose})
-        }
-    })
+            const orchestrator = orchestrators.get()
+            try {
+                await orchestrator.deploy(instance, {verbose: options.verbose})
+            } catch (e) {
+                if (!options.retry) throw e
+                std.log(e)
+                await utils.sleep(10 * 1000)
+                await orchestrator.continue(instance, {verbose: options.verbose})
+            }
+        },
+        options.lock
+    )
 }

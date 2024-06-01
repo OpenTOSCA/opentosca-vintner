@@ -7,27 +7,34 @@ export type InstanceResolveOptions = {
     instance: string
     presets?: string[]
     inputs?: string
+    lock?: boolean
 }
 
 export default async function (options: InstanceResolveOptions) {
+    options.lock = options.lock ?? true
+
     const time = utils.now()
     const instance = new Instance(options.instance)
 
-    await lock.try(instance.getLockKey(), async () => {
-        // Resolve variability
-        const result = await Resolver.run({
-            template: instance.getVariableServiceTemplate(),
-            inputs: options.inputs,
-            presets: options.presets,
-        })
+    await lock.try(
+        instance.getLockKey(),
+        async () => {
+            // Resolve variability
+            const result = await Resolver.run({
+                template: instance.getVariableServiceTemplate(),
+                inputs: options.inputs,
+                presets: options.presets,
+            })
 
-        // Store used variability inputs
-        // Required later for self-adaptation
-        // Note, used presets are resolved to respective variability inputs
-        await instance.setVariabilityInputs(result.inputs, time)
+            // Store used variability inputs
+            // Required later for self-adaptation
+            // Note, used presets are resolved to respective variability inputs
+            await instance.setVariabilityInputs(result.inputs, time)
 
-        // Store variability resolved service template
-        await instance.setServiceTemplate(result.template, time)
-        await instance.setResolvedTimestamp(time)
-    })
+            // Store variability resolved service template
+            await instance.setServiceTemplate(result.template, time)
+            await instance.setResolvedTimestamp(time)
+        },
+        options.lock
+    )
 }
