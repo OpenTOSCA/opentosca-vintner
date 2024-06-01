@@ -812,6 +812,18 @@ instances
         })
     )
 
+instances
+    .command('state')
+    .description('set the state of the instance')
+    .requiredOption('--instance <string>', 'instance name')
+    .option('--force [boolean]', 'force', false)
+    .option('--lock [boolean]', 'enable locking', true)
+    .action(
+        hae.exit(async options => {
+            await Controller.instances.state(options)
+        })
+    )
+
 /**
  * Server
  */

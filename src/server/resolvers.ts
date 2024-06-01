@@ -557,6 +557,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/instances/state',
+    hae.express(async (req, res, next) => {
+        await Controller.instances.state(req.body)
+        res.json({})
+    })
+)
+
 /**
  * Assets
  */

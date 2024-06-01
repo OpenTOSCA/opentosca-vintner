@@ -1,3 +1,4 @@
+import {InstanceStateMachine, STATES} from '#/machines/instance'
 import * as check from '#check'
 import * as files from '#files'
 import Loader from '#graph/loader'
@@ -12,6 +13,7 @@ import {Template} from './templates'
 
 type InstanceInfo = {
     name: string
+    state: string
     creation_timestamp: number
     resolved_timestamp?: number
     template_timestamp: number
@@ -35,8 +37,11 @@ export class Instances {
 export class Instance {
     private readonly _name: string
 
+    readonly machine: InstanceStateMachine
+
     constructor(name: string) {
         this._name = name
+        this.machine = new InstanceStateMachine(this)
     }
 
     getName() {
@@ -59,7 +64,12 @@ export class Instance {
         files.createDirectory(this.getTemplatesDirectory())
 
         // Create info
-        this.setInfo({name: this.getName(), creation_timestamp: time, template_timestamp: time})
+        this.setInfo({
+            name: this.getName(),
+            state: STATES.INITIATED,
+            creation_timestamp: time,
+            template_timestamp: time,
+        })
 
         // Set template
         this.setTemplate(template.getName(), time)
@@ -91,10 +101,21 @@ export class Instance {
         const info = files.loadYAML<InstanceInfo>(this.getInfo())
 
         if (check.isUndefined(info.name)) throw new Error(`${this.getName()} has no name`)
+        if (check.isUndefined(info.state)) throw new Error(`${this.getName()} has no state`)
         if (check.isUndefined(info.creation_timestamp)) throw new Error(`${this.getName()} has no creation timestamp`)
         if (check.isUndefined(info.template_timestamp)) throw new Error(`${this.getName()} has no template timestamp`)
 
         return info
+    }
+
+    setState(state: string) {
+        this.setInfo({...this.loadInfo(), state})
+        return this
+    }
+
+    loadState() {
+        const info = this.loadInfo()
+        return info.state
     }
 
     setResolvedTimestamp(time: number) {
