@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import {ACTIONS} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import * as Resolver from '#resolver'
@@ -14,16 +15,19 @@ export type InstanceResolveOptions = {
 }
 
 export default async function (options: InstanceResolveOptions) {
+    assert.isString(options.instance)
+
     options.force = options.force ?? false
     options.lock = options.lock ?? !options.force
     options.machine = options.machine ?? !options.force
 
     const time = utils.now()
     const instance = new Instance(options.instance)
-
     await lock.try(
         instance.getLockKey(),
         async () => {
+            instance.assert()
+
             await instance.machine.try(
                 ACTIONS.RESOLVE,
                 async () => {

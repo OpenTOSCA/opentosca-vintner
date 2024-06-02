@@ -11,7 +11,7 @@ import _ from 'lodash'
 import * as path from 'path'
 import {Template} from './templates'
 
-type InstanceInfo = {
+export type InstanceInfo = {
     name: string
     state: string
     creation_timestamp: number
@@ -54,6 +54,10 @@ export class Instance {
 
     exists() {
         return files.exists(this.getInstanceDirectory())
+    }
+
+    assert() {
+        if (!this.exists()) throw new Error(`Instance "${this.getName()}" does not exist`)
     }
 
     create(template: Template, time: number) {

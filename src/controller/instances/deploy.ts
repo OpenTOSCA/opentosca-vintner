@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+import {ACTIONS} from '#machines/instance'
 import orchestrators from '#orchestrators'
 import {Instance} from '#repositories/instances'
 import std from '#std'
@@ -9,29 +11,41 @@ export type InstancesDeployOptions = {
     inputs?: string
     verbose?: boolean
     retry?: boolean
+    force?: boolean
     lock?: boolean
+    machine?: boolean
 }
 
 export default async function (options: InstancesDeployOptions) {
-    options.retry = options.retry ?? true
-    options.lock = options.lock ?? true
+    assert.isString(options.instance)
+
+    options.force = options.force ?? false
+    options.lock = options.lock ?? !options.force
+    options.machine = options.machine ?? !options.force
 
     const instance = new Instance(options.instance)
     await lock.try(
         instance.getLockKey(),
         async () => {
-            if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
-            instance.setServiceInputs(utils.now(), options.inputs)
+            instance.assert()
 
-            const orchestrator = orchestrators.get()
-            try {
-                await orchestrator.deploy(instance, {verbose: options.verbose})
-            } catch (e) {
-                if (!options.retry) throw e
-                std.log(e)
-                await utils.sleep(10 * 1000)
-                await orchestrator.continue(instance, {verbose: options.verbose})
-            }
+            await instance.machine.try(
+                ACTIONS.DEPLOY,
+                async () => {
+                    instance.setServiceInputs(utils.now(), options.inputs)
+
+                    const orchestrator = orchestrators.get()
+                    try {
+                        await orchestrator.deploy(instance, {verbose: options.verbose})
+                    } catch (e) {
+                        if (!options.retry) throw e
+                        std.log(e)
+                        await utils.sleep(10 * 1000)
+                        await orchestrator.continue(instance, {verbose: options.verbose})
+                    }
+                },
+                options.machine
+            )
         },
         options.lock
     )

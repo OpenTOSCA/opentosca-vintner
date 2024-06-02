@@ -1,4 +1,5 @@
 import {Instance} from '#repositories/instances'
+import * as utils from '#utils'
 import {StateMachine} from '#utils/state'
 
 export enum STATES {
@@ -44,9 +45,16 @@ export enum ACTIONS {
     DELETE = 'DELETE',
     SUCCESS = 'SUCCESS',
     ERROR = 'ERROR',
+
+    INFO = 'INFO',
+    DEBUG = 'DEBUG',
+    STATE = 'STATE',
+    INSPECT = 'INSPECT',
+    OUTPUTS = 'OUTPUTS',
+    VALIDATE = 'VALIDATE',
 }
 
-const TRANSACTIONS = [
+const TRANSITIONS = [
     // VOID
     {from: STATES.VOID, via: ACTIONS.INIT, to: STATES.INITIATED},
 
@@ -65,6 +73,8 @@ const TRANSACTIONS = [
     // RESOLVED
     {from: STATES.RESOLVED, via: ACTIONS.DEPLOY, to: STATES.DEPLOYING},
     {from: STATES.RESOLVED, via: ACTIONS.DELETE, to: STATES.DELETING},
+    {from: STATES.RESOLVED, via: ACTIONS.VALIDATE, to: STATES.RESOLVED},
+    {from: STATES.RESOLVED, via: ACTIONS.INSPECT, to: STATES.RESOLVED},
 
     // DELETING
     {from: STATES.DELETING, via: ACTIONS.SUCCESS, to: STATES.DELETED},
@@ -77,9 +87,11 @@ const TRANSACTIONS = [
     {from: STATES.DEPLOYING, via: ACTIONS.ERROR, to: STATES.DEPLOY_ERROR},
     {from: STATES.DEPLOYING, via: ACTIONS.SUCCESS, to: STATES.DEPLOYED},
 
-    // DEPLOY
+    // DEPLOYED
     {from: STATES.DEPLOYED, via: ACTIONS.SWAP, to: STATES.SWAPPING},
     {from: STATES.DEPLOYED, via: ACTIONS.UNDEPLOY, to: STATES.UNDEPLOYING},
+    {from: STATES.DEPLOYED, via: ACTIONS.OUTPUTS, to: STATES.DEPLOYED},
+    {from: STATES.DEPLOYED, via: ACTIONS.INSPECT, to: STATES.DEPLOYED},
 
     // DEPLOY_ERROR
     {from: STATES.DEPLOY_ERROR, via: ACTIONS.CONTINUE, to: STATES.DEPLOYING},
@@ -108,6 +120,7 @@ const TRANSACTIONS = [
     // RESOLVING_DEPLOYED
     {from: STATES.RESOLVING_DEPLOYED, via: ACTIONS.SUCCESS, to: STATES.RESOLVED_DEPLOYED},
     {from: STATES.RESOLVING_DEPLOYED, via: ACTIONS.ERROR, to: STATES.RESOLVING_DEPLOYED_ERROR},
+    {from: STATES.RESOLVING_DEPLOYED, via: ACTIONS.VALIDATE, to: STATES.RESOLVING_DEPLOYED},
 
     // RESOLVING_DEPLOYED_ERROR
     {from: STATES.RESOLVING_DEPLOYED_ERROR, via: ACTIONS.RESOLVE, to: STATES.RESOLVING_DEPLOYED},
@@ -128,7 +141,6 @@ const TRANSACTIONS = [
 
 export class InstanceStateMachine {
     private readonly instance: Instance
-    private machine?: StateMachine
 
     constructor(instance: Instance) {
         this.instance = instance
@@ -136,21 +148,46 @@ export class InstanceStateMachine {
 
     async try(action: `${ACTIONS}`, fn: () => Promise<void> | void, enabled = true) {
         if (enabled) {
-            this.machine = new StateMachine(this.instance.loadState(), TRANSACTIONS)
-            this.machine.do(action)
-            this.instance.setState(this.machine.state)
+            const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+            machine.do(action)
+            this.instance.setState(machine.state)
 
             try {
                 await fn()
-                this.machine.do(ACTIONS.SUCCESS)
-                this.instance.setState(this.machine.state)
+                machine.do(ACTIONS.SUCCESS)
+                this.instance.setState(machine.state)
             } catch (e) {
-                this.machine.do(ACTIONS.ERROR)
-                this.instance.setState(this.machine.state)
+                machine.do(ACTIONS.ERROR)
+                this.instance.setState(machine.state)
                 throw e
             }
         } else {
             await fn()
         }
+    }
+
+    noop(noop: `${ACTIONS}`, enabled = true) {
+        if (!enabled) return
+
+        // TODO: make this a transition somehow
+        if (noop === ACTIONS.INFO) return
+        if (noop === ACTIONS.DEBUG) return
+        if (noop === ACTIONS.STATE) return
+
+        const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+
+        const from = machine.state
+        const to = machine.do(noop)
+
+        if (from !== to) throw new Error(`Action "${noop}" in state ${from} is not a noop and results in "${to}"`)
+    }
+
+    assert(states: `${STATES}`[], enabled = true) {
+        if (!enabled) return
+
+        const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+        if (states.includes(machine.state as `${STATES}`)) return
+
+        throw new Error(`State "${machine.state}" not in  "${utils.pretty(states)}"`)
     }
 }
