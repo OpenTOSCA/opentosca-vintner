@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
+import {STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import * as Resolver from '#resolver'
 import {InputAssignmentMap} from '#spec/topology-template'
@@ -95,6 +96,8 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             await instance.setServiceTemplate(result.template, time)
             await instance.setVariabilityInputs(result.inputs, time)
             instance.setResolvedTimestamp(time)
+            instance.setState(STATES.RESOLVED_DEPLOYED)
+
             await Controller.instances.update({
                 instance: instance.getName(),
                 time,
