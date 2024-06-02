@@ -1,5 +1,7 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
+import {STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import * as Resolver from '#resolver'
 import {InputAssignmentMap} from '#spec/topology-template'
@@ -22,13 +24,15 @@ type InstancesAdaptationOptions = {instance: string; inputs: InputAssignmentMap}
  * Monitor: Collect sensor data and trigger adaptation
  */
 export default async function (options: InstancesAdaptationOptions) {
+    assert.isString(options.instance)
+
     std.log(options)
     if (stopped[options.instance]) return
 
     if (queue[options.instance]) return queue[options.instance]!.push(options.inputs)
 
     const instance = new Instance(options.instance)
-    if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    instance.assert()
 
     queue[options.instance] = [options.inputs]
     emitter.emit(events.start_adaptation, instance)
@@ -50,7 +54,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
         instance.getLockKey(),
         hae.log(async () => {
             // Sanity
-            if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+            instance.assert()
 
             // Current time used as correlation identifier
             const time = utils.now()
@@ -92,9 +96,12 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             await instance.setServiceTemplate(result.template, time)
             await instance.setVariabilityInputs(result.inputs, time)
             instance.setResolvedTimestamp(time)
+            instance.setState(STATES.RESOLVED_DEPLOYED)
+
             await Controller.instances.update({
                 instance: instance.getName(),
                 time,
+                lock: false,
             })
         })
     )

@@ -1,17 +1,42 @@
+import * as assert from '#assert'
+import {ACTIONS} from '#machines/instance'
 import orchestrators from '#orchestrators'
 import {Instance} from '#repositories/instances'
 import std from '#std'
 import * as utils from '#utils'
-import lock from '#utils/lock'
 
-export type InstancesDeployOptions = {instance: string; inputs?: string; verbose?: boolean; retry?: boolean}
+export type InstancesDeployOptions = {
+    instance: string
+    inputs?: string
+    verbose?: boolean
+    retry?: boolean
+    force?: boolean
+    lock?: boolean
+    machine?: boolean
+}
 
 export default async function (options: InstancesDeployOptions) {
-    options.retry = options.retry ?? true
+    /**
+     * Validation
+     */
+    assert.isString(options.instance)
 
+    /**
+     * Defaults
+     */
+    options.force = options.force ?? false
+    options.lock = options.lock ?? !options.force
+    options.machine = options.machine ?? !options.force
+
+    /**
+     * Instance
+     */
     const instance = new Instance(options.instance)
-    await lock.try(instance.getLockKey(), async () => {
-        if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+
+    /**
+     * Action
+     */
+    async function action() {
         instance.setServiceInputs(utils.now(), options.inputs)
 
         const orchestrator = orchestrators.get()
@@ -23,5 +48,10 @@ export default async function (options: InstancesDeployOptions) {
             await utils.sleep(10 * 1000)
             await orchestrator.continue(instance, {verbose: options.verbose})
         }
-    })
+    }
+
+    /**
+     * Execution
+     */
+    await instance.machine.try(ACTIONS.DEPLOY, action, {lock: options.lock, machine: options.machine})
 }

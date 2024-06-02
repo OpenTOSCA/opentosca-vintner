@@ -1,19 +1,43 @@
+import * as assert from '#assert'
+import {ACTIONS} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import * as Resolver from '#resolver'
 import * as utils from '#utils'
-import lock from '#utils/lock'
 
 export type InstanceResolveOptions = {
     instance: string
     presets?: string[]
     inputs?: string
+    force?: boolean
+    lock?: boolean
+    machine?: boolean
 }
 
 export default async function (options: InstanceResolveOptions) {
-    const time = utils.now()
+    /**
+     * Validation
+     */
+    assert.isString(options.instance)
+
+    /**
+     * Defaults
+     */
+    options.force = options.force ?? false
+    options.lock = options.lock ?? !options.force
+    options.machine = options.machine ?? !options.force
+
+    /**
+     * Instance
+     */
     const instance = new Instance(options.instance)
 
-    await lock.try(instance.getLockKey(), async () => {
+    /**
+     * Action
+     */
+    async function action() {
+        // Time
+        const time = utils.now()
+
         // Resolve variability
         const result = await Resolver.run({
             template: instance.getVariableServiceTemplate(),
@@ -27,7 +51,12 @@ export default async function (options: InstanceResolveOptions) {
         await instance.setVariabilityInputs(result.inputs, time)
 
         // Store variability resolved service template
-        await instance.setServiceTemplate(result.template, time)
-        await instance.setResolvedTimestamp(time)
-    })
+        instance.setServiceTemplate(result.template, time)
+        instance.setResolvedTimestamp(time)
+    }
+
+    /**
+     * Execution
+     */
+    await instance.machine.try(ACTIONS.RESOLVE, action, {lock: options.lock, machine: options.machine})
 }

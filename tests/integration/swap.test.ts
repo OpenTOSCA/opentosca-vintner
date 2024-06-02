@@ -27,11 +27,11 @@ if (!integrationTestsEnabled) {
 
             // Bravo Template
             const bravoName = 'xopera-test-swap-template-bravo'
-            const bravoDirectoy = path.join(examplesDir, bravoName)
-            const bravoTemplate = new Loader(path.join(bravoDirectoy, 'variable-service-template.yaml')).raw()
+            const bravoDirectory = path.join(examplesDir, bravoName)
+            const bravoTemplate = new Loader(path.join(bravoDirectory, 'variable-service-template.yaml')).raw()
             await Controller.templates.import({
                 template: bravoName,
-                path: bravoDirectoy,
+                path: bravoDirectory,
             })
 
             // Create instance

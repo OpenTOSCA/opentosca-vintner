@@ -13,6 +13,7 @@ import _open from './open'
 import _outputs from './outputs'
 import _path from './path'
 import _resolve from './resolve'
+import _state from './state'
 import _swap from './swap'
 import _unadapt from './unadapt'
 import _undeploy from './undeploy'
@@ -40,4 +41,5 @@ export default {
     swap: _swap,
     info: _info,
     clean: _clean,
+    state: _state,
 }

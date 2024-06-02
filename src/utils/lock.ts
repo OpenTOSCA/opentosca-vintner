@@ -12,9 +12,13 @@ async function wait(key: string, fn: () => Promise<void> | void) {
     await mutexes[key].runExclusive(fn)
 }
 
-async function _try(key: string, fn: () => Promise<void> | void) {
-    if (!mutexes[key]) mutexes[key] = new Mutex()
-    await tryAcquire(mutexes[key]).runExclusive(fn)
+async function _try(key: string, fn: () => Promise<void> | void, enabled = true) {
+    if (enabled) {
+        if (!mutexes[key]) mutexes[key] = new Mutex()
+        await tryAcquire(mutexes[key]).runExclusive(fn)
+    } else {
+        await fn()
+    }
 }
 
 export default {

@@ -30,7 +30,8 @@
             "#utils": ["src/utils/utils"],
             "#std": ["src/utils/std"],
             "#check": ["src/utils/check"],
-            "#assert": ["src/utils/assert"]
+            "#assert": ["src/utils/assert"],
+            "#machines/*": ["src/machines/*"]
         },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,

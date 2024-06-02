@@ -1,9 +1,12 @@
+import * as assert from '#assert'
 import {Instance} from '#repositories/instances'
 
 export type InstancesOpenOptions = {instance: string}
 
 export default async function (options: InstancesOpenOptions) {
+    assert.isString(options.instance)
+
     const instance = new Instance(options.instance)
-    if (!instance.exists()) throw new Error(`Instance "${instance.getName()}" does not exist`)
+    instance.assert()
     return instance.getInstanceDirectory()
 }

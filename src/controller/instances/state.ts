@@ -1,10 +1,16 @@
 import * as assert from '#assert'
-import {ACTIONS} from '#machines/instance'
+import {ACTIONS, STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 
-export type InstancesDeleteOptions = {instance: string; force?: boolean; lock?: boolean; machine?: boolean}
+export type InstanceStateOptions = {
+    instance: string
+    state: string
+    force?: boolean
+    lock?: boolean
+    machine?: boolean
+}
 
-export default async function (options: InstancesDeleteOptions) {
+export default async function (options: InstanceStateOptions) {
     /**
      * Validation
      */
@@ -15,7 +21,6 @@ export default async function (options: InstancesDeleteOptions) {
      */
     options.force = options.force ?? false
     options.lock = options.lock ?? !options.force
-    options.machine = options.machine ?? !options.force
 
     /**
      * Instance
@@ -26,11 +31,11 @@ export default async function (options: InstancesDeleteOptions) {
      * Action
      */
     async function action() {
-        instance.delete()
+        instance.setState(options.state as `${STATES}`)
     }
 
     /**
      * Execution
      */
-    await instance.machine.try(ACTIONS.DELETE, action, {lock: options.lock, machine: options.machine})
+    await instance.machine.noop(ACTIONS.STATE, action, {lock: options.lock, machine: options.machine})
 }
