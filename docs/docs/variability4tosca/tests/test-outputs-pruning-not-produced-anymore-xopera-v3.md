@@ -11,6 +11,9 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_3
 topology_template:
+  variability:
+    options:
+      technology_required: false
   outputs:
     input:
       type: string

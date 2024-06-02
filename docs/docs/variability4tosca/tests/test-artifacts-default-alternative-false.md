@@ -14,6 +14,7 @@ topology_template:
   variability:
     options:
       expected_artifact_check: false
+      type_default_condition: true
   node_templates:
     node_one:
       type: node

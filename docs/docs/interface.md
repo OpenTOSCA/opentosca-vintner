@@ -892,6 +892,61 @@ continue instance (deployment)
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
+
+## vintner instances debug
+
+debug utility that passes a command into the orchestrator in scope of the instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances debug --instance ${INSTANCE} --command ${COMMAND}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "command": "${COMMAND}"}' \
+            ${SERVER_ADDRESS}/instances/debug
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/debug", {
+		instance: INSTANCE,
+		command: COMMAND
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/debug", json={
+		"instance": INSTANCE,
+		"command": COMMAND
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/debug", json=mapOf(
+		"instance" to INSTANCE,
+		"command" to COMMAND
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| command |  true  | string | command |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
 
 ## vintner instances delete
 
@@ -938,6 +993,9 @@ deletes instance
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances deploy
 
@@ -987,6 +1045,9 @@ deploys instance
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | retry |  false  | boolean | retry (default: true) |
 | verbose |  false  | boolean | verbose |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances info
 
@@ -1033,6 +1094,9 @@ display instance info
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances init
 
@@ -1083,6 +1147,8 @@ initializes a new instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
 | template |  true  | string | template name |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
 
 ## vintner instances inspect
 
@@ -1129,6 +1195,9 @@ inspects variability-resolved service template
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances list
 
@@ -1226,6 +1295,9 @@ returns instance outputs
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances path
 
@@ -1320,6 +1392,62 @@ resolves variability
 | instance |  true  | string | instance name |
 | presets |  false  | string... | names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}) |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
+
+## vintner instances state
+
+set the state of the instance
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner instances state --instance ${INSTANCE} --state ${STATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"instance": "${INSTANCE}", "state": "${STATE}"}' \
+            ${SERVER_ADDRESS}/instances/state
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/instances/state", {
+		instance: INSTANCE,
+		state: STATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/instances/state", json={
+		"instance": INSTANCE,
+		"state": STATE
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/instances/state", json=mapOf(
+		"instance" to INSTANCE,
+		"state" to STATE
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| instance |  true  | string | instance name |
+| state |  true  | string | state |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances swap
 
@@ -1370,6 +1498,9 @@ swap instance template
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | template |  true  | string | template name |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances unadapt
 
@@ -1458,6 +1589,9 @@ undeploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances update
 
@@ -1506,6 +1640,9 @@ update instance
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | verbose |  false  | boolean | verbose |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances validate
 
@@ -1555,6 +1692,9 @@ validates variability-resolved service template
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
 | dry |  false  | boolean | dry run |
+| force |  false  | boolean | force (default: false) |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner orchestrators attest
 
