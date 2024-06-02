@@ -1,10 +1,13 @@
 import {Instance} from '#repositories/instances'
 import * as utils from '#utils'
+import lock from '#utils/lock'
 import {StateMachine} from '#utils/state'
 
 export enum STATES {
-    VOID = 'VOID',
+    START = 'START',
 
+    INITIATING = 'INITIATING',
+    INITIATING_ERROR = 'INITIATING_ERROR',
     INITIATED = 'INITIATED',
 
     RESOLVING = 'RESOLVING',
@@ -56,12 +59,19 @@ export enum ACTIONS {
 }
 
 const TRANSITIONS = [
-    // VOID
-    {from: STATES.VOID, via: ACTIONS.INIT, to: STATES.INITIATED},
+    // START
+    {from: STATES.START, via: ACTIONS.INIT, to: STATES.INITIATING},
+
+    // INITIATING
+    {from: STATES.INITIATING, via: ACTIONS.SUCCESS, to: STATES.INITIATED},
+    {from: STATES.INITIATING, via: ACTIONS.ERROR, to: STATES.INITIATING_ERROR},
+
+    // INITIATING_ERROR
+    {from: STATES.INITIATING_ERROR, via: ACTIONS.DELETE, to: STATES.DELETING},
 
     // INITIATED
     {from: STATES.INITIATED, via: ACTIONS.RESOLVE, to: STATES.RESOLVING},
-    {from: STATES.INITIATED, via: ACTIONS.DELETE, to: STATES.DELETED},
+    {from: STATES.INITIATED, via: ACTIONS.DELETE, to: STATES.DELETING},
 
     // RESOLVING
     {from: STATES.RESOLVING, via: ACTIONS.SUCCESS, to: STATES.RESOLVED},
@@ -147,40 +157,69 @@ export class InstanceStateMachine {
         this.instance = instance
     }
 
-    async try(action: `${ACTIONS}`, fn: () => Promise<void> | void, enabled = true) {
-        if (enabled) {
-            const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
-            machine.do(action)
-            this.instance.setState(machine.state)
+    async try(
+        action: `${ACTIONS}`,
+        fn: () => Promise<void> | void,
+        options: {lock?: boolean; machine?: boolean; assert?: boolean; write?: boolean; state?: `${STATES}`}
+    ) {
+        options.lock = options.lock ?? true
+        options.machine = options.machine ?? true
+        options.assert = options.assert ?? true
+        options.write = options.write ?? true
 
-            try {
-                await fn()
-                machine.do(ACTIONS.SUCCESS)
-                this.instance.setState(machine.state)
-            } catch (e) {
-                machine.do(ACTIONS.ERROR)
-                this.instance.setState(machine.state)
-                throw e
-            }
-        } else {
-            await fn()
-        }
+        await lock.try(
+            this.instance.getLockKey(),
+            async () => {
+                if (options.assert) this.instance.assert()
+
+                if (options.machine) {
+                    const machine = new StateMachine(options.state ?? this.instance.loadState(), TRANSITIONS)
+                    machine.do(action)
+                    if (options.write) this.instance.setState(machine.state)
+
+                    try {
+                        await fn()
+                        machine.do(ACTIONS.SUCCESS)
+                        if (options.write) this.instance.setState(machine.state)
+                    } catch (e) {
+                        machine.do(ACTIONS.ERROR)
+                        if (options.write) this.instance.setState(machine.state)
+                        throw e
+                    }
+                } else {
+                    await fn()
+                }
+            },
+            options.lock
+        )
     }
 
-    noop(noop: `${ACTIONS}`, enabled = true) {
-        if (!enabled) return
+    async noop(noop: `${ACTIONS}`, fn: () => Promise<void> | void, options: {lock?: boolean; machine?: boolean}) {
+        options.lock = options.lock ?? true
+        options.machine = options.machine ?? true
 
-        // TODO: make this a transition somehow (could be generated for each state)
-        if (noop === ACTIONS.INFO) return
-        if (noop === ACTIONS.DEBUG) return
-        if (noop === ACTIONS.STATE) return
+        await lock.try(
+            this.instance.getLockKey(),
+            async () => {
+                if (!options.lock) return
 
-        const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+                // TODO: make this a transition somehow (could be generated for each state)
+                if (noop === ACTIONS.INFO) return
+                if (noop === ACTIONS.DEBUG) return
+                if (noop === ACTIONS.STATE) return
 
-        const from = machine.state
-        const to = machine.do(noop)
+                const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
 
-        if (from !== to) throw new Error(`Action "${noop}" in state ${from} is not a noop and results in "${to}"`)
+                const from = machine.state
+                const to = machine.do(noop)
+
+                if (from !== to)
+                    throw new Error(`Action "${noop}" in state ${from} is not a noop and results in "${to}"`)
+
+                await fn()
+            },
+            options.lock
+        )
     }
 
     assert(states: `${STATES}`[], enabled = true) {

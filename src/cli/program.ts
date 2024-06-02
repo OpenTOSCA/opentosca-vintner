@@ -620,6 +620,7 @@ instances
     .requiredOption('--template <string>', 'template name')
     .option('--force [boolean]', 'force', false)
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--machine [boolean]', 'enable state machine', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.init(options)

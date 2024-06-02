@@ -1,7 +1,6 @@
 import * as assert from '#assert'
-import {ACTIONS} from '#machines/instance'
+import {ACTIONS, STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
-import lock from '#utils/lock'
 
 export type InstanceStateOptions = {
     instance: string
@@ -12,19 +11,31 @@ export type InstanceStateOptions = {
 }
 
 export default async function (options: InstanceStateOptions) {
+    /**
+     * Validation
+     */
     assert.isString(options.instance)
 
+    /**
+     * Defaults
+     */
     options.force = options.force ?? false
     options.lock = options.lock ?? !options.force
 
+    /**
+     * Instance
+     */
     const instance = new Instance(options.instance)
-    await lock.try(
-        instance.getLockKey(),
-        async () => {
-            instance.assert()
-            instance.machine.noop(ACTIONS.STATE, options.machine)
-            instance.setState(options.state as any)
-        },
-        options.lock
-    )
+
+    /**
+     * Action
+     */
+    async function action() {
+        instance.setState(options.state as `${STATES}`)
+    }
+
+    /**
+     * Execution
+     */
+    await instance.machine.noop(ACTIONS.STATE, action, {lock: options.lock, machine: options.machine})
 }

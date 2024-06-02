@@ -3,7 +3,6 @@ import {ACTIONS} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import {Template} from '#repositories/templates'
 import * as utils from '#utils'
-import lock from '#utils/lock'
 
 export type InstancesSwapOptions = {
     instance: string
@@ -14,33 +13,35 @@ export type InstancesSwapOptions = {
 }
 
 export default async function (options: InstancesSwapOptions) {
+    /**
+     * Validation
+     */
     assert.isString(options.instance)
     assert.isString(options.template)
 
+    /**
+     * Defaults
+     */
     options.force = options.force ?? false
     options.lock = options.lock ?? !options.force
     options.machine = options.machine ?? !options.force
 
+    /**
+     * Instance
+     */
     const instance = new Instance(options.instance)
     const template = new Template(options.template)
 
-    await lock.try(
-        instance.getLockKey(),
-        async () => {
-            await lock.try(template.getLockKey(), async () => {
-                instance.assert()
+    /**
+     * Action
+     */
+    async function action() {
+        if (!template.exists()) throw new Error(`Template ${options.instance} does not exist`)
+        instance.setTemplate(options.template, utils.now())
+    }
 
-                await instance.machine.try(
-                    ACTIONS.SWAP,
-                    async () => {
-                        if (!instance.exists()) throw new Error(`Instance ${options.instance} does not exists`)
-                        if (!template.exists()) throw new Error(`Template ${options.instance} does not exist`)
-                        instance.setTemplate(options.template, utils.now())
-                    },
-                    options.machine
-                )
-            })
-        },
-        options.lock
-    )
+    /**
+     * Execution
+     */
+    await instance.machine.try(ACTIONS.SWAP, action, {lock: options.lock, machine: options.machine})
 }
