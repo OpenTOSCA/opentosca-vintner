@@ -150,6 +150,19 @@ const TRANSITIONS = [
     {from: STATES.UPDATING_ERROR, via: ACTIONS.UNDEPLOY, to: STATES.UNDEPLOYING},
 ]
 
+/**
+ * NOOPS allowed in any state
+ */
+for (const action of [ACTIONS.INFO, ACTIONS.DEBUG, ACTIONS.STATE]) {
+    for (const state of Object.values(STATES)) {
+        TRANSITIONS.push({
+            from: state,
+            via: action,
+            to: state,
+        })
+    }
+}
+
 export class InstanceStateMachine {
     private readonly instance: Instance
 
@@ -194,6 +207,10 @@ export class InstanceStateMachine {
         )
     }
 
+    /**
+     * Execute NOOP Action.
+     * In contrast to other actions, a NOOP action does not change the state and also does not have an SUCCESS or ERROR.
+     */
     async noop(noop: `${ACTIONS}`, fn: () => Promise<void> | void, options: {lock?: boolean; machine?: boolean}) {
         options.lock = options.lock ?? true
         options.machine = options.machine ?? true
@@ -202,12 +219,6 @@ export class InstanceStateMachine {
             this.instance.getLockKey(),
             async () => {
                 if (!options.lock) return
-
-                // TODO: make this a transition somehow (could be generated for each state)
-                if (noop === ACTIONS.INFO) return
-                if (noop === ACTIONS.DEBUG) return
-                if (noop === ACTIONS.STATE) return
-
                 const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
 
                 const from = machine.state
