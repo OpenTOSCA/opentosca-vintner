@@ -388,9 +388,6 @@ template
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
     )
     .requiredOption('--output <string>', 'path of the output')
-    .option('--force [boolean]', 'force', false)
-    .option('--lock [boolean]', 'enable instance locking', true)
-    .option('--machine [boolean]', 'enable state machine', true)
     .action(
         hae.exit(async options => {
             await Controller.template.resolve(options)
@@ -682,7 +679,9 @@ instances
         '--inputs [string]',
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
     )
-    .option('--lock [boolean]', 'enable locking', true)
+    .option('--force [boolean]', 'force', false)
+    .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--machine [boolean]', 'enable state machine', true)
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
