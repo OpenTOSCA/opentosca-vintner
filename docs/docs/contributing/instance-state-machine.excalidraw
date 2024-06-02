@@ -6030,7 +6030,7 @@
     }
   ],
   "appState": {
-    "gridSize": 20,
+    "gridSize": null,
     "viewBackgroundColor": "#ffffff"
   },
   "files": {}

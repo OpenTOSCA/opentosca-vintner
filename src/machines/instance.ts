@@ -46,6 +46,7 @@ export enum ACTIONS {
     SUCCESS = 'SUCCESS',
     ERROR = 'ERROR',
 
+    // NOOPs
     INFO = 'INFO',
     DEBUG = 'DEBUG',
     STATE = 'STATE',
@@ -169,7 +170,7 @@ export class InstanceStateMachine {
     noop(noop: `${ACTIONS}`, enabled = true) {
         if (!enabled) return
 
-        // TODO: make this a transition somehow
+        // TODO: make this a transition somehow (could be generated for each state)
         if (noop === ACTIONS.INFO) return
         if (noop === ACTIONS.DEBUG) return
         if (noop === ACTIONS.STATE) return
