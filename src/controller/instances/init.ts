@@ -9,7 +9,7 @@ export type InstancesCreateOptions = {
     template: string
     force?: boolean
     lock?: boolean
-    machine?: boolean // TODO: docs
+    machine?: boolean
 }
 
 export default async function (options: InstancesCreateOptions) {
