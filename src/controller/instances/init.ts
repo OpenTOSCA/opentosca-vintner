@@ -50,5 +50,6 @@ export default async function (options: InstancesCreateOptions) {
         lock: options.lock,
         machine: options.machine,
         assert: false,
+        write: false,
     })
 }
