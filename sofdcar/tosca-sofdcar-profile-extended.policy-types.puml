@@ -1,0 +1,26 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.policies.ASIL"
+
+rectangle "sofdcar.policies.ASIL.A"
+
+rectangle "sofdcar.policies.ASIL.B"
+
+rectangle "sofdcar.policies.ASIL.C"
+
+rectangle "sofdcar.policies.ASIL.D"
+
+
+"sofdcar.policies.Safety" <|-- "sofdcar.policies.ASIL"
+
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.A"
+
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.B"
+
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.C"
+
+"sofdcar.policies.ASIL" <|-- "sofdcar.policies.ASIL.D"
+
+@enduml

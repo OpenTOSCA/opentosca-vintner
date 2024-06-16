@@ -1,0 +1,42 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.relationships.CAN"
+
+rectangle "sofdcar.relationships.CAN-FD"
+
+rectangle "sofdcar.relationships.LIN"
+
+rectangle "sofdcar.relationships.MOST"
+
+rectangle "sofdcar.relationships.GPIO"
+
+rectangle "sofdcar.relationships.FlexRay"
+
+rectangle "sofdcar.relationships.Ethernet"
+
+rectangle "sofdcar.relationships.OBD"
+
+rectangle "sofdcar.relationships.SOME/IP"
+
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.CAN"
+
+"sofdcar.relationships.CAN" <|-- "sofdcar.relationships.CAN-FD"
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.LIN"
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.MOST"
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.GPIO"
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.FlexRay"
+
+"sofdcar.relationships.Root" <|-- "sofdcar.relationships.Ethernet"
+
+"sofdcar.relationships.CAN" <|-- "sofdcar.relationships.OBD"
+
+"sofdcar.relationships.Ethernet" <|-- "sofdcar.relationships.SOME/IP"
+
+@enduml

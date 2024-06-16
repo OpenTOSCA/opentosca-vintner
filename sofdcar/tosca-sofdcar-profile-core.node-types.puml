@@ -1,0 +1,102 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.nodes.Root"
+
+rectangle "sofdcar.nodes.Vehicle"
+
+rectangle "sofdcar.nodes.Cloud"
+
+rectangle "sofdcar.nodes.ECU.Hardware"
+
+rectangle "sofdcar.nodes.ECU.Software"
+
+rectangle "sofdcar.nodes.ECU.Runtime"
+
+rectangle "sofdcar.nodes.HPC.Software"
+
+rectangle "sofdcar.nodes.HPC.Hardware"
+
+rectangle "sofdcar.nodes.Actuator"
+
+rectangle "sofdcar.nodes.Accelerator"
+
+rectangle "sofdcar.nodes.Brake"
+
+rectangle "sofdcar.nodes.Steering"
+
+rectangle "sofdcar.nodes.Light"
+
+rectangle "sofdcar.nodes.Cooling"
+
+rectangle "sofdcar.nodes.Airbag"
+
+rectangle "sofdcar.nodes.Sensor"
+
+rectangle "sofdcar.nodes.RADAR"
+
+rectangle "sofdcar.nodes.Camera"
+
+rectangle "sofdcar.nodes.LIDAR"
+
+rectangle "sofdcar.nodes.Ultrasonic"
+
+rectangle "sofdcar.nodes.Microphone"
+
+rectangle "sofdcar.nodes.Channel"
+
+rectangle "sofdcar.nodes.Battery"
+
+rectangle "sofdcar.nodes.Feature"
+
+
+"tosca.nodes.Root" <|-- "sofdcar.nodes.Root"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Vehicle"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Cloud"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.ECU.Hardware"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.ECU.Software"
+
+"sofdcar.nodes.ECU.Software" <|-- "sofdcar.nodes.ECU.Runtime"
+
+"tosca.nodes.SoftwareComponent" <|-- "sofdcar.nodes.HPC.Software"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.HPC.Hardware"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Actuator"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Accelerator"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Brake"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Steering"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Light"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Cooling"
+
+"sofdcar.nodes.Actuator" <|-- "sofdcar.nodes.Airbag"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Sensor"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.RADAR"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Camera"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.LIDAR"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Ultrasonic"
+
+"sofdcar.nodes.Sensor" <|-- "sofdcar.nodes.Microphone"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Channel"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Battery"
+
+"sofdcar.nodes.Root" <|-- "sofdcar.nodes.Feature"
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.capabilities.Endpoint.CAN"
+
+rectangle "sofdcar.capabilities.Endpoint.CAN-FD"
+
+rectangle "sofdcar.capabilities.Endpoint.LIN"
+
+rectangle "sofdcar.capabilities.Endpoint.MOST"
+
+rectangle "sofdcar.capabilities.Endpoint.GPIO"
+
+rectangle "sofdcar.capabilities.Endpoint.FlexRay"
+
+rectangle "sofdcar.capabilities.Endpoint.Ethernet"
+
+rectangle "sofdcar.capabilities.Endpoint.OBD"
+
+rectangle "sofdcar.capabilities.Endpoint.SOME/IP"
+
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.CAN"
+
+"sofdcar.capabilities.Endpoint.CAN" <|-- "sofdcar.capabilities.Endpoint.CAN-FD"
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.LIN"
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.MOST"
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.GPIO"
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.FlexRay"
+
+"sofdcar.capabilities.Endpoint" <|-- "sofdcar.capabilities.Endpoint.Ethernet"
+
+"sofdcar.capabilities.Endpoint.CAN" <|-- "sofdcar.capabilities.Endpoint.OBD"
+
+"sofdcar.capabilities.Endpoint.Ethernet" <|-- "sofdcar.capabilities.Endpoint.SOME/IP"
+
+@enduml

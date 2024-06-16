@@ -1,0 +1,14 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: TOSCA Profile for Software-Defined Cars.
+metadata:
+    template_name: TOSCA SofDCar Profile
+    template_author: Miles Stötzner
+    template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_version: 1.0.0-draft
+    template_id: tosca-sofdcar-profile
+    template_license: https://www.apache.org/licenses/LICENSE-2.0
+    acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
+
+imports:
+    - ./tosca-sofdcar-profile-core.yaml
+    - ./tosca-sofdcar-profile-extended.yaml

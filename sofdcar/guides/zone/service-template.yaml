@@ -1,0 +1,143 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: Example of a zonal architecture connected to the cloud.
+imports:
+    - types.yaml
+
+topology_template:
+    node_templates:
+        ###################################################
+        #
+        # Cloud
+        #
+        ###################################################
+
+        cloud_service:
+            type: example.nodes.Cloud.Service
+            requirements:
+                - host: cloud_provider
+
+        cloud_provider:
+            type: example.nodes.Cloud.Provider
+
+        ###################################################
+        #
+        # Vehicle Control Unit
+        #
+        ###################################################
+
+        vehicle_control_unit_software:
+            type: example.nodes.VCU.Software
+            requirements:
+                - host: vehicle_control_unit_hardware
+                - cloud: cloud_service
+
+        vehicle_control_unit_hardware:
+            type: example.nodes.VCU.Hardware
+            requirements:
+                - ethernet: zone_a_ethernet
+                - ethernet: zone_b_ethernet
+
+        ###################################################
+        #
+        # Zone A
+        #
+        ###################################################
+
+        zone_a_control_unit_software:
+            type: example.nodes.ZCU.Software
+            requirements:
+                - host: zone_a_control_unit_hardware
+                - vcu: vehicle_control_unit_software
+
+        zone_a_control_unit_hardware:
+            type: example.nodes.ZCU.Hardware
+            requirements:
+                - ethernet: zone_a_ethernet
+                - can: zone_a_can_bus
+
+        zone_a_ethernet:
+            type: sofdcar.nodes.Ethernet
+
+        zone_a_can_bus:
+            type: sofdcar.nodes.CAN
+
+        zone_a_actuator:
+            type: example.nodes.Actuator
+            requirements:
+                - can: zone_a_can_bus
+                - zcu: zone_a_control_unit_software
+
+        zone_a_sensor:
+            type: example.nodes.Sensor
+            requirements:
+                - can: zone_a_can_bus
+                - zcu: zone_a_control_unit_software
+
+        ###################################################
+        #
+        # Zone B
+        #
+        ###################################################
+
+        zone_b_control_unit_software:
+            type: example.nodes.ZCU.Software
+            requirements:
+                - host: zone_b_control_unit_hardware
+                - vcu: vehicle_control_unit_software
+
+        zone_b_control_unit_hardware:
+            type: example.nodes.ZCU.Hardware
+            requirements:
+                - ethernet: zone_b_ethernet
+                - can: zone_b_can_bus
+
+        zone_b_ethernet:
+            type: sofdcar.nodes.Ethernet
+
+        zone_b_can_bus:
+            type: sofdcar.nodes.CAN
+
+        zone_b_actuator:
+            type: example.nodes.Actuator
+            requirements:
+                - can: zone_b_can_bus
+                - zcu: zone_b_control_unit_software
+
+        zone_b_sensor:
+            type: example.nodes.Sensor
+            requirements:
+                - can: zone_b_can_bus
+                - zcu: zone_b_control_unit_software
+
+    groups:
+        cloud:
+            type: tosca.groups.Root
+            members:
+                - cloud_service
+                - cloud_provider
+
+        zone_a:
+            type: sofdcar.groups.Zone
+            members:
+                - zone_a_control_unit_software
+                - zone_a_control_unit_hardware
+                - zone_a_ethernet
+                - zone_a_can_bus
+                - zone_a_actuator
+                - zone_a_sensor
+
+        zone_b:
+            type: sofdcar.groups.Zone
+            members:
+                - zone_b_control_unit_software
+                - zone_b_control_unit_hardware
+                - zone_b_ethernet
+                - zone_b_can_bus
+                - zone_b_actuator
+                - zone_b_sensor
+
+        zone_c:
+            type: sofdcar.groups.Zone
+            members:
+                - vehicle_control_unit_software
+                - vehicle_control_unit_hardware

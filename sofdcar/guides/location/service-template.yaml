@@ -1,0 +1,108 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: Example of an architecture distributed across several geographical locations.
+imports:
+    - types.yaml
+
+topology_template:
+    node_templates:
+        ###################################################
+        #
+        # Cloud
+        #
+        ###################################################
+
+        cloud_service:
+            type: example.nodes.Cloud.Service
+            requirements:
+                - host: cloud_provider
+
+        cloud_provider:
+            type: example.nodes.Cloud.Provider
+
+        ###################################################
+        #
+        # Location A
+        #
+        ###################################################
+
+        a_ecu_software:
+            type: example.nodes.ECU.Software
+            requirements:
+                - host: a_ecu_runtime
+                - can: a_can_bus
+                - connect: b_ecu_software
+
+        a_ecu_runtime:
+            type: example.nodes.ECU.Runtime
+            requirements:
+                - host: a_ecu_hardware
+
+        a_ecu_hardware:
+            type: example.nodes.ECU.Hardware
+            requirements:
+                - can: a_can_bus
+
+        a_can_bus:
+            type: sofdcar.nodes.CAN
+
+        a_can_bridge:
+            type: example.nodes.CAN.Bridge
+            requirements:
+                - can: a_can_bus
+                - cloud: cloud_service
+
+        ###################################################
+        #
+        # Location B
+        #
+        ###################################################
+
+        b_ecu_software:
+            type: example.nodes.ECU.Software
+            requirements:
+                - host: b_ecu_runtime
+                - can: b_can_bus
+
+        b_ecu_runtime:
+            type: example.nodes.ECU.Runtime
+            requirements:
+                - host: b_ecu_hardware
+
+        b_ecu_hardware:
+            type: example.nodes.ECU.Hardware
+            requirements:
+                - can: b_can_bus
+
+        b_can_bus:
+            type: sofdcar.nodes.CAN
+
+        b_can_bridge:
+            type: example.nodes.CAN.Bridge
+            requirements:
+                - can: b_can_bus
+                - cloud: cloud_service
+
+    groups:
+        cloud:
+            type: sofdcar.groups.Location
+            members:
+                - cloud_service
+                - cloud_provider
+
+        location_a:
+            type: sofdcar.groups.Location
+            members:
+                - a_ecu_software
+                - a_ecu_runtime
+                - a_ecu_hardware
+                - a_can_bus
+                - a_can_bridge
+
+        location_b:
+            type: sofdcar.groups.Location
+            members:
+                - b_ecu_software
+                - b_ecu_runtime
+                - b_ecu_hardware
+                - b_can_bus
+                - b_can_bridge

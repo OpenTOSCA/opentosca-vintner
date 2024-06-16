@@ -1,0 +1,2700 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://vintner.opentosca.org/variability4tosca/tests/test-other-throw-SELF/" rel="canonical"/>
+<link href="../test-other-throw-CONTAINER/" rel="prev"/>
+<link href="../test-other-throw-not-unique/" rel="next"/>
+<link href="../../../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
+<meta content="mkdocs-1.6.0, mkdocs-material-9.1.21" name="generator"/>
+<title>other-throw-SELF - OpenTOSCA Vintner</title>
+<link href="../../../assets/stylesheets/main.eebd395e.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7Cui-monospace:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Inter";--md-code-font:"ui-monospace"}</style>
+<link href="../../../assets/stylesheets/extra.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/typeset.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/asciinema-player.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/print.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/video.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&amp;display=swap" rel="stylesheet"/>
+<script src="../../../assets/javascripts/asciinema-player.min.js"></script>
+<link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>html.glightbox-open { overflow: initial; height: 100%; }</style><script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="deep-orange" data-md-color-primary="white" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#other-throw-self">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="OpenTOSCA Vintner" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="OpenTOSCA Vintner">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg height="1600" id="svg1" inkscape:version="1.3 (0e150ed6c4, 2023-07-21)" sodipodi:docname="vintner-icon-bold.svg" version="1.1" viewbox="0 0 423.33328 423.33328" width="1600" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview bordercolor="#ffffff" borderopacity="1" id="namedview1" inkscape:current-layer="layer1" inkscape:cx="950.92915" inkscape:cy="1083.9685" inkscape:deskcolor="#505050" inkscape:document-units="mm" inkscape:pagecheckerboard="1" inkscape:pageopacity="0" inkscape:showpageshadow="0" inkscape:window-height="1369" inkscape:window-maximized="1" inkscape:window-width="2560" inkscape:window-x="-8" inkscape:window-y="797" inkscape:zoom="0.33072916" pagecolor="#505050"></sodipodi:namedview>
+<defs id="defs1">
+<inkscape:perspective id="perspective3" inkscape:persp3d-origin="211.66664 : 141.11109 : 1" inkscape:vp_x="0 : 211.66664 : 1" inkscape:vp_y="0 : 1000 : 0" inkscape:vp_z="423.33328 : 211.66664 : 1" sodipodi:type="inkscape:persp3d"></inkscape:perspective>
+<clippath clippathunits="userSpaceOnUse" id="clipEmfPath1">
+<path d="M 0,0 H 97.754923 V 97.434939 H 0 Z" id="path1"></path>
+</clippath>
+<pattern height="6" id="EMFhbasepattern" patternunits="userSpaceOnUse" width="6" x="0" y="0"></pattern>
+</defs>
+<g id="layer1" inkscape:groupmode="layer" inkscape:highlight-color="#f37fff" inkscape:label="picture">
+<rect height="423.33334" id="rect10" inkscape:label="background" ry="0" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<circle cx="210.86186" cy="12.05364" id="path2" inkscape:label="sun" r="105.81039" style="fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<rect height="106.18864" id="rect3" inkscape:label="house" rx="0" ry="0" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linejoin:bevel;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" width="163.49139" x="292.03436" y="168.61122"></rect>
+<path d="m 291.07071,170.5899 h 119.81812 l -61.87064,-35.72103 -61.80251,35.6817 z" id="path38" inkscape:label="roof" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
+<g id="g2" inkscape:label="hill-right" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="360.8638" cy="470.42841" id="path2-6-2" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-6" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-5-0" r="77.889099" style="display:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<g id="g3" inkscape:label="hill-left" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="102.87116" cy="471.56323" id="path2-6" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5-5" r="77.889099" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<ellipse cx="57.591373" cy="227.12271" id="path9" inkscape:label="tree-left" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="102.02961" cy="220.7366" id="path9-7" inkscape:label="tree-center" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="148.03065" cy="226.33833" id="path9-7-5" inkscape:label="tree-right" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<g id="g10" inkscape:label="sky">
+<path d="M 52.868629,102.07695 H 86.468627" id="path10" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="M 65.260787,141.69062 H 119.50831" id="path10-9" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 153.99932,170.74862 h 90.45139" id="path10-9-5" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 194.95132,210.73793 h 32.13381" id="path10-9-5-0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 215.37121,248.67361 h 29.07452" id="path10-9-5-0-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 317.99623,113.47338 h 51.70193" id="path10-9-5-0-1-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 345.46421,68.388556 h 27.6603" id="path10-9-5-0-1-1-3" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+</g>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="border">
+<rect height="423.33334" id="rect2" inkscape:label="background" ry="0" style="display:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<path d="M 0,0 V 423.33333 H 423.33333 V 0 Z M 62.856628,13.229167 H 360.56817 c 1.71835,0 3.41569,0.08646 5.08806,0.255281 1.67238,0.168825 3.31999,0.41985 4.9382,0.749309 1.61822,0.329458 3.20715,0.737144 4.76302,1.219047 1.55587,0.481902 3.07874,1.038341 4.56406,1.664497 1.48533,0.626157 2.93319,1.322409 4.33979,2.084628 1.4066,0.762219 2.77155,1.590377 4.09122,2.480468 1.31968,0.890092 2.59381,1.841732 3.81837,2.851506 1.22457,1.009774 2.39997,2.077506 3.52124,3.198771 1.12126,1.121265 2.18848,2.296149 3.19825,3.520715 1.00977,1.224567 1.96193,2.498695 2.85202,3.818372 0.89009,1.319677 1.71825,2.685142 2.48047,4.09174 0.76222,1.406598 1.45847,2.854459 2.08463,4.339787 0.62616,1.485327 1.18208,3.008195 1.66398,4.564062 0.4819,1.555867 0.88959,3.144801 1.21905,4.763017 0.32946,1.618216 0.581,3.265308 0.74982,4.937683 0.16883,1.672375 0.25528,3.370236 0.25528,5.088578 V 360.56817 c 0,1.71835 -0.0865,3.41569 -0.25528,5.08806 -0.16882,1.67238 -0.42036,3.31999 -0.74982,4.9382 -0.32946,1.61822 -0.73715,3.20715 -1.21905,4.76302 -0.4819,1.55587 -1.03782,3.07874 -1.66398,4.56406 -0.62616,1.48533 -1.32241,2.93319 -2.08463,4.33979 -0.76222,1.4066 -1.59038,2.77155 -2.48047,4.09122 -0.89009,1.31968 -1.84225,2.59381 -2.85202,3.81837 -1.00977,1.22457 -2.07699,2.39997 -3.19825,3.52124 -1.12127,1.12126 -2.29667,2.18848 -3.52124,3.19825 -1.22456,1.00977 -2.49869,1.96193 -3.81837,2.85202 -1.31967,0.89009 -2.68462,1.71825 -4.09122,2.48047 -1.4066,0.76222 -2.85446,1.45847 -4.33979,2.08463 -1.48532,0.62616 -3.00819,1.18208 -4.56406,1.66398 -1.55587,0.4819 -3.1448,0.88959 -4.76302,1.21905 -1.61821,0.32946 -3.26582,0.581 -4.9382,0.74982 -1.67237,0.16883 -3.36971,0.25528 -5.08806,0.25528 H 62.856628 c -1.718342,0 -3.416203,-0.0865 -5.088578,-0.25528 -1.672375,-0.16882 -3.319467,-0.42036 -4.937683,-0.74982 -1.618216,-0.32946 -3.20715,-0.73715 -4.763017,-1.21905 -1.555867,-0.4819 -3.078735,-1.03782 -4.564062,-1.66398 -1.485328,-0.62616 -2.933189,-1.32241 -4.339787,-2.08463 -1.406598,-0.76222 -2.772063,-1.59038 -4.09174,-2.48047 -1.319677,-0.89009 -2.593805,-1.84225 -3.818372,-2.85202 -1.224566,-1.00977 -2.39945,-2.07699 -3.520715,-3.19825 -1.121265,-1.12127 -2.188997,-2.29667 -3.198771,-3.52124 -1.009774,-1.22456 -1.961414,-2.49869 -2.851506,-3.81837 -0.890091,-1.31967 -1.718249,-2.68462 -2.480468,-4.09122 -0.762219,-1.4066 -1.458471,-2.85446 -2.084628,-4.33979 -0.626156,-1.48532 -1.182595,-3.00819 -1.664497,-4.56406 -0.481903,-1.55587 -0.889589,-3.1448 -1.219047,-4.76302 -0.329459,-1.61821 -0.580484,-3.26582 -0.749309,-4.9382 -0.168824,-1.67237 -0.255281,-3.36971 -0.255281,-5.08806 V 62.856628 c 0,-1.718342 0.08646,-3.416203 0.255281,-5.088578 0.168825,-1.672375 0.41985,-3.319467 0.749309,-4.937683 0.329458,-1.618216 0.737144,-3.20715 1.219047,-4.763017 0.481902,-1.555867 1.038341,-3.078735 1.664497,-4.564062 0.626157,-1.485328 1.322409,-2.933189 2.084628,-4.339787 0.762219,-1.406598 1.590377,-2.772063 2.480468,-4.09174 0.890092,-1.319677 1.841732,-2.593805 2.851506,-3.818372 1.009774,-1.224566 2.077506,-2.39945 3.198771,-3.520715 1.121265,-1.121265 2.296149,-2.188997 3.520715,-3.198771 1.224567,-1.009774 2.498695,-1.961414 3.818372,-2.851506 1.319677,-0.890091 2.685142,-1.718249 4.09174,-2.480468 1.406598,-0.762219 2.854459,-1.458471 4.339787,-2.084628 1.485327,-0.626156 3.008195,-1.182595 4.564062,-1.664497 1.555867,-0.481903 3.144801,-0.889589 4.763017,-1.219047 1.618216,-0.329459 3.265308,-0.580484 4.937683,-0.749309 1.672375,-0.168824 3.370236,-0.255281 5.088578,-0.255281 z" id="path5" style="display:inline;fill:#ffffff;stroke-width:28.2157;stroke-linejoin:round"></path>
+<rect height="396.96637" id="rect1" inkscape:label="border" ry="49.627281" style="display:inline;fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="396.96634" x="13.22915" y="13.22915"></rect>
+</g>
+</svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            OpenTOSCA Vintner
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              other-throw-SELF
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="OpenTOSCA Vintner" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="OpenTOSCA Vintner">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg height="1600" id="svg1" inkscape:version="1.3 (0e150ed6c4, 2023-07-21)" sodipodi:docname="vintner-icon-bold.svg" version="1.1" viewbox="0 0 423.33328 423.33328" width="1600" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview bordercolor="#ffffff" borderopacity="1" id="namedview1" inkscape:current-layer="layer1" inkscape:cx="950.92915" inkscape:cy="1083.9685" inkscape:deskcolor="#505050" inkscape:document-units="mm" inkscape:pagecheckerboard="1" inkscape:pageopacity="0" inkscape:showpageshadow="0" inkscape:window-height="1369" inkscape:window-maximized="1" inkscape:window-width="2560" inkscape:window-x="-8" inkscape:window-y="797" inkscape:zoom="0.33072916" pagecolor="#505050"></sodipodi:namedview>
+<defs id="defs1">
+<inkscape:perspective id="perspective3" inkscape:persp3d-origin="211.66664 : 141.11109 : 1" inkscape:vp_x="0 : 211.66664 : 1" inkscape:vp_y="0 : 1000 : 0" inkscape:vp_z="423.33328 : 211.66664 : 1" sodipodi:type="inkscape:persp3d"></inkscape:perspective>
+<clippath clippathunits="userSpaceOnUse" id="clipEmfPath1">
+<path d="M 0,0 H 97.754923 V 97.434939 H 0 Z" id="path1"></path>
+</clippath>
+<pattern height="6" id="EMFhbasepattern" patternunits="userSpaceOnUse" width="6" x="0" y="0"></pattern>
+</defs>
+<g id="layer1" inkscape:groupmode="layer" inkscape:highlight-color="#f37fff" inkscape:label="picture">
+<rect height="423.33334" id="rect10" inkscape:label="background" ry="0" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<circle cx="210.86186" cy="12.05364" id="path2" inkscape:label="sun" r="105.81039" style="fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<rect height="106.18864" id="rect3" inkscape:label="house" rx="0" ry="0" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linejoin:bevel;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" width="163.49139" x="292.03436" y="168.61122"></rect>
+<path d="m 291.07071,170.5899 h 119.81812 l -61.87064,-35.72103 -61.80251,35.6817 z" id="path38" inkscape:label="roof" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
+<g id="g2" inkscape:label="hill-right" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="360.8638" cy="470.42841" id="path2-6-2" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-6" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-5-0" r="77.889099" style="display:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<g id="g3" inkscape:label="hill-left" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="102.87116" cy="471.56323" id="path2-6" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5-5" r="77.889099" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<ellipse cx="57.591373" cy="227.12271" id="path9" inkscape:label="tree-left" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="102.02961" cy="220.7366" id="path9-7" inkscape:label="tree-center" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="148.03065" cy="226.33833" id="path9-7-5" inkscape:label="tree-right" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<g id="g10" inkscape:label="sky">
+<path d="M 52.868629,102.07695 H 86.468627" id="path10" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="M 65.260787,141.69062 H 119.50831" id="path10-9" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 153.99932,170.74862 h 90.45139" id="path10-9-5" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 194.95132,210.73793 h 32.13381" id="path10-9-5-0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 215.37121,248.67361 h 29.07452" id="path10-9-5-0-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 317.99623,113.47338 h 51.70193" id="path10-9-5-0-1-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 345.46421,68.388556 h 27.6603" id="path10-9-5-0-1-1-3" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+</g>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="border">
+<rect height="423.33334" id="rect2" inkscape:label="background" ry="0" style="display:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<path d="M 0,0 V 423.33333 H 423.33333 V 0 Z M 62.856628,13.229167 H 360.56817 c 1.71835,0 3.41569,0.08646 5.08806,0.255281 1.67238,0.168825 3.31999,0.41985 4.9382,0.749309 1.61822,0.329458 3.20715,0.737144 4.76302,1.219047 1.55587,0.481902 3.07874,1.038341 4.56406,1.664497 1.48533,0.626157 2.93319,1.322409 4.33979,2.084628 1.4066,0.762219 2.77155,1.590377 4.09122,2.480468 1.31968,0.890092 2.59381,1.841732 3.81837,2.851506 1.22457,1.009774 2.39997,2.077506 3.52124,3.198771 1.12126,1.121265 2.18848,2.296149 3.19825,3.520715 1.00977,1.224567 1.96193,2.498695 2.85202,3.818372 0.89009,1.319677 1.71825,2.685142 2.48047,4.09174 0.76222,1.406598 1.45847,2.854459 2.08463,4.339787 0.62616,1.485327 1.18208,3.008195 1.66398,4.564062 0.4819,1.555867 0.88959,3.144801 1.21905,4.763017 0.32946,1.618216 0.581,3.265308 0.74982,4.937683 0.16883,1.672375 0.25528,3.370236 0.25528,5.088578 V 360.56817 c 0,1.71835 -0.0865,3.41569 -0.25528,5.08806 -0.16882,1.67238 -0.42036,3.31999 -0.74982,4.9382 -0.32946,1.61822 -0.73715,3.20715 -1.21905,4.76302 -0.4819,1.55587 -1.03782,3.07874 -1.66398,4.56406 -0.62616,1.48533 -1.32241,2.93319 -2.08463,4.33979 -0.76222,1.4066 -1.59038,2.77155 -2.48047,4.09122 -0.89009,1.31968 -1.84225,2.59381 -2.85202,3.81837 -1.00977,1.22457 -2.07699,2.39997 -3.19825,3.52124 -1.12127,1.12126 -2.29667,2.18848 -3.52124,3.19825 -1.22456,1.00977 -2.49869,1.96193 -3.81837,2.85202 -1.31967,0.89009 -2.68462,1.71825 -4.09122,2.48047 -1.4066,0.76222 -2.85446,1.45847 -4.33979,2.08463 -1.48532,0.62616 -3.00819,1.18208 -4.56406,1.66398 -1.55587,0.4819 -3.1448,0.88959 -4.76302,1.21905 -1.61821,0.32946 -3.26582,0.581 -4.9382,0.74982 -1.67237,0.16883 -3.36971,0.25528 -5.08806,0.25528 H 62.856628 c -1.718342,0 -3.416203,-0.0865 -5.088578,-0.25528 -1.672375,-0.16882 -3.319467,-0.42036 -4.937683,-0.74982 -1.618216,-0.32946 -3.20715,-0.73715 -4.763017,-1.21905 -1.555867,-0.4819 -3.078735,-1.03782 -4.564062,-1.66398 -1.485328,-0.62616 -2.933189,-1.32241 -4.339787,-2.08463 -1.406598,-0.76222 -2.772063,-1.59038 -4.09174,-2.48047 -1.319677,-0.89009 -2.593805,-1.84225 -3.818372,-2.85202 -1.224566,-1.00977 -2.39945,-2.07699 -3.520715,-3.19825 -1.121265,-1.12127 -2.188997,-2.29667 -3.198771,-3.52124 -1.009774,-1.22456 -1.961414,-2.49869 -2.851506,-3.81837 -0.890091,-1.31967 -1.718249,-2.68462 -2.480468,-4.09122 -0.762219,-1.4066 -1.458471,-2.85446 -2.084628,-4.33979 -0.626156,-1.48532 -1.182595,-3.00819 -1.664497,-4.56406 -0.481903,-1.55587 -0.889589,-3.1448 -1.219047,-4.76302 -0.329459,-1.61821 -0.580484,-3.26582 -0.749309,-4.9382 -0.168824,-1.67237 -0.255281,-3.36971 -0.255281,-5.08806 V 62.856628 c 0,-1.718342 0.08646,-3.416203 0.255281,-5.088578 0.168825,-1.672375 0.41985,-3.319467 0.749309,-4.937683 0.329458,-1.618216 0.737144,-3.20715 1.219047,-4.763017 0.481902,-1.555867 1.038341,-3.078735 1.664497,-4.564062 0.626157,-1.485328 1.322409,-2.933189 2.084628,-4.339787 0.762219,-1.406598 1.590377,-2.772063 2.480468,-4.09174 0.890092,-1.319677 1.841732,-2.593805 2.851506,-3.818372 1.009774,-1.224566 2.077506,-2.39945 3.198771,-3.520715 1.121265,-1.121265 2.296149,-2.188997 3.520715,-3.198771 1.224567,-1.009774 2.498695,-1.961414 3.818372,-2.851506 1.319677,-0.890091 2.685142,-1.718249 4.09174,-2.480468 1.406598,-0.762219 2.854459,-1.458471 4.339787,-2.084628 1.485327,-0.626156 3.008195,-1.182595 4.564062,-1.664497 1.555867,-0.481903 3.144801,-0.889589 4.763017,-1.219047 1.618216,-0.329459 3.265308,-0.580484 4.937683,-0.749309 1.672375,-0.168824 3.370236,-0.255281 5.088578,-0.255281 z" id="path5" style="display:inline;fill:#ffffff;stroke-width:28.2157;stroke-linejoin:round"></path>
+<rect height="396.96637" id="rect1" inkscape:label="border" ry="49.627281" style="display:inline;fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="396.96634" x="13.22915" y="13.22915"></rect>
+</g>
+</svg>
+</a>
+    OpenTOSCA Vintner
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          OpenTOSCA Vintner
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+          OpenTOSCA Vintner
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../publications/">
+        Publications
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../features/">
+        Features
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../installation/">
+        Installation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../orchestrators/">
+        Orchestrators
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../interface/">
+        Interface
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../dependencies/">
+        Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../uninstallation/">
+        Uninstallation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://github.com/opentosca/opentosca-vintner">
+        GitHub
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://discord.gg/Uz6348Ctmg">
+        Discord
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://doi.org/10.5281/zenodo.10155277">
+        Zenodo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://youtube.com/@milesstoetzner">
+        Youtube
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Specifications
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          Specifications
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Variability4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+          Variability4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../testing/">
+        Testing
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_1_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+          Conformance Tests
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_1_4_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_1_4">
+<span class="md-nav__icon md-icon"></span>
+          Conformance Tests
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../introduction/">
+        Introduction
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-count/">
+        Operator "count"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-exponential_regression/">
+        Operator "exponential_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-linear_regression/">
+        Operator "variance"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-logarithmic_regression/">
+        Operator "logarithmic_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-max/">
+        Operator "max"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-mean/">
+        Operator "mean"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-median/">
+        Operator "median"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-min/">
+        Operator "min"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-polynomial_regression/">
+        Operator "polynomial_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-standard_deviation/">
+        Operator "standard_deviation"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-sum/">
+        Operator "sum"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-analytical-operators-variance/">
+        Operator "variance"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-add/">
+        Operator "add"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-div/">
+        Operator "div"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-mod-even/">
+        Operator "mod" (Even)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-mod-odd/">
+        Operator "add" (Odd)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-mul/">
+        Operator "mul"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-arithmetic-operators-sub/">
+        Operator "sub"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-artifact-presence-number-absent/">
+        artifacts-artifact-presence-number-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-artifact-presence-number-present/">
+        artifacts-artifact-presence-number-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-artifact-presence-string-absent/">
+        artifacts-artifact-presence-string-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-artifact-presence-string-present/">
+        artifacts-artifact-presence-string-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-conditional/">
+        artifacts-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-container-presence-absent/">
+        artifacts-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-container-presence-present/">
+        artifacts-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-default-alternative-false/">
+        artifacts-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-default-alternative/">
+        artifacts-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-default-condition/">
+        artifacts-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-dont-throw-ambiguous-artifact/">
+        artifacts-dont-throw-ambiguous-artifact
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-prune/">
+        Artifact Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-throw-ambiguous-artifact/">
+        artifacts-throw-ambiguous-artifact
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-throw-ambiguous-default/">
+        artifacts-throw-ambiguous-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-artifacts-throw-missing-artifact-container/">
+        artifacts-throw-missing-artifact-container
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-and-empty/">
+        Operator "and" Evaluates to "True" (Empty)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-and-false/">
+        Operator "and" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-and-nested-false/">
+        Operator "and" Evaluates to "false" (Nested)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-and-nested-true/">
+        Operator "and" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-and-true/">
+        Operator "and" Evaluates to "true" (Nested)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-implies-false-false-true/">
+        Operator "implies": false false -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-implies-false-true-true/">
+        Operator "implies": false true -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-implies-true-false-false/">
+        Operator "implies": true false -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-implies-true-true-true/">
+        Operator "implies": true true -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-not-false/">
+        Operator "not" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-not-true/">
+        Operator "not" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-or-empty/">
+        Operator "or" Evaluates to "False" (Empty)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-or-false/">
+        Operator "or" Evaluates to "False"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-or-true-all/">
+        Operator "or" Evaluates to "true" (All "true")
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-or-true/">
+        Operator "or" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-xor-false-all/">
+        Operator "xor": all false -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-xor-true-all/">
+        Operator "xor": all true -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-boolean-operators-xor-true/">
+        Operator "xor": One ture -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-alpha/">
+        circles-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-bravo/">
+        circles-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-charlie/">
+        circles-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-delta/">
+        circles-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-echo/">
+        circles-echo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-golf/">
+        circles-golf
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-hotel/">
+        circles-hotel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-circles-india/">
+        circles-india
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-hosting-relation-missing-constraint/">
+        consistency-throw-hosting-relation-missing-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-hosting-relation-missing/">
+        consistency-throw-hosting-relation-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-multiple-hosting-relations-constraint/">
+        consistency-throw-multiple-hosting-relations-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-multiple-hosting-relations/">
+        consistency-throw-multiple-hosting-relations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-relation-source-missing/">
+        consistency-throw-relation-source-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-consistency-throw-relation-target-missing/">
+        consistency-throw-relation-target-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-equal-false/">
+        Operator "equal" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-equal-true/">
+        Operator "equal" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-or-equal-equal/">
+        Operator "greater_or_equal" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-or-equal-greater/">
+        Operator "greater_or_equal" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-or-equal-less/">
+        Operator "greater_or_equal" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-than-equal/">
+        Operator "greater" Evaluates to "false" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-than-greater/">
+        Operator "greater" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-greater-than-less/">
+        Operator "greater" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-in_range_false/">
+        Operator "in_range" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-in_range_true/">
+        Operator "in_range" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-length_false/">
+        Operator "length" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-length_true/">
+        Operator "length" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_or_equal_equal/">
+        Operator "less_or_equal" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_or_equal_greater/">
+        Operator "less_or_equal" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_or_equal_less/">
+        Operator "less_or_equal" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_than_equal/">
+        Operator "less" Evaluates to "false" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_than_greater/">
+        Operator "less" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-less_than_less/">
+        Operator "less" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-max_length_equal/">
+        Operator "max_length" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-max_length_greater/">
+        Operator "max_length" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-max_length_less/">
+        Operator "max_length" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-min_length_equal/">
+        Operator "min_length" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-min_length_greater/">
+        Operator "min_length" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-min_length_less/">
+        Operator "min_length" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-valid_values_false/">
+        Operator "valid_values" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-constraint-operators-valid_values_true/">
+        Operator "valid_values" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-after-false/">
+        date-operators-after-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-after-or-same-false/">
+        date-operators-after-or-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-after-or-same-true/">
+        date-operators-after-or-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-after-true/">
+        date-operators-after-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-before-false/">
+        date-operators-before-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-before-or-same-false/">
+        date-operators-before-or-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-before-or-same-true/">
+        date-operators-before-or-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-before-true/">
+        date-operators-before-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-same-false/">
+        date-operators-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-same-true/">
+        date-operators-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-within-false/">
+        date-operators-within-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-date-operators-within-true/">
+        date-operators-within-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-conditional/">
+        Conditional Group
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-default-condition-nothing/">
+        groups-default-condition-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-default-condition/">
+        groups-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-group-presence-absent/">
+        groups-group-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-group-presence-present/">
+        groups-group-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-groups-prune/">
+        groups-prune
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-constraints-elastic/">
+        hosting-aware-pruning-constraints-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-constraints-static/">
+        hosting-aware-pruning-constraints-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-fig-10-broken/">
+        hosting-aware-pruning-fig-10-broken
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-fig-10-fixed/">
+        hosting-aware-pruning-fig-10-fixed
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-host-elastic/">
+        hosting-aware-pruning-host-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-host-static/">
+        hosting-aware-pruning-host-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-motivation-elastic/">
+        hosting-aware-pruning-motivation-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-motivation-static/">
+        hosting-aware-pruning-motivation-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-provider-elastic/">
+        hosting-aware-pruning-provider-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-provider-static/">
+        hosting-aware-pruning-provider-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-transitive-ambiguous/">
+        hosting-aware-pruning-transitive-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-transitive-both/">
+        hosting-aware-pruning-transitive-both
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-transitive-preserved/">
+        hosting-aware-pruning-transitive-preserved
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-hosting-aware-pruning-transitive-unexpected/">
+        hosting-aware-pruning-transitive-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-constraints/">
+        implications-constraints
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-implied-left/">
+        implications-implied-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-implied-right/">
+        implications-implied-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-implies-left/">
+        implications-implies-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-implies-right/">
+        implications-implies-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-incoming-left/">
+        implications-incoming-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-incoming-right/">
+        implications-incoming-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-motivating-scenario-cloud/">
+        implications-motivating-scenario-cloud
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-motivating-scenario-static/">
+        implications-motivating-scenario-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-constraints/">
+        implications-naive-constraints
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-implied-left/">
+        implications-naive-implied-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-implied-right/">
+        implications-naive-implied-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-implies-left/">
+        implications-naive-implies-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-implies-right/">
+        implications-naive-implies-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-incoming-left/">
+        implications-naive-incoming-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-incoming-right/">
+        implications-naive-incoming-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-motivating-scenario-cloud/">
+        implications-naive-motivating-scenario-cloud
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-motivating-scenario-static/">
+        implications-naive-motivating-scenario-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-naive-another-no-optimization/">
+        implications-naive-naive-another-no-optimization
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-naive-another-not/">
+        implications-naive-naive-another-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-naive-another/">
+        implications-naive-naive-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-naive-not/">
+        implications-naive-naive-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-naive/">
+        implications-naive-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-requires/">
+        implications-naive-requires
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-naive-unexpected/">
+        implications-naive-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-requires/">
+        implications-requires
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implications-unexpected/">
+        implications-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-default-fixed-left/">
+        implied-default-fixed-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-default-fixed-right/">
+        implied-default-fixed-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-default-manual-left/">
+        implied-default-manual-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-default-manual-right/">
+        implied-default-manual-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-host-broken/">
+        implied-host-broken
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-host-fixed-left/">
+        implied-host-fixed-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-host-fixed-right/">
+        implied-host-fixed-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-host-manual-left/">
+        implied-host-manual-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-implied-host-manual-right/">
+        implied-host-manual-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-import-conditional/">
+        import-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-import-empty/">
+        import-empty
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-import-get-import-absent/">
+        import-get-import-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-import-get-import-present/">
+        import-get-import-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-conditional-list/">
+        inputs-conditional-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-conditional/">
+        inputs-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-default-alternative/">
+        inputs-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-input-presence-absent/">
+        inputs-input-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-input-presence-present/">
+        inputs-input-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-pruning-consumed-still/">
+        inputs-pruning-consumed-still
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-pruning-consumed/">
+        inputs-pruning-consumed
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-pruning-no-consumer/">
+        inputs-pruning-no-consumer
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-pruning-not-consumed-anymore-v3/">
+        inputs-pruning-not-consumed-anymore-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-inputs-pruning-not-consumed-anymore/">
+        inputs-pruning-not-consumed-anymore
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-conditional-type-default/">
+        nodes-conditional-type-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-conditional-type/">
+        nodes-conditional-type
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-conditional/">
+        nodes-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-false-false/">
+        nodes-default-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-false-true/">
+        nodes-default-false-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-host-absent/">
+        nodes-default-host-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-host-present/">
+        nodes-default-host-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-true-false/">
+        nodes-default-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-default-true-true/">
+        nodes-default-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-absent/">
+        nodes-host-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-false-false/">
+        nodes-host-presence-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-present/">
+        nodes-host-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-true-false/">
+        nodes-host-presence-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-true-true-constraint/">
+        nodes-host-presence-true-true-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-host-presence-true-true/">
+        nodes-host-presence-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-node-presence-absent/">
+        nodes-node-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-node-presence-present/">
+        nodes-node-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-nodes-type-specific/">
+        nodes-type-specific
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-benchmark/">
+        Benchmark
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-concat/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-default-variability-input/">
+        Get Variability Expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-join/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-logic-expression-false/">
+        other-logic-expression-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-logic-expression-true/">
+        other-logic-expression-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-logic-value-expression/">
+        other-logic-value-expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-nothing/">
+        other-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-preset/">
+        other-preset
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-presets/">
+        other-presets
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-throw-CONTAINER/">
+        other-throw-CONTAINER
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          other-throw-SELF
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        other-throw-SELF
+      </a>
+<nav aria-label="Table of Contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of Contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-service-template">
+    Variable Service Template
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expected-error">
+    Expected Error
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-throw-not-unique/">
+        other-throw-not-unique
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-token/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-value-expression/">
+        Get Variability Expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-variability-input/">
+        Get Variability Input
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-version/">
+        other-version
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-other-weight/">
+        other-weight
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-conditional-list/">
+        outputs-conditional-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-conditional/">
+        outputs-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-default/">
+        outputs-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-input-presence-absent/">
+        outputs-input-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-input-presence-present/">
+        outputs-input-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-not-produced-anymore-unfurl-1/">
+        outputs-pruning-not-produced-anymore-unfurl-1
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-not-produced-anymore-unfurl-2/">
+        outputs-pruning-not-produced-anymore-unfurl-2
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-not-produced-anymore-xopera-v3/">
+        outputs-pruning-not-produced-anymore-xopera-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-not-produced-anymore-xopera/">
+        outputs-pruning-not-produced-anymore-xopera
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-produced-unfurl-attribute-not/">
+        outputs-pruning-produced-unfurl-attribute-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-produced-unfurl-attribute/">
+        outputs-pruning-produced-unfurl-attribute
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-outputs-pruning-produced-unfurl/">
+        outputs-pruning-produced-unfurl
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-persistent-persistent-false/">
+        persistent-persistent-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-persistent-persistent-throw/">
+        persistent-persistent-throw
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-persistent-persistent-undefined/">
+        persistent-persistent-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-persistent-persistent/">
+        persistent-persistent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-conditional/">
+        policies-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-default-condition-nothing/">
+        policies-default-condition-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-default-condition/">
+        policies-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-absent-members/">
+        Policy Targets Absent Members
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-absent-nodes/">
+        Policy Targets Absent Nodes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-no-targets/">
+        Policy Has No Targets
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-present-member/">
+        Policy Targets Present Member
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-present-node/">
+        Policy Targets One Present Node
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-has-present-target-present-nodes/">
+        Policy Targets Present Nodes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-policy-presence-absent/">
+        policies-policy-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-policy-presence-present/">
+        policies-policy-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-policies-prune/">
+        Policy Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-artifact-container-presence-absent/">
+        properties-artifact-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-artifact-container-presence-present/">
+        properties-artifact-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-conditional/">
+        properties-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-default-alternative-false/">
+        properties-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-default-alternative/">
+        properties-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-default-condition/">
+        properties-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-expression/">
+        properties-expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-list-another/">
+        properties-list-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-list/">
+        properties-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-map-another/">
+        properties-map-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-map/">
+        properties-map
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-container-presence-absent/">
+        properties-node-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-container-presence-present/">
+        properties-node-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-node-presence-CONTAINER-absent/">
+        properties-node-node-presence-CONTAINER-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-node-presence-CONTAINER-present/">
+        properties-node-node-presence-CONTAINER-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-property-presence-number-absent/">
+        properties-node-property-presence-number-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-property-presence-number-present/">
+        properties-node-property-presence-number-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-property-presence-string-absent/">
+        properties-node-property-presence-string-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-node-property-presence-string-present/">
+        properties-node-property-presence-string-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-properties/">
+        properties-properties
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-relation-container-presence-absent/">
+        properties-relation-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-relation-container-presence-present/">
+        properties-relation-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-throw-ambiguous-property/">
+        properties-throw-ambiguous-property
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-throw-missing-property-container/">
+        properties-throw-missing-property-container
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-properties-throw-multiple-default/">
+        properties-throw-multiple-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-alpha-default-naive/">
+        pruning-alpha-default-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-alpha-default/">
+        pruning-alpha-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-alpha-pruning/">
+        pruning-alpha-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-artifact-default-alpha/">
+        pruning-artifact-default-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-artifact-default-bravo/">
+        pruning-artifact-default-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-artifact-default-charlie/">
+        pruning-artifact-default-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-artifact-default-delta/">
+        pruning-artifact-default-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-artifact-default-naive/">
+        pruning-artifact-default-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-bravo-default/">
+        pruning-bravo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-bravo-pruning/">
+        pruning-bravo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-charlie-default/">
+        pruning-charlie-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-charlie-pruning/">
+        pruning-charlie-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-delta-default/">
+        pruning-delta-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-delta-pruning/">
+        pruning-delta-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-echo-default/">
+        pruning-echo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-echo-pruning/">
+        pruning-echo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-foxtrott-default/">
+        pruning-foxtrott-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-foxtrott-pruning/">
+        pruning-foxtrott-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-hotel-default/">
+        pruning-hotel-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-hotel-pruning/">
+        pruning-hotel-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-alpha/">
+        pruning-incoming-artifact-pruning-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-bravo/">
+        pruning-incoming-artifact-pruning-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-charlie/">
+        pruning-incoming-artifact-pruning-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-delta/">
+        pruning-incoming-artifact-pruning-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-echo/">
+        pruning-incoming-artifact-pruning-echo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-foxtrott/">
+        pruning-incoming-artifact-pruning-foxtrott
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-golf/">
+        pruning-incoming-artifact-pruning-golf
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-hotel/">
+        pruning-incoming-artifact-pruning-hotel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-naive-alpha/">
+        pruning-incoming-artifact-pruning-naive-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-incoming-artifact-pruning-naive-bravo/">
+        pruning-incoming-artifact-pruning-naive-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-india-default/">
+        pruning-india-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-india-pruning/">
+        pruning-india-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-juliett-default/">
+        pruning-juliett-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-juliett-pruning/">
+        pruning-juliett-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-kilo-default/">
+        pruning-kilo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-kilo-pruning/">
+        pruning-kilo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-lima-default/">
+        pruning-lima-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-lima-pruning/">
+        pruning-lima-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-mike-default/">
+        pruning-mike-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-mike-pruning/">
+        pruning-mike-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-outgoing-relation-absent/">
+        pruning-outgoing-relation-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-outgoing-relation-present/">
+        pruning-outgoing-relation-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-outgoing-target-absent/">
+        pruning-outgoing-target-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-outgoing-target-present/">
+        pruning-outgoing-target-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-outgoingnaive-target-present/">
+        pruning-outgoingnaive-target-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-pruning-false-false/">
+        pruning-pruning-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-pruning-false-true/">
+        pruning-pruning-false-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-pruning-true-false/">
+        pruning-pruning-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-pruning-true-true/">
+        pruning-pruning-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-pruning/">
+        pruning-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-pruning-relation/">
+        Relation Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-relationships-conditional/">
+        relationships-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-relationships-throw-multiple/">
+        relationships-throw-multiple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-relationships-throw-undefined/">
+        relationships-throw-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-relationships-throw-unused/">
+        relationships-throw-unused
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-relationships-type-specific/">
+        relationships-type-specific
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-conditional/">
+        requirement-assignment-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-default-alternative-false/">
+        requirement-assignment-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-default-alternative/">
+        requirement-assignment-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-default-condition-throw-source/">
+        requirement-assignment-default-condition-throw-source
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-default-condition-throw-target/">
+        requirement-assignment-default-condition-throw-target
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-default-condition/">
+        requirement-assignment-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-one-hosting-relation/">
+        requirement-assignment-one-hosting-relation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-relation-presence-index-absent/">
+        requirement-assignment-relation-presence-index-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-relation-presence-name-absent/">
+        requirement-assignment-relation-presence-name-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-source-presence-absent/">
+        requirement-assignment-source-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-source-presence-present/">
+        requirement-assignment-source-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-target-presence-absent/">
+        requirement-assignment-target-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-target-presence-present/">
+        requirement-assignment-target-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-requirement-assignment-throw-multiple-defaults/">
+        requirement-assignment-throw-multiple-defaults
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-scenario-complex-alpha/">
+        Scenario "Alpha"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-scenario-worker-agent-false/">
+        scenario-worker-agent-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-scenario-worker-agent-true/">
+        scenario-worker-agent-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-scenario-worker-worker-false/">
+        scenario-worker-worker-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-scenario-worker-worker-true/">
+        scenario-worker-worker-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-ambiguous-disabled/">
+        technologies-ambiguous-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-ambiguous/">
+        technologies-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-conditional/">
+        technologies-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-constraint-disabled/">
+        technologies-constraint-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-constraint/">
+        technologies-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-default-multiple/">
+        technologies-default-multiple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-default-true/">
+        technologies-default-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-expected-disabled/">
+        technologies-expected-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-expected/">
+        technologies-expected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-lowercase/">
+        technologies-lowercase
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-missing-disabled/">
+        technologies-missing-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-missing/">
+        technologies-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-optimization-double/">
+        technologies-optimization-double
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-optimization-order/">
+        technologies-optimization-order
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-optimization-unsat/">
+        technologies-optimization-unsat
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-optimization-weight/">
+        technologies-optimization-weight
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-optimization/">
+        technologies-optimization
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-pruning-disabled/">
+        technologies-pruning-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-pruning/">
+        technologies-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-rules-v3/">
+        technologies-rules-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-rules/">
+        technologies-rules
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-throw-required/">
+        technologies-throw-required
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-unique-disabled/">
+        technologies-unique-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-technologies-unique/">
+        technologies-unique
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-variability-inputs-implies/">
+        variability-inputs-implies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test-variability-inputs-no-constraints/">
+        variability-inputs-no-constraints
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../dynamic/">
+        Dynamic Deployment Artifacts
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../feature-ide/">
+        Feature IDE
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../benchmark/">
+        Benchmark
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_1_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_8_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_1_8">
+<span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/artifacts/">
+        Conditional Deployment Artifacts and Conditional Properties
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/pruning/">
+        Pruning Elements
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/modes/">
+        Pruning Modes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/aware/">
+        Hosting-Aware Pruning
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Queries4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+          Queries4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_2_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2_3" id="__nav_2_2_3_label" tabindex="0">
+          Conformance Tests
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_2_3_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_2_3">
+<span class="md-nav__icon md-icon"></span>
+          Conformance Tests
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/introduction/">
+        Introduction
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-all/">
+        all
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-array-access/">
+        array-access
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-boolean-and/">
+        boolean-and
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-boolean-or/">
+        boolean-or
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-filter-equals/">
+        filter-equals
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-filter-existence/">
+        filter-existence
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-filter-negation/">
+        filter-negation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-filter-nested/">
+        filter-nested
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-filter-regex/">
+        filter-regex
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-group/">
+        group
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-length-any/">
+        match-length-any
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-length-range/">
+        match-length-range
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-next/">
+        match-next
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-previous/">
+        match-previous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-rel-filter/">
+        match-rel-filter
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-match-single/">
+        match-single
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-node-template/">
+        node-template
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-policy/">
+        policy
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-resolve-chain/">
+        resolve-chain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-resolve-loop/">
+        resolve-loop
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-resolve-self/">
+        resolve-self
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-resolve-simple/">
+        resolve-simple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-result-structure-complex/">
+        result-structure-complex
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-result-structure-simple/">
+        result-structure-simple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../queries4tosca/tests/test-shortcut-property/">
+        shortcut-property
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../scsar/">
+        Secure CSAR
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          TOSCA SofDCar Profile
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_4_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_4">
+<span class="md-nav__icon md-icon"></span>
+          TOSCA SofDCar Profile
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../sofdcar/profile/">
+        Profile
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_4_2_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../sofdcar/guides/zone/">
+        Zonal Architecture
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../sofdcar/guides/location/">
+        Distributed Locations
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html">
+        TOSCA Simple Profile
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Contributing
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/setup/">
+        Setup
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/development/">
+        Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/release/">
+        Release
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/documentation/">
+        Documentation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/code-of-conduct/">
+        Code of Conduct
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../contributing/notes/">
+        Notes
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          More Information
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          More Information
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://www.opentosca.org">
+        OpenTOSCA
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../branding/">
+        Branding
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../resources/">
+        Resources
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../about-us/">
+        About Us
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://www.uni-stuttgart.de/impressum">
+        Legal Notice
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../faq/">
+        FAQ
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../tags/">
+        Tags
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of Contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of Contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variable-service-template">
+    Variable Service Template
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expected-error">
+    Expected Error
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="other-throw-self">other-throw-SELF<a class="headerlink" href="#other-throw-self" title="Permanent link">¶</a></h1>
+<h2 id="variable-service-template">Variable Service Template<a class="headerlink" href="#variable-service-template" title="Permanent link">¶</a></h2>
+<p>The variability of the following variable service template shall be resolved.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">topology_template</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">SELF</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELF</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="expected-error">Expected Error<a class="headerlink" href="#expected-error" title="Permanent link">¶</a></h2>
+<p>The following error is expected to be thrown, when resolving variability.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>Node must not be named "SELF"
+</code></pre></div></td></tr></table></div>
+<hr/>
+<div class="md-source-file">
+<small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2024</span>
+</small>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: other-throw-CONTAINER" class="md-footer__link md-footer__link--prev" href="../test-other-throw-CONTAINER/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Previous
+              </span>
+<div class="md-ellipsis">
+                other-throw-CONTAINER
+              </div>
+</div>
+</a>
+<a aria-label="Next: other-throw-not-unique" class="md-footer__link md-footer__link--next" href="../test-other-throw-not-unique/" rel="next">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Next
+              </span>
+<div class="md-ellipsis">
+                other-throw-not-unique
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<a href="https://www.uni-stuttgart.de/impressum/" rel="noopener" target="_blank">
+        Copyright © 2022 - 2024 University of Stuttgart (Legal Notice)
+    </a>
+<br/>
+
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank"> Material for MkDocs </a>
+<br/>
+
+    Partially funded by the
+    <a href="https://www.bmwk.de/Navigation/EN/Home/home.html" rel="noopener" target="_blank">
+        German Federal Ministry for Economic Affairs and Climate Action (BMWK)
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs.sticky", "navigation.instant", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.annotate", "toc.follow", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../../assets/javascripts/bundle.220ee61c.min.js"></script>
+<script src="../../../assets/javascripts/tablesort.min.js"></script>
+<script src="../../../assets/javascripts/tablesort-controller.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "width": "100%", "height": "auto", "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom"});})</script></body>
+</html>

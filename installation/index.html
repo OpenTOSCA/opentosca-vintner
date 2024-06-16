@@ -1,0 +1,3290 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://vintner.opentosca.org/installation/" rel="canonical"/>
+<link href="../getting-started/" rel="prev"/>
+<link href="../versions/" rel="next"/>
+<link href="../assets/images/vintner/icon/vintner-icon-bold.svg" rel="icon"/>
+<meta content="mkdocs-1.6.0, mkdocs-material-9.1.21" name="generator"/>
+<title>Installation - OpenTOSCA Vintner</title>
+<link href="../assets/stylesheets/main.eebd395e.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7Cui-monospace:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Inter";--md-code-font:"ui-monospace"}</style>
+<link href="../assets/stylesheets/extra.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/typeset.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/asciinema-player.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/print.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/video.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&amp;display=swap" rel="stylesheet"/>
+<script src="../assets/javascripts/asciinema-player.min.js"></script>
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>html.glightbox-open { overflow: initial; height: 100%; }</style><script src="../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="deep-orange" data-md-color-primary="white" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#installation">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="OpenTOSCA Vintner" class="md-header__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg height="1600" id="svg1" inkscape:version="1.3 (0e150ed6c4, 2023-07-21)" sodipodi:docname="vintner-icon-bold.svg" version="1.1" viewbox="0 0 423.33328 423.33328" width="1600" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview bordercolor="#ffffff" borderopacity="1" id="namedview1" inkscape:current-layer="layer1" inkscape:cx="950.92915" inkscape:cy="1083.9685" inkscape:deskcolor="#505050" inkscape:document-units="mm" inkscape:pagecheckerboard="1" inkscape:pageopacity="0" inkscape:showpageshadow="0" inkscape:window-height="1369" inkscape:window-maximized="1" inkscape:window-width="2560" inkscape:window-x="-8" inkscape:window-y="797" inkscape:zoom="0.33072916" pagecolor="#505050"></sodipodi:namedview>
+<defs id="defs1">
+<inkscape:perspective id="perspective3" inkscape:persp3d-origin="211.66664 : 141.11109 : 1" inkscape:vp_x="0 : 211.66664 : 1" inkscape:vp_y="0 : 1000 : 0" inkscape:vp_z="423.33328 : 211.66664 : 1" sodipodi:type="inkscape:persp3d"></inkscape:perspective>
+<clippath clippathunits="userSpaceOnUse" id="clipEmfPath1">
+<path d="M 0,0 H 97.754923 V 97.434939 H 0 Z" id="path1"></path>
+</clippath>
+<pattern height="6" id="EMFhbasepattern" patternunits="userSpaceOnUse" width="6" x="0" y="0"></pattern>
+</defs>
+<g id="layer1" inkscape:groupmode="layer" inkscape:highlight-color="#f37fff" inkscape:label="picture">
+<rect height="423.33334" id="rect10" inkscape:label="background" ry="0" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<circle cx="210.86186" cy="12.05364" id="path2" inkscape:label="sun" r="105.81039" style="fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<rect height="106.18864" id="rect3" inkscape:label="house" rx="0" ry="0" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linejoin:bevel;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" width="163.49139" x="292.03436" y="168.61122"></rect>
+<path d="m 291.07071,170.5899 h 119.81812 l -61.87064,-35.72103 -61.80251,35.6817 z" id="path38" inkscape:label="roof" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
+<g id="g2" inkscape:label="hill-right" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="360.8638" cy="470.42841" id="path2-6-2" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-6" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-5-0" r="77.889099" style="display:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<g id="g3" inkscape:label="hill-left" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="102.87116" cy="471.56323" id="path2-6" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5-5" r="77.889099" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<ellipse cx="57.591373" cy="227.12271" id="path9" inkscape:label="tree-left" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="102.02961" cy="220.7366" id="path9-7" inkscape:label="tree-center" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="148.03065" cy="226.33833" id="path9-7-5" inkscape:label="tree-right" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<g id="g10" inkscape:label="sky">
+<path d="M 52.868629,102.07695 H 86.468627" id="path10" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="M 65.260787,141.69062 H 119.50831" id="path10-9" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 153.99932,170.74862 h 90.45139" id="path10-9-5" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 194.95132,210.73793 h 32.13381" id="path10-9-5-0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 215.37121,248.67361 h 29.07452" id="path10-9-5-0-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 317.99623,113.47338 h 51.70193" id="path10-9-5-0-1-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 345.46421,68.388556 h 27.6603" id="path10-9-5-0-1-1-3" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+</g>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="border">
+<rect height="423.33334" id="rect2" inkscape:label="background" ry="0" style="display:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<path d="M 0,0 V 423.33333 H 423.33333 V 0 Z M 62.856628,13.229167 H 360.56817 c 1.71835,0 3.41569,0.08646 5.08806,0.255281 1.67238,0.168825 3.31999,0.41985 4.9382,0.749309 1.61822,0.329458 3.20715,0.737144 4.76302,1.219047 1.55587,0.481902 3.07874,1.038341 4.56406,1.664497 1.48533,0.626157 2.93319,1.322409 4.33979,2.084628 1.4066,0.762219 2.77155,1.590377 4.09122,2.480468 1.31968,0.890092 2.59381,1.841732 3.81837,2.851506 1.22457,1.009774 2.39997,2.077506 3.52124,3.198771 1.12126,1.121265 2.18848,2.296149 3.19825,3.520715 1.00977,1.224567 1.96193,2.498695 2.85202,3.818372 0.89009,1.319677 1.71825,2.685142 2.48047,4.09174 0.76222,1.406598 1.45847,2.854459 2.08463,4.339787 0.62616,1.485327 1.18208,3.008195 1.66398,4.564062 0.4819,1.555867 0.88959,3.144801 1.21905,4.763017 0.32946,1.618216 0.581,3.265308 0.74982,4.937683 0.16883,1.672375 0.25528,3.370236 0.25528,5.088578 V 360.56817 c 0,1.71835 -0.0865,3.41569 -0.25528,5.08806 -0.16882,1.67238 -0.42036,3.31999 -0.74982,4.9382 -0.32946,1.61822 -0.73715,3.20715 -1.21905,4.76302 -0.4819,1.55587 -1.03782,3.07874 -1.66398,4.56406 -0.62616,1.48533 -1.32241,2.93319 -2.08463,4.33979 -0.76222,1.4066 -1.59038,2.77155 -2.48047,4.09122 -0.89009,1.31968 -1.84225,2.59381 -2.85202,3.81837 -1.00977,1.22457 -2.07699,2.39997 -3.19825,3.52124 -1.12127,1.12126 -2.29667,2.18848 -3.52124,3.19825 -1.22456,1.00977 -2.49869,1.96193 -3.81837,2.85202 -1.31967,0.89009 -2.68462,1.71825 -4.09122,2.48047 -1.4066,0.76222 -2.85446,1.45847 -4.33979,2.08463 -1.48532,0.62616 -3.00819,1.18208 -4.56406,1.66398 -1.55587,0.4819 -3.1448,0.88959 -4.76302,1.21905 -1.61821,0.32946 -3.26582,0.581 -4.9382,0.74982 -1.67237,0.16883 -3.36971,0.25528 -5.08806,0.25528 H 62.856628 c -1.718342,0 -3.416203,-0.0865 -5.088578,-0.25528 -1.672375,-0.16882 -3.319467,-0.42036 -4.937683,-0.74982 -1.618216,-0.32946 -3.20715,-0.73715 -4.763017,-1.21905 -1.555867,-0.4819 -3.078735,-1.03782 -4.564062,-1.66398 -1.485328,-0.62616 -2.933189,-1.32241 -4.339787,-2.08463 -1.406598,-0.76222 -2.772063,-1.59038 -4.09174,-2.48047 -1.319677,-0.89009 -2.593805,-1.84225 -3.818372,-2.85202 -1.224566,-1.00977 -2.39945,-2.07699 -3.520715,-3.19825 -1.121265,-1.12127 -2.188997,-2.29667 -3.198771,-3.52124 -1.009774,-1.22456 -1.961414,-2.49869 -2.851506,-3.81837 -0.890091,-1.31967 -1.718249,-2.68462 -2.480468,-4.09122 -0.762219,-1.4066 -1.458471,-2.85446 -2.084628,-4.33979 -0.626156,-1.48532 -1.182595,-3.00819 -1.664497,-4.56406 -0.481903,-1.55587 -0.889589,-3.1448 -1.219047,-4.76302 -0.329459,-1.61821 -0.580484,-3.26582 -0.749309,-4.9382 -0.168824,-1.67237 -0.255281,-3.36971 -0.255281,-5.08806 V 62.856628 c 0,-1.718342 0.08646,-3.416203 0.255281,-5.088578 0.168825,-1.672375 0.41985,-3.319467 0.749309,-4.937683 0.329458,-1.618216 0.737144,-3.20715 1.219047,-4.763017 0.481902,-1.555867 1.038341,-3.078735 1.664497,-4.564062 0.626157,-1.485328 1.322409,-2.933189 2.084628,-4.339787 0.762219,-1.406598 1.590377,-2.772063 2.480468,-4.09174 0.890092,-1.319677 1.841732,-2.593805 2.851506,-3.818372 1.009774,-1.224566 2.077506,-2.39945 3.198771,-3.520715 1.121265,-1.121265 2.296149,-2.188997 3.520715,-3.198771 1.224567,-1.009774 2.498695,-1.961414 3.818372,-2.851506 1.319677,-0.890091 2.685142,-1.718249 4.09174,-2.480468 1.406598,-0.762219 2.854459,-1.458471 4.339787,-2.084628 1.485327,-0.626156 3.008195,-1.182595 4.564062,-1.664497 1.555867,-0.481903 3.144801,-0.889589 4.763017,-1.219047 1.618216,-0.329459 3.265308,-0.580484 4.937683,-0.749309 1.672375,-0.168824 3.370236,-0.255281 5.088578,-0.255281 z" id="path5" style="display:inline;fill:#ffffff;stroke-width:28.2157;stroke-linejoin:round"></path>
+<rect height="396.96637" id="rect1" inkscape:label="border" ry="49.627281" style="display:inline;fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="396.96634" x="13.22915" y="13.22915"></rect>
+</g>
+</svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            OpenTOSCA Vintner
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="OpenTOSCA Vintner" class="md-nav__button md-logo" data-md-component="logo" href=".." title="OpenTOSCA Vintner">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg height="1600" id="svg1" inkscape:version="1.3 (0e150ed6c4, 2023-07-21)" sodipodi:docname="vintner-icon-bold.svg" version="1.1" viewbox="0 0 423.33328 423.33328" width="1600" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+<sodipodi:namedview bordercolor="#ffffff" borderopacity="1" id="namedview1" inkscape:current-layer="layer1" inkscape:cx="950.92915" inkscape:cy="1083.9685" inkscape:deskcolor="#505050" inkscape:document-units="mm" inkscape:pagecheckerboard="1" inkscape:pageopacity="0" inkscape:showpageshadow="0" inkscape:window-height="1369" inkscape:window-maximized="1" inkscape:window-width="2560" inkscape:window-x="-8" inkscape:window-y="797" inkscape:zoom="0.33072916" pagecolor="#505050"></sodipodi:namedview>
+<defs id="defs1">
+<inkscape:perspective id="perspective3" inkscape:persp3d-origin="211.66664 : 141.11109 : 1" inkscape:vp_x="0 : 211.66664 : 1" inkscape:vp_y="0 : 1000 : 0" inkscape:vp_z="423.33328 : 211.66664 : 1" sodipodi:type="inkscape:persp3d"></inkscape:perspective>
+<clippath clippathunits="userSpaceOnUse" id="clipEmfPath1">
+<path d="M 0,0 H 97.754923 V 97.434939 H 0 Z" id="path1"></path>
+</clippath>
+<pattern height="6" id="EMFhbasepattern" patternunits="userSpaceOnUse" width="6" x="0" y="0"></pattern>
+</defs>
+<g id="layer1" inkscape:groupmode="layer" inkscape:highlight-color="#f37fff" inkscape:label="picture">
+<rect height="423.33334" id="rect10" inkscape:label="background" ry="0" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<circle cx="210.86186" cy="12.05364" id="path2" inkscape:label="sun" r="105.81039" style="fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<rect height="106.18864" id="rect3" inkscape:label="house" rx="0" ry="0" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linejoin:bevel;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" width="163.49139" x="292.03436" y="168.61122"></rect>
+<path d="m 291.07071,170.5899 h 119.81812 l -61.87064,-35.72103 -61.80251,35.6817 z" id="path38" inkscape:label="roof" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.45833333;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
+<g id="g2" inkscape:label="hill-right" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="360.8638" cy="470.42841" id="path2-6-2" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-6" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="360.8638" cy="470.42841" id="path2-6-5-5-0" r="77.889099" style="display:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<g id="g3" inkscape:label="hill-left" style="stroke-width:26.4583;stroke-dasharray:none">
+<circle cx="102.87116" cy="471.56323" id="path2-6" r="211.92213" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5" r="147.1646" style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+<circle cx="102.87116" cy="471.56323" id="path2-6-5-5" r="77.889099" style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></circle>
+</g>
+<ellipse cx="57.591373" cy="227.12271" id="path9" inkscape:label="tree-left" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="102.02961" cy="220.7366" id="path9-7" inkscape:label="tree-center" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<ellipse cx="148.03065" cy="226.33833" id="path9-7-5" inkscape:label="tree-right" rx="14.033597" ry="36.48671" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"></ellipse>
+<g id="g10" inkscape:label="sky">
+<path d="M 52.868629,102.07695 H 86.468627" id="path10" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="M 65.260787,141.69062 H 119.50831" id="path10-9" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 153.99932,170.74862 h 90.45139" id="path10-9-5" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 194.95132,210.73793 h 32.13381" id="path10-9-5-0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 215.37121,248.67361 h 29.07452" id="path10-9-5-0-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 317.99623,113.47338 h 51.70193" id="path10-9-5-0-1-1" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+<path d="m 345.46421,68.388556 h 27.6603" id="path10-9-5-0-1-1-3" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"></path>
+</g>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="border">
+<rect height="423.33334" id="rect2" inkscape:label="background" ry="0" style="display:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:28.2157;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="423.33334" x="-1.7763568e-15" y="-1.7763568e-15"></rect>
+<path d="M 0,0 V 423.33333 H 423.33333 V 0 Z M 62.856628,13.229167 H 360.56817 c 1.71835,0 3.41569,0.08646 5.08806,0.255281 1.67238,0.168825 3.31999,0.41985 4.9382,0.749309 1.61822,0.329458 3.20715,0.737144 4.76302,1.219047 1.55587,0.481902 3.07874,1.038341 4.56406,1.664497 1.48533,0.626157 2.93319,1.322409 4.33979,2.084628 1.4066,0.762219 2.77155,1.590377 4.09122,2.480468 1.31968,0.890092 2.59381,1.841732 3.81837,2.851506 1.22457,1.009774 2.39997,2.077506 3.52124,3.198771 1.12126,1.121265 2.18848,2.296149 3.19825,3.520715 1.00977,1.224567 1.96193,2.498695 2.85202,3.818372 0.89009,1.319677 1.71825,2.685142 2.48047,4.09174 0.76222,1.406598 1.45847,2.854459 2.08463,4.339787 0.62616,1.485327 1.18208,3.008195 1.66398,4.564062 0.4819,1.555867 0.88959,3.144801 1.21905,4.763017 0.32946,1.618216 0.581,3.265308 0.74982,4.937683 0.16883,1.672375 0.25528,3.370236 0.25528,5.088578 V 360.56817 c 0,1.71835 -0.0865,3.41569 -0.25528,5.08806 -0.16882,1.67238 -0.42036,3.31999 -0.74982,4.9382 -0.32946,1.61822 -0.73715,3.20715 -1.21905,4.76302 -0.4819,1.55587 -1.03782,3.07874 -1.66398,4.56406 -0.62616,1.48533 -1.32241,2.93319 -2.08463,4.33979 -0.76222,1.4066 -1.59038,2.77155 -2.48047,4.09122 -0.89009,1.31968 -1.84225,2.59381 -2.85202,3.81837 -1.00977,1.22457 -2.07699,2.39997 -3.19825,3.52124 -1.12127,1.12126 -2.29667,2.18848 -3.52124,3.19825 -1.22456,1.00977 -2.49869,1.96193 -3.81837,2.85202 -1.31967,0.89009 -2.68462,1.71825 -4.09122,2.48047 -1.4066,0.76222 -2.85446,1.45847 -4.33979,2.08463 -1.48532,0.62616 -3.00819,1.18208 -4.56406,1.66398 -1.55587,0.4819 -3.1448,0.88959 -4.76302,1.21905 -1.61821,0.32946 -3.26582,0.581 -4.9382,0.74982 -1.67237,0.16883 -3.36971,0.25528 -5.08806,0.25528 H 62.856628 c -1.718342,0 -3.416203,-0.0865 -5.088578,-0.25528 -1.672375,-0.16882 -3.319467,-0.42036 -4.937683,-0.74982 -1.618216,-0.32946 -3.20715,-0.73715 -4.763017,-1.21905 -1.555867,-0.4819 -3.078735,-1.03782 -4.564062,-1.66398 -1.485328,-0.62616 -2.933189,-1.32241 -4.339787,-2.08463 -1.406598,-0.76222 -2.772063,-1.59038 -4.09174,-2.48047 -1.319677,-0.89009 -2.593805,-1.84225 -3.818372,-2.85202 -1.224566,-1.00977 -2.39945,-2.07699 -3.520715,-3.19825 -1.121265,-1.12127 -2.188997,-2.29667 -3.198771,-3.52124 -1.009774,-1.22456 -1.961414,-2.49869 -2.851506,-3.81837 -0.890091,-1.31967 -1.718249,-2.68462 -2.480468,-4.09122 -0.762219,-1.4066 -1.458471,-2.85446 -2.084628,-4.33979 -0.626156,-1.48532 -1.182595,-3.00819 -1.664497,-4.56406 -0.481903,-1.55587 -0.889589,-3.1448 -1.219047,-4.76302 -0.329459,-1.61821 -0.580484,-3.26582 -0.749309,-4.9382 -0.168824,-1.67237 -0.255281,-3.36971 -0.255281,-5.08806 V 62.856628 c 0,-1.718342 0.08646,-3.416203 0.255281,-5.088578 0.168825,-1.672375 0.41985,-3.319467 0.749309,-4.937683 0.329458,-1.618216 0.737144,-3.20715 1.219047,-4.763017 0.481902,-1.555867 1.038341,-3.078735 1.664497,-4.564062 0.626157,-1.485328 1.322409,-2.933189 2.084628,-4.339787 0.762219,-1.406598 1.590377,-2.772063 2.480468,-4.09174 0.890092,-1.319677 1.841732,-2.593805 2.851506,-3.818372 1.009774,-1.224566 2.077506,-2.39945 3.198771,-3.520715 1.121265,-1.121265 2.296149,-2.188997 3.520715,-3.198771 1.224567,-1.009774 2.498695,-1.961414 3.818372,-2.851506 1.319677,-0.890091 2.685142,-1.718249 4.09174,-2.480468 1.406598,-0.762219 2.854459,-1.458471 4.339787,-2.084628 1.485327,-0.626156 3.008195,-1.182595 4.564062,-1.664497 1.555867,-0.481903 3.144801,-0.889589 4.763017,-1.219047 1.618216,-0.329459 3.265308,-0.580484 4.937683,-0.749309 1.672375,-0.168824 3.370236,-0.255281 5.088578,-0.255281 z" id="path5" style="display:inline;fill:#ffffff;stroke-width:28.2157;stroke-linejoin:round"></path>
+<rect height="396.96637" id="rect1" inkscape:label="border" ry="49.627281" style="display:inline;fill:none;stroke:#000000;stroke-width:26.4583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" width="396.96634" x="13.22915" y="13.22915"></rect>
+</g>
+</svg>
+</a>
+    OpenTOSCA Vintner
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/opentosca/opentosca-vintner" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+</div>
+<div class="md-source__repository">
+    opentosca/opentosca-vintner
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          OpenTOSCA Vintner
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+          OpenTOSCA Vintner
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../publications/">
+        Publications
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../features/">
+        Features
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Installation
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Installation
+      </a>
+<nav aria-label="Table of Contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of Contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#script">
+    Script
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#npm">
+    NPM
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#yarn-classic">
+    Yarn (Classic)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#yarn-modern">
+    Yarn (Modern)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#choco">
+    Choco
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#docker">
+    Docker
+  </a>
+<nav aria-label="Docker" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#github-container-registry">
+    GitHub Container Registry
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-the-container">
+    Starting the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#executing-a-command">
+    Executing a Command
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#xopera">
+    xOpera
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unfurl">
+    Unfurl
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stopping-the-container">
+    Stopping the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#watching-the-logs-of-the-container">
+    Watching the Logs of the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#debugging-the-container">
+    Debugging the Container
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#manual">
+    Manual
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#checksum">
+    Checksum
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#signature">
+    Signature
+  </a>
+<nav aria-label="Signature" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#verification">
+    Verification
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#public-key">
+    Public Key
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../versions/">
+        Versions
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../usage/">
+        Usage
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../orchestrators/">
+        Orchestrators
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../interface/">
+        Interface
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../dependencies/">
+        Dependencies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../uninstallation/">
+        Uninstallation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://github.com/opentosca/opentosca-vintner">
+        GitHub
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://discord.gg/Uz6348Ctmg">
+        Discord
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://doi.org/10.5281/zenodo.10155277">
+        Zenodo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://youtube.com/@milesstoetzner">
+        Youtube
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Specifications
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          Specifications
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Variability4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+          Variability4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/motivation/">
+        Motivation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/testing/">
+        Testing
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_1_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+          Conformance Tests
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_4_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_1_4">
+<span class="md-nav__icon md-icon"></span>
+          Conformance Tests
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/introduction/">
+        Introduction
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-count/">
+        Operator "count"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-exponential_regression/">
+        Operator "exponential_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-linear_regression/">
+        Operator "variance"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-logarithmic_regression/">
+        Operator "logarithmic_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-max/">
+        Operator "max"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-mean/">
+        Operator "mean"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-median/">
+        Operator "median"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-min/">
+        Operator "min"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-polynomial_regression/">
+        Operator "polynomial_regression"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-standard_deviation/">
+        Operator "standard_deviation"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-sum/">
+        Operator "sum"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-analytical-operators-variance/">
+        Operator "variance"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-add/">
+        Operator "add"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-div/">
+        Operator "div"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-mod-even/">
+        Operator "mod" (Even)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-mod-odd/">
+        Operator "add" (Odd)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-mul/">
+        Operator "mul"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-arithmetic-operators-sub/">
+        Operator "sub"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-artifact-presence-number-absent/">
+        artifacts-artifact-presence-number-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-artifact-presence-number-present/">
+        artifacts-artifact-presence-number-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-artifact-presence-string-absent/">
+        artifacts-artifact-presence-string-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-artifact-presence-string-present/">
+        artifacts-artifact-presence-string-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-conditional/">
+        artifacts-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-container-presence-absent/">
+        artifacts-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-container-presence-present/">
+        artifacts-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-default-alternative-false/">
+        artifacts-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-default-alternative/">
+        artifacts-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-default-condition/">
+        artifacts-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-dont-throw-ambiguous-artifact/">
+        artifacts-dont-throw-ambiguous-artifact
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-prune/">
+        Artifact Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-throw-ambiguous-artifact/">
+        artifacts-throw-ambiguous-artifact
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-throw-ambiguous-default/">
+        artifacts-throw-ambiguous-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-artifacts-throw-missing-artifact-container/">
+        artifacts-throw-missing-artifact-container
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-and-empty/">
+        Operator "and" Evaluates to "True" (Empty)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-and-false/">
+        Operator "and" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-and-nested-false/">
+        Operator "and" Evaluates to "false" (Nested)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-and-nested-true/">
+        Operator "and" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-and-true/">
+        Operator "and" Evaluates to "true" (Nested)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-implies-false-false-true/">
+        Operator "implies": false false -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-implies-false-true-true/">
+        Operator "implies": false true -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-implies-true-false-false/">
+        Operator "implies": true false -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-implies-true-true-true/">
+        Operator "implies": true true -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-not-false/">
+        Operator "not" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-not-true/">
+        Operator "not" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-or-empty/">
+        Operator "or" Evaluates to "False" (Empty)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-or-false/">
+        Operator "or" Evaluates to "False"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-or-true-all/">
+        Operator "or" Evaluates to "true" (All "true")
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-or-true/">
+        Operator "or" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-xor-false-all/">
+        Operator "xor": all false -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-xor-true-all/">
+        Operator "xor": all true -&gt; false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-boolean-operators-xor-true/">
+        Operator "xor": One ture -&gt; true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-alpha/">
+        circles-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-bravo/">
+        circles-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-charlie/">
+        circles-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-delta/">
+        circles-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-echo/">
+        circles-echo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-golf/">
+        circles-golf
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-hotel/">
+        circles-hotel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-circles-india/">
+        circles-india
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-hosting-relation-missing-constraint/">
+        consistency-throw-hosting-relation-missing-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-hosting-relation-missing/">
+        consistency-throw-hosting-relation-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-multiple-hosting-relations-constraint/">
+        consistency-throw-multiple-hosting-relations-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-multiple-hosting-relations/">
+        consistency-throw-multiple-hosting-relations
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-relation-source-missing/">
+        consistency-throw-relation-source-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-consistency-throw-relation-target-missing/">
+        consistency-throw-relation-target-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-equal-false/">
+        Operator "equal" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-equal-true/">
+        Operator "equal" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-or-equal-equal/">
+        Operator "greater_or_equal" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-or-equal-greater/">
+        Operator "greater_or_equal" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-or-equal-less/">
+        Operator "greater_or_equal" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-than-equal/">
+        Operator "greater" Evaluates to "false" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-than-greater/">
+        Operator "greater" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-greater-than-less/">
+        Operator "greater" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-in_range_false/">
+        Operator "in_range" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-in_range_true/">
+        Operator "in_range" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-length_false/">
+        Operator "length" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-length_true/">
+        Operator "length" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_or_equal_equal/">
+        Operator "less_or_equal" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_or_equal_greater/">
+        Operator "less_or_equal" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_or_equal_less/">
+        Operator "less_or_equal" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_than_equal/">
+        Operator "less" Evaluates to "false" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_than_greater/">
+        Operator "less" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-less_than_less/">
+        Operator "less" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-max_length_equal/">
+        Operator "max_length" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-max_length_greater/">
+        Operator "max_length" Evaluates to "false" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-max_length_less/">
+        Operator "max_length" Evaluates to "true" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-min_length_equal/">
+        Operator "min_length" Evaluates to "true" (Equal)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-min_length_greater/">
+        Operator "min_length" Evaluates to "true" (Greater)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-min_length_less/">
+        Operator "min_length" Evaluates to "false" (Less)
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-valid_values_false/">
+        Operator "valid_values" Evaluates to "false"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-constraint-operators-valid_values_true/">
+        Operator "valid_values" Evaluates to "true"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-after-false/">
+        date-operators-after-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-after-or-same-false/">
+        date-operators-after-or-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-after-or-same-true/">
+        date-operators-after-or-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-after-true/">
+        date-operators-after-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-before-false/">
+        date-operators-before-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-before-or-same-false/">
+        date-operators-before-or-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-before-or-same-true/">
+        date-operators-before-or-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-before-true/">
+        date-operators-before-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-same-false/">
+        date-operators-same-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-same-true/">
+        date-operators-same-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-within-false/">
+        date-operators-within-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-date-operators-within-true/">
+        date-operators-within-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-conditional/">
+        Conditional Group
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-default-condition-nothing/">
+        groups-default-condition-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-default-condition/">
+        groups-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-group-presence-absent/">
+        groups-group-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-group-presence-present/">
+        groups-group-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-groups-prune/">
+        groups-prune
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-constraints-elastic/">
+        hosting-aware-pruning-constraints-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-constraints-static/">
+        hosting-aware-pruning-constraints-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-fig-10-broken/">
+        hosting-aware-pruning-fig-10-broken
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-fig-10-fixed/">
+        hosting-aware-pruning-fig-10-fixed
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-host-elastic/">
+        hosting-aware-pruning-host-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-host-static/">
+        hosting-aware-pruning-host-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-motivation-elastic/">
+        hosting-aware-pruning-motivation-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-motivation-static/">
+        hosting-aware-pruning-motivation-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-provider-elastic/">
+        hosting-aware-pruning-provider-elastic
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-provider-static/">
+        hosting-aware-pruning-provider-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-transitive-ambiguous/">
+        hosting-aware-pruning-transitive-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-transitive-both/">
+        hosting-aware-pruning-transitive-both
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-transitive-preserved/">
+        hosting-aware-pruning-transitive-preserved
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-hosting-aware-pruning-transitive-unexpected/">
+        hosting-aware-pruning-transitive-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-constraints/">
+        implications-constraints
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-implied-left/">
+        implications-implied-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-implied-right/">
+        implications-implied-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-implies-left/">
+        implications-implies-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-implies-right/">
+        implications-implies-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-incoming-left/">
+        implications-incoming-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-incoming-right/">
+        implications-incoming-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-motivating-scenario-cloud/">
+        implications-motivating-scenario-cloud
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-motivating-scenario-static/">
+        implications-motivating-scenario-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-constraints/">
+        implications-naive-constraints
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-implied-left/">
+        implications-naive-implied-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-implied-right/">
+        implications-naive-implied-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-implies-left/">
+        implications-naive-implies-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-implies-right/">
+        implications-naive-implies-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-incoming-left/">
+        implications-naive-incoming-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-incoming-right/">
+        implications-naive-incoming-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-motivating-scenario-cloud/">
+        implications-naive-motivating-scenario-cloud
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-motivating-scenario-static/">
+        implications-naive-motivating-scenario-static
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-naive-another-no-optimization/">
+        implications-naive-naive-another-no-optimization
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-naive-another-not/">
+        implications-naive-naive-another-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-naive-another/">
+        implications-naive-naive-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-naive-not/">
+        implications-naive-naive-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-naive/">
+        implications-naive-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-requires/">
+        implications-naive-requires
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-naive-unexpected/">
+        implications-naive-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-requires/">
+        implications-requires
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implications-unexpected/">
+        implications-unexpected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-default-fixed-left/">
+        implied-default-fixed-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-default-fixed-right/">
+        implied-default-fixed-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-default-manual-left/">
+        implied-default-manual-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-default-manual-right/">
+        implied-default-manual-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-host-broken/">
+        implied-host-broken
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-host-fixed-left/">
+        implied-host-fixed-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-host-fixed-right/">
+        implied-host-fixed-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-host-manual-left/">
+        implied-host-manual-left
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-implied-host-manual-right/">
+        implied-host-manual-right
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-import-conditional/">
+        import-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-import-empty/">
+        import-empty
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-import-get-import-absent/">
+        import-get-import-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-import-get-import-present/">
+        import-get-import-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-conditional-list/">
+        inputs-conditional-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-conditional/">
+        inputs-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-default-alternative/">
+        inputs-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-input-presence-absent/">
+        inputs-input-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-input-presence-present/">
+        inputs-input-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-pruning-consumed-still/">
+        inputs-pruning-consumed-still
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-pruning-consumed/">
+        inputs-pruning-consumed
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-pruning-no-consumer/">
+        inputs-pruning-no-consumer
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-pruning-not-consumed-anymore-v3/">
+        inputs-pruning-not-consumed-anymore-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-inputs-pruning-not-consumed-anymore/">
+        inputs-pruning-not-consumed-anymore
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-conditional-type-default/">
+        nodes-conditional-type-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-conditional-type/">
+        nodes-conditional-type
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-conditional/">
+        nodes-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-false-false/">
+        nodes-default-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-false-true/">
+        nodes-default-false-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-host-absent/">
+        nodes-default-host-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-host-present/">
+        nodes-default-host-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-true-false/">
+        nodes-default-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-default-true-true/">
+        nodes-default-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-absent/">
+        nodes-host-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-false-false/">
+        nodes-host-presence-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-present/">
+        nodes-host-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-true-false/">
+        nodes-host-presence-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-true-true-constraint/">
+        nodes-host-presence-true-true-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-host-presence-true-true/">
+        nodes-host-presence-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-node-presence-absent/">
+        nodes-node-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-node-presence-present/">
+        nodes-node-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-nodes-type-specific/">
+        nodes-type-specific
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-benchmark/">
+        Benchmark
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-concat/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-default-variability-input/">
+        Get Variability Expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-join/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-logic-expression-false/">
+        other-logic-expression-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-logic-expression-true/">
+        other-logic-expression-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-logic-value-expression/">
+        other-logic-value-expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-nothing/">
+        other-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-preset/">
+        other-preset
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-presets/">
+        other-presets
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-throw-CONTAINER/">
+        other-throw-CONTAINER
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-throw-SELF/">
+        other-throw-SELF
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-throw-not-unique/">
+        other-throw-not-unique
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-token/">
+        Operator "concat"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-value-expression/">
+        Get Variability Expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-variability-input/">
+        Get Variability Input
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-version/">
+        other-version
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-other-weight/">
+        other-weight
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-conditional-list/">
+        outputs-conditional-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-conditional/">
+        outputs-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-default/">
+        outputs-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-input-presence-absent/">
+        outputs-input-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-input-presence-present/">
+        outputs-input-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-not-produced-anymore-unfurl-1/">
+        outputs-pruning-not-produced-anymore-unfurl-1
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-not-produced-anymore-unfurl-2/">
+        outputs-pruning-not-produced-anymore-unfurl-2
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-not-produced-anymore-xopera-v3/">
+        outputs-pruning-not-produced-anymore-xopera-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-not-produced-anymore-xopera/">
+        outputs-pruning-not-produced-anymore-xopera
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-produced-unfurl-attribute-not/">
+        outputs-pruning-produced-unfurl-attribute-not
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-produced-unfurl-attribute/">
+        outputs-pruning-produced-unfurl-attribute
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-outputs-pruning-produced-unfurl/">
+        outputs-pruning-produced-unfurl
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-persistent-persistent-false/">
+        persistent-persistent-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-persistent-persistent-throw/">
+        persistent-persistent-throw
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-persistent-persistent-undefined/">
+        persistent-persistent-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-persistent-persistent/">
+        persistent-persistent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-conditional/">
+        policies-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-default-condition-nothing/">
+        policies-default-condition-nothing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-default-condition/">
+        policies-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-absent-members/">
+        Policy Targets Absent Members
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-absent-nodes/">
+        Policy Targets Absent Nodes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-no-targets/">
+        Policy Has No Targets
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-present-member/">
+        Policy Targets Present Member
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-present-node/">
+        Policy Targets One Present Node
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-has-present-target-present-nodes/">
+        Policy Targets Present Nodes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-policy-presence-absent/">
+        policies-policy-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-policy-presence-present/">
+        policies-policy-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-policies-prune/">
+        Policy Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-artifact-container-presence-absent/">
+        properties-artifact-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-artifact-container-presence-present/">
+        properties-artifact-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-conditional/">
+        properties-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-default-alternative-false/">
+        properties-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-default-alternative/">
+        properties-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-default-condition/">
+        properties-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-expression/">
+        properties-expression
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-list-another/">
+        properties-list-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-list/">
+        properties-list
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-map-another/">
+        properties-map-another
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-map/">
+        properties-map
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-container-presence-absent/">
+        properties-node-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-container-presence-present/">
+        properties-node-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-node-presence-CONTAINER-absent/">
+        properties-node-node-presence-CONTAINER-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-node-presence-CONTAINER-present/">
+        properties-node-node-presence-CONTAINER-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-property-presence-number-absent/">
+        properties-node-property-presence-number-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-property-presence-number-present/">
+        properties-node-property-presence-number-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-property-presence-string-absent/">
+        properties-node-property-presence-string-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-node-property-presence-string-present/">
+        properties-node-property-presence-string-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-properties/">
+        properties-properties
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-relation-container-presence-absent/">
+        properties-relation-container-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-relation-container-presence-present/">
+        properties-relation-container-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-throw-ambiguous-property/">
+        properties-throw-ambiguous-property
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-throw-missing-property-container/">
+        properties-throw-missing-property-container
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-properties-throw-multiple-default/">
+        properties-throw-multiple-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-alpha-default-naive/">
+        pruning-alpha-default-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-alpha-default/">
+        pruning-alpha-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-alpha-pruning/">
+        pruning-alpha-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-artifact-default-alpha/">
+        pruning-artifact-default-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-artifact-default-bravo/">
+        pruning-artifact-default-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-artifact-default-charlie/">
+        pruning-artifact-default-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-artifact-default-delta/">
+        pruning-artifact-default-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-artifact-default-naive/">
+        pruning-artifact-default-naive
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-bravo-default/">
+        pruning-bravo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-bravo-pruning/">
+        pruning-bravo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-charlie-default/">
+        pruning-charlie-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-charlie-pruning/">
+        pruning-charlie-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-delta-default/">
+        pruning-delta-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-delta-pruning/">
+        pruning-delta-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-echo-default/">
+        pruning-echo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-echo-pruning/">
+        pruning-echo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-foxtrott-default/">
+        pruning-foxtrott-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-foxtrott-pruning/">
+        pruning-foxtrott-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-hotel-default/">
+        pruning-hotel-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-hotel-pruning/">
+        pruning-hotel-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-alpha/">
+        pruning-incoming-artifact-pruning-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-bravo/">
+        pruning-incoming-artifact-pruning-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-charlie/">
+        pruning-incoming-artifact-pruning-charlie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-delta/">
+        pruning-incoming-artifact-pruning-delta
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-echo/">
+        pruning-incoming-artifact-pruning-echo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-foxtrott/">
+        pruning-incoming-artifact-pruning-foxtrott
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-golf/">
+        pruning-incoming-artifact-pruning-golf
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-hotel/">
+        pruning-incoming-artifact-pruning-hotel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-naive-alpha/">
+        pruning-incoming-artifact-pruning-naive-alpha
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-incoming-artifact-pruning-naive-bravo/">
+        pruning-incoming-artifact-pruning-naive-bravo
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-india-default/">
+        pruning-india-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-india-pruning/">
+        pruning-india-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-juliett-default/">
+        pruning-juliett-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-juliett-pruning/">
+        pruning-juliett-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-kilo-default/">
+        pruning-kilo-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-kilo-pruning/">
+        pruning-kilo-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-lima-default/">
+        pruning-lima-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-lima-pruning/">
+        pruning-lima-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-mike-default/">
+        pruning-mike-default
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-mike-pruning/">
+        pruning-mike-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-outgoing-relation-absent/">
+        pruning-outgoing-relation-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-outgoing-relation-present/">
+        pruning-outgoing-relation-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-outgoing-target-absent/">
+        pruning-outgoing-target-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-outgoing-target-present/">
+        pruning-outgoing-target-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-outgoingnaive-target-present/">
+        pruning-outgoingnaive-target-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-pruning-false-false/">
+        pruning-pruning-false-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-pruning-false-true/">
+        pruning-pruning-false-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-pruning-true-false/">
+        pruning-pruning-true-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-pruning-true-true/">
+        pruning-pruning-true-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-pruning/">
+        pruning-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-pruning-relation/">
+        Relation Pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-relationships-conditional/">
+        relationships-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-relationships-throw-multiple/">
+        relationships-throw-multiple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-relationships-throw-undefined/">
+        relationships-throw-undefined
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-relationships-throw-unused/">
+        relationships-throw-unused
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-relationships-type-specific/">
+        relationships-type-specific
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-conditional/">
+        requirement-assignment-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-default-alternative-false/">
+        requirement-assignment-default-alternative-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-default-alternative/">
+        requirement-assignment-default-alternative
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-default-condition-throw-source/">
+        requirement-assignment-default-condition-throw-source
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-default-condition-throw-target/">
+        requirement-assignment-default-condition-throw-target
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-default-condition/">
+        requirement-assignment-default-condition
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-one-hosting-relation/">
+        requirement-assignment-one-hosting-relation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-relation-presence-index-absent/">
+        requirement-assignment-relation-presence-index-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-relation-presence-name-absent/">
+        requirement-assignment-relation-presence-name-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-source-presence-absent/">
+        requirement-assignment-source-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-source-presence-present/">
+        requirement-assignment-source-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-target-presence-absent/">
+        requirement-assignment-target-presence-absent
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-target-presence-present/">
+        requirement-assignment-target-presence-present
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-requirement-assignment-throw-multiple-defaults/">
+        requirement-assignment-throw-multiple-defaults
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-scenario-complex-alpha/">
+        Scenario "Alpha"
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-scenario-worker-agent-false/">
+        scenario-worker-agent-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-scenario-worker-agent-true/">
+        scenario-worker-agent-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-scenario-worker-worker-false/">
+        scenario-worker-worker-false
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-scenario-worker-worker-true/">
+        scenario-worker-worker-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-ambiguous-disabled/">
+        technologies-ambiguous-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-ambiguous/">
+        technologies-ambiguous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-conditional/">
+        technologies-conditional
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-constraint-disabled/">
+        technologies-constraint-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-constraint/">
+        technologies-constraint
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-default-multiple/">
+        technologies-default-multiple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-default-true/">
+        technologies-default-true
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-expected-disabled/">
+        technologies-expected-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-expected/">
+        technologies-expected
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-lowercase/">
+        technologies-lowercase
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-missing-disabled/">
+        technologies-missing-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-missing/">
+        technologies-missing
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-optimization-double/">
+        technologies-optimization-double
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-optimization-order/">
+        technologies-optimization-order
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-optimization-unsat/">
+        technologies-optimization-unsat
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-optimization-weight/">
+        technologies-optimization-weight
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-optimization/">
+        technologies-optimization
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-pruning-disabled/">
+        technologies-pruning-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-pruning/">
+        technologies-pruning
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-rules-v3/">
+        technologies-rules-v3
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-rules/">
+        technologies-rules
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-throw-required/">
+        technologies-throw-required
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-unique-disabled/">
+        technologies-unique-disabled
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-technologies-unique/">
+        technologies-unique
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-variability-inputs-implies/">
+        variability-inputs-implies
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/tests/test-variability-inputs-no-constraints/">
+        variability-inputs-no-constraints
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/dynamic/">
+        Dynamic Deployment Artifacts
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/feature-ide/">
+        Feature IDE
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/benchmark/">
+        Benchmark
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_1_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_8_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_1_8">
+<span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/guides/artifacts/">
+        Conditional Deployment Artifacts and Conditional Properties
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/guides/pruning/">
+        Pruning Elements
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/guides/modes/">
+        Pruning Modes
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../variability4tosca/guides/aware/">
+        Hosting-Aware Pruning
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Queries4TOSCA
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+          Queries4TOSCA
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/getting-started/">
+        Getting Started
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/specification/">
+        Specification
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_2_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2_3" id="__nav_2_2_3_label" tabindex="0">
+          Conformance Tests
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_2_3_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_2_3">
+<span class="md-nav__icon md-icon"></span>
+          Conformance Tests
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/introduction/">
+        Introduction
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-all/">
+        all
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-array-access/">
+        array-access
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-boolean-and/">
+        boolean-and
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-boolean-or/">
+        boolean-or
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-filter-equals/">
+        filter-equals
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-filter-existence/">
+        filter-existence
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-filter-negation/">
+        filter-negation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-filter-nested/">
+        filter-nested
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-filter-regex/">
+        filter-regex
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-group/">
+        group
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-length-any/">
+        match-length-any
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-length-range/">
+        match-length-range
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-next/">
+        match-next
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-previous/">
+        match-previous
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-rel-filter/">
+        match-rel-filter
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-match-single/">
+        match-single
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-node-template/">
+        node-template
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-policy/">
+        policy
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-resolve-chain/">
+        resolve-chain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-resolve-loop/">
+        resolve-loop
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-resolve-self/">
+        resolve-self
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-resolve-simple/">
+        resolve-simple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-result-structure-complex/">
+        result-structure-complex
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-result-structure-simple/">
+        result-structure-simple
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../queries4tosca/tests/test-shortcut-property/">
+        shortcut-property
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../scsar/">
+        Secure CSAR
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          TOSCA SofDCar Profile
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_4_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_4">
+<span class="md-nav__icon md-icon"></span>
+          TOSCA SofDCar Profile
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sofdcar/profile/">
+        Profile
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_4_2_label" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_2_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sofdcar/guides/zone/">
+        Zonal Architecture
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sofdcar/guides/location/">
+        Distributed Locations
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html">
+        TOSCA Simple Profile
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Contributing
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/setup/">
+        Setup
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/development/">
+        Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/release/">
+        Release
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/documentation/">
+        Documentation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/code-of-conduct/">
+        Code of Conduct
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../contributing/notes/">
+        Notes
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          More Information
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          More Information
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://www.opentosca.org">
+        OpenTOSCA
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../branding/">
+        Branding
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../resources/">
+        Resources
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../about-us/">
+        About Us
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://www.uni-stuttgart.de/impressum">
+        Legal Notice
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../faq/">
+        FAQ
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tags/">
+        Tags
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of Contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of Contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#script">
+    Script
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#npm">
+    NPM
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#yarn-classic">
+    Yarn (Classic)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#yarn-modern">
+    Yarn (Modern)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#choco">
+    Choco
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#docker">
+    Docker
+  </a>
+<nav aria-label="Docker" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#github-container-registry">
+    GitHub Container Registry
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-the-container">
+    Starting the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#executing-a-command">
+    Executing a Command
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#xopera">
+    xOpera
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unfurl">
+    Unfurl
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stopping-the-container">
+    Stopping the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#watching-the-logs-of-the-container">
+    Watching the Logs of the Container
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#debugging-the-container">
+    Debugging the Container
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#manual">
+    Manual
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#checksum">
+    Checksum
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#signature">
+    Signature
+  </a>
+<nav aria-label="Signature" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#verification">
+    Verification
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#public-key">
+    Public Key
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<nav class="md-tags">
+<a class="md-tag" href="../tags/#vintner">Vintner</a>
+<a class="md-tag" href="../tags/#docker">Docker</a>
+</nav>
+<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">¶</a></h1>
+<p>This document holds instructions on installing Vintner.</p>
+<h2 id="script">Script<a class="headerlink" href="#script" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed on Linux x64/ arm64 and Windows x64 using our installation scripts.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Linux x64/ arm64</label><label for="__tabbed_1_2">Windows x64</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>-
+</code></pre></div></td></tr></table></div>
+<p>Install a specific version as follows. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://vintner.opentosca.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span><span class="nv">VERSION</span><span class="o">=</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="w"> </span>bash<span class="w"> </span>-
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></div></td></tr></table></div>
+<p>Install a specific version as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">$env:VERSION</span> <span class="p">=</span> <span class="s2">"DESIRED_VERSION"</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</input></input></div>
+<h2 id="npm">NPM<a class="headerlink" href="#npm" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>npm</code>.
+Ensure, that <code>npm bin -g</code> is in your <code>$PATH</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>npm<span class="w"> </span>install<span class="w"> </span>--global<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="yarn-classic">Yarn (Classic)<a class="headerlink" href="#yarn-classic" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>yarn</code> (classic).
+Ensure, that <code>yarn global bin</code> is in your <code>$PATH</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>yarn<span class="w"> </span>global<span class="w"> </span>add<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="yarn-modern">Yarn (Modern)<a class="headerlink" href="#yarn-modern" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>yarn</code> (modern).
+However, this will not install Vintner permanently but only <a href="https://yarnpkg.com/migration/guide#use-yarn-dlx-instead-of-yarn-global" target="_blank">temporary</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>yarn<span class="w"> </span>dlx<span class="w"> </span>opentosca-vintner
+</code></pre></div></td></tr></table></div>
+<h2 id="choco">Choco<a class="headerlink" href="#choco" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using <code>choco</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>choco<span class="w"> </span>install<span class="w"> </span>opentosca-vintner<span class="w"> </span>-y
+</code></pre></div></td></tr></table></div>
+<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
+<p>Vintner can be installed using Docker. 
+The Image is about 3GB large and contains tools, such as xOpera, Unfurl, Ansible, Terraform, and all of our examples.</p>
+<h3 id="github-container-registry">GitHub Container Registry<a class="headerlink" href="#github-container-registry" title="Permanent link">¶</a></h3>
+<p>Pull the latest image from the <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">GitHub Container Registry</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/opentosca/opentosca-vintner:latest
+</code></pre></div></td></tr></table></div>
+<h3 id="starting-the-container">Starting the Container<a class="headerlink" href="#starting-the-container" title="Permanent link">¶</a></h3>
+<p>First, we create directories for persisting data.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>mkdir<span class="w"> </span>vintner
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>vintner
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>mkdir<span class="w"> </span>data
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>mkdir<span class="w"> </span>shared
+</code></pre></div></td></tr></table></div>
+<p>Next, we start the container.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span>
+<span class="normal"><a href="#__codelineno-10-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span>--detach<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/data:/vintner/data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">  </span>--volume<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/shared:/vintner/shared<span class="w">  </span><span class="se">\</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">  </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">  </span>--name<span class="w"> </span>vintner<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">  </span>ghcr.io/opentosca/opentosca-vintner:latest
+</code></pre></div></td></tr></table></div>
+<p>The command consists of the following aspects.</p>
+<ul>
+<li><code>--detach</code> starts the container in the background.</li>
+<li><code>--volume ${PWD}/data:/vintner/data</code> persists all data written by Vintner.</li>
+<li><code>--volume ${PWD}/shared:/vintner/shared</code> should be used to share data between the host and the container, e.g., CSARs or GCP credentials.</li>
+<li><code>--network host</code> uses the host network, e.g., for ipv6 support.</li>
+<li><code>--name vintner</code> is the container name. </li>
+<li><code>ghcr.io/opentosca/opentosca-vintner:latest</code> pulls the latest Docker Image</li>
+</ul>
+<p>Inside the container, the following directories are of interest.</p>
+<ul>
+<li><code>/vintner/data</code> holds all data written by Vintner.</li>
+<li><code>/vintner/shared</code> should be used to share data between the host and the container, e.g., CSARs or GCP credentials.</li>
+<li><code>/vintner/examples</code> holds the examples directory of the repository.</li>
+</ul>
+<h3 id="executing-a-command">Executing a Command<a class="headerlink" href="#executing-a-command" title="Permanent link">¶</a></h3>
+<p>The container runs in the background. 
+Vintner is executed as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<p>On Linux, we set an alias to directly use Vintner as command in the terminal on the docker host.
+To persist the alias, add the alias, e.g., to <code>~/.bashrc</code> (requires reloading the session).</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">vintner</span><span class="o">=</span><span class="s2">"docker exec -it vintner vintner"</span>
+</code></pre></div></td></tr></table></div>
+<p>Now, Vintner is available as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>vintner<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<h3 id="xopera">xOpera<a class="headerlink" href="#xopera" title="Permanent link">¶</a></h3>
+<p>xOpera is already installed inside the container and Vintner is already correctly configured to connect to xOpera.
+By default, xOpera is already enabled.
+Enable xOpera as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>xopera
+</code></pre></div></td></tr></table></div>
+<h3 id="unfurl">Unfurl<a class="headerlink" href="#unfurl" title="Permanent link">¶</a></h3>
+<p>Unfurl is already installed inside the container and Vintner is already correctly configured to connect to Unfurl.
+Enable Unfurl as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>vintner<span class="w"> </span>orchestrators<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--orchestrator<span class="w"> </span>unfurl
+</code></pre></div></td></tr></table></div>
+<h3 id="stopping-the-container">Stopping the Container<a class="headerlink" href="#stopping-the-container" title="Permanent link">¶</a></h3>
+<p>Ensure to only stop Vintner, once Vintner is idle. 
+Otherwise, data and deployments will be corrupted.
+Stop the container as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>docker<span class="w"> </span>stop<span class="w"> </span>vintner
+</code></pre></div></td></tr></table></div>
+<h3 id="watching-the-logs-of-the-container">Watching the Logs of the Container<a class="headerlink" href="#watching-the-logs-of-the-container" title="Permanent link">¶</a></h3>
+<p>Watch the logs of the container as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>vintner
+</code></pre></div></td></tr></table></div>
+<h3 id="debugging-the-container">Debugging the Container<a class="headerlink" href="#debugging-the-container" title="Permanent link">¶</a></h3>
+<p>In case we need to debug something inside the container or perform any administrative ./tasks, we can exec into the container as follows. 
+This starts a shell inside the container.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>vintner<span class="w"> </span>/bin/bash
+</code></pre></div></td></tr></table></div>
+<h2 id="manual">Manual<a class="headerlink" href="#manual" title="Permanent link">¶</a></h2>
+<p>Install Vintner manually by downloading the binary for your system and adding it to <code>$PATH</code>.
+There are no other dependencies required. 
+The following example shows the installation on selected platforms and architectures.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><input id="__tabbed_2_4" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Linux x64</label><label for="__tabbed_2_2">Linux arm64</label><label for="__tabbed_2_3">Alpine x64</label><label for="__tabbed_2_4">Windows x64</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span>
+<span class="normal"><a href="#__codelineno-19-3">3</a></span>
+<span class="normal"><a href="#__codelineno-19-4">4</a></span>
+<span class="normal"><a href="#__codelineno-19-5">5</a></span>
+<span class="normal"><a href="#__codelineno-19-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-x64.xz
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a>rm<span class="w"> </span>vintner-linux-x64.xz
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a>mv<span class="w"> </span>vintner-linux-x64<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-19-5" name="__codelineno-19-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-19-6" name="__codelineno-19-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
+<span class="normal"><a href="#__codelineno-20-2">2</a></span>
+<span class="normal"><a href="#__codelineno-20-3">3</a></span>
+<span class="normal"><a href="#__codelineno-20-4">4</a></span>
+<span class="normal"><a href="#__codelineno-20-5">5</a></span>
+<span class="normal"><a href="#__codelineno-20-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-linux-arm64.xz
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a>rm<span class="w"> </span>vintner-linux-arm64.xz
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a>mv<span class="w"> </span>vintner-linux-arm64<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-20-6" name="__codelineno-20-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span>
+<span class="normal"><a href="#__codelineno-21-2">2</a></span>
+<span class="normal"><a href="#__codelineno-21-3">3</a></span>
+<span class="normal"><a href="#__codelineno-21-4">4</a></span>
+<span class="normal"><a href="#__codelineno-21-5">5</a></span>
+<span class="normal"><a href="#__codelineno-21-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a>tar<span class="w"> </span>-xf<span class="w"> </span>vintner-alpine-x64.xz
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a>rm<span class="w"> </span>vintner-alpine-x64.xz
+<a id="__codelineno-21-4" name="__codelineno-21-4"></a>mv<span class="w"> </span>vintner-alpine-x64<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-21-5" name="__codelineno-21-5"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/vintner
+<a id="__codelineno-21-6" name="__codelineno-21-6"></a>vintner<span class="w"> </span>setup<span class="w"> </span>init
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<p>First, create the directory <code>$env:USERPROFILE\bin</code> and add it to your PATH.
+We recommend to do this manually.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span>
+<span class="normal"><a href="#__codelineno-22-2">2</a></span>
+<span class="normal"><a href="#__codelineno-22-3">3</a></span>
+<span class="normal"><a href="#__codelineno-22-4">4</a></span>
+<span class="normal"><a href="#__codelineno-22-5">5</a></span>
+<span class="normal"><a href="#__codelineno-22-6">6</a></span>
+<span class="normal"><a href="#__codelineno-22-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-Path</span> <span class="nv">$userBin</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3"></a>    <span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4"></a>    <span class="nv">$userPath</span> <span class="p">=</span> <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5"></a>    <span class="nv">$newPath</span> <span class="p">=</span> <span class="s2">"$userPath$userBin;"</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6"></a>    <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="nv">$newPath</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Next, install vintner.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span>
+<span class="normal"><a href="#__codelineno-23-2">2</a></span>
+<span class="normal"><a href="#__codelineno-23-3">3</a></span>
+<span class="normal"><a href="#__codelineno-23-4">4</a></span>
+<span class="normal"><a href="#__codelineno-23-5">5</a></span>
+<span class="normal"><a href="#__codelineno-23-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-URI</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">opentosca</span><span class="p">/</span><span class="n">opentosca-vintner</span><span class="p">/</span><span class="n">releases</span><span class="p">/</span><span class="n">download</span><span class="p">/</span><span class="n">latest</span><span class="p">/</span><span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span> <span class="n">-OutFile</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="n">tar</span> <span class="n">-xf</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="nb">Remove-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="nb">Move-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span> <span class="nv">$userBin</span><span class="p">\</span><span class="n">vintner</span><span class="p">.</span><span class="n">exe</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="n">vintner</span> <span class="n">setup</span> <span class="n">init</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</input></input></input></input></div>
+<p>The following binaries are available:</p>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Architecture</th>
+<th>Binary</th>
+<th>Archive</th>
+<th>Signature</th>
+<th>Checksum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alpine</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.xz" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.asc" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-alpine-x64.sha256" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>arm64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.xz" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.asc" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-arm64.sha256" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.xz" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>x64</td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.xz" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.asc" target="_blank">link</a></td>
+<td><a href="https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-win-x64.exe.sha256" target="_blank">link</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="checksum">Checksum<a class="headerlink" href="#checksum" title="Permanent link">¶</a></h2>
+<p>To verify the integrity of a binary, proceed as follows.
+The following is a walkthrough for <code>vintner-linux-x64</code>.
+We assume that <code>vintner-linux-x64</code> is present in the current working directory.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
+<span class="normal"><a href="#__codelineno-24-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.sha256
+<a id="__codelineno-24-2" name="__codelineno-24-2"></a>sha256sum<span class="w"> </span>--check<span class="w"> </span>vintner-linux-x64.sha256
+</code></pre></div></td></tr></table></div>
+<h2 id="signature">Signature<a class="headerlink" href="#signature" title="Permanent link">¶</a></h2>
+<p>Every binary is cryptographically signed.</p>
+<h3 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">¶</a></h3>
+<p>To verify a signature of a binary, first import our public key and download the respective signature.
+The following is a walkthrough for <code>vintner-linux-x64</code> using <code>gpg</code>.
+We assume that <code>vintner-linux-x64</code> is present in the current working directory.</p>
+<p>First, we import the public key.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>curl<span class="w"> </span>https://vintner.opentosca.org/vintner-release.gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--import
+</code></pre></div></td></tr></table></div>
+<p>Next, we download the signature.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>wget<span class="w"> </span>https://github.com/opentosca/opentosca-vintner/releases/download/latest/vintner-linux-x64.asc
+</code></pre></div></td></tr></table></div>
+<p>Next, we verify the signature.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>gpg<span class="w"> </span>--verify<span class="w"> </span>vintner-linux-x64.asc
+</code></pre></div></td></tr></table></div>
+<p>The output should be something as follows.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1">1</a></span>
+<span class="normal"><a href="#__codelineno-28-2">2</a></span>
+<span class="normal"><a href="#__codelineno-28-3">3</a></span>
+<span class="normal"><a href="#__codelineno-28-4">4</a></span>
+<span class="normal"><a href="#__codelineno-28-5">5</a></span>
+<span class="normal"><a href="#__codelineno-28-6">6</a></span>
+<span class="normal"><a href="#__codelineno-28-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>gpg: assuming signed data in 'vintner-linux-x64'
+<a id="__codelineno-28-2" name="__codelineno-28-2"></a>gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
+<a id="__codelineno-28-3" name="__codelineno-28-3"></a>gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-28-4" name="__codelineno-28-4"></a>gpg: Good signature from "vintner-release" [unknown]
+<a id="__codelineno-28-5" name="__codelineno-28-5"></a>gpg: WARNING: This key is not certified with a trusted signature!
+<a id="__codelineno-28-6" name="__codelineno-28-6"></a>gpg:          There is no indication that the signature belongs to the owner.
+<a id="__codelineno-28-7" name="__codelineno-28-7"></a>Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
+</code></pre></div></td></tr></table></div>
+<h3 id="public-key">Public Key<a class="headerlink" href="#public-key" title="Permanent link">¶</a></h3>
+<p>The following public key shall be used for verifying signatures. 
+The public key is also available as <a href="https://vintner.opentosca.org/vintner-release.gpg" target="_blank">download</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span>
+<span class="normal"><a href="#__codelineno-29-2">2</a></span>
+<span class="normal"><a href="#__codelineno-29-3">3</a></span>
+<span class="normal"><a href="#__codelineno-29-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>pub<span class="w">   </span>rsa4096/964183A1485881AD<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>SC<span class="o">]</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="w">      </span>4BB862B810B792CC072D59DB964183A1485881AD
+<a id="__codelineno-29-3" name="__codelineno-29-3"></a>uid<span class="w">                 </span><span class="o">[</span>unknown<span class="o">]</span><span class="w"> </span>vintner-release
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a>sub<span class="w">   </span>rsa4096/B230BD6651AA1BB8<span class="w"> </span><span class="m">2022</span>-10-23<span class="w"> </span><span class="o">[</span>E<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-30-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-30-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-30-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-30-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-30-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-30-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-30-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-30-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-30-10">10</a></span>
+<span class="normal"><a href="#__codelineno-30-11">11</a></span>
+<span class="normal"><a href="#__codelineno-30-12">12</a></span>
+<span class="normal"><a href="#__codelineno-30-13">13</a></span>
+<span class="normal"><a href="#__codelineno-30-14">14</a></span>
+<span class="normal"><a href="#__codelineno-30-15">15</a></span>
+<span class="normal"><a href="#__codelineno-30-16">16</a></span>
+<span class="normal"><a href="#__codelineno-30-17">17</a></span>
+<span class="normal"><a href="#__codelineno-30-18">18</a></span>
+<span class="normal"><a href="#__codelineno-30-19">19</a></span>
+<span class="normal"><a href="#__codelineno-30-20">20</a></span>
+<span class="normal"><a href="#__codelineno-30-21">21</a></span>
+<span class="normal"><a href="#__codelineno-30-22">22</a></span>
+<span class="normal"><a href="#__codelineno-30-23">23</a></span>
+<span class="normal"><a href="#__codelineno-30-24">24</a></span>
+<span class="normal"><a href="#__codelineno-30-25">25</a></span>
+<span class="normal"><a href="#__codelineno-30-26">26</a></span>
+<span class="normal"><a href="#__codelineno-30-27">27</a></span>
+<span class="normal"><a href="#__codelineno-30-28">28</a></span>
+<span class="normal"><a href="#__codelineno-30-29">29</a></span>
+<span class="normal"><a href="#__codelineno-30-30">30</a></span>
+<span class="normal"><a href="#__codelineno-30-31">31</a></span>
+<span class="normal"><a href="#__codelineno-30-32">32</a></span>
+<span class="normal"><a href="#__codelineno-30-33">33</a></span>
+<span class="normal"><a href="#__codelineno-30-34">34</a></span>
+<span class="normal"><a href="#__codelineno-30-35">35</a></span>
+<span class="normal"><a href="#__codelineno-30-36">36</a></span>
+<span class="normal"><a href="#__codelineno-30-37">37</a></span>
+<span class="normal"><a href="#__codelineno-30-38">38</a></span>
+<span class="normal"><a href="#__codelineno-30-39">39</a></span>
+<span class="normal"><a href="#__codelineno-30-40">40</a></span>
+<span class="normal"><a href="#__codelineno-30-41">41</a></span>
+<span class="normal"><a href="#__codelineno-30-42">42</a></span>
+<span class="normal"><a href="#__codelineno-30-43">43</a></span>
+<span class="normal"><a href="#__codelineno-30-44">44</a></span>
+<span class="normal"><a href="#__codelineno-30-45">45</a></span>
+<span class="normal"><a href="#__codelineno-30-46">46</a></span>
+<span class="normal"><a href="#__codelineno-30-47">47</a></span>
+<span class="normal"><a href="#__codelineno-30-48">48</a></span>
+<span class="normal"><a href="#__codelineno-30-49">49</a></span>
+<span class="normal"><a href="#__codelineno-30-50">50</a></span>
+<span class="normal"><a href="#__codelineno-30-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a>-----BEGIN PGP PUBLIC KEY BLOCK-----
+<a id="__codelineno-30-2" name="__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3"></a>mQINBGNVcowBEAC0jzKuuLE6AqCaRvjp1mwCC76Px6wG4jgvrXfraCaOf3Y3uywW
+<a id="__codelineno-30-4" name="__codelineno-30-4"></a>lD3NNfqb/rc/FYQXH9lIU9n6zIB47mK0zoeHWWqPjRp6BTTbbMjePinHCb2K1XM5
+<a id="__codelineno-30-5" name="__codelineno-30-5"></a>wLglw0OeC2T/NvfbU7FbN/QVFgQPWL16UhuoQhfraax6TFGO9iF/+yhG7AYZ+vAE
+<a id="__codelineno-30-6" name="__codelineno-30-6"></a>7GkaPQAlzGrbbyffaBYzoqgalHslmxG9RvAxDBaQXrcsqJiv6Zfv8rDNdPlGk7mX
+<a id="__codelineno-30-7" name="__codelineno-30-7"></a>UIbMHUuFzcep15ZQy+9PY/JLyYBUUDNhAXKLomjNPuCQHvZ/DS/XveIW+l6EYSLq
+<a id="__codelineno-30-8" name="__codelineno-30-8"></a>r6B/XCFkVWUO2RugvmpEacUSLrIL39ceUh0dYnpEDU4Z8dRlAyVaswR5j90bPrgz
+<a id="__codelineno-30-9" name="__codelineno-30-9"></a>NSaLF5NQrWlE8gksvK2KYog9Q4lrAdD0wQNV0bnU6YG3TM71wXZim8PokTzxPrA0
+<a id="__codelineno-30-10" name="__codelineno-30-10"></a>JAigEHzN9nbHSzjB71m8cVt6Zl4lGCCYqr8jSjKAUAN01koQVZd/lFljXfI27NcG
+<a id="__codelineno-30-11" name="__codelineno-30-11"></a>y7yYBc97IWaOM039kyPKKVGAB3I3l9d90+RL3tSET2MwPN3Vjlq3ArJ6QBKeB80S
+<a id="__codelineno-30-12" name="__codelineno-30-12"></a>HgRroYVXx+dCJpZhMeeTC8kVjWNL1kctwOMtxWU7N4fO+pi2BW1F5QHlYWJj2fRY
+<a id="__codelineno-30-13" name="__codelineno-30-13"></a>Mp9LE9NYXD1UO/8N1bT2RLGPwrmXXCJF20UDc63wuKzO0IBgXBvPArkUtwARAQAB
+<a id="__codelineno-30-14" name="__codelineno-30-14"></a>tA92aW50bmVyLXJlbGVhc2WJAk4EEwEIADgWIQRLuGK4ELeSzActWduWQYOhSFiB
+<a id="__codelineno-30-15" name="__codelineno-30-15"></a>rQUCY1VyjAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCWQYOhSFiBraf5
+<a id="__codelineno-30-16" name="__codelineno-30-16"></a>D/4mHhD7nwLQ87bE4d6jPB9prwN86eT3bpz1wXoVwFJfArJ7I3wH/0uQe0GXGbJx
+<a id="__codelineno-30-17" name="__codelineno-30-17"></a>G9TUdQHAGgN6/e99x54Dg4n4Qzap4W5baYlE3Klu6BUZOx9RKhSdtGfCk0+kUpxV
+<a id="__codelineno-30-18" name="__codelineno-30-18"></a>lMNLWeXFeHepCp3CwKdH3gkwcWxaBBSsYE2ayk34+CXs3ftttRRUPmCCyxk+XiM9
+<a id="__codelineno-30-19" name="__codelineno-30-19"></a>HSDO/1yIdiwO1XPFVuFZA150wdW2KYL4AuG4aB7lh1nd6jNgoz7LjwdpWN4Sa+38
+<a id="__codelineno-30-20" name="__codelineno-30-20"></a>5AkQVez1n8Ru1ul4GRPbS2T+OZu6aoITe6i3JxDEAL/ljPN07ufiqFnTYKh8yUsl
+<a id="__codelineno-30-21" name="__codelineno-30-21"></a>pPOpoM6ytMgcPlSxDfyhWSKw4aFYEJYT6Teeniup4ElywOJsBHfQ6Tl9Ix9nVti1
+<a id="__codelineno-30-22" name="__codelineno-30-22"></a>9h+xbO7mik802AVYdyXtBrZHNdaUClsJjYpL17mivuZ1JoFNAmLPo1nTr/4IVuiI
+<a id="__codelineno-30-23" name="__codelineno-30-23"></a>A/LoKotLsL9OI+4rhXzsvIyvJBXHhcDp7TOjfEp8S9tLygDLnlC4lsJLzVdDamq2
+<a id="__codelineno-30-24" name="__codelineno-30-24"></a>/iDnucQu3TMRoVLrZwVAtsr5GyazmAZcpBjkh88Rgf4iKWbAesG7yGgJdOJ5Bi81
+<a id="__codelineno-30-25" name="__codelineno-30-25"></a>vmm25Sks+UxaXQzXcTe6ga80o5dqm1KYIkoj+assnA0LwOh1GZt7FZaSoQqXERKm
+<a id="__codelineno-30-26" name="__codelineno-30-26"></a>yEjOAXNt8ZhewyJZGizYhGUslFOQA/8/kKBKcW9hxqTqLbkCDQRjVXKMARAA2MNq
+<a id="__codelineno-30-27" name="__codelineno-30-27"></a>ipSOqaLOzDz4EULTYknshTe34bKw4EDYVbTeHhIJKr1VWkPo8XK9o74+NgiwpI2H
+<a id="__codelineno-30-28" name="__codelineno-30-28"></a>fPlO61BMm0FWRq9RUPQHNWU6qtV2KimQuvTdlwUiiX9uLeJvU6DO25350d7b9RdZ
+<a id="__codelineno-30-29" name="__codelineno-30-29"></a>aXUT1In9Ziya67ThsnXQqPusUyV7OEFI9xLX8EsmrZjw/7S3ACJ0ekehq0tRcPJo
+<a id="__codelineno-30-30" name="__codelineno-30-30"></a>hS5bmN75V9YZVmQViW5nuUfg3iifhsn6xMSBV2oQ+vg0qFwKlTRO1a12ltJuJjCB
+<a id="__codelineno-30-31" name="__codelineno-30-31"></a>FAtB3C8aI/tl//KRnkyuARmrtGtaht0oCbi+J3/1ChnTvbEXlMG65mNw/OXz+KsI
+<a id="__codelineno-30-32" name="__codelineno-30-32"></a>GPn4dOvigMQMTfTcvSX6pT4H3xmadFl4pF+8gmysxZuSMhTrPhLXitu24r9DxRrY
+<a id="__codelineno-30-33" name="__codelineno-30-33"></a>dAibrXOJu7J20+8ZttvRAiEUYAvUyQVtgsc0aAkbUGGBwt4NmdMb0mbN34X0bKPV
+<a id="__codelineno-30-34" name="__codelineno-30-34"></a>XGc/JImn1pZd1h7zzO4nHlJPDtjb5/s4C3g9isnvFHFXmAIfV9q94e0lXmI5xsQY
+<a id="__codelineno-30-35" name="__codelineno-30-35"></a>rGqcQzT8JT8S2SpvX/2ABPWyLBAxveDAKZpKNu6uasG2AeA8GpNqOGJq4S7IkaUx
+<a id="__codelineno-30-36" name="__codelineno-30-36"></a>1xNaQzkJvemKWefslExVAhV1uv2cOxCIq8wTxsozRxs+5WzWxIfT/ob60edKgMkn
+<a id="__codelineno-30-37" name="__codelineno-30-37"></a>z8NfPbCZw5PkHf/e0pbkbGJI8F2VerjubSSNDEMAEQEAAYkCNgQYAQgAIBYhBEu4
+<a id="__codelineno-30-38" name="__codelineno-30-38"></a>YrgQt5LMBy1Z25ZBg6FIWIGtBQJjVXKMAhsMAAoJEJZBg6FIWIGtx80QAIOGvqB5
+<a id="__codelineno-30-39" name="__codelineno-30-39"></a>X+E6VvblU5HHbj8mSZOqWKWgDpnKlehEjEx5UxFgJckmywhYy6UpxjLVGUvIaDLj
+<a id="__codelineno-30-40" name="__codelineno-30-40"></a>XTmekqV32PUzaLEA5Z/n7nnNBXhVkAPReXqOrpMru+G6q5EgEBtAqVBx34J1Wq/f
+<a id="__codelineno-30-41" name="__codelineno-30-41"></a>FBWVq4qoPVQrIuvJRtpQJTl7EDWfFZNDrbWCyNjWCQFOU0RzbpGN8Psr2yQZGBpa
+<a id="__codelineno-30-42" name="__codelineno-30-42"></a>/BkobV3ffJnNvWd2qqP0eOsmOZUrERO3wlbb4Gfi7IvbBaqrwcXw9PwgQ0mWGXoH
+<a id="__codelineno-30-43" name="__codelineno-30-43"></a>IGvcc3XgEoN4j/RCrkz8LufgkmDjjcomfwXMC/g7NWChCxlGAmZPqZnU5hCLLHpL
+<a id="__codelineno-30-44" name="__codelineno-30-44"></a>nIyEZJEhpWXk2VGwgiSl+LhfSk1jWGStVL92bgW/YGu7+rjWA6+2hu9PZ0bneAWb
+<a id="__codelineno-30-45" name="__codelineno-30-45"></a>B/ho86sE5y9eeSUM87aN0E5rWCmzx8ijTKOcukdpk+yJS1L1d/CxAv5twSrA23ne
+<a id="__codelineno-30-46" name="__codelineno-30-46"></a>aTBoNMm9JmUxJU8ILWY9DRBWV1FLsoBy3v3+ztQWz6i3bPZKNVgPdQD2XyXMZQfu
+<a id="__codelineno-30-47" name="__codelineno-30-47"></a>ZWvvd6zqXqPPX38sveW+jMyw4jUORWYkjF1MOP/YtmmuVbdcvJNTrwLlN+KWzSzd
+<a id="__codelineno-30-48" name="__codelineno-30-48"></a>e83fmHrZs0iN43SQBPNtz3hYWnwpQLZCSgLa0UKzaVWLkhHA/QBFOPMQUNwdfaHq
+<a id="__codelineno-30-49" name="__codelineno-30-49"></a>q2BZ9kJ+ruFawgv9hjTz2vYO/EGXwZuqcvHB
+<a id="__codelineno-30-50" name="__codelineno-30-50"></a>=MPBe
+<a id="__codelineno-30-51" name="__codelineno-30-51"></a>-----END PGP PUBLIC KEY BLOCK-----
+</code></pre></div></td></tr></table></div>
+<hr/>
+<div class="md-source-file">
+<small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2024</span>
+</small>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Getting Started" class="md-footer__link md-footer__link--prev" href="../getting-started/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Previous
+              </span>
+<div class="md-ellipsis">
+                Getting Started
+              </div>
+</div>
+</a>
+<a aria-label="Next: Versions" class="md-footer__link md-footer__link--next" href="../versions/" rel="next">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Next
+              </span>
+<div class="md-ellipsis">
+                Versions
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<a href="https://www.uni-stuttgart.de/impressum/" rel="noopener" target="_blank">
+        Copyright © 2022 - 2024 University of Stuttgart (Legal Notice)
+    </a>
+<br/>
+
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank"> Material for MkDocs </a>
+<br/>
+
+    Partially funded by the
+    <a href="https://www.bmwk.de/Navigation/EN/Home/home.html" rel="noopener" target="_blank">
+        German Federal Ministry for Economic Affairs and Climate Action (BMWK)
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs.sticky", "navigation.instant", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.annotate", "toc.follow", "navigation.sections"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+<script src="../assets/javascripts/tablesort.min.js"></script>
+<script src="../assets/javascripts/tablesort-controller.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "width": "100%", "height": "auto", "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom"});})</script></body>
+</html>

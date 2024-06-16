@@ -1,0 +1,10 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "sofdcar.data.GPIO.Pin"
+
+
+"sofdcar.data.Root" <|-- "sofdcar.data.GPIO.Pin"
+
+@enduml
