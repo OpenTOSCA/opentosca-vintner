@@ -5561,7 +5561,6 @@ __metadata:
     typescript: ^5.0.4
     uuid: ^10.0.0
     xml2js: ^0.6.2
-    yarn-upgrade-all: ^0.7.2
   bin:
     vintner: ./build/cli/index.js
   languageName: unknown
@@ -7903,15 +7902,6 @@ __metadata:
     y18n: ^4.0.0
     yargs-parser: ^18.1.2
   checksum: 40b974f508d8aed28598087720e086ecd32a5fd3e945e95ea4457da04ee9bdb8bdd17fd91acff36dc5b7f0595a735929c514c40c402416bbb87c03f6fb782373
-  languageName: node
-  linkType: hard
-
-"yarn-upgrade-all@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "yarn-upgrade-all@npm:0.7.2"
-  bin:
-    yarn-upgrade-all: build/index.js
-  checksum: accf406dda39ea10045237e2072c33d788836998bff68d8a2ebdf7c7e84fd8e7dfd78c0070f9ee2923f09336ed8f9523ac72371e4d7318f7870ea3223b4885cb
   languageName: node
   linkType: hard
 
