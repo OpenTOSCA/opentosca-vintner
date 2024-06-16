@@ -12,7 +12,7 @@ export type SensorWeekdayOptions = SensorBaseOptions & {start?: string}
 const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
 export default async function (options: SensorWeekdayOptions) {
-    let index = day().day()
+    let index: number = day().day()
     if (check.isDefined(options.start)) {
         index = week.findIndex(d => d === options.start)
         if (index === -1) throw new Error(`Did not find day "${options.start}"`)
