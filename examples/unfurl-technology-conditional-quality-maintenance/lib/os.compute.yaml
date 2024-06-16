@@ -122,6 +122,7 @@ node_types:
                                           network: '{{ SELF.network }}'
                                           security_groups: "{{ 'default,' + SELF.machine }}"
                                           auto_ip: false
+                                          timeout: 360
                                       register: server_info
 
                                     - name: Set attributes
@@ -149,6 +150,7 @@ node_types:
                                           state: absent
                                           name: '{{ SELF.machine }}'
                                           delete_fip: true
+                                          timeout: 360
 
                                     - name: Delete security group
                                       openstack.cloud.security_group:
