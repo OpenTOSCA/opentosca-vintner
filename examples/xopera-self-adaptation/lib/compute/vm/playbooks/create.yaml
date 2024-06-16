@@ -36,6 +36,7 @@
             network: '{{ network }}'
             security_groups: "{{ security_groups + ',' + vm_name }}"
             auto_ip: false
+            timeout: 360
         register: server_info
 
       - name: Set attributes

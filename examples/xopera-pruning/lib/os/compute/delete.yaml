@@ -15,6 +15,7 @@
             state: absent
             name: '{{ vm_name }}'
             delete_fip: true
+            timeout: 360
 
       - name: delete security group
         openstack.cloud.security_group:
