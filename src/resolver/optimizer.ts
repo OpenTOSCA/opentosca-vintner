@@ -43,7 +43,6 @@ export default class Optimizer {
 
         return this.results
     }
-
     private optimizeTopology() {
         /**
          * Minimize
