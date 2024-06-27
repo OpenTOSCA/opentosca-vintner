@@ -138,7 +138,7 @@ export class ConstraintEnricher {
         if (this.graph.options.constraints.requiredIncomingRelation) {
             for (const node of this.graph.nodes) {
                 if (utils.isEmpty(node.ingoing)) continue
-                const consequence = {xor: node.ingoing.map(it => it.id)}
+                const consequence = {or: node.ingoing.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }

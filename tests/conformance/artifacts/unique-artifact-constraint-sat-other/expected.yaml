@@ -6,4 +6,4 @@ topology_template:
             type: node
             artifacts:
                 artifact_one:
-                    type: artifact_a
+                    type: artifact_b
