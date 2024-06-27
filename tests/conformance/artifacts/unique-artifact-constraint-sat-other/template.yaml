@@ -1,0 +1,17 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            type_pruning: true
+            unique_artifact_constraint: true
+
+    node_templates:
+        node_one:
+            type: node
+            artifacts:
+                - artifact_one:
+                      type: artifact_a
+                      conditions: false
+                - artifact_one:
+                      type: artifact_b

@@ -68,8 +68,16 @@ export class ConstraintEnricher {
             }
         }
 
-        // TODO: THIS
-        // TODO: Ensure that artifacts are unique within their node (also considering non-present nodes)
+        /**
+         * Ensure that artifacts are unique within their node (also considering non-present nodes)
+         */
+        if (this.graph.options.constraints.uniqueArtifact) {
+            for (const node of this.graph.nodes) {
+                for (const artifacts of node.artifactsMap.values()) {
+                    this.graph.addConstraint({amo: artifacts.map(it => it.id)})
+                }
+            }
+        }
 
         /**
          * Ensure that each artifact container exists
@@ -87,27 +95,34 @@ export class ConstraintEnricher {
                 this.graph.addConstraint({implies: [property.id, property.container.id]})
         }
 
-        // TODO: THIS
-        // TODO: Ensure that each property has maximum one value (also considering non-present nodes)
+        /**
+         * Ensure that each property has maximum one value (also considering non-present nodes)
+         */
+        if (this.graph.options.constraints.uniqueProperty) {
+            for (const node of this.graph.nodes) {
+                for (const properties of node.propertiesMap.values()) {
+                    this.graph.addConstraint({amo: properties.map(it => it.id)})
+                }
+            }
+        }
 
         /**
          * Ensure that each type container exists
          */
         if (this.graph.options.constraints.typeContainer) {
-            for (const type of this.graph.types) this.graph.addConstraint({implies: [type.id, type.container.id]})
+            for (const type of this.graph.types) {
+                this.graph.addConstraint({implies: [type.id, type.container.id]})
+            }
         }
 
         /**
          * Ensure that hosting stack exists
-         * This prevents, e.g., the unexpected removal of the hosting stack.
          */
         if (this.graph.options.constraints.hostingStack) {
             for (const node of this.graph.nodes.filter(it => it.hasHost)) {
                 const hostings = node.outgoing.filter(it => it.isHostedOn())
                 const consequence = hostings.length === 1 ? hostings[0].id : {xor: hostings.map(it => it.id)}
-                this.graph.addConstraint({
-                    implies: [node.id, consequence],
-                })
+                this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }
 
@@ -117,9 +132,27 @@ export class ConstraintEnricher {
 
         // TODO: Ensure that every component that had a hosting relation previously still has one
 
-        // TODO: Ensure that every component that had an incoming relation previously still has one
+        /**
+         * Ensure that every component that had an incoming relation previously still has one
+         */
+        if (this.graph.options.constraints.requiredIncomingRelation) {
+            for (const node of this.graph.nodes) {
+                if (utils.isEmpty(node.ingoing)) continue
+                const consequence = {xor: node.ingoing.map(it => it.id)}
+                this.graph.addConstraint({implies: [node.id, consequence]})
+            }
+        }
 
-        // TODO: Ensure that every component that had a deployment artifact previously still has one
+        /**
+         * Ensure that every component that had a deployment artifact previously still has one
+         */
+        if (this.graph.options.constraints.requiredArtifact) {
+            for (const node of this.graph.nodes) {
+                if (utils.isEmpty(node.artifacts)) continue
+                const consequence = {xor: node.artifacts.map(it => it.id)}
+                this.graph.addConstraint({implies: [node.id, consequence]})
+            }
+        }
 
         /**
          * Ensure that technology exists
@@ -128,19 +161,29 @@ export class ConstraintEnricher {
             for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {
                 const consequence =
                     node.technologies.length === 1 ? node.technologies[0].id : {xor: node.technologies.map(it => it.id)}
-                this.graph.addConstraint({
-                    implies: [node.id, consequence],
-                })
+                this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }
 
-        // TODO: THIS
-        // TODO: Ensure that inputs are unique per name
+        /**
+         * Ensure that inputs are unique per name
+         */
+        if (this.graph.options.constraints.uniqueInput) {
+            for (const inputs of this.graph.inputsMap.values()) {
+                this.graph.addConstraint({amo: inputs.map(it => it.id)})
+            }
+        }
 
         // TODO: Ensure that inputs are consumed
 
-        // TODO: THIS
-        // TODO: Ensure that outputs are unique per name
+        /**
+         * Ensure that outputs are unique per name
+         */
+        if (this.graph.options.constraints.uniqueOutput) {
+            for (const outputs of this.graph.outputsMap.values()) {
+                this.graph.addConstraint({amo: outputs.map(it => it.id)})
+            }
+        }
 
         // TODO: Ensure that outputs are produced
 

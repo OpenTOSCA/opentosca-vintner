@@ -837,6 +837,9 @@ class ConstraintsOptions extends BaseOptions {
     readonly uniqueInput: boolean
     readonly uniqueOutput: boolean
 
+    readonly requiredArtifact: boolean
+    readonly requiredIncomingRelation: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
@@ -879,6 +882,12 @@ class ConstraintsOptions extends BaseOptions {
 
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
             assert.isBoolean(this.uniqueOutput)
+
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            assert.isBoolean(this.requiredArtifact)
+
+            this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
+            assert.isBoolean(this.requiredIncomingRelation)
         } else {
             /**
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
@@ -900,6 +909,13 @@ class ConstraintsOptions extends BaseOptions {
 
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueOutput)
+
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredArtifact)
+
+            this.requiredIncomingRelation =
+                this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredIncomingRelation)
         }
     }
 }

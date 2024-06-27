@@ -1,0 +1,2 @@
+error: Could not solve
+description: Unique artifact constraints is UNSAT since two artifacts with same name of same container are present.

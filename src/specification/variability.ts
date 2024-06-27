@@ -69,24 +69,28 @@ export type ConstraintsOptions = {
     technology_constraint?: boolean
 
     // TODO: doc
-    // TODO: implement
     // TODO: test
     unique_property_constraint?: boolean
 
     // TODO: doc
-    // TODO: implement
     // TODO: test
     unique_artifact_constraint?: boolean
 
     // TODO: doc
-    // TODO: implement
     // TODO: test
     unique_input_constraint?: boolean
 
     // TODO: doc
-    // TODO: implement
     // TODO: test
     unique_output_constraint?: boolean
+
+    // TODO: doc
+    // TODO: test
+    required_artifact_constraint?: boolean
+
+    // TODO: doc
+    // TODO: test
+    required_incoming_relation_constraint?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
