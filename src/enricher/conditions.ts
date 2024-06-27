@@ -48,6 +48,9 @@ export class ConditionEnricher {
         element.conditions = conditions
     }
 
+    /**
+     * Auto-assign variability input as condition based on name
+     */
     private enrichInputCondition(element: Element, conditions: LogicExpression[]) {
         const input = (this.graph.serviceTemplate.topology_template?.variability?.inputs || {})[element.id]
         if (check.isDefined(input)) conditions.push({variability_input: element.id})

@@ -335,13 +335,14 @@ optimization_technologies: max
 optimization_technologies_mode: weight
 technology_constraint: true
 hosting_stack_constraint: true
+unique_property_constraint: true
+unique_artifact_constraint: true
+unique_input_constraint: true
+unique_output_constraint: true
 relation_default_implied: true
 technology_required: true
-semantic_checks: false
-unconsumed_input_check: true
-unproduced_output_check: true
+checks: false
 ```
-
 
 
 ## Default Conditions

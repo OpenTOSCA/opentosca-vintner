@@ -68,6 +68,7 @@ export class ConstraintEnricher {
             }
         }
 
+        // TODO: THIS
         // TODO: Ensure that artifacts are unique within their node (also considering non-present nodes)
 
         /**
@@ -86,6 +87,7 @@ export class ConstraintEnricher {
                 this.graph.addConstraint({implies: [property.id, property.container.id]})
         }
 
+        // TODO: THIS
         // TODO: Ensure that each property has maximum one value (also considering non-present nodes)
 
         /**
@@ -119,8 +121,6 @@ export class ConstraintEnricher {
 
         // TODO: Ensure that every component that had a deployment artifact previously still has one
 
-        // TODO: enable/ disable flag for each constraint in variability.options
-
         /**
          * Ensure that technology exists
          */
@@ -133,5 +133,17 @@ export class ConstraintEnricher {
                 })
             }
         }
+
+        // TODO: THIS
+        // TODO: Ensure that inputs are unique per name
+
+        // TODO: Ensure that inputs are consumed
+
+        // TODO: THIS
+        // TODO: Ensure that outputs are unique per name
+
+        // TODO: Ensure that outputs are produced
+
+        // TODO: Ensure that relations are unique per name
     }
 }

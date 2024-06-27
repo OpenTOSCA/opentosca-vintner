@@ -67,6 +67,26 @@ export type ConstraintsOptions = {
     type_container_constraint?: boolean
     hosting_stack_constraint?: boolean
     technology_constraint?: boolean
+
+    // TODO: doc
+    // TODO: implement
+    // TODO: test
+    unique_property_constraint?: boolean
+
+    // TODO: doc
+    // TODO: implement
+    // TODO: test
+    unique_artifact_constraint?: boolean
+
+    // TODO: doc
+    // TODO: implement
+    // TODO: test
+    unique_input_constraint?: boolean
+
+    // TODO: doc
+    // TODO: implement
+    // TODO: test
+    unique_output_constraint?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
