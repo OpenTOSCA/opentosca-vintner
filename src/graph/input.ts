@@ -1,3 +1,4 @@
+import Property from '#graph/property'
 import {bratify} from '#graph/utils'
 import {InputDefinition} from '#spec/topology-template'
 import {LogicExpression} from '#spec/variability'
@@ -10,7 +11,7 @@ export default class Input extends Element {
     readonly raw: InputDefinition
     readonly index: number
 
-    readonly consumers: Element[] = []
+    readonly consumers: Property[] = []
 
     constructor(data: {name: string; raw: InputDefinition; index: number}) {
         super()

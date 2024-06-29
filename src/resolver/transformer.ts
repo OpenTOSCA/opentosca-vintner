@@ -25,6 +25,10 @@ export default class Transformer {
     }
 
     run() {
+        // Transform inputs
+        // Note, must happen before any transformProperties
+        this.transformInputs()
+
         // Transform nodes, artifacts, and requirement assignment
         this.transformNodes()
 
@@ -36,9 +40,6 @@ export default class Transformer {
 
         // Transform policies
         this.transformPolicies()
-
-        // Transform inputs
-        this.transformInputs()
 
         // Transform outputs
         this.transformOutputs()
@@ -224,6 +225,10 @@ export default class Transformer {
                     const template = input.raw
                     this.clean(template)
                     map[input.name] = template
+
+                    // Replace any index number with name
+                    input.consumers.forEach(consumer => (consumer.value = {get_input: input.name}))
+
                     return map
                 }, {})
 

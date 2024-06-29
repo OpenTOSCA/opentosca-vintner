@@ -564,8 +564,19 @@ class ChecksOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        this.checks = this.raw.checks ?? true
-        assert.isBoolean(this.checks)
+        if (this.v1 || this.v2) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
+             */
+            this.checks = this.raw.checks ?? true
+            assert.isBoolean(this.checks)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_3
+             */
+            this.checks = this.raw.checks ?? false
+            assert.isBoolean(this.checks)
+        }
 
         this.consistency = this.raw.consistency_checks ?? this.checks
         assert.isBoolean(this.consistency)
@@ -597,19 +608,8 @@ class ChecksOptions extends BaseOptions {
         this.ambiguousType = this.raw.ambiguous_type_check ?? this.consistency
         assert.isBoolean(this.ambiguousType)
 
-        if (this.v1 || this.v2) {
-            /**
-             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
-             */
-            this.semantic = this.raw.semantic_checks ?? this.checks
-            assert.isBoolean(this.semantic)
-        } else {
-            /**
-             * Case: tosca_variability_1_0_rc_3
-             */
-            this.semantic = this.raw.semantic_checks ?? false
-            assert.isBoolean(this.semantic)
-        }
+        this.semantic = this.raw.semantic_checks ?? this.checks
+        assert.isBoolean(this.semantic)
 
         this.expectedHosting = this.raw.expected_hosting_check ?? this.semantic
         assert.isBoolean(this.expectedHosting)
@@ -832,6 +832,14 @@ class ConstraintsOptions extends BaseOptions {
     readonly hostingStack: boolean
     readonly technology: boolean
 
+    readonly uniqueProperty: boolean
+    readonly uniqueArtifact: boolean
+    readonly uniqueInput: boolean
+    readonly uniqueOutput: boolean
+
+    readonly requiredArtifact: boolean
+    readonly requiredIncomingRelation: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
@@ -862,6 +870,24 @@ class ConstraintsOptions extends BaseOptions {
 
             this.technology = this.raw.technology_constraint ?? this.constraints
             assert.isBoolean(this.technology)
+
+            this.uniqueProperty = this.raw.unique_property_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueProperty)
+
+            this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueArtifact)
+
+            this.uniqueInput = this.raw.unique_input_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueInput)
+
+            this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueOutput)
+
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            assert.isBoolean(this.requiredArtifact)
+
+            this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
+            assert.isBoolean(this.requiredIncomingRelation)
         } else {
             /**
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
@@ -871,6 +897,25 @@ class ConstraintsOptions extends BaseOptions {
 
             this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.technology)
+
+            this.uniqueProperty = this.raw.unique_property_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueProperty)
+
+            this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueArtifact)
+
+            this.uniqueInput = this.raw.unique_input_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueInput)
+
+            this.uniqueOutput = this.raw.unique_output_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueOutput)
+
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredArtifact)
+
+            this.requiredIncomingRelation =
+                this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredIncomingRelation)
         }
     }
 }

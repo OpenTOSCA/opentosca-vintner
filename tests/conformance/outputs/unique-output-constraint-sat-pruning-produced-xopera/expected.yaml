@@ -1,0 +1,13 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    outputs:
+        input:
+            type: string_a
+            value: {get_property: [container, some_property]}
+
+    node_templates:
+        container:
+            type: container
+            properties:
+                some_property: some_value

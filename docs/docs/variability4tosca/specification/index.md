@@ -278,16 +278,22 @@ _This is an experimental feature._
 
 The following options are used to configure constraints.
 
-| Keyname                       | Mandatory | Type     | Default | Description                                                      |
-|-------------------------------|-----------|----------|---------|------------------------------------------------------------------|
-| constraints                   | false     | Boolean  | false   | Enable all constraints.                                          |
-| relation_source_constraint    | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
-| relation_target_constraint    | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
-| artifact_container_constraint | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
-| property_container_constraint | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
-| type_container_constraint     | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
-| hosting_stack_constraint      | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
-| technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
+| Keyname                               | Mandatory | Type     | Default | Description                                                      |
+|---------------------------------------|-----------|----------|---------|------------------------------------------------------------------|
+| constraints                           | false     | Boolean  | false   | Enable all constraints.                                          |
+| relation_source_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
+| relation_target_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
+| artifact_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
+| property_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
+| type_container_constraint             | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
+| hosting_stack_constraint              | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
+| technology_constraint                 | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
+| unique_property_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
+| unique_artifact_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
+| unique_input_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
+| unique_output_constraint              | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
+| required_artifact_constraint          | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
+| required_incoming_relation_constraint | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
 
 ### Pruning Modes
 
@@ -335,13 +341,16 @@ optimization_technologies: max
 optimization_technologies_mode: weight
 technology_constraint: true
 hosting_stack_constraint: true
+unique_property_constraint: true
+unique_artifact_constraint: true
+unique_input_constraint: true
+unique_output_constraint: true
+required_artifact_constraint: true
+required_incoming_relation_constraint: true
 relation_default_implied: true
 technology_required: true
-semantic_checks: false
-unconsumed_input_check: true
-unproduced_output_check: true
+checks: false
 ```
-
 
 
 ## Default Conditions

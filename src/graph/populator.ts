@@ -486,7 +486,21 @@ export class Populator {
             for (const property of this.graph.properties) {
                 const value = property.value
                 if (check.isObject(value) && !check.isArray(value) && check.isDefined(value.get_input)) {
-                    if (value.get_input === input.name) input.consumers.push(property)
+                    // Referenced by name
+                    if (check.isString(value.get_input)) {
+                        if (value.get_input === input.name) input.consumers.push(property)
+                        continue
+                    }
+
+                    // Referenced by index
+                    if (check.isNumber(value.get_input)) {
+                        if (value.get_input === input.index) input.consumers.push(property)
+                        continue
+                    }
+
+                    throw new Error(
+                        `${property.Display} has neither number nor string in get_input but "${value.get_input}"`
+                    )
                 }
             }
         }

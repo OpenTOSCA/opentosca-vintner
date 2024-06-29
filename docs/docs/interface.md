@@ -1149,6 +1149,7 @@ initializes a new instance
 | template |  true  | string | template name |
 | force |  false  | boolean | force (default: false) |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| machine |  false  | boolean | enable state machine (default: true) |
 
 ## vintner instances inspect
 
