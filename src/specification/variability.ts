@@ -82,7 +82,6 @@ export type ConstraintsOptions = {
     unique_output_constraint?: boolean
 
     // TODO: doc
-    // TODO: test
     required_artifact_constraint?: boolean
 
     // TODO: doc
