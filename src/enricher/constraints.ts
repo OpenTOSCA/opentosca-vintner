@@ -155,7 +155,7 @@ export class ConstraintEnricher {
         }
 
         /**
-         * Ensure that technology exists
+         * Ensure that technology exists (required and single)
          */
         if (this.graph.options.constraints.technology) {
             for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {

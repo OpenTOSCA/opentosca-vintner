@@ -68,23 +68,13 @@ export type ConstraintsOptions = {
     hosting_stack_constraint?: boolean
     technology_constraint?: boolean
 
-    // TODO: doc
     // TODO: test
     unique_property_constraint?: boolean
-
-    // TODO: doc
     unique_artifact_constraint?: boolean
-
-    // TODO: doc
     unique_input_constraint?: boolean
-
-    // TODO: doc
     unique_output_constraint?: boolean
 
-    // TODO: doc
     required_artifact_constraint?: boolean
-
-    // TODO: doc
     required_incoming_relation_constraint?: boolean
 }
 
