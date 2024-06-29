@@ -73,11 +73,9 @@ export type ConstraintsOptions = {
     unique_property_constraint?: boolean
 
     // TODO: doc
-    // TODO: test
     unique_artifact_constraint?: boolean
 
     // TODO: doc
-    // TODO: test
     unique_input_constraint?: boolean
 
     // TODO: doc
