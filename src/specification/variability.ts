@@ -85,7 +85,6 @@ export type ConstraintsOptions = {
     required_artifact_constraint?: boolean
 
     // TODO: doc
-    // TODO: test
     required_incoming_relation_constraint?: boolean
 }
 
