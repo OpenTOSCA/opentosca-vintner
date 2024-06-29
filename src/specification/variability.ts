@@ -79,7 +79,6 @@ export type ConstraintsOptions = {
     unique_input_constraint?: boolean
 
     // TODO: doc
-    // TODO: test
     unique_output_constraint?: boolean
 
     // TODO: doc
