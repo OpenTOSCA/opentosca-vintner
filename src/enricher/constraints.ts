@@ -99,8 +99,14 @@ export class ConstraintEnricher {
          * Ensure that each property has maximum one value (also considering non-present nodes)
          */
         if (this.graph.options.constraints.uniqueProperty) {
-            for (const node of this.graph.nodes) {
-                for (const properties of node.propertiesMap.values()) {
+            for (const element of [
+                ...this.graph.nodes,
+                ...this.graph.relations,
+                ...this.graph.policies,
+                ...this.graph.groups,
+                ...this.graph.artifacts,
+            ]) {
+                for (const properties of element.propertiesMap.values()) {
                     this.graph.addConstraint({amo: properties.map(it => it.id)})
                 }
             }

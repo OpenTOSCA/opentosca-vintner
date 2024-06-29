@@ -187,6 +187,8 @@ export default class Transformer {
             delete this.topology.variability.options.unique_artifact_constraint
             delete this.topology.variability.options.unique_input_constraint
             delete this.topology.variability.options.unique_output_constraint
+            delete this.topology.variability.options.required_artifact_constraint
+            delete this.topology.variability.options.required_incoming_relation_constraint
 
             // Delete check options
             delete this.topology.variability.options.required_technology_check
