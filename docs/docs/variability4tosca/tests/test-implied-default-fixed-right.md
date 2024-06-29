@@ -26,6 +26,7 @@ topology_template:
           - false
     options:
       expected_incoming_relation_check: false
+      required_incoming_relation_constraint: false
   node_templates:
     application:
       type: Application
