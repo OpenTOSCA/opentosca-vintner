@@ -14,7 +14,7 @@ This document holds a list of selected publications.
 ## Hosting-Aware Pruning of Components in Deployment Models
 
 - CLOSER 2024
-- _Accepted_
+- [https://doi.org/10.5220/0012671900003711](https://doi.org/10.5220/0012671900003711){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/aware/index.md){target=_blank}
 - {{ repo_link('examples ', 'Models of the Case Study') }} (Relevant models start with "unfurl-aware")
 - [GitHub Actions](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} (Relevant jobs start with "Unfurl Aware")
@@ -22,12 +22,27 @@ This document holds a list of selected publications.
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10452506){target=_blank}
 - {{ tag_link('publication-stoetzner-2024-hosting-aware-pruning') }}
 
-
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2024_HostingAwarePruning,
+    Title = {{Hosting-Aware Pruning of Components in Deployment Models}},
+    Author = {St{\"o}tzner, Miles and Speth, Sandro and Becker, Steffen},
+    Year = 2024,
+    Month = may,
+    Booktitle = {Proceedings of the 14\textsuperscript{th} International Conference on Cloud Computing and Services Science (CLOSER 2024)},
+    Publisher = {SciTePress},
+    Pages = {149--158},
+    Doi = {10.5220/0012671900003711},
+    url = {https://www.scitepress.org/Link.aspx?doi=10.5220/0012671900003711},
+    projects = {SofDCar,OpenTOSCA}
+}
+```
+{% endraw %}
 
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
 
 - CLOSER 2024
-- _Accepted_
+- [https://doi.org/10.5220/0012568300003711](https://doi.org/10.5220/0012568300003711){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/modes/index.md){target=_blank}
 - {{ repo_link('tests/enricher', 'Models of the Experiments') }}
 - {{ repo_link('examples ', 'Models of the Case Study') }} (Relevant models start with "xopera-pruning")
@@ -35,6 +50,23 @@ This document holds a list of selected publications.
 - [GitHub Actions Raw Logs](assets/documents/night.zip){target=_blank} (Relevant jobs start with "xOpera Pruning Mode")
 - [Assets on Zenodo](https://doi.org/10.5281/zenodo.10363694){target=_blank}
 - {{ tag_link('publication-stoetzner-2024-pruning-modes') }}
+
+{% raw %}
+```bibtex linenums="1"
+@inproceedings{Stoetzner2024_PruningModes,
+    Title = {{Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications}},
+    Author = {St{\"o}tzner, Miles and Speth, Sandro and Becker, Steffen},
+    Year = 2024,
+    Month = may,
+    Booktitle = {Proceedings of the 14\textsuperscript{th} International Conference on Cloud Computing and Services Science (CLOSER 2024)},
+    Publisher = {SciTePress},
+    Pages = {65--76},
+    Doi = {10.5220/0012568300003711},
+    url = {https://www.scitepress.org/Link.aspx?doi=10.5220/0012568300003711},
+    projects = {SofDCar,OpenTOSCA}
+}
+```
+{% endraw %}
 
 
 ## A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators

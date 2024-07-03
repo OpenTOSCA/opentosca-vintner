@@ -25,7 +25,7 @@ Branches should be names as follows.
 ## Squash and Merge
 
 Squash your commits into a single commit with a short but meaningful message.
-The commit message should not have a link to the merge request.
+The commit message should have a link to the merge request.
 The branch is automatically deleted once merged.
 
 ## Tags 
