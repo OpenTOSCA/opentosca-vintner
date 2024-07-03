@@ -339,6 +339,7 @@ optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
 optimization_technologies_mode: weight
+optimization_technologies_unique: false
 technology_constraint: true
 hosting_stack_constraint: true
 unique_property_constraint: true
