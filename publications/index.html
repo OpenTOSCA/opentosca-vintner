@@ -2790,36 +2790,13 @@
 <h2 id="hosting-aware-pruning-of-components-in-deployment-models">Hosting-Aware Pruning of Components in Deployment Models<a class="headerlink" href="#hosting-aware-pruning-of-components-in-deployment-models" title="Permanent link">¶</a></h2>
 <ul>
 <li>CLOSER 2024</li>
-<li><em>Accepted</em></li>
+<li><a href="https://doi.org/10.5220/0012671900003711" target="_blank">https://doi.org/10.5220/0012671900003711</a></li>
 <li><a href="../variability4tosca/guides/aware/" target="_blank">Step-by-Step Guide</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples" target="_blank">Models of the Case Study</a> (Relevant models start with "unfurl-aware")</li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">GitHub Actions</a> (Relevant jobs start with "Unfurl Aware")</li>
 <li><a href="../assets/documents/night.zip" target="_blank">GitHub Actions Raw Logs</a> (Relevant jobs start with "Unfurl Aware")</li>
 <li><a href="https://doi.org/10.5281/zenodo.10452506" target="_blank">Assets on Zenodo</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2024-hosting-aware-pruning" target="_blank">@publication-stoetzner-2024-hosting-aware-pruning</a></li>
-</ul>
-<h2 id="pruning-modes-for-deployment-models-from-manual-modeling-to-automated-removal-of-elements-and-their-implications">Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications<a class="headerlink" href="#pruning-modes-for-deployment-models-from-manual-modeling-to-automated-removal-of-elements-and-their-implications" title="Permanent link">¶</a></h2>
-<ul>
-<li>CLOSER 2024</li>
-<li><em>Accepted</em></li>
-<li><a href="../variability4tosca/guides/modes/" target="_blank">Step-by-Step Guide</a></li>
-<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/enricher" target="_blank">Models of the Experiments</a></li>
-<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples" target="_blank">Models of the Case Study</a> (Relevant models start with "xopera-pruning")</li>
-<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">GitHub Actions</a> (Relevant jobs start with "xOpera Pruning Mode")</li>
-<li><a href="../assets/documents/night.zip" target="_blank">GitHub Actions Raw Logs</a> (Relevant jobs start with "xOpera Pruning Mode")</li>
-<li><a href="https://doi.org/10.5281/zenodo.10363694" target="_blank">Assets on Zenodo</a></li>
-<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2024-pruning-modes" target="_blank">@publication-stoetzner-2024-pruning-modes</a></li>
-</ul>
-<h2 id="a-systematic-technology-review-of-general-purpose-open-source-tosca-orchestrators">A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators<a class="headerlink" href="#a-systematic-technology-review-of-general-purpose-open-source-tosca-orchestrators" title="Permanent link">¶</a></h2>
-<blockquote>
-<p>Stötzner, M., Becker, S., Harzenetter, L., Leymann, F., Weder, B., Breitenbücher, U., Kopp, O., Klein, K., &amp; Soldani, J. (2023, December). A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632130</p>
-</blockquote>
-<ul>
-<li>UCC 2023</li>
-<li><a href="https://doi.org/10.1145/3603166.3632130" target="_blank">https://doi.org/10.1145/3603166.3632130</a></li>
-<li><a href="https://tosss.opentosca.org">https://tosss.opentosca.org</a></li>
-<li><a href="https://github.com/OpenTOSCA/opentosca-tosss">https://github.com/OpenTOSCA/opentosca-tosss</a></li>
-<li><a href="https://doi.org/10.5281/zenodo.7545278" target="_blank">Assets on Zenodo</a></li>
 </ul>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
@@ -2832,28 +2809,99 @@
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_TOSSS</span><span class="p">,</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators}}</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St\"{o}tzner, Miles and Becker, Steffen and Harzenetter, Lukas and Leymann, Frank and Weder, Benjamin and Breitenb\"{u}cher, Uwe and Kopp, Oliver and Klein, Kevin and Soldani, Jacopo}</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">dec</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)}</span><span class="p">,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{ACM}</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{New York, NY, USA}</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--11}</span><span class="p">,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{6}</span><span class="p">,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1145/3603166.3632130}</span><span class="p">,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{9798400702341}</span><span class="p">,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.1145/3603166.3632130}</span><span class="p">,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA,EniQmA}</span><span class="p">,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="na">numpages</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{11}</span><span class="p">,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="na">keywords</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{TOSCA, orchestrator, systematic technology review, classification framework, general-purpose, open-source}</span><span class="p">,</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2024_HostingAwarePruning</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="na">Title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{{Hosting-Aware Pruning of Components in Deployment Models}}</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="na">Author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Speth, Sandro and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="na">Year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">2024</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="na">Month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">may</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 14\textsuperscript{th} International Conference on Cloud Computing and Services Science (CLOSER 2024)}</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SciTePress}</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{149--158}</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="na">Doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.5220/0012671900003711}</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://www.scitepress.org/Link.aspx?doi=10.5220/0012671900003711}</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="na">projects</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="pruning-modes-for-deployment-models-from-manual-modeling-to-automated-removal-of-elements-and-their-implications">Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications<a class="headerlink" href="#pruning-modes-for-deployment-models-from-manual-modeling-to-automated-removal-of-elements-and-their-implications" title="Permanent link">¶</a></h2>
+<ul>
+<li>CLOSER 2024</li>
+<li><a href="https://doi.org/10.5220/0012568300003711" target="_blank">https://doi.org/10.5220/0012568300003711</a></li>
+<li><a href="../variability4tosca/guides/modes/" target="_blank">Step-by-Step Guide</a></li>
+<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/tests/enricher" target="_blank">Models of the Experiments</a></li>
+<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/tree/main/examples" target="_blank">Models of the Case Study</a> (Relevant models start with "xopera-pruning")</li>
+<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml" target="_blank">GitHub Actions</a> (Relevant jobs start with "xOpera Pruning Mode")</li>
+<li><a href="../assets/documents/night.zip" target="_blank">GitHub Actions Raw Logs</a> (Relevant jobs start with "xOpera Pruning Mode")</li>
+<li><a href="https://doi.org/10.5281/zenodo.10363694" target="_blank">Assets on Zenodo</a></li>
+<li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2024-pruning-modes" target="_blank">@publication-stoetzner-2024-pruning-modes</a></li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2024_PruningModes</span><span class="p">,</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="na">Title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{{Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications}}</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="na">Author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Speth, Sandro and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="na">Year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">2024</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="na">Month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">may</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 14\textsuperscript{th} International Conference on Cloud Computing and Services Science (CLOSER 2024)}</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SciTePress}</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{65--76}</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="na">Doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.5220/0012568300003711}</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://www.scitepress.org/Link.aspx?doi=10.5220/0012568300003711}</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="na">projects</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="a-systematic-technology-review-of-general-purpose-open-source-tosca-orchestrators">A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators<a class="headerlink" href="#a-systematic-technology-review-of-general-purpose-open-source-tosca-orchestrators" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>Stötzner, M., Becker, S., Harzenetter, L., Leymann, F., Weder, B., Breitenbücher, U., Kopp, O., Klein, K., &amp; Soldani, J. (2023, December). A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators. Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023), 1–11. doi:10.1145/3603166.3632130</p>
+</blockquote>
+<ul>
+<li>UCC 2023</li>
+<li><a href="https://doi.org/10.1145/3603166.3632130" target="_blank">https://doi.org/10.1145/3603166.3632130</a></li>
+<li><a href="https://tosss.opentosca.org">https://tosss.opentosca.org</a></li>
+<li><a href="https://github.com/OpenTOSCA/opentosca-tosss">https://github.com/OpenTOSCA/opentosca-tosss</a></li>
+<li><a href="https://doi.org/10.5281/zenodo.7545278" target="_blank">Assets on Zenodo</a></li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_TOSSS</span><span class="p">,</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{A Systematic Technology Review of General-Purpose Open-Source TOSCA Orchestrators}}</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St\"{o}tzner, Miles and Becker, Steffen and Harzenetter, Lukas and Leymann, Frank and Weder, Benjamin and Breitenb\"{u}cher, Uwe and Kopp, Oliver and Klein, Kevin and Soldani, Jacopo}</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">dec</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)}</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{ACM}</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{New York, NY, USA}</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--11}</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{6}</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1145/3603166.3632130}</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{9798400702341}</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.1145/3603166.3632130}</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA,EniQmA}</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">    </span><span class="na">numpages</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{11}</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">    </span><span class="na">keywords</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{TOSCA, orchestrator, systematic technology review, classification framework, general-purpose, open-source}</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models">Enhancing Deployment Variability Management by Pruning Elements in Deployment Models<a class="headerlink" href="#enhancing-deployment-variability-management-by-pruning-elements-in-deployment-models" title="Permanent link">¶</a></h2>
 <blockquote>
@@ -2870,39 +2918,39 @@
 <li><a href="https://doi.org/10.5281/zenodo.10050260" target="_blank">Assets on Zenodo</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-pruning" target="_blank">@publication-stoetzner-2023-pruning</a></li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-1-10">10</a></span>
-<span class="normal"><a href="#__codelineno-1-11">11</a></span>
-<span class="normal"><a href="#__codelineno-1-12">12</a></span>
-<span class="normal"><a href="#__codelineno-1-13">13</a></span>
-<span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span>
-<span class="normal"><a href="#__codelineno-1-16">16</a></span>
-<span class="normal"><a href="#__codelineno-1-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_Pruning</span><span class="p">,</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Enhancing Deployment Variability Management by Pruning Elements in Deployment Models}}</span><span class="p">,</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St\"{o}tzner, Miles and Klinaku, Floriment and Pesl, Robin Dominic and Becker, Steffen}</span><span class="p">,</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">dec</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)}</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{ACM}</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{New York, NY, USA}</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--11}</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{18}</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1145/3603166.3632143}</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{9798400702341}</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.1145/3603166.3632143}</span><span class="p">,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span><span class="na">numpages</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{11}</span><span class="p">,</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="na">keywords</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{pruning, deployment models, variability management, TOSCA}</span><span class="p">,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="p">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_Pruning</span><span class="p">,</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Enhancing Deployment Variability Management by Pruning Elements in Deployment Models}}</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St\"{o}tzner, Miles and Klinaku, Floriment and Pesl, Robin Dominic and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">dec</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing (UCC 2023)}</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{ACM}</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{New York, NY, USA}</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--11}</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{18}</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1145/3603166.3632143}</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{9798400702341}</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.1145/3603166.3632143}</span><span class="p">,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">    </span><span class="na">numpages</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{11}</span><span class="p">,</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">    </span><span class="na">keywords</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{pruning, deployment models, variability management, TOSCA}</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability">Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability<a class="headerlink" href="#using-variability4tosca-and-opentosca-vintner-for-holistically-managing-deployment-variability" title="Permanent link">¶</a></h2>
 <blockquote>
@@ -2920,33 +2968,33 @@
 <li><a href="https://doi.org/10.5281/zenodo.10445089" target="_blank">Assets on Zenodo</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2-demo" target="_blank">@publication-stoetzner-2023-vdmm-v2-demo</a></li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span>
-<span class="normal"><a href="#__codelineno-2-12">12</a></span>
-<span class="normal"><a href="#__codelineno-2-13">13</a></span>
-<span class="normal"><a href="#__codelineno-2-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_VDMMv2Demo</span><span class="p">,</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability}}</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen}</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the Demonstration Track at International Conference on Cooperative Information Systems 2023}</span><span class="p">,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{{CEUR-WS.org}}</span><span class="p">,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{36--40}</span><span class="p">,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="na">Series</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{CEUR Workshop Proceedings}</span><span class="p">,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{3552}</span><span class="p">,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://ceur-ws.org/Vol-3552/paper-8.pdf}</span><span class="p">,</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span><span class="na">type</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{Demonstration}</span><span class="p">,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="p">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_VDMMv2Demo</span><span class="p">,</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Using Variability4TOSCA and OpenTOSCA Vintner for Holistically Managing Deployment Variability}}</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the Demonstration Track at International Conference on Cooperative Information Systems 2023}</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{{CEUR-WS.org}}</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{36--40}</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="na">Series</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{CEUR Workshop Proceedings}</span><span class="p">,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{3552}</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://ceur-ws.org/Vol-3552/paper-8.pdf}</span><span class="p">,</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="na">type</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{Demonstration}</span><span class="p">,</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies">Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies<a class="headerlink" href="#managing-the-variability-of-component-implementations-and-their-deployment-configurations-across-heterogeneous-deployment-technologies" title="Permanent link">¶</a></h2>
 <blockquote>
@@ -2963,33 +3011,33 @@
 <li><a href="https://doi.org/10.5281/zenodo.10445089" target="_blank">Assets on Zenodo</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2023-vdmm-v2" target="_blank">@publication-stoetzner-2023-vdmm-v2</a></li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-3-10">10</a></span>
-<span class="normal"><a href="#__codelineno-3-11">11</a></span>
-<span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_VDMMv2</span><span class="p">,</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies}}</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen}</span><span class="p">,</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Cooperative Information Systems}</span><span class="p">,</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Springer Nature Switzerland}</span><span class="p">,</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Cham}</span><span class="p">,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{61--78}</span><span class="p">,</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1007/978-3-031-46846-9_4}</span><span class="p">,</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{978-3-031-46846-9}</span><span class="p">,</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://link.springer.com/chapter/10.1007/978-3-031-46846-9_4}</span><span class="p">,</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="p">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Stoetzner2023_VDMMv2</span><span class="p">,</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Managing the Variability of Component Implementations and Their Deployment Configurations Across Heterogeneous Deployment Technologies}}</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Breitenb{\"u}cher, Uwe and Pesl, Robin D. and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="na">Booktitle</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Cooperative Information Systems}</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Springer Nature Switzerland}</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="na">Address</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Cham}</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{61--78}</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1007/978-3-031-46846-9_4}</span><span class="p">,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">    </span><span class="na">isbn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{978-3-031-46846-9}</span><span class="p">,</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://link.springer.com/chapter/10.1007/978-3-031-46846-9_4}</span><span class="p">,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="developing-the-software-of-future-cars-a-car-devops-approach">Developing the Software of Future Cars: A Car DevOps Approach<a class="headerlink" href="#developing-the-software-of-future-cars-a-car-devops-approach" title="Permanent link">¶</a></h2>
 <blockquote>
@@ -2999,31 +3047,31 @@
 <li>Softwaretechnik-Trends 2024</li>
 <li><a href="https://fb-swt.gi.de/publikationen/softwaretechnik-trends" target="_blank">https://fb-swt.gi.de/publikationen/softwaretechnik-trends</a></li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span>
-<span class="normal"><a href="#__codelineno-4-12">12</a></span>
-<span class="normal"><a href="#__codelineno-4-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nc">@article</span><span class="p">{</span><span class="nl">Weller2023_SofDCar</span><span class="p">,</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Developing the Software of Future Cars: A Car DevOps Approach}}</span><span class="p">,</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{Weller, Marcel and St{\"o}tzner, Miles and Klinaku, Floriment and Becker, Steffen}</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">may</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="na">Journal</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Softwaretechnik-Trends}</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Gesellschaft f{\"u}r Informatik}</span><span class="p">,</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{3--10}</span><span class="p">,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{43}</span><span class="p">,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="na">Number</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{2}</span><span class="p">,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="na">issn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{0720-8928}</span><span class="p">,</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="p">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nc">@article</span><span class="p">{</span><span class="nl">Weller2023_SofDCar</span><span class="p">,</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Developing the Software of Future Cars: A Car DevOps Approach}}</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{Weller, Marcel and St{\"o}tzner, Miles and Klinaku, Floriment and Becker, Steffen}</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2023</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">may</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">    </span><span class="na">Journal</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Softwaretechnik-Trends}</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Gesellschaft f{\"u}r Informatik}</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{3--10}</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{43}</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">    </span><span class="na">Number</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{2}</span><span class="p">,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">    </span><span class="na">issn</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{0720-8928}</span><span class="p">,</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model">Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model<a class="headerlink" href="#modeling-different-deployment-variants-of-a-composite-application-in-a-single-declarative-deployment-model" title="Permanent link">¶</a></h2>
 <blockquote>
@@ -3040,42 +3088,42 @@
 <li><a href="https://doi.org/10.5281/zenodo.10445186" target="_blank">Assets on Zenodo</a></li>
 <li><a href="https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/publication-stoetzner-2022-vdmm" target="_blank">@publication-stoetzner-2022-vdmm</a></li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span>
-<span class="normal"><a href="#__codelineno-5-12">12</a></span>
-<span class="normal"><a href="#__codelineno-5-13">13</a></span>
-<span class="normal"><a href="#__codelineno-5-14">14</a></span>
-<span class="normal"><a href="#__codelineno-5-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nc">@article</span><span class="p">{</span><span class="nl">Stoetzner2022_VDMM</span><span class="p">,</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model}}</span><span class="p">,</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Becker, Steffen and Breitenb{\"u}cher, Uwe and K{\'a}lm{\'a}n, K{\'e}pes and Leymann, Frank}</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2022</span><span class="p">,</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="na">Journal</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Algorithms}</span><span class="p">,</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{MDPI}</span><span class="p">,</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--25}</span><span class="p">,</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{382}</span><span class="p">,</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{15}</span><span class="p">,</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">    </span><span class="na">Number</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{10}</span><span class="p">,</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.3390/a15100382}</span><span class="p">,</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://www.mdpi.com/1999-4893/15/10/382}</span><span class="p">,</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="p">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nc">@article</span><span class="p">{</span><span class="nl">Stoetzner2022_VDMM</span><span class="p">,</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">    </span><span class="na">Title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{{Modeling Different Deployment Variants of a Composite Application in a Single Declarative Deployment Model}}</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="na">Author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{St{\"o}tzner, Miles and Becker, Steffen and Breitenb{\"u}cher, Uwe and K{\'a}lm{\'a}n, K{\'e}pes and Leymann, Frank}</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="na">Year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="m">2022</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="na">Month</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="nv">oct</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="na">Journal</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Algorithms}</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="na">Publisher</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{MDPI}</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="na">Pages</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{1--25}</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">    </span><span class="na">articleno</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{382}</span><span class="p">,</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="na">Volume</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{15}</span><span class="p">,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span><span class="na">Number</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{10}</span><span class="p">,</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">    </span><span class="na">Doi</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{10.3390/a15100382}</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="w">    </span><span class="na">url</span><span class="w">           </span><span class="p">=</span><span class="w"> </span><span class="s">{https://www.mdpi.com/1999-4893/15/10/382}</span><span class="p">,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">    </span><span class="na">projects</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{SofDCar,OpenTOSCA}</span><span class="p">,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 29, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 3, 2024</span>
 </small>
 </div>
 </article>
