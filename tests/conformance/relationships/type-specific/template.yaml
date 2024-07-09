@@ -8,7 +8,7 @@ topology_template:
         type_specific_conditions:
             relationship_types:
                 rone:
-                    conditions: false
+                    conditions: {or: []}
     node_templates:
         source:
             type: source
