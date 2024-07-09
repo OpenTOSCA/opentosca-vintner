@@ -638,7 +638,7 @@ export default class Solver {
          */
         if (check.isDefined(expression.is_produced)) {
             const output = this.graph.getOutput(expression.is_produced, {element, cached})
-            return MiniSat.and(output.producers.map(it => it.id))
+            return MiniSat.or(output.producers.map(it => it.id))
         }
 
         /**
