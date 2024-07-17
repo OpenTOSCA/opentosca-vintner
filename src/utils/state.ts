@@ -16,7 +16,7 @@ export class StateMachine {
 
     do(action: ACTION) {
         const transition = this.transitions.find(it => it.from === this.state && it.via === action)
-        assert.isDefined(transition, `No transition from "${this.state}" via "${action}"`)
+        assert.isDefined(transition, `No transition from current state "${this.state}" via action "${action}"`)
         this.state = transition.to
         return this.state
     }
