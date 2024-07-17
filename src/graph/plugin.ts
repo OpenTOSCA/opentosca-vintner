@@ -45,7 +45,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         if (check.isUndefined(map)) return maps
 
         for (const technology of Object.keys(map)) {
-            const rules = map[technology]
+            const rules = utils.copy(map[technology])
 
             for (const rule of rules) {
                 if (rule.component !== node.getType().name) continue

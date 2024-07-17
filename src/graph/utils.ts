@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import {LogicExpression} from '#spec/variability'
@@ -68,6 +69,7 @@ export function simplify(conditions: LogicExpression) {
 
 // TODO: better already set this when generating them?
 export function generatify(expression: LogicExpression) {
-    if (check.isObject(expression)) expression._generated = true
+    assert.isObject(expression)
+    expression._generated = true
     return expression
 }
