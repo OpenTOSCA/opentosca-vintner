@@ -9,6 +9,9 @@ export type TemplatePullOptions = {
 export default async function (options: TemplatePullOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
 
+    options.link = options.link ?? false
+    assert.isBoolean(options.link)
+
     const config = new Config(options.dir, {link: options.link})
     config.load()
 

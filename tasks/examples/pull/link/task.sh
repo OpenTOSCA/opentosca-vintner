@@ -1,1 +1,1 @@
-./task examples:pull true
+./task examples:pull --link
