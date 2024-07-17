@@ -347,7 +347,6 @@ unique_artifact_constraint: true
 unique_input_constraint: true
 unique_output_constraint: true
 required_artifact_constraint: true
-required_incoming_relation_constraint: true
 relation_default_implied: true
 technology_required: true
 checks: false
