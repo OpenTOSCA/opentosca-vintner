@@ -7,7 +7,7 @@ if [ ! -f "${ENTRYPOINT}" ]; then
 fi
 
 # Symbolic
-LINK=${1:-false}
+LINK_FLAG=${1}
 
 # Pull dependencies of each example
 for EXAMPLE in examples/*/; do
@@ -24,5 +24,5 @@ for EXAMPLE in examples/*/; do
 
   # Pull dependencies
   echo "Pulling ${EXAMPLE}"
-  $VINTNER template pull --dir "$(realpath ${EXAMPLE})" --link ${LINK}
+  $VINTNER template pull --dir "$(realpath ${EXAMPLE})" ${LINK_FLAG}
 done
