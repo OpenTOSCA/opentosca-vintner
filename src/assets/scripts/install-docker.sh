@@ -13,6 +13,7 @@ if which sudo &>/dev/null; then
     SUDO="sudo"
 fi
 
-# Install utils
-${SUDO} apt-get update -y
-${SUDO} apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap apt-utils -y
+# Install docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+${SUDO} sh get-docker.sh
+rm get-docker.sh

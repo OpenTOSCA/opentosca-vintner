@@ -1,4 +1,5 @@
 import _ansible from './ansible'
+import _docker from './docker'
 import _gcloud from './gcloud'
 import _platformio from './platformio'
 import _python from './python'
@@ -16,4 +17,5 @@ export default {
     unfurl: _unfurl,
     utils: _utils,
     xopera: _xopera,
+    docker: _docker,
 }

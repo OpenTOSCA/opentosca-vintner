@@ -7,6 +7,12 @@ if which python &>/dev/null; then
     exit 0
 fi
 
+# Ensure required permissions
+# (we assume that "sudo" is not required if not installed, e.g. in a docker container)
+if which sudo &>/dev/null; then
+    SUDO="sudo"
+fi
+
 # Install Python
-sudo apt-get update -y
-sudo apt-get install python3 python3-pip python3-venv python-is-python3 -y
+${SUDO} apt-get update -y
+${SUDO} apt-get install python3 python3-pip python3-venv python-is-python3 -y

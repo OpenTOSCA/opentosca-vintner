@@ -126,6 +126,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/install/docker',
+    hae.express(async (req, res, next) => {
+        await Controller.install.docker(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
     '/install/gcloud',
     hae.express(async (req, res, next) => {
         await Controller.install.gcloud(req.body)
