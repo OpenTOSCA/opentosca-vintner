@@ -67,3 +67,8 @@ node_types:
                             EOF
                         inputs:
                             keeplines: true
+                            shell: /usr/bin/bash
+                            resultTemplate:
+                                readyState:
+                                    local: "{{ 'ok' if success else 'error' }}"
+                                    state: "{{ 'created' if success else 'error' }}"

@@ -92,6 +92,9 @@ node_types:
                             keeplines: true
                             shell: /usr/bin/bash
                             resultTemplate:
+                                readyState:
+                                    local: "{{ 'ok' if success else 'error' }}"
+                                    state: "{{ 'created' if success else 'error' }}"
                                 attributes:
                                     public_address: '{{ (stdout | from_json).ipAddresses[0].ipAddress }}'
                     delete:
@@ -160,6 +163,10 @@ node_types:
                         inputs:
                             keeplines: true
                             shell: /usr/bin/bash
+                            resultTemplate:
+                                readyState:
+                                    local: "{{ 'ok' if success else 'error' }}"
+                                    state: "{{ 'created' if success else 'error' }}"
 
                     delete:
                         implementation: |
@@ -226,3 +233,7 @@ node_types:
                         inputs:
                             keeplines: true
                             shell: /usr/bin/bash
+                            resultTemplate:
+                                readyState:
+                                    local: "{{ 'ok' if success else 'error' }}"
+                                    state: "{{ 'created' if success else 'error' }}"
