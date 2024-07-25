@@ -10,7 +10,7 @@ fi
 # Ensure that pip is installed
 if ! which pip &>/dev/null; then
     echo "\"pip\" not installed"
-    exit 0
+    exit 1
 fi
 
 # Install OpenStack
