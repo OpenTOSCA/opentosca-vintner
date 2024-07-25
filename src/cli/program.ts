@@ -174,7 +174,16 @@ install
     .description('installs Ansible')
     .action(
         hae.exit(async options => {
-            await Controller.install.utils(options)
+            await Controller.install.ansible(options)
+        })
+    )
+
+install
+    .command('docker')
+    .description('installs Docker')
+    .action(
+        hae.exit(async options => {
+            await Controller.install.docker(options)
         })
     )
 

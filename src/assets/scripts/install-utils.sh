@@ -15,4 +15,4 @@ fi
 
 # Install utils
 ${SUDO} apt-get update -y
-${SUDO} apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap -y
+${SUDO} apt-get install sudo unzip tree nano wget jq net-tools curl git stress nmap apt-utils -y
