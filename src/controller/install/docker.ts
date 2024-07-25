@@ -2,9 +2,9 @@ import * as assert from '#assert'
 import {Shell} from '#shell'
 import std from '#std'
 
-export type InstallAnsibleOptions = {}
+export type InstallDockerOptions = {}
 
-export default async function (options: InstallAnsibleOptions) {
+export default async function (options: InstallDockerOptions) {
     std.log('Installing Docker')
 
     assert.isLinux()

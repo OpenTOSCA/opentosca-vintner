@@ -33,6 +33,8 @@ if [ ! -f ".venv/bin/activate" ]; then
 fi
 
 # Install xOpera
-# openstacksdk 0.61 is required, see https://storyboard.openstack.org/#!/story/2010128
-# pyyaml 5.3.1 is required, see https://github.com/yaml/pyyaml/issues/724#issuecomment-1638587228
+# openstacksdk==0.61 is required, see https://storyboard.openstack.org/#!/story/2010128
+# pyyaml==5.3.1 is required, see https://github.com/yaml/pyyaml/issues/724#issuecomment-1638587228
+# requests==2.31.0 is required, see https://github.com/ansible-collections/community.docker/issues/868
 pip install opera==0.6.9 openstacksdk==0.61 python-openstackclient==6.0.0 pyyaml==5.3.1 ansible==4.10.0 pymysql==1.1.0
+ansible-galaxy collection install community.docker:3.9.0
