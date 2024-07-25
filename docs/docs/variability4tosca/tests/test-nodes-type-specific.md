@@ -18,7 +18,8 @@ topology_template:
     type_specific_conditions:
       node_types:
         one:
-          conditions: false
+          conditions:
+            or: []
   node_templates:
     one:
       type: one

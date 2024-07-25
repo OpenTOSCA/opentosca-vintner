@@ -506,6 +506,41 @@ installs Ansible
     post(SERVER_ADDRESS + "/install/ansible")
     ```
 
+## vintner install docker
+
+installs Docker
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner install docker 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/install/docker
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/install/docker")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/install/docker")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/install/docker")
+    ```
+
 ## vintner install gcloud
 
 installs GCloud
