@@ -7,7 +7,7 @@ export type SensorBaseOptions = {
     vintner: string
     instance: string
     timeInterval: string
-    disableSubmission: string
+    submission: boolean
 }
 
 export function human2cron(value: string) {

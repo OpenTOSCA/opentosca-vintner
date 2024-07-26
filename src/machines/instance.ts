@@ -211,23 +211,34 @@ export class InstanceStateMachine {
      * Execute NOOP Action.
      * In contrast to other actions, a NOOP action does not change the state and also does not have an SUCCESS or ERROR.
      */
-    async noop(noop: `${ACTIONS}`, fn: () => Promise<void> | void, options: {lock?: boolean; machine?: boolean}) {
-        options.lock = options.lock ?? true
-        options.machine = options.machine ?? true
-
+    async noop(noop: `${ACTIONS}`, fn: () => Promise<void> | void, options: {lock: boolean; machine: boolean}) {
         await lock.try(
             this.instance.getLockKey(),
             async () => {
-                if (!options.lock) return
-                const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+                if (options.machine) {
+                    const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
 
-                const from = machine.state
-                const to = machine.do(noop)
+                    const from = machine.state
+                    const to = machine.do(noop)
 
-                if (from !== to)
-                    throw new Error(`Action "${noop}" in state ${from} is not a noop and results in "${to}"`)
+                    if (from !== to)
+                        throw new Error(`Action "${noop}" in state ${from} is not a noop and results in "${to}"`)
+                }
 
                 await fn()
+            },
+            options.lock
+        )
+    }
+
+    /**
+     * Set State
+     */
+    async set(state: string, options: {lock: boolean}) {
+        await lock.try(
+            this.instance.getLockKey(),
+            async () => {
+                this.instance.setState(state)
             },
             options.lock
         )

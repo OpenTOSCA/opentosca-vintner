@@ -22,8 +22,7 @@ export default async function (options: SensorWeekdayOptions) {
         const inputs: InputAssignmentMap = {weekday: week[index]}
         std.log(inputs)
 
-        if (options.disableSubmission) return
-        await submit(options, inputs)
+        if (options.submission) await submit(options, inputs)
     }
 
     await handle()

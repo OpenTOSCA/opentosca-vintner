@@ -113,7 +113,7 @@ class SensorCompute {
         const inputs = prefix(data, this.options.template)
         std.log(inputs)
 
-        if (this.options.disableSubmission) return
+        if (this.options.submission) return
         await submit(this.options, inputs)
     }
 }
