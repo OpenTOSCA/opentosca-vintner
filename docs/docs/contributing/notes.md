@@ -198,7 +198,7 @@ word     = ("a" ... "z" | "A" ... "Z")[word]
 
 All environment variables are prefixed by `OPENTOSCA_VINTNER_`.
 When the following environment variables are read, they are tried to be parsed as JSON.
-If they can not be parsed, they are treated as string.
+If they cannot be parsed, they are treated as string.
 
 - `OPENTOSCA_VINTNER_VARIABILITY_PRESETS`
 - `OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}`

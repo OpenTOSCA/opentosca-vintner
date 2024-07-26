@@ -6,18 +6,17 @@ import death from '#utils/death'
 import hae from '#utils/hae'
 import cron from 'node-cron'
 
-export type SensorFileOptions = SensorBaseOptions & {file: string; disableWatch?: boolean}
+export type SensorFileOptions = SensorBaseOptions & {file: string; watch: boolean}
 
 export default async function (options: SensorFileOptions) {
     async function handle() {
         const inputs = files.loadYAML<InputAssignmentMap>(options.file)
         std.log(inputs)
 
-        if (options.disableSubmission) return
-        await submit(options, inputs)
+        if (options.submission) await submit(options, inputs)
     }
 
-    if (options.disableWatch) return await handle()
+    if (!options.watch) return await handle()
 
     await handle()
     const task = cron.schedule(

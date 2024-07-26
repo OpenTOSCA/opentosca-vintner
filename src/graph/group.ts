@@ -28,7 +28,7 @@ export default class Group extends Element {
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
 
-        // Note, variability groups can not have conditional types
+        // Note, variability groups cannot have conditional types
         assert.isArray(this.raw.type)
         const type = utils.firstKey(this.raw.type[0])
         if (

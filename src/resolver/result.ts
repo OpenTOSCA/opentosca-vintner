@@ -56,7 +56,7 @@ export class Result {
     }
 
     /**
-     * Can not use element.present yet since we are currently selecting the result!
+     * Cannot use element.present yet since we are currently selecting the result!
      */
     isPresent(element: Element) {
         return check.isTrue(this.map[element.id])

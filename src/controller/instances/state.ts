@@ -1,5 +1,4 @@
 import * as assert from '#assert'
-import {ACTIONS, STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 
 export type InstanceStateOptions = {
@@ -7,7 +6,6 @@ export type InstanceStateOptions = {
     state: string
     force?: boolean
     lock?: boolean
-    machine?: boolean
 }
 
 export default async function (options: InstanceStateOptions) {
@@ -20,7 +18,7 @@ export default async function (options: InstanceStateOptions) {
      * Defaults
      */
     options.force = options.force ?? false
-    options.lock = options.lock ?? !options.force
+    options.lock = options.force ? true : options.lock ?? true
 
     /**
      * Instance
@@ -28,14 +26,7 @@ export default async function (options: InstanceStateOptions) {
     const instance = new Instance(options.instance)
 
     /**
-     * Action
-     */
-    async function action() {
-        instance.setState(options.state as `${STATES}`)
-    }
-
-    /**
      * Execution
      */
-    await instance.machine.noop(ACTIONS.STATE, action, {lock: options.lock, machine: options.machine})
+    await instance.machine.set(options.state, {lock: options.lock})
 }

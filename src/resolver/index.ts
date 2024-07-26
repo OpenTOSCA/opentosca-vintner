@@ -86,7 +86,7 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
  *  rc2 sets "incomingnaive-aritfact-host"
  *  this triggers the persistent component check
  *  however, this check is only relevant during enriching
- *  also can not set version to rc1 since we require, e.g., the rc2 optimization defaults
+ *  also cannot set version to rc1 since we require, e.g., the rc2 optimization defaults
  */
 export function hotfixPersistentCheck(template: ServiceTemplate) {
     if (check.isDefined(template.topology_template)) {

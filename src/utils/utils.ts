@@ -44,7 +44,7 @@ export function isEmpty(obj: any) {
     if (check.isUndefined(obj)) return true
     if (check.isArray(obj)) return obj.length === 0
     if (check.isObject(obj)) return Object.keys(obj).length === 0
-    throw new Error(`Can not check if object ${pretty(obj)} is empty`)
+    throw new Error(`Cannot check if object ${pretty(obj)} is empty`)
 }
 
 export function last<T>(array: T[]) {

@@ -649,4 +649,10 @@ resolvers.post(
     })
 )
 
+/**
+ * Sensors
+ *
+ * Cannot be controlled via API
+ */
+
 export default resolvers

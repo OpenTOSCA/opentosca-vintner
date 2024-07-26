@@ -34,6 +34,7 @@ setup
     .command('clean')
     .description('cleans up the filesystem')
     .option('--force [boolean]', 'force clean up')
+    .option('--no-force [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.setup.clean(options)
@@ -44,6 +45,7 @@ setup
     .command('reset')
     .description('resets the filesystem')
     .option('--force [boolean]', 'force clean up')
+    .option('--no-force [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.setup.reset(options)
@@ -337,6 +339,7 @@ template
     .option('--template <string>', 'template name (default: directory name of --path)')
     .option('--vintner <string>', 'vintner binary to execute', 'task cli --')
     .option('--force [boolean]', 'force initialization, e.g., on non-empty directories')
+    .option('--no-force [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.template.init(options)
@@ -476,6 +479,7 @@ template
     .description('pull template dependencies')
     .requiredOption('--dir <string>', 'path to service template directory')
     .option('--link [boolean]', 'create symbolic links instead of copying files', false)
+    .option('--no-link [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.template.pull(options)
@@ -628,8 +632,11 @@ instances
     .requiredOption('--instance <string>', 'instance name (must match /^[a-z\\-]+$/)')
     .requiredOption('--template <string>', 'template name')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.init(options)
@@ -641,8 +648,11 @@ instances
     .description('display instance info')
     .requiredOption('--instance <string>', 'instance name')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             const info = await Controller.instances.info(options)
@@ -690,8 +700,11 @@ instances
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
     )
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.resolve(options)
@@ -704,10 +717,15 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--dry [boolean]', 'dry run')
+    .option('--no-dry [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.validate(options)
@@ -719,8 +737,11 @@ instances
     .description('inspects variability-resolved service template')
     .requiredOption('--instance <string>', 'instance name')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             const template = await Controller.instances.inspect(options)
@@ -734,10 +755,15 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--retry [boolean]', 'retry', true)
+    .option('--no-retry [boolean]')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.deploy(options)
@@ -749,9 +775,13 @@ instances
     .description('returns instance outputs')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.outputs(options)
@@ -763,9 +793,13 @@ instances
     .description('continue instance (deployment)')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.continue(options)
@@ -778,9 +812,13 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.update(options)
@@ -793,8 +831,11 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--template <string>', 'template name')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.swap(options)
@@ -806,9 +847,13 @@ instances
     .description('undeploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--verbose [boolean]', 'verbose')
+    .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.undeploy(options)
@@ -820,8 +865,11 @@ instances
     .description('deletes instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.delete(options)
@@ -843,7 +891,11 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--command <string>', 'command')
     .option('--force [boolean]', 'force', false)
+    .option('--no-force [boolean]')
     .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
+    .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.debug(options)
@@ -856,8 +908,9 @@ instances
     .requiredOption('--instance <string>', 'instance name')
     .requiredOption('--state <string>', 'state')
     .option('--force [boolean]', 'force', false)
-    .option('--lock [boolean]', 'enable locking', true)
-    .option('--machine [boolean]', 'enable state machine', true)
+    .option('--no-force [boolean]')
+    .option('--lock [boolean]', 'enable instance locking', true)
+    .option('--no-lock [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.instances.state(options)
@@ -873,7 +926,7 @@ server
     .command('start')
     .description('starts the server')
     .option('--host [string]', 'host on which to listen', '127.0.0.1')
-    .option('--port [number}', 'port on which to listen', '3000')
+    .option('--port [number]', 'port on which to listen', '3000')
     .action(
         hae.exit(async options => {
             await Controller.server.start(options)
@@ -892,7 +945,8 @@ sensors
     .requiredOption('--template <string>', 'node template name')
     .option('--vintner [string]', 'vintner address to submit sensors data', 'http://127.0.0.1:3000')
     .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
-    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .option('--submission [boolean]', 'send data', true)
+    .option('--no-submission [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.sensors.compute(options)
@@ -906,7 +960,8 @@ sensors
     .requiredOption('--template <string>', 'node template name')
     .option('--vintner [string]', 'vintner address to submit sensors data', 'http://127.0.0.1:3000')
     .option('--time-interval [string]', 'interval to submit data', 'every minute')
-    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .option('--submission [boolean]', 'send data', true)
+    .option('--no-submission [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.sensors.location(options)
@@ -920,7 +975,8 @@ sensors
     .option('--vintner [string]', 'vintner address to submit sensors data', 'http://127.0.0.1:3000')
     .option('--time-interval [string]', 'interval to submit data', 'every day')
     .option('--start [string]', 'set day to start from')
-    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .option('--submission [boolean]', 'send data', true)
+    .option('--no-submission [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.sensors.weekday(options)
@@ -934,8 +990,10 @@ sensors
     .requiredOption('--file <string>', 'path to file')
     .option('--vintner [string]', 'vintner address to submit sensors data', 'http://127.0.0.1:3000')
     .option('--time-interval [string]', 'interval to submit data', 'every 10 seconds')
-    .option('--disable-watch [boolean]', 'do not watch file but send data once', false)
-    .option('--disable-submission [boolean]', 'disable submission of data', false)
+    .option('--watch [boolean]', 'watch file and send changes', true)
+    .option('--no-watch [boolean]')
+    .option('--submission [boolean]', 'send data', true)
+    .option('--no-submission [boolean]')
     .action(
         hae.exit(async options => {
             await Controller.sensors.file(options)
