@@ -1,0 +1,186 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_service:
+            type: frontend.service
+            requirements:
+                - checkout: checkout_service
+                - currency: currency_service
+                - shipping: shipping_service
+                - cart: cart_service
+                - product: product_service
+                - recommendation: recommendation_service
+                - advertisement: advertisement_service
+
+                - host: go_runtime
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_service:
+            type: checkout.service
+            requirements:
+                - email: email_service
+                - payment: payment_service
+                - currency: currency_service
+                - shipping: shipping_service
+                - cart: cart_service
+                - product: product_service
+
+                - host: go_runtime
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_service:
+            type: email.service
+            requirements:
+                - host: python_runtime
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_service:
+            type: payment.service
+            requirements:
+                - host: node_runtime
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_service:
+            type: currency.service
+            requirements:
+                - host: node_runtime
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_service:
+            type: shipping.service
+            requirements:
+                - host: go_runtime
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_service:
+            type: cart.service
+            requirements:
+                - database: postgresql_database
+
+                - host: csharp_runtime
+
+        postgresql_database:
+            type: postgresql.database
+            requirements:
+                - host: postgresql_dbms
+
+        postgresql_dbms:
+            type: postgresql.dbms
+            requirements:
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_service:
+            type: product.service
+            requirements:
+                - host: go_runtime
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_service:
+            type: recommendation.service
+            requirements:
+                - product: product_service
+
+                - host: python_runtime
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_service:
+            type: advertisement.service
+            requirements:
+                - host: java_runtime
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        go_runtime:
+            type: go.runtime
+            requirements:
+                - host: virtual_machine
+
+        csharp_runtime:
+            type: csharp.runtime
+            requirements:
+                - host: virtual_machine
+
+        node_runtime:
+            type: node.runtime
+            requirements:
+                - host: virtual_machine
+
+        python_runtime:
+            type: python.runtime
+            requirements:
+                - host: virtual_machine
+
+        java_runtime:
+            type: java.runtime
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: virtual.machine
+            properties:
+                flavor: m1.large
+            requirements:
+                - host: openstack
+
+        openstack:
+            type: openstack.provider

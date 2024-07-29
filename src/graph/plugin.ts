@@ -100,6 +100,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             const hostingCopy = utils.copy(hosting)
 
             // Recursive search
+            console.log('rabbit', {host, hostingCopy, historyCopy, output})
             this.search(host, hostingCopy, historyCopy, output)
         }
     }

@@ -1,0 +1,553 @@
+ansible:
+    # Frontend
+    - component: frontend.service
+      hosting: go.runtime
+      weight: 1
+
+    - component: frontend.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: frontend.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: frontend.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Checkout
+    - component: checkout.service
+      hosting: go.runtime
+      weight: 1
+
+    - component: checkout.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: checkout.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: checkout.service
+      hosting: gco.provider
+      weight: 1
+
+    # Email
+    - component: email.service
+      hosting: python.runtime
+      weight: 1
+
+    - component: email.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: email.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: email.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Payment
+    - component: payment.service
+      hosting: node.runtime
+      weight: 1
+
+    - component: payment.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: payment.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: payment.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Currency
+    - component: currency.service
+      hosting: node.runtime
+      weight: 1
+
+    - component: currency.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: currency.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: currency.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Shipping
+    - component: shipping.service
+      hosting: go.runtime
+      weight: 1
+
+    - component: shipping.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: shipping.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: shipping.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Cart
+    - component: cart.service
+      hosting: csharp.runtime
+      weight: 1
+
+    - component: cart.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: cart.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: cart.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Product
+    - component: product.service
+      hosting: go.runtime
+      weight: 1
+
+    - component: product.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: product.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: product.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Recommendation
+    - component: recommendation.service
+      hosting: python.runtime
+      weight: 1
+
+    - component: recommendation.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: recommendation.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: recommendation.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Advertisement
+    - component: advertisement.service
+      hosting: java.runtime
+      weight: 1
+
+    - component: advertisement.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: advertisement.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: advertisement.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Database
+    # TODO: this is stupid if DBMS is hosted on k8s
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - virtual.machine
+      weight: 1
+
+    # TODO: in reality, the docker container usually has one default database ... and one usually does not create a second one since every microservice simply gets its own DBMS ... (same applies when hosted in k8s)
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - docker.engine
+      weight: 1
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 1
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - gcp.provider
+      weight: 1
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: virtual.machine
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: docker.engine
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: gcp.provider
+      weight: 1
+
+    # Go
+    - component: go.runtime
+      hosting: virtual.machine
+      weight: 1
+
+    # CSharp
+    - component: csharp.runtime
+      hosting: virtual.machine
+      weight: 1
+
+    # Node
+    - component: node.runtime
+      hosting: virtual.machine
+      weight: 1
+
+    # Python
+    - component: python.runtime
+      hosting: virtual.machine
+      weight: 1
+
+    # Java
+    - component: java.runtime
+      hosting: virtual.machine
+      weight: 1
+
+    # Virtual Machine
+    # TODO: weight ...
+    - component: virtual.machine
+      weight: 0.5
+
+terraform:
+    # Frontend
+    - component: frontend.service
+      hosting: go.runtime
+      weight: 0
+
+    - component: frontend.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: frontend.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: frontend.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Checkout
+    - component: checkout.service
+      hosting: go.runtime
+      weight: 0
+
+    - component: checkout.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: checkout.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: checkout.service
+      hosting: gco.provider
+      weight: 1
+
+    # Email
+    - component: email.service
+      hosting: python.runtime
+      weight: 0
+
+    - component: email.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: email.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: email.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Payment
+    - component: payment.service
+      hosting: node.runtime
+      weight: 0
+
+    - component: payment.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: payment.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: payment.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Currency
+    - component: currency.service
+      hosting: node.runtime
+      weight: 0
+
+    - component: currency.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: currency.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: currency.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Shipping
+    - component: shipping.service
+      hosting: go.runtime
+      weight: 0
+
+    - component: shipping.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: shipping.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: shipping.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Cart
+    - component: cart.service
+      hosting: csharp.runtime
+      weight: 0
+
+    - component: cart.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: cart.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: cart.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Product
+    - component: product.service
+      hosting: go.runtime
+      weight: 0
+
+    - component: product.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: product.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: product.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Recommendation
+    - component: recommendation.service
+      hosting: python.runtime
+      weight: 0
+
+    - component: recommendation.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: recommendation.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: recommendation.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Advertisement
+    - component: advertisement.service
+      hosting: java.runtime
+      weight: 0
+
+    - component: advertisement.service
+      hosting: docker.engine
+      weight: 1
+
+    - component: advertisement.service
+      hosting: kubernetes
+      weight: 1
+
+    - component: advertisement.service
+      hosting: gcp.provider
+      weight: 1
+
+    # Database
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - virtual.machine
+      weight: 0.5
+
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - docker.engine
+      weight: 0.5
+
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 0.5
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - gcp.provider
+      weight: 1
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: virtual.machine
+      weight: 0
+
+    - component: postgresql.dbms
+      hosting: docker.engine
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: gcp.provider
+      weight: 1
+
+    # Go
+    - component: go.runtime
+      hosting: virtual.machine
+      weight: 0
+
+    # CSharp
+    - component: csharp.runtime
+      hosting: virtual.machine
+      weight: 0
+
+    # Node
+    - component: node.runtime
+      hosting: virtual.machine
+      weight: 0
+
+    # Python
+    - component: python.runtime
+      hosting: virtual.machine
+      weight: 0
+
+    # Java
+    - component: java.runtime
+      hosting: virtual.machine
+      weight: 0
+
+    # Virtual Machine
+    - component: virtual.machine
+      weight: 1
+
+kubernetes:
+    # Frontend
+    - component: frontend.service
+      hosting: kubernetes
+      weight: 1
+
+    # Checkout
+    - component: checkout.service
+      hosting: kubernetes
+      weight: 1
+
+    # Email
+    - component: email.service
+      hosting: kubernetes
+      weight: 1
+
+    # Payment
+    - component: payment.service
+      hosting: kubernetes
+      weight: 1
+
+    # Currency
+    - component: currency.service
+      hosting: kubernetes
+      weight: 1
+
+    # Shipping
+    - component: shipping.service
+      hosting: kubernetes
+      weight: 1
+
+    # Cart
+    - component: cart.service
+      hosting: kubernetes
+      weight: 1
+
+    # Product
+    - component: product.service
+      hosting: kubernetes
+      weight: 1
+
+    # Recommendation
+    - component: recommendation.service
+      hosting: kubernetes
+      weight: 1
+
+    # Advertisement
+    - component: advertisement.service
+      hosting: kubernetes
+      weight: 1
+
+    # Database
+    # TODO: use kubernetes job
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 0
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 1

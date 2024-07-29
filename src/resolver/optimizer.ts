@@ -126,12 +126,6 @@ export default class Optimizer {
         return result
     }
 
-    private last() {
-        const result = this.results[this.results.length - 1]
-        assert.isDefined(result)
-        return result
-    }
-
     private compare<T>(order: 'asc' | 'desc', value: (element: T) => number) {
         return (a: T, b: T) => {
             if (order === 'asc') return value(a) - value(b)
