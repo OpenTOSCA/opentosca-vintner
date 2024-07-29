@@ -123,8 +123,11 @@ export default class Solver {
         const results: Result[] = []
 
         let result: MiniSat.Solution | null
+        let count = 0
         while ((result = this.minisat.solve())) {
             results.push(new Result(this.graph, result))
+            count++
+            console.log(count)
             this.minisat.forbid(result.getFormula())
         }
 

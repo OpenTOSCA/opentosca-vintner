@@ -12,7 +12,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service
+            type: frontend.service.ansible.docker
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -31,7 +31,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service
+            type: checkout.service.ansible.docker
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -49,7 +49,7 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service
+            type: email.service.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -60,7 +60,7 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service
+            type: payment.service.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -71,7 +71,7 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service
+            type: currency.service.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -82,7 +82,7 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service
+            type: shipping.service.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -93,19 +93,19 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service
+            type: cart.service.ansible.docker
             requirements:
                 - database: postgresql_database
 
                 - host: docker_runtime
 
         postgresql_database:
-            type: postgresql.database
+            type: postgresql.database.ansible.postgresql
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms
+            type: postgresql.dbms.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -116,7 +116,7 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service
+            type: product.service.ansible.docker
             requirements:
                 - host: docker_runtime
 
@@ -127,7 +127,7 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service
+            type: recommendation.service.ansible.docker
             requirements:
                 - product: product_service
 
@@ -140,7 +140,7 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service
+            type: advertisement.service.ansible.docker
             requirements:
                 - host: docker_runtime
 

@@ -131,6 +131,120 @@ topology_template:
           - node.virtual_machine
           - relation.host@0.node.virtual_machine
       - implies:
+          - node.frontend_service
+          - xor:
+              - technology.ansible@0.node.frontend_service
+              - technology.terraform@1.node.frontend_service
+              - technology.terraform@2.node.frontend_service
+              - technology.kubernetes@3.node.frontend_service
+      - implies:
+          - node.checkout_service
+          - xor:
+              - technology.ansible@0.node.checkout_service
+              - technology.terraform@1.node.checkout_service
+              - technology.terraform@2.node.checkout_service
+              - technology.kubernetes@3.node.checkout_service
+      - implies:
+          - node.email_service
+          - xor:
+              - technology.ansible@0.node.email_service
+              - technology.terraform@1.node.email_service
+              - technology.terraform@2.node.email_service
+              - technology.kubernetes@3.node.email_service
+      - implies:
+          - node.payment_service
+          - xor:
+              - technology.ansible@0.node.payment_service
+              - technology.terraform@1.node.payment_service
+              - technology.terraform@2.node.payment_service
+              - technology.kubernetes@3.node.payment_service
+      - implies:
+          - node.currency_service
+          - xor:
+              - technology.ansible@0.node.currency_service
+              - technology.terraform@1.node.currency_service
+              - technology.terraform@2.node.currency_service
+              - technology.kubernetes@3.node.currency_service
+      - implies:
+          - node.shipping_service
+          - xor:
+              - technology.ansible@0.node.shipping_service
+              - technology.terraform@1.node.shipping_service
+              - technology.terraform@2.node.shipping_service
+              - technology.kubernetes@3.node.shipping_service
+      - implies:
+          - node.cart_service
+          - xor:
+              - technology.ansible@0.node.cart_service
+              - technology.terraform@1.node.cart_service
+              - technology.terraform@2.node.cart_service
+              - technology.kubernetes@3.node.cart_service
+      - implies:
+          - node.postgresql_database
+          - xor:
+              - technology.ansible@0.node.postgresql_database
+              - technology.terraform@1.node.postgresql_database
+              - technology.terraform@2.node.postgresql_database
+              - technology.kubernetes@3.node.postgresql_database
+      - implies:
+          - node.postgresql_dbms
+          - xor:
+              - technology.ansible@0.node.postgresql_dbms
+              - technology.terraform@1.node.postgresql_dbms
+              - technology.terraform@2.node.postgresql_dbms
+              - technology.kubernetes@3.node.postgresql_dbms
+      - implies:
+          - node.product_service
+          - xor:
+              - technology.ansible@0.node.product_service
+              - technology.terraform@1.node.product_service
+              - technology.terraform@2.node.product_service
+              - technology.kubernetes@3.node.product_service
+      - implies:
+          - node.recommendation_service
+          - xor:
+              - technology.ansible@0.node.recommendation_service
+              - technology.terraform@1.node.recommendation_service
+              - technology.terraform@2.node.recommendation_service
+              - technology.kubernetes@3.node.recommendation_service
+      - implies:
+          - node.advertisement_service
+          - xor:
+              - technology.ansible@0.node.advertisement_service
+              - technology.terraform@1.node.advertisement_service
+              - technology.terraform@2.node.advertisement_service
+              - technology.kubernetes@3.node.advertisement_service
+      - implies:
+          - node.go_runtime
+          - xor:
+              - technology.ansible@0.node.go_runtime
+              - technology.terraform@1.node.go_runtime
+      - implies:
+          - node.csharp_runtime
+          - xor:
+              - technology.ansible@0.node.csharp_runtime
+              - technology.terraform@1.node.csharp_runtime
+      - implies:
+          - node.node_runtime
+          - xor:
+              - technology.ansible@0.node.node_runtime
+              - technology.terraform@1.node.node_runtime
+      - implies:
+          - node.python_runtime
+          - xor:
+              - technology.ansible@0.node.python_runtime
+              - technology.terraform@1.node.python_runtime
+      - implies:
+          - node.java_runtime
+          - xor:
+              - technology.ansible@0.node.java_runtime
+              - technology.terraform@1.node.java_runtime
+      - implies:
+          - node.virtual_machine
+          - xor:
+              - technology.ansible@0.node.virtual_machine
+              - technology.terraform@1.node.virtual_machine
+      - implies:
           - and:
               - node.frontend_service
               - manual.relation.checkout@0.node.frontend_service
@@ -312,7 +426,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: frontend_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - frontend_service
+                              - 1
+                          - technology_presence:
+                              - frontend_service
+                              - 2
+                          - technology_presence:
+                              - frontend_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: frontend_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - frontend_service
+                              - 0
+                          - technology_presence:
+                              - frontend_service
+                              - 2
+                          - technology_presence:
+                              - frontend_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: frontend_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - frontend_service
+                              - 0
+                          - technology_presence:
+                              - frontend_service
+                              - 1
+                          - technology_presence:
+                              - frontend_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: frontend_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - frontend_service
+                              - 0
+                          - technology_presence:
+                              - frontend_service
+                              - 1
+                          - technology_presence:
+                              - frontend_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions: []
     - checkout_service:
         type:
@@ -411,7 +627,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: checkout_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - checkout_service
+                              - 1
+                          - technology_presence:
+                              - checkout_service
+                              - 2
+                          - technology_presence:
+                              - checkout_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: checkout_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - checkout_service
+                              - 0
+                          - technology_presence:
+                              - checkout_service
+                              - 2
+                          - technology_presence:
+                              - checkout_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: checkout_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - checkout_service
+                              - 0
+                          - technology_presence:
+                              - checkout_service
+                              - 1
+                          - technology_presence:
+                              - checkout_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: checkout_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - checkout_service
+                              - 0
+                          - technology_presence:
+                              - checkout_service
+                              - 1
+                          - technology_presence:
+                              - checkout_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: checkout_service
@@ -460,7 +778,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: email_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - email_service
+                              - 1
+                          - technology_presence:
+                              - email_service
+                              - 2
+                          - technology_presence:
+                              - email_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: python_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: email_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - email_service
+                              - 0
+                          - technology_presence:
+                              - email_service
+                              - 2
+                          - technology_presence:
+                              - email_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: python_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: email_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - email_service
+                              - 0
+                          - technology_presence:
+                              - email_service
+                              - 1
+                          - technology_presence:
+                              - email_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: email_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - email_service
+                              - 0
+                          - technology_presence:
+                              - email_service
+                              - 1
+                          - technology_presence:
+                              - email_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: email_service
@@ -509,7 +929,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: payment_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - payment_service
+                              - 1
+                          - technology_presence:
+                              - payment_service
+                              - 2
+                          - technology_presence:
+                              - payment_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: node_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: payment_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - payment_service
+                              - 0
+                          - technology_presence:
+                              - payment_service
+                              - 2
+                          - technology_presence:
+                              - payment_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: node_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: payment_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - payment_service
+                              - 0
+                          - technology_presence:
+                              - payment_service
+                              - 1
+                          - technology_presence:
+                              - payment_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: payment_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - payment_service
+                              - 0
+                          - technology_presence:
+                              - payment_service
+                              - 1
+                          - technology_presence:
+                              - payment_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: payment_service
@@ -558,7 +1080,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: currency_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - currency_service
+                              - 1
+                          - technology_presence:
+                              - currency_service
+                              - 2
+                          - technology_presence:
+                              - currency_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: node_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: currency_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - currency_service
+                              - 0
+                          - technology_presence:
+                              - currency_service
+                              - 2
+                          - technology_presence:
+                              - currency_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: node_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: currency_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - currency_service
+                              - 0
+                          - technology_presence:
+                              - currency_service
+                              - 1
+                          - technology_presence:
+                              - currency_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: currency_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - currency_service
+                              - 0
+                          - technology_presence:
+                              - currency_service
+                              - 1
+                          - technology_presence:
+                              - currency_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: currency_service
@@ -607,7 +1231,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: shipping_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - shipping_service
+                              - 1
+                          - technology_presence:
+                              - shipping_service
+                              - 2
+                          - technology_presence:
+                              - shipping_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: shipping_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - shipping_service
+                              - 0
+                          - technology_presence:
+                              - shipping_service
+                              - 2
+                          - technology_presence:
+                              - shipping_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: shipping_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - shipping_service
+                              - 0
+                          - technology_presence:
+                              - shipping_service
+                              - 1
+                          - technology_presence:
+                              - shipping_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: shipping_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - shipping_service
+                              - 0
+                          - technology_presence:
+                              - shipping_service
+                              - 1
+                          - technology_presence:
+                              - shipping_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: shipping_service
@@ -665,7 +1391,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: cart_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - cart_service
+                              - 1
+                          - technology_presence:
+                              - cart_service
+                              - 2
+                          - technology_presence:
+                              - cart_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: csharp_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: cart_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - cart_service
+                              - 0
+                          - technology_presence:
+                              - cart_service
+                              - 2
+                          - technology_presence:
+                              - cart_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: csharp_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: cart_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - cart_service
+                              - 0
+                          - technology_presence:
+                              - cart_service
+                              - 1
+                          - technology_presence:
+                              - cart_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: cart_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - cart_service
+                              - 0
+                          - technology_presence:
+                              - cart_service
+                              - 1
+                          - technology_presence:
+                              - cart_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: cart_service
@@ -687,7 +1515,118 @@ topology_template:
                     - node_presence: postgresql_dbms
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: postgresql_database
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_database
+                              - 1
+                          - technology_presence:
+                              - postgresql_database
+                              - 2
+                          - technology_presence:
+                              - postgresql_database
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: virtual_machine
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: postgresql_database
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_database
+                              - 0
+                          - technology_presence:
+                              - postgresql_database
+                              - 2
+                          - technology_presence:
+                              - postgresql_database
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: postgresql_database
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_database
+                              - 0
+                          - technology_presence:
+                              - postgresql_database
+                              - 1
+                          - technology_presence:
+                              - postgresql_database
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: virtual_machine
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 0.5
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: postgresql_database
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_database
+                              - 0
+                          - technology_presence:
+                              - postgresql_database
+                              - 1
+                          - technology_presence:
+                              - postgresql_database
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: postgresql_dbms
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: postgresql_database
@@ -736,7 +1675,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: postgresql_dbms
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 1
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 2
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: postgresql_dbms
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 0
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 2
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: postgresql_dbms
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 0
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 1
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: postgresql_dbms
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 0
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 1
+                          - technology_presence:
+                              - postgresql_dbms
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: postgresql_dbms
@@ -785,7 +1826,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: product_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - product_service
+                              - 1
+                          - technology_presence:
+                              - product_service
+                              - 2
+                          - technology_presence:
+                              - product_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: product_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - product_service
+                              - 0
+                          - technology_presence:
+                              - product_service
+                              - 2
+                          - technology_presence:
+                              - product_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: go_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: product_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - product_service
+                              - 0
+                          - technology_presence:
+                              - product_service
+                              - 1
+                          - technology_presence:
+                              - product_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: product_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - product_service
+                              - 0
+                          - technology_presence:
+                              - product_service
+                              - 1
+                          - technology_presence:
+                              - product_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: product_service
@@ -843,7 +1986,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: recommendation_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - recommendation_service
+                              - 1
+                          - technology_presence:
+                              - recommendation_service
+                              - 2
+                          - technology_presence:
+                              - recommendation_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: python_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: recommendation_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - recommendation_service
+                              - 0
+                          - technology_presence:
+                              - recommendation_service
+                              - 2
+                          - technology_presence:
+                              - recommendation_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: python_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: recommendation_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - recommendation_service
+                              - 0
+                          - technology_presence:
+                              - recommendation_service
+                              - 1
+                          - technology_presence:
+                              - recommendation_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: recommendation_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - recommendation_service
+                              - 0
+                          - technology_presence:
+                              - recommendation_service
+                              - 1
+                          - technology_presence:
+                              - recommendation_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: recommendation_service
@@ -892,7 +2137,109 @@ topology_template:
                     - node_presence: gcp_runtime
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: advertisement_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - advertisement_service
+                              - 1
+                          - technology_presence:
+                              - advertisement_service
+                              - 2
+                          - technology_presence:
+                              - advertisement_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: java_runtime
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: advertisement_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - advertisement_service
+                              - 0
+                          - technology_presence:
+                              - advertisement_service
+                              - 2
+                          - technology_presence:
+                              - advertisement_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: java_runtime
+                  _generated: true
+              weight: 0
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: advertisement_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - advertisement_service
+                              - 0
+                          - technology_presence:
+                              - advertisement_service
+                              - 1
+                          - technology_presence:
+                              - advertisement_service
+                              - 3
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: docker_runtime
+                    - and:
+                        - node_presence: kubernetes_runtime
+                    - and:
+                        - node_presence: gcp_runtime
+                  _generated: true
+              weight: 1
+          - kubernetes:
+              conditions:
+                - and:
+                    - node_presence: advertisement_service
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - advertisement_service
+                              - 0
+                          - technology_presence:
+                              - advertisement_service
+                              - 1
+                          - technology_presence:
+                              - advertisement_service
+                              - 2
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: kubernetes_runtime
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: advertisement_service
@@ -914,7 +2261,41 @@ topology_template:
                     - node_presence: virtual_machine
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: go_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - go_runtime
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: go_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - go_runtime
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: go_runtime
@@ -936,7 +2317,41 @@ topology_template:
                     - node_presence: virtual_machine
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: csharp_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - csharp_runtime
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: csharp_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - csharp_runtime
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: csharp_runtime
@@ -958,7 +2373,41 @@ topology_template:
                     - node_presence: virtual_machine
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: node_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - node_runtime
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: node_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - node_runtime
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: node_runtime
@@ -980,7 +2429,41 @@ topology_template:
                     - node_presence: virtual_machine
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: python_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - python_runtime
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: python_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - python_runtime
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: python_runtime
@@ -1002,7 +2485,41 @@ topology_template:
                     - node_presence: virtual_machine
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: java_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - java_runtime
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 1
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: java_runtime
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - java_runtime
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - and:
+                        - node_presence: virtual_machine
+                  _generated: true
+              weight: 0
         conditions:
           - and:
               - has_incoming_relation_naive: java_runtime
@@ -1041,7 +2558,39 @@ topology_template:
                     - node_presence: openstack
                       _generated: true
                   _generated: true
-        technology: []
+        technology:
+          - ansible:
+              conditions:
+                - and:
+                    - node_presence: virtual_machine
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - virtual_machine
+                              - 1
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - true
+                  _generated: true
+              weight: 0.5
+          - terraform:
+              conditions:
+                - and:
+                    - node_presence: virtual_machine
+                      _generated: true
+                    - not:
+                        or:
+                          - technology_presence:
+                              - virtual_machine
+                              - 0
+                      _bratan: true
+                  _generated: true
+                - or:
+                    - true
+                  _generated: true
+              weight: 1
         conditions:
           - and:
               - has_incoming_relation_naive: virtual_machine

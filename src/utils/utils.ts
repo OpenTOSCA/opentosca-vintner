@@ -13,7 +13,7 @@ export function mapSome<K, V>(map: Map<K, V>, fn: (value: V) => boolean) {
     return false
 }
 
-export function groupBy<T>(elements: T[], by: (element: T) => string) {
+export function groupBy<T>(elements: T[], by: (element: T) => string | number) {
     return elements.reduce<{[name: string]: T[]}>((map, element) => {
         const id = by(element)
         if (check.isUndefined(map[id])) map[id] = []

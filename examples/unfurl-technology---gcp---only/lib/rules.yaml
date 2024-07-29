@@ -30,7 +30,7 @@ ansible:
       weight: 1
 
     - component: checkout.service
-      hosting: gco.provider
+      hosting: gcp.provider
       weight: 1
 
     # Email
@@ -275,7 +275,7 @@ terraform:
       weight: 1
 
     - component: checkout.service
-      hosting: gco.provider
+      hosting: gcp.provider
       weight: 1
 
     # Email

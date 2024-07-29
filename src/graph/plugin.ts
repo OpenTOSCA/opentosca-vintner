@@ -2,7 +2,8 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import {TechnologyTemplateMap} from '#spec/technology-template'
+import {andify} from '#graph/utils'
+import {TechnologyTemplate, TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
@@ -47,6 +48,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         for (const technology of Object.keys(map)) {
             const rules = utils.copy(map[technology])
 
+            const tmp: TechnologyTemplate[] = []
+
             for (const rule of rules) {
                 if (rule.component !== node.getType().name) continue
                 if (check.isDefined(rule.hosting)) {
@@ -54,24 +57,40 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     const output: LogicExpression[][] = []
                     this.search(node, rule.hosting, [], output)
                     output.forEach(it => {
-                        maps.push({
-                            [technology]: {
-                                conditions: it,
-                                weight: rule.weight,
-                                assign: rule.assign,
-                            },
+                        tmp.push({
+                            conditions: it,
+                            weight: rule.weight,
+                            assign: rule.assign,
                         })
                     })
                 } else {
-                    maps.push({
-                        [technology]: {
-                            conditions: rule.conditions,
-                            weight: rule.weight,
-                            assign: rule.assign,
-                        },
+                    tmp.push({
+                        // TODO: not supported
+                        // conditions: rule.conditions,
+                        weight: rule.weight,
+                        assign: rule.assign,
                     })
                 }
             }
+
+            // TODO: must group by weights ...
+
+            const groups = utils.groupBy(tmp, it => it.weight!)
+            for (const group of Object.values(groups)) {
+                maps.push({
+                    [technology]: {
+                        conditions: {
+                            or: group.map(it => {
+                                if (check.isUndefined(it.conditions)) return true
+                                assert.isArray(it.conditions)
+                                return andify(it.conditions)
+                            }),
+                        },
+                        weight: group[0].weight!,
+                    },
+                })
+            }
+            // TODO: assign not supported ...
         }
 
         return maps
@@ -100,7 +119,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             const hostingCopy = utils.copy(hosting)
 
             // Recursive search
-            console.log('rabbit', {host, hostingCopy, historyCopy, output})
             this.search(host, hostingCopy, historyCopy, output)
         }
     }

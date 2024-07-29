@@ -4,6 +4,8 @@ set -e
 # Load configuration
 source configuration.sh
 
+export TOTAL_MEMORY=${671088640:-67108864}
+
 # Quality
 #for dir in ../tests/*/;
 for dir in "kubernetes";
