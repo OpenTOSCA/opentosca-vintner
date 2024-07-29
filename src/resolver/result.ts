@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
@@ -12,6 +13,7 @@ export class Result {
     private readonly result: MiniSat.Solution
     readonly topology: {count: number; weight: number}
     readonly technologies: {count: number; weight: number}
+    readonly quality: {count: number; weight: number; average: number}
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
@@ -19,6 +21,7 @@ export class Result {
 
         this.topology = this.weightTopology()
         this.technologies = this.weightTechnologies()
+        this.quality = this.assessQuality()
     }
 
     private _map?: ResultMap
@@ -55,8 +58,19 @@ export class Result {
         }
     }
 
+    private assessQuality() {
+        assert.isDefined(this.technologies)
+
+        const count = this.graph.technologies.filter(it => this.isPresent(it)).length
+        return {
+            count,
+            weight: this.technologies.weight,
+            average: this.technologies.weight / count,
+        }
+    }
+
     /**
-     * Cannot use element.present yet since we are currently selecting the result!
+     * Note, we cannot use element.present yet since we are currently selecting the result!
      */
     isPresent(element: Element) {
         return check.isTrue(this.map[element.id])

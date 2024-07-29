@@ -21,6 +21,35 @@ export type ResolveResult = {
 }
 
 export async function run(options: ResolveOptions): Promise<ResolveResult> {
+    /**
+     * Graph
+     */
+    const {graph, inputs} = await load(options)
+
+    /**
+     * Resolver
+     */
+    new Resolver(graph, inputs).run()
+
+    return {
+        inputs: inputs,
+        template: graph.serviceTemplate,
+    }
+}
+
+export async function optimize(options: ResolveOptions) {
+    /**
+     * Graph
+     */
+    const {graph, inputs} = await load(options)
+
+    /**
+     * Resolver
+     */
+    return new Resolver(graph, inputs).optimize()
+}
+
+async function load(options: ResolveOptions) {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
@@ -75,15 +104,12 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
      */
     new Resolver(graph, inputs.inputs).run()
 
-    return {
-        inputs: inputs.inputs,
-        template: options.template,
-    }
+    return {graph, inputs: inputs.inputs}
 }
 
 /**
  * TODO: Hotfix Persistent Check
- *  rc2 sets "incomingnaive-aritfact-host"
+ *  rc2 sets "incomingnaive-artifact-host"
  *  this triggers the persistent component check
  *  however, this check is only relevant during enriching
  *  also cannot set version to rc1 since we require, e.g., the rc2 optimization defaults

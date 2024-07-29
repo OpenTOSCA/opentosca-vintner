@@ -35,4 +35,16 @@ export default class Resolver {
          */
         new Transformer(this.graph).run()
     }
+
+    optimize() {
+        /**
+         * Validator
+         */
+        new Validator(this.graph, this.inputs).run()
+
+        /**
+         * Solver
+         */
+        return new Solver(this.graph, this.inputs).optimize()
+    }
 }

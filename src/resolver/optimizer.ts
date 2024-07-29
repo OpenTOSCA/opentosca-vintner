@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import Graph from '#graph/graph'
 import {Result} from '#resolver/result'
 
@@ -114,11 +115,21 @@ export default class Optimizer {
     }
 
     private first() {
-        return this.results[0]
+        const result = this.results[0]
+        assert.isDefined(result)
+        return result
     }
 
     private second() {
-        return this.results[1]
+        const result = this.results[1]
+        assert.isDefined(result)
+        return result
+    }
+
+    private last() {
+        const result = this.results[this.results.length - 1]
+        assert.isDefined(result)
+        return result
     }
 
     private compare<T>(order: 'asc' | 'desc', value: (element: T) => number) {

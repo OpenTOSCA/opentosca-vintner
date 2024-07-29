@@ -487,6 +487,22 @@ template
     )
 
 template
+    .command('quality')
+    .description('get quality of template (experimental)')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
+    .option(
+        '--inputs [string]',
+        'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
+    )
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.template.quality(options))
+        })
+    )
+
+template
     .command('unpull')
     .description('unpull template dependencies')
     .requiredOption('--dir <string>', 'path to service template directory')
@@ -498,8 +514,7 @@ template
 
 const puml = template.command('puml').description('generate puml')
 
-const pumlTopology = puml
-    .command('topology')
+puml.command('topology')
     .description('plot topology as PlantUML')
     .requiredOption('--path <string>', 'path to service template')
     .option('--output [string]', 'path of the output')
@@ -509,8 +524,7 @@ const pumlTopology = puml
         })
     )
 
-const pumlTypes = puml
-    .command('types')
+puml.command('types')
     .description('plot types as PlantUML (each entity types is plotted separately)')
     .requiredOption('--path <string>', 'path to service template')
     .option('--output [string]', 'path of the output directory (default: the directory of the service template)')

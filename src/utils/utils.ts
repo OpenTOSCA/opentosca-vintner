@@ -47,6 +47,10 @@ export function isEmpty(obj: any) {
     throw new Error(`Cannot check if object ${pretty(obj)} is empty`)
 }
 
+export function first<T>(array: T[]) {
+    return array[0]
+}
+
 export function last<T>(array: T[]) {
     return array[array.length - 1]
 }
