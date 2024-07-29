@@ -12,7 +12,7 @@ export class Result {
 
     private readonly result: MiniSat.Solution
     readonly topology: {count: number; weight: number}
-    readonly technologies: {count: number; weight: number}
+    readonly technologies: {count: number; weight: number; weights: {[key: string]: number}}
     readonly quality: {count: number; weight: number; average: number}
 
     constructor(graph: Graph, result: MiniSat.Solution) {
@@ -55,6 +55,7 @@ export class Result {
         return {
             count: Object.values(weights).length,
             weight: utils.sum(Object.values(weights)),
+            weights,
         }
     }
 
@@ -62,6 +63,7 @@ export class Result {
         assert.isDefined(this.technologies)
 
         const count = this.graph.technologies.filter(it => this.isPresent(it)).length
+        assert.isNumber(count)
         return {
             count,
             weight: this.technologies.weight,

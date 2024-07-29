@@ -46,7 +46,12 @@ export async function optimize(options: ResolveOptions) {
     /**
      * Resolver
      */
-    return new Resolver(graph, inputs).optimize()
+    const results = new Resolver(graph, inputs).optimize()
+
+    return {
+        results,
+        graph,
+    }
 }
 
 async function load(options: ResolveOptions) {
@@ -98,11 +103,6 @@ async function load(options: ResolveOptions) {
      * Graph
      */
     const graph = new Graph(options.template)
-
-    /**
-     * Resolver
-     */
-    new Resolver(graph, inputs.inputs).run()
 
     return {graph, inputs: inputs.inputs}
 }
