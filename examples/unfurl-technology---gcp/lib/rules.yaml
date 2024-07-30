@@ -170,7 +170,6 @@ ansible:
       weight: 0
 
     # Database
-    # TODO: this is stupid if DBMS is hosted on k8s
     - component: postgresql.database
       hosting:
           - postgresql.dbms

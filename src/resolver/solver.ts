@@ -13,6 +13,7 @@ import day from '#utils/day'
 import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
+import * as console from 'node:console'
 import regression from 'regression'
 import stats from 'stats-lite'
 
@@ -60,18 +61,54 @@ export default class Solver {
         /**
          * Get initial solution
          */
-        const solution = this.minisat.solve()
+        let solution = this.minisat.solve()
         if (check.isUndefined(solution)) throw new Error('Could not solve')
 
         /**
          * Optimize topology
          */
-        const first = this.minisat.minimizeWeightedSum(
-            solution,
-            this.graph.nodes.map(it => it.id),
-            this.graph.nodes.map(it => it.weight)
-        )
-        if (check.isUndefined(first)) throw new Error('Could not optimize topology')
+        if (this.graph.options.solver.topology.optimize) {
+            let next: MiniSat.Solution | undefined | null
+            const formulas = this.graph.nodes.map(it => it.id)
+            let weights
+
+            /**
+             * Weight
+             */
+            if (this.graph.options.solver.topology.mode === 'weight') {
+                weights = this.graph.nodes.map(it => it.weight * 100)
+            }
+
+            /**
+             * Count
+             */
+            if (this.graph.options.solver.topology.mode === 'count') {
+                weights = 1
+            }
+
+            /**
+             * Sanity checks
+             */
+            assert.isDefined(weights)
+
+            /**
+             * Minimize
+             */
+            if (this.graph.options.solver.topology.min) {
+                next = this.minisat.minimizeWeightedSum(solution, formulas, weights)
+            }
+
+            /**
+             * Maximize
+             */
+            if (this.graph.options.solver.topology.max) {
+                next = this.minisat.maximizeWeightedSum(solution, formulas, weights)
+            }
+
+            if (check.isUndefined(next)) throw new Error('Could not optimize topology')
+
+            solution = next
+        }
 
         /**
          * Unique topology check
@@ -79,30 +116,89 @@ export default class Solver {
          * Ensure that there is not another solution that has the same nodes enabled
          * Note, we use solveAssuming to keep the problem solvable.
          */
-        const ambiguous = this.minisat.solveAssuming(
-            MiniSat.not(MiniSat.and(first.getTrueVars().filter(it => it.startsWith('node'))))
-        )
-        if (check.isDefined(ambiguous)) throw new Error(`Topology is ambiguous`)
-
-        // TODO: implement all the other options
+        if (this.graph.options.solver.topology.unique) {
+            const nodes = solution.getTrueVars().filter(it => it.startsWith('node'))
+            const ambiguous = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(nodes)))
+            if (check.isDefined(ambiguous)) {
+                if (this.graph.options.solver.topology.optimize) {
+                    throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
+                } else {
+                    throw new Error(`The result is ambiguous considering nodes (without optimization)`)
+                }
+            }
+        }
 
         /**
          * Optimize technologies
          */
-        const second = this.minisat.maximizeWeightedSum(
-            solution,
-            this.graph.technologies.map(it => it.id),
-            this.graph.technologies.map(it => it.weight * 100)
-            // this.graph.technologies.map(it => (1 - it.weight) * 10)
-        )
-        if (check.isUndefined(second)) throw new Error('Could not optimize technologies')
+        if (this.graph.options.solver.technologies.optimize) {
+            let next: MiniSat.Solution | undefined | null
+            let formulas
+            let weights
+
+            /**
+             * Weight
+             */
+            if (this.graph.options.solver.technologies.mode === 'weight') {
+                formulas = this.graph.technologies.map(it => it.id)
+                weights = this.graph.technologies.map(it => it.weight * 100)
+            }
+
+            /**
+             * Count
+             */
+            if (this.graph.options.solver.technologies.mode === 'count') {
+                const groups = utils.groupBy(this.graph.technologies, it => it.name)
+                formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
+                weights = 1
+            }
+
+            /**
+             * Sanity checks
+             */
+            assert.isDefined(formulas)
+            assert.isDefined(weights)
+
+            /**
+             * Minimize
+             */
+            if (this.graph.options.solver.technologies.min) {
+                next = this.minisat.minimizeWeightedSum(solution, formulas, weights)
+            }
+
+            /**
+             * Maximize
+             */
+            if (this.graph.options.solver.technologies.max) {
+                next = this.minisat.maximizeWeightedSum(solution, formulas, weights)
+            }
+
+            if (check.isUndefined(next)) throw new Error('Could not optimize technologies')
+
+            solution = next
+        }
 
         // TODO: should minimize number of different technologies (hence must group them ...)
 
         /**
+         * Check if there are multiple optimal technologies
+         */
+        if (this.graph.options.solver.technologies.unique) {
+            const technologies = solution.getTrueVars().filter(it => it.startsWith('technology'))
+            const ambiguous = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(technologies)))
+            if (check.isDefined(ambiguous)) {
+                if (this.graph.options.solver.technologies.optimize) {
+                    throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
+                } else {
+                    throw new Error(`The result is ambiguous considering technologies (without optimization)`)
+                }
+            }
+        }
+
+        /**
          * Result
          */
-        const result = new Result(this.graph, second)
+        const result = new Result(this.graph, solution)
 
         /**
          * Assign presence to elements

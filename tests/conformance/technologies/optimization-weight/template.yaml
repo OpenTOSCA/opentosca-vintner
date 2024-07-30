@@ -14,10 +14,9 @@ topology_template:
             technology:
                 - terraform:
                       conditions: true
-                      weight: 0
                 - ansible:
                       conditions: true
-                      weight: 1
+                      weight: 100
 
         another:
             type: another
