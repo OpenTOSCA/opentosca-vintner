@@ -8,6 +8,8 @@ import Resolver from '#resolver/resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import {InputAssignmentPreset} from '#spec/variability'
+import * as utils from '#utils'
+import {UnexpectedError} from '#utils/error'
 
 export type ResolveOptions = {
     template: ServiceTemplate | string
@@ -37,24 +39,92 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     }
 }
 
-export async function optimize(options: ResolveOptions) {
-    /**
-     * Graph
-     */
-    const {graph, inputs} = await load(options)
+export async function minMaxQuality(options: ResolveOptions) {
+    const {graph} = await load(utils.copy(options))
 
     /**
-     * Resolver
+     * Quality
+     *
+     * Get the result with the quality of all results (min or max is not overridden)
      */
-    const results = new Resolver(graph, inputs).optimize()
-
-    return {
-        results,
-        graph,
+    if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight') {
+        const loaded = await load(utils.copy(options))
+        const quality = new Resolver(loaded.graph, loaded.inputs).quality()
+        if (quality.length !== 1) throw new Error(`Did not return correct quality`)
+        return utils.first(quality).quality.average
     }
+
+    /**
+     * Counting
+     *
+     * Get the min and max quality of the results which have the min number of technologies
+     */
+    if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'count') {
+        const loaded = await load(utils.copy(options), {
+            topology_template: {
+                variability: {
+                    options: {
+                        optimization_technologies: 'min',
+                    },
+                },
+            },
+        })
+        const all = new Resolver(loaded.graph, loaded.inputs).quality({all: true})
+
+        const min = Math.min(...all.map(it => it.technologies.count))
+        const candidates = all.filter(it => it.technologies.count === min)
+        return {
+            min: utils.first(candidates).quality.average,
+            max: utils.last(candidates).quality.average,
+        }
+    }
+
+    /**
+     * Random
+     *
+     * Get the min and max quality of all results
+     */
+    if (!graph.options.solver.technologies.optimize) {
+        /**
+         * Min
+         */
+        const minLoad = await load(utils.copy(options), {
+            topology_template: {
+                variability: {
+                    options: {
+                        optimization_technologies: 'min',
+                    },
+                },
+            },
+        })
+        const min = new Resolver(minLoad.graph, minLoad.inputs).quality()
+        if (min.length !== 1) throw new Error(`Did not return correct quality`)
+
+        /**
+         * Max
+         */
+        const maxLoad = await load(utils.copy(options), {
+            topology_template: {
+                variability: {
+                    options: {
+                        optimization_technologies: 'max',
+                    },
+                },
+            },
+        })
+        const max = new Resolver(maxLoad.graph, maxLoad.inputs).quality()
+        if (max.length !== 1) throw new Error(`Did not return correct quality`)
+
+        return {min: utils.first(min).quality.average, max: utils.first(max).quality.average}
+    }
+
+    /**
+     * Sanity check
+     */
+    throw new UnexpectedError()
 }
 
-async function load(options: ResolveOptions) {
+async function load(options: ResolveOptions, override?: Partial<ServiceTemplate>) {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 
@@ -62,7 +132,7 @@ async function load(options: ResolveOptions) {
      * Service template
      */
     // TODO: where to load? inside enricher?
-    if (check.isString(options.template)) options.template = await new Loader(options.template).load()
+    if (check.isString(options.template)) options.template = await new Loader(options.template, override).load()
 
     /**
      * Enricher

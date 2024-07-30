@@ -76,6 +76,7 @@ export class Result {
 
         const count = this.graph.technologies.filter(it => this.isPresent(it)).length
         assert.isNumber(count)
+
         return {
             count,
             weight: this.technologies.weight,

@@ -13,7 +13,6 @@ import day from '#utils/day'
 import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
-import * as console from 'node:console'
 import regression from 'regression'
 import stats from 'stats-lite'
 import Min = Mocha.reporters.Min
@@ -62,8 +61,46 @@ export default class Solver {
         /**
          * Get initial solution
          */
-        let solution = this.minisat.solve()
+        const solution = this.minisat.solve()
         if (check.isUndefined(solution)) throw new Error('Could not solve')
+
+        /**
+         * Optimize
+         */
+        const optimized = this.optimize(solution)
+
+        /**
+         * Result
+         */
+        const result = new Result(this.graph, optimized)
+
+        /**
+         * Assign presence to elements
+         */
+        for (const element of this.graph.elements) {
+            element.present = result.getPresence(element)
+        }
+
+        /**
+         * Evaluate value expressions
+         */
+        for (const property of this.graph.properties.filter(it => it.present)) {
+            this.evaluateProperty(property)
+        }
+
+        /**
+         * Note, input default expressions are evaluated on-demand in {@link getInput}
+         */
+
+        /**
+         * Return result
+         */
+        return result.map
+    }
+
+    // TODO: replace optimizer.ts with this
+    optimize(initial: MiniSat.Solution) {
+        let solution = initial
 
         /**
          * Optimize topology
@@ -202,33 +239,7 @@ export default class Solver {
             }
         }
 
-        /**
-         * Result
-         */
-        const result = new Result(this.graph, solution)
-
-        /**
-         * Assign presence to elements
-         */
-        for (const element of this.graph.elements) {
-            element.present = result.getPresence(element)
-        }
-
-        /**
-         * Evaluate value expressions
-         */
-        for (const property of this.graph.properties.filter(it => it.present)) {
-            this.evaluateProperty(property)
-        }
-
-        /**
-         * Note, input default expressions are evaluated on-demand in {@link getInput}
-         */
-
-        /**
-         * Return result
-         */
-        return result.map
+        return solution
     }
 
     runOriginal(): ResultMap {
@@ -272,23 +283,44 @@ export default class Solver {
         return result.map
     }
 
-    // TODO: adapt this
-    optimize(): Result[] {
+    optimized(options: {all?: boolean} = {}) {
+        /**
+         * Default options
+         */
+        options.all = options.all ?? false
+
+        /**
+         * Ensure that not already solved
+         */
         if (this.solved) throw new Error('Has been already solved')
         this.solved = true
 
+        /**
+         * Transform
+         */
         this.transform()
 
         /**
-         * Get all results
+         * Get initial solution
          */
-        const results = this.solveAll()
-        if (utils.isEmpty(results)) throw new Error('Could not solve')
+        const solution = this.minisat.solve()
+        if (check.isUndefined(solution)) throw new Error('Could not solve')
 
         /**
-         * Optimizer
+         * Optimize
          */
-        return new Optimizer(this.graph, results).optimize()
+        const optimized = this.optimize(solution)
+
+        /**
+         * Result
+         */
+        const result = new Result(this.graph, optimized)
+
+        /**
+         * Return
+         */
+        if (options.all) return this.solveAll()
+        return [result]
     }
 
     runAll(): ResultMap[] {
@@ -309,7 +341,7 @@ export default class Solver {
             results.push(new Result(this.graph, result))
             // TODO: remove this
             count++
-            console.log(count)
+            //console.log(count)
             this.minisat.forbid(result.getFormula())
         }
 
