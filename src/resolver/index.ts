@@ -40,6 +40,9 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
 }
 
 export async function minMaxQuality(options: ResolveOptions) {
+    /**
+     * Graph (for checking options)
+     */
     const {graph} = await load(utils.copy(options))
 
     /**
@@ -49,9 +52,9 @@ export async function minMaxQuality(options: ResolveOptions) {
      */
     if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight') {
         const loaded = await load(utils.copy(options))
-        const quality = new Resolver(loaded.graph, loaded.inputs).quality()
-        if (quality.length !== 1) throw new Error(`Did not return correct quality`)
-        return utils.first(quality).quality.average
+        const optimized = new Resolver(loaded.graph, loaded.inputs).optimized()
+        if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
+        return utils.first(optimized).quality.average
     }
 
     /**
@@ -69,7 +72,7 @@ export async function minMaxQuality(options: ResolveOptions) {
                 },
             },
         })
-        const all = new Resolver(loaded.graph, loaded.inputs).quality({all: true})
+        const all = new Resolver(loaded.graph, loaded.inputs).optimized({all: true})
 
         const min = Math.min(...all.map(it => it.technologies.count))
         const candidates = all.filter(it => it.technologies.count === min)
@@ -97,7 +100,7 @@ export async function minMaxQuality(options: ResolveOptions) {
                 },
             },
         })
-        const min = new Resolver(minLoad.graph, minLoad.inputs).quality()
+        const min = new Resolver(minLoad.graph, minLoad.inputs).optimized()
         if (min.length !== 1) throw new Error(`Did not return correct quality`)
 
         /**
@@ -112,7 +115,7 @@ export async function minMaxQuality(options: ResolveOptions) {
                 },
             },
         })
-        const max = new Resolver(maxLoad.graph, maxLoad.inputs).quality()
+        const max = new Resolver(maxLoad.graph, maxLoad.inputs).optimized()
         if (max.length !== 1) throw new Error(`Did not return correct quality`)
 
         return {min: utils.first(min).quality.average, max: utils.first(max).quality.average}
