@@ -4,7 +4,6 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
 import {andify} from '#graph/utils'
-import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
@@ -240,47 +239,6 @@ export default class Solver {
         }
 
         return solution
-    }
-
-    runOriginal(): ResultMap {
-        if (this.solved) throw new Error('Has been already solved')
-        this.solved = true
-
-        this.transform()
-
-        /**
-         * Get all results
-         */
-        const results = this.solveAll()
-        if (utils.isEmpty(results)) throw new Error('Could not solve')
-
-        /**
-         * Optimizer
-         */
-        const result = new Optimizer(this.graph, results).run()
-
-        /**
-         * Assign presence to elements
-         */
-        for (const element of this.graph.elements) {
-            element.present = result.getPresence(element)
-        }
-
-        /**
-         * Evaluate value expressions
-         */
-        for (const property of this.graph.properties.filter(it => it.present)) {
-            this.evaluateProperty(property)
-        }
-
-        /**
-         * Note, input default expressions are evaluated on-demand in {@link getInput}
-         */
-
-        /**
-         * Return result
-         */
-        return result.map
     }
 
     optimized(options: {all?: boolean} = {}) {
