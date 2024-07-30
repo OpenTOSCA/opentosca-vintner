@@ -36,6 +36,18 @@ export class Result {
         return present
     }
 
+    getPresentElements(prefix: string) {
+        return Object.entries(this.map)
+            .filter(([name, value]) => name.startsWith(prefix) && check.isTrue(value))
+            .map(([name, _]) => name)
+    }
+
+    getAbsentElements(prefix: string) {
+        return Object.entries(this.map)
+            .filter(([name, value]) => name.startsWith(prefix) && check.isFalse(value))
+            .map(([name, _]) => name)
+    }
+
     private weightTopology() {
         let count = 0
         let weight = 0
@@ -74,7 +86,7 @@ export class Result {
     /**
      * Note, we cannot use element.present yet since we are currently selecting the result!
      */
-    isPresent(element: Element) {
+    private isPresent(element: Element) {
         return check.isTrue(this.map[element.id])
     }
 

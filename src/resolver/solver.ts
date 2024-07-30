@@ -16,6 +16,7 @@ import MiniSat from 'logic-solver'
 import * as console from 'node:console'
 import regression from 'regression'
 import stats from 'stats-lite'
+import Min = Mocha.reporters.Min
 
 type ExpressionContext = {
     element: Element
@@ -113,12 +114,18 @@ export default class Solver {
         /**
          * Unique topology check
          *
-         * Ensure that there is not another solution that has the same nodes enabled
+         * Ensure that there is not another solution that has the same nodes enabled and disabled
          * Note, we use solveAssuming to keep the problem solvable.
          */
         if (this.graph.options.solver.topology.unique) {
-            const nodes = solution.getTrueVars().filter(it => it.startsWith('node'))
-            const ambiguous = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(nodes)))
+            const r = new Result(this.graph, solution)
+            const p = r.getPresentElements('node')
+            const a = r.getAbsentElements('node')
+
+            const ambiguous = this.minisat.solveAssuming(
+                MiniSat.not(MiniSat.and(MiniSat.and(p), MiniSat.not(MiniSat.or(a))))
+            )
+
             if (check.isDefined(ambiguous)) {
                 if (this.graph.options.solver.topology.optimize) {
                     throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
@@ -300,6 +307,7 @@ export default class Solver {
         let count = 0
         while ((result = this.minisat.solve())) {
             results.push(new Result(this.graph, result))
+            // TODO: remove this
             count++
             console.log(count)
             this.minisat.forbid(result.getFormula())
