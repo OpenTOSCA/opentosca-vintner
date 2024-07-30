@@ -12,7 +12,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service
+            type: frontend.service.terraform.gcp
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -22,7 +22,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: go_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -31,7 +31,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service
+            type: checkout.service.terraform.gcp
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -40,7 +40,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: go_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -49,9 +49,9 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service
+            type: email.service.terraform.gcp
             requirements:
-                - host: python_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -60,9 +60,9 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service
+            type: payment.service.terraform.gcp
             requirements:
-                - host: node_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -71,9 +71,9 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service
+            type: currency.service.terraform.gcp
             requirements:
-                - host: node_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -82,9 +82,9 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service
+            type: shipping.service.terraform.gcp
             requirements:
-                - host: go_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -93,21 +93,21 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service
+            type: cart.service.terraform.gcp
             requirements:
                 - database: postgresql_database
 
-                - host: csharp_runtime
+                - host: gcp_runtime
 
         postgresql_database:
-            type: postgresql.database
+            type: postgresql.database.terraform.postgresql
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms
+            type: postgresql.dbms.terraform.gcp
             requirements:
-                - host: virtual_machine
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -116,9 +116,9 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service
+            type: product.service.terraform.gcp
             requirements:
-                - host: go_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -127,11 +127,11 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service
+            type: recommendation.service.terraform.gcp
             requirements:
                 - product: product_service
 
-                - host: python_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
@@ -140,47 +140,15 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service
+            type: advertisement.service.terraform.gcp
             requirements:
-                - host: java_runtime
+                - host: gcp_runtime
 
         ###################################################
         #
-        # Virtual Machine
+        # GCP
         #
         ###################################################
 
-        go_runtime:
-            type: go.runtime
-            requirements:
-                - host: virtual_machine
-
-        csharp_runtime:
-            type: csharp.runtime
-            requirements:
-                - host: virtual_machine
-
-        node_runtime:
-            type: node.runtime
-            requirements:
-                - host: virtual_machine
-
-        python_runtime:
-            type: python.runtime
-            requirements:
-                - host: virtual_machine
-
-        java_runtime:
-            type: java.runtime
-            requirements:
-                - host: virtual_machine
-
-        virtual_machine:
-            type: virtual.machine
-            properties:
-                flavor: m1.large
-            requirements:
-                - host: openstack
-
-        openstack:
-            type: openstack.provider
+        gcp_runtime:
+            type: gcp.provider

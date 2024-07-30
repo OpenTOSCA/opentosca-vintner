@@ -10,11 +10,11 @@ ansible:
 
     - component: frontend.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: frontend.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Checkout
     - component: checkout.service
@@ -27,11 +27,11 @@ ansible:
 
     - component: checkout.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: checkout.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Email
     - component: email.service
@@ -44,11 +44,11 @@ ansible:
 
     - component: email.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: email.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Payment
     - component: payment.service
@@ -61,11 +61,11 @@ ansible:
 
     - component: payment.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: payment.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Currency
     - component: currency.service
@@ -78,11 +78,11 @@ ansible:
 
     - component: currency.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: currency.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Shipping
     - component: shipping.service
@@ -95,11 +95,11 @@ ansible:
 
     - component: shipping.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: shipping.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Cart
     - component: cart.service
@@ -112,11 +112,11 @@ ansible:
 
     - component: cart.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: cart.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Product
     - component: product.service
@@ -129,11 +129,11 @@ ansible:
 
     - component: product.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: product.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Recommendation
     - component: recommendation.service
@@ -146,11 +146,11 @@ ansible:
 
     - component: recommendation.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: recommendation.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Advertisement
     - component: advertisement.service
@@ -163,11 +163,11 @@ ansible:
 
     - component: advertisement.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: advertisement.service
       hosting: gcp.provider
-      weight: 1
+      weight: 0
 
     # Database
     # TODO: this is stupid if DBMS is hosted on k8s
@@ -194,7 +194,7 @@ ansible:
       hosting:
           - postgresql.dbms
           - gcp.provider
-      weight: 1
+      weight: 0.5
 
     # DBMS
     - component: postgresql.dbms
@@ -207,11 +207,11 @@ ansible:
 
     - component: postgresql.dbms
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: postgresql.dbms
       hosting: gcp.provider
-      weight: 1
+      weight: 0.5
 
     # Go
     - component: go.runtime
@@ -239,7 +239,6 @@ ansible:
       weight: 1
 
     # Virtual Machine
-    # TODO: weight ...
     - component: virtual.machine
       weight: 0.5
 
@@ -255,7 +254,7 @@ terraform:
 
     - component: frontend.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: frontend.service
       hosting: gcp.provider
@@ -272,7 +271,7 @@ terraform:
 
     - component: checkout.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: checkout.service
       hosting: gcp.provider
@@ -289,7 +288,7 @@ terraform:
 
     - component: email.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: email.service
       hosting: gcp.provider
@@ -306,7 +305,7 @@ terraform:
 
     - component: payment.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: payment.service
       hosting: gcp.provider
@@ -323,7 +322,7 @@ terraform:
 
     - component: currency.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: currency.service
       hosting: gcp.provider
@@ -340,7 +339,7 @@ terraform:
 
     - component: shipping.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: shipping.service
       hosting: gcp.provider
@@ -357,7 +356,7 @@ terraform:
 
     - component: cart.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: cart.service
       hosting: gcp.provider
@@ -374,7 +373,7 @@ terraform:
 
     - component: product.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: product.service
       hosting: gcp.provider
@@ -391,7 +390,7 @@ terraform:
 
     - component: recommendation.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: recommendation.service
       hosting: gcp.provider
@@ -408,7 +407,7 @@ terraform:
 
     - component: advertisement.service
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: advertisement.service
       hosting: gcp.provider
@@ -453,7 +452,7 @@ terraform:
 
     - component: postgresql.dbms
       hosting: kubernetes
-      weight: 1
+      weight: 0.75
 
     - component: postgresql.dbms
       hosting: gcp.provider

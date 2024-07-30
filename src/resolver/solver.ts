@@ -58,6 +58,83 @@ export default class Solver {
         this.transform()
 
         /**
+         * Get initial solution
+         */
+        const solution = this.minisat.solve()
+        if (check.isUndefined(solution)) throw new Error('Could not solve')
+
+        /**
+         * Optimize topology
+         */
+        const first = this.minisat.minimizeWeightedSum(
+            solution,
+            this.graph.nodes.map(it => it.id),
+            this.graph.nodes.map(it => it.weight)
+        )
+        if (check.isUndefined(first)) throw new Error('Could not optimize topology')
+
+        /**
+         * Unique topology check
+         *
+         * Ensure that there is not another solution that has the same nodes enabled
+         * Note, we use solveAssuming to keep the problem solvable.
+         */
+        const ambiguous = this.minisat.solveAssuming(
+            MiniSat.not(MiniSat.and(first.getTrueVars().filter(it => it.startsWith('node'))))
+        )
+        if (check.isDefined(ambiguous)) throw new Error(`Topology is ambiguous`)
+
+        // TODO: implement all the other options
+
+        /**
+         * Optimize technologies
+         */
+        const second = this.minisat.maximizeWeightedSum(
+            solution,
+            this.graph.technologies.map(it => it.id),
+            this.graph.technologies.map(it => it.weight * 100)
+            // this.graph.technologies.map(it => (1 - it.weight) * 10)
+        )
+        if (check.isUndefined(second)) throw new Error('Could not optimize technologies')
+
+        // TODO: should minimize number of different technologies (hence must group them ...)
+
+        /**
+         * Result
+         */
+        const result = new Result(this.graph, second)
+
+        /**
+         * Assign presence to elements
+         */
+        for (const element of this.graph.elements) {
+            element.present = result.getPresence(element)
+        }
+
+        /**
+         * Evaluate value expressions
+         */
+        for (const property of this.graph.properties.filter(it => it.present)) {
+            this.evaluateProperty(property)
+        }
+
+        /**
+         * Note, input default expressions are evaluated on-demand in {@link getInput}
+         */
+
+        /**
+         * Return result
+         */
+        return result.map
+    }
+
+    runOriginal(): ResultMap {
+        if (this.solved) throw new Error('Has been already solved')
+        this.solved = true
+
+        this.transform()
+
+        /**
          * Get all results
          */
         const results = this.solveAll()
@@ -92,6 +169,7 @@ export default class Solver {
         return result.map
     }
 
+    // TODO: adapt this
     optimize(): Result[] {
         if (this.solved) throw new Error('Has been already solved')
         this.solved = true
