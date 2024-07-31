@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
@@ -10,15 +11,10 @@ export class Result {
     private readonly graph: Graph
 
     private readonly result: MiniSat.Solution
-    readonly topology: {count: number; weight: number}
-    readonly technologies: {count: number; weight: number}
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
         this.result = result
-
-        this.topology = this.weightTopology()
-        this.technologies = this.weightTechnologies()
     }
 
     private _map?: ResultMap
@@ -27,48 +23,115 @@ export class Result {
         return this._map
     }
 
-    getPresence(element: Element) {
+    /**
+     * Note, we cannot use element.present yet since we are currently selecting the result!
+     */
+    isPresent(element: Element) {
         const present = this.map[element.id]
         if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
-        return present
+        return check.isTrue(present)
     }
 
-    private weightTopology() {
-        let count = 0
-        let weight = 0
-        for (const node of this.graph.nodes.filter(it => this.isPresent(it))) {
-            count++
-            weight += node.weight
-        }
+    getPresences(prefix: string) {
+        return Object.entries(this.map)
+            .filter(([name, value]) => name.startsWith(prefix) && check.isTrue(value))
+            .map(([name, _]) => name)
+    }
+
+    getAbsences(prefix: string) {
+        return Object.entries(this.map)
+            .filter(([name, value]) => name.startsWith(prefix) && check.isFalse(value))
+            .map(([name, _]) => name)
+    }
+
+    get topology(): {count: number; weight: number} {
+        /**
+         * Present nodes
+         */
+        const present = this.graph.nodes.filter(it => this.isPresent(it))
+
+        /**
+         * Count (number of present nodes)
+         */
+        const count = present.length
+
+        /**
+         * Weight (sum of all weights of present nodes)
+         */
+        const weight = present.reduce((sum, it) => sum + it.weight, 0)
+
         return {count, weight}
     }
 
-    private weightTechnologies() {
-        const weights: {[key: string]: number} = {}
-        for (const technology of this.graph.technologies.filter(it => this.isPresent(it))) {
-            if (check.isUndefined(weights[technology.name])) weights[technology.name] = 0
-            weights[technology.name] += technology.weight
-        }
-        return {
-            count: Object.values(weights).length,
-            weight: utils.sum(Object.values(weights)),
-        }
+    get technologies(): {
+        count: number
+        count_total: number
+        count_each: {[technology: string]: number}
+        weight: number
+        weight_each: {[technology: string]: number}
+    } {
+        /**
+         * Present technologies
+         */
+        const present = this.graph.technologies.filter(it => this.isPresent(it))
+        const groups = utils.groupBy(present, it => it.name)
+
+        /**
+         * Count (total number of different technologies, i.e., number of groups by name)
+         */
+        const count = Object.values(groups).length
+
+        /**
+         * Count Total (total number of all present technologies)
+         */
+        const count_total = present.length
+
+        /**
+         * Count Each (number of technologies per group)
+         */
+        const count_each = Object.entries(groups).reduce((output, [name, group]) => {
+            return {[name]: group.length}
+        }, {})
+
+        /**
+         * Weight (sum of all weights of all present technologies)
+         */
+        const weight = utils.sum(present.map(it => it.weight))
+
+        /**
+         * Weight Each (sum of all weight in a group of present technology)
+         */
+        const weight_each = Object.entries(groups).reduce((output, [name, group]) => {
+            return {[name]: utils.sum(group.map(it => it.weight))}
+        }, {})
+
+        /**
+         * Result
+         */
+        return {count, count_total, count_each, weight, weight_each}
     }
 
-    /**
-     * Cannot use element.present yet since we are currently selecting the result!
-     */
-    isPresent(element: Element) {
-        return check.isTrue(this.map[element.id])
-    }
+    get quality(): {count: number; weight: number; average: number} {
+        /**
+         * Count (total number of present technologies)
+         */
+        const count = this.graph.technologies.filter(it => this.isPresent(it)).length
+        assert.isNumber(count)
+        if (count === 0) throw new Error(`Technology count is 0`)
 
-    equals(result: Result): boolean {
-        if (Object.keys(this.map).length !== Object.keys(result.map).length) return false
+        /**
+         * Weight (sum of all weights of all present technologies)
+         */
+        const weight = this.technologies.weight
 
-        for (const key of Object.keys(this.map).filter(it => !it.startsWith('technology'))) {
-            if (this.map[key] !== result.map[key]) return false
-        }
+        /**
+         * Average (average weight per technology)
+         */
+        const average = this.technologies.weight / count
 
-        return true
+        /**
+         * Result
+         */
+        return {count, weight, average}
     }
 }

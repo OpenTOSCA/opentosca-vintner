@@ -34,8 +34,8 @@ index 0000000..4484d0f
 +        forbid(...args: Operands[]): void
 +        solve(): Solution | null
 +        solveAssuming(assumption: Operand): Solution | null
-+        minimizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution | null
-+        maximizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution | null
++        minimizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution
++        maximizeWeightedSum(solution: Solution, formulas: Operand[], weights: number[] | number): Solution
 +        clauses: Clause[]
 +    }
 +

@@ -1,3 +1,4 @@
 {
-    "require": ["ts-node/register", "tsconfig-paths/register", "./tests/setup.ts"]
+    "require": ["ts-node/register", "tsconfig-paths/register", "./tests/setup.ts"],
+    "slow": 100
 }

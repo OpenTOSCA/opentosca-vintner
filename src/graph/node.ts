@@ -64,7 +64,9 @@ export default class Node extends Element {
             )
 
             if (data.raw.weight < 0)
-                throw new Error(`Weight "${data.raw.weight}" of ${this.display} is not a negative number`)
+                throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
+
+            if (data.raw.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
 
             this.weight = data.raw.weight
         }

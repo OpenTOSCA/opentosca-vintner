@@ -6,6 +6,7 @@ import {TechnologyPluginBuilder} from '#graph/plugin'
 import {ServiceTemplate} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
+import _ from 'lodash'
 import path from 'path'
 
 export default class Loader {
@@ -14,10 +15,12 @@ export default class Loader {
 
     private serviceTemplate?: ServiceTemplate
     private graph?: Graph
+    private readonly override?: Partial<ServiceTemplate>
 
-    constructor(file: string) {
+    constructor(file: string, override?: Partial<ServiceTemplate>) {
         this.file = file
         this.dir = files.getDirectory(file)
+        this.override = override
     }
 
     raw() {
@@ -26,6 +29,13 @@ export default class Loader {
 
     async load() {
         this.serviceTemplate = this.raw()
+
+        /**
+         * Override
+         */
+        if (check.isDefined(this.override)) {
+            this.serviceTemplate = _.merge(this.serviceTemplate, this.override)
+        }
 
         /**
          * Load type-specific conditions

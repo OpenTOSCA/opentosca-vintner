@@ -4,4 +4,4 @@ topology_template:
     node_templates:
         container:
             type: container
-            weight: 100
+            weight: 1

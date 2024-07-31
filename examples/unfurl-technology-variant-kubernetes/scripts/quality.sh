@@ -5,4 +5,4 @@ set -e
 source configuration.sh
 
 # Quality
-$VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml
+$VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml --experimental
