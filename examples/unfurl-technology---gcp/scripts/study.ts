@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import controller from '#controller'
+import * as files from '#files'
 import * as utils from '#utils'
 import path from 'path'
 import Graph from '../../../src/graph/graph'
@@ -209,7 +210,7 @@ async function qualities() {
     /**
      * Data
      */
-    for (const variant of ['docker', 'gcp', 'kubernetes', 'os-large', 'os-medium']) {
+    for (const variant of files.listDirectories(testsDir)) {
         const inputs = path.join(testsDir, variant, 'inputs.yaml')
 
         const quality = await controller.template.quality({template: templateFile, experimental: true, inputs})

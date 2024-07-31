@@ -39,7 +39,12 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     }
 }
 
-export async function minMaxQuality(options: ResolveOptions) {
+// TODO: quality
+// TODO: counting
+// TODO: random
+export async function minMaxQuality(
+    options: ResolveOptions & {quality?: boolean; counting?: boolean; random?: boolean}
+) {
     /**
      * Graph (for checking options)
      */

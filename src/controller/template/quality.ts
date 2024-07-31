@@ -5,6 +5,9 @@ export type TemplateQualityOptions = {
     template: string
     presets?: string[]
     inputs?: string
+    quality?: boolean
+    counting?: boolean
+    random?: boolean
     experimental: boolean
 }
 
@@ -20,5 +23,8 @@ export default async function (options: TemplateQualityOptions) {
         template: options.template,
         inputs: options.inputs,
         presets: options.presets,
+        quality: options.quality,
+        counting: options.counting,
+        random: options.random,
     })
 }
