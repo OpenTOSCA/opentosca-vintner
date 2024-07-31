@@ -131,7 +131,7 @@ export async function minMaxQuality(options: ResolveOptions) {
     throw new UnexpectedError()
 }
 
-async function load(options: ResolveOptions, override?: Partial<ServiceTemplate>) {
+export async function load(options: ResolveOptions, override?: Partial<ServiceTemplate>) {
     if (check.isUndefined(options.presets)) options.presets = []
     if (!check.isArray(options.presets)) throw new Error(`Presets must be a list`)
 

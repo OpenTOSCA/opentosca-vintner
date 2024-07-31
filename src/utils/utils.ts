@@ -146,14 +146,14 @@ export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
-export function sumObjects(objects: {[key: string]: number}[]) {
+export function sumObjects<T>(objects: {[key: string]: number}[]): T {
     return objects.reduce((a, b) => {
         for (const key in b) {
             // eslint-disable-next-line no-prototype-builtins
             if (b.hasOwnProperty(key)) a[key] = (a[key] || 0) + b[key]
         }
         return a
-    }, {})
+    }, {}) as T
 }
 
 export function looseParse(value: any) {
