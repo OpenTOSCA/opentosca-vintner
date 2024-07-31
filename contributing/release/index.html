@@ -2790,7 +2790,7 @@
 This will transpile Javascript inside the <code>/build</code> directory.
 During the build, the string <code>__VERSION__</code> inside a Javascript file is replace with the current commit hash.
 The current version can be checked using <code>vintner --version</code>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>task<span class="w"> </span>build
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>./task<span class="w"> </span>build
 </code></pre></div></td></tr></table></div>
 <h2 id="package">Package<a class="headerlink" href="#package" title="Permanent link">¶</a></h2>
 <div class="admonition warning">
@@ -2800,7 +2800,7 @@ The current version can be checked using <code>vintner --version</code>.</p>
 <p>To locally package the project, run the following command.
 This will package the previously transpiled Javascript using <a href="https://github.com/vercel/pkg" target="_blank"><code>pkg</code></a> and
 generate binaries inside the <code>/dist</code> directory.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>task<span class="w"> </span>package
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>./task<span class="w"> </span>package
 </code></pre></div></td></tr></table></div>
 <p>The issue considering the failed bytecode generation of MiniSat is known and can be ignored in our case.</p>
 <h2 id="github">GitHub<a class="headerlink" href="#github" title="Permanent link">¶</a></h2>
@@ -2819,7 +2819,7 @@ Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.</p>
 <p>Vintner is available as npm package <a href="https://www.npmjs.com/package/opentosca-vintner" target="_blank"><code>opentosca-vintner</code></a>.
 New versions are published manually.
 To publish a new version, first update the version number in <code>package.json</code> and then run</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>task<span class="w"> </span>release:npm
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>./task<span class="w"> </span>release:npm
 </code></pre></div></td></tr></table></div>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">¶</a></h2>
 <p>Vintner is available as Docker image on <a href="https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner" target="_blank">https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner</a>.
@@ -2836,7 +2836,7 @@ See <a href="https://docs.chocolatey.org/en-us/create/create-packages-quick-star
 </code></pre></div></td></tr></table></div>
 <p>Publish a new version as follows. 
 This will use the latest release.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>task<span class="w"> </span>release:choco
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>./task<span class="w"> </span>release:choco
 </code></pre></div></td></tr></table></div>
 <h2 id="zenodo">Zenodo<a class="headerlink" href="#zenodo" title="Permanent link">¶</a></h2>
 <p>Vintner is available on Zenodo with unique DOI <a href="https://doi.org/10.5281/zenodo.10155277" target="_blank">https://doi.org/10.5281/zenodo.10155277</a>.
@@ -2849,7 +2849,7 @@ The version must be manually published on Zenodo.</p>
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 30, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 31, 2024</span>
 </small>
 </div>
 </article>

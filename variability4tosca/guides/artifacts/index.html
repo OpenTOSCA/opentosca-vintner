@@ -2859,10 +2859,16 @@ For more information see <a href="../../../orchestrators/" target="_blank">Orche
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenTOSCA/opentosca-vintner.git
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>opentosca-vintner
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>lfs<span class="w"> </span>install
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>./task<span class="w"> </span>install
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>./task<span class="w"> </span>tasks:build
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>./task<span class="w"> </span>examples:pull:link
 </code></pre></div></td></tr></table></div></p>
 <p>Next, we import the template and initialize an instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>vintner<span class="w"> </span>templates<span class="w"> </span>import<span class="w"> </span>--template<span class="w"> </span>artifacts<span class="w"> </span>--path<span class="w"> </span>examples/unfurl-artifacts
@@ -2929,7 +2935,7 @@ Also check our other <a href="../../../publications/" target="_blank">publicatio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 30, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 31, 2024</span>
 </small>
 </div>
 </article>
