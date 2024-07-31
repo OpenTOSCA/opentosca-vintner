@@ -32,71 +32,100 @@ export class Result {
         return check.isTrue(present)
     }
 
-    getPresentElements(prefix: string) {
+    getPresences(prefix: string) {
         return Object.entries(this.map)
             .filter(([name, value]) => name.startsWith(prefix) && check.isTrue(value))
             .map(([name, _]) => name)
     }
 
-    getAbsentElements(prefix: string) {
+    getAbsences(prefix: string) {
         return Object.entries(this.map)
             .filter(([name, value]) => name.startsWith(prefix) && check.isFalse(value))
             .map(([name, _]) => name)
     }
 
     get topology(): {count: number; weight: number} {
-        let count = 0
-        let weight = 0
-        for (const node of this.graph.nodes.filter(it => this.isPresent(it))) {
-            count++
-            weight += node.weight
-        }
+        /**
+         * Present nodes
+         */
+        const present = this.graph.nodes.filter(it => this.isPresent(it))
+
+        /**
+         * Count (number of present nodes)
+         */
+        const count = present.length
+
+        /**
+         * Weight (sum of all weights of present nodes)
+         */
+        const weight = present.reduce((sum, it) => sum + it.weight, 0)
+
         return {count, weight}
     }
 
-    get technologies(): {count: number; weight: number; weights: {[key: string]: number}} {
+    get technologies(): {
+        count: number
+        count_total: number
+        count_each: {[technology: string]: number}
+        weight: number
+        weight_each: {[technology: string]: number}
+    } {
         /**
-         * Weight
+         * Present technologies
          */
-        const weights: {[key: string]: number} = {}
-        for (const technology of this.graph.technologies.filter(it => this.isPresent(it))) {
-            if (check.isUndefined(weights[technology.name])) weights[technology.name] = 0
-            weights[technology.name] += technology.weight
-        }
+        const present = this.graph.technologies.filter(it => this.isPresent(it))
+        const groups = utils.groupBy(present, it => it.name)
 
         /**
-         * Count
+         * Count (total number of different technologies, i.e., number of groups by name)
          */
-        const count = Object.values(weights).length
+        const count = Object.values(groups).length
 
         /**
-         * Weight
+         * Count Total (total number of all present technologies)
          */
-        const weight = utils.sum(Object.values(weights))
+        const count_total = present.length
+
+        /**
+         * Count Each (number of technologies per group)
+         */
+        const count_each = Object.entries(groups).reduce((output, [name, group]) => {
+            return {[name]: group.length}
+        }, {})
+
+        /**
+         * Weight (sum of all weights of all present technologies)
+         */
+        const weight = utils.sum(present.map(it => it.weight))
+
+        /**
+         * Weight Each (sum of all weight in a group of present technology)
+         */
+        const weight_each = Object.entries(groups).reduce((output, [name, group]) => {
+            return {[name]: utils.sum(group.map(it => it.weight))}
+        }, {})
 
         /**
          * Result
          */
-        return {count, weight, weights}
+        return {count, count_total, count_each, weight, weight_each}
     }
 
     get quality(): {count: number; weight: number; average: number} {
-        assert.isDefined(this.technologies)
-
         /**
-         * Count (total number of present technologies assignments)
+         * Count (total number of present technologies)
          */
         const count = this.graph.technologies.filter(it => this.isPresent(it)).length
         assert.isNumber(count)
         if (count === 0) throw new Error(`Technology count is 0`)
 
         /**
-         * Weight (total weight of technology assignments)
+         * Weight (sum of all weights of all present technologies)
          */
         const weight = this.technologies.weight
 
         /**
-         * Average (average weight per technology assignment)
+         * Average (average weight per technology)
          */
         const average = this.technologies.weight / count
 

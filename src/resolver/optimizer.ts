@@ -105,8 +105,8 @@ export default class Optimizer {
      */
     private ensureTopologyUniqueness() {
         const result = new Result(this.graph, this.current)
-        const present = result.getPresentElements('node')
-        const absent = result.getAbsentElements('node')
+        const present = result.getPresences('node')
+        const absent = result.getAbsences('node')
 
         const topology = MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
         const another = this.minisat.solveAssuming(MiniSat.not(topology))
@@ -180,8 +180,8 @@ export default class Optimizer {
      */
     private ensureTechnologiesUniqueness() {
         const result = new Result(this.graph, this.current)
-        const present = result.getPresentElements('technology')
-        const absent = result.getAbsentElements('technology')
+        const present = result.getPresences('technology')
+        const absent = result.getAbsences('technology')
 
         const technologies = MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
         const another = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(technologies)))
