@@ -43,8 +43,8 @@ export function firstEntry<V>(map: {[key: string]: V}): [string, V] {
 export function isEmpty(obj: any) {
     if (check.isUndefined(obj)) return true
     if (check.isArray(obj)) return obj.length === 0
-    if (check.isObject(obj)) return Object.keys(obj).length === 0
     if (check.isString(obj)) return obj.length === 0
+    if (check.isObject(obj)) return Object.keys(obj).length === 0
     throw new Error(`Cannot check if object ${pretty(obj)} is empty`)
 }
 
