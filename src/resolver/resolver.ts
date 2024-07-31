@@ -36,7 +36,7 @@ export default class Resolver {
         new Transformer(this.graph).run()
     }
 
-    optimized(options?: {all: boolean}) {
+    optimize(options?: {all: boolean}) {
         /**
          * Validator
          */

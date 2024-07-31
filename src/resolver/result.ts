@@ -11,17 +11,10 @@ export class Result {
     private readonly graph: Graph
 
     private readonly result: MiniSat.Solution
-    readonly topology: {count: number; weight: number}
-    readonly technologies: {count: number; weight: number; weights: {[key: string]: number}}
-    readonly quality: {count: number; weight: number; average: number}
 
     constructor(graph: Graph, result: MiniSat.Solution) {
         this.graph = graph
         this.result = result
-
-        this.topology = this.weightTopology()
-        this.technologies = this.weightTechnologies()
-        this.quality = this.assessQuality()
     }
 
     private _map?: ResultMap
@@ -30,10 +23,13 @@ export class Result {
         return this._map
     }
 
-    getPresence(element: Element) {
+    /**
+     * Note, we cannot use element.present yet since we are currently selecting the result!
+     */
+    isPresent(element: Element) {
         const present = this.map[element.id]
         if (check.isUndefined(present)) throw new Error(`${element.Display} is not part of the result`)
-        return present
+        return check.isTrue(present)
     }
 
     getPresentElements(prefix: string) {
@@ -48,7 +44,7 @@ export class Result {
             .map(([name, _]) => name)
     }
 
-    private weightTopology() {
+    get topology(): {count: number; weight: number} {
         let count = 0
         let weight = 0
         for (const node of this.graph.nodes.filter(it => this.isPresent(it))) {
@@ -58,46 +54,55 @@ export class Result {
         return {count, weight}
     }
 
-    private weightTechnologies() {
+    get technologies(): {count: number; weight: number; weights: {[key: string]: number}} {
+        /**
+         * Weight
+         */
         const weights: {[key: string]: number} = {}
         for (const technology of this.graph.technologies.filter(it => this.isPresent(it))) {
             if (check.isUndefined(weights[technology.name])) weights[technology.name] = 0
             weights[technology.name] += technology.weight
         }
-        return {
-            count: Object.values(weights).length,
-            weight: utils.sum(Object.values(weights)),
-            weights,
-        }
+
+        /**
+         * Count
+         */
+        const count = Object.values(weights).length
+
+        /**
+         * Weight
+         */
+        const weight = utils.sum(Object.values(weights))
+
+        /**
+         * Result
+         */
+        return {count, weight, weights}
     }
 
-    private assessQuality() {
+    get quality(): {count: number; weight: number; average: number} {
         assert.isDefined(this.technologies)
 
+        /**
+         * Count (total number of present technologies assignments)
+         */
         const count = this.graph.technologies.filter(it => this.isPresent(it)).length
         assert.isNumber(count)
+        if (count === 0) throw new Error(`Technology count is 0`)
 
-        return {
-            count,
-            weight: this.technologies.weight,
-            average: this.technologies.weight / count,
-        }
-    }
+        /**
+         * Weight (total weight of technology assignments)
+         */
+        const weight = this.technologies.weight
 
-    /**
-     * Note, we cannot use element.present yet since we are currently selecting the result!
-     */
-    private isPresent(element: Element) {
-        return check.isTrue(this.map[element.id])
-    }
+        /**
+         * Average (average weight per technology assignment)
+         */
+        const average = this.technologies.weight / count
 
-    equals(result: Result): boolean {
-        if (Object.keys(this.map).length !== Object.keys(result.map).length) return false
-
-        for (const key of Object.keys(this.map).filter(it => !it.startsWith('technology'))) {
-            if (this.map[key] !== result.map[key]) return false
-        }
-
-        return true
+        /**
+         * Result
+         */
+        return {count, weight, average}
     }
 }

@@ -342,6 +342,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/quality',
+    hae.express(async (req, res, next) => {
+        const quality = await Controller.template.quality(req.body)
+        res.json({quality})
+    })
+)
+
+resolvers.post(
     '/template/unpull',
     hae.express(async (req, res, next) => {
         await Controller.template.unpull(req.body)

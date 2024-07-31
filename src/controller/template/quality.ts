@@ -14,7 +14,7 @@ export default async function (options: TemplateQualityOptions) {
 
     /**
      * Note, checker does not run on these results!
-     * However, this is fine as long as the correct resolving options, e.g., with constraints enabled
+     * However, this is fine as long as the correct resolving options are used, e.g., with constraints enabled
      */
     return await Resolver.minMaxQuality({
         template: options.template,

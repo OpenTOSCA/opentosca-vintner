@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
@@ -24,11 +25,15 @@ export default class Technology extends Element {
         this.raw = data.raw
         this.container = data.container
         this.index = data.index
-        this.weight = data.raw.weight ?? 1
         this.assign = data.raw.assign
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false
+
+        this.weight = data.raw.weight ?? 1
+        assert.isNumber(this.weight)
+        if (this.weight < 0) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
+        if (this.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
     }
 
     get toscaId(): TechnologyPresenceArguments {

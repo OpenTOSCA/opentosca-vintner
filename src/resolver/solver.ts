@@ -15,7 +15,6 @@ import _ from 'lodash'
 import MiniSat from 'logic-solver'
 import regression from 'regression'
 import stats from 'stats-lite'
-import Min = Mocha.reporters.Min
 
 type ExpressionContext = {
     element: Element
@@ -78,7 +77,7 @@ export default class Solver {
          * Assign presence to elements
          */
         for (const element of this.graph.elements) {
-            element.present = result.getPresence(element)
+            element.present = result.isPresent(element)
         }
 
         /**
@@ -151,12 +150,8 @@ export default class Solver {
         const results: Result[] = []
 
         let result: MiniSat.Solution | null
-        let count = 0
         while ((result = this.minisat.solve())) {
             results.push(new Result(this.graph, result))
-            // TODO: remove this
-            count++
-            //console.log(count)
             this.minisat.forbid(result.getFormula())
         }
 
