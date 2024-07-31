@@ -45,6 +45,6 @@ export default class Resolver {
         /**
          * Solver
          */
-        return new Solver(this.graph, this.inputs).optimized(options)
+        return new Solver(this.graph, this.inputs).optimize(options)
     }
 }

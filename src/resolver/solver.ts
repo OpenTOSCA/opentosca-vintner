@@ -4,6 +4,7 @@ import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
 import {andify} from '#graph/utils'
+import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
@@ -66,7 +67,7 @@ export default class Solver {
         /**
          * Optimize
          */
-        const optimized = this.optimize(solution)
+        const optimized = new Optimizer(this.graph, solution, this.minisat).run()
 
         /**
          * Result
@@ -97,151 +98,7 @@ export default class Solver {
         return result.map
     }
 
-    // TODO: replace optimizer.ts with this
-    optimize(initial: MiniSat.Solution) {
-        let solution = initial
-
-        /**
-         * Optimize topology
-         */
-        if (this.graph.options.solver.topology.optimize) {
-            let next: MiniSat.Solution | undefined | null
-            const formulas = this.graph.nodes.map(it => it.id)
-            let weights
-
-            /**
-             * Weight
-             */
-            if (this.graph.options.solver.topology.mode === 'weight') {
-                weights = this.graph.nodes.map(it => it.weight * 100)
-            }
-
-            /**
-             * Count
-             */
-            if (this.graph.options.solver.topology.mode === 'count') {
-                weights = 1
-            }
-
-            /**
-             * Sanity checks
-             */
-            assert.isDefined(weights)
-
-            /**
-             * Minimize
-             */
-            if (this.graph.options.solver.topology.min) {
-                next = this.minisat.minimizeWeightedSum(solution, formulas, weights)
-            }
-
-            /**
-             * Maximize
-             */
-            if (this.graph.options.solver.topology.max) {
-                next = this.minisat.maximizeWeightedSum(solution, formulas, weights)
-            }
-
-            if (check.isUndefined(next)) throw new Error('Could not optimize topology')
-
-            solution = next
-        }
-
-        /**
-         * Unique topology check
-         *
-         * Ensure that there is not another solution that has the same nodes enabled and disabled
-         * Note, we use solveAssuming to keep the problem solvable.
-         */
-        if (this.graph.options.solver.topology.unique) {
-            const r = new Result(this.graph, solution)
-            const p = r.getPresentElements('node')
-            const a = r.getAbsentElements('node')
-
-            const ambiguous = this.minisat.solveAssuming(
-                MiniSat.not(MiniSat.and(MiniSat.and(p), MiniSat.not(MiniSat.or(a))))
-            )
-
-            if (check.isDefined(ambiguous)) {
-                if (this.graph.options.solver.topology.optimize) {
-                    throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
-                } else {
-                    throw new Error(`The result is ambiguous considering nodes (without optimization)`)
-                }
-            }
-        }
-
-        /**
-         * Optimize technologies
-         */
-        if (this.graph.options.solver.technologies.optimize) {
-            let next: MiniSat.Solution | undefined | null
-            let formulas
-            let weights
-
-            /**
-             * Weight
-             */
-            if (this.graph.options.solver.technologies.mode === 'weight') {
-                formulas = this.graph.technologies.map(it => it.id)
-                weights = this.graph.technologies.map(it => it.weight * 100)
-            }
-
-            /**
-             * Count
-             */
-            if (this.graph.options.solver.technologies.mode === 'count') {
-                const groups = utils.groupBy(this.graph.technologies, it => it.name)
-                formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
-                weights = 1
-            }
-
-            /**
-             * Sanity checks
-             */
-            assert.isDefined(formulas)
-            assert.isDefined(weights)
-
-            /**
-             * Minimize
-             */
-            if (this.graph.options.solver.technologies.min) {
-                next = this.minisat.minimizeWeightedSum(solution, formulas, weights)
-            }
-
-            /**
-             * Maximize
-             */
-            if (this.graph.options.solver.technologies.max) {
-                next = this.minisat.maximizeWeightedSum(solution, formulas, weights)
-            }
-
-            if (check.isUndefined(next)) throw new Error('Could not optimize technologies')
-
-            solution = next
-        }
-
-        // TODO: should minimize number of different technologies (hence must group them ...)
-
-        /**
-         * Check if there are multiple optimal technologies
-         */
-        if (this.graph.options.solver.technologies.unique) {
-            const technologies = solution.getTrueVars().filter(it => it.startsWith('technology'))
-            const ambiguous = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(technologies)))
-            if (check.isDefined(ambiguous)) {
-                if (this.graph.options.solver.technologies.optimize) {
-                    throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
-                } else {
-                    throw new Error(`The result is ambiguous considering technologies (without optimization)`)
-                }
-            }
-        }
-
-        return solution
-    }
-
-    optimized(options: {all?: boolean} = {}) {
+    optimize(options: {all?: boolean} = {}) {
         /**
          * Default options
          */
@@ -267,7 +124,7 @@ export default class Solver {
         /**
          * Optimize
          */
-        const optimized = this.optimize(solution)
+        const optimized = new Optimizer(this.graph, solution, this.minisat).run()
 
         /**
          * Result

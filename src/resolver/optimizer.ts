@@ -1,26 +1,26 @@
-import * as assert from '#assert'
+import * as check from '#check'
 import Graph from '#graph/graph'
 import {Result} from '#resolver/result'
+import * as utils from '#utils'
+import {UnexpectedError} from '#utils/error'
+import MiniSat from 'logic-solver'
 
 export default class Optimizer {
     private readonly graph: Graph
-    private results: Result[]
-    private transformed = false
+    private optimized = false
 
-    constructor(graph: Graph, results: Result[]) {
+    private minisat: MiniSat.Solver
+    private current: MiniSat.Solution
+
+    constructor(graph: Graph, solution: MiniSat.Solution, minisat: MiniSat.Solver) {
         this.graph = graph
-        this.results = results
+        this.current = solution
+        this.minisat = minisat
     }
 
-    run() {
-        this.optimize()
-
-        return this.first()
-    }
-
-    optimize() {
-        if (this.transformed) return this.results
-        this.transformed = true
+    run(): MiniSat.Solution {
+        if (this.optimized) return this.current
+        this.optimized = true
 
         /**
          * Optimize topology
@@ -42,94 +42,153 @@ export default class Optimizer {
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
-        return this.results
+        // TODO: additionally minimize number of different technologies?
+
+        return this.current
     }
 
+    /**
+     * Optimize topology
+     */
     private optimizeTopology() {
+        const formulas = this.graph.nodes.map(it => it.id)
+        let weights: number | number[]
+
+        switch (this.graph.options.solver.topology.mode) {
+            /**
+             * Weight
+             */
+            case 'weight': {
+                weights = this.graph.nodes.map(it => it.weight * 100)
+                break
+            }
+
+            /**
+             * Count
+             */
+            case 'count': {
+                weights = 1
+                break
+            }
+
+            /**
+             * Abort
+             */
+            default:
+                throw new Error(`Topology optimization mode "${this.graph.options.solver.topology.mode}" not supported`)
+        }
+
         /**
          * Minimize
          */
         if (this.graph.options.solver.topology.min) {
-            this.results.sort(this.compare('asc', it => it.topology[this.graph.options.solver.topology.mode]))
+            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
+            return
         }
 
         /**
          * Maximize
          */
         if (this.graph.options.solver.topology.max) {
-            this.results.sort(this.compare('desc', it => it.topology[this.graph.options.solver.topology.mode]))
+            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
+            return
         }
+
+        throw new UnexpectedError()
     }
 
+    /**
+     * Unique topology check
+     *
+     * Ensure that there is not another solution that has the same nodes enabled and disabled.
+     * Note, we use solveAssuming to keep the problem solvable.
+     */
     private ensureTopologyUniqueness() {
-        if (this.results.length > 1 && !this.first().equals(this.second())) {
-            if (this.graph.options.solver.topology.optimize) {
-                if (this.first().topology.weight === this.second().topology.weight)
-                    throw new Error(`The result is ambiguous considering nodes (besides optimization)`)
-            } else {
-                throw new Error(`The result is ambiguous considering nodes (without optimization)`)
-            }
+        const result = new Result(this.graph, this.current)
+        const present = result.getPresentElements('node')
+        const absent = result.getAbsentElements('node')
+
+        const topology = MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
+        const another = this.minisat.solveAssuming(MiniSat.not(topology))
+
+        if (check.isDefined(another)) {
+            const mode = this.graph.options.solver.topology.optimize ? 'besides' : 'without'
+            throw new Error(`The result is ambiguous considering nodes (${mode} optimization)`)
         }
     }
 
+    /**
+     * Optimize technologies
+     */
     private optimizeTechnologies() {
-        /**
-         * Get subset of result (this simplifies unique check and does not sort in-place considering weight)
-         * If optimized, then the best results.
-         * If optimized and unique, then only the first.
-         * If not optimized, then not further defined/ any/ just chose the first one/ might be a list or just the first one
-         */
-        this.results = this.results.filter(
-            it =>
-                it.topology[this.graph.options.solver.topology.mode] ===
-                this.first().topology[this.graph.options.solver.topology.mode]
-        )
+        let formulas: MiniSat.Operands[]
+        let weights: number | number[]
+
+        switch (this.graph.options.solver.technologies.mode) {
+            /**
+             * Weight
+             */
+            case 'weight': {
+                formulas = this.graph.technologies.map(it => it.id)
+                weights = this.graph.technologies.map(it => it.weight * 100)
+                break
+            }
+
+            /**
+             * Count
+             */
+            case 'count': {
+                const groups = utils.groupBy(this.graph.technologies, it => it.name)
+                formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
+                weights = 1
+                break
+            }
+
+            /**
+             * Abort
+             */
+            default:
+                throw new Error(
+                    `Technology optimization mode "${this.graph.options.solver.technologies.mode}" not supported`
+                )
+        }
 
         /**
          * Minimize
          */
         if (this.graph.options.solver.technologies.min) {
-            this.results.sort(this.compare('asc', it => it.technologies[this.graph.options.solver.technologies.mode]))
+            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
+            return
         }
 
         /**
          * Maximize
          */
         if (this.graph.options.solver.technologies.max) {
-            this.results.sort(this.compare('desc', it => it.technologies[this.graph.options.solver.technologies.mode]))
+            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
+            return
         }
+
+        throw new UnexpectedError()
     }
 
+    /**
+     * Unique technologies check
+     *
+     * Ensure that there is not another solution that has the same technologies enabled and disabled.
+     * Note, we use solveAssuming to keep the problem solvable.
+     */
     private ensureTechnologiesUniqueness() {
-        if (this.results.length > 1) {
-            if (this.graph.options.solver.technologies.optimize) {
-                if (
-                    this.first().technologies[this.graph.options.solver.technologies.mode] ===
-                    this.second().technologies[this.graph.options.solver.technologies.mode]
-                )
-                    throw new Error(`The result is ambiguous considering technologies (besides optimization)`)
-            } else {
-                throw new Error(`The result is ambiguous considering technologies (without optimization)`)
-            }
-        }
-    }
+        const result = new Result(this.graph, this.current)
+        const present = result.getPresentElements('technology')
+        const absent = result.getAbsentElements('technology')
 
-    private first() {
-        const result = this.results[0]
-        assert.isDefined(result)
-        return result
-    }
+        const technologies = MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
+        const another = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(technologies)))
 
-    private second() {
-        const result = this.results[1]
-        assert.isDefined(result)
-        return result
-    }
-
-    private compare<T>(order: 'asc' | 'desc', value: (element: T) => number) {
-        return (a: T, b: T) => {
-            if (order === 'asc') return value(a) - value(b)
-            return value(b) - value(a)
+        if (check.isDefined(another)) {
+            const mode = this.graph.options.solver.technologies.optimize ? 'besides' : 'without'
+            throw new Error(`The result is ambiguous considering technologies (${mode} optimization)`)
         }
     }
 }
