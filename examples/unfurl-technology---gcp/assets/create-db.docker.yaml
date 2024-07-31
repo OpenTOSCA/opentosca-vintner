@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root_password
+            MYSQL_DATABASE: initial_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+        ports:
+            - '3306:3306'
+        volumes:
+            - mysql-data:/var/lib/mysql
+
+    create-db:
+        image: mysql:5.7
+        container_name: create-db
+        depends_on:
+            - mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root_password
+        entrypoint: ['sh', '-c', "mysql -h mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'CREATE DATABASE IF NOT EXISTS second_db;'"]
+
+volumes:
+    mysql-data:

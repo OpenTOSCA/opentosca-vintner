@@ -104,6 +104,10 @@ export function prettyNumber(number?: number) {
     return number.toLocaleString('en', {maximumFractionDigits: 3, minimumFractionDigits: 3})
 }
 
+export function roundNumber(number: number, digits = 2) {
+    return Number(number.toFixed(digits))
+}
+
 export function getMedianFromSorted(array: number[]) {
     const mid = Math.floor(array.length / 2)
     return array.length % 2 ? array[mid] : (array[mid] + array[mid - 1]) / 2

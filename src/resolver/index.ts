@@ -54,7 +54,7 @@ export async function minMaxQuality(options: ResolveOptions) {
         const loaded = await load(utils.copy(options))
         const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
         if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-        return utils.first(optimized).quality.average
+        return utils.roundNumber(utils.first(optimized).quality.average)
     }
 
     /**
@@ -76,9 +76,10 @@ export async function minMaxQuality(options: ResolveOptions) {
 
         const min = Math.min(...all.map(it => it.technologies.count))
         const candidates = all.filter(it => it.technologies.count === min)
+        const selected = utils.first(candidates)
         return {
-            min: utils.first(candidates).quality.average,
-            max: utils.last(candidates).quality.average,
+            min: utils.roundNumber(selected.quality.average),
+            max: utils.roundNumber(selected.quality.average),
         }
     }
 
@@ -118,7 +119,10 @@ export async function minMaxQuality(options: ResolveOptions) {
         const max = new Resolver(maxLoad.graph, maxLoad.inputs).optimize()
         if (max.length !== 1) throw new Error(`Did not return correct quality`)
 
-        return {min: utils.first(min).quality.average, max: utils.first(max).quality.average}
+        return {
+            min: utils.roundNumber(utils.first(min).quality.average),
+            max: utils.roundNumber(utils.first(max).quality.average),
+        }
     }
 
     /**
