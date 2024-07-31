@@ -130,6 +130,18 @@ export default class Node extends Element {
         return this.types[0]
     }
 
+    isA(name: string) {
+        const inheritance = this.graph.serviceTemplate.topology_template?.variability?.inheritance ?? {}
+        let current: string | undefined = this.getType().name
+
+        do {
+            if (current === name) return true
+            current = inheritance[current]
+        } while (check.isDefined(current) && !utils.isEmpty(current))
+
+        return false
+    }
+
     getTypeSpecificConditionWrapper() {
         const type = this.getTypeSilent()
         if (check.isUndefined(type)) return

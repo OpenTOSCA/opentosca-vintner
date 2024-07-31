@@ -1,3 +1,5 @@
+# https://github.com/GoogleCloudPlatform/microservices-demo
+
 tosca_definitions_version: tosca_variability_1_0_rc_3
 
 imports:
@@ -22,6 +24,7 @@ topology_template:
         options:
             # TODO: remove this
             required_technology_check: false
+            # TODO: must be "true" to work
             optimization_technologies: true
 
     node_templates:
@@ -46,7 +49,7 @@ topology_template:
                 - host: go_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -67,7 +70,7 @@ topology_template:
                 - host: go_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -81,7 +84,7 @@ topology_template:
                 - host: python_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -95,7 +98,7 @@ topology_template:
                 - host: node_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -109,7 +112,7 @@ topology_template:
                 - host: node_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -123,7 +126,7 @@ topology_template:
                 - host: go_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -139,7 +142,7 @@ topology_template:
                 - host: csharp_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         postgresql_database:
             type: postgresql.database
@@ -152,7 +155,7 @@ topology_template:
                 - host: virtual_machine
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_cloudsql
 
         ###################################################
         #
@@ -166,7 +169,7 @@ topology_template:
                 - host: go_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -182,7 +185,7 @@ topology_template:
                 - host: python_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -196,7 +199,7 @@ topology_template:
                 - host: java_runtime
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -230,7 +233,7 @@ topology_template:
                 - host: virtual_machine
 
         virtual_machine:
-            type: virtual.machine
+            type: openstack.machine
             properties:
                 - flavor:
                       value: m1.medium
@@ -258,11 +261,21 @@ topology_template:
 
         ###################################################
         #
-        # GCP AppEngine
+        # GCP
         #
         ###################################################
 
-        gcp_runtime:
+        gcp_appengine:
+            type: gcp.appengine
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
             type: gcp.provider
             conditions: {logic_expression: is_gcp}
 

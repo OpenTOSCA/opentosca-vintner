@@ -22,7 +22,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -40,7 +40,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -51,7 +51,7 @@ topology_template:
         email_service:
             type: email.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -62,7 +62,7 @@ topology_template:
         payment_service:
             type: payment.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -73,7 +73,7 @@ topology_template:
         currency_service:
             type: currency.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -84,7 +84,7 @@ topology_template:
         shipping_service:
             type: shipping.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -97,7 +97,7 @@ topology_template:
             requirements:
                 - database: postgresql_database
 
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         postgresql_database:
             type: postgresql.database.terraform.postgresql
@@ -107,7 +107,7 @@ topology_template:
         postgresql_dbms:
             type: postgresql.dbms.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_cloudsql
 
         ###################################################
         #
@@ -118,7 +118,7 @@ topology_template:
         product_service:
             type: product.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -131,7 +131,7 @@ topology_template:
             requirements:
                 - product: product_service
 
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -142,7 +142,7 @@ topology_template:
         advertisement_service:
             type: advertisement.service.terraform.gcp
             requirements:
-                - host: gcp_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -150,5 +150,15 @@ topology_template:
         #
         ###################################################
 
-        gcp_runtime:
+        gcp_appengine:
+            type: gcp.appengine
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
             type: gcp.provider

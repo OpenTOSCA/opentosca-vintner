@@ -12,6 +12,13 @@ export type VariabilityDefinition = {
     type_specific_conditions?: string | TypeSpecificLogicExpressions
     technology_assignment_rules?: string | TechnologyAssignmentRulesMap
     plugins?: PluginDefinitionMap
+
+    // TODO: use tosca type system ...
+    inheritance?: Inheritance
+}
+
+export type Inheritance = {
+    [key: string]: string
 }
 
 export type VariabilityInputDefinitionMap = {[key: string]: VariabilityInputDefinition}

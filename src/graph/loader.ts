@@ -5,7 +5,7 @@ import Graph from '#graph/graph'
 import {TechnologyPluginBuilder} from '#graph/plugin'
 import {ServiceTemplate} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
-import {TypeSpecificLogicExpressions} from '#spec/variability'
+import {Inheritance, TypeSpecificLogicExpressions} from '#spec/variability'
 import _ from 'lodash'
 import path from 'path'
 
@@ -51,6 +51,11 @@ export default class Loader {
          * Load technology plugins
          */
         await this.loadTechnologyPluginBuilders()
+
+        /**
+         * Load inheritance
+         */
+        await this.loadInheritance()
 
         return this.serviceTemplate
     }
@@ -159,5 +164,24 @@ export default class Loader {
         }
 
         this.serviceTemplate.topology_template.variability.plugins.technology = builders
+    }
+
+    // TODO: replace with tosca type system ...
+    private async loadInheritance() {
+        assert.isDefined(this.serviceTemplate, 'Template not loaded')
+        if (check.isUndefined(this.serviceTemplate.topology_template)) return
+
+        /**
+         * Load inheritance from default file
+         */
+        const file = path.join(this.dir, 'lib', 'inheritance.yaml')
+        if (files.exists(file)) {
+            const inheritance = files.loadYAML<Inheritance>(file)
+
+            if (check.isUndefined(this.serviceTemplate.topology_template.variability))
+                this.serviceTemplate.topology_template.variability = {}
+
+            this.serviceTemplate.topology_template.variability.inheritance = inheritance
+        }
     }
 }

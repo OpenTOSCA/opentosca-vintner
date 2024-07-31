@@ -105,7 +105,7 @@ topology_template:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms.ansible.virtual
+            type: postgresql.dbms.ansible.openstack
             requirements:
                 - host: virtual_machine
 
@@ -151,32 +151,32 @@ topology_template:
         ###################################################
 
         go_runtime:
-            type: go.runtime.ansible.virtual
+            type: go.runtime.ansible.openstack
             requirements:
                 - host: virtual_machine
 
         csharp_runtime:
-            type: csharp.runtime.ansible.virtual
+            type: csharp.runtime.ansible.openstack
             requirements:
                 - host: virtual_machine
 
         node_runtime:
-            type: node.runtime.ansible.virtual
+            type: node.runtime.ansible.openstack
             requirements:
                 - host: virtual_machine
 
         python_runtime:
-            type: python.runtime.ansible.virtual
+            type: python.runtime.ansible.openstack
             requirements:
                 - host: virtual_machine
 
         java_runtime:
-            type: java.runtime.ansible.virtual
+            type: java.runtime.ansible.openstack
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: virtual.machine.terraform.openstack
+            type: openstack.machine.terraform.openstack
             properties:
                 flavor: m1.medium
             requirements:
