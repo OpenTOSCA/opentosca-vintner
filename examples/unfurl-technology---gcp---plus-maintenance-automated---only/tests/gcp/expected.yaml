@@ -5,9 +5,20 @@ imports:
 
 topology_template:
     inputs:
-        docker_host:
+        database_password:
             type: string
-            default: 'unix://var/run/docker.sock'
+
+        dbms_password:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
 
     node_templates:
         ###################################################
@@ -17,15 +28,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service.docker.docker
-            properties:
-                checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
-                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
-                recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
-                advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
+            type: frontend.service.terraform.gcp
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -35,7 +38,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -44,14 +47,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service.docker.docker
-            properties:
-                email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
-                payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
-                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+            type: checkout.service.terraform.gcp
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -60,7 +56,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -69,9 +65,9 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service.docker.docker
+            type: email.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -80,9 +76,9 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service.docker.docker
+            type: payment.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -91,9 +87,9 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service.docker.docker
+            type: currency.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -102,9 +98,9 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service.docker.docker
+            type: shipping.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -113,21 +109,28 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service.docker.docker
+            type: cart.service.terraform.gcp
             requirements:
                 - database: postgresql_database
 
-                - host: docker_runtime
+                - host: gcp_appengine
 
         postgresql_database:
-            type: postgresql.database.ansible.postgresql
+            type: postgresql.database.terraform.postgresql
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms.docker.docker
+            type: postgresql.dbms.terraform.gcp
+            properties:
+                dbms_name: cart
+                dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker_runtime
+                - host: gcp_cloudsql
 
         ###################################################
         #
@@ -136,9 +139,9 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service.docker.docker
+            type: product.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -147,11 +150,11 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service.docker.docker
+            type: recommendation.service.terraform.gcp
             requirements:
                 - product: product_service
 
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -160,17 +163,29 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service.docker.docker
+            type: advertisement.service.terraform.gcp
             requirements:
-                - host: docker_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
-        # Docker
+        # GCP
         #
         ###################################################
 
-        docker_runtime:
-            type: docker.engine
+        gcp_appengine:
+            type: gcp.appengine.terraform.gcp
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql.terraform.gcp
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
+            type: gcp.provider
             properties:
-                docker_host: {get_input: docker_host}
+                gcp_region: {get_input: gcp_region}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+                gcp_project: {get_input: gcp_project}

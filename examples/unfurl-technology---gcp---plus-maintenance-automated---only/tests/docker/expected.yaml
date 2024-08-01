@@ -5,20 +5,15 @@ imports:
 
 topology_template:
     inputs:
-        k8s_api_address:
+        database_password:
             type: string
 
-        k8s_api_port:
+        dbms_password:
             type: string
 
-        k8s_ca_cert_file:
+        docker_host:
             type: string
-
-        k8s_client_cert_file:
-            type: string
-
-        k8s_client_key_file:
-            type: string
+            default: 'unix://var/run/docker.sock'
 
     node_templates:
         ###################################################
@@ -28,7 +23,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service.kubernetes.kubernetes
+            type: frontend.service.docker.docker
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -38,14 +33,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: kubernetes_runtime
-
-        frontend_ingress:
-            type: ingress.kubernetes.kubernetes
-            requirements:
-                - upstream: frontend_service
-
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -54,7 +42,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service.kubernetes.kubernetes
+            type: checkout.service.docker.docker
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -63,7 +51,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -72,9 +60,9 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service.kubernetes.kubernetes
+            type: email.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -83,9 +71,9 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service.kubernetes.kubernetes
+            type: payment.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -94,9 +82,9 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service.kubernetes.kubernetes
+            type: currency.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -105,9 +93,9 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service.kubernetes.kubernetes
+            type: shipping.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -116,21 +104,28 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service.kubernetes.kubernetes
+            type: cart.service.docker.docker
             requirements:
                 - database: postgresql_database
 
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         postgresql_database:
             type: postgresql.database.ansible.postgresql
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms.kubernetes.kubernetes
+            type: postgresql.dbms.docker.docker
+            properties:
+                dbms_name: cart
+                dbms_password: {get_input: dbms_password}
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -139,9 +134,9 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service.kubernetes.kubernetes
+            type: product.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -150,11 +145,11 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service.kubernetes.kubernetes
+            type: recommendation.service.docker.docker
             requirements:
                 - product: product_service
 
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -163,21 +158,17 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service.kubernetes.kubernetes
+            type: advertisement.service.docker.docker
             requirements:
-                - host: kubernetes_runtime
+                - host: docker_runtime
 
         ###################################################
         #
-        # Kubernetes
+        # Docker
         #
         ###################################################
 
-        kubernetes_runtime:
-            type: kubernetes
+        docker_runtime:
+            type: docker.engine
             properties:
-                k8s_api_address: {get_input: k8s_api_address}
-                k8s_api_port: {get_input: k8s_api_port}
-                k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
-                k8s_client_cert_file: {get_input: k8s_client_cert_file}
-                k8s_client_key_file: {get_input: k8s_client_key_file}
+                docker_host: {get_input: docker_host}

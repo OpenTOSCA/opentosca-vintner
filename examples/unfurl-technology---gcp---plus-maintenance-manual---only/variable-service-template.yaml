@@ -10,6 +10,9 @@ topology_template:
         database_password:
             type: string
 
+        dbms_password:
+            type: string
+
         docker_host:
             type: string
             default: 'unix://var/run/docker.sock'
@@ -294,6 +297,10 @@ topology_template:
                       conditions: {logic_expression: is_docker}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
             requirements:
                 - host: postgresql_dbms
 
@@ -308,6 +315,9 @@ topology_template:
                       conditions: {logic_expression: is_kubernetes}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
+            properties:
+                - dbms_name: cart
+                - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
                 - host: docker_runtime
@@ -485,11 +495,13 @@ topology_template:
 
         gcp_appengine:
             type: gcp.appengine
+            technology: terraform
             requirements:
                 - host: gcp_provider
 
         gcp_cloudsql:
             type: gcp.cloudsql
+            technology: terraform
             requirements:
                 - host: gcp_provider
 

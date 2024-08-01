@@ -5,6 +5,12 @@ imports:
 
 topology_template:
     inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
         os_network:
             type: string
 
@@ -142,11 +148,18 @@ topology_template:
 
         postgresql_database:
             type: postgresql.database.ansible.postgresql
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
             type: postgresql.dbms.ansible.openstack
+            properties:
+                dbms_name: cart
+                dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
 

@@ -1,2 +1,2 @@
-expected: ../../../unfurl-technology---gcp---plus-maintenance-quality---only/tests/docker/expected.yaml
-inputs: ../../../unfurl-technology---gcp---plus-maintenance-quality---only/tests/docker/inputs.yaml
+expected: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/docker/expected.yaml
+inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/docker/inputs.yaml

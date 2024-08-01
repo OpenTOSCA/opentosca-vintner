@@ -1,2 +1,2 @@
-expected: ../../../unfurl-technology---gcp---plus-maintenance-quality---only/tests/os-medium/expected.yaml
-inputs: ../../../unfurl-technology---gcp---plus-maintenance-quality---only/tests/os-medium/inputs.yaml
+expected: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/os-medium/expected.yaml
+inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/os-medium/inputs.yaml
