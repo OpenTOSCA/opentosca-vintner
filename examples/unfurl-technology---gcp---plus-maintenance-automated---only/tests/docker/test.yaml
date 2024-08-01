@@ -1,0 +1,7 @@
+merge:
+    topology_template:
+        node_templates:
+            payment_service:
+                properties:
+                    optional_feature: false
+                    premium_feature: false

@@ -80,6 +80,8 @@ topology_template:
             is_gcp: {equal: [{variability_input: env}, GCP]}
             is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
+            has_optional_feature: {equal: [{variability_input: optional_feature}, true]}
+            has_premium_feature: {equal: [{variability_input: premium_feature}, true]}
         inputs:
             env:
                 type: string
@@ -88,6 +90,14 @@ topology_template:
             tier:
                 type: string
                 default: MEDIUM
+
+            optional_feature:
+                type: boolean
+                default: false
+
+            premium_feature:
+                type: boolean
+                default: false
 
         options:
             # TODO: remove this
@@ -170,6 +180,19 @@ topology_template:
 
         payment_service:
             type: payment.service
+            properties:
+                - optional_feature:
+                      value: true
+                      conditions: {logic_expression: has_optional_feature}
+                - optional_feature:
+                      value: false
+                      conditions: {not: {logic_expression: has_optional_feature}}
+                - premium_feature:
+                      value: true
+                      conditions: {logic_expression: has_premium_feature}
+                - premium_feature:
+                      value: false
+                      conditions: {not: {logic_expression: has_premium_feature}}
             requirements:
                 - host: node_runtime
                 - host: docker_runtime
@@ -336,7 +359,6 @@ topology_template:
                 - flavor:
                       value: m1.large
                       conditions: {equal: [{variability_input: tier}, LARGE]}
-
                 - os_network: {get_input: os_network}
                 - os_ssh_key_name: {get_input: os_ssh_key_name}
                 - os_ssh_user: {get_input: os_ssh_user}
