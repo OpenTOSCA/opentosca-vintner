@@ -19,6 +19,7 @@ const testsDir = path.join(templateDir, 'tests')
  */
 type MetricsData = {
     scenario: string
+    short?: string
     models: number
     elements: number
     conditions: number
@@ -77,13 +78,13 @@ async function main() {
     /**
      * EDMM Total Default
      */
-    const edmm_total_default = edmmTotal('EDMM Total', [edmm_docker, edmm_gcp, edmm_os_medium, edmm_os_large])
+    const edmm_total_default = sumMetrics('EDMM Total', [edmm_docker, edmm_gcp, edmm_os_medium, edmm_os_large])
 
     /**
      * VDMM Baseline Default
      */
     const vdmm_baseline_default = await stats(
-        'VDMM Baseline Default ',
+        'VDMM Baseline Default',
         path.join(examplesDir, 'unfurl-technology---gcp---baseline-default---only', 'variable-service-template.yaml')
     )
 
@@ -91,7 +92,7 @@ async function main() {
      * VDMM+ Default Manual
      */
     const vdmm_plus_default_manual = await stats(
-        'VDMM+ Default Automated Quality ',
+        'VDMM+ Default Manual',
         path.join(examplesDir, 'unfurl-technology---gcp---plus-default-manual---only', 'variable-service-template.yaml')
     )
 
@@ -99,7 +100,7 @@ async function main() {
      * VDMM+ Default Automated Quality
      */
     const vdmm_plus_default_automated_quality = await stats(
-        'VDMM+ Default Automated Quality ',
+        'VDMM+ Default Automated Quality',
         path.join(
             examplesDir,
             'unfurl-technology---gcp---plus-default-automated---only',
@@ -160,7 +161,7 @@ async function main() {
     /**
      * EDMM Total Maintenance
      */
-    const edmm_total_maintenance = edmmTotal('EDMM Total', [
+    const edmm_total_maintenance = sumMetrics('EDMM Total Maintenance', [
         edmm_docker,
         edmm_gcp,
         edmm_os_medium,
@@ -181,9 +182,21 @@ async function main() {
     )
 
     /**
+     * VDMM+ Maintenance Manual
+     */
+    const vdmm_plus_maintenance_manual = await stats(
+        'VDMM+ Maintenance Manual',
+        path.join(
+            examplesDir,
+            'unfurl-technology---gcp---plus-maintenance-manual---only',
+            'variable-service-template.yaml'
+        )
+    )
+
+    /**
      * VDMM+ Maintenance Automated Quality
      */
-    const vdmm_plus_maintenance_automated_quality = await stats('VDMM+ Maintenance Automated Quality ', templateFile)
+    const vdmm_plus_maintenance_automated_quality = await stats('VDMM+ Maintenance Automated Quality', templateFile)
 
     /**
      * VDMM+ Maintenance Automated Random (same as quality but with 3 more lines due to variability options)
@@ -206,10 +219,114 @@ async function main() {
         edmm_kubernetes,
         edmm_total_maintenance,
         vdmm_baseline_maintenance,
+        vdmm_plus_maintenance_manual,
         vdmm_plus_maintenance_automated_random,
         vdmm_plus_maintenance_automated_counting,
         vdmm_plus_maintenance_automated_quality,
     ])
+
+    /*******************************************************************************************************************
+     *
+     * Absolute Diff
+     *
+     ******************************************************************************************************************/
+
+    /**
+     * EDMM Total Diff
+     */
+    const edmm_total_diff = absoluteDiff(edmm_total_maintenance, edmm_total_default)
+
+    /**
+     * VDMM Baseline Diff
+     */
+    const vdmm_baseline_diff = absoluteDiff(vdmm_baseline_maintenance, vdmm_baseline_default)
+
+    /**
+     * VDMM+ Manual Diff
+     */
+    const vdmm_plus_manual_diff = absoluteDiff(vdmm_plus_maintenance_manual, vdmm_plus_default_manual)
+
+    /**
+     * VDMM+ Automated Diff
+     */
+    const vdmm_plus_automated_diff = absoluteDiff(
+        vdmm_plus_maintenance_automated_quality,
+        vdmm_plus_default_automated_quality
+    )
+
+    printTable<MetricsDataAbsDiff>('From Default to Maintained (Absolut to previous)', [
+        edmm_total_diff,
+        vdmm_baseline_diff,
+        vdmm_plus_manual_diff,
+        vdmm_plus_automated_diff,
+    ])
+
+    /*******************************************************************************************************************
+     *
+     * Relative Diff
+     *
+     ******************************************************************************************************************/
+
+    /**
+     * Relative Diff of "VDMM+ Maintenance Manual - VDMM+ Default Manual" in constrast to "VDMM Baseline Maintenance - VDMM Baseline Default"
+     */
+    const vdmm_plus_manual_diff_relative_diff = relativeDiff(vdmm_plus_manual_diff, vdmm_baseline_diff)
+
+    /**
+     * Relative Diff of "VDMM+ Maintenance Automated Quality - VDMM+ Default Automated Quality" in constrast to "VDMM Baseline Maintenance - VDMM Baseline Default"
+     */
+    const vdmm_plus_automated_quality_diff_relative_diff = relativeDiff(vdmm_plus_automated_diff, vdmm_baseline_diff)
+
+    printTable<MetricsDataRelDiff>('From Default to Maintained (Relative to change to baseline) ', [
+        vdmm_plus_manual_diff_relative_diff,
+        vdmm_plus_automated_quality_diff_relative_diff,
+    ])
+}
+
+type MetricsDataAbsDiff = {
+    scenario: string
+    models_absolute_diff: number
+    elements_absolute_diff: number
+    conditions_absolute_diff: number
+    technology_assignments_absolute_diff: number
+    lines_of_code_absolute_diff: number
+}
+
+function absoluteDiff(maintained: MetricsData, previous: MetricsData): MetricsDataAbsDiff {
+    return {
+        scenario: `${maintained.short ?? maintained.scenario} - ${previous.short ?? previous.scenario}`,
+        models_absolute_diff: maintained.models - previous.models,
+        elements_absolute_diff: maintained.elements - previous.elements,
+        conditions_absolute_diff: maintained.conditions - previous.conditions,
+        technology_assignments_absolute_diff: maintained.technology_assignments - previous.technology_assignments,
+        lines_of_code_absolute_diff: maintained.lines_of_code - previous.lines_of_code,
+    }
+}
+
+type MetricsDataRelDiff = {
+    scenario: string
+    //  models_relative_diff: number
+    elements_relative_diff: number
+    conditions_relative_diff: number
+    technology_assignments_relative_diff: number
+    lines_of_code_relative_diff: number
+}
+
+function relativeDiff(maintained: MetricsDataAbsDiff, previous: MetricsDataAbsDiff): MetricsDataRelDiff {
+    return {
+        scenario: `(${maintained.scenario}) / (${previous.scenario})`,
+        //        models_relative_diff: maintained.models_absolute_diff / previous.models_absolute_diff,
+        elements_relative_diff: utils.roundNumber(maintained.elements_absolute_diff / previous.elements_absolute_diff),
+        conditions_relative_diff: utils.roundNumber(
+            maintained.conditions_absolute_diff / previous.conditions_absolute_diff
+        ),
+        technology_assignments_relative_diff: utils.roundNumber(
+            maintained.technology_assignments_absolute_diff / previous.technology_assignments_absolute_diff
+        ),
+        lines_of_code_relative_diff: utils.roundNumber(
+            maintained.lines_of_code_absolute_diff / previous.lines_of_code_absolute_diff
+        ),
+    }
 }
 
 async function technologyRules(graph: Graph) {
@@ -257,9 +374,10 @@ async function stats(scenario: string, file: string): Promise<MetricsData> {
     }
 }
 
-function edmmTotal(secnario: string, variants: MetricsData[]): MetricsData {
+function sumMetrics(scenario: string, variants: MetricsData[]): MetricsData {
     return {
-        scenario: `${secnario} (${variants.map(it => it.scenario).join(', ')})`,
+        scenario: `${scenario} (${variants.map(it => it.scenario).join(', ')})`,
+        short: scenario,
         models: variants.length,
         elements: utils.sum(variants.map(it => it.elements)),
         conditions: utils.sum(variants.map(it => it.conditions)),
