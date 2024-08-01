@@ -1,0 +1,2 @@
+expected: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/kubernetes/expected.yaml
+inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/kubernetes/inputs.yaml
