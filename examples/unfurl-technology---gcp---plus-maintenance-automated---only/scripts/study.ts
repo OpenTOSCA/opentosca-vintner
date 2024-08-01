@@ -166,15 +166,28 @@ async function main() {
     for (const variant of files.listDirectories(testsDir)) {
         const inputs = path.join(testsDir, variant, 'inputs.yaml')
 
-        const quality = await controller.template.quality({template: templateFile, experimental: true, inputs})
+        const quality = await controller.template.quality({
+            template: templateFile,
+            experimental: true,
+            inputs,
+            quality: true,
+        })
         assert.isNumber(quality)
 
-        // TODO: random
-        const random = {min: -1, max: -1}
+        const random = await controller.template.quality({
+            template: templateFile,
+            experimental: true,
+            inputs,
+            random: true,
+        })
         assert.isObject(random)
 
-        // TODO: counting
-        const counting = {min: -1, max: -1}
+        const counting = await controller.template.quality({
+            template: templateFile,
+            experimental: true,
+            inputs,
+            counting: true,
+        })
         assert.isObject(counting)
 
         qualityData.push({

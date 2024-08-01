@@ -39,16 +39,49 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     }
 }
 
-// TODO: quality
-// TODO: counting
-// TODO: random
+// TODO: this is so messy
 export async function minMaxQuality(
-    options: ResolveOptions & {quality?: boolean; counting?: boolean; random?: boolean}
+    options: ResolveOptions & {quality?: boolean; counting?: boolean; random?: boolean; min?: boolean; max?: boolean}
 ) {
+    const weight: Partial<ServiceTemplate> = {
+        topology_template: {
+            variability: {
+                options: {
+                    optimization_technologies: 'max',
+                    optimization_technologies_mode: 'weight',
+                },
+            },
+        },
+    }
+
+    const count: Partial<ServiceTemplate> = {
+        topology_template: {
+            variability: {
+                options: {
+                    optimization_technologies: 'min',
+                    optimization_technologies_mode: 'count',
+                },
+            },
+        },
+    }
+
+    const random: Partial<ServiceTemplate> = {
+        topology_template: {
+            variability: {
+                options: {
+                    optimization_technologies: false,
+                },
+            },
+        },
+    }
+
     /**
      * Graph (for checking options)
      */
-    const {graph} = await load(utils.copy(options))
+    const {graph} = await load(
+        utils.copy(options),
+        options.quality ? weight : options.counting ? count : options.random ? random : undefined
+    )
 
     /**
      * Quality
@@ -56,7 +89,7 @@ export async function minMaxQuality(
      * Get the result with the quality of all results (min or max is not overridden)
      */
     if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight') {
-        const loaded = await load(utils.copy(options))
+        const loaded = await load(utils.copy(options), weight)
         const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
         if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
         return utils.roundNumber(utils.first(optimized).quality.average)
@@ -68,23 +101,25 @@ export async function minMaxQuality(
      * Get the min and max quality of the results which have the min number of technologies
      */
     if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'count') {
-        const loaded = await load(utils.copy(options), {
-            topology_template: {
-                variability: {
-                    options: {
-                        optimization_technologies: 'min',
-                    },
-                },
-            },
-        })
+        const loaded = await load(utils.copy(options), count)
         const all = new Resolver(loaded.graph, loaded.inputs).optimize({all: true})
-
         const min = Math.min(...all.map(it => it.technologies.count))
-        const candidates = all.filter(it => it.technologies.count === min)
-        const selected = utils.first(candidates)
+        const candidates = all
+            .filter(it => it.technologies.count === min)
+            .sort((a, b) => a.quality.average - b.quality.average)
+
+        /*
+        console.log(
+            candidates.map(it => ({
+                technologies: it.technologies.count_each,
+                quality: it.quality.average,
+                presences: it.getPresences('technology'),
+            }))
+        )
+         */
         return {
-            min: utils.roundNumber(selected.quality.average),
-            max: utils.roundNumber(selected.quality.average),
+            min: utils.roundNumber(utils.first(candidates).quality.average),
+            max: utils.roundNumber(utils.last(candidates).quality.average),
         }
     }
 

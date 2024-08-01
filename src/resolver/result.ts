@@ -89,8 +89,9 @@ export class Result {
         /**
          * Count Each (number of technologies per group)
          */
-        const count_each = Object.entries(groups).reduce((output, [name, group]) => {
-            return {[name]: group.length}
+        const count_each = Object.entries(groups).reduce<{[key: string]: number}>((output, [name, group]) => {
+            output[name] = group.length
+            return output
         }, {})
 
         /**
@@ -101,8 +102,9 @@ export class Result {
         /**
          * Weight Each (sum of all weight in a group of present technology)
          */
-        const weight_each = Object.entries(groups).reduce((output, [name, group]) => {
-            return {[name]: utils.sum(group.map(it => it.weight))}
+        const weight_each = Object.entries(groups).reduce<{[key: string]: number}>((output, [name, group]) => {
+            output[name] = utils.sum(group.map(it => it.weight))
+            return output
         }, {})
 
         /**
