@@ -370,7 +370,7 @@ async function stats(scenario: string, file: string): Promise<MetricsData> {
         elements: stats.edmm_elements_without_technologies,
         conditions: stats.edmm_elements_conditions_manual,
         technology_assignments: stats.technologies,
-        lines_of_code: stats.locp,
+        lines_of_code: stats.loc,
     }
 }
 
