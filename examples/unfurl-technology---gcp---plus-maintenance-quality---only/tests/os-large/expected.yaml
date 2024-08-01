@@ -58,6 +58,13 @@ topology_template:
 
                 - host: go_runtime
 
+        frontend_ingress:
+            type: ingress.ansible.openstack
+            requirements:
+                - upstream: frontend_service
+
+                - host: virtual_machine
+
         ###################################################
         #
         # Checkout

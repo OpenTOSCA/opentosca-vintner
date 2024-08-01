@@ -18,6 +18,14 @@ topology_template:
 
         frontend_service:
             type: frontend.service.docker.docker
+            properties:
+                checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -37,6 +45,13 @@ topology_template:
 
         checkout_service:
             type: checkout.service.docker.docker
+            properties:
+                email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service
                 - payment: payment_service

@@ -65,9 +65,18 @@ ansible:
       hosting: gcp.cloudsql
       weight: 0.5
 
+    # Ingress
+    - component: ingress
+      hosting: openstack.machine
+      weight: 1
+
     # Virtual Machine
     - component: openstack.machine
       weight: 0.5
+
+    # GCP Service
+    - component: gcp.service
+      weight: 0
 
 terraform:
     # Software
@@ -138,8 +147,17 @@ terraform:
       hosting: gcp.cloudsql
       weight: 1
 
+    # Ingress
+    - component: ingress
+      hosting: openstack.machine
+      weight: 0
+
     # Virtual Machine
     - component: openstack.machine
+      weight: 1
+
+    # GCP Service
+    - component: gcp.service
       weight: 1
 
 kubernetes:
@@ -158,6 +176,11 @@ kubernetes:
 
     # DBMS
     - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 1
+
+    # Ingress
+    - component: ingress
       hosting: kubernetes
       weight: 1
 

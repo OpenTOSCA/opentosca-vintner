@@ -21,7 +21,7 @@ advertisement.service: java.application
 relational.database: root
 postgresql.database: relational.database
 postgresql.dbms: relational.dbms
-gcp.cloudsql: relational.dbms
+#gcp.cloudsql: relational.dbms
 
 software.runtime: root
 go.runtime: software.runtime
@@ -29,7 +29,13 @@ dotnet.runtime: software.runtime
 node.runtime: software.runtime
 python.runtime: software.runtime
 java.runtime: software.runtime
-gcp.appengine: software.runtime
+#gcp.appengine: software.runtime
 
 computing: root
 openstack.machine: computing
+
+ingress: root
+
+gcp.service: root
+gcp.appengine: gcp.service
+gcp.cloudsql: gcp.service

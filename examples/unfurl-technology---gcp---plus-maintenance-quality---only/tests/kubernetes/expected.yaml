@@ -40,6 +40,13 @@ topology_template:
 
                 - host: kubernetes_runtime
 
+        frontend_ingress:
+            type: ingress.kubernetes.kubernetes
+            requirements:
+                - upstream: frontend_service
+
+                - host: kubernetes_runtime
+
         ###################################################
         #
         # Checkout

@@ -10,6 +10,9 @@ topology_template:
         database_password:
             type: string
 
+        dbms_password:
+            type: string
+
         docker_host:
             type: string
             default: 'unix://var/run/docker.sock'
@@ -102,6 +105,14 @@ topology_template:
         frontend_service:
             type: frontend.service
             persistent: true
+            properties:
+                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -116,6 +127,14 @@ topology_template:
                 - host: kubernetes_runtime
                 - host: gcp_appengine
 
+        frontend_ingress:
+            type: ingress
+            requirements:
+                - upstream: frontend_service
+
+                - host: kubernetes_runtime
+                - host: virtual_machine
+
         ###################################################
         #
         # Checkout
@@ -124,6 +143,13 @@ topology_template:
 
         checkout_service:
             type: checkout.service
+            properties:
+                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -201,6 +227,7 @@ topology_template:
 
         cart_service:
             type: cart.service
+            # TODO: db
             requirements:
                 - database: postgresql_database
 
@@ -211,11 +238,18 @@ topology_template:
 
         postgresql_database:
             type: postgresql.database
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
             type: postgresql.dbms
+            properties:
+                - dbms_name: cart
+                - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
                 - host: docker_runtime
@@ -244,6 +278,8 @@ topology_template:
 
         recommendation_service:
             type: recommendation.service
+            properties:
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service
 
