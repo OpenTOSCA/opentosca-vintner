@@ -4,6 +4,40 @@ imports:
     - lib/types.yaml
 
 topology_template:
+    inputs:
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
     node_templates:
         ###################################################
         #
@@ -93,11 +127,11 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service.ansible.csharp
+            type: cart.service.ansible.dotnet
             requirements:
                 - database: postgresql_database
 
-                - host: csharp_runtime
+                - host: dotnet_runtime
 
         postgresql_database:
             type: postgresql.database.ansible.postgresql
@@ -152,35 +186,60 @@ topology_template:
 
         go_runtime:
             type: go.runtime.ansible.openstack
+            properties:
+                version: 1.22.5
             requirements:
                 - host: virtual_machine
 
-        csharp_runtime:
-            type: csharp.runtime.ansible.openstack
+        dotnet_runtime:
+            type: dotnet.runtime.ansible.openstack
+            properties:
+                version: 8.0.7
             requirements:
                 - host: virtual_machine
 
         node_runtime:
             type: node.runtime.ansible.openstack
+            properties:
+                version: 20.15.1
             requirements:
                 - host: virtual_machine
 
         python_runtime:
             type: python.runtime.ansible.openstack
+            properties:
+                version: 3.12.4
             requirements:
                 - host: virtual_machine
 
         java_runtime:
             type: java.runtime.ansible.openstack
+            properties:
+                version: 21.0.3+9
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
             type: openstack.machine.terraform.openstack
             properties:
-                flavor: m1.medium
+                machine: unfurl-technology-gcp
+                ports: [80, 3000, 8000]
+                flavor: m1.large
+                os_network: {get_input: os_network}
+                os_ssh_key_name: {get_input: os_ssh_key_name}
+                os_ssh_user: {get_input: os_ssh_user}
+                os_ssh_key_file: {get_input: os_ssh_key_file}
+                os_region_name: {get_input: os_region_name}
             requirements:
                 - host: openstack
 
         openstack:
             type: openstack.provider
+            properties:
+                os_region_name: {get_input: os_region_name}
+                os_auth_type: {get_input: os_auth_type}
+                os_auth_url: {get_input: os_auth_url}
+                os_identity_api_version: {get_input: os_identity_api_version}
+                os_interface: {get_input: os_interface}
+                os_application_credential_id: {get_input: os_application_credential_id}
+                os_application_credential_secret: {get_input: os_application_credential_secret}

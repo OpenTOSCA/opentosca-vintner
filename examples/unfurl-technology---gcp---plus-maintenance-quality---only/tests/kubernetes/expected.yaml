@@ -4,6 +4,22 @@ imports:
     - lib/types.yaml
 
 topology_template:
+    inputs:
+        k8s_api_address:
+            type: string
+
+        k8s_api_port:
+            type: string
+
+        k8s_ca_cert_file:
+            type: string
+
+        k8s_client_cert_file:
+            type: string
+
+        k8s_client_key_file:
+            type: string
+
     node_templates:
         ###################################################
         #
@@ -152,3 +168,9 @@ topology_template:
 
         kubernetes_runtime:
             type: kubernetes
+            properties:
+                k8s_api_address: {get_input: k8s_api_address}
+                k8s_api_port: {get_input: k8s_api_port}
+                k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
+                k8s_client_cert_file: {get_input: k8s_client_cert_file}
+                k8s_client_key_file: {get_input: k8s_client_key_file}

@@ -4,6 +4,16 @@ imports:
     - lib/types.yaml
 
 topology_template:
+    inputs:
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
+
     node_templates:
         ###################################################
         #
@@ -12,7 +22,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service.ansible.go
+            type: frontend.service.terraform.gcp
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -22,7 +32,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: go_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -31,7 +41,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service.ansible.go
+            type: checkout.service.terraform.gcp
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -40,7 +50,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: go_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -49,9 +59,9 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service.ansible.python
+            type: email.service.terraform.gcp
             requirements:
-                - host: python_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -60,9 +70,9 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service.ansible.node
+            type: payment.service.terraform.gcp
             requirements:
-                - host: node_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -71,9 +81,9 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service.ansible.node
+            type: currency.service.terraform.gcp
             requirements:
-                - host: node_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -82,9 +92,9 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service.ansible.go
+            type: shipping.service.terraform.gcp
             requirements:
-                - host: go_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -93,21 +103,21 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service.ansible.csharp
+            type: cart.service.terraform.gcp
             requirements:
                 - database: postgresql_database
 
-                - host: csharp_runtime
+                - host: gcp_appengine
 
         postgresql_database:
-            type: postgresql.database.ansible.postgresql
+            type: postgresql.database.terraform.postgresql
             requirements:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms.ansible.openstack
+            type: postgresql.dbms.terraform.gcp
             requirements:
-                - host: virtual_machine
+                - host: gcp_cloudsql
 
         ###################################################
         #
@@ -116,9 +126,9 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service.ansible.go
+            type: product.service.terraform.gcp
             requirements:
-                - host: go_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -127,11 +137,11 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service.ansible.python
+            type: recommendation.service.terraform.gcp
             requirements:
                 - product: product_service
 
-                - host: python_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
@@ -140,47 +150,29 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service.ansible.java
+            type: advertisement.service.terraform.gcp
             requirements:
-                - host: java_runtime
+                - host: gcp_appengine
 
         ###################################################
         #
-        # Virtual Machine
+        # GCP
         #
         ###################################################
 
-        go_runtime:
-            type: go.runtime.ansible.openstack
+        gcp_appengine:
+            type: gcp.appengine
             requirements:
-                - host: virtual_machine
+                - host: gcp_provider
 
-        csharp_runtime:
-            type: csharp.runtime.ansible.openstack
+        gcp_cloudsql:
+            type: gcp.cloudsql
             requirements:
-                - host: virtual_machine
+                - host: gcp_provider
 
-        node_runtime:
-            type: node.runtime.ansible.openstack
-            requirements:
-                - host: virtual_machine
-
-        python_runtime:
-            type: python.runtime.ansible.openstack
-            requirements:
-                - host: virtual_machine
-
-        java_runtime:
-            type: java.runtime.ansible.openstack
-            requirements:
-                - host: virtual_machine
-
-        virtual_machine:
-            type: openstack.machine.terraform.openstack
+        gcp_provider:
+            type: gcp.provider
             properties:
-                flavor: m1.large
-            requirements:
-                - host: openstack
-
-        openstack:
-            type: openstack.provider
+                gcp_region: {get_input: gcp_region}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+                gcp_project: {get_input: gcp_project}

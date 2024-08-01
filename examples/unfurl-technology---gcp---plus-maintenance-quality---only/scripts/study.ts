@@ -103,87 +103,87 @@ async function metrics() {
     /**
      * Docker (12 technologies are encoded in types)
      */
-    const docker = await stats('Docker', path.join(testsDir, 'docker', 'expected.yaml'))
-    docker.technology_assignments = 12
-    docker.lines_of_code += 12
+    const edmm_docker = await stats('EDMM Docker', path.join(testsDir, 'docker', 'expected.yaml'))
+    edmm_docker.technology_assignments = 12
+    edmm_docker.lines_of_code += 12
 
     /**
      * GCP (12 technologies are encoded in types)
      */
-    const gcp = await stats('GCP', path.join(testsDir, 'gcp', 'expected.yaml'))
-    gcp.technology_assignments = 12
-    gcp.lines_of_code += 12
+    const edmm_gcp = await stats('EDMM GCP', path.join(testsDir, 'gcp', 'expected.yaml'))
+    edmm_gcp.technology_assignments = 12
+    edmm_gcp.lines_of_code += 12
 
     /**
      * Kubernetes (12 technologies are encoded in types)
      */
-    const kubernetes = await stats('Kubernetes', path.join(testsDir, 'kubernetes', 'expected.yaml'))
-    kubernetes.technology_assignments = 12
-    kubernetes.lines_of_code += 12
+    const edmm_kubernetes = await stats('EDMM Kubernetes', path.join(testsDir, 'kubernetes', 'expected.yaml'))
+    edmm_kubernetes.technology_assignments = 12
+    edmm_kubernetes.lines_of_code += 12
 
     /**
      * OS Medium (18 technologies are encoded in types)
      */
-    const medium = await stats('Medium', path.join(testsDir, 'os-medium', 'expected.yaml'))
-    medium.technology_assignments = 18
-    medium.lines_of_code += 18
+    const edmm_os_medium = await stats('EDMM OS Medium', path.join(testsDir, 'os-medium', 'expected.yaml'))
+    edmm_os_medium.technology_assignments = 18
+    edmm_os_medium.lines_of_code += 18
 
     /**
      * OS Large (18 technologies are encoded in types)
      */
-    const large = await stats('Large', path.join(testsDir, 'os-large', 'expected.yaml'))
-    large.technology_assignments = 18
-    large.lines_of_code += 18
+    const edmm_os_large = await stats('EDMM OS Large', path.join(testsDir, 'os-large', 'expected.yaml'))
+    edmm_os_large.technology_assignments = 18
+    edmm_os_large.lines_of_code += 18
 
     /**
      * Total Variants
      */
-    const variants = [docker, gcp, kubernetes, medium, large]
-    const total: Data = {
-        scenario: 'Total (Docker, GCP, Kubernetes, Large, Medium)',
-        models: variants.length,
-        elements: utils.sum(variants.map(it => it.elements)),
-        conditions: utils.sum(variants.map(it => it.conditions)),
-        technology_assignments: utils.sum(variants.map(it => it.technology_assignments)),
-        lines_of_code: utils.sum(variants.map(it => it.lines_of_code)),
+    const edmm_variants = [edmm_docker, edmm_gcp, edmm_kubernetes, edmm_os_medium, edmm_os_large]
+    const edmm_total: Data = {
+        scenario: 'EDMM Total (EMM Docker, EDMM GCP, EDMM Kubernetes, EDMM OS Large, EDMM OS Medium)',
+        models: edmm_variants.length,
+        elements: utils.sum(edmm_variants.map(it => it.elements)),
+        conditions: utils.sum(edmm_variants.map(it => it.conditions)),
+        technology_assignments: utils.sum(edmm_variants.map(it => it.technology_assignments)),
+        lines_of_code: utils.sum(edmm_variants.map(it => it.lines_of_code)),
     }
 
     /**
      * Quality
      */
-    const quality = await stats('Quality', templateFile)
+    const vdmm_plus_quality = await stats('VDMM+ Quality ', templateFile)
 
     /**
      * Random (same as quality but with 3 more lines due to variability options)
      */
-    const random = utils.copy(quality)
-    random.scenario = 'Random'
-    random.lines_of_code += 3
+    const vdmm_plus_random = utils.copy(vdmm_plus_quality)
+    vdmm_plus_random.scenario = 'VDMM+ Random'
+    vdmm_plus_random.lines_of_code += 3
 
     /**
      * Counting (same as quality but with 4 more lines due to variability options)
      */
-    const counting = utils.copy(quality)
-    counting.scenario = 'Counting'
-    counting.lines_of_code += 4
+    const vdmm_plus_counting = utils.copy(vdmm_plus_quality)
+    vdmm_plus_counting.scenario = 'VDMM+ Counting'
+    vdmm_plus_counting.lines_of_code += 4
 
     /**
      * Add data
      */
-    table.push(docker)
-    table.push(gcp)
-    table.push(kubernetes)
-    table.push(large)
-    table.push(medium)
-    table.push(total)
+    table.push(edmm_docker)
+    table.push(edmm_gcp)
+    table.push(edmm_kubernetes)
+    table.push(edmm_os_large)
+    table.push(edmm_os_medium)
+    table.push(edmm_total)
 
     // TODO: baseline
 
     // TODO: manual
 
-    table.push(random)
-    table.push(counting)
-    table.push(quality)
+    table.push(vdmm_plus_random)
+    table.push(vdmm_plus_counting)
+    table.push(vdmm_plus_quality)
 
     /**
      * Output
