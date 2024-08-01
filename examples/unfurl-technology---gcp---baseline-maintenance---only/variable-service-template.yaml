@@ -105,6 +105,7 @@ topology_template:
         frontend_service_ansible:
             type: frontend.service
             persistent: true
+            conditions: {logic_expression: is_openstack}
             technology: ansible
             requirements:
                 - checkout: checkout_service_ansible
@@ -119,6 +120,7 @@ topology_template:
 
         frontend_service_docker:
             type: frontend.service
+            conditions: {logic_expression: is_docker}
             persistent: true
             technology: docker
             requirements:
@@ -134,21 +136,23 @@ topology_template:
 
         frontend_service_kubernetes:
             type: frontend.service
+            conditions: {logic_expression: is_kubernetes}
             persistent: true
             technology: kubernetes
             requirements:
-                - checkout: checkout_service_docker
-                - currency: currency_service_docker
-                - shipping: shipping_service_docker
-                - cart: cart_service_docker
-                - product: product_service_docker
-                - recommendation: recommendation_service_docker
-                - advertisement: advertisement_service_docker
+                - checkout: checkout_service_kubernetes
+                - currency: currency_service_kubernetes
+                - shipping: shipping_service_kubernetes
+                - cart: cart_service_kubernetes
+                - product: product_service_kubernetes
+                - recommendation: recommendation_service_kubernetes
+                - advertisement: advertisement_service_kubernetes
 
                 - host: kubernetes_runtime
 
         frontend_service_terraform:
             type: frontend.service
+            conditions: {logic_expression: is_gcp}
             persistent: true
             technology: terraform
             requirements:
@@ -167,8 +171,6 @@ topology_template:
             technology: ansible
             requirements:
                 - upstream: frontend_service_ansible
-
-                - host: kubernetes_runtime
                 - host: virtual_machine
 
         frontend_ingress_kubernetes:
@@ -176,9 +178,7 @@ topology_template:
             technology: kubernetes
             requirements:
                 - upstream: frontend_service_kubernetes
-
                 - host: kubernetes_runtime
-                - host: virtual_machine
 
         ###################################################
         #
@@ -410,14 +410,15 @@ topology_template:
 
                 - host:
                       node: postgresql_dbms_docker
-                      conditions: {logic_expression: is_openstack}
+                      conditions: {logic_expression: is_docker}
 
                 - host:
                       node: postgresql_dbms_kubernetes
-                      conditions: {logic_expression: is_openstack}
+                      conditions: {logic_expression: is_kubernetes}
 
         postgresql_database_terraform:
             type: postgresql.database
+            technology: terraform
             properties:
                 - database_name: cart
                 - database_user: cart
