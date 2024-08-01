@@ -14,19 +14,6 @@ const templateDir = path.join('..')
 const templateFile = path.join(templateDir, 'variable-service-template.yaml')
 const testsDir = path.join(templateDir, 'tests')
 
-/**
- * MetricsData
- */
-type MetricsData = {
-    scenario: string
-    short?: string
-    models: number
-    elements: number
-    conditions: number
-    technology_assignments: number
-    lines_of_code: number
-}
-
 async function main() {
     /**
      * Graph
@@ -39,7 +26,31 @@ async function main() {
      * Technology Rules
      *
      ******************************************************************************************************************/
-    await technologyRules(graph)
+    /**
+     * Rules
+     */
+    const map = graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules ?? {}
+    if (check.isString(map)) throw new UnexpectedError()
+
+    /**
+     * Table
+     */
+    const ruleData: RuleData[] = []
+    Object.entries(map).forEach(([name, rules]) => {
+        rules.forEach(rule => {
+            ruleData.push({
+                Technology: name,
+                Component: rule.component,
+                Hosting: rule.hosting,
+                Quality: rule.weight,
+            })
+        })
+    })
+
+    /**
+     * Output
+     */
+    printTable<RuleData>('The technology rules of our case study. Qualities range from bad (0) to good (1).', ruleData)
 
     /*******************************************************************************************************************
      *
@@ -143,7 +154,46 @@ async function main() {
      * Qualities
      *
      ******************************************************************************************************************/
-    await qualities()
+
+    /**
+     * Table
+     */
+    const qualityData: QualityData[] = []
+
+    /**
+     * Data
+     */
+    for (const variant of files.listDirectories(testsDir)) {
+        const inputs = path.join(testsDir, variant, 'inputs.yaml')
+
+        const quality = await controller.template.quality({template: templateFile, experimental: true, inputs})
+        assert.isNumber(quality)
+
+        // TODO: random
+        const random = {min: -1, max: -1}
+        assert.isObject(random)
+
+        // TODO: counting
+        const counting = {min: -1, max: -1}
+        assert.isObject(counting)
+
+        qualityData.push({
+            scenario: variant,
+            expert: quality,
+            non_expert: [random.min, random.max],
+            random: [random.min, random.max],
+            counting: [counting.min, counting.max],
+            quality,
+        })
+    }
+
+    /**
+     * Output
+     */
+    printTable<QualityData>(
+        'Qualities of the derived deployment models, i.e., the deployment variants, of the different scenarios ranging from bad (0) to good (1).',
+        qualityData
+    )
 
     /*******************************************************************************************************************
      *
@@ -254,6 +304,9 @@ async function main() {
         vdmm_plus_default_automated_quality
     )
 
+    /**
+     * Output
+     */
     printTable<MetricsDataAbsDiff>('From Default to Maintained (Absolut to previous)', [
         edmm_total_diff,
         vdmm_baseline_diff,
@@ -277,10 +330,34 @@ async function main() {
      */
     const vdmm_plus_automated_quality_diff_relative_diff = relativeDiff(vdmm_plus_automated_diff, vdmm_baseline_diff)
 
+    /**
+     * Output
+     */
     printTable<MetricsDataRelDiff>('From Default to Maintained (Relative to change to baseline) ', [
         vdmm_plus_manual_diff_relative_diff,
         vdmm_plus_automated_quality_diff_relative_diff,
     ])
+}
+
+type RuleData = {Technology: string; Component: string; Hosting?: string | string[]; Quality?: number}
+
+type QualityData = {
+    scenario: string
+    expert: number
+    non_expert: any
+    random: number[]
+    counting: number[]
+    quality: number
+}
+
+type MetricsData = {
+    scenario: string
+    short?: string
+    models: number
+    elements: number
+    conditions: number
+    technology_assignments: number
+    lines_of_code: number
 }
 
 type MetricsDataAbsDiff = {
@@ -292,6 +369,15 @@ type MetricsDataAbsDiff = {
     lines_of_code_absolute_diff: number
 }
 
+type MetricsDataRelDiff = {
+    scenario: string
+    //  models_relative_diff: number
+    elements_relative_diff: number
+    conditions_relative_diff: number
+    technology_assignments_relative_diff: number
+    lines_of_code_relative_diff: number
+}
+
 function absoluteDiff(maintained: MetricsData, previous: MetricsData): MetricsDataAbsDiff {
     return {
         scenario: `${maintained.short ?? maintained.scenario} - ${previous.short ?? previous.scenario}`,
@@ -301,15 +387,6 @@ function absoluteDiff(maintained: MetricsData, previous: MetricsData): MetricsDa
         technology_assignments_absolute_diff: maintained.technology_assignments - previous.technology_assignments,
         lines_of_code_absolute_diff: maintained.lines_of_code - previous.lines_of_code,
     }
-}
-
-type MetricsDataRelDiff = {
-    scenario: string
-    //  models_relative_diff: number
-    elements_relative_diff: number
-    conditions_relative_diff: number
-    technology_assignments_relative_diff: number
-    lines_of_code_relative_diff: number
 }
 
 function relativeDiff(maintained: MetricsDataAbsDiff, previous: MetricsDataAbsDiff): MetricsDataRelDiff {
@@ -329,51 +406,6 @@ function relativeDiff(maintained: MetricsDataAbsDiff, previous: MetricsDataAbsDi
     }
 }
 
-async function technologyRules(graph: Graph) {
-    /**
-     * Rules
-     */
-    const map = graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules ?? {}
-    if (check.isString(map)) throw new UnexpectedError()
-
-    /**
-     * Table
-     */
-    const table: {Technology: string; Component: string; Hosting?: string | string[]; Quality?: number}[] = []
-    Object.entries(map).forEach(([name, rules]) => {
-        rules.forEach(rule => {
-            table.push({
-                Technology: name,
-                Component: rule.component,
-                Hosting: rule.hosting,
-                Quality: rule.weight,
-            })
-        })
-    })
-
-    /**
-     * Output
-     */
-    console.log()
-    console.log('The technology rules of our case study. Qualities range from bad (0) to good (1).')
-    console.table(table)
-}
-
-/**
- * Stats
- */
-async function stats(scenario: string, file: string): Promise<MetricsData> {
-    const stats = await controller.template.stats({template: [file], experimental: true})
-    return {
-        scenario,
-        models: 1,
-        elements: stats.edmm_elements_without_technologies,
-        conditions: stats.edmm_elements_conditions_manual,
-        technology_assignments: stats.technologies,
-        lines_of_code: stats.loc,
-    }
-}
-
 function sumMetrics(scenario: string, variants: MetricsData[]): MetricsData {
     return {
         scenario: `${scenario} (${variants.map(it => it.scenario).join(', ')})`,
@@ -386,61 +418,22 @@ function sumMetrics(scenario: string, variants: MetricsData[]): MetricsData {
     }
 }
 
+async function stats(scenario: string, file: string): Promise<MetricsData> {
+    const stats = await controller.template.stats({template: [file], experimental: true})
+    return {
+        scenario,
+        models: 1,
+        elements: stats.edmm_elements_without_technologies,
+        conditions: stats.edmm_elements_conditions_manual,
+        technology_assignments: stats.technologies,
+        lines_of_code: stats.loc,
+    }
+}
+
 function printTable<T>(caption: string, data: T[]) {
     console.log()
     console.log(caption)
     console.table(data)
-}
-
-async function qualities() {
-    /**
-     * Table
-     */
-    type Data = {
-        scenario: string
-        expert: number
-        non_expert: any
-        random: number[]
-        counting: number[]
-        quality: number
-    }
-    const table: Data[] = []
-
-    /**
-     * Data
-     */
-    for (const variant of files.listDirectories(testsDir)) {
-        const inputs = path.join(testsDir, variant, 'inputs.yaml')
-
-        const quality = await controller.template.quality({template: templateFile, experimental: true, inputs})
-        assert.isNumber(quality)
-
-        // TODO: random
-        const random = {min: -1, max: -1}
-        assert.isObject(random)
-
-        // TODO: counting
-        const counting = {min: -1, max: -1}
-        assert.isObject(counting)
-
-        table.push({
-            scenario: variant,
-            expert: quality,
-            non_expert: [random.min, random.max],
-            random: [random.min, random.max],
-            counting: [counting.min, counting.max],
-            quality,
-        })
-    }
-
-    /**
-     * Output
-     */
-    console.log()
-    console.log(
-        'Qualities of the derived deployment models, i.e., the deployment variants, of the different scenarios ranging from bad (0) to good (1).'
-    )
-    console.table(table)
 }
 
 main()
