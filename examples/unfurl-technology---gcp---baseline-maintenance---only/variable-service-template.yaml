@@ -89,12 +89,6 @@ topology_template:
                 type: string
                 default: MEDIUM
 
-        options:
-            # TODO: remove this
-            required_technology_check: false
-            # TODO: must be "true" to work
-            optimization_technologies: false
-
     node_templates:
         ###################################################
         #
