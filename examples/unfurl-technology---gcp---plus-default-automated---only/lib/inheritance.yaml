@@ -1,0 +1,41 @@
+root:
+
+software.application: root
+go.application: software.application
+node.application: software.application
+python.application: software.application
+dotnet.application: software.application
+java.application: software.application
+
+frontend.service: go.application
+checkout.service: go.application
+email.service: python.application
+payment.service: node.application
+currency.service: node.application
+shipping.service: go.application
+cart.service: dotnet.application
+product.service: go.application
+recommendation.service: python.application
+advertisement.service: java.application
+
+relational.database: root
+postgresql.database: relational.database
+postgresql.dbms: relational.dbms
+#gcp.cloudsql: relational.dbms
+
+software.runtime: root
+go.runtime: software.runtime
+dotnet.runtime: software.runtime
+node.runtime: software.runtime
+python.runtime: software.runtime
+java.runtime: software.runtime
+#gcp.appengine: software.runtime
+
+computing: root
+openstack.machine: computing
+
+ingress: root
+
+gcp.service: root
+gcp.appengine: gcp.service
+gcp.cloudsql: gcp.service

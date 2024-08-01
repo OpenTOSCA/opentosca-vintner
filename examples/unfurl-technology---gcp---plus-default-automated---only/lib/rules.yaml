@@ -1,0 +1,204 @@
+ansible:
+    # Software
+    - component: software.application
+      hosting:
+          - software.runtime
+          - openstack.machine
+      weight: 1
+
+    - component: software.application
+      hosting: docker.engine
+      weight: 0.7
+
+    - component: software.application
+      hosting: kubernetes
+      weight: 0.7
+
+    - component: software.application
+      hosting: gcp.appengine
+      weight: 0.3
+
+    - component: software.runtime
+      hosting: openstack.machine
+      weight: 1
+
+    # Database
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - openstack.machine
+      weight: 1
+
+    # TODO: in reality, the docker container usually has one default database ... and one usually does not create a second one since every microservice simply gets its own DBMS ... (same applies when hosted in k8s)
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - docker.engine
+      weight: 1
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 1
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - gcp.cloudsql
+      weight: 0.5
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: openstack.machine
+      weight: 1
+
+    - component: postgresql.dbms
+      hosting: docker.engine
+      weight: 0.7
+
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 0.7
+
+    - component: postgresql.dbms
+      hosting: gcp.cloudsql
+      weight: 0.5
+
+    # Ingress
+    - component: ingress
+      hosting: openstack.machine
+      weight: 1
+
+    # Virtual Machine
+    - component: openstack.machine
+      weight: 0.5
+
+    # GCP Service
+    - component: gcp.service
+      weight: 0
+
+terraform:
+    # Software
+    - component: software.application
+      hosting:
+          - software.runtime
+          - openstack.machine
+      weight: 0
+
+    - component: software.application
+      hosting: docker.engine
+      weight: 0.7
+
+    - component: software.application
+      hosting: kubernetes
+      weight: 0.7
+
+    - component: software.application
+      hosting: gcp.appengine
+      weight: 1
+
+    - component: software.runtime
+      hosting: openstack.machine
+      weight: 0
+
+    # Database
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - openstack.machine
+      weight: 0.5
+
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - docker.engine
+      weight: 0.5
+
+    # TODO: weight?!
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 0.5
+
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - gcp.cloudsql
+      weight: 1
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: openstack.machine
+      weight: 0
+
+    - component: postgresql.dbms
+      hosting: docker.engine
+      weight: 0.7
+
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 0.7
+
+    - component: postgresql.dbms
+      hosting: gcp.cloudsql
+      weight: 1
+
+    # Ingress
+    - component: ingress
+      hosting: openstack.machine
+      weight: 0
+
+    # Virtual Machine
+    - component: openstack.machine
+      weight: 1
+
+    # GCP Service
+    - component: gcp.service
+      weight: 1
+
+kubernetes:
+    # Software
+    - component: software.application
+      hosting: kubernetes
+      weight: 1
+
+    # Database
+    # TODO: use kubernetes job
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - kubernetes
+      weight: 0
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: kubernetes
+      weight: 1
+
+    # Ingress
+    - component: ingress
+      hosting: kubernetes
+      weight: 1
+
+docker:
+    # Software
+    - component: software.application
+      hosting: docker.engine
+      weight: 1
+
+    # Database
+    # TODO: use docker job
+    - component: postgresql.database
+      hosting:
+          - postgresql.dbms
+          - docker.engine
+      weight: 0
+
+    # DBMS
+    - component: postgresql.dbms
+      hosting: docker.engine
+      weight: 1

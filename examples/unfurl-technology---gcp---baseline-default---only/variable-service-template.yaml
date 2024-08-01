@@ -1,0 +1,556 @@
+# https://github.com/GoogleCloudPlatform/microservices-demo
+
+tosca_definitions_version: tosca_variability_1_0_rc_2
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
+        docker_host:
+            type: string
+            default: 'unix://var/run/docker.sock'
+
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
+
+    variability:
+        expressions:
+            is_docker: {equal: [{variability_input: env}, DOCKER]}
+            is_gcp: {equal: [{variability_input: env}, GCP]}
+            is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
+        inputs:
+            env:
+                type: string
+                default: DOCKER
+
+            tier:
+                type: string
+                default: MEDIUM
+
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_service_ansible:
+            type: frontend.service
+            persistent: true
+            conditions: {logic_expression: is_openstack}
+            technology: ansible
+            requirements:
+                - checkout: checkout_service_ansible
+                - currency: currency_service_ansible
+                - shipping: shipping_service_ansible
+                - cart: cart_service_ansible
+                - product: product_service_ansible
+                - recommendation: recommendation_service_ansible
+                - advertisement: advertisement_service_ansible
+
+                - host: go_runtime
+
+        frontend_service_docker:
+            type: frontend.service
+            conditions: {logic_expression: is_docker}
+            persistent: true
+            technology: docker
+            requirements:
+                - checkout: checkout_service_docker
+                - currency: currency_service_docker
+                - shipping: shipping_service_docker
+                - cart: cart_service_docker
+                - product: product_service_docker
+                - recommendation: recommendation_service_docker
+                - advertisement: advertisement_service_docker
+
+                - host: docker_runtime
+
+        frontend_service_terraform:
+            type: frontend.service
+            conditions: {logic_expression: is_gcp}
+            persistent: true
+            technology: terraform
+            requirements:
+                - checkout: checkout_service_terraform
+                - currency: currency_service_terraform
+                - shipping: shipping_service_terraform
+                - cart: cart_service_terraform
+                - product: product_service_terraform
+                - recommendation: recommendation_service_terraform
+                - advertisement: advertisement_service_terraform
+
+                - host: gcp_appengine
+
+        frontend_ingress_ansible:
+            type: ingress
+            technology: ansible
+            requirements:
+                - upstream: frontend_service_ansible
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_service_ansible:
+            type: checkout.service
+            technology: ansible
+            requirements:
+                - email: email_service_ansible
+                - payment: payment_service_ansible
+                - currency: currency_service_ansible
+                - shipping: shipping_service_ansible
+                - cart: cart_service_ansible
+                - product: product_service_ansible
+
+                - host: go_runtime
+
+        checkout_service_docker:
+            type: checkout.service
+            technology: docker
+            requirements:
+                - email: email_service_docker
+                - payment: payment_service_docker
+                - currency: currency_service_docker
+                - shipping: shipping_service_docker
+                - cart: cart_service_docker
+                - product: product_service_docker
+
+                - host: docker_runtime
+
+        checkout_service_terraform:
+            type: checkout.service
+            technology: terraform
+            requirements:
+                - email: email_service_terraform
+                - payment: payment_service_terraform
+                - currency: currency_service_terraform
+                - shipping: shipping_service_terraform
+                - cart: cart_service_terraform
+                - product: product_service_terraform
+
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_service_ansible:
+            type: email.service
+            technology: ansible
+            requirements:
+                - host: python_runtime
+
+        email_service_docker:
+            type: email.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        email_service_terraform:
+            type: email.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_service_ansible:
+            type: payment.service
+            technology: ansible
+            requirements:
+                - host: node_runtime
+
+        payment_service_docker:
+            type: payment.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        payment_service_terraform:
+            type: payment.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_service_ansible:
+            type: currency.service
+            technology: ansible
+            requirements:
+                - host: node_runtime
+
+        currency_service_docker:
+            type: currency.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        currency_service_terraform:
+            type: currency.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_service_ansible:
+            type: shipping.service
+            technology: ansible
+            requirements:
+                - host: go_runtime
+
+        shipping_service_docker:
+            type: shipping.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        shipping_service_terraform:
+            type: shipping.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_service_ansible:
+            type: cart.service
+            technology: ansible
+            requirements:
+                - database: postgresql_database_ansible
+
+                - host: dotnet_runtime
+
+        cart_service_docker:
+            type: cart.service
+            technology: docker
+            requirements:
+                - database: postgresql_database_ansible
+
+                - host: docker_runtime
+
+        cart_service_terraform:
+            type: cart.service
+            technology: terraform
+            requirements:
+                - database: postgresql_database_terraform
+
+                - host: gcp_appengine
+
+        postgresql_database_ansible:
+            type: postgresql.database
+            technology: ansible
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
+            requirements:
+                - host:
+                      node: postgresql_dbms_ansible
+                      conditions: {logic_expression: is_openstack}
+
+                - host:
+                      node: postgresql_dbms_docker
+                      conditions: {logic_expression: is_docker}
+
+        postgresql_database_terraform:
+            type: postgresql.database
+            technology: terraform
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: postgresql_dbms_terraform
+
+        postgresql_dbms_ansible:
+            type: postgresql.dbms
+            technology: ansible
+            properties:
+                - dbms_name: cart
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: virtual_machine
+
+        postgresql_dbms_docker:
+            type: postgresql.dbms
+            technology: docker
+            properties:
+                - dbms_name: cart
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: docker_runtime
+
+        postgresql_dbms_terraform:
+            type: postgresql.dbms
+            technology: terraform
+            properties:
+                - dbms_name: cart
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: gcp_cloudsql
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_service_ansible:
+            type: product.service
+            technology: ansible
+            requirements:
+                - host: go_runtime
+
+        product_service_docker:
+            type: product.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        product_service_terraform:
+            type: product.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_service_ansible:
+            type: recommendation.service
+            technology: ansible
+            requirements:
+                - product: product_service_ansible
+
+                - host: python_runtime
+
+        recommendation_service_docker:
+            type: recommendation.service
+            technology: docker
+            requirements:
+                - product: product_service_docker
+
+                - host: docker_runtime
+
+        recommendation_service_terraform:
+            type: recommendation.service
+            technology: terraform
+            requirements:
+                - product: product_service_terraform
+
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_service_ansible:
+            type: advertisement.service
+            technology: ansible
+            requirements:
+                - host: java_runtime
+
+        advertisement_service_docker:
+            type: advertisement.service
+            technology: docker
+            requirements:
+                - host: docker_runtime
+
+        advertisement_service_terraform:
+            type: advertisement.service
+            technology: terraform
+            requirements:
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        go_runtime:
+            type: go.runtime
+            technology: ansible
+            properties:
+                - version: 1.22.5
+            requirements:
+                - host: virtual_machine
+
+        dotnet_runtime:
+            type: dotnet.runtime
+            technology: ansible
+            properties:
+                - version: 8.0.7
+            requirements:
+                - host: virtual_machine
+
+        node_runtime:
+            type: node.runtime
+            technology: ansible
+            properties:
+                - version: 20.15.1
+            requirements:
+                - host: virtual_machine
+
+        python_runtime:
+            type: python.runtime
+            technology: ansible
+            properties:
+                - version: 3.12.4
+            requirements:
+                - host: virtual_machine
+
+        java_runtime:
+            type: java.runtime
+            technology: ansible
+            properties:
+                - version: 21.0.3+9
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: openstack.machine
+            technology: terraform
+            properties:
+                - machine: unfurl-technology-gcp
+                - ports: [80, 3000, 8000]
+                - flavor:
+                      value: m1.medium
+                      conditions: {equal: [{variability_input: tier}, MEDIUM]}
+                - flavor:
+                      value: m1.large
+                      conditions: {equal: [{variability_input: tier}, LARGE]}
+
+                - os_network: {get_input: os_network}
+                - os_ssh_key_name: {get_input: os_ssh_key_name}
+                - os_ssh_user: {get_input: os_ssh_user}
+                - os_ssh_key_file: {get_input: os_ssh_key_file}
+                - os_region_name: {get_input: os_region_name}
+
+            requirements:
+                - host: openstack
+
+        openstack:
+            type: openstack.provider
+            conditions: {logic_expression: is_openstack}
+            properties:
+                - os_region_name: {get_input: os_region_name}
+                - os_auth_type: {get_input: os_auth_type}
+                - os_auth_url: {get_input: os_auth_url}
+                - os_identity_api_version: {get_input: os_identity_api_version}
+                - os_interface: {get_input: os_interface}
+                - os_application_credential_id: {get_input: os_application_credential_id}
+                - os_application_credential_secret: {get_input: os_application_credential_secret}
+
+        ###################################################
+        #
+        # Docker
+        #
+        ###################################################
+
+        docker_runtime:
+            type: docker.engine
+            conditions: {logic_expression: is_docker}
+            properties:
+                - docker_host: {get_input: docker_host}
+
+        ###################################################
+        #
+        # GCP
+        #
+        ###################################################
+
+        gcp_appengine:
+            type: gcp.appengine
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
+            type: gcp.provider
+            conditions: {logic_expression: is_gcp}
+            properties:
+                - gcp_region: {get_input: gcp_region}
+                - gcp_service_account_file: {get_input: gcp_service_account_file}
+                - gcp_project: {get_input: gcp_project}
