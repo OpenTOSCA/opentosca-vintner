@@ -1,13 +1,6 @@
 ansible:
     # Software
     - component: software.application
-      hosting:
-          - software.runtime
-          - openstack.machine
-      weight: 1
-      comment: Primary use case due to the specialization of Ansible.
-
-    - component: software.application
       hosting: docker.engine
       weight: 0.5
       comment: Docker is more specialized.
@@ -22,7 +15,13 @@ ansible:
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
-    - component: software.runtime
+    - component: software.application
+      hosting: openstack.machine
+      weight: 1
+      comment: Primary use case due to the specialization of Ansible.
+
+    # Docker Engine
+    - component: docker.engine
       hosting: openstack.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
@@ -122,7 +121,13 @@ terraform:
       weight: 1
       comment: Terraform provides a declarative module.
 
-    - component: software.runtime
+    - component: software.application
+      hosting: openstack.machine
+      weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+
+    # Docker Engine
+    - component: docker.engine
       hosting: openstack.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".

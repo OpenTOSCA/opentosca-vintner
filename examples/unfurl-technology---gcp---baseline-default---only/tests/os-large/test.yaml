@@ -2,43 +2,43 @@ expected: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/t
 inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/os-large/inputs.yaml
 
 replace:
-    - - frontend_service_ansible
+    - - frontend_service_docker
       - frontend_service
 
-    - - frontend_ingress_ansible
+    - - frontend_ingress_docker
       - frontend_ingress
 
-    - - checkout_service_ansible
+    - - checkout_service_docker
       - checkout_service
 
-    - - email_service_ansible
+    - - email_service_docker
       - email_service
 
-    - - payment_service_ansible
+    - - payment_service_docker
       - payment_service
 
-    - - currency_service_ansible
+    - - currency_service_docker
       - currency_service
 
-    - - shipping_service_ansible
+    - - shipping_service_docker
       - shipping_service
 
-    - - cart_service_ansible
+    - - cart_service_docker
       - cart_service
 
-    - - postgresql_database_ansible
+    - - postgresql_database_docker
       - postgresql_database
 
-    - - postgresql_dbms_ansible
+    - - postgresql_dbms_docker
       - postgresql_dbms
 
-    - - product_service_ansible
+    - - product_service_docker
       - product_service
 
-    - - recommendation_service_ansible
+    - - recommendation_service_docker
       - recommendation_service
 
-    - - advertisement_service_ansible
+    - - advertisement_service_docker
       - advertisement_service
 
 merge:
@@ -49,10 +49,6 @@ merge:
 
             dbms_password:
                 type: string
-
-            docker_host:
-                type: string
-                default: 'unix://var/run/docker.sock'
 
             os_network:
                 type: string

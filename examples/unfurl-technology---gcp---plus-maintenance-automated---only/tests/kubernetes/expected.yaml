@@ -129,7 +129,7 @@ topology_template:
                 - host: kubernetes_runtime
 
         postgresql_database:
-            type: postgresql.database.ansible.postgresql
+            type: postgresql.database.terraform.postgresql
             properties:
                 database_name: cart
                 database_user: cart

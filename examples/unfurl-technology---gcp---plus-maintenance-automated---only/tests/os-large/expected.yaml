@@ -52,7 +52,7 @@ topology_template:
         ###################################################
 
         frontend_service:
-            type: frontend.service.ansible.go
+            type: frontend.service.docker.docker
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -62,7 +62,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: go_runtime
+                - host: docker_runtime
 
         frontend_ingress:
             type: ingress.ansible.openstack
@@ -78,7 +78,7 @@ topology_template:
         ###################################################
 
         checkout_service:
-            type: checkout.service.ansible.go
+            type: checkout.service.docker.docker
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -87,7 +87,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: go_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -96,9 +96,9 @@ topology_template:
         ###################################################
 
         email_service:
-            type: email.service.ansible.python
+            type: email.service.docker.docker
             requirements:
-                - host: python_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -107,9 +107,9 @@ topology_template:
         ###################################################
 
         payment_service:
-            type: payment.service.ansible.node
+            type: payment.service.docker.docker
             requirements:
-                - host: node_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -118,9 +118,9 @@ topology_template:
         ###################################################
 
         currency_service:
-            type: currency.service.ansible.node
+            type: currency.service.docker.docker
             requirements:
-                - host: node_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -129,9 +129,9 @@ topology_template:
         ###################################################
 
         shipping_service:
-            type: shipping.service.ansible.go
+            type: shipping.service.docker.docker
             requirements:
-                - host: go_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -140,14 +140,14 @@ topology_template:
         ###################################################
 
         cart_service:
-            type: cart.service.ansible.dotnet
+            type: cart.service.docker.docker
             requirements:
                 - database: postgresql_database
 
-                - host: dotnet_runtime
+                - host: docker_runtime
 
         postgresql_database:
-            type: postgresql.database.ansible.postgresql
+            type: postgresql.database.terraform.postgresql
             properties:
                 database_name: cart
                 database_user: cart
@@ -156,12 +156,12 @@ topology_template:
                 - host: postgresql_dbms
 
         postgresql_dbms:
-            type: postgresql.dbms.ansible.openstack
+            type: postgresql.dbms.docker.docker
             properties:
                 dbms_name: cart
                 dbms_password: {get_input: dbms_password}
             requirements:
-                - host: virtual_machine
+                - host: docker_runtime
 
         ###################################################
         #
@@ -170,9 +170,9 @@ topology_template:
         ###################################################
 
         product_service:
-            type: product.service.ansible.go
+            type: product.service.docker.docker
             requirements:
-                - host: go_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -181,11 +181,11 @@ topology_template:
         ###################################################
 
         recommendation_service:
-            type: recommendation.service.ansible.python
+            type: recommendation.service.docker.docker
             requirements:
                 - product: product_service
 
-                - host: python_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -194,9 +194,9 @@ topology_template:
         ###################################################
 
         advertisement_service:
-            type: advertisement.service.ansible.java
+            type: advertisement.service.docker.docker
             requirements:
-                - host: java_runtime
+                - host: docker_runtime
 
         ###################################################
         #
@@ -204,38 +204,23 @@ topology_template:
         #
         ###################################################
 
-        go_runtime:
-            type: go.runtime.ansible.openstack
-            properties:
-                version: 1.22.5
+        docker_runtime:
+            type: docker.engine.ansible.openstack
             requirements:
                 - host: virtual_machine
 
-        dotnet_runtime:
-            type: dotnet.runtime.ansible.openstack
-            properties:
-                version: 8.0.7
+        monitoring_agent:
+            type: monitoring.agent.ansible.openstack
             requirements:
                 - host: virtual_machine
 
-        node_runtime:
-            type: node.runtime.ansible.openstack
-            properties:
-                version: 20.15.1
+        logging_agent:
+            type: logging.agent.ansible.openstack
             requirements:
                 - host: virtual_machine
 
-        python_runtime:
-            type: python.runtime.ansible.openstack
-            properties:
-                version: 3.12.4
-            requirements:
-                - host: virtual_machine
-
-        java_runtime:
-            type: java.runtime.ansible.openstack
-            properties:
-                version: 21.0.3+9
+        security_agent:
+            type: security.agent.ansible.openstack
             requirements:
                 - host: virtual_machine
 

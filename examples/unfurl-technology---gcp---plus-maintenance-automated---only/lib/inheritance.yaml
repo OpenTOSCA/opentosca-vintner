@@ -18,18 +18,14 @@ product.service: go.application
 recommendation.service: python.application
 advertisement.service: java.application
 
+monitoring.agent: software.application
+logging.agent: software.application
+security.agent: software.application
+
 relational.database: root
 postgresql.database: relational.database
 postgresql.dbms: relational.dbms
 #gcp.cloudsql: relational.dbms
-
-software.runtime: root
-go.runtime: software.runtime
-dotnet.runtime: software.runtime
-node.runtime: software.runtime
-python.runtime: software.runtime
-java.runtime: software.runtime
-#gcp.appengine: software.runtime
 
 computing: root
 openstack.machine: computing

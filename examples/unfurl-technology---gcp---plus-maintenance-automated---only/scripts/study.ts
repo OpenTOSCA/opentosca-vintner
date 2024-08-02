@@ -59,18 +59,11 @@ async function main() {
      ******************************************************************************************************************/
 
     /**
-     * Docker (12 technologies are encoded in types)
-     */
-    const edmm_docker = await stats('EDMM Docker Variant', path.join(testsDir, 'docker', 'expected.yaml'))
-    edmm_docker.technology_assignments = 12
-    edmm_docker.lines_of_code += 12
-
-    /**
      * GCP (12 technologies are encoded in types)
      */
     const edmm_gcp = await stats('EDMM GCP Variant', path.join(testsDir, 'gcp', 'expected.yaml'))
-    edmm_gcp.technology_assignments = 12
-    edmm_gcp.lines_of_code += 12
+    edmm_gcp.technology_assignments = 14
+    edmm_gcp.lines_of_code += 14
 
     /**
      * OS Medium (18 technologies are encoded in types)
@@ -89,7 +82,8 @@ async function main() {
     /**
      * EDMM Total Default
      */
-    const edmm_total_default = sumMetrics('EDMM Total', [edmm_docker, edmm_gcp, edmm_os_medium, edmm_os_large])
+    const edmm_variants_default = [edmm_gcp, edmm_os_medium, edmm_os_large]
+    const edmm_total_default = sumMetrics('EDMM Total', edmm_variants_default)
 
     /**
      * VDMM Baseline Default
@@ -137,7 +131,6 @@ async function main() {
      * Print
      */
     printTable<MetricsData>('Metrics relevant when modeling the different scenarios', [
-        edmm_docker,
         edmm_gcp,
         edmm_os_large,
         edmm_os_medium,
@@ -218,19 +211,13 @@ async function main() {
      * Kubernetes (12 technologies are encoded in types)
      */
     const edmm_kubernetes = await stats('EDMM Kubernetes', path.join(testsDir, 'kubernetes', 'expected.yaml'))
-    edmm_kubernetes.technology_assignments = 12
-    edmm_kubernetes.lines_of_code += 12
+    edmm_kubernetes.technology_assignments = 13
+    edmm_kubernetes.lines_of_code += 13
 
     /**
      * EDMM Total Maintenance
      */
-    const edmm_total_maintenance = sumMetrics('EDMM Total Maintenance', [
-        edmm_docker,
-        edmm_gcp,
-        edmm_os_medium,
-        edmm_os_large,
-        edmm_kubernetes,
-    ])
+    const edmm_total_maintenance = sumMetrics('EDMM Total Maintenance', [...edmm_variants_default, edmm_kubernetes])
 
     /**
      * VDMM Baseline Maintenance

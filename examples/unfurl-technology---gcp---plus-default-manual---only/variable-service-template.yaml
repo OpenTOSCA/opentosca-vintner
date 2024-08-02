@@ -13,10 +13,6 @@ topology_template:
         dbms_password:
             type: string
 
-        docker_host:
-            type: string
-            default: 'unix://var/run/docker.sock'
-
         os_network:
             type: string
 
@@ -61,7 +57,6 @@ topology_template:
 
     variability:
         expressions:
-            is_docker: {equal: [{variability_input: env}, DOCKER]}
             is_gcp: {equal: [{variability_input: env}, GCP]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
         inputs:
@@ -88,10 +83,8 @@ topology_template:
             type: frontend.service
             persistent: true
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
@@ -103,7 +96,6 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
 
-                - host: go_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -126,10 +118,8 @@ topology_template:
         checkout_service:
             type: checkout.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
@@ -140,7 +130,6 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
 
-                - host: go_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -153,14 +142,11 @@ topology_template:
         email_service:
             type: email.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: python_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -173,14 +159,11 @@ topology_template:
         payment_service:
             type: payment.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: node_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -193,14 +176,11 @@ topology_template:
         currency_service:
             type: currency.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: node_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -213,14 +193,11 @@ topology_template:
         shipping_service:
             type: shipping.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: go_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -233,28 +210,19 @@ topology_template:
         cart_service:
             type: cart.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - database: postgresql_database
 
-                - host: dotnet_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
         postgresql_database:
             type: postgresql.database
-            technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
-                - ansible:
-                      conditions: {logic_expression: is_docker}
-                - terraform:
-                      conditions: {logic_expression: is_gcp}
+            technology: terraform
             properties:
                 - database_name: cart
                 - database_user: cart
@@ -265,17 +233,14 @@ topology_template:
         postgresql_dbms:
             type: postgresql.dbms
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             properties:
                 - dbms_name: cart
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: virtual_machine
                 - host: docker_runtime
                 - host: gcp_cloudsql
 
@@ -288,14 +253,11 @@ topology_template:
         product_service:
             type: product.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: go_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -308,16 +270,13 @@ topology_template:
         recommendation_service:
             type: recommendation.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - product: product_service
 
-                - host: python_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -330,14 +289,11 @@ topology_template:
         advertisement_service:
             type: advertisement.service
             technology:
-                - ansible:
-                      conditions: {logic_expression: is_openstack}
                 - docker:
-                      conditions: {logic_expression: is_docker}
+                      conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: java_runtime
                 - host: docker_runtime
                 - host: gcp_appengine
 
@@ -347,43 +303,27 @@ topology_template:
         #
         ###################################################
 
-        go_runtime:
-            type: go.runtime
+        docker_runtime:
+            type: docker.engine
             technology: ansible
-            properties:
-                - version: 1.22.5
             requirements:
                 - host: virtual_machine
 
-        dotnet_runtime:
-            type: dotnet.runtime
+        monitoring_agent:
+            type: monitoring.agent
             technology: ansible
-            properties:
-                - version: 8.0.7
             requirements:
                 - host: virtual_machine
 
-        node_runtime:
-            type: node.runtime
+        logging_agent:
+            type: logging.agent
             technology: ansible
-            properties:
-                - version: 20.15.1
             requirements:
                 - host: virtual_machine
 
-        python_runtime:
-            type: python.runtime
+        security_agent:
+            type: security.agent
             technology: ansible
-            properties:
-                - version: 3.12.4
-            requirements:
-                - host: virtual_machine
-
-        java_runtime:
-            type: java.runtime
-            technology: ansible
-            properties:
-                - version: 21.0.3+9
             requirements:
                 - host: virtual_machine
 
@@ -420,18 +360,6 @@ topology_template:
                 - os_interface: {get_input: os_interface}
                 - os_application_credential_id: {get_input: os_application_credential_id}
                 - os_application_credential_secret: {get_input: os_application_credential_secret}
-
-        ###################################################
-        #
-        # Docker
-        #
-        ###################################################
-
-        docker_runtime:
-            type: docker.engine
-            conditions: {logic_expression: is_docker}
-            properties:
-                - docker_host: {get_input: docker_host}
 
         ###################################################
         #

@@ -43,7 +43,18 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
 export async function minMaxQuality(
     options: ResolveOptions & {quality?: boolean; counting?: boolean; random?: boolean; min?: boolean; max?: boolean}
 ) {
-    const weight: Partial<ServiceTemplate> = {
+    const minWeight: Partial<ServiceTemplate> = {
+        topology_template: {
+            variability: {
+                options: {
+                    optimization_technologies: 'min',
+                    optimization_technologies_mode: 'weight',
+                },
+            },
+        },
+    }
+
+    const maxWeight: Partial<ServiceTemplate> = {
         topology_template: {
             variability: {
                 options: {
@@ -80,7 +91,7 @@ export async function minMaxQuality(
      */
     const {graph} = await load(
         utils.copy(options),
-        options.quality ? weight : options.counting ? count : options.random ? random : undefined
+        options.quality ? maxWeight : options.counting ? count : options.random ? random : undefined
     )
 
     /**
@@ -89,7 +100,7 @@ export async function minMaxQuality(
      * Get the result with the quality of all results (min or max is not overridden)
      */
     if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight') {
-        const loaded = await load(utils.copy(options), weight)
+        const loaded = await load(utils.copy(options), maxWeight)
         const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
         if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
         return utils.roundNumber(utils.first(optimized).quality.average)
@@ -109,6 +120,13 @@ export async function minMaxQuality(
             .sort((a, b) => a.quality.average - b.quality.average)
 
         /*
+        console.log(
+            '---------------------------------------------------------------------------------------------------'
+        )
+        console.log('some counting')
+        console.log(
+            '---------------------------------------------------------------------------------------------------'
+        )
         console.log(all.length)
         console.log(
             candidates.map(it => ({
@@ -118,6 +136,7 @@ export async function minMaxQuality(
             }))
         )
          */
+
         return {
             min: utils.roundNumber(utils.first(candidates).quality.average),
             max: utils.roundNumber(utils.last(candidates).quality.average),
@@ -133,30 +152,23 @@ export async function minMaxQuality(
         /**
          * Min
          */
-        const minLoad = await load(utils.copy(options), {
-            topology_template: {
-                variability: {
-                    options: {
-                        optimization_technologies: 'min',
-                    },
-                },
-            },
-        })
+        const minLoad = await load(utils.copy(options), minWeight)
         const min = new Resolver(minLoad.graph, minLoad.inputs).optimize()
         if (min.length !== 1) throw new Error(`Did not return correct quality`)
+
+        /*
+        console.log({
+            technologies: min[0].technologies.count_each,
+            quality: min[0].quality.average,
+            presences: min[0].getPresences('technology'),
+        })
+
+         */
 
         /**
          * Max
          */
-        const maxLoad = await load(utils.copy(options), {
-            topology_template: {
-                variability: {
-                    options: {
-                        optimization_technologies: 'max',
-                    },
-                },
-            },
-        })
+        const maxLoad = await load(utils.copy(options), maxWeight)
         const max = new Resolver(maxLoad.graph, maxLoad.inputs).optimize()
         if (max.length !== 1) throw new Error(`Did not return correct quality`)
 

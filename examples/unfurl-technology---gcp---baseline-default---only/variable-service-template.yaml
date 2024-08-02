@@ -13,10 +13,6 @@ topology_template:
         dbms_password:
             type: string
 
-        docker_host:
-            type: string
-            default: 'unix://var/run/docker.sock'
-
         os_network:
             type: string
 
@@ -61,7 +57,6 @@ topology_template:
 
     variability:
         expressions:
-            is_docker: {equal: [{variability_input: env}, DOCKER]}
             is_gcp: {equal: [{variability_input: env}, GCP]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
         inputs:
@@ -80,26 +75,10 @@ topology_template:
         #
         ###################################################
 
-        frontend_service_ansible:
+        frontend_service_docker:
             type: frontend.service
             persistent: true
             conditions: {logic_expression: is_openstack}
-            technology: ansible
-            requirements:
-                - checkout: checkout_service_ansible
-                - currency: currency_service_ansible
-                - shipping: shipping_service_ansible
-                - cart: cart_service_ansible
-                - product: product_service_ansible
-                - recommendation: recommendation_service_ansible
-                - advertisement: advertisement_service_ansible
-
-                - host: go_runtime
-
-        frontend_service_docker:
-            type: frontend.service
-            conditions: {logic_expression: is_docker}
-            persistent: true
             technology: docker
             requirements:
                 - checkout: checkout_service_docker
@@ -128,11 +107,11 @@ topology_template:
 
                 - host: gcp_appengine
 
-        frontend_ingress_ansible:
+        frontend_ingress:
             type: ingress
             technology: ansible
             requirements:
-                - upstream: frontend_service_ansible
+                - upstream: frontend_service_docker
                 - host: virtual_machine
 
         ###################################################
@@ -140,19 +119,6 @@ topology_template:
         # Checkout
         #
         ###################################################
-
-        checkout_service_ansible:
-            type: checkout.service
-            technology: ansible
-            requirements:
-                - email: email_service_ansible
-                - payment: payment_service_ansible
-                - currency: currency_service_ansible
-                - shipping: shipping_service_ansible
-                - cart: cart_service_ansible
-                - product: product_service_ansible
-
-                - host: go_runtime
 
         checkout_service_docker:
             type: checkout.service
@@ -186,12 +152,6 @@ topology_template:
         #
         ###################################################
 
-        email_service_ansible:
-            type: email.service
-            technology: ansible
-            requirements:
-                - host: python_runtime
-
         email_service_docker:
             type: email.service
             technology: docker
@@ -209,12 +169,6 @@ topology_template:
         # Payment
         #
         ###################################################
-
-        payment_service_ansible:
-            type: payment.service
-            technology: ansible
-            requirements:
-                - host: node_runtime
 
         payment_service_docker:
             type: payment.service
@@ -234,12 +188,6 @@ topology_template:
         #
         ###################################################
 
-        currency_service_ansible:
-            type: currency.service
-            technology: ansible
-            requirements:
-                - host: node_runtime
-
         currency_service_docker:
             type: currency.service
             technology: docker
@@ -257,12 +205,6 @@ topology_template:
         # Shipping
         #
         ###################################################
-
-        shipping_service_ansible:
-            type: shipping.service
-            technology: ansible
-            requirements:
-                - host: go_runtime
 
         shipping_service_docker:
             type: shipping.service
@@ -282,19 +224,11 @@ topology_template:
         #
         ###################################################
 
-        cart_service_ansible:
-            type: cart.service
-            technology: ansible
-            requirements:
-                - database: postgresql_database_ansible
-
-                - host: dotnet_runtime
-
         cart_service_docker:
             type: cart.service
             technology: docker
             requirements:
-                - database: postgresql_database_ansible
+                - database: postgresql_database
 
                 - host: docker_runtime
 
@@ -302,27 +236,11 @@ topology_template:
             type: cart.service
             technology: terraform
             requirements:
-                - database: postgresql_database_terraform
+                - database: postgresql_database
 
                 - host: gcp_appengine
 
-        postgresql_database_ansible:
-            type: postgresql.database
-            technology: ansible
-            properties:
-                - database_name: cart
-                - database_user: cart
-                - database_password: {get_input: database_password}
-            requirements:
-                - host:
-                      node: postgresql_dbms_ansible
-                      conditions: {logic_expression: is_openstack}
-
-                - host:
-                      node: postgresql_dbms_docker
-                      conditions: {logic_expression: is_docker}
-
-        postgresql_database_terraform:
+        postgresql_database:
             type: postgresql.database
             technology: terraform
             properties:
@@ -330,16 +248,13 @@ topology_template:
                 - database_user: cart
                 - database_password: {get_input: database_password}
             requirements:
-                - host: postgresql_dbms_terraform
+                - host:
+                      node: postgresql_dbms_docker
+                      conditions: {logic_expression: is_openstack}
 
-        postgresql_dbms_ansible:
-            type: postgresql.dbms
-            technology: ansible
-            properties:
-                - dbms_name: cart
-                - dbms_password: {get_input: dbms_password}
-            requirements:
-                - host: virtual_machine
+                - host:
+                      node: postgresql_dbms_terraform
+                      conditions: {logic_expression: is_gcp}
 
         postgresql_dbms_docker:
             type: postgresql.dbms
@@ -365,12 +280,6 @@ topology_template:
         #
         ###################################################
 
-        product_service_ansible:
-            type: product.service
-            technology: ansible
-            requirements:
-                - host: go_runtime
-
         product_service_docker:
             type: product.service
             technology: docker
@@ -388,14 +297,6 @@ topology_template:
         # Recommendation
         #
         ###################################################
-
-        recommendation_service_ansible:
-            type: recommendation.service
-            technology: ansible
-            requirements:
-                - product: product_service_ansible
-
-                - host: python_runtime
 
         recommendation_service_docker:
             type: recommendation.service
@@ -419,12 +320,6 @@ topology_template:
         #
         ###################################################
 
-        advertisement_service_ansible:
-            type: advertisement.service
-            technology: ansible
-            requirements:
-                - host: java_runtime
-
         advertisement_service_docker:
             type: advertisement.service
             technology: docker
@@ -443,43 +338,27 @@ topology_template:
         #
         ###################################################
 
-        go_runtime:
-            type: go.runtime
+        docker_runtime:
+            type: docker.engine
             technology: ansible
-            properties:
-                - version: 1.22.5
             requirements:
                 - host: virtual_machine
 
-        dotnet_runtime:
-            type: dotnet.runtime
+        monitoring_agent:
+            type: monitoring.agent
             technology: ansible
-            properties:
-                - version: 8.0.7
             requirements:
                 - host: virtual_machine
 
-        node_runtime:
-            type: node.runtime
+        logging_agent:
+            type: logging.agent
             technology: ansible
-            properties:
-                - version: 20.15.1
             requirements:
                 - host: virtual_machine
 
-        python_runtime:
-            type: python.runtime
+        security_agent:
+            type: security.agent
             technology: ansible
-            properties:
-                - version: 3.12.4
-            requirements:
-                - host: virtual_machine
-
-        java_runtime:
-            type: java.runtime
-            technology: ansible
-            properties:
-                - version: 21.0.3+9
             requirements:
                 - host: virtual_machine
 
@@ -516,18 +395,6 @@ topology_template:
                 - os_interface: {get_input: os_interface}
                 - os_application_credential_id: {get_input: os_application_credential_id}
                 - os_application_credential_secret: {get_input: os_application_credential_secret}
-
-        ###################################################
-        #
-        # Docker
-        #
-        ###################################################
-
-        docker_runtime:
-            type: docker.engine
-            conditions: {logic_expression: is_docker}
-            properties:
-                - docker_host: {get_input: docker_host}
 
         ###################################################
         #
