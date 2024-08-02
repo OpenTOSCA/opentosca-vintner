@@ -5,22 +5,27 @@ ansible:
           - software.runtime
           - openstack.machine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     - component: software.application
       hosting: docker.engine
-      weight: 0.7
+      weight: 0.5
+      comment: Docker is more specialized.
 
     - component: software.application
       hosting: kubernetes
-      weight: 0.7
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
     - component: software.application
       hosting: gcp.appengine
-      weight: 0.3
+      weight: 0
+      comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
     - component: software.runtime
       hosting: openstack.machine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     # Database
     - component: postgresql.database
@@ -28,55 +33,70 @@ ansible:
           - postgresql.dbms
           - openstack.machine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
-    # TODO: in reality, the docker container usually has one default database ... and one usually does not create a second one since every microservice simply gets its own DBMS ... (same applies when hosted in k8s)
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - docker.engine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - kubernetes
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
+    # TODO: whats about google.cloud.gcp_sql_database?
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - gcp.cloudsql
-      weight: 0.5
+      weight: 1
 
     # DBMS
     - component: postgresql.dbms
       hosting: openstack.machine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     - component: postgresql.dbms
       hosting: docker.engine
-      weight: 0.7
+      weight: 0.5
+      comment: Docker is more specialized.
 
     - component: postgresql.dbms
       hosting: kubernetes
-      weight: 0.7
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
+    # TODO: whats about google.cloud.gcp_sql_instance?
     - component: postgresql.dbms
       hosting: gcp.cloudsql
-      weight: 0.5
+      weight: 1
 
     # Ingress
     - component: ingress
       hosting: openstack.machine
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
+
+    - component: ingress
+      hosting: kubernetes
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
     # Virtual Machine
     - component: openstack.machine
       weight: 0.5
+      comment: Terraform is more specialized.
 
     # GCP Service
+    # TODO: what is about google.cloud.gcp_serviceusage_service?
     - component: gcp.service
-      weight: 0
+      weight: 1
 
 terraform:
     # Software
@@ -85,120 +105,143 @@ terraform:
           - software.runtime
           - openstack.machine
       weight: 0
+      comment: Ansible is more specialized.
 
     - component: software.application
       hosting: docker.engine
-      weight: 0.7
+      weight: 0.5
+      comment: Docker is more specialized.
 
     - component: software.application
       hosting: kubernetes
-      weight: 0.7
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
     - component: software.application
       hosting: gcp.appengine
       weight: 1
+      comment: Terraform provides a declarative module.
 
     - component: software.runtime
       hosting: openstack.machine
       weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     # Database
-    # TODO: weight?!
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - openstack.machine
-      weight: 0.5
+      weight: 1
+      comment: Terraform provides a declarative module.
 
-    # TODO: weight?!
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - docker.engine
-      weight: 0.5
+      weight: 1
+      comment: Terraform provides a declarative module.
 
-    # TODO: weight?!
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - kubernetes
-      weight: 0.5
+      weight: 1
+      comment: Terraform provides a declarative module.
 
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - gcp.cloudsql
       weight: 1
+      comment: Terraform provides a declarative module.
 
     # DBMS
     - component: postgresql.dbms
       hosting: openstack.machine
       weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     - component: postgresql.dbms
       hosting: docker.engine
-      weight: 0.7
+      weight: 0.5
+      comment: Docker is more specialized.
 
     - component: postgresql.dbms
       hosting: kubernetes
-      weight: 0.7
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
     - component: postgresql.dbms
       hosting: gcp.cloudsql
       weight: 1
+      comment: Terraform provides a declarative module.
 
     # Ingress
     - component: ingress
       hosting: openstack.machine
       weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+
+    - component: ingress
+      hosting: kubernetes
+      weight: 0.5
+      comment: Kubernetes is more specialized.
 
     # Virtual Machine
     - component: openstack.machine
       weight: 1
+      comment: Terraform provides a declarative module.
 
     # GCP Service
     - component: gcp.service
       weight: 1
+      comment: Terraform provides a declarative module.
 
 kubernetes:
     # Software
     - component: software.application
       hosting: kubernetes
       weight: 1
+      comment: Kubernetes is the underlying technology.
 
     # Database
-    # TODO: use kubernetes job
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - kubernetes
       weight: 0
+      comment: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS
     - component: postgresql.dbms
       hosting: kubernetes
       weight: 1
+      comment: Kubernetes is the underlying technology.
 
     # Ingress
     - component: ingress
       hosting: kubernetes
       weight: 1
+      comment: Kubernetes is the underlying technology.
 
 docker:
     # Software
     - component: software.application
       hosting: docker.engine
       weight: 1
+      comment: Docker is the underlying technology.
 
     # Database
-    # TODO: use docker job
     - component: postgresql.database
       hosting:
           - postgresql.dbms
           - docker.engine
       weight: 0
+      comment: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS
     - component: postgresql.dbms
       hosting: docker.engine
       weight: 1
+      comment: Docker is the underlying technology.

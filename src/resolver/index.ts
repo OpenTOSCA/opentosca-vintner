@@ -109,6 +109,7 @@ export async function minMaxQuality(
             .sort((a, b) => a.quality.average - b.quality.average)
 
         /*
+        console.log(all.length)
         console.log(
             candidates.map(it => ({
                 technologies: it.technologies.count_each,
