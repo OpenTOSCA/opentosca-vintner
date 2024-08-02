@@ -1,3 +1,11 @@
+replace:
+    # The selection of Terraform and Ansible is random since they have the same quality assigned for postgresql.database ...
+    - - postgresql.database.terraform.postgresql
+      - postgresql.database.ansible.postgresql
+
+    - - postgresql.database.ansible.postgresql
+      - postgresql.database.terraform.postgresql
+
 merge:
     topology_template:
         node_templates:

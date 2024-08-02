@@ -51,8 +51,10 @@ topology_template:
                 - product: product_service
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
-
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
 
         frontend_ingress:
             type: ingress.kubernetes.kubernetes
@@ -60,7 +62,6 @@ topology_template:
                 upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service
-
                 - host: kubernetes_runtime
 
         ###################################################
@@ -85,8 +86,10 @@ topology_template:
                 - shipping: shipping_service
                 - cart: cart_service
                 - product: product_service
-
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.1
 
         ###################################################
         #
@@ -98,6 +101,9 @@ topology_template:
             type: email.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/emailservice:v0.10.1
 
         ###################################################
         #
@@ -109,6 +115,9 @@ topology_template:
             type: payment.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/paymentservice:v0.10.1
 
         ###################################################
         #
@@ -120,6 +129,9 @@ topology_template:
             type: currency.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/currencyservice:v0.10.1
 
         ###################################################
         #
@@ -131,6 +143,9 @@ topology_template:
             type: shipping.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/shippingservice:v0.10.1
 
         ###################################################
         #
@@ -146,8 +161,10 @@ topology_template:
                 database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
-
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
 
         postgresql_database:
             type: postgresql.database.terraform.postgresql
@@ -176,6 +193,9 @@ topology_template:
             type: product.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/productservice:v0.10.1
 
         ###################################################
         #
@@ -189,8 +209,10 @@ topology_template:
                 product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service
-
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/recommendationervice:v0.10.1
 
         ###################################################
         #
@@ -202,6 +224,9 @@ topology_template:
             type: advertisement.service.kubernetes.kubernetes
             requirements:
                 - host: kubernetes_runtime
+            artifacts:
+                docker:
+                    file: gcr.io/google-samples/microservices-demo/advertisementservice:v0.10.1
 
         ###################################################
         #
