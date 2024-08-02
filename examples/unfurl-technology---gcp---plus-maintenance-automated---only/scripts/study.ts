@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import controller from '#controller'
 import * as files from '#files'
@@ -163,42 +162,16 @@ async function main() {
             template: templateFile,
             experimental: true,
             inputs,
-            quality: true,
         })
-        assert.isNumber(quality)
-
-        const random = await controller.template.quality({
-            template: templateFile,
-            experimental: true,
-            inputs,
-            random: true,
-        })
-        assert.isObject(random)
-
-        const counting = await controller.template.quality({
-            template: templateFile,
-            experimental: true,
-            inputs,
-            counting: true,
-        })
-        assert.isObject(counting)
-
-        const quality_counting = await controller.template.quality({
-            template: templateFile,
-            experimental: true,
-            inputs,
-            qualityCounting: true,
-        })
-        assert.isNumber(quality_counting)
 
         qualityData.push({
             scenario: variant,
-            expert: quality,
-            non_expert: [random.min, random.max],
-            random: [random.min, random.max],
-            counting: [counting.min, counting.max],
-            quality,
-            quality_counting,
+            expert: quality.max_weight,
+            non_expert: [quality.min_weight, quality.max_weight],
+            random: [quality.min_weight, quality.max_weight],
+            counting: [quality.min_count.min, quality.min_count.max],
+            quality: quality.max_weight,
+            quality_counting: quality.max_weight_min_count,
         })
     }
 

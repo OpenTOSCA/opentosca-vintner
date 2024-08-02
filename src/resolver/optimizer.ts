@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import {Result} from '#resolver/result'
@@ -49,35 +50,26 @@ export default class Optimizer {
      */
     private optimizeTopology() {
         const formulas = this.graph.nodes.map(it => it.id)
-        let weights: number | number[]
+        let weights: number | number[] | undefined
 
-        switch (this.graph.options.solver.topology.mode) {
-            /**
-             * Weight
-             */
-            case 'weight': {
-                weights = this.graph.nodes.map(it => it.weight * 100)
-                break
-            }
+        /**
+         * Weight
+         */
+        if (this.graph.options.solver.topology.mode === 'weight') {
+            weights = this.graph.nodes.map(it => it.weight * 100)
+        }
 
-            /**
-             * Count
-             */
-            case 'count': {
-                weights = 1
-                break
-            }
-
-            /**
-             * Abort
-             */
-            default:
-                throw new Error(`Topology optimization mode "${this.graph.options.solver.topology.mode}" not supported`)
+        /**
+         * Count
+         */
+        if (this.graph.options.solver.topology.mode === 'count') {
+            weights = 1
         }
 
         /**
          * Optimize
          */
+        assert.isDefined(weights)
         this.optimize({min: this.graph.options.solver.topology.min, formulas, weights})
     }
 
@@ -101,48 +93,40 @@ export default class Optimizer {
         }
     }
 
-    // TODO: this is so messy!
-
     /**
      * Optimize technologies
      */
     private optimizeTechnologies() {
         /**
-         * Weight
+         * Weight(-Count)
          */
-        const weight_formulas = this.graph.technologies.map(it => it.id)
-        const weight_weights = this.graph.technologies.map(it => it.weight * 100)
-        if (this.graph.options.solver.technologies.mode === 'weight') {
-            return this.optimize({
-                min: this.graph.options.solver.technologies.min,
-                formulas: weight_formulas,
-                weights: weight_weights,
-            })
+        if (this.graph.options.solver.technologies.mode.includes('weight')) {
+            const formulas = this.graph.technologies.map(it => it.id)
+            const weights = this.graph.technologies.map(it => it.weight * 100)
+
+            // We always maximize weight in weight-count
+            const min = this.graph.options.solver.technologies.mode.includes('count')
+                ? false
+                : this.graph.options.solver.technologies.min
+
+            this.optimize({min, formulas, weights})
         }
 
         /**
-         * Count
+         * (Weight-)Count
          */
-        const count_groups = utils.groupBy(this.graph.technologies, it => it.name)
-        const count_formulas = Object.entries(count_groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
-        const count_weights = 1
-        if (this.graph.options.solver.technologies.mode === 'count') {
-            return this.optimize({
-                min: this.graph.options.solver.technologies.min,
-                formulas: count_formulas,
-                weights: count_weights,
-            })
-        }
+        if (this.graph.options.solver.technologies.mode.includes('count')) {
+            const groups = utils.groupBy(this.graph.technologies, it => it.name)
+            const formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
+            const weights = 1
 
-        /**
-         * Weight-Count
-         */
-        if (this.graph.options.solver.technologies.mode === 'weight-count') {
-            this.optimize({min: false, formulas: weight_formulas, weights: weight_weights})
-            return this.optimize({min: true, formulas: count_formulas, weights: count_weights})
-        }
+            // We always minimize count in weight-count
+            const min = this.graph.options.solver.technologies.mode.includes('weight')
+                ? true
+                : this.graph.options.solver.technologies.min
 
-        throw new Error(`Technology optimization mode "${this.graph.options.solver.technologies.mode}" not supported`)
+            this.optimize({min, formulas: formulas, weights: weights})
+        }
     }
 
     /**
@@ -167,6 +151,8 @@ export default class Optimizer {
 
     /**
      * Optimize
+     *
+     * This changes the state of the SAT solver but keeps it satisfiable
      */
     private optimize(options: {min: boolean; formulas: MiniSat.Operand[]; weights: number | number[]}) {
         if (options.min) {

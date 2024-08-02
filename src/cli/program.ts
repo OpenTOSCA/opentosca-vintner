@@ -496,9 +496,6 @@ template
         '--inputs [string]',
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY})'
     )
-    .option('--quality [boolean]', 'enforce quality strategy', false)
-    .option('--counting [boolean]', 'enforce counting strategy', false)
-    .option('--random [boolean]', 'enforce random strategy', false)
     .action(
         hae.exit(async options => {
             std.out(await Controller.template.quality(options))

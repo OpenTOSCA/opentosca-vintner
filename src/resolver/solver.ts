@@ -134,7 +134,7 @@ export default class Solver {
          * Return
          */
         if (options.all) {
-            // Note, this actually also contains current result since we did not forbid this solution yet
+            // This actually also contains the current result since we did not forbid it
             return this.solveAll()
         }
         return [result]
