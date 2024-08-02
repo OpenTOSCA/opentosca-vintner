@@ -99,6 +99,7 @@ topology_template:
             required_technology_check: false
             # TODO: must be "true" to work
             optimization_technologies: true
+            optimization_technologies_mode: weight-count
 
     node_templates:
         ###################################################

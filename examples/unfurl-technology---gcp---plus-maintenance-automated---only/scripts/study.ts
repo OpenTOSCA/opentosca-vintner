@@ -183,6 +183,14 @@ async function main() {
         })
         assert.isObject(counting)
 
+        const quality_counting = await controller.template.quality({
+            template: templateFile,
+            experimental: true,
+            inputs,
+            qualityCounting: true,
+        })
+        assert.isNumber(quality_counting)
+
         qualityData.push({
             scenario: variant,
             expert: quality,
@@ -190,6 +198,7 @@ async function main() {
             random: [random.min, random.max],
             counting: [counting.min, counting.max],
             quality,
+            quality_counting,
         })
     }
 
@@ -348,6 +357,7 @@ type QualityData = {
     random: number[]
     counting: number[]
     quality: number
+    quality_counting: number
 }
 
 type MetricsData = {

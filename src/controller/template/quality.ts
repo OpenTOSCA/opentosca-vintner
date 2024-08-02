@@ -8,6 +8,8 @@ export type TemplateQualityOptions = {
     quality?: boolean
     counting?: boolean
     random?: boolean
+    // TODO: missing in cli
+    qualityCounting?: boolean
     experimental: boolean
 }
 
@@ -26,5 +28,6 @@ export default async function (options: TemplateQualityOptions) {
         quality: options.quality,
         counting: options.counting,
         random: options.random,
+        qualityCounting: options.qualityCounting,
     })
 }

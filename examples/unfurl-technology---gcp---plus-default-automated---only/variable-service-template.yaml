@@ -71,6 +71,7 @@ topology_template:
         options:
             # TODO: remove this
             required_technology_check: false
+            optimization_technologies_mode: weight-count
 
     node_templates:
         ###################################################

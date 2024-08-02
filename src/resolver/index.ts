@@ -41,7 +41,14 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
 
 // TODO: this is so messy
 export async function minMaxQuality(
-    options: ResolveOptions & {quality?: boolean; counting?: boolean; random?: boolean; min?: boolean; max?: boolean}
+    options: ResolveOptions & {
+        quality?: boolean
+        counting?: boolean
+        random?: boolean
+        min?: boolean
+        max?: boolean
+        qualityCounting?: boolean
+    }
 ) {
     const minWeight: Partial<ServiceTemplate> = {
         topology_template: {
@@ -86,12 +93,30 @@ export async function minMaxQuality(
         },
     }
 
+    const qualityCounting: Partial<ServiceTemplate> = {
+        topology_template: {
+            variability: {
+                options: {
+                    optimization_technologies_mode: 'weight-count',
+                },
+            },
+        },
+    }
+
     /**
      * Graph (for checking options)
      */
     const {graph} = await load(
         utils.copy(options),
-        options.quality ? maxWeight : options.counting ? count : options.random ? random : undefined
+        options.quality
+            ? maxWeight
+            : options.counting
+            ? count
+            : options.random
+            ? random
+            : options.qualityCounting
+            ? qualityCounting
+            : undefined
     )
 
     /**
@@ -101,6 +126,16 @@ export async function minMaxQuality(
      */
     if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight') {
         const loaded = await load(utils.copy(options), maxWeight)
+        const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
+        if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
+        return utils.roundNumber(utils.first(optimized).quality.average)
+    }
+
+    /**
+     * Quality Counting
+     */
+    if (graph.options.solver.technologies.optimize && graph.options.solver.technologies.mode === 'weight-count') {
+        const loaded = await load(utils.copy(options), qualityCounting)
         const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
         if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
         return utils.roundNumber(utils.first(optimized).quality.average)

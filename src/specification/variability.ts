@@ -54,7 +54,8 @@ export type SolverOptions = {
     // Technologies
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
-    optimization_technologies_mode?: 'weight' | 'count'
+    // TODO: add "weight-count" to docs
+    optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 }
 
 export type NormalizationOptions = {

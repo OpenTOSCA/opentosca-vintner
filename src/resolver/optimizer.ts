@@ -2,7 +2,6 @@ import * as check from '#check'
 import Graph from '#graph/graph'
 import {Result} from '#resolver/result'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import MiniSat from 'logic-solver'
 
 export default class Optimizer {
@@ -42,8 +41,6 @@ export default class Optimizer {
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
-        // TODO: additionally minimize number of different technologies?
-
         return this.current
     }
 
@@ -79,22 +76,9 @@ export default class Optimizer {
         }
 
         /**
-         * Minimize
+         * Optimize
          */
-        if (this.graph.options.solver.topology.min) {
-            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
-            return
-        }
-
-        /**
-         * Maximize
-         */
-        if (this.graph.options.solver.topology.max) {
-            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
-            return
-        }
-
-        throw new UnexpectedError()
+        this.optimize({min: this.graph.options.solver.topology.min, formulas, weights})
     }
 
     /**
@@ -117,59 +101,48 @@ export default class Optimizer {
         }
     }
 
+    // TODO: this is so messy!
+
     /**
      * Optimize technologies
      */
     private optimizeTechnologies() {
-        let formulas: MiniSat.Operands[]
-        let weights: number | number[]
-
-        switch (this.graph.options.solver.technologies.mode) {
-            /**
-             * Weight
-             */
-            case 'weight': {
-                formulas = this.graph.technologies.map(it => it.id)
-                weights = this.graph.technologies.map(it => it.weight * 100)
-                break
-            }
-
-            /**
-             * Count
-             */
-            case 'count': {
-                const groups = utils.groupBy(this.graph.technologies, it => it.name)
-                formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
-                weights = 1
-                break
-            }
-
-            /**
-             * Abort
-             */
-            default:
-                throw new Error(
-                    `Technology optimization mode "${this.graph.options.solver.technologies.mode}" not supported`
-                )
+        /**
+         * Weight
+         */
+        const weight_formulas = this.graph.technologies.map(it => it.id)
+        const weight_weights = this.graph.technologies.map(it => it.weight * 100)
+        if (this.graph.options.solver.technologies.mode === 'weight') {
+            return this.optimize({
+                min: this.graph.options.solver.technologies.min,
+                formulas: weight_formulas,
+                weights: weight_weights,
+            })
         }
 
         /**
-         * Minimize
+         * Count
          */
-        if (this.graph.options.solver.technologies.min) {
-            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
-            return
+        const count_groups = utils.groupBy(this.graph.technologies, it => it.name)
+        const count_formulas = Object.entries(count_groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
+        const count_weights = 1
+        if (this.graph.options.solver.technologies.mode === 'count') {
+            return this.optimize({
+                min: this.graph.options.solver.technologies.min,
+                formulas: count_formulas,
+                weights: count_weights,
+            })
         }
 
         /**
-         * Maximize
+         * Weight-Count
          */
-        if (this.graph.options.solver.technologies.max) {
-            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
-            return
+        if (this.graph.options.solver.technologies.mode === 'weight-count') {
+            this.optimize({min: false, formulas: weight_formulas, weights: weight_weights})
+            return this.optimize({min: true, formulas: count_formulas, weights: count_weights})
         }
 
-        throw new UnexpectedError()
+        throw new Error(`Technology optimization mode "${this.graph.options.solver.technologies.mode}" not supported`)
     }
 
     /**
@@ -189,6 +162,17 @@ export default class Optimizer {
         if (check.isDefined(another)) {
             const mode = this.graph.options.solver.technologies.optimize ? 'besides' : 'without'
             throw new Error(`The result is ambiguous considering technologies (${mode} optimization)`)
+        }
+    }
+
+    /**
+     * Optimize
+     */
+    private optimize(options: {min: boolean; formulas: MiniSat.Operand[]; weights: number | number[]}) {
+        if (options.min) {
+            this.current = this.minisat.minimizeWeightedSum(this.current, options.formulas, options.weights)
+        } else {
+            this.current = this.minisat.maximizeWeightedSum(this.current, options.formulas, options.weights)
         }
     }
 }
