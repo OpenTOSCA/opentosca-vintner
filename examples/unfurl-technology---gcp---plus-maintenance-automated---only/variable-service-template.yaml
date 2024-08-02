@@ -75,8 +75,10 @@ topology_template:
             is_gcp: {equal: [{variability_input: env}, GCP]}
             is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
-            has_optional_feature: {equal: [{variability_input: optional_feature}, true]}
-            has_premium_feature: {equal: [{variability_input: premium_feature}, true]}
+            has_optional_payment_feature: {equal: [{variability_input: optional_payment_feature}, true]}
+            has_premium_payment_feature: {equal: [{variability_input: premium_payment_feature}, true]}
+            has_optional_analytical_feature: {equal: [{variability_input: optional_analytical_feature}, true]}
+            has_premium_analytical_feature: {equal: [{variability_input: premium_analytical_feature}, true]}
         inputs:
             env:
                 type: string
@@ -86,11 +88,19 @@ topology_template:
                 type: string
                 default: MEDIUM
 
-            optional_feature:
+            optional_payment_feature:
                 type: boolean
                 default: false
 
-            premium_feature:
+            premium_payment_feature:
+                type: boolean
+                default: false
+
+            optional_analytical_feature:
+                type: boolean
+                default: false
+
+            premium_analytical_feature:
                 type: boolean
                 default: false
 
@@ -173,16 +183,16 @@ topology_template:
             properties:
                 - optional_feature:
                       value: true
-                      conditions: {logic_expression: has_optional_feature}
+                      conditions: {logic_expression: has_optional_payment_feature}
                 - optional_feature:
                       value: false
-                      conditions: {not: {logic_expression: has_optional_feature}}
+                      conditions: {not: {logic_expression: has_optional_payment_feature}}
                 - premium_feature:
                       value: true
-                      conditions: {logic_expression: has_premium_feature}
+                      conditions: {logic_expression: has_premium_payment_feature}
                 - premium_feature:
                       value: false
-                      conditions: {not: {logic_expression: has_premium_feature}}
+                      conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
@@ -283,6 +293,34 @@ topology_template:
         advertisement_service:
             type: advertisement.service
             requirements:
+                - host: docker_runtime
+                - host: kubernetes_runtime
+                - host: gcp_appengine
+
+        ###################################################
+        #
+        # Analytical
+        #
+        ###################################################
+
+        analytical_service:
+            type: analytical.service
+            properties:
+                - optional_feature:
+                      value: true
+                      conditions: {logic_expression: has_optional_analytical_feature}
+                - optional_feature:
+                      value: false
+                      conditions: {not: {logic_expression: has_optional_analytical_feature}}
+                - premium_feature:
+                      value: true
+                      conditions: {logic_expression: has_premium_analytical_feature}
+                - premium_feature:
+                      value: false
+                      conditions: {not: {logic_expression: has_premium_analytical_feature}}
+            requirements:
+                - checkout: checkout_service
+                - recommendation: recommendation_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine

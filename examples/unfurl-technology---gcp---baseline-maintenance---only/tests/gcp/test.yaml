@@ -38,6 +38,8 @@ replace:
     - - advertisement_service_terraform
       - advertisement_service
 
+    - - analytical_service_terraform
+      - analytical_service
 merge:
     topology_template:
         inputs:
@@ -105,7 +107,12 @@ merge:
                 type: string
 
         node_templates:
-            payment_service:
+            analytical_service:
+                type: analytical.service.terraform.gcp
                 properties:
                     optional_feature: false
                     premium_feature: false
+                requirements:
+                    - checkout: checkout_service
+                    - recommendation: recommendation_service
+                    - host: gcp_appengine

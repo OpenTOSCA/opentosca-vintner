@@ -87,6 +87,9 @@ topology_template:
 
         payment_service:
             type: payment.service.kubernetes.kubernetes
+            properties:
+                optional_feature: false
+                premium_feature: false
             requirements:
                 - host: kubernetes_runtime
 
@@ -173,6 +176,22 @@ topology_template:
         advertisement_service:
             type: advertisement.service.kubernetes.kubernetes
             requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Analytical
+        #
+        ###################################################
+
+        analytical_service:
+            type: analytical.service.kubernetes.kubernetes
+            properties:
+                optional_feature: false
+                premium_feature: false
+            requirements:
+                - checkout: checkout_service
+                - recommendation: recommendation_service
                 - host: kubernetes_runtime
 
         ###################################################

@@ -105,6 +105,9 @@ topology_template:
 
         payment_service:
             type: payment.service.docker.docker
+            properties:
+                optional_feature: false
+                premium_feature: false
             requirements:
                 - host: docker_runtime
 

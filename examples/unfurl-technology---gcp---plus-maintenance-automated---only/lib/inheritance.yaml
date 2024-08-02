@@ -17,6 +17,7 @@ cart.service: dotnet.application
 product.service: go.application
 recommendation.service: python.application
 advertisement.service: java.application
+analytical.service: node.application
 
 monitoring.agent: software.application
 logging.agent: software.application

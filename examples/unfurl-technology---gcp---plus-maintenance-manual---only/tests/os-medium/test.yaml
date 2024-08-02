@@ -3,7 +3,12 @@ inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tes
 merge:
     topology_template:
         node_templates:
-            payment_service:
+            analytical_service:
+                type: analytical.service.docker.docker
                 properties:
                     optional_feature: false
                     premium_feature: false
+                requirements:
+                    - checkout: checkout_service
+                    - recommendation: recommendation_service
+                    - host: docker_runtime

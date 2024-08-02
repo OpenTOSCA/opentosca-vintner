@@ -75,6 +75,9 @@ topology_template:
 
         payment_service:
             type: payment.service.terraform.gcp
+            properties:
+                optional_feature: false
+                premium_feature: false
             requirements:
                 - host: gcp_appengine
 

@@ -41,6 +41,9 @@ replace:
     - - advertisement_service_kubernetes
       - advertisement_service
 
+    - - analytical_service_kubernetes
+      - analytical_service
+
 merge:
     topology_template:
         inputs:
@@ -106,9 +109,3 @@ merge:
 
             k8s_client_key_file:
                 type: string
-
-        node_templates:
-            payment_service:
-                properties:
-                    optional_feature: false
-                    premium_feature: false

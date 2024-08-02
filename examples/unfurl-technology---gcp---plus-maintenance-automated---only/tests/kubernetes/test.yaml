@@ -5,11 +5,3 @@ replace:
 
     - - postgresql.database.ansible.postgresql
       - postgresql.database.terraform.postgresql
-
-merge:
-    topology_template:
-        node_templates:
-            payment_service:
-                properties:
-                    optional_feature: false
-                    premium_feature: false
