@@ -102,3 +102,5 @@ From Default to Maintained (Relative to change to baseline)
 │    0    │            '(VDMM+ Maintenance Manual - VDMM+ Default Manual) / (VDMM Baseline Maintenance - VDMM Baseline Default)'            │          0.32          │           1.13           │                  1                   │            0.44             │
 │    1    │ '(VDMM+ Maintenance Automated Quality - VDMM+ Default Automated Quality) / (VDMM Baseline Maintenance - VDMM Baseline Default)' │          0.32          │           0.33           │                  0                   │            0.33             │
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
+
+> connection properties

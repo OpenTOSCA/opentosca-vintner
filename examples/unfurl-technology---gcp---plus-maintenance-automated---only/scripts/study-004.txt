@@ -102,3 +102,5 @@ From Default to Maintained (Relative to change to baseline)
 │    0    │            '(VDMM+ Maintenance Manual - VDMM+ Default Manual) / (VDMM Baseline Maintenance - VDMM Baseline Default)'            │          0.29          │           1.8            │                  1                   │            0.39             │
 │    1    │ '(VDMM+ Maintenance Automated Quality - VDMM+ Default Automated Quality) / (VDMM Baseline Maintenance - VDMM Baseline Default)' │          0.29          │            1             │                  0                   │            0.29             │
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
+
+> artifacts
