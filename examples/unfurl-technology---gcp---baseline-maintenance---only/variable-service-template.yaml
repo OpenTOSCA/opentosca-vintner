@@ -106,6 +106,14 @@ topology_template:
             conditions: {logic_expression: is_openstack}
             persistent: true
             technology: docker
+            properties:
+                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service_docker
                 - currency: currency_service_docker
@@ -122,6 +130,14 @@ topology_template:
             conditions: {logic_expression: is_kubernetes}
             persistent: true
             technology: kubernetes
+            properties:
+                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service_kubernetes
                 - currency: currency_service_kubernetes
@@ -138,6 +154,14 @@ topology_template:
             conditions: {logic_expression: is_gcp}
             persistent: true
             technology: terraform
+            properties:
+                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service_terraform
                 - currency: currency_service_terraform
@@ -152,6 +176,8 @@ topology_template:
         frontend_ingress_ansible:
             type: ingress
             technology: ansible
+            properties:
+                - upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service_docker
                 - host: virtual_machine
@@ -159,6 +185,8 @@ topology_template:
         frontend_ingress_kubernetes:
             type: ingress
             technology: kubernetes
+            properties:
+                - upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service_kubernetes
                 - host: kubernetes_runtime
@@ -172,6 +200,13 @@ topology_template:
         checkout_service_docker:
             type: checkout.service
             technology: docker
+            properties:
+                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service_docker
                 - payment: payment_service_docker
@@ -185,6 +220,13 @@ topology_template:
         checkout_service_kubernetes:
             type: checkout.service
             technology: kubernetes
+            properties:
+                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service_kubernetes
                 - payment: payment_service_kubernetes
@@ -198,6 +240,13 @@ topology_template:
         checkout_service_terraform:
             type: checkout.service
             technology: terraform
+            properties:
+                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service_terraform
                 - payment: payment_service_terraform
@@ -352,6 +401,10 @@ topology_template:
         cart_service_docker:
             type: cart.service
             technology: docker
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
 
@@ -360,6 +413,10 @@ topology_template:
         cart_service_kubernetes:
             type: cart.service
             technology: kubernetes
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
 
@@ -368,6 +425,10 @@ topology_template:
         cart_service_terraform:
             type: cart.service
             technology: terraform
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
 
@@ -453,6 +514,8 @@ topology_template:
         recommendation_service_docker:
             type: recommendation.service
             technology: docker
+            properties:
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service_docker
 
@@ -461,6 +524,8 @@ topology_template:
         recommendation_service_kubernetes:
             type: recommendation.service
             technology: kubernetes
+            properties:
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service_kubernetes
 
@@ -469,6 +534,8 @@ topology_template:
         recommendation_service_terraform:
             type: recommendation.service
             technology: terraform
+            properties:
+                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service_terraform
 

@@ -35,6 +35,14 @@ topology_template:
 
         frontend_service:
             type: frontend.service.kubernetes.kubernetes
+            properties:
+                checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -48,6 +56,8 @@ topology_template:
 
         frontend_ingress:
             type: ingress.kubernetes.kubernetes
+            properties:
+                upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service
 
@@ -61,6 +71,13 @@ topology_template:
 
         checkout_service:
             type: checkout.service.kubernetes.kubernetes
+            properties:
+                email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
+                payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
+                currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -123,6 +140,10 @@ topology_template:
 
         cart_service:
             type: cart.service.kubernetes.kubernetes
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
 
@@ -164,6 +185,8 @@ topology_template:
 
         recommendation_service:
             type: recommendation.service.kubernetes.kubernetes
+            properties:
+                product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service
 
