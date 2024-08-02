@@ -233,22 +233,22 @@ topology_template:
         cart_service:
             type: cart.service
             requirements:
-                - database: postgresql_database
+                - database: mysql_database
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
 
-        postgresql_database:
-            type: postgresql.database
+        mysql_database:
+            type: mysql.database
             properties:
                 - database_name: cart
                 - database_user: cart
                 - database_password: {get_input: database_password}
             requirements:
-                - host: postgresql_dbms
+                - host: mysql_dbms
 
-        postgresql_dbms:
-            type: postgresql.dbms
+        mysql_dbms:
+            type: mysql.dbms
             properties:
                 - dbms_name: cart
                 - dbms_password: {get_input: dbms_password}

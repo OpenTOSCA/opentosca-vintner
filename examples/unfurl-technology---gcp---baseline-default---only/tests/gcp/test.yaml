@@ -23,11 +23,11 @@ replace:
     - - cart_service_terraform
       - cart_service
 
-    - - postgresql_database_terraform
-      - postgresql_database
+    - - mysql_database_terraform
+      - mysql_database
 
-    - - postgresql_dbms_terraform
-      - postgresql_dbms
+    - - mysql_dbms_terraform
+      - mysql_dbms
 
     - - product_service_terraform
       - product_service

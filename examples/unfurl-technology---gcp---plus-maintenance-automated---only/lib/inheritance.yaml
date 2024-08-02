@@ -24,8 +24,8 @@ logging.agent: software.application
 security.agent: software.application
 
 relational.database: root
-postgresql.database: relational.database
-postgresql.dbms: relational.dbms
+mysql.database: relational.database
+mysql.dbms: relational.dbms
 #gcp.cloudsql: relational.dbms
 
 computing: root

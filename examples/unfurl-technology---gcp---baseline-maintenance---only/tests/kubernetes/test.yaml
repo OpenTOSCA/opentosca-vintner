@@ -26,11 +26,11 @@ replace:
     - - cart_service_kubernetes
       - cart_service
 
-    - - postgresql_database_ansible
-      - postgresql_database
+    - - mysql_database_ansible
+      - mysql_database
 
-    - - postgresql_dbms_kubernetes
-      - postgresql_dbms
+    - - mysql_dbms_kubernetes
+      - mysql_dbms
 
     - - product_service_kubernetes
       - product_service

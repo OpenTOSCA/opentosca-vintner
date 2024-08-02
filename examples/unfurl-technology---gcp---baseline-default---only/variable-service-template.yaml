@@ -259,18 +259,18 @@ topology_template:
             type: cart.service
             technology: docker
             requirements:
-                - database: postgresql_database
+                - database: mysql_database
                 - host: docker_runtime
 
         cart_service_terraform:
             type: cart.service
             technology: terraform
             requirements:
-                - database: postgresql_database
+                - database: mysql_database
                 - host: gcp_appengine
 
-        postgresql_database:
-            type: postgresql.database
+        mysql_database:
+            type: mysql.database
             technology: terraform
             properties:
                 - database_name: cart
@@ -278,14 +278,14 @@ topology_template:
                 - database_password: {get_input: database_password}
             requirements:
                 - host:
-                      node: postgresql_dbms_docker
+                      node: mysql_dbms_docker
                       conditions: {logic_expression: is_openstack}
                 - host:
-                      node: postgresql_dbms_terraform
+                      node: mysql_dbms_terraform
                       conditions: {logic_expression: is_gcp}
 
-        postgresql_dbms_docker:
-            type: postgresql.dbms
+        mysql_dbms_docker:
+            type: mysql.dbms
             technology: docker
             properties:
                 - dbms_name: cart
@@ -293,8 +293,8 @@ topology_template:
             requirements:
                 - host: docker_runtime
 
-        postgresql_dbms_terraform:
-            type: postgresql.dbms
+        mysql_dbms_terraform:
+            type: mysql.dbms
             technology: terraform
             properties:
                 - dbms_name: cart

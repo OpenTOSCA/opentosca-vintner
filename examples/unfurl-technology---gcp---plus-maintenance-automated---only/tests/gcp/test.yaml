@@ -1,10 +1,10 @@
 replace:
-    # The selection of Terraform and Ansible is random since they have the same quality assigned for postgresql.database ...
-    - - postgresql.database.terraform.postgresql
-      - postgresql.database.ansible.postgresql
+    # The selection of Terraform and Ansible is random since they have the same quality assigned for mysql.database ...
+    - - mysql.database.terraform.mysql
+      - mysql.database.ansible.mysql
 
-    - - postgresql.database.ansible.postgresql
-      - postgresql.database.terraform.postgresql
+    - - mysql.database.ansible.mysql
+      - mysql.database.terraform.mysql
 
 merge:
     topology_template:

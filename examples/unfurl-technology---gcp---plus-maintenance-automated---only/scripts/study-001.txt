@@ -8,14 +8,14 @@ The technology rules of our case study. Qualities range from bad (0) to good (1)
 │    2    │  'ansible'   │ 'software.application' │              [ 'kubernetes' ]               │   0.5   │
 │    3    │  'ansible'   │ 'software.application' │             [ 'gcp.appengine' ]             │    0    │
 │    4    │  'ansible'   │   'software.runtime'   │           [ 'openstack.machine' ]           │    1    │
-│    5    │  'ansible'   │ 'postgresql.database'  │ [ 'postgresql.dbms', 'openstack.machine' ]  │    1    │
-│    6    │  'ansible'   │ 'postgresql.database'  │   [ 'postgresql.dbms', 'docker.engine' ]    │    1    │
-│    7    │  'ansible'   │ 'postgresql.database'  │     [ 'postgresql.dbms', 'kubernetes' ]     │    1    │
-│    8    │  'ansible'   │ 'postgresql.database'  │    [ 'postgresql.dbms', 'gcp.cloudsql' ]    │    1    │
-│    9    │  'ansible'   │   'postgresql.dbms'    │           [ 'openstack.machine' ]           │    1    │
-│   10    │  'ansible'   │   'postgresql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
-│   11    │  'ansible'   │   'postgresql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
-│   12    │  'ansible'   │   'postgresql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
+│    5    │  'ansible'   │ 'mysql.database'  │ [ 'mysql.dbms', 'openstack.machine' ]  │    1    │
+│    6    │  'ansible'   │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    1    │
+│    7    │  'ansible'   │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    1    │
+│    8    │  'ansible'   │ 'mysql.database'  │    [ 'mysql.dbms', 'gcp.cloudsql' ]    │    1    │
+│    9    │  'ansible'   │   'mysql.dbms'    │           [ 'openstack.machine' ]           │    1    │
+│   10    │  'ansible'   │   'mysql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
+│   11    │  'ansible'   │   'mysql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
+│   12    │  'ansible'   │   'mysql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
 │   13    │  'ansible'   │       'ingress'        │           [ 'openstack.machine' ]           │    1    │
 │   14    │  'ansible'   │       'ingress'        │              [ 'kubernetes' ]               │   0.5   │
 │   15    │  'ansible'   │  'openstack.machine'   │                  undefined                  │   0.5   │
@@ -25,25 +25,25 @@ The technology rules of our case study. Qualities range from bad (0) to good (1)
 │   19    │ 'terraform'  │ 'software.application' │              [ 'kubernetes' ]               │   0.5   │
 │   20    │ 'terraform'  │ 'software.application' │             [ 'gcp.appengine' ]             │    1    │
 │   21    │ 'terraform'  │   'software.runtime'   │           [ 'openstack.machine' ]           │    0    │
-│   22    │ 'terraform'  │ 'postgresql.database'  │ [ 'postgresql.dbms', 'openstack.machine' ]  │    1    │
-│   23    │ 'terraform'  │ 'postgresql.database'  │   [ 'postgresql.dbms', 'docker.engine' ]    │    1    │
-│   24    │ 'terraform'  │ 'postgresql.database'  │     [ 'postgresql.dbms', 'kubernetes' ]     │    1    │
-│   25    │ 'terraform'  │ 'postgresql.database'  │    [ 'postgresql.dbms', 'gcp.cloudsql' ]    │    1    │
-│   26    │ 'terraform'  │   'postgresql.dbms'    │           [ 'openstack.machine' ]           │    0    │
-│   27    │ 'terraform'  │   'postgresql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
-│   28    │ 'terraform'  │   'postgresql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
-│   29    │ 'terraform'  │   'postgresql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
+│   22    │ 'terraform'  │ 'mysql.database'  │ [ 'mysql.dbms', 'openstack.machine' ]  │    1    │
+│   23    │ 'terraform'  │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    1    │
+│   24    │ 'terraform'  │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    1    │
+│   25    │ 'terraform'  │ 'mysql.database'  │    [ 'mysql.dbms', 'gcp.cloudsql' ]    │    1    │
+│   26    │ 'terraform'  │   'mysql.dbms'    │           [ 'openstack.machine' ]           │    0    │
+│   27    │ 'terraform'  │   'mysql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
+│   28    │ 'terraform'  │   'mysql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
+│   29    │ 'terraform'  │   'mysql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
 │   30    │ 'terraform'  │       'ingress'        │           [ 'openstack.machine' ]           │    0    │
 │   31    │ 'terraform'  │       'ingress'        │              [ 'kubernetes' ]               │   0.5   │
 │   32    │ 'terraform'  │  'openstack.machine'   │                  undefined                  │    1    │
 │   33    │ 'terraform'  │     'gcp.service'      │                  undefined                  │    1    │
 │   34    │ 'kubernetes' │ 'software.application' │              [ 'kubernetes' ]               │    1    │
-│   35    │ 'kubernetes' │ 'postgresql.database'  │     [ 'postgresql.dbms', 'kubernetes' ]     │    0    │
-│   36    │ 'kubernetes' │   'postgresql.dbms'    │              [ 'kubernetes' ]               │    1    │
+│   35    │ 'kubernetes' │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    0    │
+│   36    │ 'kubernetes' │   'mysql.dbms'    │              [ 'kubernetes' ]               │    1    │
 │   37    │ 'kubernetes' │       'ingress'        │              [ 'kubernetes' ]               │    1    │
 │   38    │   'docker'   │ 'software.application' │             [ 'docker.engine' ]             │    1    │
-│   39    │   'docker'   │ 'postgresql.database'  │   [ 'postgresql.dbms', 'docker.engine' ]    │    0    │
-│   40    │   'docker'   │   'postgresql.dbms'    │             [ 'docker.engine' ]             │    1    │
+│   39    │   'docker'   │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    0    │
+│   40    │   'docker'   │   'mysql.dbms'    │             [ 'docker.engine' ]             │    1    │
 └─────────┴──────────────┴────────────────────────┴─────────────────────────────────────────────┴─────────┘
 
 Metrics relevant when modeling the different scenarios

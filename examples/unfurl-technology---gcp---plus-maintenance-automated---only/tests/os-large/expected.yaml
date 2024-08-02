@@ -142,20 +142,20 @@ topology_template:
         cart_service:
             type: cart.service.docker.docker
             requirements:
-                - database: postgresql_database
+                - database: mysql_database
                 - host: docker_runtime
 
-        postgresql_database:
-            type: postgresql.database.terraform.postgresql
+        mysql_database:
+            type: mysql.database.terraform.mysql
             properties:
                 database_name: cart
                 database_user: cart
                 database_password: {get_input: database_password}
             requirements:
-                - host: postgresql_dbms
+                - host: mysql_dbms
 
-        postgresql_dbms:
-            type: postgresql.dbms.docker.docker
+        mysql_dbms:
+            type: mysql.dbms.docker.docker
             properties:
                 dbms_name: cart
                 dbms_password: {get_input: dbms_password}

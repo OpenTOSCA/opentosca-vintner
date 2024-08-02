@@ -234,22 +234,22 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - database: postgresql_database
+                - database: mysql_database
                 - host: docker_runtime
                 - host: gcp_appengine
 
-        postgresql_database:
-            type: postgresql.database
+        mysql_database:
+            type: mysql.database
             technology: terraform
             properties:
                 - database_name: cart
                 - database_user: cart
                 - database_password: {get_input: database_password}
             requirements:
-                - host: postgresql_dbms
+                - host: mysql_dbms
 
-        postgresql_dbms:
-            type: postgresql.dbms
+        mysql_dbms:
+            type: mysql.dbms
             technology:
                 - docker:
                       conditions: {logic_expression: is_openstack}

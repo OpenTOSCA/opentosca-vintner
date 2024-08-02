@@ -26,11 +26,11 @@ replace:
     - - cart_service_docker
       - cart_service
 
-    - - postgresql_database_docker
-      - postgresql_database
+    - - mysql_database_docker
+      - mysql_database
 
-    - - postgresql_dbms_docker
-      - postgresql_dbms
+    - - mysql_dbms_docker
+      - mysql_dbms
 
     - - product_service_docker
       - product_service
