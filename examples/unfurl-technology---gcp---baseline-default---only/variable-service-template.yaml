@@ -80,14 +80,6 @@ topology_template:
             persistent: true
             conditions: {logic_expression: is_openstack}
             technology: docker
-            properties:
-                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
-                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
-                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service_docker
                 - currency: currency_service_docker
@@ -97,23 +89,12 @@ topology_template:
                 - recommendation: recommendation_service_docker
                 - advertisement: advertisement_service_docker
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
 
         frontend_service_terraform:
             type: frontend.service
             conditions: {logic_expression: is_gcp}
             persistent: true
             technology: terraform
-            properties:
-                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
-                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
-                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             requirements:
                 - checkout: checkout_service_terraform
                 - currency: currency_service_terraform
@@ -123,15 +104,10 @@ topology_template:
                 - recommendation: recommendation_service_terraform
                 - advertisement: advertisement_service_terraform
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: frontend-v0.10.1.tar.gz
 
         frontend_ingress:
             type: ingress
             technology: ansible
-            properties:
-                - upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service_docker
                 - host: virtual_machine
@@ -145,13 +121,6 @@ topology_template:
         checkout_service_docker:
             type: checkout.service
             technology: docker
-            properties:
-                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
-                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service_docker
                 - payment: payment_service_docker
@@ -160,20 +129,10 @@ topology_template:
                 - cart: cart_service_docker
                 - product: product_service_docker
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.1
 
         checkout_service_terraform:
             type: checkout.service
             technology: terraform
-            properties:
-                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
-                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service_terraform
                 - payment: payment_service_terraform
@@ -182,9 +141,6 @@ topology_template:
                 - cart: cart_service_terraform
                 - product: product_service_terraform
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: checkoutservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -197,18 +153,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/emailservice:v0.10.1
 
         email_service_terraform:
             type: email.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: emailservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -221,18 +171,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/paymentservice:v0.10.1
 
         payment_service_terraform:
             type: payment.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: paymentservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -245,18 +189,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/currencyservice:v0.10.1
 
         currency_service_terraform:
             type: currency.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: currencyservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -269,18 +207,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/shippingservice:v0.10.1
 
         shipping_service_terraform:
             type: shipping.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: shippingservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -291,30 +223,16 @@ topology_template:
         cart_service_docker:
             type: cart.service
             technology: docker
-            properties:
-                - database_name: cart
-                - database_user: cart
-                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
 
         cart_service_terraform:
             type: cart.service
             technology: terraform
-            properties:
-                - database_name: cart
-                - database_user: cart
-                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: cartservice-v0.10.1.tar.gz
 
         postgresql_database:
             type: postgresql.database
@@ -327,7 +245,6 @@ topology_template:
                 - host:
                       node: postgresql_dbms_docker
                       conditions: {logic_expression: is_openstack}
-
                 - host:
                       node: postgresql_dbms_terraform
                       conditions: {logic_expression: is_gcp}
@@ -361,18 +278,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/productservice:v0.10.1
 
         product_service_terraform:
             type: product.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: productservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -383,26 +294,16 @@ topology_template:
         recommendation_service_docker:
             type: recommendation.service
             technology: docker
-            properties:
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service_docker
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/recommendationervice:v0.10.1
 
         recommendation_service_terraform:
             type: recommendation.service
             technology: terraform
-            properties:
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service_terraform
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: recommendationservice-v0.10.1.tar.gz
 
         ###################################################
         #
@@ -415,18 +316,12 @@ topology_template:
             technology: docker
             requirements:
                 - host: docker_runtime
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/advertisementservice:v0.10.1
 
         advertisement_service_terraform:
             type: advertisement.service
             technology: terraform
             requirements:
                 - host: gcp_appengine
-            artifacts:
-                - archive:
-                      file: advertisementservice-v0.10.1.tar.gz
 
         ###################################################
         #

@@ -107,14 +107,6 @@ topology_template:
         frontend_service:
             type: frontend.service
             persistent: true
-            properties:
-                - checkout_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
-                - recommendation_address: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
-                - advertisement_address: {eval: '.::.requirements[.name=advertisement]::.target::application_address'}
             technology:
                 - docker:
                       conditions: {logic_expression: is_openstack}
@@ -133,13 +125,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: frontend-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         frontend_ingress:
             type: ingress
@@ -148,11 +133,8 @@ topology_template:
                       conditions: {logic_expression: is_openstack}
                 - kubernetes:
                       conditions: {logic_expression: is_kubernetes}
-            properties:
-                - upstream_address: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
             requirements:
                 - upstream: frontend_service
-
                 - host: kubernetes_runtime
                 - host: virtual_machine
 
@@ -171,13 +153,6 @@ topology_template:
                       conditions: {logic_expression: is_kubernetes}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
-            properties:
-                - email_address: {eval: '.::.requirements[.name=email]::.target::application_address'}
-                - payment_address: {eval: '.::.requirements[.name=payment]::.target::application_address'}
-                - currency_address: {eval: '.::.requirements[.name=currency]::.target::application_address'}
-                - shipping_address: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
-                - cart_address: {eval: '.::.requirements[.name=cart]::.target::application_address'}
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -188,13 +163,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: checkoutservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -215,13 +183,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/emailservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: emailservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -255,13 +216,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/paymentservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: paymentservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -282,13 +236,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/currencyservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: currencyservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -309,13 +256,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/shippingservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: shippingservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -332,22 +272,11 @@ topology_template:
                       conditions: {logic_expression: is_kubernetes}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
-            properties:
-                - database_name: cart
-                - database_user: cart
-                - database_password: {get_input: database_password}
             requirements:
                 - database: postgresql_database
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: cartservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         postgresql_database:
             type: postgresql.database
@@ -395,13 +324,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/productservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: productservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -418,20 +340,11 @@ topology_template:
                       conditions: {logic_expression: is_kubernetes}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
-            properties:
-                - product_address: {eval: '.::.requirements[.name=product]::.target::application_address'}
             requirements:
                 - product: product_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/recommendationervice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: recommendationservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
@@ -452,13 +365,6 @@ topology_template:
                 - host: docker_runtime
                 - host: kubernetes_runtime
                 - host: gcp_appengine
-            artifacts:
-                - docker:
-                      file: gcr.io/google-samples/microservices-demo/advertisementservice:v0.10.1
-                      conditions: {or: [{node_presence: docker_runtime}, {node_presence: kubernetes_runtime}]}
-                - archive:
-                      file: advertisementservice-v0.10.1.tar.gz
-                      conditions: {node_presence: gcp_appengine}
 
         ###################################################
         #
