@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+    loadgenerator:
+        image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.10.1
+        network_mode: host
+        environment:
+            - FRONTEND_ADDR=localhost:80
+            - USERS=10

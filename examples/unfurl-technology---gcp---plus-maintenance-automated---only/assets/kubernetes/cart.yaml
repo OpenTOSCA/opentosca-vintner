@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: cartservice
+    labels:
+        app: cartservice
+spec:
+    selector:
+        matchLabels:
+            app: cartservice
+    template:
+        metadata:
+            labels:
+                app: cartservice
+        spec:
+            containers:
+                - name: server
+                  image: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
+                  ports:
+                      - containerPort: 7070
+                  env:
+                      - name: REDIS_ADDR
+                        value: 'redis-cart:6379'
+                  readinessProbe:
+                      initialDelaySeconds: 15
+                      grpc:
+                          port: 7070
+                  livenessProbe:
+                      initialDelaySeconds: 15
+                      periodSeconds: 10
+                      grpc:
+                          port: 7070
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: cartservice
+    labels:
+        app: cartservice
+spec:
+    type: ClusterIP
+    selector:
+        app: cartservice
+    ports:
+        - name: grpc
+          port: 7070
+          targetPort: 7070
