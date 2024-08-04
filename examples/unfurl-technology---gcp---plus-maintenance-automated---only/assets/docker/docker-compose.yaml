@@ -55,6 +55,7 @@ services:
             - DISABLE_PROFILER=1
 
     frontend:
+        #image: gcp-microservice-demo-frontend-stoetzms:v6
         image: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
         #build: ../components/frontend
         ports:
@@ -62,7 +63,7 @@ services:
         environment:
             - PORT=8080
             - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
-            - CURRENCY_SERVICE_ADDR=currency-fgx2efhqra-ey.a.run.app:7000
+            - CURRENCY_SERVICE_ADDR=currencyservice-fgx2efhqra-ey.a.run.app:443
             - CART_SERVICE_ADDR=cartservice:7070
             - RECOMMENDATION_SERVICE_ADDR=recommendationservice:8080
             - SHIPPING_SERVICE_ADDR=shippingservice:50051
