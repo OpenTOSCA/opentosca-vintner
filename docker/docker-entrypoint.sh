@@ -37,6 +37,12 @@ if [[ ! -f $VINTNER_INIT ]]; then
   $VINTNER orchestrators attest --orchestrator xopera
   echo
 
+  # Extract examples
+  cd /vintner
+  tar -xf examples.tar.gz
+  rm examples.tar.gz
+
+  # Timestamp
   date > $VINTNER_INIT
 fi
 
