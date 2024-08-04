@@ -1,3 +1,6 @@
+docs.tar.gz
+examples.tar.gz
+
 # Allow any assets
 !docs/docs/assets
 

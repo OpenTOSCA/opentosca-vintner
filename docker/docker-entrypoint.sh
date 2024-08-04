@@ -38,9 +38,10 @@ if [[ ! -f $VINTNER_INIT ]]; then
   echo
 
   # Extract examples
-  echo "Extracting examples"
+  echo "Extract examples"
   mkdir -p /vintner/examples
-  tar -xvf /vintner/examples.tar.gz -C /vintner/examples
+  tar -xf /vintner/examples.tar.gz -C /vintner/examples
+  ls -1 /vintner/examples
   rm /vintner/examples.tar.gz
   echo
 

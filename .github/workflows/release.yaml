@@ -206,6 +206,14 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: (RELEASE) Archive examples
+              run: tar -czvf examples.tar.gz -C examples .
+
+            - name: (RELEASE) Upload examples to release
+              run: gh release upload latest examples.tar.gz
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             ###################################################
             #
             # Docker
