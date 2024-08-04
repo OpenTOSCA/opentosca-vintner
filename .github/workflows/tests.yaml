@@ -16,6 +16,14 @@ jobs:
             #
             ###################################################
 
+            # https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
+            # https://github.com/orgs/community/discussions/25678#discussioncomment-5242449
+            - name: (PREPARE) Free space
+              run: |
+                  sudo rm -rf /usr/share/dotnet
+                  sudo rm -rf /opt/ghc
+                  sudo rm -rf /opt/hostedtoolcache
+
             - name: (PREPARE) Set up QEMU
               uses: docker/setup-qemu-action@v2
 
@@ -92,6 +100,9 @@ jobs:
 
             - name: (PACKAGE) Package Binaries
               run: ./task package
+
+            - name: (PACKAGE) Compress Examples
+              run: tar -czvf ./dist/examples.tar.gz -C examples .
 
             ###################################################
             #

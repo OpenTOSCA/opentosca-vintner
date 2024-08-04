@@ -4,7 +4,7 @@
 #
 ###################################################
 
-FROM ubuntu:22.04 as base
+FROM ubuntu:22.04 AS base
 
 # Labels
 LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
@@ -57,7 +57,7 @@ RUN rm -rf ./scripts
 #
 ###################################################
 
-FROM base as run
+FROM base AS run
 
 # Labels
 LABEL org.opencontainers.image.source=https://github.com/OpenTOSCA/opentosca-vintner
@@ -71,9 +71,10 @@ WORKDIR /vintner
 COPY ./dist/vintner-linux-x64 /bin/vintner
 ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
 
-# Copy examples
-COPY ./examples ./examples
+# Add archived examples (expecting that all dependencies are already pulled)
+COPY ./dist/examples.tar.gz .
 
 # Entrypoint
 COPY --chmod=+x docker/docker-entrypoint.sh .
+SHELL ["/bin/bash", "-c"]
 ENTRYPOINT /vintner/docker-entrypoint.sh
