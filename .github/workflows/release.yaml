@@ -144,6 +144,9 @@ jobs:
                     tar -cJf ${BINARY}.xz ${BINARY}             
                   done
 
+            - name: (PACKAGE) Compress Examples
+              run: tar -czvf ./dist/examples.tar.gz -C examples .
+
             ###################################################
             #
             # Release
@@ -203,14 +206,6 @@ jobs:
 
             - name: (RELEASE) Upload docs to release
               run: gh release upload latest docs.tar.gz
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: (RELEASE) Archive examples
-              run: tar -czvf examples.tar.gz -C examples .
-
-            - name: (RELEASE) Upload examples to release
-              run: gh release upload latest examples.tar.gz
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

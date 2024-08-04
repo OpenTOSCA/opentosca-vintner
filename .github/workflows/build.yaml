@@ -85,6 +85,9 @@ jobs:
                     tar -cJf ${BINARY}.xz ${BINARY}             
                   done
 
+            - name: (PACKAGE) Compress Examples
+              run: tar -czvf ./dist/examples.tar.gz -C examples .
+
             ###################################################
             #
             # Release
