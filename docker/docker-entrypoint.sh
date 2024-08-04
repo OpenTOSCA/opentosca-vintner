@@ -38,9 +38,11 @@ if [[ ! -f $VINTNER_INIT ]]; then
   echo
 
   # Extract examples
-  cd /vintner
-  tar -xf examples.tar.gz
-  rm examples.tar.gz
+  echo "Extracting examples"
+  mkdir -p /vintner/examples
+  tar -xvf /vintner/examples.tar.gz -C /vintner/examples
+  rm /vintner/examples.tar.gz
+  echo
 
   # Timestamp
   date > $VINTNER_INIT
