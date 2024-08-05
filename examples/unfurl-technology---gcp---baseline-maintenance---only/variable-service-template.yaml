@@ -116,6 +116,9 @@ topology_template:
             conditions: {logic_expression: is_openstack}
             persistent: true
             technology: docker
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_docker, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_docker, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service_docker
                 - currency: currency_service_docker
@@ -131,6 +134,9 @@ topology_template:
             conditions: {logic_expression: is_kubernetes}
             persistent: true
             technology: kubernetes
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_kubernetes, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_kubernetes, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service_kubernetes
                 - currency: currency_service_kubernetes
@@ -146,6 +152,9 @@ topology_template:
             conditions: {logic_expression: is_gcp}
             persistent: true
             technology: terraform
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_terraform, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_terraform, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service_terraform
                 - currency: currency_service_terraform
@@ -179,6 +188,9 @@ topology_template:
         checkout_service_docker:
             type: checkout.service
             technology: docker
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_docker, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_docker, premium_payment_feature]}
             requirements:
                 - email: email_service_docker
                 - payment: payment_service_docker
@@ -191,6 +203,9 @@ topology_template:
         checkout_service_kubernetes:
             type: checkout.service
             technology: kubernetes
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_kubernetes, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_kubernetes, premium_payment_feature]}
             requirements:
                 - email: email_service_kubernetes
                 - payment: payment_service_kubernetes
@@ -203,6 +218,9 @@ topology_template:
         checkout_service_terraform:
             type: checkout.service
             technology: terraform
+            properties:
+                - optional_payment_feature: {get_property: [payment_service_terraform, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service_terraform, premium_payment_feature]}
             requirements:
                 - email: email_service_terraform
                 - payment: payment_service_terraform

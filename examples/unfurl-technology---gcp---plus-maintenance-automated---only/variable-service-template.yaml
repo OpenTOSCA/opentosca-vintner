@@ -121,6 +121,9 @@ topology_template:
         frontend_service:
             type: frontend.service
             persistent: true
+            properties:
+                - optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -148,6 +151,9 @@ topology_template:
 
         checkout_service:
             type: checkout.service
+            properties:
+                - optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - email: email_service
                 - payment: payment_service

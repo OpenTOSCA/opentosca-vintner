@@ -96,6 +96,9 @@ topology_template:
                       conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
+            properties:
+                - optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -129,6 +132,9 @@ topology_template:
                       conditions: {logic_expression: is_openstack}
                 - terraform:
                       conditions: {logic_expression: is_gcp}
+            properties:
+                - optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
+                - premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - email: email_service
                 - payment: payment_service
