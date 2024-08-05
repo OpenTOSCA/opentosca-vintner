@@ -12,8 +12,8 @@ merge:
             analytical_service:
                 type: analytical.service.docker.docker
                 properties:
-                    optional_feature: false
-                    premium_feature: false
+                    optional_analytical_feature: false
+                    premium_analytical_feature: false
                 requirements:
                     - checkout: checkout_service
                     - recommendation: recommendation_service

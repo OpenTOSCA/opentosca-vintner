@@ -29,9 +29,6 @@ topology_template:
 
         frontend_service:
             type: frontend.service.terraform.gcp
-            properties:
-                optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
-                premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -50,9 +47,6 @@ topology_template:
 
         checkout_service:
             type: checkout.service.terraform.gcp
-            properties:
-                optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
-                premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -82,8 +76,8 @@ topology_template:
         payment_service:
             type: payment.service.terraform.gcp
             properties:
-                optional_feature: false
-                premium_feature: false
+                optional_payment_feature: false
+                premium_payment_feature: false
             requirements:
                 - host: gcp_appengine
 

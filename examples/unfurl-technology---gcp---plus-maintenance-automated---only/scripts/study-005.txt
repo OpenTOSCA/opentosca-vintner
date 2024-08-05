@@ -104,3 +104,4 @@ From Default to Maintained (Relative to change to baseline)
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
 
 > Starting Point: Docker on VM; Diff: payment properties already in default and new analytical component with analytical properties in maintenance
+> CURRENTLY SELECTED

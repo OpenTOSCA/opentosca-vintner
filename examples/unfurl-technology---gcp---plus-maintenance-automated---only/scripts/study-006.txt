@@ -104,3 +104,4 @@ From Default to Maintained (Relative to change to baseline)
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
 
 > Starting Point: 005; Diff: payment properties also at frontend and checkout
+> Comment: little value, configuration should happen automatically due to specialized tosca node types

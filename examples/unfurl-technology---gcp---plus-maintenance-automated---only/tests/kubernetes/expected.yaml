@@ -35,9 +35,6 @@ topology_template:
 
         frontend_service:
             type: frontend.service.kubernetes.kubernetes
-            properties:
-                optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
-                premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - checkout: checkout_service
                 - currency: currency_service
@@ -62,9 +59,6 @@ topology_template:
 
         checkout_service:
             type: checkout.service.kubernetes.kubernetes
-            properties:
-                optional_payment_feature: {get_property: [payment_service, optional_payment_feature]}
-                premium_payment_feature: {get_property: [payment_service, premium_payment_feature]}
             requirements:
                 - email: email_service
                 - payment: payment_service
@@ -94,8 +88,8 @@ topology_template:
         payment_service:
             type: payment.service.kubernetes.kubernetes
             properties:
-                optional_feature: false
-                premium_feature: false
+                optional_payment_feature: false
+                premium_payment_feature: false
             requirements:
                 - host: kubernetes_runtime
 
@@ -193,8 +187,8 @@ topology_template:
         analytical_service:
             type: analytical.service.kubernetes.kubernetes
             properties:
-                optional_feature: false
-                premium_feature: false
+                optional_analytical_feature: false
+                premium_analytical_feature: false
             requirements:
                 - checkout: checkout_service
                 - recommendation: recommendation_service
