@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Modifications made by University of Stuttgart
+// Modifications made by the University of Stuttgart
 
 package main
 
@@ -34,11 +34,12 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"crypto/tls"
 	"crypto/x509"
 	"strconv"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 const (
@@ -61,38 +62,38 @@ var (
 		"TRY": true,
 	}
 
-	baseUrl         = ""
+	baseUrl = ""
 )
 
 type ctxKeySessionID struct{}
 
 type frontendServer struct {
-	productCatalogSvcAddr string
-	productCatalogSvcConn *grpc.ClientConn
+	productCatalogSvcAddr   string
+	productCatalogSvcConn   *grpc.ClientConn
 	productCatalogSvcSecure bool
 
-	currencySvcAddr string
-	currencySvcConn *grpc.ClientConn
+	currencySvcAddr   string
+	currencySvcConn   *grpc.ClientConn
 	currencySvcSecure bool
 
-	cartSvcAddr string
-	cartSvcConn *grpc.ClientConn
+	cartSvcAddr   string
+	cartSvcConn   *grpc.ClientConn
 	cartSvcSecure bool
 
-	recommendationSvcAddr string
-	recommendationSvcConn *grpc.ClientConn
+	recommendationSvcAddr   string
+	recommendationSvcConn   *grpc.ClientConn
 	recommendationSvcSecure bool
 
-	checkoutSvcAddr string
-	checkoutSvcConn *grpc.ClientConn
+	checkoutSvcAddr   string
+	checkoutSvcConn   *grpc.ClientConn
 	checkoutSvcSecure bool
 
-	shippingSvcAddr string
-	shippingSvcConn *grpc.ClientConn
+	shippingSvcAddr   string
+	shippingSvcConn   *grpc.ClientConn
 	shippingSvcSecure bool
 
-	adSvcAddr string
-	adSvcConn *grpc.ClientConn
+	adSvcAddr   string
+	adSvcConn   *grpc.ClientConn
 	adSvcSecure bool
 
 	collectorAddr string
@@ -137,6 +138,18 @@ func main() {
 		log.Info("Profiling disabled.")
 	}
 
+	if os.Getenv("OPTIONAL_PAYMENT_FEATURE") == "1" {
+		log.Info("optional payment feature enabled")
+	} else {
+		log.Info("optional payment feature disabled")
+	}
+
+	if os.Getenv("PREMIUM_PAYMENT_FEATURE") == "1" {
+		log.Info("premium payment feature enabled")
+	} else {
+		log.Info("premium payment feature disabled")
+	}
+
 	srvPort := port
 	if os.Getenv("PORT") != "" {
 		srvPort = os.Getenv("PORT")
@@ -150,16 +163,16 @@ func main() {
 
 	mustMapEnvString(&svc.cartSvcAddr, "CART_SERVICE_ADDR")
 	mustMapEnvBool(&svc.cartSvcSecure, "CART_SERVICE_SECURE")
-	
+
 	mustMapEnvString(&svc.recommendationSvcAddr, "RECOMMENDATION_SERVICE_ADDR")
 	mustMapEnvBool(&svc.recommendationSvcSecure, "RECOMMENDATION_SERVICE_SECURE")
-	
+
 	mustMapEnvString(&svc.checkoutSvcAddr, "CHECKOUT_SERVICE_ADDR")
 	mustMapEnvBool(&svc.checkoutSvcSecure, "CHECKOUT_SERVICE_SECURE")
-	
+
 	mustMapEnvString(&svc.shippingSvcAddr, "SHIPPING_SERVICE_ADDR")
 	mustMapEnvBool(&svc.shippingSvcSecure, "SHIPPING_SERVICE_SECURE")
-	
+
 	mustMapEnvString(&svc.adSvcAddr, "AD_SERVICE_ADDR")
 	mustMapEnvBool(&svc.adSvcSecure, "AD_SERVICE_SECURE")
 
@@ -174,20 +187,20 @@ func main() {
 	mustConnGRPC(ctx, &svc.adSvcConn, svc.adSvcAddr, svc.adSvcSecure)
 
 	r := mux.NewRouter()
-	r.HandleFunc(baseUrl + "/", svc.homeHandler).Methods(http.MethodGet, http.MethodHead)
-	r.HandleFunc(baseUrl + "/product/{id}", svc.productHandler).Methods(http.MethodGet, http.MethodHead)
-	r.HandleFunc(baseUrl + "/cart", svc.viewCartHandler).Methods(http.MethodGet, http.MethodHead)
-	r.HandleFunc(baseUrl + "/cart", svc.addToCartHandler).Methods(http.MethodPost)
-	r.HandleFunc(baseUrl + "/cart/empty", svc.emptyCartHandler).Methods(http.MethodPost)
-	r.HandleFunc(baseUrl + "/setCurrency", svc.setCurrencyHandler).Methods(http.MethodPost)
-	r.HandleFunc(baseUrl + "/logout", svc.logoutHandler).Methods(http.MethodGet)
-	r.HandleFunc(baseUrl + "/cart/checkout", svc.placeOrderHandler).Methods(http.MethodPost)
-	r.HandleFunc(baseUrl + "/assistant", svc.assistantHandler).Methods(http.MethodGet)
-	r.PathPrefix(baseUrl + "/static/").Handler(http.StripPrefix(baseUrl + "/static/", http.FileServer(http.Dir("./static/"))))
-	r.HandleFunc(baseUrl + "/robots.txt", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "User-agent: *\nDisallow: /") })
-	r.HandleFunc(baseUrl + "/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
-	r.HandleFunc(baseUrl + "/product-meta/{ids}", svc.getProductByID).Methods(http.MethodGet)
-	r.HandleFunc(baseUrl + "/bot", svc.chatBotHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/", svc.homeHandler).Methods(http.MethodGet, http.MethodHead)
+	r.HandleFunc(baseUrl+"/product/{id}", svc.productHandler).Methods(http.MethodGet, http.MethodHead)
+	r.HandleFunc(baseUrl+"/cart", svc.viewCartHandler).Methods(http.MethodGet, http.MethodHead)
+	r.HandleFunc(baseUrl+"/cart", svc.addToCartHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/cart/empty", svc.emptyCartHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/setCurrency", svc.setCurrencyHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/logout", svc.logoutHandler).Methods(http.MethodGet)
+	r.HandleFunc(baseUrl+"/cart/checkout", svc.placeOrderHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/assistant", svc.assistantHandler).Methods(http.MethodGet)
+	r.PathPrefix(baseUrl + "/static/").Handler(http.StripPrefix(baseUrl+"/static/", http.FileServer(http.Dir("./static/"))))
+	r.HandleFunc(baseUrl+"/robots.txt", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "User-agent: *\nDisallow: /") })
+	r.HandleFunc(baseUrl+"/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
+	r.HandleFunc(baseUrl+"/product-meta/{ids}", svc.getProductByID).Methods(http.MethodGet)
+	r.HandleFunc(baseUrl+"/bot", svc.chatBotHandler).Methods(http.MethodPost)
 
 	var handler http.Handler = r
 	handler = &logHandler{log: log, next: handler}     // add logging
@@ -268,7 +281,7 @@ func mustConnGRPC(ctx context.Context, conn **grpc.ClientConn, addr string, secu
 	var err error
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
-	
+
 	systemRoots, err := x509.SystemCertPool()
 	cred := credentials.NewTLS(&tls.Config{
 		RootCAs: systemRoots,
@@ -287,7 +300,7 @@ func mustConnGRPC(ctx context.Context, conn **grpc.ClientConn, addr string, secu
 	} else {
 		opts = append(opts, grpc.WithInsecure())
 	}
-	
+
 	*conn, err = grpc.DialContext(ctx, addr, opts...)
 	if err != nil {
 		panic(errors.Wrapf(err, "grpc: failed to connect %s", addr))

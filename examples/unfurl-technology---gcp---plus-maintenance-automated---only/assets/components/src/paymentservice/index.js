@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* Modifications made by the University of Stuttgart */
+
 'use strict';
 
 const logger = require('./logger')
@@ -61,6 +63,22 @@ else {
   logger.info("Tracing disabled.")
 }
 
+
+function str2bool(v) {
+  return ["yes", "true", "t", "1"].includes(v.toLowerCase()) 
+}
+
+if (str2bool(process.env.OPTIONAL_PAYMENT_FEATURE)) {
+  logger.info("optional payment feature enabled")
+} else {
+  logger.info("optional payment feature disabled")
+}
+
+if (str2bool(process.env.PREMIUM_PAYMENT_FEATURE)) {
+  logger.info("premium payment feature enabled")
+} else {
+  logger.info("premium payment feature disabled")
+}
 
 const path = require('path');
 const HipsterShopServer = require('./server');

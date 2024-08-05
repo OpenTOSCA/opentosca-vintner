@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Modifications made by University of Stuttgart
+// Modifications made by the University of Stuttgart
 
 package main
 
@@ -110,6 +110,18 @@ func main() {
 		go initProfiling("checkoutservice", "1.0.0")
 	} else {
 		log.Info("Profiling disabled.")
+	}
+
+	if os.Getenv("OPTIONAL_PAYMENT_FEATURE") == "1" {
+		log.Info("optional payment feature enabled")
+	} else {
+		log.Info("optional payment feature disabled")
+	}
+
+	if os.Getenv("PREMIUM_PAYMENT_FEATURE") == "1" {
+		log.Info("premium payment feature enabled")
+	} else {
+		log.Info("premium payment feature disabled")
 	}
 
 	port := listenPort

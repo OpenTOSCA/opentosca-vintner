@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Modifications made by University of Stuttgart
+# Modifications made by the University of Stuttgart
 
 import os
 import random
