@@ -17,4 +17,4 @@ merge:
                 requirements:
                     - checkout: checkout_service
                     - recommendation: recommendation_service
-                    - host: gcp_appengine
+                    - host: gcp_cloudrun

@@ -34,5 +34,5 @@ openstack.machine: computing
 ingress: root
 
 gcp.service: root
-gcp.appengine: gcp.service
+gcp.cloudrun: gcp.service
 gcp.cloudsql: gcp.service

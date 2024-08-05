@@ -117,7 +117,7 @@ terraform:
       comment: Kubernetes is more specialized.
 
     - component: software.application
-      hosting: gcp.appengine
+      hosting: gcp.cloudrun
       weight: 1
       comment: Terraform provides a declarative module.
 

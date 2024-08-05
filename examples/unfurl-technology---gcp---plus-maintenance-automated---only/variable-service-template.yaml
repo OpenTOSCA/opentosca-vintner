@@ -131,7 +131,7 @@ topology_template:
                 - advertisement: advertisement_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         frontend_ingress:
             type: ingress
@@ -157,7 +157,7 @@ topology_template:
                 - product: product_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -170,7 +170,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -196,7 +196,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -209,7 +209,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -222,7 +222,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -236,7 +236,7 @@ topology_template:
                 - database: mysql_database
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         mysql_database:
             type: mysql.database
@@ -268,7 +268,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -282,7 +282,7 @@ topology_template:
                 - product: product_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -295,7 +295,7 @@ topology_template:
             requirements:
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -323,7 +323,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - host: docker_runtime
                 - host: kubernetes_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -389,8 +389,8 @@ topology_template:
         #
         ###################################################
 
-        gcp_appengine:
-            type: gcp.appengine
+        gcp_cloudrun:
+            type: gcp.cloudrun
             requirements:
                 - host: gcp_provider
 

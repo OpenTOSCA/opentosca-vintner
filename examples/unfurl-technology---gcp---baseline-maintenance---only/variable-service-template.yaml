@@ -154,7 +154,7 @@ topology_template:
                 - product: product_service_terraform
                 - recommendation: recommendation_service_terraform
                 - advertisement: advertisement_service_terraform
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         frontend_ingress_ansible:
             type: ingress
@@ -210,7 +210,7 @@ topology_template:
                 - shipping: shipping_service_terraform
                 - cart: cart_service_terraform
                 - product: product_service_terraform
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -234,7 +234,7 @@ topology_template:
             type: email.service
             technology: terraform
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -297,7 +297,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -321,7 +321,7 @@ topology_template:
             type: currency.service
             technology: terraform
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -345,7 +345,7 @@ topology_template:
             type: shipping.service
             technology: terraform
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -372,7 +372,7 @@ topology_template:
             technology: terraform
             requirements:
                 - database: mysql_database
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         mysql_database:
             type: mysql.database
@@ -441,7 +441,7 @@ topology_template:
             type: product.service
             technology: terraform
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -468,7 +468,7 @@ topology_template:
             technology: terraform
             requirements:
                 - product: product_service_terraform
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -492,7 +492,7 @@ topology_template:
             type: advertisement.service
             technology: terraform
             requirements:
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -561,7 +561,7 @@ topology_template:
             requirements:
                 - checkout: checkout_service_terraform
                 - recommendation: recommendation_service_terraform
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -633,8 +633,8 @@ topology_template:
         #
         ###################################################
 
-        gcp_appengine:
-            type: gcp.appengine
+        gcp_cloudrun:
+            type: gcp.cloudrun
             technology: terraform
             requirements:
                 - host: gcp_provider

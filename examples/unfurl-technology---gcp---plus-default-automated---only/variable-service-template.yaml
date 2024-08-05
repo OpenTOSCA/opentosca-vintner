@@ -102,7 +102,7 @@ topology_template:
                 - recommendation: recommendation_service
                 - advertisement: advertisement_service
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         frontend_ingress:
             type: ingress
@@ -126,7 +126,7 @@ topology_template:
                 - cart: cart_service
                 - product: product_service
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -138,7 +138,7 @@ topology_template:
             type: email.service
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -163,7 +163,7 @@ topology_template:
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -175,7 +175,7 @@ topology_template:
             type: currency.service
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -187,7 +187,7 @@ topology_template:
             type: shipping.service
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -200,7 +200,7 @@ topology_template:
             requirements:
                 - database: mysql_database
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         mysql_database:
             type: mysql.database
@@ -230,7 +230,7 @@ topology_template:
             type: product.service
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -243,7 +243,7 @@ topology_template:
             requirements:
                 - product: product_service
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -255,7 +255,7 @@ topology_template:
             type: advertisement.service
             requirements:
                 - host: docker_runtime
-                - host: gcp_appengine
+                - host: gcp_cloudrun
 
         ###################################################
         #
@@ -321,8 +321,8 @@ topology_template:
         #
         ###################################################
 
-        gcp_appengine:
-            type: gcp.appengine
+        gcp_cloudrun:
+            type: gcp.cloudrun
             requirements:
                 - host: gcp_provider
 
