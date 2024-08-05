@@ -35,8 +35,9 @@ namespace cartservice.cartstore
             string mysqlDBHost = configuration["MYSQL_HOST"];
             string mysqlDBPort = configuration["MYSQL_PORT"];
             string mysqlDBPassword = configuration["MYSQL_PASSWORD"];
-            string mysqlDBUser = configuration["MYSQL_USERNAME"];;
+            string mysqlDBUser = configuration["MYSQL_USER"];;
             string databaseName = configuration["MYSQL_DATABASE"];
+            string sslMode = configuration["MYSQL_SSL_MODE"];
             connectionString = "server="        +
                                mysqlDBHost      +
                                ";port="         +
@@ -46,7 +47,9 @@ namespace cartservice.cartstore
                                ";pwd="          +
                                mysqlDBPassword  +
                                ";database="     +
-                               databaseName;
+                               databaseName     +
+                               ";SslMode="      +
+                               sslMode;
 
             Console.WriteLine(connectionString);
             tableName = configuration["MYSQL_TABLE"];
@@ -63,7 +66,7 @@ namespace cartservice.cartstore
                 connection.Open();
 
                 // Fetch the current quantity for our userId/productId tuple
-                var fetchCmd = $"SELECT quantity FROM {tableName} WHERE userID='{userId}' AND productID='{productId}'";
+                var fetchCmd = $"SELECT quantity FROM {tableName} WHERE userId = '{userId}' AND productId = '{productId}'";
                 var currentQuantity = 0;
                 var cmdRead = new MySqlCommand(fetchCmd, connection);
                 await using (var reader = await cmdRead.ExecuteReaderAsync())
@@ -100,6 +103,12 @@ namespace cartservice.cartstore
                 await using var connection = new MySqlConnection(connectionString);
                 connection.Open();
 
+                var createTableCmd = $"CREATE TABLE IF NOT EXISTS `{tableName}` (userId CHAR(64), productId CHAR(64), quantity INT, PRIMARY KEY(userId, productId))";
+                await using (var createTableCmdCmd = new MySqlCommand(createTableCmd, connection))
+                {
+                    await createTableCmdCmd.ExecuteNonQueryAsync();
+                }
+                
                 var cartFetchCmd = $"SELECT productId, quantity FROM {tableName} WHERE userId = '{userId}'";
                 var cmd = new MySqlCommand(cartFetchCmd, connection);
                 await using (var reader = await cmd.ExecuteReaderAsync())
@@ -127,7 +136,6 @@ namespace cartservice.cartstore
             return cart;
         }
 
-
         public async Task EmptyCartAsync(string userId)
         {
             Console.WriteLine($"EmptyCartAsync called for userId={userId}");
@@ -137,7 +145,7 @@ namespace cartservice.cartstore
                 await using var connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                var deleteCmd = $"DELETE FROM {tableName} WHERE userID = '{userId}'";
+                var deleteCmd = $"DELETE FROM {tableName} WHERE userId = '{userId}'";
                 await using (var cmd = new MySqlCommand(deleteCmd, connection))
                 {
                     await Task.Run(() =>
