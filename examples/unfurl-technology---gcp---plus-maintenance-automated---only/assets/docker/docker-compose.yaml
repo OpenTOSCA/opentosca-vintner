@@ -110,5 +110,16 @@ services:
         environment:
             - PORT=9555
 
+    analyticalservice:
+        build: ../components/src/analyticalservice
+        ports:
+            - '81:9555'
+        environment:
+            - PORT=9555
+            - CHECKOUT_SERVICE_ADDR=checkoutservice:5050
+            - CHECKOUT_SERVICE_SECURE=0
+            - RECOMMENDATION_SERVICE_ADDR=recommendationservice:8080
+            - RECOMMENDATION_SERVICE_SECURE=0
+
 volumes:
     redis-data:
