@@ -93,7 +93,6 @@ services:
             DISABLE_PROFILER: 1
 
     frontend:
-        #image: gcp-microservice-demo-frontend-stoetzms:v6
         #image: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
         build: ../components/src/frontend
         container_name: boutique-frontend
@@ -115,8 +114,7 @@ services:
             CHECKOUT_SERVICE_SECURE: 0
             AD_SERVICE_ADDR: adservice:9555
             AD_SERVICE_SECURE: 0
-            SHOPPING_ASSISTANT_SERVICE_ADDR: shoppingassistantservice:80
-            SHOPPING_ASSISTANT_SERVICE_SECURE: 0
+            SHOPPING_ASSISTANT_SERVICE_ADDR: shoppingassistantservice
             ENABLE_PROFILER: 0
             ENV_PLATFORM: local
             OPTIONAL_PAYMENT_FEATURE: 1
@@ -147,6 +145,7 @@ services:
             CHECKOUT_SERVICE_SECURE: 0
             RECOMMENDATION_SERVICE_ADDR: recommendationservice:8080
             RECOMMENDATION_SERVICE_SECURE: 0
+            DISABLE_PROFILER: 1
 
 volumes:
     #redis-data:

@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Modifications made by the University of Stuttgart
+
 FROM python:3.12.4-slim@sha256:f11725aba18c19664a408902103365eaf8013823ffc56270f921d1dc78a198cb as base
 
 FROM base as builder
@@ -32,4 +34,4 @@ COPY locustfile.py .
 # enable gevent support in debugger
 ENV GEVENT_SUPPORT=True
 
-ENTRYPOINT locust --host="http://${FRONTEND_ADDR}" --headless -u "${USERS:-10}" 2>&1
+ENTRYPOINT locust --host="${FRONTEND_ADDR}" --headless -u "${USERS:-10}" 2>&1
