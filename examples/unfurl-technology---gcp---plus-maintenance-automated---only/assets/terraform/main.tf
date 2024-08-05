@@ -260,7 +260,40 @@ resource "google_cloud_run_v2_service" "cart" {
         container_port = 7070
       }
 
-      # TODO: mysql properties
+      env {
+        name = "MYSQL_HOST"
+        value = google_sql_database_instance.dbms.public_ip_address
+      }
+
+      env {
+        name = "MYSQL_PORT"
+        value = "3306"
+      }
+
+      env {
+        name = "MYSQL_DATABASE"
+        value = "cart"
+      }
+
+      env {
+        name = "MYSQL_USER"
+        value = "root"
+      }
+
+      env {
+        name = "MYSQL_PASSWORD"
+        value = "password"
+      }
+
+      env {
+        name = "MYSQL_TABLE"
+        value = "carts"
+      }
+
+      env {
+        name = "MYSQL_SSL_MODE"
+        value = "Preferred"
+      }
 
       env {
         name  = "DISABLE_PROFILER"
@@ -279,7 +312,45 @@ resource "google_cloud_run_service_iam_binding" "cart" {
   ]
 }
 
-# TODO: mysql database
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
+resource "google_sql_database_instance" "dbms" {
+  name             = "boutique-dbms"
+  database_version = "MYSQL_5_7"
+  root_password = "password"
+  deletion_protection = false
+
+  settings {
+    tier = "db-f1-micro"
+
+    availability_type = "REGIONAL"
+
+    backup_configuration {
+      enabled = true
+      binary_log_enabled = true
+    }
+
+    ip_configuration {
+      ipv4_enabled = true
+
+      authorized_networks {
+        name = "public"
+        value = "0.0.0.0/0"
+      }
+    }
+  }
+}
+
+resource "google_sql_database" "database" {
+  name     = "cart"
+  instance = google_sql_database_instance.dbms.name
+}
+
+resource "google_sql_user" "users" {
+  name     = "root"
+  instance = google_sql_database_instance.dbms.name
+  host     = "%"
+  password = "password"
+}
 
 
 ###################################################
