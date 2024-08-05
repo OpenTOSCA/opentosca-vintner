@@ -1,0 +1,9 @@
+The project "Online Boutique" has been developed by https://github.com/GoogleCloudPlatform/microservices-demo
+
+Modifications made by University of Stuttgart:
+
+- Project: Initialized the project by copying the original `src`
+- Frontend: use TLS for gRPC depending on env variables (required Alpine)
+- Checkout: use TLS for gRPC depending on env variables (required Alpine)
+- Recommendation: use TLS for gRPC depending on env variables
+- Frontend: add "OS Medium" and "OS Large" to platform envs

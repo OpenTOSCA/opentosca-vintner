@@ -1,28 +1,35 @@
 version: '3.8'
 
 services:
-    currencyservice:
-        image: gcr.io/google-samples/microservices-demo/currencyservice:v0.10.1
-        environment:
-            - PORT=7000
-            - DISABLE_PROFILER=0
+    #currencyservice:
+    #    image: gcr.io/google-samples/microservices-demo/currencyservice:v0.10.1
+    #    environment:
+    #        - PORT=7000
+    #        - DISABLE_PROFILER=0
 
-    productcatalogservice:
-        image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.10.1
-        environment:
-            - PORT=3550
-            - DISABLE_PROFILER=1
+    #productcatalogservice:
+    #    image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.10.1
+    #    environment:
+    #        - PORT=3550
+    #        - DISABLE_PROFILER=1
 
     checkoutservice:
-        image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.1
+        #image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.1
+        build: ../components/src/checkoutservice
         environment:
             - PORT=5050
-            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
+            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice-fgx2efhqra-ey.a.run.app:443
+            - PRODUCT_CATALOG_SERVICE_SECURE=1
             - SHIPPING_SERVICE_ADDR=shippingservice:50051
+            - SHIPPING_SERVICE_SECURE=0
             - PAYMENT_SERVICE_ADDR=paymentservice:50051
+            - PAYMENT_SERVICE_SECURE=0
             - EMAIL_SERVICE_ADDR=emailservice:8080
-            - CURRENCY_SERVICE_ADDR=currencyservice:7000
+            - EMAIL_SERVICE_SECURE=0
+            - CURRENCY_SERVICE_ADDR=currencyservice-fgx2efhqra-ey.a.run.app:443
+            - CURRENCY_SERVICE_SECURE=1
             - CART_SERVICE_ADDR=cartservice:7070
+            - CART_SERVICE_SECURE=0
 
     shippingservice:
         image: gcr.io/google-samples/microservices-demo/shippingservice:v0.10.1
@@ -56,27 +63,39 @@ services:
 
     frontend:
         #image: gcp-microservice-demo-frontend-stoetzms:v6
-        image: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
-        #build: ../components/frontend
+        #image: gcr.io/google-samples/microservices-demo/frontend:v0.10.1
+        build: ../components/src/frontend
         ports:
             - '80:8080'
         environment:
             - PORT=8080
-            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
+            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice-fgx2efhqra-ey.a.run.app:443
+            - PRODUCT_CATALOG_SERVICE_SECURE=1
             - CURRENCY_SERVICE_ADDR=currencyservice-fgx2efhqra-ey.a.run.app:443
+            - CURRENCY_SERVICE_SECURE=1
             - CART_SERVICE_ADDR=cartservice:7070
+            - CART_SERVICE_SECURE=0
             - RECOMMENDATION_SERVICE_ADDR=recommendationservice:8080
+            - RECOMMENDATION_SERVICE_SECURE=0
             - SHIPPING_SERVICE_ADDR=shippingservice:50051
+            - SHIPPING_SERVICE_SECURE=0
             - CHECKOUT_SERVICE_ADDR=checkoutservice:5050
+            - CHECKOUT_SERVICE_SECURE=0
             - AD_SERVICE_ADDR=adservice:9555
+            - AD_SERVICE_SECURE=0
             - SHOPPING_ASSISTANT_SERVICE_ADDR=shoppingassistantservice:80
+            - SHOPPING_ASSISTANT_SERVICE_SECURE=0
             - ENABLE_PROFILER=0
+            - ENV_PLATFORM=osmedium
 
     recommendationservice:
-        image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.10.1
+        #image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.10.1
+        build: ../components/src/recommendationservice
         environment:
             - PORT=8080
-            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
+            # - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
+            - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice-fgx2efhqra-ey.a.run.app:443
+            - PRODUCT_CATALOG_SERVICE_SECURE=1
             - DISABLE_PROFILER=1
 
     adservice:
