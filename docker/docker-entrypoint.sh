@@ -37,12 +37,9 @@ if [[ ! -f $VINTNER_INIT ]]; then
   $VINTNER orchestrators attest --orchestrator xopera
   echo
 
-  # Extract examples
-  echo "Extract examples"
-  mkdir -p /vintner/examples
-  tar -xf /vintner/examples.tar.gz -C /vintner/examples
+  # List examples
+  echo "The following examples are available:"
   ls -1 /vintner/examples
-  rm /vintner/examples.tar.gz
   echo
 
   # Timestamp
@@ -64,6 +61,9 @@ Vintner can be used as follows:
 
 If you need to log into Terraform, you can log into your account as follows:
     docker exec -it vintner terraform login
+
+If you need to conduct any operations inside the container, you can start a shell in the container as follows:
+    docker exec -it vintner /bin/bash
 
 If you are running on Linux, you can set an alias to natively use \"vintner\" on the host, e.g., \"vintner --version\"
     alias vintner=\"docker exec -it vintner vintner\"

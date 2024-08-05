@@ -71,8 +71,8 @@ WORKDIR /vintner
 COPY ./dist/vintner-linux-x64 /bin/vintner
 ENV OPENTOSCA_VINTNER_HOME_DIR=/vintner/data
 
-# Add archived examples (expecting that all dependencies are already pulled)
-COPY ./dist/examples.tar.gz .
+# Copy examples
+COPY ./examples ./examples
 
 # Entrypoint
 COPY --chmod=+x docker/docker-entrypoint.sh .
