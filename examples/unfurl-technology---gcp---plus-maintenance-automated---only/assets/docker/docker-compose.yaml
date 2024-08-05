@@ -40,16 +40,31 @@ services:
             - DISABLE_PROFILER=1
 
     cartservice:
-        image: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
+        #image: gcr.io/google-samples/microservices-demo/cartservice:v0.10.1
+        build: ../components/src/cartservice/src
         environment:
-            - REDIS_ADDR=redis-cart:6379
-        depends_on:
-            - redis-cart
+            #REDIS_ADDR: redis-cart:6379
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: cart
+            MYSQL_USER: cart
+            MYSQL_PASSWORD: password
 
-    redis-cart:
-        image: redis:alpine
+    #redis-cart:
+    #    image: redis:alpine
+    #    volumes:
+    #        - redis-data:/data
+
+    mysql-cert:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: cart
+            MYSQL_USER: cart
+            MYSQL_PASSWORD: password
+        ports:
+            - '3306:3306'
         volumes:
-            - redis-data:/data
+            - mysql-data:/var/lib/mysql
 
     emailservice:
         image: gcr.io/google-samples/microservices-demo/emailservice:v0.10.1
@@ -123,3 +138,4 @@ services:
 
 volumes:
     redis-data:
+    mysql-data:
