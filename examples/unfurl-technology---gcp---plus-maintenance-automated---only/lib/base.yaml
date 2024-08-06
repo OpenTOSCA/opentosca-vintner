@@ -19,6 +19,28 @@ node_types:
     software.application:
         derived_from: root
 
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
     go.application:
         derived_from: software.application
 

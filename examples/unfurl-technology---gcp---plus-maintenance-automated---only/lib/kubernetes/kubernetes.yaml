@@ -23,11 +23,6 @@ node_types:
             k8s_client_key_file:
                 type: string
 
-        attributes:
-            management_address:
-                type: string
-                default: {concat: [{get_input: k8s_api_address}, ':', {get_input_k8s_api_port}]}
-
         capabilities:
             host:
                 type: tosca.capabilities.Compute
