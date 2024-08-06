@@ -41,6 +41,9 @@ replace:
     - - advertisement_service_docker
       - advertisement_service
 
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.docker
+
 merge:
     topology_template:
         inputs:

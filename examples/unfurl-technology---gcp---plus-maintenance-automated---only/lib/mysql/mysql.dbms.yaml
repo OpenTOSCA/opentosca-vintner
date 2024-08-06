@@ -1,0 +1,132 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    mysql.dbms:
+        derived_from: relational.dbms
+
+        properties:
+            dbms_name: string
+
+            dbms_password:
+                type: string
+
+        attributes:
+            application_address:
+                type: string
+
+            application_port:
+                type: integer
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: mysql.dbms.ansible.gcp
+    # TODO: mysql.dbms.terraform.gcp
+
+    # TODO: mysql.dbms.ansible.docker
+    # TODO: mysql.dbms.terraform.docker
+    # TODO: mysql.dbms.docker.docker
+
+    ###################################################
+    #
+    # Ansible Kubernetes
+    #
+    ###################################################
+
+    mysql.dbms.ansible.kubernetes:
+        derived_from: mysql.dbms
+
+        attributes:
+            application_address:
+                type: string
+                default: mysql
+
+            application_port:
+                type: integer
+                default: 3306
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+
+                                    - name: Create file
+                                      copy:
+                                          dest: '{{ SELF.dbms_name }}.yaml'
+                                          content: |
+                                              ---
+                                              apiVersion: apps/v1
+                                              kind: Deployment
+                                              metadata:
+                                                  name: {{ SELF.dbms_name }}
+                                              spec:
+                                                  selector:
+                                                      matchLabels:
+                                                          app: {{ SELF.dbms_name }}
+                                                  strategy:
+                                                      type: Recreate
+                                                  template:
+                                                      metadata:
+                                                          labels:
+                                                              app: {{ SELF.dbms_name }}
+                                                      spec:
+                                                          containers:
+                                                              - image: mysql:5.6
+                                                                name: {{ SELF.dbms_name }}
+                                                                env:
+                                                                    - name: MYSQL_ROOT_PASSWORD
+                                                                      value: {{ SELF.dbms_password }}
+                                                                ports:
+                                                                    - containerPort: 3306
+                                                                      name: mysql
+
+                                              ---
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: {{ SELF.dbms_name }}
+                                              spec:
+                                                  ports:
+                                                      - port: 3306
+                                                  selector:
+                                                      app: {{ SELF.dbms_name }}
+                                                  type: NodePort
+
+                                    - name: Install MySQL DBMS
+                                      shell: |
+                                          kubectl apply -f {{ SELF.dbms_name }}.yaml
+                                          kubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s
+                                          sleep 2m
+                                      args:
+                                          executable: /usr/bin/bash
+
+                            playbookArgs:
+                                - --key-file={{ SELF.os_ssh_key_file }}
+                                - --user={{ SELF.os_ssh_user }}
+                                - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    # TODO: mysql.dbms.terraform.kubernetes
+    # TODO: mysql.dbms.kubernetes.kubernetes

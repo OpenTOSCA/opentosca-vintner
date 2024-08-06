@@ -38,6 +38,9 @@ replace:
     - - advertisement_service_terraform
       - advertisement_service
 
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.gcp
+
 merge:
     topology_template:
         inputs:

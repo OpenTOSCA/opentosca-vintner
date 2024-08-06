@@ -128,7 +128,7 @@ topology_template:
                 - host: kubernetes_runtime
 
         mysql_database:
-            type: mysql.database.terraform.mysql
+            type: mysql.database.terraform.mysql.kubernetes
             properties:
                 database_name: cart
                 database_user: cart

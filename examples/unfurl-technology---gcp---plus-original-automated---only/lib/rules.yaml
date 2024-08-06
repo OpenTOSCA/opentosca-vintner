@@ -32,6 +32,7 @@ ansible:
           - mysql.dbms
           - openstack.machine
       weight: 1
+      assign: mysql.database.ansible.mysql.openstack
       comment: Primary use case due to the specialization of Ansible.
 
     - component: mysql.database
@@ -39,6 +40,7 @@ ansible:
           - mysql.dbms
           - docker.engine
       weight: 1
+      assign: mysql.database.ansible.mysql.docker
       comment: Primary use case due to the specialization of Ansible.
 
     - component: mysql.database
@@ -46,6 +48,7 @@ ansible:
           - mysql.dbms
           - kubernetes
       weight: 1
+      assign: mysql.database.ansible.mysql.kubernetes
       comment: Primary use case due to the specialization of Ansible.
 
     # TODO: whats about google.cloud.gcp_sql_database?
@@ -54,6 +57,7 @@ ansible:
           - mysql.dbms
           - gcp.cloudsql
       weight: 1
+      assign: mysql.database.ansible.mysql.gcp
 
     # DBMS
     - component: mysql.dbms
@@ -100,13 +104,6 @@ ansible:
 terraform:
     # Software
     - component: software.application
-      hosting:
-          - software.runtime
-          - openstack.machine
-      weight: 0
-      comment: Ansible is more specialized.
-
-    - component: software.application
       hosting: docker.engine
       weight: 0.5
       comment: Docker is more specialized.
@@ -138,6 +135,7 @@ terraform:
           - mysql.dbms
           - openstack.machine
       weight: 1
+      assign: mysql.database.terraform.mysql.openstack
       comment: Terraform provides a declarative module.
 
     - component: mysql.database
@@ -145,6 +143,7 @@ terraform:
           - mysql.dbms
           - docker.engine
       weight: 1
+      assign: mysql.database.terraform.mysql.docker
       comment: Terraform provides a declarative module.
 
     - component: mysql.database
@@ -152,6 +151,7 @@ terraform:
           - mysql.dbms
           - kubernetes
       weight: 1
+      assign: mysql.database.terraform.mysql.kubernetes
       comment: Terraform provides a declarative module.
 
     - component: mysql.database
@@ -159,6 +159,7 @@ terraform:
           - mysql.dbms
           - gcp.cloudsql
       weight: 1
+      assign: mysql.database.terraform.mysql.gcp
       comment: Terraform provides a declarative module.
 
     # DBMS
@@ -216,6 +217,7 @@ kubernetes:
           - mysql.dbms
           - kubernetes
       weight: 0
+      assign: mysql.database.kubernetes.mysql.kubernetes
       comment: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS
@@ -243,6 +245,7 @@ docker:
           - mysql.dbms
           - docker.engine
       weight: 0
+      assign: mysql.database.docker.mysql.docker
       comment: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS

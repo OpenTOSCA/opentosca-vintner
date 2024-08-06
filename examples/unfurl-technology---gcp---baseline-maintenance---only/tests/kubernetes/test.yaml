@@ -44,6 +44,12 @@ replace:
     - - analytical_service_kubernetes
       - analytical_service
 
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.kubernetes
+
+    - - mysql.database.ansible.mysql
+      - mysql.database.ansible.mysql.kubernetes
+
 merge:
     topology_template:
         inputs:

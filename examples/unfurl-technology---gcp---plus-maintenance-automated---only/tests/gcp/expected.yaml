@@ -116,7 +116,7 @@ topology_template:
                 - host: gcp_cloudrun
 
         mysql_database:
-            type: mysql.database.terraform.mysql
+            type: mysql.database.terraform.mysql.gcp
             properties:
                 database_name: cart
                 database_user: cart

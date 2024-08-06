@@ -1,0 +1,67 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    checkout.service:
+        derived_from: go.application
+
+        properties:
+            optional_payment_feature:
+                type: boolean
+                default: {eval: '.::.requirements[.name=payment]::.target::optional_payment_feature'}
+
+            premium_payment_feature:
+                type: boolean
+                default: {eval: '.::.requirements[.name=payment]::.target::premium_payment_feature'}
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - email:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - payment:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - currency:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - shipping:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - cart:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - product:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: checkout.service.ansible.gcp
+    # TODO: checkout.service.terraform.gcp
+
+    # TODO: checkout.service.ansible.docker
+    # TODO: checkout.service.terraform.docker
+    # TODO: checkout.service.docker.docker
+
+    # TODO: checkout.service.ansible.kubernetes
+    # TODO: checkout.service.terraform.kubernetes
+    # TODO. checkout.service.kubernetes.kubernetes

@@ -1,0 +1,67 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    frontend.service:
+        derived_from: go.application
+
+        properties:
+            optional_payment_feature:
+                type: boolean
+                default: {eval: '.::.requirements[.name=checkout]::.target::optional_payment_feature'}
+
+            premium_payment_feature:
+                type: boolean
+                default: {eval: '.::.requirements[.name=checkout]::.target::premium_payment_feature'}
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - checkout:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - currency:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - shipping:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - cart:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - product:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - recommendation:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: frontend.service.ansible.gcp
+    # TODO: frontend.service.terraform.gcp
+
+    # TODO: frontend.service.ansible.docker
+    # TODO: frontend.service.terraform.docker
+    # TODO: frontend.service.docker.docker
+
+    # TODO: frontend.service.ansible.kubernetes
+    # TODO: frontend.service.terraform.kubernetes
+    # TODO. frontend.service.kubernetes.kubernetes

@@ -1,0 +1,42 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    analytical.service:
+        derived_from: python.application
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - checkout:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - recommendation:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.ConnectsTo
+
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: analytical.service.ansible.gcp
+    # TODO: analytical.service.terraform.gcp
+
+    # TODO: analytical.service.ansible.docker
+    # TODO: analytical.service.terraform.docker
+    # TODO: analytical.service.docker.docker
+
+    # TODO: analytical.service.ansible.kubernetes
+    # TODO: analytical.service.terraform.kubernetes
+    # TODO. analytical.service.kubernetes.kubernetes

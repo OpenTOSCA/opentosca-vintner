@@ -40,6 +40,10 @@ replace:
 
     - - analytical_service_terraform
       - analytical_service
+
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.gcp
+
 merge:
     topology_template:
         inputs:

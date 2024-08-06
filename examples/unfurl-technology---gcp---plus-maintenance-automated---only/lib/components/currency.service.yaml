@@ -1,0 +1,34 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    currency.service:
+        derived_from: node.application
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: currency.service.ansible.gcp
+    # TODO: currency.service.terraform.gcp
+
+    # TODO: currency.service.ansible.docker
+    # TODO: currency.service.terraform.docker
+    # TODO: currency.service.docker.docker
+
+    # TODO: currency.service.ansible.kubernetes
+    # TODO: currency.service.terraform.kubernetes
+    # TODO. currency.service.kubernetes.kubernetes

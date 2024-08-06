@@ -58,6 +58,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                             [technology]: {
                                 conditions: it,
                                 weight: rule.weight,
+                                // TODO: extend this to support depths in naming depending on hosting depth?
                                 assign: rule.assign,
                             },
                         })

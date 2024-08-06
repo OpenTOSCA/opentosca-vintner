@@ -1,0 +1,49 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    ###################################################
+    #
+    # Root
+    #
+    ###################################################
+
+    root:
+        derived_from: tosca.nodes.Root
+
+    ###################################################
+    #
+    # Software Application
+    #
+    ###################################################
+
+    software.application:
+        derived_from: root
+
+    go.application:
+        derived_from: software.application
+
+    python.application:
+        derived_from: software.application
+
+    node.application:
+        derived_from: software.application
+
+    dotnet.application:
+        derived_from: software.application
+
+    java.application:
+        derived_from: software.application
+
+    ###################################################
+    #
+    # GCP
+    #
+    ###################################################
+
+    gcp.service:
+        derived_from: root
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

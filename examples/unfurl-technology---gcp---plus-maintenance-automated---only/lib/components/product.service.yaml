@@ -1,0 +1,34 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    product.service:
+        derived_from: go.application
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: product.service.ansible.gcp
+    # TODO: product.service.terraform.gcp
+
+    # TODO: product.service.ansible.docker
+    # TODO: product.service.terraform.docker
+    # TODO: product.service.docker.docker
+
+    # TODO: product.service.ansible.kubernetes
+    # TODO: product.service.terraform.kubernetes
+    # TODO. product.service.kubernetes.kubernetes

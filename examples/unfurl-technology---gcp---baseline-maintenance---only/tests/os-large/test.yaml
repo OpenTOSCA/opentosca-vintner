@@ -44,6 +44,8 @@ replace:
     - - analytical_service_docker
       - analytical_service
 
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.docker
 merge:
     topology_template:
         inputs:

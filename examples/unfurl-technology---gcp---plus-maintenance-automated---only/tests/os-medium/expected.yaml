@@ -146,7 +146,7 @@ topology_template:
                 - host: docker_runtime
 
         mysql_database:
-            type: mysql.database.terraform.mysql
+            type: mysql.database.terraform.mysql.docker
             properties:
                 database_name: cart
                 database_user: cart

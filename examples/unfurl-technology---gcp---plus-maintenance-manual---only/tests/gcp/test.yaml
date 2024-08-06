@@ -1,6 +1,8 @@
 expected: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/gcp/expected.yaml
 inputs: ../../../unfurl-technology---gcp---plus-maintenance-automated---only/tests/gcp/inputs.yaml
-
+replace:
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.gcp
 merge:
     topology_template:
         node_templates:
