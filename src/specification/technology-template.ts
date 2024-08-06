@@ -25,4 +25,5 @@ export type TechnologyAssignmentRule = {
     conditions?: LogicExpression | LogicExpression[]
     weight?: number
     assign?: string
+    comment?: string
 }
