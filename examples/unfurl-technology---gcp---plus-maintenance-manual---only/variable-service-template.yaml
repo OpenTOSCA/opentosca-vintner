@@ -144,7 +144,7 @@ topology_template:
                 - kubernetes:
                       conditions: {logic_expression: is_kubernetes}
             requirements:
-                - upstream: frontend_service
+                - application: frontend_service
                 - host: kubernetes_runtime
                 - host: virtual_machine
 

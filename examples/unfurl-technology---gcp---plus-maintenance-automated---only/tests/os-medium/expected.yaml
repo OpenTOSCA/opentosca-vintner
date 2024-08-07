@@ -66,7 +66,7 @@ topology_template:
         frontend_ingress:
             type: ingress.ansible.openstack
             requirements:
-                - upstream: frontend_service
+                - application: frontend_service
                 - host: virtual_machine
 
         ###################################################

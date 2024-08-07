@@ -113,7 +113,7 @@ topology_template:
                 - ansible:
                       conditions: {logic_expression: is_openstack}
             requirements:
-                - upstream: frontend_service
+                - application: frontend_service
                 - host: virtual_machine
 
         ###################################################

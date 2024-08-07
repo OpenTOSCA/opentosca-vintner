@@ -118,7 +118,7 @@ topology_template:
             type: ingress
             technology: ansible
             requirements:
-                - upstream: frontend_service_docker
+                - application: frontend_service_docker
                 - host: virtual_machine
 
         ###################################################

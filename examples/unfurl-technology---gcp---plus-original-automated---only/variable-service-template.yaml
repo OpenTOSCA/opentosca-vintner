@@ -107,7 +107,7 @@ topology_template:
         frontend_ingress:
             type: ingress
             requirements:
-                - upstream: frontend_service
+                - application: frontend_service
                 - host: virtual_machine
 
         ###################################################

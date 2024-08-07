@@ -160,14 +160,14 @@ topology_template:
             type: ingress
             technology: ansible
             requirements:
-                - upstream: frontend_service_docker
+                - application: frontend_service_docker
                 - host: virtual_machine
 
         frontend_ingress_kubernetes:
             type: ingress
             technology: kubernetes
             requirements:
-                - upstream: frontend_service_kubernetes
+                - application: frontend_service_kubernetes
                 - host: kubernetes_runtime
 
         ###################################################

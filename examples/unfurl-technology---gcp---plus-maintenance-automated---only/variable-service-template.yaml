@@ -136,7 +136,7 @@ topology_template:
         frontend_ingress:
             type: ingress
             requirements:
-                - upstream: frontend_service
+                - application: frontend_service
                 - host: kubernetes_runtime
                 - host: virtual_machine
 
