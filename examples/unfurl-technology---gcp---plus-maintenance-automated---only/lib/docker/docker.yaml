@@ -82,7 +82,7 @@ node_types:
 
     ###################################################
     #
-    # Terraform OS
+    # Terraform Openstack
     #
     ###################################################
 
@@ -113,13 +113,14 @@ node_types:
                     main:
                         resource:
                             terraform_data:
-                                os:
+                                docker:
                                     - connection:
                                           - host: '{{ SELF.os_ssh_host }}'
                                             private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
+                                            sudo: true
                                       provisioner:
                                           remote-exec:
                                               - inline:
-                                                    - 'curl -sSL https://get.docker.com | sudo sh'
+                                                    - 'curl -sSL https://get.docker.com | sh'
