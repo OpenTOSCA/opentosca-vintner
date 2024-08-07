@@ -115,7 +115,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: this
     # use https://registry.terraform.io/providers/neuspaces/system/latest/docs ?
 
     logging.agent.terraform.openstack:
@@ -155,13 +154,33 @@ node_types:
                                       provisioner:
                                           file:
                                               - content: |
-                                                    mkdir -p /etc/apt/keyrings/
-                                                    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor > /etc/apt/keyrings/grafana.gpg
-                                                    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | tee /etc/apt/sources.list.d/grafana.list
+                                                    mkdir -p /etc/node_exporter
+                                                    cd /tmp
 
-                                                    apt-get update
-                                                    apt-get install promtail -y
-                                                destination: /tmp/install-promtail.sh
+                                                    wget https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
+                                                    tar -xf node_exporter-1.6.0.linux-amd64.tar.gz
+                                                    mv node_exporter-1.6.0.linux-amd64/node_exporter /usr/local/bin/node_exporter
+                                                    chmod 0755 /usr/local/bin/node_exporter
+                                                    rm node_exporter-1.6.0.linux-amd64.tar.gz
+                                                    rm -rf node_exporter-1.6.0.linux-amd64
+
+                                                    cat << EOF > /etc/systemd/system/node_exporter.service
+                                                    [Unit]
+                                                    Description=Node Exporter
+                                                    After=network.target
+
+                                                    [Service]
+                                                    Type=simple
+                                                    ExecStart=/usr/local/bin/node_exporter
+
+                                                    [Install]
+                                                    WantedBy=multi-user.target
+                                                    EOF
+
+                                                    systemctl daemon-reload
+                                                    systemctl enable node_exporter
+                                                    systemctl start node_exporter
+                                                destination: /tmp/install-node-exporter.sh
                                           remote-exec:
                                               - inline:
-                                                    - /tmp/install-promtail.sh
+                                                    - /tmp/install-node-exporter.sh

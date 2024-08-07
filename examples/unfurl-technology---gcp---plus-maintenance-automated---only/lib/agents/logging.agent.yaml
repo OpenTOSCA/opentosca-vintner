@@ -49,7 +49,7 @@ node_types:
                                     - name: wait for ssh
                                       wait_for_connection:
 
-                                    - name: install docker
+                                    - name: install promtail
                                       ansible.builtin.shell: |
                                           mkdir -p /etc/apt/keyrings/
                                           wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor > /etc/apt/keyrings/grafana.gpg
