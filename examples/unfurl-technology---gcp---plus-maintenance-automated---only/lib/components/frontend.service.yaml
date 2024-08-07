@@ -226,47 +226,49 @@ node_types:
                                     - name: wait for ssh
                                       wait_for_connection:
 
-                                    - name: create working directory
-                                      register: dir
+                                    - name: create file
+                                      register: compose
                                       ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}'
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
                                           state: directory
 
                                     - name: create manifest
                                       register: manifest
                                       ansible.builtin.copy:
-                                          dest: '{{ dir.path }}/{{ SELF.application_name }}.compose.yaml'
+                                          dest: '{{ compose.path }}'
                                           content: |
-                                              version: '3.8'
-                                              services:
-                                                {{ SELF.application_name }}:
-                                                  container_name: '{{ SELF.application_name }}'
-                                                  network_mode: host
-                                                  environment:
-                                                    PORT: '{{ SELF.application_port }}'
-                                                    PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
-                                                    PRODUCT_CATALOG_SERVICE_SECURE: 0
-                                                    CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
-                                                    CURRENCY_SERVICE_SECURE: 0
-                                                    CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
-                                                    CART_SERVICE_SECURE: 0
-                                                    RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
-                                                    RECOMMENDATION_SERVICE_SECURE: 0
-                                                    SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
-                                                    SHIPPING_SERVICE_SECURE: 0
-                                                    CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
-                                                    CHECKOUT_SERVICE_SECURE: 0
-                                                    AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
-                                                    AD_SERVICE_SECURE: 0
-                                                    SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                                    ENABLE_PROFILER: 0
-                                                    ENV_PLATFORM: oslarge
-                                                    OPTIONAL_PAYMENT_FEATURE: 1
-                                                    PREMIUM_PAYMENT_FEATURE: 0
+                                          vars:
+                                              compose:
+                                                  version: '3.8'
+                                                  services:
+                                                      application:
+                                                          container_name: '{{ SELF.application_name }}'
+                                                          network_mode: host
+                                                          environment:
+                                                              PORT: '{{ SELF.application_port }}'
+                                                              PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
+                                                              PRODUCT_CATALOG_SERVICE_SECURE: 0
+                                                              CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
+                                                              CURRENCY_SERVICE_SECURE: 0
+                                                              CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
+                                                              CART_SERVICE_SECURE: 0
+                                                              RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
+                                                              RECOMMENDATION_SERVICE_SECURE: 0
+                                                              SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
+                                                              SHIPPING_SERVICE_SECURE: 0
+                                                              CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
+                                                              CHECKOUT_SERVICE_SECURE: 0
+                                                              AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
+                                                              AD_SERVICE_SECURE: 0
+                                                              SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
+                                                              ENABLE_PROFILER: 0
+                                                              ENV_PLATFORM: oslarge
+                                                              OPTIONAL_PAYMENT_FEATURE: 1
+                                                              PREMIUM_PAYMENT_FEATURE: 0
 
                                     - name: apply manifest
                                       shell: |
-                                          docker compose up -f {{ manifest.dest }} -d
+                                          docker compose up -f {{ manifest.path }} -d
                                       args:
                                           executable: /usr/bin/bash
 
@@ -318,16 +320,16 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: ORCHESTRATOR
+                            environment:
+                                K8S_AUTH_HOST: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
+                                K8S_AUTH_SSL_CA_CERT: '{{ SELF.k8s_ca_cert_file }}'
+                                K8S_AUTH_CERT_FILE: '{{ SELF.k8s_client_cert_file }}'
+                                K8S_AUTH_KEY_FILE: '{{ SELF.k8s_client_key_file }}'
                         inputs:
                             playbook:
                                 q:
                                     - name: create deployment
-                                      register: manifest
                                       kubernetes.core.k8s:
-                                          host: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
-                                          client_cert: '{{ SELF.k8s_client_cert_file }}'
-                                          client_key: '{{ SELF.k8s_client_key_file }}'
-                                          ca_cert: '{{ SELF.k8s_ca_cert_file }}'
                                           wait: true
                                           definition:
                                               apiVersion: apps/v1
@@ -410,12 +412,7 @@ node_types:
                                                                 ports:
                                                                     - containerPort: '{{ SELF.application_port }}'
                                     - name: create service
-                                      register: manifest
                                       kubernetes.core.k8s:
-                                          host: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
-                                          client_cert: '{{ SELF.k8s_client_cert_file }}'
-                                          client_key: '{{ SELF.k8s_client_key_file }}'
-                                          ca_cert: '{{ SELF.k8s_ca_cert_file }}'
                                           definition:
                                               apiVersion: v1
                                               kind: Service
@@ -476,175 +473,91 @@ node_types:
                             primary: Terraform
             defaults:
                 inputs:
-                    main: |
-                        terraform {
-                          required_version = ">= 0.14.0"
-                          required_providers {
-                            kubernetes = {
-                              source  = "hashicorp/kubernetes"
-                              version = "2.31.0"
-                            }
-                          }
-                        }
-
-                        provider "kubernetes" {
-                          host = "{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}"
-                          client_certificate = file("{{ SELF.k8s_client_cert_file }}")
-                          client_key = file("{{ SELF.k8s_client_key_file }}")
-                          cluster_ca_certificate = file("{{ SELF.k8s_ca_cert_file }}")
-                        }
-
-                        resource "kubernetes_deployment_v1" "{{ SELF.application_name }}" {
-                          metadata {
-                            name = "{{ SELF.application_name }}"
-                          }
-
-                          spec {
-                            selector {
-                              match_labels = {
-                                app = "{{ SELF.application_name }}"
-                              }
-                            }
-
-                            template {
-                              metadata {
-                                labels = {
-                                  app = "{{ SELF.application_name }}"
-                                }
-                              }
-
-                              spec {
-                                container {
-                                  image = "{{ SELF.application_image }}"
-                                  name  = "{{ SELF.application_name }}"
-
-                                  env {
-                                    name  = "PORT"
-                                    value = "{{ SELF.application_port }}"
-                                  }
-
-                                  env {
-                                    name  = "PRODUCT_CATALOG_SERVICE_ADDR"
-                                    value = "{{ SELF.product_address }}"
-                                  }
-
-                                  env {
-                                    name  = "PRODUCT_CATALOG_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "CURRENCY_SERVICE_ADDR"
-                                    value = "{{ SELF.currency_address }}"
-                                  }
-
-                                  env {
-                                    name  = "CURRENCY_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "CART_SERVICE_ADDR"
-                                    value = "{{ SELF.cart_address }}"
-                                  }
-
-                                  env {
-                                    name  = "CART_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "RECOMMENDATION_SERVICE_ADDR"
-                                    value = "{{ SELF.recommendation_address }}"
-                                  }
-
-                                  env {
-                                    name  = "RECOMMENDATION_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "SHIPPING_SERVICE_ADDR"
-                                    value = "{{ SELF.shipping_address }}"
-                                  }
-
-                                  env {
-                                    name  = "SHIPPING_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "CHECKOUT_SERVICE_ADDR"
-                                    value = "{{ SELF.checkout_address }}"
-                                  }
-
-                                  env {
-                                    name  = "CHECKOUT_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "AD_SERVICE_ADDR"
-                                    value = "{{ SELF.advertisement_address }}"
-                                  }
-
-                                  env {
-                                    name  = "AD_SERVICE_SECURE"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "SHOPPING_ASSISTANT_SERVICE_ADDR"
-                                    value = "required-but-not-used"
-                                  }
-
-                                  env {
-                                    name  = "ENABLE_PROFILER"
-                                    value = "0"
-                                  }
-
-                                  env {
-                                    name  = "ENV_PLATFORM"
-                                    value = "kubernetes"
-                                  }
-
-                                  env {
-                                    name  = "OPTIONAL_PAYMENT_FEATURE"
-                                    value = "{{ SELF.feature_payment_optional }}"
-                                  }
-
-                                  env {
-                                    name  = "PREMIUM_PAYMENT_FEATURE"
-                                    value = "{{ SELF.premium_payment_feature }}"
-                                  }
-
-                                  port {
-                                    container_port = "{{ SELF.application_port }}"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-
-                        resource "kubernetes_service_v1" "{{ SELF.application_name }}" {
-                          metadata {
-                            name = "{{ SELF.application_name }}"
-                          }
-                          spec {
-                            selector = {
-                              app = "{{ SELF.application_name }}"
-                            }
-
-                            port {
-                              name        = "{{ SELF.application_endpoint }}"
-                              port        = "{{ SELF.application_port }}"
-                              target_port = "{{ SELF.application_port }}"
-                            }
-
-                            type = "ClusterIP"
-                          }
-                        }
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - kubernetes:
+                                        source: hashicorp/kubernetes
+                                        version: 2.31.0
+                              required_version: '>= 0.14.0'
+                        provider:
+                            kubernetes:
+                                - client_certificate: '${file("{{ SELF.k8s_client_cert_file }}")}'
+                                  client_key: '${file("{{ SELF.k8s_client_key_file }}")}'
+                                  cluster_ca_certificate: '${file("{{ SELF.k8s_ca_cert_file }}")}'
+                                  host: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
+                        resource:
+                            kubernetes_deployment_v1:
+                                application:
+                                    - metadata:
+                                          - name: '{{ SELF.application_name }}'
+                                      spec:
+                                          - selector:
+                                                - match_labels:
+                                                      app: '{{ SELF.application_name }}'
+                                            template:
+                                                - metadata:
+                                                      - labels:
+                                                            app: '{{ SELF.application_name }}'
+                                                  spec:
+                                                      - container:
+                                                            - env:
+                                                                  - name: PORT
+                                                                    value: '{{ SELF.application_port }}'
+                                                                  - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                                    value: '{{ SELF.product_address }}'
+                                                                  - name: PRODUCT_CATALOG_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: CURRENCY_SERVICE_ADDR
+                                                                    value: '{{ SELF.currency_address }}'
+                                                                  - name: CURRENCY_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: CART_SERVICE_ADDR
+                                                                    value: '{{ SELF.cart_address }}'
+                                                                  - name: CART_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: RECOMMENDATION_SERVICE_ADDR
+                                                                    value: '{{ SELF.recommendation_address }}'
+                                                                  - name: RECOMMENDATION_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: SHIPPING_SERVICE_ADDR
+                                                                    value: '{{ SELF.shipping_address }}'
+                                                                  - name: SHIPPING_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: CHECKOUT_SERVICE_ADDR
+                                                                    value: '{{ SELF.checkout_address }}'
+                                                                  - name: CHECKOUT_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: AD_SERVICE_ADDR
+                                                                    value: '{{ SELF.advertisement_address }}'
+                                                                  - name: AD_SERVICE_SECURE
+                                                                    value: '0'
+                                                                  - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+                                                                    value: required-but-not-used
+                                                                  - name: ENABLE_PROFILER
+                                                                    value: '0'
+                                                                  - name: ENV_PLATFORM
+                                                                    value: kubernetes
+                                                                  - name: OPTIONAL_PAYMENT_FEATURE
+                                                                    value: '{{ SELF.feature_payment_optional }}'
+                                                                  - name: PREMIUM_PAYMENT_FEATURE
+                                                                    value: '{{ SELF.premium_payment_feature }}'
+                                                              image: '{{ SELF.application_image }}'
+                                                              name: '{{ SELF.application_name }}'
+                                                              port:
+                                                                  - container_port: '{{ SELF.application_port }}'
+                            kubernetes_service_v1:
+                                application:
+                                    - metadata:
+                                          - name: '{{ SELF.application_name }}'
+                                      spec:
+                                          - port:
+                                                - name: '{{ SELF.application_endpoint }}'
+                                                  port: '{{ SELF.application_port }}'
+                                                  target_port: '{{ SELF.application_port }}'
+                                            selector:
+                                                app: '{{ SELF.application_name }}'
+                                            type: ClusterIP
 
     ###################################################
     #
@@ -670,114 +583,119 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: create working directory
-                                      register: dir
+                                    - name: create temporary file
+                                      register: manifest
                                       ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}'
-                                          state: directory
+                                          suffix: '{{ SELF.application_name }}.manifest.yaml'
+                                          state: present
 
                                     - name: create manifest
                                       register: manifest
                                       ansible.builtin.copy:
-                                          dest: '{{ dir.path }}/{{ SELF.application_name }}.manifest.yaml'
+                                          dest: '{{ manifest.path }}'
                                           content: |
-                                              apiVersion: apps/v1
-                                              kind: Deployment
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                              spec:
-                                                  selector:
-                                                      matchLabels:
-                                                          app: '{{ SELF.application_name }}'
-                                                  template:
-                                                      metadata:
-                                                          labels:
-                                                              app: '{{ SELF.application_name }}'
-                                                      spec:
-                                                          containers:
-                                                              - image: '{{ SELF.application_image }}'
-                                                                name: '{{ SELF.application_name }}'
-                                                                env:
-                                                                    - name: PORT
-                                                                      value: '{{ SELF.application_port }}'
-
-                                                                    - name: PRODUCT_CATALOG_SERVICE_ADDR
-                                                                      value: '{{ SELF.product_address }}'
-
-                                                                    - name: PRODUCT_CATALOG_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: CURRENCY_SERVICE_ADDR
-                                                                      value: '{{ SELF.currency_address }}'
-
-                                                                    - name: CURRENCY_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: CART_SERVICE_ADDR
-                                                                      value: '{{ SELF.cart_address }}'
-
-                                                                    - name: CART_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: RECOMMENDATION_SERVICE_ADDR
-                                                                      value: '{{ SELF.recommendation_address }}'
-
-                                                                    - name: RECOMMENDATION_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: SHIPPING_SERVICE_ADDR
-                                                                      value: '{{ SELF.shipping_address }}'
-
-                                                                    - name: SHIPPING_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: CHECKOUT_SERVICE_ADDR
-                                                                      value: '{{ SELF.checkout_address }}'
-
-                                                                    - name: CHECKOUT_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: AD_SERVICE_ADDR
-                                                                      value: '{{ SELF.advertisement_address }}'
-
-                                                                    - name: AD_SERVICE_SECURE
-                                                                      value: '0'
-
-                                                                    - name: SHOPPING_ASSISTANT_SERVICE_ADDR
-                                                                      value: 'required-but-not-used'
-
-                                                                    - name: ENABLE_PROFILER
-                                                                      value: '0'
-
-                                                                    - name: ENV_PLATFORM
-                                                                      value: 'kubernetes'
-
-                                                                    - name: OPTIONAL_PAYMENT_FEATURE
-                                                                      value: '{{ SELF.feature_payment_optional }}'
-
-                                                                    - name: PREMIUM_PAYMENT_FEATURE
-                                                                      value: '{{ SELF.premium_payment_feature }}'
-
-                                                                ports:
-                                                                    - containerPort: '{{ SELF.application_port }}'
-
+                                              {{ deployment | to_yaml }}
                                               ---
-                                              apiVersion: v1
-                                              kind: Service
-                                              metadata:
-                                                  name: {{ SELF.application_name }}
-                                              spec:
-                                                  ports:
-                                                      - name: {{ SELF.application_endpoint }}
-                                                        port: {{ SELF.application_port }}
-                                                        targetPort: {{ SELF.application_port }}
-                                                  selector:
-                                                      app: {{ SELF.application_name }}
-                                                  type: ClusterIP
+                                              {{ service | to_yaml }}
+                                          vars:
+                                              deployment:
+                                                  apiVersion: apps/v1
+                                                  kind: Deployment
+                                                  metadata:
+                                                      name: '{{ SELF.application_name }}'
+                                                  spec:
+                                                      selector:
+                                                          matchLabels:
+                                                              app: '{{ SELF.application_name }}'
+                                                      template:
+                                                          metadata:
+                                                              labels:
+                                                                  app: '{{ SELF.application_name }}'
+                                                          spec:
+                                                              containers:
+                                                                  - image: '{{ SELF.application_image }}'
+                                                                    name: '{{ SELF.application_name }}'
+                                                                    env:
+                                                                        - name: PORT
+                                                                          value: '{{ SELF.application_port }}'
+
+                                                                        - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                                          value: '{{ SELF.product_address }}'
+
+                                                                        - name: PRODUCT_CATALOG_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: CURRENCY_SERVICE_ADDR
+                                                                          value: '{{ SELF.currency_address }}'
+
+                                                                        - name: CURRENCY_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: CART_SERVICE_ADDR
+                                                                          value: '{{ SELF.cart_address }}'
+
+                                                                        - name: CART_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: RECOMMENDATION_SERVICE_ADDR
+                                                                          value: '{{ SELF.recommendation_address }}'
+
+                                                                        - name: RECOMMENDATION_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: SHIPPING_SERVICE_ADDR
+                                                                          value: '{{ SELF.shipping_address }}'
+
+                                                                        - name: SHIPPING_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: CHECKOUT_SERVICE_ADDR
+                                                                          value: '{{ SELF.checkout_address }}'
+
+                                                                        - name: CHECKOUT_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: AD_SERVICE_ADDR
+                                                                          value: '{{ SELF.advertisement_address }}'
+
+                                                                        - name: AD_SERVICE_SECURE
+                                                                          value: '0'
+
+                                                                        - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+                                                                          value: 'required-but-not-used'
+
+                                                                        - name: ENABLE_PROFILER
+                                                                          value: '0'
+
+                                                                        - name: ENV_PLATFORM
+                                                                          value: 'kubernetes'
+
+                                                                        - name: OPTIONAL_PAYMENT_FEATURE
+                                                                          value: '{{ SELF.feature_payment_optional }}'
+
+                                                                        - name: PREMIUM_PAYMENT_FEATURE
+                                                                          value: '{{ SELF.premium_payment_feature }}'
+
+                                                                    ports:
+                                                                        - containerPort: '{{ SELF.application_port }}'
+
+                                              service:
+                                                  apiVersion: v1
+                                                  kind: Service
+                                                  metadata:
+                                                      name: '{{ SELF.application_name }}'
+                                                  spec:
+                                                      ports:
+                                                          - name: '{{ SELF.application_endpoint }}'
+                                                            port: '{{ SELF.application_port }}'
+                                                            targetPort: '{{ SELF.application_port }}'
+                                                      selector:
+                                                          app: '{{ SELF.application_name }}'
+                                                      type: ClusterIP
 
                                     - name: apply manifest
                                       shell: |
-                                          kubectl apply -f {{ manifest.dest }}
+                                          kubectl apply -f {{ manifest.path }}
                                           kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s
                                       args:
                                           executable: /usr/bin/bash
