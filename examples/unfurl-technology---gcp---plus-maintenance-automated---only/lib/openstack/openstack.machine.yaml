@@ -137,7 +137,6 @@ node_types:
                                   attributes:
                                     management_address: "{{ outputs.management_address | trim }}"
 
-                        # TODO: this is on the wrong level ...
                         outputs:
                             management_address:
 

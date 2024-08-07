@@ -89,8 +89,259 @@ node_types:
                   capability: tosca.capabilities.Root
                   relationship: tosca.relationships.ConnectsTo
 
-    # TODO: frontend.service.ansible.gcp
-    # TODO: frontend.service.terraform.gcp
+    ###################################################
+    #
+    # Ansible GCP
+    #
+    ###################################################
+
+    shop.component.ansible.gcp:
+        derived_from: shop.component
+
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: activate service account
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
+
+                                    - name: touch service
+                                      register: service
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.service.yaml'
+
+                                    # https://cloud.google.com/run/docs/reference/yaml/v1
+                                    - name: create service
+                                      ansible.builtin.copy:
+                                          dest: '{{ service.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                          vars:
+                                              manifest:
+                                                  apiVersion: serving.knative.dev/v1
+                                                  kind: Service
+                                                  metadata:
+                                                      name: '{{ SELF.application_name }}'
+                                                  labels:
+                                                      cloud.googleapis.com/location: '{{ SELF.gcp_region }}'
+                                                  annotations:
+                                                      run.googleapis.com/ingress: all
+                                                  spec:
+                                                      template:
+                                                          spec:
+                                                              containers:
+                                                                  - image: '{{ SELF.application_image }}'
+                                                                    ports:
+                                                                        - name: http1
+                                                                          containerPort: '{{ SELF.application_port }}'
+                                                                    env:
+                                                                        - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                                          value: '{{ SELF.product_address }}'
+                                                                        - name: PRODUCT_CATALOG_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: CURRENCY_SERVICE_ADDR
+                                                                          value: '{{ SELF.currency_address }}'
+                                                                        - name: CURRENCY_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: CART_SERVICE_ADDR
+                                                                          value: '{{ SELF.cart_address }}'
+                                                                        - name: CART_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: RECOMMENDATION_SERVICE_ADDR
+                                                                          value: '{{ SELF.recommendation_address }}'
+                                                                        - name: RECOMMENDATION_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: SHIPPING_SERVICE_ADDR
+                                                                          value: '{{ SELF.shipping_address }}'
+                                                                        - name: SHIPPING_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: CHECKOUT_SERVICE_ADDR
+                                                                          value: '{{ SELF.checkout_address }}'
+                                                                        - name: CHECKOUT_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: AD_SERVICE_ADDR
+                                                                          value: '{{ SELF.advertisement_address }}'
+                                                                        - name: AD_SERVICE_SECURE
+                                                                          value: '1'
+                                                                        - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+                                                                          value: required-but-not-used
+                                                                        - name: ENABLE_PROFILER
+                                                                          value: '0'
+                                                                        - name: ENV_PLATFORM
+                                                                          value: gcp
+                                                                        - name: OPTIONAL_PAYMENT_FEATURE
+                                                                          value: '1'
+                                                                        - name: PREMIUM_PAYMENT_FEATURE
+                                                                          value: '0'
+
+                                    # https://cloud.google.com/sdk/gcloud/reference/run/services/replace
+                                    - name: apply service
+                                      shell: 'gcloud run services replace {{ service.path }} --quiet'
+
+                                    - name: touch policy
+                                      register: policy
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.policy.yaml'
+
+                                    # https://cloud.google.com/run/docs/authenticating/public
+                                    - name: fill policy
+                                      ansible.builtin.copy:
+                                          dest: '{{ policy.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                          vars:
+                                              manifest:
+                                                  bindings:
+                                                      - members:
+                                                            - allUsers
+                                                        role: roles/run.invoker
+
+                                    - name: apply policy
+                                      shell: 'gcloud run services set-iam-policy {{ SELF.application_name }} {{ policy.path }} --quiet'
+
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: activate service account
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
+
+                                    # https://cloud.google.com/sdk/gcloud/reference/run/services/delete
+                                    - name: create app
+                                      shell: 'gcloud run services delete {{ SELF.application_name }} --quiet'
+
+    ###################################################
+    #
+    # Terraform GCP
+    #
+    ###################################################
+
+    frontend.service.terraform.gcp:
+        derived_from: frontend.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['{{ SELF.application_name }}', '{{ SELF.application_port }}']}
+
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    outputs:
+                        application_address: application_address
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        output:
+                            management_address:
+                                - value: '${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
+                        resource:
+                            google_cloud_run_service_iam_binding:
+                                application:
+                                    - location: '{{ SELF.gcp_region }}'
+                                      members:
+                                          - allUsers
+                                      role: roles/run.invoker
+                                      service: '{{ SELF.application_name }}'
+                            google_cloud_run_v2_service:
+                                application:
+                                    - ingress: INGRESS_TRAFFIC_ALL
+                                      location: '{{ SELF.gcp_region }}'
+                                      name: '{{ SELF.application_name }}'
+                                      template:
+                                          - containers:
+                                                - image: '{{ SELF.application_image }}'
+                                                  ports:
+                                                      - name: h2c
+                                                        container_port: '{{ SELF.application_port }}'
+                                                  env:
+                                                      - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                        value: '{{ SELF.product_address }}'
+                                                      - name: PRODUCT_CATALOG_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: CURRENCY_SERVICE_ADDR
+                                                        value: '{{ SELF.currency_address }}'
+                                                      - name: CURRENCY_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: CART_SERVICE_ADDR
+                                                        value: '{{ SELF.cart_address }}'
+                                                      - name: CART_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: RECOMMENDATION_SERVICE_ADDR
+                                                        value: '{{ SELF.recommendation_address }}'
+                                                      - name: RECOMMENDATION_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: SHIPPING_SERVICE_ADDR
+                                                        value: '{{ SELF.shipping_address }}'
+                                                      - name: SHIPPING_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: CHECKOUT_SERVICE_ADDR
+                                                        value: '{{ SELF.checkout_address }}'
+                                                      - name: CHECKOUT_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: AD_SERVICE_ADDR
+                                                        value: '{{ SELF.advertisement_address }}'
+                                                      - name: AD_SERVICE_SECURE
+                                                        value: '1'
+                                                      - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+                                                        value: required-but-not-used
+                                                      - name: ENABLE_PROFILER
+                                                        value: '0'
+                                                      - name: ENV_PLATFORM
+                                                        value: gcp
+                                                      - name: OPTIONAL_PAYMENT_FEATURE
+                                                        value: '1'
+                                                      - name: PREMIUM_PAYMENT_FEATURE
+                                                        value: '0'
 
     ###################################################
     #
@@ -167,8 +418,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: this
-
     frontend.service.terraform.docker:
         derived_from: frontend.service
 
@@ -188,7 +437,50 @@ node_types:
                             primary: Terraform
             defaults:
                 inputs:
-                    main: |
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                        provider:
+                            docker:
+                                - host: 'ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_key_file }}:22'
+                                  ssh_opts:
+                                      - '-o IdentitiesOnly=yes'
+                                      - '-o BatchMode=yes'
+                                      - '-o UserKnownHostsFile=/dev/null'
+                                      - '-o StrictHostKeyChecking=no'
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - 'PORT={{ SELF.application_port }}'
+                                          - 'PRODUCT_CATALOG_SERVICE_ADDR={{ SELF.product_address }}'
+                                          - 'PRODUCT_CATALOG_SERVICE_SECURE=0'
+                                          - 'CURRENCY_SERVICE_ADDR={{ SELF.currency_address }}'
+                                          - 'CURRENCY_SERVICE_SECURE=0'
+                                          - 'CART_SERVICE_ADDR={{ SELF.cart_address }}'
+                                          - 'CART_SERVICE_SECURE=0'
+                                          - 'RECOMMENDATION_SERVICE_ADDR={{ SELF.recommendation_address }}'
+                                          - 'RECOMMENDATION_SERVICE_SECURE=0'
+                                          - 'SHIPPING_SERVICE_ADDR={{ SELF.shipping_address }}'
+                                          - 'SHIPPING_SERVICE_SECURE=0'
+                                          - 'CHECKOUT_SERVICE_ADDR={{ SELF.checkout_address }}'
+                                          - 'CHECKOUT_SERVICE_SECURE=0'
+                                          - 'AD_SERVICE_ADDR={{ SELF.advertisement_address }}'
+                                          - 'AD_SERVICE_SECURE=0'
+                                          - "SHOPPING_ASSISTANT_SERVICE_ADDR='required-but-not-used"
+                                          - 'ENABLE_PROFILER=0'
+                                          - 'ENV_PLATFORM=oslarge'
+                                          - 'OPTIONAL_PAYMENT_FEATURE=1'
+                                          - 'PREMIUM_PAYMENT_FEATURE=0'
+                                      image: '${docker_image.image.image_id}'
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ SELF.application_image }}'
 
     ###################################################
     #
@@ -226,17 +518,16 @@ node_types:
                                     - name: wait for ssh
                                       wait_for_connection:
 
-                                    - name: create file
+                                    - name: touch compose
                                       register: compose
                                       ansible.builtin.tempfile:
                                           suffix: '{{ SELF.application_name }}.compose.yaml'
                                           state: directory
 
-                                    - name: create manifest
-                                      register: manifest
+                                    - name: create compose
                                       ansible.builtin.copy:
                                           dest: '{{ compose.path }}'
-                                          content: |
+                                          content: '{{ manifest | to_yaml }}'
                                           vars:
                                               compose:
                                                   version: '3.8'
@@ -266,9 +557,9 @@ node_types:
                                                               OPTIONAL_PAYMENT_FEATURE: 1
                                                               PREMIUM_PAYMENT_FEATURE: 0
 
-                                    - name: apply manifest
+                                    - name: apply compose
                                       shell: |
-                                          docker compose up -f {{ manifest.path }} -d
+                                          docker compose up -f {{ compose.path }} -d
                                       args:
                                           executable: /usr/bin/bash
 
@@ -583,7 +874,7 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: create temporary file
+                                    - name: touch manifest
                                       register: manifest
                                       ansible.builtin.tempfile:
                                           suffix: '{{ SELF.application_name }}.manifest.yaml'
