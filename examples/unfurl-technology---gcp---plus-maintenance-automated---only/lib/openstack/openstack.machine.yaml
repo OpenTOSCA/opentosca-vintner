@@ -180,96 +180,47 @@ node_types:
                 outputs:
                     management_address: management_address
                 inputs:
-                    tfvars: |
-                        os_region_name = "{{ SELF.os_region_name }}"
-                        os_auth_url = "{{ SELF.os_auth_url }}"
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - openstack:
+                                        source: terraform-provider-openstack/openstack
+                                        version: ~> 1.48.0
+                              required_version: '>= 0.14.0'
+                        provider:
+                            openstack:
+                                - application_credential_id: '{{ SELF.os_application_credential_id }}'
+                                  application_credential_secret: '{{ SELF.os_application_credential_secret }}'
+                                  auth_url: '{{ SELF.os_auth_url }}'
+                                  region: '{{ SELF.os_region_name }}'
+                        output:
+                            management_address:
+                                - value: ${yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)}
 
-                        os_application_credential_id = "{{ SELF.os_application_credential_id }}"
-                        os_application_credential_secret = "{{ SELF.os_application_credential_secret }}"
+                        resource:
+                            openstack_compute_instance_v2:
+                                machine:
+                                    - flavor_name: '{{ SELF.flavor }}'
+                                      image_name: Ubuntu 22.04
+                                      key_pair: default
+                                      name: '{{ SELF.machine }}'
+                                      network:
+                                          - name: '{{ SELF.network }}'
+                                      security_groups:
+                                          - default
+                                          - '${openstack_networking_secgroup_v2.ports.name}'
 
-                        ports = {{ SELF.ports | join("::") | split("::") | map("int") }}
-                        machine = "{{ SELF.machine }}"
-                        flavor = "{{ SELF.flavor }}"
-                        network = "{{ SELF.network }}"
-                    main: |
-                        terraform {
-                        required_version = ">= 0.14.0"
-                          required_providers {
-                            openstack = {
-                              source  = "terraform-provider-openstack/openstack"
-                              version = "~> 1.48.0"
-                            }
-                          }
-                        }
+                            openstack_networking_secgroup_rule_v2:
+                                port:
+                                    - direction: ingress
+                                      ethertype: IPv4
+                                      for_each: ${toset("{{ SELF.ports | join('::') | split('::') | map('int') }}")}
+                                      port_range_max: ${each.value}
+                                      port_range_min: ${each.value}
+                                      protocol: tcp
+                                      remote_ip_prefix: 0.0.0.0/0
+                                      security_group_id: ${openstack_networking_secgroup_v2.ports.id}
 
-                        provider "openstack" {
-                          region = var.os_region_name
-                          auth_url = var.os_auth_url
-
-                          application_credential_id = var.os_application_credential_id
-                          application_credential_secret = var.os_application_credential_secret
-                        }
-
-                        variable "os_region_name" {
-                          type        = string
-                        }
-
-                        variable "os_auth_url" {
-                          type        = string
-                        }
-
-                        variable "os_application_credential_id" {
-                          type        = string
-                        }
-
-                        variable "os_application_credential_secret" {
-                          type        = string
-                        }
-
-                        variable "ports" {
-                          type        = list(string)
-                        }
-
-                        variable "machine" {
-                          type        = string
-                        }
-
-                        variable "flavor" {
-                          type        = string
-                        }
-
-                        variable "network" {
-                          type        = string
-                        }
-
-                        resource "openstack_networking_secgroup_v2" "ports" {
-                            name        = var.machine
-                        }
-
-                        resource "openstack_networking_secgroup_rule_v2" "port" {
-                            for_each = toset(var.ports)
-
-                            direction         = "ingress"
-                            ethertype         = "IPv4"
-                            protocol          = "tcp"
-                            port_range_min    = each.value
-                            port_range_max    = each.value
-                            remote_ip_prefix  = "0.0.0.0/0"
-                            security_group_id = openstack_networking_secgroup_v2.ports.id
-                        }
-
-                        resource "openstack_compute_instance_v2" "machine" {
-                          name            = var.machine
-                          image_name      = "Ubuntu 22.04"
-                          flavor_name     = var.flavor
-                          key_pair        = "default"
-                          security_groups = ["default", openstack_networking_secgroup_v2.ports.name]
-
-                          network {
-                            name = var.network
-                          }
-                        }
-
-                        output "management_address" {
-                          value = yamldecode(openstack_compute_instance_v2.machine.access_ip_v4)
-                        }
+                            openstack_networking_secgroup_v2:
+                                ports:
+                                    - name: '{{ SELF.machine }}'

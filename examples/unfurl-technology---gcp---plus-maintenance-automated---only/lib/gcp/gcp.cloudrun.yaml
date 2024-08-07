@@ -13,9 +13,84 @@ node_types:
     gcp.cloudrun:
         derived_from: gcp.service
 
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+            gcp_service:
+                type: string
+                default: 'sqladmin.googleapis.com'
+
         capabilities:
             host:
                 type: tosca.capabilities.Compute
 
-    # TODO: gcp.cloudrun.ansible.gcp
-    # TODO: gcp.cloudrun.terraform.gcp
+    ###################################################
+    #
+    # Ansible GCP
+    #
+    ###################################################
+
+    gcp.cloudrun.ansible.gcp:
+        derived_from: gcp.service
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                GCP_SERVICE_ACCOUNT_FILE: '{{ SELF.gcp_service_account_file }}'
+                                GCP_AUTH_KIND: 'serviceaccount'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: enable service
+                                      google.cloud.gcp_serviceusage_service:
+                                          name: '{{ SELF.gcp_service }}'
+
+    ###################################################
+    #
+    # Terraform GCP
+    #
+    ###################################################
+
+    gcp.cloudrun.terraform.gcp:
+        derived_from: gcp.service
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 4.67.0
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        resource:
+                            google_project_service:
+                                cloud_sql_admin:
+                                    - disable_on_destroy: false
+                                      project: '{{ SELF.gcp_project }}'
+                                      service: '{{ SELF.gcp_service }}'
