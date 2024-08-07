@@ -2,6 +2,24 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - checkout.service.yaml
+    - currency.service.yaml
+    - shipping.service.yaml
+    - cart.service.yaml
+    - product.service.yaml
+    - recommendation.service.yaml
+    - advertisement.service.yaml
+
+# TODO: get os_variant
+
+capability_types:
+    boutique.capabilities.Endpoint.Frontend:
+        description: The capability to provide a CAN endpoint.
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Frontend:
+        derived_from: tosca.relationships.ConnectsTo
 
 node_types:
     ###################################################
@@ -31,61 +49,69 @@ node_types:
                 default: milesstoetzner/boutique-frontend:v5
 
             checkout_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=checkout]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=checkout]::.target::application_address'}
 
             currency_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=currency]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=currency]::.target::application_address'}
 
             shipping_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=shipping]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=shipping]::.target::application_address'}
 
             cart_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=cart]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=cart]::.target::application_address'}
 
             product_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=product]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=product]::.target::application_address'}
 
             recommendation_address:
-                type: boolean
-                default: {eval: '.::.requirements[.name=recommendation]::.target::application_address'}
+                type: string
+                default: {eval: '.::.requirements::[.name=recommendation]::.target::application_address'}
+
+            advertisement_address:
+                type: string
+                default: {eval: '.::.requirements::[.name=advertisement]::.target::application_address'}
 
             optional_payment_feature:
                 type: boolean
-                default: {eval: '.::.requirements[.name=checkout]::.target::optional_payment_feature'}
+                default: {eval: '.::.requirements::[.name=checkout]::.target::optional_payment_feature'}
 
             premium_payment_feature:
                 type: boolean
-                default: {eval: '.::.requirements[.name=checkout]::.target::premium_payment_feature'}
+                default: {eval: '.::.requirements::[.name=checkout]::.target::premium_payment_feature'}
+
+        capabilities:
+            frontend:
+                type: boutique.capabilities.Endpoint.Frontend
 
         requirements:
             - checkout:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Checkout
+                  relationship: boutique.relationships.ConnectsTo.Checkout
 
             - currency:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Currency
+                  relationship: boutique.relationships.ConnectsTo.Currency
 
             - shipping:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Shipping
+                  relationship: boutique.relationships.ConnectsTo.Shipping
 
             - cart:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Cart
+                  relationship: boutique.relationships.ConnectsTo.Cart
 
             - product:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Product
+                  relationship: boutique.relationships.ConnectsTo.Product
 
             - recommendation:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Recommendation
+                  relationship: boutique.relationships.ConnectsTo.Recommendation
 
     ###################################################
     #
@@ -240,7 +266,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['{{ SELF.application_name }}', '{{ SELF.application_port }}']}
+                default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
 
         properties:
             gcp_service_account_file:
@@ -353,7 +379,7 @@ node_types:
         properties:
             os_variant:
                 type: string
-                default: {concat: [{get_input: en}, {get_input: tier}]}
+                default: 'not implemented'
 
             os_ssh_user:
                 type: string
@@ -366,7 +392,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['localhost', '{{ SELF.application_port }}']}
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
 
         interfaces:
             Standard:
@@ -375,11 +401,13 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: False
                         inputs:
                             playbook:
                                 q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
+                                    #- name: wait for ssh
+                                    #  wait_for_connection:
 
                                     - name: start container
                                       community.docker.docker_container:
@@ -410,9 +438,9 @@ node_types:
 
                             playbookArgs:
                                 - --become
-                                - --key-file={{ SELF.ssh_key_file }}
-                                - --user={{ SELF.ssh_user }}
-                                - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+                                - --key-file={{ SELF.os_ssh_key_file }}
+                                - --user={{ SELF.os_ssh_user }}
+                    delete: exit 0
 
     ###################################################
     #
@@ -426,7 +454,7 @@ node_types:
         properties:
             os_variant:
                 type: string
-                default: {concat: [{get_input: en}, {get_input: tier}]}
+                default: 'not implemented'
 
             os_ssh_user:
                 type: string
@@ -439,7 +467,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['localhost', '{{ SELF.application_port }}']}
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
 
         interfaces:
             Standard:
@@ -509,7 +537,7 @@ node_types:
         properties:
             os_variant:
                 type: string
-                default: {concat: [{get_input: en}, {get_input: tier}]}
+                default: 'not implemented'
 
             os_ssh_user:
                 type: string
@@ -522,7 +550,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['localhost', '{{ SELF.application_port }}']}
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
 
         interfaces:
             Standard:
@@ -531,62 +559,64 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: False
                         inputs:
                             playbook:
                                 q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
+                                    # TODO: enable this again everywhere
+                                    #- name: wait for ssh
+                                    #  wait_for_connection:
 
                                     - name: touch compose
                                       register: compose
                                       ansible.builtin.tempfile:
                                           suffix: '{{ SELF.application_name }}.compose.yaml'
-                                          state: directory
 
                                     - name: create compose
                                       ansible.builtin.copy:
                                           dest: '{{ compose.path }}'
                                           content: '{{ manifest | to_yaml }}'
-                                          vars:
-                                              compose:
-                                                  version: '3.8'
-                                                  services:
-                                                      application:
-                                                          container_name: '{{ SELF.application_name }}'
-                                                          network_mode: host
-                                                          environment:
-                                                              PORT: '{{ SELF.application_port }}'
-                                                              PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
-                                                              PRODUCT_CATALOG_SERVICE_SECURE: 0
-                                                              CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
-                                                              CURRENCY_SERVICE_SECURE: 0
-                                                              CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
-                                                              CART_SERVICE_SECURE: 0
-                                                              RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
-                                                              RECOMMENDATION_SERVICE_SECURE: 0
-                                                              SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
-                                                              SHIPPING_SERVICE_SECURE: 0
-                                                              CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
-                                                              CHECKOUT_SERVICE_SECURE: 0
-                                                              AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
-                                                              AD_SERVICE_SECURE: 0
-                                                              SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                                              ENABLE_PROFILER: 0
-                                                              ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
-                                                              OPTIONAL_PAYMENT_FEATURE: 1
-                                                              PREMIUM_PAYMENT_FEATURE: 0
+                                      vars:
+                                          manifest:
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ SELF.application_image }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '{{ SELF.application_port }}'
+                                                          PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
+                                                          PRODUCT_CATALOG_SERVICE_SECURE: 0
+                                                          CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
+                                                          CURRENCY_SERVICE_SECURE: 0
+                                                          CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
+                                                          CART_SERVICE_SECURE: 0
+                                                          RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
+                                                          RECOMMENDATION_SERVICE_SECURE: 0
+                                                          SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
+                                                          SHIPPING_SERVICE_SECURE: 0
+                                                          CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
+                                                          CHECKOUT_SERVICE_SECURE: 0
+                                                          AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
+                                                          AD_SERVICE_SECURE: 0
+                                                          SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
+                                                          ENABLE_PROFILER: 0
+                                                          ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
+                                                          OPTIONAL_PAYMENT_FEATURE: 1
+                                                          PREMIUM_PAYMENT_FEATURE: 0
 
                                     - name: apply compose
                                       shell: |
-                                          docker compose up -f {{ compose.path }} -d
+                                          docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
 
                             playbookArgs:
                                 - --become
-                                - --key-file={{ SELF.ssh_key_file }}
-                                - --user={{ SELF.ssh_user }}
-                                - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+                                - --key-file={{ SELF.os_ssh_key_file }}
+                                - --user={{ SELF.os_ssh_user }}
+                    delete: exit 0
 
     ###################################################
     #
@@ -621,7 +651,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['{{ SELF.application_name }}', '{{ SELF.application_port }}']}
+                default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
 
         interfaces:
             Standard:
@@ -736,6 +766,7 @@ node_types:
                                                   selector:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
+                    delete: exit 0
 
     ###################################################
     #
@@ -749,7 +780,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['{{ SELF.application_name }}', '{{ SELF.application_port }}']}
+                default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
 
         properties:
             k8s_api_address:
@@ -881,7 +912,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {concat: ['{{ SELF.application_name }}', '{{ SELF.application_port }}']}
+                default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
 
         interfaces:
             Standard:
@@ -897,7 +928,6 @@ node_types:
                                       register: manifest
                                       ansible.builtin.tempfile:
                                           suffix: '{{ SELF.application_name }}.manifest.yaml'
-                                          state: present
 
                                     - name: create manifest
                                       register: manifest
@@ -1009,3 +1039,4 @@ node_types:
                                           kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s
                                       args:
                                           executable: /usr/bin/bash
+                    delete: exit 0

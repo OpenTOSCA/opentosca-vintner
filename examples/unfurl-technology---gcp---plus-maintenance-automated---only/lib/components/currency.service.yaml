@@ -3,6 +3,14 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+capability_types:
+    boutique.capabilities.Endpoint.Currency:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Currency:
+        derived_from: tosca.relationships.ConnectsTo
+
 node_types:
     ###################################################
     #
@@ -13,9 +21,30 @@ node_types:
     currency.service:
         derived_from: node.application
 
+        properties:
+            application_name:
+                type: string
+                default: currency
+
+            application_port:
+                type: string
+                default: 7004
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-currency:v5
+
         attributes:
             application_address:
                 type: string
+
+        capabilities:
+            currency:
+                type: boutique.capabilities.Endpoint.Currency
 
         requirements:
             - host:
@@ -32,3 +61,23 @@ node_types:
     # TODO: currency.service.ansible.kubernetes
     # TODO: currency.service.terraform.kubernetes
     # TODO. currency.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    currency.service.docker.docker:
+        derived_from: currency.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

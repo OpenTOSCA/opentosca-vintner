@@ -2,6 +2,8 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - checkout.service.yaml
+    - recommendation.service.yaml
 
 node_types:
     ###################################################
@@ -13,18 +15,35 @@ node_types:
     analytical.service:
         derived_from: python.application
 
+        properties:
+            application_name:
+                type: string
+                default: analytical
+
+            application_port:
+                type: string
+                default: 7001
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-analytical:v5
+
         attributes:
             application_address:
                 type: string
 
         requirements:
             - checkout:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Checkout
+                  relationship: boutique.relationships.ConnectsTo.Checkout
 
             - recommendation:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Recommendation
+                  relationship: boutique.relationships.ConnectsTo.Recommendation
 
             - host:
                   capability: tosca.capabilities.Compute
@@ -40,3 +59,23 @@ node_types:
     # TODO: analytical.service.ansible.kubernetes
     # TODO: analytical.service.terraform.kubernetes
     # TODO. analytical.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    analytical.service.docker.docker:
+        derived_from: analytical.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

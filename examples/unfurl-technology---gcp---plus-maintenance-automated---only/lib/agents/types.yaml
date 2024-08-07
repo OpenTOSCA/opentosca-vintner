@@ -1,0 +1,6 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - logging.agent.yaml
+    - monitoring.agent.yaml
+    - security.agent.yaml

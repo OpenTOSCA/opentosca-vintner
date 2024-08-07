@@ -18,7 +18,17 @@ node_types:
 
     software.application:
         derived_from: root
+        attributes:
+            application_address:
+                type: string
 
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    go.application:
+        derived_from: software.application
         properties:
             application_name:
                 type: string
@@ -32,29 +42,92 @@ node_types:
             application_image:
                 type: string
 
-        attributes:
-            application_address:
-                type: string
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
-    go.application:
-        derived_from: software.application
-
     python.application:
         derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
 
     node.application:
         derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
 
     dotnet.application:
         derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
 
     java.application:
         derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    ###################################################
+    #
+    # Compute
+    #
+    ###################################################
+
+    compute:
+        derived_from: root
+
+    ###################################################
+    #
+    # Database
+    #
+    ###################################################
+
+    database:
+        derived_from: root
+
+    relational.database:
+        derived_from: database
+
+    dbms:
+        derived_from: root
+
+    relational.dbms:
+        derived_from: dbms
 
     ###################################################
     #

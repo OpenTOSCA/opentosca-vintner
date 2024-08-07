@@ -43,11 +43,13 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: False
                         inputs:
                             playbook:
                                 q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
+                                    #- name: wait for ssh
+                                    #  wait_for_connection:
 
                                     # https://falco.org/docs/install-operate/installation
                                     # https://falco.org/docs/getting-started/falco-linux-quickstart
@@ -65,17 +67,15 @@ node_types:
 
                             playbookArgs:
                                 - --become
-                                - --key-file={{ SELF.ssh_key_file }}
-                                - --user={{ SELF.ssh_user }}
-                                - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+                                - --key-file={{ SELF.os_ssh_key_file }}
+                                - --user={{ SELF.os_ssh_user }}
+                    delete: exit 0
 
     ###################################################
     #
     # Terraform Openstack
     #
     ###################################################
-
-    # TODO: this
 
     security.agent.terraform.openstack:
         derived_from: security.agent
@@ -91,7 +91,7 @@ node_types:
 
             os_ssh_host:
                 type: string
-                default: {eval: '.::.requirements[.name=host]::.target::management_address'}
+                default: {eval: '.::.requirements::[.name=host]::.target::management_address'}
 
         interfaces:
             Standard:

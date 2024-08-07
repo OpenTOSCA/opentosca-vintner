@@ -59,6 +59,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                    delete: exit 0
 
     ###################################################
     #

@@ -82,7 +82,7 @@ topology_template:
         inputs:
             env:
                 type: string
-                default: DOCKER
+                default: OPENSTACK
 
             tier:
                 type: string
@@ -355,7 +355,7 @@ topology_template:
             type: openstack.machine
             properties:
                 - machine: unfurl-technology-gcp
-                - ports: [80, 3000, 8000]
+                - ports: [80, 3000, 8000, 9100]
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}

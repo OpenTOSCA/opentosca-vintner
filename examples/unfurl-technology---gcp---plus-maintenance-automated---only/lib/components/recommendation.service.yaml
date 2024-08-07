@@ -2,6 +2,15 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - product.service.yaml
+
+capability_types:
+    boutique.capabilities.Endpoint.Recommendation:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Recommendation:
+        derived_from: tosca.relationships.ConnectsTo
 
 node_types:
     ###################################################
@@ -13,14 +22,35 @@ node_types:
     recommendation.service:
         derived_from: python.application
 
+        properties:
+            application_name:
+                type: string
+                default: recommendation
+
+            application_port:
+                type: string
+                default: 7008
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-recommendation:v5
+
         attributes:
             application_address:
                 type: string
 
+        capabilities:
+            recommendation:
+                type: boutique.capabilities.Endpoint.Recommendation
+
         requirements:
             - product:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Product
+                  relationship: boutique.relationships.ConnectsTo.Product
 
             - host:
                   capability: tosca.capabilities.Compute
@@ -36,3 +66,23 @@ node_types:
     # TODO: recommendation.service.ansible.kubernetes
     # TODO: recommendation.service.terraform.kubernetes
     # TODO. recommendation.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    recommendation.service.docker.docker:
+        derived_from: recommendation.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

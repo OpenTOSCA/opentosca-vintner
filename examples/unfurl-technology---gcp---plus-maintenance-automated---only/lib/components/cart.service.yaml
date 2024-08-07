@@ -3,6 +3,14 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+capability_types:
+    boutique.capabilities.Endpoint.Cart:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Cart:
+        derived_from: tosca.relationships.ConnectsTo
+
 node_types:
     ###################################################
     #
@@ -13,9 +21,31 @@ node_types:
     cart.service:
         derived_from: dotnet.application
 
+        properties:
+            application_name:
+                type: string
+                default: cart
+
+            # TODO: make this configurable
+            application_port:
+                type: string
+                default: 7070
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-cart:v5
+
         attributes:
             application_address:
                 type: string
+
+        capabilities:
+            cart:
+                type: boutique.capabilities.Endpoint.Cart
 
         requirements:
             - database:
@@ -36,3 +66,23 @@ node_types:
     # TODO: cart.service.ansible.kubernetes
     # TODO: cart.service.terraform.kubernetes
     # TODO. cart.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    cart.service.docker.docker:
+        derived_from: cart.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

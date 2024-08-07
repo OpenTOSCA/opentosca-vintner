@@ -64,7 +64,7 @@ topology_template:
         inputs:
             env:
                 type: string
-                default: DOCKER
+                default: OPENSTACK
 
             tier:
                 type: string

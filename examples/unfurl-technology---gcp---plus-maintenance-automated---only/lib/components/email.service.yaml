@@ -3,6 +3,14 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+capability_types:
+    boutique.capabilities.Endpoint.Email:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Email:
+        derived_from: tosca.relationships.ConnectsTo
+
 node_types:
     ###################################################
     #
@@ -13,9 +21,30 @@ node_types:
     email.service:
         derived_from: python.application
 
+        properties:
+            application_name:
+                type: string
+                default: email
+
+            application_port:
+                type: string
+                default: 7005
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-email:v5
+
         attributes:
             application_address:
                 type: string
+
+        capabilities:
+            email:
+                type: boutique.capabilities.Endpoint.Email
 
         requirements:
             - host:
@@ -32,3 +61,23 @@ node_types:
     # TODO: email.service.ansible.kubernetes
     # TODO: email.service.terraform.kubernetes
     # TODO. email.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    email.service.docker.docker:
+        derived_from: email.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

@@ -14,7 +14,8 @@ node_types:
         derived_from: relational.dbms
 
         properties:
-            dbms_name: string
+            dbms_name:
+                type: string
 
             dbms_password:
                 type: string
@@ -67,11 +68,13 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: False
                         inputs:
                             playbook:
                                 q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
+                                    #- name: wait for ssh
+                                    #  wait_for_connection:
 
                                     - name: Create file
                                       copy:
@@ -126,7 +129,30 @@ node_types:
                             playbookArgs:
                                 - --key-file={{ SELF.os_ssh_key_file }}
                                 - --user={{ SELF.os_ssh_user }}
-                                - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
     # TODO: mysql.dbms.terraform.kubernetes
     # TODO: mysql.dbms.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    mysql.dbms.docker.docker:
+        derived_from: mysql.dbms
+
+        attributes:
+            application_address:
+                type: string
+                default: mysql
+
+            application_port:
+                type: integer
+                default: 3306
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

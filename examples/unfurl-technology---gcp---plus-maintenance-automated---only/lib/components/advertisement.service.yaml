@@ -3,6 +3,14 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+capability_types:
+    boutique.capabilities.Endpoint.Advertisement:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Advertisement:
+        derived_from: tosca.relationships.ConnectsTo
+
 node_types:
     ###################################################
     #
@@ -13,9 +21,30 @@ node_types:
     advertisement.service:
         derived_from: java.application
 
+        properties:
+            application_name:
+                type: string
+                default: advertisement
+
+            application_port:
+                type: string
+                default: 7000
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-advertisement:v5
+
         attributes:
             application_address:
                 type: string
+
+        capabilities:
+            advertisement:
+                type: boutique.capabilities.Endpoint.Advertisement
 
         requirements:
             - host:
@@ -32,3 +61,23 @@ node_types:
     # TODO: advertisement.service.ansible.kubernetes
     # TODO: advertisement.service.terraform.kubernetes
     # TODO. advertisement.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    advertisement.service.docker.docker:
+        derived_from: advertisement.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

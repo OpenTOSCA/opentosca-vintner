@@ -3,6 +3,14 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+capability_types:
+    boutique.capabilities.Endpoint.Product:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Product:
+        derived_from: tosca.relationships.ConnectsTo
+
 node_types:
     ###################################################
     #
@@ -13,9 +21,30 @@ node_types:
     product.service:
         derived_from: go.application
 
+        properties:
+            application_name:
+                type: string
+                default: product
+
+            application_port:
+                type: string
+                default: 7007
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-product:v5
+
         attributes:
             application_address:
                 type: string
+
+        capabilities:
+            product:
+                type: boutique.capabilities.Endpoint.Product
 
         requirements:
             - host:
@@ -32,3 +61,23 @@ node_types:
     # TODO: product.service.ansible.kubernetes
     # TODO: product.service.terraform.kubernetes
     # TODO. product.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    product.service.docker.docker:
+        derived_from: product.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

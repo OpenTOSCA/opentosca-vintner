@@ -26,11 +26,11 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {eval: '.::.requirements[.name=host]::.target::application_address'}
+                default: {eval: '.::.requirements::[.name=host]::.target::application_address'}
 
             application_port:
                 type: integer
-                default: {eval: '.::.requirements[.name=host]::.target::application_port'}
+                default: {eval: '.::.requirements::[.name=host]::.target::application_port'}
 
         capabilities:
             database:
@@ -54,3 +54,17 @@ node_types:
 
     # TODO: mysql.database.ansible.mysql.gcp
     # TODO: mysql.database.terraform.mysql.gcp
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    mysql.database.ansible.mysql.docker:
+        derived_from: mysql.database
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

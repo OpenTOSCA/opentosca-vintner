@@ -2,6 +2,20 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - email.service.yaml
+    - payment.service.yaml
+    - currency.service.yaml
+    - shipping.service.yaml
+    - cart.service.yaml
+    - product.service.yaml
+
+capability_types:
+    boutique.capabilities.Endpoint.Checkout:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Checkout:
+        derived_from: tosca.relationships.ConnectsTo
 
 node_types:
     ###################################################
@@ -14,42 +28,62 @@ node_types:
         derived_from: go.application
 
         properties:
+            application_name:
+                type: string
+                default: checkout
+
+            application_port:
+                type: string
+                default: 7003
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-checkout:v5
+
             optional_payment_feature:
                 type: boolean
-                default: {eval: '.::.requirements[.name=payment]::.target::optional_payment_feature'}
+                default: {eval: '.::.requirements::[.name=payment]::.target::optional_payment_feature'}
 
             premium_payment_feature:
                 type: boolean
-                default: {eval: '.::.requirements[.name=payment]::.target::premium_payment_feature'}
+                default: {eval: '.::.requirements::[.name=payment]::.target::premium_payment_feature'}
 
         attributes:
             application_address:
                 type: string
 
+        capabilities:
+            cart:
+                type: boutique.capabilities.Endpoint.Checkout
+
         requirements:
             - email:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Email
+                  relationship: boutique.relationships.ConnectsTo.Email
 
             - payment:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Payment
+                  relationship: boutique.relationships.ConnectsTo.Payment
 
             - currency:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Currency
+                  relationship: boutique.relationships.ConnectsTo.Currency
 
             - shipping:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Shipping
+                  relationship: boutique.relationships.ConnectsTo.Shipping
 
             - cart:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Cart
+                  relationship: boutique.relationships.ConnectsTo.Cart
 
             - product:
-                  capability: tosca.capabilities.Root
-                  relationship: tosca.relationships.ConnectsTo
+                  capability: boutique.capabilities.Endpoint.Product
+                  relationship: boutique.relationships.ConnectsTo.Product
 
             - host:
                   capability: tosca.capabilities.Compute
@@ -65,3 +99,23 @@ node_types:
     # TODO: checkout.service.ansible.kubernetes
     # TODO: checkout.service.terraform.kubernetes
     # TODO. checkout.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    checkout.service.docker.docker:
+        derived_from: checkout.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0
