@@ -5,7 +5,7 @@ Modifications made by the University of Stuttgart:
 - Project: Initialized the project by copying the original `src`
 - Frontend, Checkout, Recommendation: use TLS for gRPC depending on env variables (requires base image with root certificates)
 - Frontend, Checkout, Payment: mock optional and premium feature
-- Frontend: add "OS Medium" and "OS Large" to platform envs
+- Frontend: add "OS Medium", "OS Large", and "Kuberenets" as platforms
 - Cart: added MySQL support following https://github.com/GoogleCloudPlatform/microservices-demo/pull/1836/files extended by the creation of the database table inside the code and the conditional use of SSL
 - Analytical: added "Analytical Service" by copying "Recommendation" and adpating it
 - Loadgenerator: added TLS support

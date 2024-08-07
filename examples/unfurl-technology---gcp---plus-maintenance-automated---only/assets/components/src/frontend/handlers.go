@@ -56,7 +56,7 @@ var (
 	plat platformDetails
 )
 
-var validEnvs = []string{"local", "osmedium", "oslarge", "gcp", "azure", "aws", "onprem", "alibaba"}
+var validEnvs = []string{"local", "openstackmedium", "openstacklarge", "kubernetes", "gcp", "azure", "aws", "onprem", "alibaba"}
 
 func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
@@ -93,6 +93,7 @@ func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Set ENV_PLATFORM (default to local if not set; use env var if set; otherwise detect GCP, which overrides env)_
 	var env = os.Getenv("ENV_PLATFORM")
+	env = strings.ToLower(env)
 
 	// Only override from env variable if set + valid env
 	if env == "" || stringinSlice(validEnvs, env) == false {
@@ -130,11 +131,14 @@ func (plat *platformDetails) setPlatformDetails(env string) {
 	} else if env == "onprem" {
 		plat.provider = "On-Premises"
 		plat.css = "onprem-platform"
-	} else if env == "osmedium" {
-		plat.provider = "OS Medium"
+	} else if env == "openstackmedium" {
+		plat.provider = "Openstack Medium"
 		plat.css = "onprem-platform"
-	} else if env == "oslarge" {
-		plat.provider = "OS Large"
+	} else if env == "openstacklarge" {
+		plat.provider = "Openstack Large"
+		plat.css = "local"
+	} else if env == "kubernetes" {
+		plat.provider = "Kubernetes"
 		plat.css = "local"
 	} else if env == "azure" {
 		plat.provider = "Azure"

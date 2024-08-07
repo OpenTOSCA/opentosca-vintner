@@ -3,8 +3,6 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
-# TODO: how to know "osmedium" vs "oslarge"?!
-
 node_types:
     ###################################################
     #
@@ -30,7 +28,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-frontend:latest
+                default: milesstoetzner/boutique-frontend:v5
 
             checkout_address:
                 type: boolean
@@ -353,6 +351,10 @@ node_types:
         derived_from: frontend.service
 
         properties:
+            os_variant:
+                type: string
+                default: {concat: [{get_input: en}, {get_input: tier}]}
+
             os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -402,7 +404,7 @@ node_types:
                                               AD_SERVICE_SECURE: 0
                                               SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                               ENABLE_PROFILER: 0
-                                              ENV_PLATFORM: oslarge
+                                              ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
                                               OPTIONAL_PAYMENT_FEATURE: 1
                                               PREMIUM_PAYMENT_FEATURE: 0
 
@@ -420,6 +422,19 @@ node_types:
 
     frontend.service.terraform.docker:
         derived_from: frontend.service
+
+        properties:
+            os_variant:
+                type: string
+                default: {concat: [{get_input: en}, {get_input: tier}]}
+
+            os_ssh_user:
+                type: string
+                default: {get_input: os_ssh_user}
+
+            os_ssh_key_file:
+                type: string
+                default: {get_input: os_ssh_key_file}
 
         attributes:
             application_address:
@@ -472,7 +487,7 @@ node_types:
                                           - 'AD_SERVICE_SECURE=0'
                                           - "SHOPPING_ASSISTANT_SERVICE_ADDR='required-but-not-used"
                                           - 'ENABLE_PROFILER=0'
-                                          - 'ENV_PLATFORM=oslarge'
+                                          - 'ENV_PLATFORM={{ SELF.os_variant | lower }}'
                                           - 'OPTIONAL_PAYMENT_FEATURE=1'
                                           - 'PREMIUM_PAYMENT_FEATURE=0'
                                       image: '${docker_image.image.image_id}'
@@ -492,6 +507,10 @@ node_types:
         derived_from: frontend.service
 
         properties:
+            os_variant:
+                type: string
+                default: {concat: [{get_input: en}, {get_input: tier}]}
+
             os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -553,7 +572,7 @@ node_types:
                                                               AD_SERVICE_SECURE: 0
                                                               SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                                               ENABLE_PROFILER: 0
-                                                              ENV_PLATFORM: oslarge
+                                                              ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
                                                               OPTIONAL_PAYMENT_FEATURE: 1
                                                               PREMIUM_PAYMENT_FEATURE: 0
 
