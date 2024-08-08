@@ -119,6 +119,8 @@ node_types:
     #
     ###################################################
 
+    # TODO: test this
+
     shop.component.ansible.gcp:
         derived_from: shop.component
 
@@ -208,13 +210,13 @@ node_types:
                                                                         - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                           value: required-but-not-used
                                                                         - name: ENABLE_PROFILER
-                                                                          value: '0'
+                                                                          value: '{{ "0" | quote }}'
                                                                         - name: ENV_PLATFORM
                                                                           value: gcp
                                                                         - name: OPTIONAL_PAYMENT_FEATURE
-                                                                          value: '1'
+                                                                          value: '{{ SELF.optional_payment_feature | string }}'
                                                                         - name: PREMIUM_PAYMENT_FEATURE
-                                                                          value: '0'
+                                                                          value: '{{ SELF.premium_payment_feature | string }}'
 
                                     # https://cloud.google.com/sdk/gcloud/reference/run/services/replace
                                     - name: apply service
@@ -259,6 +261,8 @@ node_types:
     # Terraform GCP
     #
     ###################################################
+
+    # TODO: test this
 
     frontend.service.terraform.gcp:
         derived_from: frontend.service
@@ -359,13 +363,13 @@ node_types:
                                                       - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                         value: required-but-not-used
                                                       - name: ENABLE_PROFILER
-                                                        value: '0'
+                                                        value: '{{ "0" | quote }}'
                                                       - name: ENV_PLATFORM
                                                         value: gcp
                                                       - name: OPTIONAL_PAYMENT_FEATURE
-                                                        value: '1'
+                                                        value: '{{ SELF.optional_payment_feature | string }}'
                                                       - name: PREMIUM_PAYMENT_FEATURE
-                                                        value: '0'
+                                                        value: '{{ SELF.premium_payment_feature | string }}'
 
     ###################################################
     #
@@ -415,26 +419,26 @@ node_types:
                                           image: '{{ SELF.application_image }}'
                                           network_mode: host
                                           env:
-                                              PORT: '{{ SELF.application_port }}'
+                                              PORT: '{{ SELF.application_port | string }}'
                                               PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
-                                              PRODUCT_CATALOG_SERVICE_SECURE: 0
+                                              PRODUCT_CATALOG_SERVICE_SECURE: '{{ "0" | string }}'
                                               CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
-                                              CURRENCY_SERVICE_SECURE: 0
+                                              CURRENCY_SERVICE_SECURE: '{{ "0" | string }}'
                                               CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
-                                              CART_SERVICE_SECURE: 0
+                                              CART_SERVICE_SECURE: '{{ "0" | string }}'
                                               RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
-                                              RECOMMENDATION_SERVICE_SECURE: 0
+                                              RECOMMENDATION_SERVICE_SECURE: '{{ "0" | string }}'
                                               SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
-                                              SHIPPING_SERVICE_SECURE: 0
+                                              SHIPPING_SERVICE_SECURE: '{{ "0" | string }}'
                                               CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
-                                              CHECKOUT_SERVICE_SECURE: 0
+                                              CHECKOUT_SERVICE_SECURE: '{{ "0" | string }}'
                                               AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
-                                              AD_SERVICE_SECURE: 0
+                                              AD_SERVICE_SECURE: '{{ "0" | string }}'
                                               SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                              ENABLE_PROFILER: 0
+                                              ENABLE_PROFILER: '{{ "0" | string }}'
                                               ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
-                                              OPTIONAL_PAYMENT_FEATURE: 1
-                                              PREMIUM_PAYMENT_FEATURE: 0
+                                              OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
+                                              PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
                             playbookArgs:
                                 - --become
@@ -464,6 +468,10 @@ node_types:
                 type: string
                 default: {get_input: os_ssh_key_file}
 
+            os_ssh_host:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::management_address'}
+
         attributes:
             application_address:
                 type: string
@@ -488,12 +496,18 @@ node_types:
                                         version: 3.0.2
                         provider:
                             docker:
-                                - host: 'ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_key_file }}:22'
+                                - host: 'ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22'
                                   ssh_opts:
-                                      - '-o IdentitiesOnly=yes'
-                                      - '-o BatchMode=yes'
-                                      - '-o UserKnownHostsFile=/dev/null'
-                                      - '-o StrictHostKeyChecking=no'
+                                      - '-i'
+                                      - '{{ SELF.os_ssh_key_file }}'
+                                      - '-o'
+                                      - 'IdentitiesOnly=yes'
+                                      - '-o'
+                                      - 'BatchMode=yes'
+                                      - '-o'
+                                      - 'UserKnownHostsFile=/dev/null'
+                                      - '-o'
+                                      - 'StrictHostKeyChecking=no'
                         resource:
                             docker_container:
                                 application:
@@ -516,8 +530,8 @@ node_types:
                                           - "SHOPPING_ASSISTANT_SERVICE_ADDR='required-but-not-used"
                                           - 'ENABLE_PROFILER=0'
                                           - 'ENV_PLATFORM={{ SELF.os_variant | lower }}'
-                                          - 'OPTIONAL_PAYMENT_FEATURE=1'
-                                          - 'PREMIUM_PAYMENT_FEATURE=0'
+                                          - 'OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature | string }}'
+                                          - 'PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature }}'
                                       image: '${docker_image.image.image_id}'
                                       name: '{{ SELF.application_name }}'
                                       network_mode: host
@@ -584,26 +598,26 @@ node_types:
                                                       image: '{{ SELF.application_image }}'
                                                       network_mode: host
                                                       environment:
-                                                          PORT: '{{ SELF.application_port }}'
+                                                          PORT: '{{ SELF.application_port | string }}'
                                                           PRODUCT_CATALOG_SERVICE_ADDR: '{{ SELF.product_address }}'
-                                                          PRODUCT_CATALOG_SERVICE_SECURE: 0
+                                                          PRODUCT_CATALOG_SERVICE_SECURE: '{{ "0" | string }}'
                                                           CURRENCY_SERVICE_ADDR: '{{ SELF.currency_address }}'
-                                                          CURRENCY_SERVICE_SECURE: 0
+                                                          CURRENCY_SERVICE_SECURE: '{{ "0" | string }}'
                                                           CART_SERVICE_ADDR: '{{ SELF.cart_address }}'
-                                                          CART_SERVICE_SECURE: 0
+                                                          CART_SERVICE_SECURE: '{{ "0" | string }}'
                                                           RECOMMENDATION_SERVICE_ADDR: '{{ SELF.recommendation_address }}'
-                                                          RECOMMENDATION_SERVICE_SECURE: 0
+                                                          RECOMMENDATION_SERVICE_SECURE: '{{ "0" | string }}'
                                                           SHIPPING_SERVICE_ADDR: '{{ SELF.shipping_address }}'
-                                                          SHIPPING_SERVICE_SECURE: 0
+                                                          SHIPPING_SERVICE_SECURE: '{{ "0" | string }}'
                                                           CHECKOUT_SERVICE_ADDR: '{{ SELF.checkout_address }}'
-                                                          CHECKOUT_SERVICE_SECURE: 0
+                                                          CHECKOUT_SERVICE_SECURE: '{{ "0" | string }}'
                                                           AD_SERVICE_ADDR: '{{ SELF.advertisement_address }}'
-                                                          AD_SERVICE_SECURE: 0
+                                                          AD_SERVICE_SECURE: '{{ "0" | string }}'
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                                          ENABLE_PROFILER: 0
+                                                          ENABLE_PROFILER: '{{ "0" | string }}'
                                                           ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
-                                                          OPTIONAL_PAYMENT_FEATURE: 1
-                                                          PREMIUM_PAYMENT_FEATURE: 0
+                                                          OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
+                                                          PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
                                     - name: apply compose
                                       shell: |
@@ -622,6 +636,8 @@ node_types:
     # Ansible Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     frontend.service.ansible.kubernetes:
         derived_from: frontend.service
@@ -689,64 +705,64 @@ node_types:
                                                                 name: '{{ SELF.application_name }}'
                                                                 env:
                                                                     - name: PORT
-                                                                      value: '{{ SELF.application_port }}'
+                                                                      value: '{{ SELF.application_port | string }}'
 
                                                                     - name: PRODUCT_CATALOG_SERVICE_ADDR
                                                                       value: '{{ SELF.product_address }}'
 
                                                                     - name: PRODUCT_CATALOG_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: CURRENCY_SERVICE_ADDR
                                                                       value: '{{ SELF.currency_address }}'
 
                                                                     - name: CURRENCY_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: CART_SERVICE_ADDR
                                                                       value: '{{ SELF.cart_address }}'
 
                                                                     - name: CART_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: RECOMMENDATION_SERVICE_ADDR
                                                                       value: '{{ SELF.recommendation_address }}'
 
                                                                     - name: RECOMMENDATION_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: SHIPPING_SERVICE_ADDR
                                                                       value: '{{ SELF.shipping_address }}'
 
                                                                     - name: SHIPPING_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: CHECKOUT_SERVICE_ADDR
                                                                       value: '{{ SELF.checkout_address }}'
 
                                                                     - name: CHECKOUT_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: AD_SERVICE_ADDR
                                                                       value: '{{ SELF.advertisement_address }}'
 
                                                                     - name: AD_SERVICE_SECURE
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: 'required-but-not-used'
 
                                                                     - name: ENABLE_PROFILER
-                                                                      value: '0'
+                                                                      value: '{{ "0" | string }}'
 
                                                                     - name: ENV_PLATFORM
                                                                       value: 'kubernetes'
 
                                                                     - name: OPTIONAL_PAYMENT_FEATURE
-                                                                      value: '{{ SELF.feature_payment_optional }}'
+                                                                      value: '{{ SELF.optional_payment_feature | string }}'
 
                                                                     - name: PREMIUM_PAYMENT_FEATURE
-                                                                      value: '{{ SELF.premium_payment_feature }}'
+                                                                      value: '{{ SELF.premium_payment_feature | string }}'
 
                                                                 ports:
                                                                     - containerPort: '{{ SELF.application_port }}'
@@ -772,6 +788,8 @@ node_types:
     # Terraform Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     frontend.service.terraform.kubernetes:
         derived_from: frontend.service
@@ -847,41 +865,41 @@ node_types:
                                                                   - name: PRODUCT_CATALOG_SERVICE_ADDR
                                                                     value: '{{ SELF.product_address }}'
                                                                   - name: PRODUCT_CATALOG_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: CURRENCY_SERVICE_ADDR
                                                                     value: '{{ SELF.currency_address }}'
                                                                   - name: CURRENCY_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: CART_SERVICE_ADDR
                                                                     value: '{{ SELF.cart_address }}'
                                                                   - name: CART_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: RECOMMENDATION_SERVICE_ADDR
                                                                     value: '{{ SELF.recommendation_address }}'
                                                                   - name: RECOMMENDATION_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: SHIPPING_SERVICE_ADDR
                                                                     value: '{{ SELF.shipping_address }}'
                                                                   - name: SHIPPING_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: CHECKOUT_SERVICE_ADDR
                                                                     value: '{{ SELF.checkout_address }}'
                                                                   - name: CHECKOUT_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: AD_SERVICE_ADDR
                                                                     value: '{{ SELF.advertisement_address }}'
                                                                   - name: AD_SERVICE_SECURE
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                     value: required-but-not-used
                                                                   - name: ENABLE_PROFILER
-                                                                    value: '0'
+                                                                    value: '{{ "0" | string }}'
                                                                   - name: ENV_PLATFORM
                                                                     value: kubernetes
                                                                   - name: OPTIONAL_PAYMENT_FEATURE
-                                                                    value: '{{ SELF.feature_payment_optional }}'
+                                                                    value: '{{ SELF.optional_payment_feature | string }}'
                                                                   - name: PREMIUM_PAYMENT_FEATURE
-                                                                    value: '{{ SELF.premium_payment_feature }}'
+                                                                    value: '{{ SELF.premium_payment_feature | string }}'
                                                               image: '{{ SELF.application_image }}'
                                                               name: '{{ SELF.application_name }}'
                                                               port:
@@ -904,6 +922,8 @@ node_types:
     # Kubernetes Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     frontend.service.kubernetes.kubernetes:
         derived_from: frontend.service
@@ -956,64 +976,64 @@ node_types:
                                                                     name: '{{ SELF.application_name }}'
                                                                     env:
                                                                         - name: PORT
-                                                                          value: '{{ SELF.application_port }}'
+                                                                          value: '{{ SELF.application_port | string }}'
 
                                                                         - name: PRODUCT_CATALOG_SERVICE_ADDR
                                                                           value: '{{ SELF.product_address }}'
 
                                                                         - name: PRODUCT_CATALOG_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: CURRENCY_SERVICE_ADDR
                                                                           value: '{{ SELF.currency_address }}'
 
                                                                         - name: CURRENCY_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: CART_SERVICE_ADDR
                                                                           value: '{{ SELF.cart_address }}'
 
                                                                         - name: CART_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: RECOMMENDATION_SERVICE_ADDR
                                                                           value: '{{ SELF.recommendation_address }}'
 
                                                                         - name: RECOMMENDATION_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: SHIPPING_SERVICE_ADDR
                                                                           value: '{{ SELF.shipping_address }}'
 
                                                                         - name: SHIPPING_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: CHECKOUT_SERVICE_ADDR
                                                                           value: '{{ SELF.checkout_address }}'
 
                                                                         - name: CHECKOUT_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: AD_SERVICE_ADDR
                                                                           value: '{{ SELF.advertisement_address }}'
 
                                                                         - name: AD_SERVICE_SECURE
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                           value: 'required-but-not-used'
 
                                                                         - name: ENABLE_PROFILER
-                                                                          value: '0'
+                                                                          value: '{{ "0" | string }}'
 
                                                                         - name: ENV_PLATFORM
                                                                           value: 'kubernetes'
 
                                                                         - name: OPTIONAL_PAYMENT_FEATURE
-                                                                          value: '{{ SELF.feature_payment_optional }}'
+                                                                          value: '{{ SELF.optional_payment_feature | string }}'
 
                                                                         - name: PREMIUM_PAYMENT_FEATURE
-                                                                          value: '{{ SELF.premium_payment_feature }}'
+                                                                          value: '{{ SELF.premium_payment_feature | string }}'
 
                                                                     ports:
                                                                         - containerPort: '{{ SELF.application_port }}'

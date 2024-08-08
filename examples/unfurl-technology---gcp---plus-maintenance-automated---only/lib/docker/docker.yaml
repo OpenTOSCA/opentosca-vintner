@@ -61,7 +61,10 @@ node_types:
                                       wait_for_connection:
 
                                     - name: install docker
-                                      ansible.builtin.shell: curl -sSL https://get.docker.com | sh
+                                      ansible.builtin.shell: |
+                                          curl -sSL https://get.docker.com | sh
+                                          sudo groupadd -f docker
+                                          sudo usermod -aG docker {{ SELF.os_ssh_user }}
                                       args:
                                           executable: /usr/bin/bash
 
@@ -110,9 +113,10 @@ node_types:
                                             private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
-                                            sudo: true
                                       provisioner:
                                           remote-exec:
                                               - inline:
-                                                    - 'curl -sSL https://get.docker.com | sh'
+                                                    - 'curl -sSL https://get.docker.com | sudo sh'
+                                                    - 'sudo groupadd -f docker'
+                                                    - 'sudo usermod -aG docker {{ SELF.os_ssh_user }}'
                     delete: exit 0

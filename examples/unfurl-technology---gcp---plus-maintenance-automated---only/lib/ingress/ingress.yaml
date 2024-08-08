@@ -147,8 +147,7 @@ node_types:
                                 os:
                                     - connection:
                                           - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_user }}")}
-                                            sudo: true
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
@@ -160,23 +159,24 @@ node_types:
                                                     apt-get update
                                                     apt-get install caddy -y
 
-                                                    echo <<EOF > /etc/caddy/Caddyfile
-                                                    :80 {
-                                                            reverse_proxy localhost:{{ SELF.application_port }}
-                                                    }
-                                                    EOF
+                                                    echo > /etc/caddy/Caddyfile
+                                                    echo ":80 {" >> /etc/caddy/Caddyfile
+                                                    echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
+                                                    echo "}" >> /etc/caddy/Caddyfile
 
                                                     systemctl reload caddy
-                                                destination: /tmp/install-caddy.sh
+                                                destination: /tmp/install-ingress.sh
                                           remote-exec:
                                               - inline:
-                                                    - /tmp/install-promtail.sh
+                                                    - sudo bash /tmp/install-ingress.sh
 
     ###################################################
     #
     # Ansible Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     ingress.ansible.kubernetes:
         derived_from: ingress
@@ -244,6 +244,8 @@ node_types:
     # Terraform Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     ingress.terraform.kubernetes:
         derived_from: ingress
@@ -318,6 +320,8 @@ node_types:
     # Kubernetes Kubernetes
     #
     ###################################################
+
+    # TODO: test this
 
     ingress.kubernetes.kubernetes:
         derived_from: ingress

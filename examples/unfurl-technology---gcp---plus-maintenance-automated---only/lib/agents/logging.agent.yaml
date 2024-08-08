@@ -104,8 +104,7 @@ node_types:
                                 os:
                                     - connection:
                                           - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_user }}")}
-                                            sudo: true
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
@@ -117,7 +116,7 @@ node_types:
 
                                                     apt-get update
                                                     apt-get install promtail -y
-                                                destination: /tmp/install-promtail.sh
+                                                destination: /tmp/install-logging-agent.sh
                                           remote-exec:
                                               - inline:
-                                                    - /tmp/install-promtail.sh
+                                                    - sudo bash /tmp/install-logging-agent.sh

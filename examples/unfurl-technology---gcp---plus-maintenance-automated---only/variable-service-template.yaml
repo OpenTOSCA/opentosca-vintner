@@ -250,7 +250,7 @@ topology_template:
         mysql_dbms:
             type: mysql.dbms
             properties:
-                - dbms_name: cart
+                - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_runtime

@@ -117,7 +117,7 @@ node_types:
 
     # use https://registry.terraform.io/providers/neuspaces/system/latest/docs ?
 
-    logging.agent.terraform.openstack:
+    monitoring.agent.terraform.openstack:
         derived_from: monitoring.agent
 
         properties:
@@ -147,8 +147,7 @@ node_types:
                                 os:
                                     - connection:
                                           - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_user }}")}
-                                            sudo: true
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
@@ -180,7 +179,7 @@ node_types:
                                                     systemctl daemon-reload
                                                     systemctl enable node_exporter
                                                     systemctl start node_exporter
-                                                destination: /tmp/install-node-exporter.sh
+                                                destination: /tmp/install-monitoring-agent.sh
                                           remote-exec:
                                               - inline:
-                                                    - /tmp/install-node-exporter.sh
+                                                    - sudo bash /tmp/install-monitoring-agent.sh

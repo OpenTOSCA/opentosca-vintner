@@ -107,8 +107,7 @@ node_types:
                                 os:
                                     - connection:
                                           - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_user }}")}
-                                            sudo: true
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
                                             type: ssh
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
@@ -121,7 +120,7 @@ node_types:
                                                     apt-get update
                                                     apt-get install -y dkms make linux-headers-$(uname -r) dialog
                                                     FALCO_FRONTEND=noninteractive apt-get install -y falco
-                                                destination: /tmp/install-promtail.sh
+                                                destination: /tmp/install-security-agent.sh
                                           remote-exec:
                                               - inline:
-                                                    - /tmp/install-promtail.sh
+                                                    - sudo bash /tmp/install-security-agent.sh

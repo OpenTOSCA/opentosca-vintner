@@ -3,6 +3,9 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
     - ../base.yaml
 
+# TODO: improve this to exec into container? we assume that dbms is exposed on the docker host
+# TODO: add openstack suffix?
+
 node_types:
     ###################################################
     #
@@ -44,8 +47,6 @@ node_types:
     # TODO: mysql.database.ansible.mysql.openstack
     # TODO: mysql.database.terraform.mysql.openstack
 
-    # TODO: mysql.database.ansible.mysql.docker
-    # TODO: mysql.database.terraform.mysql.docker
     # TODO: mysql.database.docker.mysql.docker
 
     # TODO: mysql.database.ansible.mysql.kubernetes
@@ -61,9 +62,80 @@ node_types:
     #
     ###################################################
 
-    # TODO: improve this to exec into container? we assume that dbms is exposed on the docker host
+    mysql.database.terraform.mysql.docker:
+        derived_from: mysql.database
 
-    # TODO: add openstack suffix?
+        properties:
+            os_ssh_user:
+                type: string
+                default: {get_input: os_ssh_user}
+
+            os_ssh_key_file:
+                type: string
+                default: {get_input: os_ssh_key_file}
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - mysql:
+                                        source: petoju/mysql
+                                        version: 3.0.48
+                                    ssh:
+                                        source: AndrewChubatiuk/ssh
+                                        version: 0.2.3
+                        data:
+                            ssh_tunnel:
+                                mysql:
+                                    - remote:
+                                          port: 3306
+                        provider:
+                            mysql:
+                                - endpoint: ${data.ssh_tunnel.mysql.local.address}
+                                  password: '{{ HOST.dbms_password }}'
+                                  username: root
+                            ssh:
+                                - auth:
+                                      private_key:
+                                          content: '${file(pathexpand("{{ SELF.os_ssh_key_file }}"))}'
+                                  server:
+                                      host: '{{ HOST.management_address }}'
+                                      port: 22
+                                  user: '{{ SELF.os_ssh_user }}'
+                        resource:
+                            mysql_database:
+                                database:
+                                    - name: '{{ SELF.database_name }}'
+                            mysql_grant:
+                                user:
+                                    - database: '{{ SELF.database_name }}'
+                                      host: '%'
+                                      table: '*'
+                                      privileges:
+                                          - 'ALL'
+                                      user: '{{ SELF.database_user }}'
+                            mysql_user:
+                                user:
+                                    - host: '%'
+                                      plaintext_password: '{{ SELF.database_password }}'
+                                      user: '{{ SELF.database_user }}'
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
     mysql.database.ansible.mysql.docker:
         derived_from: mysql.database
 
