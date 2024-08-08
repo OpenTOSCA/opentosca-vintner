@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    shipping.service.docker.docker:
+    shipping.service.ansible.kubernetes:
         derived_from: shipping.service
 
         attributes:

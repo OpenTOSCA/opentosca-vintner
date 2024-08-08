@@ -55,10 +55,7 @@ topology_template:
         gcp_project:
             type: string
 
-        k8s_api_address:
-            type: string
-
-        k8s_api_port:
+        k8s_host:
             type: string
 
         k8s_ca_cert_file:
@@ -417,8 +414,7 @@ topology_template:
             type: kubernetes
             conditions: {logic_expression: is_kubernetes}
             properties:
-                - k8s_api_address: {get_input: k8s_api_address}
-                - k8s_api_port: {get_input: k8s_api_port}
+                - k8s_host: {get_input: k8s_host}
                 - k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
                 - k8s_client_cert_file: {get_input: k8s_client_cert_file}
                 - k8s_client_key_file: {get_input: k8s_client_key_file}

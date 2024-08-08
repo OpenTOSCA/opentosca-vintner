@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    email.service.docker.docker:
+    email.service.ansible.kubernetes:
         derived_from: email.service
 
         attributes:

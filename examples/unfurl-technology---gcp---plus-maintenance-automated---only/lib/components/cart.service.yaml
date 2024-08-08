@@ -73,7 +73,7 @@ node_types:
     #
     ###################################################
 
-    cart.service.docker.docker:
+    cart.service.ansible.kubernetes:
         derived_from: cart.service
 
         attributes:

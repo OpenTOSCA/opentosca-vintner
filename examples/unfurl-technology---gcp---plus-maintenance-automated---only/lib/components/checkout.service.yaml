@@ -106,7 +106,7 @@ node_types:
     #
     ###################################################
 
-    checkout.service.docker.docker:
+    checkout.service.ansible.kubernetes:
         derived_from: checkout.service
 
         attributes:

@@ -664,6 +664,7 @@ node_types:
                 default: {get_input: k8s_client_key_file}
 
         attributes:
+            # TODO: split this up and introduce application_port?
             application_address:
                 type: string
                 default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
@@ -676,10 +677,10 @@ node_types:
                             primary: Ansible
                             operation_host: ORCHESTRATOR
                             environment:
-                                K8S_AUTH_HOST: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
-                                K8S_AUTH_SSL_CA_CERT: '{{ SELF.k8s_ca_cert_file }}'
-                                K8S_AUTH_CERT_FILE: '{{ SELF.k8s_client_cert_file }}'
-                                K8S_AUTH_KEY_FILE: '{{ SELF.k8s_client_key_file }}'
+                                K8S_AUTH_HOST: {eval: '.::k8s_host'}
+                                K8S_AUTH_SSL_CA_CERT: {eval: '.::k8s_ca_cert_file'}
+                                K8S_AUTH_CERT_FILE: {eval: '.::k8s_client_cert_file'}
+                                K8S_AUTH_KEY_FILE: {eval: '.::k8s_client_key_file'}
                         inputs:
                             playbook:
                                 q:
@@ -691,6 +692,7 @@ node_types:
                                               kind: Deployment
                                               metadata:
                                                   name: '{{ SELF.application_name }}'
+                                                  namespace: default
                                               spec:
                                                   selector:
                                                       matchLabels:
@@ -773,6 +775,7 @@ node_types:
                                               kind: Service
                                               metadata:
                                                   name: '{{ SELF.application_name }}'
+                                                  namespace: default
                                               spec:
                                                   ports:
                                                       - name: '{{ SELF.application_endpoint }}'
@@ -843,7 +846,7 @@ node_types:
                                 - client_certificate: '${file("{{ SELF.k8s_client_cert_file }}")}'
                                   client_key: '${file("{{ SELF.k8s_client_key_file }}")}'
                                   cluster_ca_certificate: '${file("{{ SELF.k8s_ca_cert_file }}")}'
-                                  host: '{{ SELF.k8s_api_address }}:{{ SELF.k8s_api_port }}'
+                                  host: '{{ SELF.k8s_host }}'
                         resource:
                             kubernetes_deployment_v1:
                                 application:
