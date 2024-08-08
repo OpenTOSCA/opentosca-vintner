@@ -30,14 +30,6 @@ ansible:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
-      weight: 1
-      assign: mysql.database.ansible.mysql.openstack
-      comment: Primary use case due to the specialization of Ansible.
-
-    - component: mysql.database
-      hosting:
-          - mysql.dbms
           - docker.engine
       weight: 1
       assign: mysql.database.ansible.mysql.docker
@@ -60,11 +52,6 @@ ansible:
       assign: mysql.database.ansible.mysql.gcp
 
     # DBMS
-    - component: mysql.dbms
-      hosting: openstack.machine
-      weight: 1
-      comment: Primary use case due to the specialization of Ansible.
-
     - component: mysql.dbms
       hosting: docker.engine
       weight: 0.5
@@ -133,14 +120,6 @@ terraform:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
-      weight: 1
-      assign: mysql.database.terraform.mysql.openstack
-      comment: Terraform provides a declarative module.
-
-    - component: mysql.database
-      hosting:
-          - mysql.dbms
           - docker.engine
       weight: 1
       assign: mysql.database.terraform.mysql.docker
@@ -163,11 +142,6 @@ terraform:
       comment: Terraform provides a declarative module.
 
     # DBMS
-    - component: mysql.dbms
-      hosting: openstack.machine
-      weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
-
     - component: mysql.dbms
       hosting: docker.engine
       weight: 0.5

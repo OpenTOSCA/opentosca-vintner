@@ -643,13 +643,9 @@ node_types:
         derived_from: frontend.service
 
         properties:
-            k8s_api_address:
+            k8s_host:
                 type: string
-                default: {get_input: k8s_api_address}
-
-            k8s_api_port:
-                type: string
-                default: {get_input: k8s_api_port}
+                default: {get_input: k8s_host}
 
             k8s_ca_cert_file:
                 type: string
@@ -803,13 +799,9 @@ node_types:
                 default: {concat: ['{{ SELF.application_name }}', ':', '{{ SELF.application_port }}']}
 
         properties:
-            k8s_api_address:
+            k8s_host:
                 type: string
-                default: {get_input: k8s_api_address}
-
-            k8s_api_port:
-                type: string
-                default: {get_input: k8s_api_port}
+                default: {get_input: k8s_host}
 
             k8s_ca_cert_file:
                 type: string

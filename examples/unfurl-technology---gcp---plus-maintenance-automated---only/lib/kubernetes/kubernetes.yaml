@@ -8,10 +8,7 @@ node_types:
         derived_from: root
 
         properties:
-            k8s_api_address:
-                type: string
-
-            k8s_api_port:
+            k8s_host:
                 type: string
 
             k8s_ca_cert_file:

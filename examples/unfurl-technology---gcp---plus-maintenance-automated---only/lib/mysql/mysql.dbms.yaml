@@ -61,13 +61,9 @@ node_types:
         derived_from: mysql.dbms
 
         properties:
-            k8s_api_address:
+            k8s_host:
                 type: string
-                default: {get_input: k8s_api_address}
-
-            k8s_api_port:
-                type: string
-                default: {get_input: k8s_api_port}
+                default: {get_input: k8s_host}
 
             k8s_ca_cert_file:
                 type: string

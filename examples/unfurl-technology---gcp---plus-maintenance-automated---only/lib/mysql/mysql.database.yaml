@@ -44,9 +44,6 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
-    # TODO: mysql.database.ansible.mysql.openstack
-    # TODO: mysql.database.terraform.mysql.openstack
-
     # TODO: mysql.database.docker.mysql.docker
 
     ###################################################
@@ -54,6 +51,8 @@ node_types:
     # Ansible Kubernetes
     #
     ###################################################
+
+    # TODO: test
 
     mysql.database.ansible.mysql.kubernetes:
         derived_from: mysql.database
@@ -69,13 +68,19 @@ node_types:
                             playbook:
                                 q:
                                     - name: create database
-                                      shell: kubectl run -it --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "CREATE DATABASE {{ SELF.database_name }}";
+                                      ansible.builtin.shell: kubectl run --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "CREATE DATABASE {{ SELF.database_name }}";
+                                      args:
+                                          executable: /usr/bin/bash
 
                                     - name: create user
-                                      shell: kubectl run -it --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "CREATE USER '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'";
+                                      ansible.builtin.shell: kubectl run --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "CREATE USER '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'";
+                                      args:
+                                          executable: /usr/bin/bash
 
                                     - name: grant privileges
-                                      shell: kubectl run -it --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'";
+                                      ansible.builtin.shell: kubectl run --rm --image={{ HOST.dbms_image }} --restart=Never mysql-client -- mysql --host {{ HOST.management_address }} --port {{ HOST.management_port }} --password {{ HOST.dbms_password }} -e "GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'";
+                                      args:
+                                          executable: /usr/bin/bash
 
     # TODO: mysql.database.terraform.mysql.kubernetes
     # TODO: mysql.database.kubernetes.mysql.kubernetes
