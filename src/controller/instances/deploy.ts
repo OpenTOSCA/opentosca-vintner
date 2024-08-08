@@ -9,7 +9,7 @@ export type InstancesDeployOptions = {
     instance: string
     inputs?: string
     verbose?: boolean
-    retry?: boolean
+    retries?: number
     force?: boolean
     lock?: boolean
     machine?: boolean
@@ -27,6 +27,7 @@ export default async function (options: InstancesDeployOptions) {
     options.force = options.force ?? false
     options.lock = options.force ? false : options.lock ?? true
     options.machine = options.force ? false : options.machine ?? true
+    options.retries = options.retries ? Number(options.retries) : 1
 
     /**
      * Instance
@@ -38,15 +39,27 @@ export default async function (options: InstancesDeployOptions) {
      */
     async function action() {
         instance.setServiceInputs(utils.now(), options.inputs)
+        assert.isDefined(options.retries)
 
         const orchestrator = orchestrators.get()
-        try {
-            await orchestrator.deploy(instance, {verbose: options.verbose})
-        } catch (e) {
-            if (!options.retry) throw e
-            std.log(e)
-            await utils.sleep(10 * 1000)
-            await orchestrator.continue(instance, {verbose: options.verbose})
+
+        const total = options.retries + 1
+        let remaining = total
+        while (remaining > 0) {
+            try {
+                std.log(`run ${total - remaining + 1} of ${total}`)
+                await orchestrator.deploy(instance, {verbose: options.verbose})
+            } catch (e) {
+                // Throw in final run
+                if (remaining === 1) throw e
+
+                // Log and retry
+                std.log(e)
+                await utils.sleep(10 * 1000)
+                await orchestrator.continue(instance, {verbose: options.verbose})
+            } finally {
+                remaining--
+            }
         }
     }
 
