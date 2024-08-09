@@ -19,5 +19,12 @@ if [[ -z ${VINTNER} ]]; then
     exit 1
 fi
 
+# Check that ORCHESTRATOR is defined
+if [[ -z ${ORCHESTRATOR} ]]; then
+    echo "ORCHESTRATOR is not defined"
+    exit 1
+fi
+
+
 # Set template directory
 TEMPLATE_DIR=$(readlink -f $(dirname $0)/../)

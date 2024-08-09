@@ -9,6 +9,6 @@ source configuration.sh
 
 # Setup
 $VINTNER setup init
-$VINTNER orchestrators init unfurl-wsl
-$VINTNER orchestrators enable --orchestrator unfurl-wsl
-$VINTNER orchestrators attest --orchestrator unfurl-wsl
+$VINTNER orchestrators init ${ORCHESTRATOR}
+$VINTNER orchestrators enable ${ORCHESTRATOR}
+$VINTNER orchestrators attest ${ORCHESTRATOR}
