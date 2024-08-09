@@ -1,10 +1,10 @@
+# TODO: improve this to exec into container? we assume that dbms is exposed on the docker host
+# TODO: add openstack suffix?
+
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
-
-# TODO: improve this to exec into container? we assume that dbms is exposed on the docker host
-# TODO: add openstack suffix?
 
 node_types:
     ###################################################
@@ -44,8 +44,6 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
-    # TODO: mysql.database.docker.mysql.docker
-
     ###################################################
     #
     # Ansible Kubernetes
@@ -80,6 +78,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
 
+    # TODO: mysql.database.docker.mysql.docker
     # TODO: mysql.database.terraform.mysql.kubernetes
     # TODO: mysql.database.kubernetes.mysql.kubernetes
 
@@ -89,7 +88,7 @@ node_types:
     #
     ###################################################
 
-    # TODO: some sytnax error at create-user
+    # TODO: some syntax error at create-user
 
     mysql.database.kubernetes.mysql.kubernetes:
         derived_from: mysql.database
@@ -172,15 +171,69 @@ node_types:
 
                     delete: exit 0
 
-    # TODO: mysql.database.ansible.mysql.gcp
-
     ###################################################
     #
-    # Docker Docker
+    # Ansible GCP
     #
     ###################################################
 
-    # TODO: next
+    # TODO: next: adapt this to ansible module
+
+    mysql.database.ansible.mysql.gcp:
+        derived_from: mysql.database
+
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: Activate service account
+                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
+
+                                    # https://cloud.google.com/sql/docs/mysql/create-manage-databases
+                                    - name: Create database
+                                      shell: 'gcloud sql databases create {{ SELF.database_name }} --instance {{ HOST.dbms_name }}'
+                                      register: create_command
+                                      failed_when:
+                                          - "'Created database' not in create_command.stderr"
+                                          - "'database exists' not in create_command.stderr"
+
+                                    - name: create user
+                                      community.mysql.mysql_user:
+                                          name: '{{ SELF.database_user }}'
+                                          password: '{{ SELF.database_password }}'
+                                          host: '%'
+                                          priv: '*.*:ALL'
+                                          login_host: '{{ HOST.management_address }}'
+                                          login_password: '{{ HOST.dbms_password }}'
+                                          login_port: 3306
+                                          login_user: root
+
+    ###################################################
+    #
+    # Terraform GCP
+    #
+    ###################################################
+
+    # TODO: next: test this
 
     mysql.database.terraform.mysql.gcp:
         derived_from: mysql.database
@@ -209,11 +262,47 @@ node_types:
                             primary: Terraform
             defaults:
                 inputs:
-                    main: {}
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
+                                  - mysql:
+                                        source: petoju/mysql
+                                        version: 3.0.48
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                            mysql:
+                                - endpoint: '{{ HOST.management_address }}'
+                                  password: '{{ HOST.dbms_password }}'
+                                  username: root
+                        resource:
+                            google_sql_database:
+                                database:
+                                    - name: '{{ SELF.database_name }}'
+                                      instance: '{{ SELF.dbms_name }}'
+                            google_sql_user:
+                                user:
+                                    - host: '%'
+                                      instance: ${google_sql_database_instance.dbms.name}
+                                      name: '{{ SELF.database_name }}'
+                                      password: '{{ SELF.database_password }}'
+                            mysql_grant:
+                                user:
+                                    - database: '{{ SELF.database_name }}'
+                                      host: '%'
+                                      table: '*'
+                                      privileges:
+                                          - 'ALL'
+                                      user: ${google_sql_user.user.name}
 
     ###################################################
     #
-    # Docker Docker
+    # Terraform Docker
     #
     ###################################################
 
@@ -271,6 +360,11 @@ node_types:
                             mysql_database:
                                 database:
                                     - name: '{{ SELF.database_name }}'
+                            mysql_user:
+                                user:
+                                    - host: '%'
+                                      plaintext_password: '{{ SELF.database_password }}'
+                                      user: '{{ SELF.database_user }}'
                             mysql_grant:
                                 user:
                                     - database: '{{ SELF.database_name }}'
@@ -278,16 +372,11 @@ node_types:
                                       table: '*'
                                       privileges:
                                           - 'ALL'
-                                      user: '{{ SELF.database_user }}'
-                            mysql_user:
-                                user:
-                                    - host: '%'
-                                      plaintext_password: '{{ SELF.database_password }}'
-                                      user: '{{ SELF.database_user }}'
+                                      user: ${mysql_user.user.user}
 
     ###################################################
     #
-    # Docker Docker
+    # Ansible Docker
     #
     ###################################################
 
