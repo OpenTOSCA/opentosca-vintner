@@ -128,21 +128,3 @@ node_types:
 
     relational.dbms:
         derived_from: dbms
-
-    ###################################################
-    #
-    # GCP
-    #
-    ###################################################
-
-    gcp.service:
-        derived_from: root
-
-        properties:
-            gcp_service:
-                type: string
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn

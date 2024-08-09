@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    currency.service.docker.docker:
+    currency.service.terraform.gcp:
         derived_from: currency.service
 
         attributes:

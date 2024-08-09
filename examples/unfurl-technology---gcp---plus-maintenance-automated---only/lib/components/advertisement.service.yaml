@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    advertisement.service.docker.docker:
+    advertisement.service.terraform.gcp:
         derived_from: advertisement.service
 
         attributes:

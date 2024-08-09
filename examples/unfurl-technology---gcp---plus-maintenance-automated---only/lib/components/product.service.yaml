@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    product.service.docker.docker:
+    product.service.terraform.gcp:
         derived_from: product.service
 
         attributes:

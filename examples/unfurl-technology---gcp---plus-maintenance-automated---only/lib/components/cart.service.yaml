@@ -73,7 +73,7 @@ node_types:
     #
     ###################################################
 
-    cart.service.docker.docker:
+    cart.service.terraform.gcp:
         derived_from: cart.service
 
         attributes:

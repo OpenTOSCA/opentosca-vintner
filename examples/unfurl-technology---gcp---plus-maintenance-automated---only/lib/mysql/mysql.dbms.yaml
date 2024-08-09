@@ -47,7 +47,7 @@ node_types:
                   relationship: tosca.relationships.HostedOn
 
     # TODO: mysql.dbms.ansible.gcp
-    # TODO: mysql.dbms.terraform.gcp
+    # TODO: next: mysql.dbms.terraform.gcp
 
     ###################################################
     #

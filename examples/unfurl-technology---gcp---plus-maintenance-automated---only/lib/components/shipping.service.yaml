@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    shipping.service.docker.docker:
+    shipping.service.terraform.gcp:
         derived_from: shipping.service
 
         attributes:

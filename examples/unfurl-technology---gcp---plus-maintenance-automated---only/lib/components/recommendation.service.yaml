@@ -73,7 +73,7 @@ node_types:
     #
     ###################################################
 
-    recommendation.service.docker.docker:
+    recommendation.service.terraform.gcp:
         derived_from: recommendation.service
 
         attributes:

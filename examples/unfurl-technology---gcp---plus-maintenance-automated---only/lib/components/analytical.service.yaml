@@ -66,7 +66,7 @@ node_types:
     #
     ###################################################
 
-    analytical.service.docker.docker:
+    analytical.service.terraform.gcp:
         derived_from: analytical.service
 
         attributes:

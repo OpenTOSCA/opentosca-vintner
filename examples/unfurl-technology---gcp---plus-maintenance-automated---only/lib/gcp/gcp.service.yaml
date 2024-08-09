@@ -1,0 +1,17 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    gcp.service:
+        derived_from: root
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

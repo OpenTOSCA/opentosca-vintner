@@ -106,7 +106,7 @@ node_types:
     #
     ###################################################
 
-    checkout.service.docker.docker:
+    checkout.service.terraform.gcp:
         derived_from: checkout.service
 
         attributes:

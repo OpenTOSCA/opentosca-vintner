@@ -173,7 +173,43 @@ node_types:
                     delete: exit 0
 
     # TODO: mysql.database.ansible.mysql.gcp
-    # TODO: mysql.database.terraform.mysql.gcp
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    # TODO: next
+
+    mysql.database.terraform.mysql.gcp:
+        derived_from: mysql.database
+
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main: {}
 
     ###################################################
     #
