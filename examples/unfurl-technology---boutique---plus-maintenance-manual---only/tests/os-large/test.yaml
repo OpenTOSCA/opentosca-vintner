@@ -1,0 +1,17 @@
+expected: ../../../unfurl-technology---boutique---plus-maintenance-automated---only/tests/os-large/expected.yaml
+inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated---only/tests/os-large/inputs.yaml
+replace:
+    - - mysql.database.terraform.mysql
+      - mysql.database.terraform.mysql.docker
+merge:
+    topology_template:
+        node_templates:
+            analytical_service:
+                type: analytical.service.docker.docker
+                properties:
+                    optional_analytical_feature: false
+                    premium_analytical_feature: false
+                requirements:
+                    - checkout: checkout_service
+                    - recommendation: recommendation_service
+                    - host: docker_runtime

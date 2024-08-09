@@ -1,0 +1,248 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_service:
+            type: frontend.service.docker.docker
+            requirements:
+                - checkout: checkout_service
+                - currency: currency_service
+                - shipping: shipping_service
+                - cart: cart_service
+                - product: product_service
+                - recommendation: recommendation_service
+                - advertisement: advertisement_service
+                - host: docker_runtime
+
+        frontend_ingress:
+            type: ingress.ansible.openstack
+            requirements:
+                - application: frontend_service
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_service:
+            type: checkout.service.docker.docker
+            requirements:
+                - email: email_service
+                - payment: payment_service
+                - currency: currency_service
+                - shipping: shipping_service
+                - cart: cart_service
+                - product: product_service
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_service:
+            type: email.service.docker.docker
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_service:
+            type: payment.service.docker.docker
+            properties:
+                optional_payment_feature: false
+                premium_payment_feature: false
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_service:
+            type: currency.service.docker.docker
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_service:
+            type: shipping.service.docker.docker
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_service:
+            type: cart.service.docker.docker
+            requirements:
+                - database: mysql_database
+                - host: docker_runtime
+
+        mysql_database:
+            type: mysql.database.terraform.mysql.docker
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
+            requirements:
+                - host: mysql_dbms
+
+        mysql_dbms:
+            type: mysql.dbms.docker.docker
+            properties:
+                dbms_name: cart
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_service:
+            type: product.service.docker.docker
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_service:
+            type: recommendation.service.docker.docker
+            requirements:
+                - product: product_service
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_service:
+            type: advertisement.service.docker.docker
+            requirements:
+                - host: docker_runtime
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        docker_runtime:
+            type: docker.engine.ansible.openstack
+            requirements:
+                - host: virtual_machine
+
+        monitoring_agent:
+            type: monitoring.agent.ansible.openstack
+            requirements:
+                - host: virtual_machine
+
+        logging_agent:
+            type: logging.agent.ansible.openstack
+            requirements:
+                - host: virtual_machine
+
+        security_agent:
+            type: security.agent.ansible.openstack
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: openstack.machine.terraform.openstack
+            properties:
+                machine: unfurl-technology-boutique
+                ports: [80, 3000, 8000]
+                flavor: m1.medium
+                os_network: {get_input: os_network}
+                os_ssh_key_name: {get_input: os_ssh_key_name}
+                os_ssh_user: {get_input: os_ssh_user}
+                os_ssh_key_file: {get_input: os_ssh_key_file}
+                os_region_name: {get_input: os_region_name}
+            requirements:
+                - host: openstack
+
+        openstack:
+            type: openstack.provider
+            properties:
+                os_region_name: {get_input: os_region_name}
+                os_auth_type: {get_input: os_auth_type}
+                os_auth_url: {get_input: os_auth_url}
+                os_identity_api_version: {get_input: os_identity_api_version}
+                os_interface: {get_input: os_interface}
+                os_application_credential_id: {get_input: os_application_credential_id}
+                os_application_credential_secret: {get_input: os_application_credential_secret}

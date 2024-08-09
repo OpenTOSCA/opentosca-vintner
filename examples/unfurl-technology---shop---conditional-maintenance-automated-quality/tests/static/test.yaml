@@ -1,0 +1,9 @@
+expected: ../../../unfurl-technology---shop---variant-static/tests/tau/expected.yaml
+
+merge:
+    topology_template:
+        node_templates:
+            shop:
+                properties:
+                    optional_feature: true
+                    premium_feature: true

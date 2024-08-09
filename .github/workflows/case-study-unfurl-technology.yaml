@@ -14,7 +14,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
             EXAMPLE_OVERRIDE: unfurl-technology
             ENV: K8S
             PORT: 30080
@@ -101,7 +101,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
             EXAMPLE_OVERRIDE: unfurl-technology
             ENV: GCP
             PORT: 80
@@ -185,7 +185,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology-conditional-quality-maintenance
+            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
             EXAMPLE_OVERRIDE: unfurl-technology
             ENV: OS
             PORT: 80
