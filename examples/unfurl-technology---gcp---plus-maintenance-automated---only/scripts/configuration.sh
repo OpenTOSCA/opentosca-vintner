@@ -32,6 +32,5 @@ if [[ -z ${ORCHESTRATOR} ]]; then
     exit 1
 fi
 
-
 # Set template directory
 TEMPLATE_DIR=$(readlink -f $(dirname $0)/../)
