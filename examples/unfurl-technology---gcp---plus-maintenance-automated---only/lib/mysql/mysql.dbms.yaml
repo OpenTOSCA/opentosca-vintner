@@ -295,7 +295,7 @@ node_types:
                                     - name: touch manifest
                                       register: manifest
                                       ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.dbms_name }}.manifest.yaml'
+                                          suffix: '{{ SELF.dbms_name }}.dbms.manifest.yaml'
 
                                     - name: create manifest
                                       ansible.builtin.copy:

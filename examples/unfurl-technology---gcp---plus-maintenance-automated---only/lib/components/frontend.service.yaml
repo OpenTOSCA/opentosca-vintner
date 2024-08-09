@@ -935,7 +935,7 @@ node_types:
                                     - name: touch manifest
                                       register: manifest
                                       ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.manifest.yaml'
+                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
 
                                     - name: create manifest
                                       ansible.builtin.copy:
