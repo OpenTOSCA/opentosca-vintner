@@ -73,7 +73,7 @@ node_types:
     #
     ###################################################
 
-    recommendation.service.ansible.kubernetes:
+    recommendation.service.docker.docker:
         derived_from: recommendation.service
 
         attributes:

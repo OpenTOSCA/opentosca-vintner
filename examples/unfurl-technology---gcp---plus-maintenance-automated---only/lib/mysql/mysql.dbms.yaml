@@ -363,8 +363,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     mysql.dbms.ansible.docker:
         derived_from: mysql.dbms
 

@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    product.service.ansible.kubernetes:
+    product.service.docker.docker:
         derived_from: product.service
 
         attributes:

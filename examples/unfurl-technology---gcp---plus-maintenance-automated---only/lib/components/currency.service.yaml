@@ -68,7 +68,7 @@ node_types:
     #
     ###################################################
 
-    currency.service.ansible.kubernetes:
+    currency.service.docker.docker:
         derived_from: currency.service
 
         attributes:
