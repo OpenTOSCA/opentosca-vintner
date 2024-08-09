@@ -1,0 +1,148 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    ###################################################
+    #
+    # Root
+    #
+    ###################################################
+
+    root:
+        derived_from: tosca.nodes.Root
+
+    ###################################################
+    #
+    # Software Application
+    #
+    ###################################################
+
+    software.application:
+        derived_from: root
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    go.application:
+        derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    python.application:
+        derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    node.application:
+        derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    dotnet.application:
+        derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    java.application:
+        derived_from: software.application
+        properties:
+            application_name:
+                type: string
+
+            application_port:
+                type: string
+
+            application_endpoint:
+                type: string
+
+            application_image:
+                type: string
+
+    ###################################################
+    #
+    # Compute
+    #
+    ###################################################
+
+    compute:
+        derived_from: root
+
+    ###################################################
+    #
+    # Database
+    #
+    ###################################################
+
+    database:
+        derived_from: root
+
+    relational.database:
+        derived_from: database
+
+    dbms:
+        derived_from: root
+
+    relational.dbms:
+        derived_from: dbms
+
+    ###################################################
+    #
+    # GCP
+    #
+    ###################################################
+
+    gcp.service:
+        derived_from: root
+
+        properties:
+            gcp_service:
+                type: string
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

@@ -16,8 +16,8 @@ export default async function (options: InstancesOutputsOptions) {
     assert.isString(options.instance)
 
     options.force = options.force ?? false
-    options.lock = options.force ? true : options.lock ?? true
-    options.machine = options.force ? true : options.machine ?? true
+    options.lock = options.force ? false : options.lock ?? true
+    options.machine = options.force ? false : options.machine ?? true
 
     const instance = new Instance(options.instance)
 

@@ -1,0 +1,31 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+node_types:
+    kubernetes:
+        derived_from: root
+
+        properties:
+            k8s_host:
+                type: string
+
+            k8s_ca_cert_file:
+                type: string
+
+            k8s_client_cert_file:
+                type: string
+
+            k8s_client_key_file:
+                type: string
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        interfaces:
+            Standard:
+                operations:
+                    create: exit 0
+                    delete: exit 0

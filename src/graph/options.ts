@@ -760,7 +760,7 @@ class SolverTechnologiesOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
-    readonly mode: 'weight' | 'count'
+    readonly mode: 'weight' | 'count' | 'weight-count'
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -813,8 +813,8 @@ class SolverTechnologiesOptions extends BaseOptions {
             assert.isBoolean(this.unique)
 
             const mode = this.raw.optimization_technologies_mode ?? 'weight'
-            if (!['weight', 'count'].includes(mode)) {
-                throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+            if (!['weight', 'count', 'weight-count'].includes(mode)) {
+                throw new Error(`Option optimization_technology_mode must be "weight", "count", or "weight-count"`)
             }
             this.mode = mode
         }

@@ -48,7 +48,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             const rules = utils.copy(map[technology])
 
             for (const rule of rules) {
-                if (rule.component !== node.getType().name) continue
+                if (!node.isA(rule.component)) continue
                 if (check.isDefined(rule.hosting)) {
                     assert.isArray(rule.hosting)
                     const output: LogicExpression[][] = []
@@ -58,6 +58,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                             [technology]: {
                                 conditions: it,
                                 weight: rule.weight,
+                                // TODO: extend this to support depths in naming depending on hosting depth?
                                 assign: rule.assign,
                             },
                         })
@@ -84,7 +85,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         assert.isDefined(search)
 
         // Conditional recursive breadth-first search
-        const hosts = node.hosts.filter(it => it.getType().name === search)
+        const hosts = node.hosts.filter(it => it.isA(search))
         for (const host of hosts) {
             // Deep copy since every child call changes the state of history
             const historyCopy = utils.copy(history)

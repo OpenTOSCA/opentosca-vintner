@@ -1,0 +1,89 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+capability_types:
+    boutique.capabilities.Endpoint.Payment:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Payment:
+        derived_from: tosca.relationships.ConnectsTo
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    payment.service:
+        derived_from: node.application
+
+        properties:
+            application_name:
+                type: string
+                default: payment
+
+            application_port:
+                type: string
+                default: 7006
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-payment:v5
+
+            optional_payment_feature:
+                type: boolean
+
+            premium_payment_feature:
+                type: boolean
+
+        attributes:
+            application_address:
+                type: string
+
+        capabilities:
+            payment:
+                type: boutique.capabilities.Endpoint.Payment
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: payment.service.ansible.gcp
+    # TODO: payment.service.terraform.gcp
+
+    # TODO: payment.service.ansible.docker
+    # TODO: payment.service.terraform.docker
+    # TODO: payment.service.docker.docker
+
+    # TODO: payment.service.ansible.kubernetes
+    # TODO: payment.service.terraform.kubernetes
+    # TODO. payment.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    payment.service.ansible.kubernetes:
+        derived_from: payment.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

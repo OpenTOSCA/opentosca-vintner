@@ -12,6 +12,13 @@ export type VariabilityDefinition = {
     type_specific_conditions?: string | TypeSpecificLogicExpressions
     technology_assignment_rules?: string | TechnologyAssignmentRulesMap
     plugins?: PluginDefinitionMap
+
+    // TODO: use tosca type system ...
+    inheritance?: Inheritance
+}
+
+export type Inheritance = {
+    [key: string]: string
 }
 
 export type VariabilityInputDefinitionMap = {[key: string]: VariabilityInputDefinition}
@@ -47,7 +54,8 @@ export type SolverOptions = {
     // Technologies
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
-    optimization_technologies_mode?: 'weight' | 'count'
+    // TODO: add "weight-count" to docs
+    optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 }
 
 export type NormalizationOptions = {

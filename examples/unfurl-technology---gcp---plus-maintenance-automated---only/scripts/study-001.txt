@@ -1,0 +1,107 @@
+
+The technology rules of our case study. Qualities range from bad (0) to good (1).
+┌─────────┬──────────────┬────────────────────────┬─────────────────────────────────────────────┬─────────┐
+│ (index) │  Technology  │       Component        │                   Hosting                   │ Quality │
+├─────────┼──────────────┼────────────────────────┼─────────────────────────────────────────────┼─────────┤
+│    0    │  'ansible'   │ 'software.application' │ [ 'software.runtime', 'openstack.machine' ] │    1    │
+│    1    │  'ansible'   │ 'software.application' │             [ 'docker.engine' ]             │   0.5   │
+│    2    │  'ansible'   │ 'software.application' │              [ 'kubernetes' ]               │   0.5   │
+│    3    │  'ansible'   │ 'software.application' │             [ 'gcp.appengine' ]             │    0    │
+│    4    │  'ansible'   │   'software.runtime'   │           [ 'openstack.machine' ]           │    1    │
+│    5    │  'ansible'   │ 'mysql.database'  │ [ 'mysql.dbms', 'openstack.machine' ]  │    1    │
+│    6    │  'ansible'   │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    1    │
+│    7    │  'ansible'   │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    1    │
+│    8    │  'ansible'   │ 'mysql.database'  │    [ 'mysql.dbms', 'gcp.cloudsql' ]    │    1    │
+│    9    │  'ansible'   │   'mysql.dbms'    │           [ 'openstack.machine' ]           │    1    │
+│   10    │  'ansible'   │   'mysql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
+│   11    │  'ansible'   │   'mysql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
+│   12    │  'ansible'   │   'mysql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
+│   13    │  'ansible'   │       'ingress'        │           [ 'openstack.machine' ]           │    1    │
+│   14    │  'ansible'   │       'ingress'        │              [ 'kubernetes' ]               │   0.5   │
+│   15    │  'ansible'   │  'openstack.machine'   │                  undefined                  │   0.5   │
+│   16    │  'ansible'   │     'gcp.service'      │                  undefined                  │    1    │
+│   17    │ 'terraform'  │ 'software.application' │ [ 'software.runtime', 'openstack.machine' ] │    0    │
+│   18    │ 'terraform'  │ 'software.application' │             [ 'docker.engine' ]             │   0.5   │
+│   19    │ 'terraform'  │ 'software.application' │              [ 'kubernetes' ]               │   0.5   │
+│   20    │ 'terraform'  │ 'software.application' │             [ 'gcp.appengine' ]             │    1    │
+│   21    │ 'terraform'  │   'software.runtime'   │           [ 'openstack.machine' ]           │    0    │
+│   22    │ 'terraform'  │ 'mysql.database'  │ [ 'mysql.dbms', 'openstack.machine' ]  │    1    │
+│   23    │ 'terraform'  │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    1    │
+│   24    │ 'terraform'  │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    1    │
+│   25    │ 'terraform'  │ 'mysql.database'  │    [ 'mysql.dbms', 'gcp.cloudsql' ]    │    1    │
+│   26    │ 'terraform'  │   'mysql.dbms'    │           [ 'openstack.machine' ]           │    0    │
+│   27    │ 'terraform'  │   'mysql.dbms'    │             [ 'docker.engine' ]             │   0.5   │
+│   28    │ 'terraform'  │   'mysql.dbms'    │              [ 'kubernetes' ]               │   0.5   │
+│   29    │ 'terraform'  │   'mysql.dbms'    │             [ 'gcp.cloudsql' ]              │    1    │
+│   30    │ 'terraform'  │       'ingress'        │           [ 'openstack.machine' ]           │    0    │
+│   31    │ 'terraform'  │       'ingress'        │              [ 'kubernetes' ]               │   0.5   │
+│   32    │ 'terraform'  │  'openstack.machine'   │                  undefined                  │    1    │
+│   33    │ 'terraform'  │     'gcp.service'      │                  undefined                  │    1    │
+│   34    │ 'kubernetes' │ 'software.application' │              [ 'kubernetes' ]               │    1    │
+│   35    │ 'kubernetes' │ 'mysql.database'  │     [ 'mysql.dbms', 'kubernetes' ]     │    0    │
+│   36    │ 'kubernetes' │   'mysql.dbms'    │              [ 'kubernetes' ]               │    1    │
+│   37    │ 'kubernetes' │       'ingress'        │              [ 'kubernetes' ]               │    1    │
+│   38    │   'docker'   │ 'software.application' │             [ 'docker.engine' ]             │    1    │
+│   39    │   'docker'   │ 'mysql.database'  │   [ 'mysql.dbms', 'docker.engine' ]    │    0    │
+│   40    │   'docker'   │   'mysql.dbms'    │             [ 'docker.engine' ]             │    1    │
+└─────────┴──────────────┴────────────────────────┴─────────────────────────────────────────────┴─────────┘
+
+Metrics relevant when modeling the different scenarios
+┌─────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────┬────────┬──────────┬────────────┬────────────────────────┬───────────────┬──────────────┐
+│ (index) │                                              scenario                                               │ models │ elements │ conditions │ technology_assignments │ lines_of_code │    short     │
+├─────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────┼────────┼──────────┼────────────┼────────────────────────┼───────────────┼──────────────┤
+│    0    │                                        'EDMM Docker Variant'                                        │   1    │    49    │     0      │           12           │      187      │              │
+│    1    │                                         'EDMM GCP Variant'                                          │   1    │    57    │     0      │           12           │      204      │              │
+│    2    │                                       'EDMM OS Large Variant'                                       │   1    │    93    │     0      │           18           │      284      │              │
+│    3    │                                      'EDMM OS Medium Variant'                                       │   1    │    93    │     0      │           18           │      284      │              │
+│    4    │ 'EDMM Total (EDMM Docker Variant, EDMM GCP Variant, EDMM OS Medium Variant, EDMM OS Large Variant)' │   4    │   292    │     0      │           60           │      959      │ 'EDMM Total' │
+│    5    │                                       'VDMM Baseline Default'                                       │   1    │   192    │     10     │           44           │      557      │              │
+│    6    │                                       'VDMM+ Default Manual'                                        │   1    │   130    │     42     │           45           │      461      │              │
+│    7    │                                  'VDMM+ Default Automated Random'                                   │   1    │   130    │     5      │           0            │      371      │              │
+│    8    │                                 'VDMM+ Default Automated Counting'                                  │   1    │   130    │     5      │           0            │      372      │              │
+│    9    │                                  'VDMM+ Default Automated Quality'                                  │   1    │   130    │     5      │           0            │      368      │              │
+└─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────┴────────┴──────────┴────────────┴────────────────────────┴───────────────┴──────────────┘
+
+Qualities of the derived deployment models, i.e., the deployment variants, of the different scenarios ranging from bad (0) to good (1).
+┌─────────┬──────────────┬────────┬─────────────┬─────────────┬────────────────┬─────────┐
+│ (index) │   scenario   │ expert │ non_expert  │   random    │    counting    │ quality │
+├─────────┼──────────────┼────────┼─────────────┼─────────────┼────────────────┼─────────┤
+│    0    │   'docker'   │   1    │ [ 0.46, 1 ] │ [ 0.46, 1 ] │ [ 0.54, 0.92 ] │    1    │
+│    1    │    'gcp'     │   1    │ [ 0.29, 1 ] │ [ 0.29, 1 ] │  [ 0.29, 1 ]   │    1    │
+│    2    │ 'kubernetes' │   1    │ [ 0.46, 1 ] │ [ 0.46, 1 ] │ [ 0.54, 0.92 ] │    1    │
+│    3    │  'os-large'  │   1    │ [ 0.08, 1 ] │ [ 0.08, 1 ] │ [ 0.11, 0.97 ] │    1    │
+│    4    │ 'os-medium'  │   1    │ [ 0.08, 1 ] │ [ 0.08, 1 ] │ [ 0.11, 0.97 ] │    1    │
+└─────────┴──────────────┴────────┴─────────────┴─────────────┴────────────────┴─────────┘
+
+Metrics relevant when modeling the maintenance scenario of our case study
+┌─────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬────────┬──────────┬────────────┬────────────────────────┬───────────────┬──────────────────────────┐
+│ (index) │                                                             scenario                                                             │ models │ elements │ conditions │ technology_assignments │ lines_of_code │          short           │
+├─────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼────────┼──────────┼────────────┼────────────────────────┼───────────────┼──────────────────────────┤
+│    0    │                                                        'EDMM Kubernetes'                                                         │   1    │    60    │     0      │           12           │      209      │                          │
+│    1    │ 'EDMM Total Maintenance (EDMM Docker Variant, EDMM GCP Variant, EDMM OS Medium Variant, EDMM OS Large Variant, EDMM Kubernetes)' │   5    │   352    │     0      │           72           │     1168      │ 'EDMM Total Maintenance' │
+│    2    │                                                   'VDMM Baseline Maintenance'                                                    │   1    │   262    │     29     │           56           │      752      │                          │
+│    3    │                                                    'VDMM+ Maintenance Manual'                                                    │   1    │   157    │     60     │           58           │      554      │                          │
+│    4    │                                               'VDMM+ Maintenance Automated Random'                                               │   1    │   157    │     10     │           0            │      437      │                          │
+│    5    │                                              'VDMM+ Maintenance Automated Counting'                                              │   1    │   157    │     10     │           0            │      438      │                          │
+│    6    │                                              'VDMM+ Maintenance Automated Quality'                                               │   1    │   157    │     10     │           0            │      434      │                          │
+└─────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────┴──────────┴────────────┴────────────────────────┴───────────────┴──────────────────────────┘
+
+From Default to Maintained (Absolut to previous)
+┌─────────┬─────────────────────────────────────────────────────────────────────────┬──────────────────────┬────────────────────────┬──────────────────────────┬──────────────────────────────────────┬─────────────────────────────┐
+│ (index) │                                scenario                                 │ models_absolute_diff │ elements_absolute_diff │ conditions_absolute_diff │ technology_assignments_absolute_diff │ lines_of_code_absolute_diff │
+├─────────┼─────────────────────────────────────────────────────────────────────────┼──────────────────────┼────────────────────────┼──────────────────────────┼──────────────────────────────────────┼─────────────────────────────┤
+│    0    │                  'EDMM Total Maintenance - EDMM Total'                  │          1           │           60           │            0             │                  12                  │             209             │
+│    1    │           'VDMM Baseline Maintenance - VDMM Baseline Default'           │          0           │           70           │            19            │                  12                  │             195             │
+│    2    │            'VDMM+ Maintenance Manual - VDMM+ Default Manual'            │          0           │           27           │            18            │                  13                  │             93              │
+│    3    │ 'VDMM+ Maintenance Automated Quality - VDMM+ Default Automated Quality' │          0           │           27           │            5             │                  0                   │             66              │
+└─────────┴─────────────────────────────────────────────────────────────────────────┴──────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
+
+From Default to Maintained (Relative to change to baseline) 
+┌─────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬────────────────────────┬──────────────────────────┬──────────────────────────────────────┬─────────────────────────────┐
+│ (index) │                                                            scenario                                                             │ elements_relative_diff │ conditions_relative_diff │ technology_assignments_relative_diff │ lines_of_code_relative_diff │
+├─────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼────────────────────────┼──────────────────────────┼──────────────────────────────────────┼─────────────────────────────┤
+│    0    │            '(VDMM+ Maintenance Manual - VDMM+ Default Manual) / (VDMM Baseline Maintenance - VDMM Baseline Default)'            │          0.39          │           0.95           │                 1.08                 │            0.48             │
+│    1    │ '(VDMM+ Maintenance Automated Quality - VDMM+ Default Automated Quality) / (VDMM Baseline Maintenance - VDMM Baseline Default)' │          0.39          │           0.26           │                  0                   │            0.34             │
+└─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────┘
+
+> Original

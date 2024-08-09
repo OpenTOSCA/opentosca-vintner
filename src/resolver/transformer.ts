@@ -256,7 +256,7 @@ export default class Transformer {
         }
     }
 
-    private transformType(element: {types: Type[]; Display: string}, template: {type: ElementType}) {
+    private transformType(element: {types: Type[]; Display: string}, template: {type?: ElementType}) {
         const type = element.types.find(it => it.present)
         if (check.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
         template.type = type.name

@@ -1,0 +1,83 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../base.yaml
+
+capability_types:
+    boutique.capabilities.Endpoint.Shipping:
+        derived_from: tosca.capabilities.Endpoint
+
+relationship_types:
+    boutique.relationships.ConnectsTo.Shipping:
+        derived_from: tosca.relationships.ConnectsTo
+
+node_types:
+    ###################################################
+    #
+    # Abstract
+    #
+    ###################################################
+
+    shipping.service:
+        derived_from: go.application
+
+        properties:
+            application_name:
+                type: string
+                default: shipping
+
+            application_port:
+                type: string
+                default: 7009
+
+            application_endpoint:
+                type: string
+                default: grpc
+
+            application_image:
+                type: string
+                default: milesstoetzner/boutique-shipping:v5
+
+        attributes:
+            application_address:
+                type: string
+
+        capabilities:
+            shipping:
+                type: boutique.capabilities.Endpoint.Shipping
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    # TODO: shipping.service.ansible.gcp
+    # TODO: shipping.service.terraform.gcp
+
+    # TODO: shipping.service.ansible.docker
+    # TODO: shipping.service.terraform.docker
+    # TODO: shipping.service.docker.docker
+
+    # TODO: shipping.service.ansible.kubernetes
+    # TODO: shipping.service.terraform.kubernetes
+    # TODO. shipping.service.kubernetes.kubernetes
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    shipping.service.ansible.kubernetes:
+        derived_from: shipping.service
+
+        attributes:
+            application_address:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
+        interfaces:
+            Standard:
+                operations:
+                    create: echo 0
+                    delete: echo 0

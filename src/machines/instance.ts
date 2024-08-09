@@ -186,15 +186,22 @@ export class InstanceStateMachine {
                 if (options.assert) this.instance.assert()
 
                 if (options.machine) {
-                    const machine = new StateMachine(options.state ?? this.instance.loadState(), TRANSITIONS)
+                    const machine = new StateMachine(
+                        this.instance.getName(),
+                        options.state ?? this.instance.loadState(),
+                        TRANSITIONS
+                    )
                     machine.do(action)
                     if (options.write) this.instance.setState(machine.state)
 
                     try {
                         await fn()
                         machine.do(ACTIONS.SUCCESS)
-                        if (options.write) this.instance.setState(machine.state)
+                        if (options.write && machine.state !== STATES.DELETED) this.instance.setState(machine.state)
                     } catch (e) {
+                        // TODO: remove this
+                        // TODO: error is supressed if eg machine.do throws ...
+                        console.log(e)
                         machine.do(ACTIONS.ERROR)
                         if (options.write) this.instance.setState(machine.state)
                         throw e
@@ -216,7 +223,7 @@ export class InstanceStateMachine {
             this.instance.getLockKey(),
             async () => {
                 if (options.machine) {
-                    const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+                    const machine = new StateMachine(this.instance.getName(), this.instance.loadState(), TRANSITIONS)
 
                     const from = machine.state
                     const to = machine.do(noop)
@@ -247,7 +254,7 @@ export class InstanceStateMachine {
     assert(states: `${STATES}`[], enabled = true) {
         if (!enabled) return
 
-        const machine = new StateMachine(this.instance.loadState(), TRANSITIONS)
+        const machine = new StateMachine(this.instance.getName(), this.instance.loadState(), TRANSITIONS)
         if (states.includes(machine.state as `${STATES}`)) return
 
         throw new Error(`State "${machine.state}" not in  "${utils.pretty(states)}"`)
