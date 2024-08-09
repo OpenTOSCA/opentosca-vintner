@@ -176,8 +176,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     ingress.ansible.kubernetes:
         derived_from: ingress
 
@@ -242,8 +240,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     ingress.terraform.kubernetes:
         derived_from: ingress
 
@@ -299,6 +295,7 @@ node_types:
                                 application:
                                     - metadata:
                                           - name: '{{ SELF.application_name }}-external'
+                                      wait_for_load_balancer: false
                                       spec:
                                           - port:
                                                 - name: '{{ SELF.application_endpoint }}'
@@ -313,8 +310,6 @@ node_types:
     # Kubernetes Kubernetes
     #
     ###################################################
-
-    # TODO: test this
 
     ingress.kubernetes.kubernetes:
         derived_from: ingress
@@ -341,7 +336,6 @@ node_types:
                                           suffix: '{{ SELF.application_name }}.manifest.yaml'
 
                                     - name: create manifest
-                                      register: manifest
                                       ansible.builtin.copy:
                                           dest: '{{ manifest.path }}'
                                           content: '{{ service | to_yaml }}'
@@ -361,7 +355,7 @@ node_types:
                                                   type: LoadBalancer
 
                                     - name: apply manifest
-                                      shell: |
+                                      ansible.builtin.shell: |
                                           kubectl apply -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash

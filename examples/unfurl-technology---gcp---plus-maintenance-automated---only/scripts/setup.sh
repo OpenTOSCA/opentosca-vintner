@@ -10,5 +10,5 @@ source configuration.sh
 # Setup
 $VINTNER setup init
 $VINTNER orchestrators init ${ORCHESTRATOR}
-$VINTNER orchestrators enable ${ORCHESTRATOR}
-$VINTNER orchestrators attest ${ORCHESTRATOR}
+$VINTNER orchestrators enable --orchestrator ${ORCHESTRATOR}
+$VINTNER orchestrators attest --orchestrator ${ORCHESTRATOR}

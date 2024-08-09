@@ -19,6 +19,13 @@ if [[ -z ${VINTNER} ]]; then
     exit 1
 fi
 
+
+# Check that VARIANT is defined
+if [[ -z ${VARIANT} ]]; then
+    echo "VARIANT is not defined"
+    exit 1
+fi
+
 # Check that ORCHESTRATOR is defined
 if [[ -z ${ORCHESTRATOR} ]]; then
     echo "ORCHESTRATOR is not defined"
