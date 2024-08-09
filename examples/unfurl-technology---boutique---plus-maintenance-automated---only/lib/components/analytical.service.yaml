@@ -24,13 +24,13 @@ node_types:
                 type: string
                 default: 7001
 
-            application_endpoint:
+            application_protocol:
                 type: string
                 default: grpc
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-analytical:v6
+                default: milesstoetzner/boutique-analytical:v5
 
         attributes:
             application_address:

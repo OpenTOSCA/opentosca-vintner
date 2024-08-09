@@ -60,7 +60,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::application_address'}
+                default: {eval: '.::.requirements::[.name=host]::.target::application_endpoint'}
 
         interfaces:
             Standard:
@@ -131,7 +131,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::application_address'}
+                default: {eval: '.::.requirements::[.name=host]::.target::application_endpoint'}
 
         interfaces:
             Standard:

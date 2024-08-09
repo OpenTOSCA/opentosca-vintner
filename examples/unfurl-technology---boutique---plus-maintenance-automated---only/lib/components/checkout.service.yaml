@@ -36,7 +36,7 @@ node_types:
                 type: string
                 default: 7003
 
-            application_endpoint:
+            application_protocol:
                 type: string
                 default: grpc
 
