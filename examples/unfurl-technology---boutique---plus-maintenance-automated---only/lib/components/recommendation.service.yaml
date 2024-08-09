@@ -37,7 +37,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-recommendation:v5
+                default: milesstoetzner/boutique-recommendation:v6
 
         attributes:
             application_address:

@@ -42,7 +42,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-checkout:v5
+                default: milesstoetzner/boutique-checkout:v6
 
             optional_payment_feature:
                 type: boolean

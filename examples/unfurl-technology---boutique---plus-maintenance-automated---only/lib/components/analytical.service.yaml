@@ -30,7 +30,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-analytical:v5
+                default: milesstoetzner/boutique-analytical:v6
 
         attributes:
             application_address:

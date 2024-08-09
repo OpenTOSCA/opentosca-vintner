@@ -36,7 +36,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-currency:v5
+                default: milesstoetzner/boutique-currency:v6
 
         attributes:
             application_address:

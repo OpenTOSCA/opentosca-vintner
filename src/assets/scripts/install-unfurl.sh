@@ -44,3 +44,6 @@ fi
 # requests==2.31.0 is required, see https://github.com/ansible-collections/community.docker/issues/868
 pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2 docker[tls] requests==2.31.0
 ansible-galaxy collection install community.docker:3.9.0
+
+# ansible-galaxy collection install kubernetes.core:3.2.0
+# pip install kubernetes

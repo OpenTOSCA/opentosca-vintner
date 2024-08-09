@@ -10,8 +10,6 @@ imports:
     - recommendation.service.yaml
     - advertisement.service.yaml
 
-# TODO: get os_variant
-
 capability_types:
     boutique.capabilities.Endpoint.Frontend:
         description: The capability to provide a CAN endpoint.
@@ -46,7 +44,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-frontend:v5
+                default: milesstoetzner/boutique-frontend:v6
 
             checkout_address:
                 type: string
@@ -381,10 +379,6 @@ node_types:
         derived_from: frontend.service
 
         properties:
-            os_variant:
-                type: string
-                default: 'not implemented'
-
             os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -436,7 +430,7 @@ node_types:
                                               AD_SERVICE_SECURE: '{{ "0" | string }}'
                                               SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                               ENABLE_PROFILER: '{{ "0" | string }}'
-                                              ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
+                                              ENV_PLATFORM: 'openstack'
                                               OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
                                               PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
@@ -456,10 +450,6 @@ node_types:
         derived_from: frontend.service
 
         properties:
-            os_variant:
-                type: string
-                default: 'not implemented'
-
             os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -529,7 +519,7 @@ node_types:
                                           - 'AD_SERVICE_SECURE=0'
                                           - "SHOPPING_ASSISTANT_SERVICE_ADDR='required-but-not-used"
                                           - 'ENABLE_PROFILER=0'
-                                          - 'ENV_PLATFORM={{ SELF.os_variant | lower }}'
+                                          - 'ENV_PLATFORM=openstack'
                                           - 'OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature | string }}'
                                           - 'PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature }}'
                                       image: '${docker_image.image.image_id}'
@@ -549,10 +539,6 @@ node_types:
         derived_from: frontend.service
 
         properties:
-            os_variant:
-                type: string
-                default: 'not implemented'
-
             os_ssh_user:
                 type: string
                 default: {get_input: os_ssh_user}
@@ -615,7 +601,7 @@ node_types:
                                                           AD_SERVICE_SECURE: '0'
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                                           ENABLE_PROFILER: '0'
-                                                          ENV_PLATFORM: '{{ SELF.os_variant | lower }}'
+                                                          ENV_PLATFORM: 'openstack'
                                                           OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature }}'
                                                           PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature }}'
 

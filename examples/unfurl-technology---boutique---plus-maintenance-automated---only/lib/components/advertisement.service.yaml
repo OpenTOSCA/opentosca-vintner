@@ -36,7 +36,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-advertisement:v5
+                default: milesstoetzner/boutique-advertisement:v6
 
         attributes:
             application_address:

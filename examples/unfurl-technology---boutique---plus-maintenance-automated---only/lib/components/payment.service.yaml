@@ -36,7 +36,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-payment:v5
+                default: milesstoetzner/boutique-payment:v6
 
             optional_payment_feature:
                 type: boolean
