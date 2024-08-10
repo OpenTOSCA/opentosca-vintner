@@ -146,7 +146,7 @@ node_types:
                                       shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
 
                                     - name: Delete Instance
-                                      shell: 'gcloud sql instances delete {{ SELF.instance_name }} --quiet'
+                                      shell: 'gcloud sql instances delete {{ SELF.dbms_name }} --quiet'
 
     ###################################################
     #

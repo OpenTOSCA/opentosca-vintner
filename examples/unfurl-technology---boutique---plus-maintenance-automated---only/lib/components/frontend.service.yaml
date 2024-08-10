@@ -276,7 +276,7 @@ node_types:
 
                                     # https://cloud.google.com/sdk/gcloud/reference/run/services/delete
                                     - name: create app
-                                      ansible.builtin.shell: 'gcloud run services delete {{ SELF.application_name }} --quiet'
+                                      ansible.builtin.shell: 'gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet'
 
     ###################################################
     #
