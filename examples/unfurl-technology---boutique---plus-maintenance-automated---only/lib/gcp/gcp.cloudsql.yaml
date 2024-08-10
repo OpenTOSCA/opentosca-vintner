@@ -40,7 +40,7 @@ node_types:
     # TODO: test this
 
     gcp.cloudsql.ansible.gcp:
-        derived_from: gcp.service
+        derived_from: gcp.cloudsql
 
         interfaces:
             Standard:
@@ -69,7 +69,7 @@ node_types:
     # TODO: test this
 
     gcp.cloudsql.terraform.gcp:
-        derived_from: gcp.service
+        derived_from: gcp.cloudsql
 
         interfaces:
             Standard:

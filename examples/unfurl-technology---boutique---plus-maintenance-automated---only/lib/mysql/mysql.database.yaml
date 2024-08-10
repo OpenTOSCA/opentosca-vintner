@@ -276,6 +276,7 @@ node_types:
                                 - credentials: '{{ SELF.gcp_service_account_file }}'
                                   project: '{{ SELF.gcp_project }}'
                                   region: '{{ SELF.gcp_region }}'
+                            # Could also use GCP CloudSQL connection support, see https://registry.terraform.io/providers/petoju/mysql/latest/docs#gcp-cloudsql-connection
                             mysql:
                                 - endpoint: '{{ HOST.management_address }}'
                                   password: '{{ HOST.dbms_password }}'

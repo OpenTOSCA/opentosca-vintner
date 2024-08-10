@@ -57,6 +57,19 @@ node_types:
     mysql.dbms.ansible.gcp:
         derived_from: mysql.dbms
 
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
+
         attributes:
             application_port:
                 type: string
@@ -148,6 +161,19 @@ node_types:
 
     mysql.dbms.terraform.gcp:
         derived_from: mysql.dbms
+
+        properties:
+            gcp_service_account_file:
+                type: string
+                default: {get_input: gcp_service_account_file}
+
+            gcp_region:
+                type: string
+                default: {get_input: gcp_region}
+
+            gcp_project:
+                type: string
+                default: {get_input: gcp_project}
 
         attributes:
             application_port:

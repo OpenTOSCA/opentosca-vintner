@@ -40,7 +40,7 @@ node_types:
     # TODO: test this
 
     gcp.cloudrun.ansible.gcp:
-        derived_from: gcp.service
+        derived_from: gcp.cloudrun
 
         interfaces:
             Standard:
@@ -69,7 +69,7 @@ node_types:
     # TODO: test this
 
     gcp.cloudrun.terraform.gcp:
-        derived_from: gcp.service
+        derived_from: gcp.cloudrun
 
         interfaces:
             Standard:
