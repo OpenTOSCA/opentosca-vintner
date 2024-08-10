@@ -157,8 +157,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: next: test this
-
     mysql.dbms.terraform.gcp:
         derived_from: mysql.dbms
 

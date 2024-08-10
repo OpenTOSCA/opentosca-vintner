@@ -37,10 +37,10 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     gcp.cloudsql.ansible.gcp:
         derived_from: gcp.cloudsql
+
+        # TODO: test this
 
         interfaces:
             Standard:
@@ -65,8 +65,6 @@ node_types:
     # Terraform GCP
     #
     ###################################################
-
-    # TODO: test this
 
     gcp.cloudsql.terraform.gcp:
         derived_from: gcp.cloudsql

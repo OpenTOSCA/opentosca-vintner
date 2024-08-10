@@ -286,8 +286,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     frontend.service.terraform.gcp:
         derived_from: frontend.service
 

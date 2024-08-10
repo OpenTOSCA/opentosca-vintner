@@ -81,6 +81,10 @@ node_types:
                 type: string
                 default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
 
+            application_endpoint:
+                type: string
+                default: {concat: ['localhost', ':', '{{ SELF.application_port }}']}
+
         interfaces:
             Standard:
                 operations:

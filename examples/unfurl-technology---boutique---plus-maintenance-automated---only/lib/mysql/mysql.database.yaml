@@ -233,8 +233,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: next: test this
-
     mysql.database.terraform.mysql.gcp:
         derived_from: mysql.database
 
@@ -268,7 +266,7 @@ node_types:
                                   - google:
                                         source: hashicorp/google
                                         version: 5.39.1
-                                  - mysql:
+                                    mysql:
                                         source: petoju/mysql
                                         version: 3.0.48
                         provider:
@@ -285,11 +283,11 @@ node_types:
                             google_sql_database:
                                 database:
                                     - name: '{{ SELF.database_name }}'
-                                      instance: '{{ SELF.dbms_name }}'
+                                      instance: '{{ HOST.dbms_name }}'
                             google_sql_user:
                                 user:
                                     - host: '%'
-                                      instance: ${google_sql_database_instance.dbms.name}
+                                      instance: '{{ HOST.dbms_name }}'
                                       name: '{{ SELF.database_name }}'
                                       password: '{{ SELF.database_password }}'
                             mysql_grant:

@@ -66,8 +66,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     gcp.cloudrun.terraform.gcp:
         derived_from: gcp.cloudrun
 
