@@ -37,8 +37,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
     gcp.cloudrun.ansible.gcp:
         derived_from: gcp.cloudrun
 
@@ -50,7 +48,7 @@ node_types:
                             primary: Ansible
                             operation_host: HOST
                             environment:
-                                GCP_SERVICE_ACCOUNT_FILE: '{{ SELF.gcp_service_account_file }}'
+                                GCP_SERVICE_ACCOUNT_FILE: {eval: '.::gcp_service_account_file'}
                                 GCP_AUTH_KIND: 'serviceaccount'
                         inputs:
                             playbook:

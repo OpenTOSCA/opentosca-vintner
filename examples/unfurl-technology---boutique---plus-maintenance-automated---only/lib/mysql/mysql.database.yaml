@@ -177,8 +177,6 @@ node_types:
     #
     ###################################################
 
-    # TODO: next: adapt this to ansible module
-
     mysql.database.ansible.mysql.gcp:
         derived_from: mysql.database
 
@@ -202,21 +200,21 @@ node_types:
                         implementation:
                             primary: Ansible
                             operation_host: ORCHESTRATOR
+                            environment:
+                                GCP_SERVICE_ACCOUNT_FILE: {eval: '.::gcp_service_account_file'}
+                                GCP_AUTH_KIND: 'serviceaccount'
                         inputs:
                             playbook:
                                 q:
-                                    - name: Activate service account
-                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
+                                    # https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_sql_database_module.html
+                                    - name: create a database
+                                      google.cloud.gcp_sql_database:
+                                          name: '{{ SELF.database_name }}'
+                                          charset: utf8
+                                          instance: '{{ HOST.dbms_name }}'
+                                          project: '{{ SELF.gcp_project }}'
 
-                                    # https://cloud.google.com/sql/docs/mysql/create-manage-databases
-                                    - name: Create database
-                                      shell: 'gcloud sql databases create {{ SELF.database_name }} --instance {{ HOST.dbms_name }}'
-                                      register: create_command
-                                      failed_when:
-                                          - "'Created database' not in create_command.stderr"
-                                          - "'database exists' not in create_command.stderr"
-
-                                    - name: create user
+                                    - name: create user (with privileges)
                                       community.mysql.mysql_user:
                                           name: '{{ SELF.database_user }}'
                                           password: '{{ SELF.database_password }}'
@@ -424,7 +422,7 @@ node_types:
                                           login_port: 3306
                                           login_user: root
 
-                                    - name: create user
+                                    - name: create user (with privileges)
                                       community.mysql.mysql_user:
                                           name: '{{ SELF.database_user }}'
                                           password: '{{ SELF.database_password }}'

@@ -119,10 +119,8 @@ node_types:
     #
     ###################################################
 
-    # TODO: test this
-
-    shop.component.ansible.gcp:
-        derived_from: shop.component
+    frontend.service.ansible.gcp:
+        derived_from: frontend.service
 
         properties:
             application_protocol:
@@ -164,63 +162,63 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ service.path }}'
                                           content: '{{ manifest | to_yaml }}'
-                                          vars:
-                                              manifest:
-                                                  apiVersion: serving.knative.dev/v1
-                                                  kind: Service
-                                                  metadata:
-                                                      name: '{{ SELF.application_name }}'
+                                      vars:
+                                          manifest:
+                                              apiVersion: serving.knative.dev/v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
                                                   labels:
                                                       cloud.googleapis.com/location: '{{ SELF.gcp_region }}'
                                                   annotations:
                                                       run.googleapis.com/ingress: all
-                                                  spec:
-                                                      template:
-                                                          spec:
-                                                              containers:
-                                                                  - image: '{{ SELF.application_image }}'
-                                                                    ports:
-                                                                        - name: '{{ SELF.application_protocol }}'
-                                                                          containerPort: '{{ SELF.application_port }}'
-                                                                    env:
-                                                                        - name: PRODUCT_CATALOG_SERVICE_ADDR
-                                                                          value: '{{ SELF.product_endpoint }}'
-                                                                        - name: PRODUCT_CATALOG_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: CURRENCY_SERVICE_ADDR
-                                                                          value: '{{ SELF.currency_endpoint }}'
-                                                                        - name: CURRENCY_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: CART_SERVICE_ADDR
-                                                                          value: '{{ SELF.cart_endpoint }}'
-                                                                        - name: CART_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: RECOMMENDATION_SERVICE_ADDR
-                                                                          value: '{{ SELF.recommendation_endpoint }}'
-                                                                        - name: RECOMMENDATION_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: SHIPPING_SERVICE_ADDR
-                                                                          value: '{{ SELF.shipping_endpoint }}'
-                                                                        - name: SHIPPING_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: CHECKOUT_SERVICE_ADDR
-                                                                          value: '{{ SELF.checkout_endpoint }}'
-                                                                        - name: CHECKOUT_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: AD_SERVICE_ADDR
-                                                                          value: '{{ SELF.advertisement_endpoint }}'
-                                                                        - name: AD_SERVICE_SECURE
-                                                                          value: '1'
-                                                                        - name: SHOPPING_ASSISTANT_SERVICE_ADDR
-                                                                          value: required-but-not-used
-                                                                        - name: ENABLE_PROFILER
-                                                                          value: '{{ "0" | quote }}'
-                                                                        - name: ENV_PLATFORM
-                                                                          value: gcp
-                                                                        - name: OPTIONAL_PAYMENT_FEATURE
-                                                                          value: '{{ SELF.optional_payment_feature | string }}'
-                                                                        - name: PREMIUM_PAYMENT_FEATURE
-                                                                          value: '{{ SELF.premium_payment_feature | string }}'
+                                              spec:
+                                                  template:
+                                                      spec:
+                                                          containers:
+                                                              - image: '{{ SELF.application_image }}'
+                                                                ports:
+                                                                    - name: '{{ SELF.application_protocol }}'
+                                                                      containerPort: '{{ SELF.application_port }}'
+                                                                env:
+                                                                    - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                                      value: '{{ SELF.product_endpoint }}'
+                                                                    - name: PRODUCT_CATALOG_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: CURRENCY_SERVICE_ADDR
+                                                                      value: '{{ SELF.currency_endpoint }}'
+                                                                    - name: CURRENCY_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: CART_SERVICE_ADDR
+                                                                      value: '{{ SELF.cart_endpoint }}'
+                                                                    - name: CART_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: RECOMMENDATION_SERVICE_ADDR
+                                                                      value: '{{ SELF.recommendation_endpoint }}'
+                                                                    - name: RECOMMENDATION_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: SHIPPING_SERVICE_ADDR
+                                                                      value: '{{ SELF.shipping_endpoint }}'
+                                                                    - name: SHIPPING_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: CHECKOUT_SERVICE_ADDR
+                                                                      value: '{{ SELF.checkout_endpoint }}'
+                                                                    - name: CHECKOUT_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: AD_SERVICE_ADDR
+                                                                      value: '{{ SELF.advertisement_endpoint }}'
+                                                                    - name: AD_SERVICE_SECURE
+                                                                      value: '1'
+                                                                    - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+                                                                      value: required-but-not-used
+                                                                    - name: ENABLE_PROFILER
+                                                                      value: '0'
+                                                                    - name: ENV_PLATFORM
+                                                                      value: gcp
+                                                                    - name: OPTIONAL_PAYMENT_FEATURE
+                                                                      value: '"{{ SELF.optional_payment_feature }}"'
+                                                                    - name: PREMIUM_PAYMENT_FEATURE
+                                                                      value: '"{{ SELF.premium_payment_feature }}"'
 
                                     # https://cloud.google.com/sdk/gcloud/reference/run/services/replace
                                     - name: apply service
@@ -236,20 +234,20 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ policy.path }}'
                                           content: '{{ manifest | to_yaml }}'
-                                          vars:
-                                              manifest:
-                                                  bindings:
-                                                      - members:
-                                                            - allUsers
-                                                        role: roles/run.invoker
+                                      vars:
+                                          manifest:
+                                              bindings:
+                                                  - members:
+                                                        - allUsers
+                                                    role: roles/run.invoker
 
                                     - name: apply policy
-                                      ansible.builtin.shell: 'gcloud run services set-iam-policy {{ SELF.application_name }} {{ policy.path }} --quiet'
+                                      ansible.builtin.shell: 'gcloud run services set-iam-policy {{ SELF.application_name }} {{ policy.path }} --region {{ SELF.gcp_region }} --quiet'
 
                                     # https://cloud.google.com/sdk/gcloud/reference/run/services/describe
                                     - name: describe service
                                       register: service_description
-                                      ansible.builtin.shell: 'gcloud run services describe {{ service.path }} --quiet --format=json'
+                                      ansible.builtin.shell: 'gcloud run services describe {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet --format=json'
 
                                     - name: set attributes
                                       set_fact:
@@ -555,7 +553,7 @@ node_types:
                                           - 'ENABLE_PROFILER=0'
                                           - 'ENV_PLATFORM=openstack'
                                           - 'OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature | string }}'
-                                          - 'PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature }}'
+                                          - 'PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature | string }}'
                                       image: '${docker_image.image.image_id}'
                                       name: '{{ SELF.application_name }}'
                                       network_mode: host
@@ -640,8 +638,8 @@ node_types:
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                                           ENABLE_PROFILER: '0'
                                                           ENV_PLATFORM: 'openstack'
-                                                          OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature }}'
-                                                          PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature }}'
+                                                          OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
+                                                          PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
                                     - name: apply compose
                                       ansible.builtin.shell: |

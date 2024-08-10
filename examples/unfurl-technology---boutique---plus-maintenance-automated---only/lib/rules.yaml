@@ -43,7 +43,6 @@ ansible:
       assign: mysql.database.ansible.mysql.kubernetes
       comment: Primary use case due to the specialization of Ansible.
 
-    # TODO: whats about google.cloud.gcp_sql_database?
     - component: mysql.database
       hosting:
           - mysql.dbms
@@ -62,7 +61,6 @@ ansible:
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    # TODO: whats about google.cloud.gcp_sql_instance?
     - component: mysql.dbms
       hosting: gcp.cloudsql
       weight: 1
@@ -84,7 +82,6 @@ ansible:
       comment: Terraform is more specialized.
 
     # GCP Service
-    # TODO: what is about google.cloud.gcp_serviceusage_service?
     - component: gcp.service
       weight: 1
 

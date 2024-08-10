@@ -45,5 +45,5 @@ fi
 pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 ansible==4.10.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2 docker[tls] requests==2.31.0
 ansible-galaxy collection install community.docker:3.9.0
 
-# ansible-galaxy collection install kubernetes.core:3.2.0
-# pip install kubernetes
+# sometimes suddenly pymysql and kubernetes disappear ...
+# might require to update kubernetes, i.e., `ansible-galaxy collection install kubernetes.core:3.2.0`
