@@ -38,6 +38,10 @@ node_types:
                 type: string
                 default: milesstoetzner/boutique-shipping:v6
 
+            disable_profiler:
+                type: string
+                default: 1
+
         attributes:
             application_address:
                 type: string

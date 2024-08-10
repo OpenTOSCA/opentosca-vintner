@@ -84,6 +84,10 @@ node_types:
                 type: boolean
                 default: {eval: '.::.requirements::[.name=checkout]::.target::premium_payment_feature'}
 
+            enable_profiler:
+                type: string
+                default: 0
+
         capabilities:
             frontend:
                 type: boutique.capabilities.Endpoint.Frontend

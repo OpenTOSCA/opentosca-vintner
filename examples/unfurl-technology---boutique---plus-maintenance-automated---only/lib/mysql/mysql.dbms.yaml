@@ -24,6 +24,10 @@ node_types:
             dbms_password:
                 type: string
 
+            dbms_ssl_mode:
+                type: string
+                default: None
+
         attributes:
             application_address:
                 type: string
@@ -67,6 +71,10 @@ node_types:
             gcp_project:
                 type: string
                 default: {get_input: gcp_project}
+
+            dbms_ssl_mode:
+                type: string
+                default: Preferred
 
         attributes:
             application_port:
@@ -169,6 +177,10 @@ node_types:
             gcp_project:
                 type: string
                 default: {get_input: gcp_project}
+
+            dbms_ssl_mode:
+                type: string
+                default: Preferred
 
         attributes:
             application_port:

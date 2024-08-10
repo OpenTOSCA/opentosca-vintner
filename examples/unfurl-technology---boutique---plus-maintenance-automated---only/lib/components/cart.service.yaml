@@ -26,7 +26,7 @@ node_types:
                 type: string
                 default: cart
 
-            # TODO: make this configurable
+            # TODO: make this configurable in DA
             application_port:
                 type: string
                 default: 7070
@@ -38,6 +38,38 @@ node_types:
             application_image:
                 type: string
                 default: milesstoetzner/boutique-cart:v6
+
+            mysql_host:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::application_endpoint'}
+
+            mysql_port:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+
+            mysql_database:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+
+            mysql_user:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+
+            mysql_password:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+
+            mysql_table:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::database_table'}
+
+            mysql_ssl_mode:
+                type: string
+                default: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=database]::.target::dbms_ssl_mode'}
+
+            disable_profiler:
+                type: string
+                default: 1
 
         attributes:
             application_address:

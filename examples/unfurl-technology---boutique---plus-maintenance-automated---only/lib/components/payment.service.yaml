@@ -44,6 +44,10 @@ node_types:
             premium_payment_feature:
                 type: boolean
 
+            disable_profiler:
+                type: string
+                default: 1
+
         attributes:
             application_address:
                 type: string

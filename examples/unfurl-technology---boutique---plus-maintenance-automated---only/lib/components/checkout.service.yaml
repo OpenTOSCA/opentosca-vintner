@@ -44,6 +44,30 @@ node_types:
                 type: string
                 default: milesstoetzner/boutique-checkout:v6
 
+            product_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+
+            shipping_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+
+            payment_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=payment]::.target::application_endpoint'}
+
+            email_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=email]::.target::application_endpoint'}
+
+            currency_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+
+            cart_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+
             optional_payment_feature:
                 type: boolean
                 default: {eval: '.::.requirements::[.name=payment]::.target::optional_payment_feature'}
@@ -51,6 +75,10 @@ node_types:
             premium_payment_feature:
                 type: boolean
                 default: {eval: '.::.requirements::[.name=payment]::.target::premium_payment_feature'}
+
+            disable_profiler:
+                type: string
+                default: 1
 
         attributes:
             application_address:

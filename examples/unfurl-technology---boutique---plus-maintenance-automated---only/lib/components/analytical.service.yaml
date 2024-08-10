@@ -32,6 +32,18 @@ node_types:
                 type: string
                 default: milesstoetzner/boutique-analytical:v5
 
+            checkout_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+
+            recommendation_endpoint:
+                type: string
+                default: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+
+            disable_profiler:
+                type: string
+                default: 1
+
         attributes:
             application_address:
                 type: string
