@@ -1,1 +1,0 @@
-grpcurl -plaintext -proto protos/grpc/health/v1/health.proto localhost:81 grpc.health.v1.Health.Check
