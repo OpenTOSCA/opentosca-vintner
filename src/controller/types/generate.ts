@@ -36,6 +36,7 @@ export default async function (options: TypesGenerateOptions) {
 
             if (check.isUndefined(template.metadata)) continue
 
+            // TODO: get this from rules by simply checking if rule.component isA this.type
             const generate = template.metadata[METADATA.VINTNER_GENERATE]
             if (check.isUndefined(generate)) continue
 
