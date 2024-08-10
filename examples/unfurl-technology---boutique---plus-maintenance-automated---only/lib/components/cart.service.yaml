@@ -71,10 +71,6 @@ node_types:
                 type: string
                 default: 1
 
-        attributes:
-            application_address:
-                type: string
-
         capabilities:
             cart:
                 type: boutique.capabilities.Endpoint.Cart

@@ -1071,6 +1071,21 @@ assets
     )
 
 /**
+ * Types
+ */
+const types = program.command('types').description('handles types')
+
+types
+    .command('generate')
+    .description('generate types')
+    .requiredOption('--template <string>', 'path to variable service template')
+    .action(
+        hae.exit(async options => {
+            await Controller.types.generate(options)
+        })
+    )
+
+/**
  * Utils
  */
 const utils = program.command('utils').description('some utilities')

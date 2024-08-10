@@ -626,6 +626,18 @@ resolvers.post(
 )
 
 /**
+ * Types
+ */
+
+resolvers.post(
+    '/types/generate',
+    hae.express(async (req, res, next) => {
+        await Controller.types.generate(req.body)
+        res.json({})
+    })
+)
+
+/**
  * Utils
  */
 

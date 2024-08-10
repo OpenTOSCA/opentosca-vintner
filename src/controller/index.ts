@@ -9,19 +9,21 @@ import ServerController from './server'
 import SetupController from './setup'
 import TemplateController from './template'
 import TemplatesController from './templates'
+import TypesController from './types'
 import UtilsController from './utils'
 
 export default {
+    assets: AssetsController,
     info: InfoController,
     install: InstallController,
     instances: InstancesController,
-    query: QueryController,
     orchestrators: OrchestratorsController,
+    query: QueryController,
+    sensors: SensorsController,
     server: ServerController,
     setup: SetupController,
     template: TemplateController,
     templates: TemplatesController,
-    sensors: SensorsController,
-    assets: AssetsController,
+    types: TypesController,
     utils: UtilsController,
 }

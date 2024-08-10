@@ -44,10 +44,6 @@ node_types:
                 type: string
                 default: 1
 
-        attributes:
-            application_address:
-                type: string
-
         requirements:
             - checkout:
                   capability: boutique.capabilities.Endpoint.Checkout
