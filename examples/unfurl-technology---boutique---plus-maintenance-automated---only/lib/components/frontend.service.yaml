@@ -35,18 +35,26 @@ node_types:
             application_name:
                 type: string
                 default: frontend
+                metadata:
+                    vintner_ignore: true
 
             application_port:
                 type: string
                 default: 8080
+                metadata:
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: http
+                metadata:
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-frontend:v6
+                metadata:
+                    vintner_ignore: true
 
             checkout_endpoint:
                 type: string

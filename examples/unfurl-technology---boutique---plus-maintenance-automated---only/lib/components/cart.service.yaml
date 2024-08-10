@@ -2,6 +2,10 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - cart.service.implementation.yaml
+
+metadata:
+    vintner_generate: ansible::gcp, terraform::gcp, ansible::docker, terraform::docker, docker::docker, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
 
 capability_types:
     boutique.capabilities.Endpoint.Cart:
@@ -25,19 +29,27 @@ node_types:
             application_name:
                 type: string
                 default: cart
+                metadata:
+                    vintner_ignore: true
 
             # TODO: make this configurable in DA
             application_port:
                 type: string
                 default: 7070
+                metadata:
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: grpc
+                metadata:
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-cart:v6
+                metadata:
+                    vintner_ignore: true
 
             mysql_host:
                 type: string

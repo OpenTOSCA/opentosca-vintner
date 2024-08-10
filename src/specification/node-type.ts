@@ -15,7 +15,12 @@ export type NodeType = {
     interfaces?: {[key: string]: InterfaceDefinition}
 }
 
-export type PropertyDefinition = {}
+export type PropertyDefinition = {
+    type?: string
+    default?: any
+    metadata?: {[key: string]: string | boolean}
+}
+
 export type AttributeDefinition = {}
 export type CapabilityDefinition = {}
 

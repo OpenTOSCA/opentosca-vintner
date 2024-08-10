@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+
 export default class Queue<T> {
     private items: T[] = []
 
@@ -7,6 +9,12 @@ export default class Queue<T> {
 
     pop(): T | undefined {
         return this.items.shift()
+    }
+
+    next(): T {
+        const result = this.pop()
+        assert.isDefined(result)
+        return result
     }
 
     peek(): T {

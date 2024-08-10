@@ -2,6 +2,10 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - advertisement.service.implementation.yaml
+
+metadata:
+    vintner_generate: ansible::gcp, terraform::gcp, ansible::docker, terraform::docker, docker::docker, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
 
 capability_types:
     boutique.capabilities.Endpoint.Advertisement:
@@ -26,25 +30,25 @@ node_types:
                 type: string
                 default: advertisement
                 metadata:
-                    vintner_env_ignore: true
+                    vintner_ignore: true
 
             application_port:
                 type: string
                 default: 7000
                 metadata:
-                    vintner_env_name: PORT
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: grpc
                 metadata:
-                    vintner_env_ignore: true
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-advertisement:v6
                 metadata:
-                    vintner_env_ignore: true
+                    vintner_ignore: true
 
             disable_profiler:
                 type: string

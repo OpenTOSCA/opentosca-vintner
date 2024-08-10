@@ -1078,7 +1078,7 @@ const types = program.command('types').description('handles types')
 types
     .command('generate')
     .description('generate types')
-    .requiredOption('--template <string>', 'path to variable service template')
+    .requiredOption('--lib <string>', 'path to types library')
     .action(
         hae.exit(async options => {
             await Controller.types.generate(options)

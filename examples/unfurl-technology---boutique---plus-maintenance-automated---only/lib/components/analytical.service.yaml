@@ -4,6 +4,10 @@ imports:
     - ../base.yaml
     - checkout.service.yaml
     - recommendation.service.yaml
+    - analytical.service.implementation.yaml
+
+metadata:
+    vintner_generate: ansible::gcp, terraform::gcp, ansible::docker, terraform::docker, docker::docker, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
 
 node_types:
     ###################################################
@@ -19,24 +23,32 @@ node_types:
             application_name:
                 type: string
                 default: analytical
+                metadata:
+                    vintner_ignore: true
 
             application_port:
                 type: string
                 default: 7001
+                metadata:
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: grpc
+                metadata:
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-analytical:v5
+                metadata:
+                    vintner_ignore: true
 
-            checkout_endpoint:
+            CHECKOUT_SERVICE_ADDR:
                 type: string
                 default: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
 
-            recommendation_endpoint:
+            RECOMMENDATION_SERVICE_ADDR:
                 type: string
                 default: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
 

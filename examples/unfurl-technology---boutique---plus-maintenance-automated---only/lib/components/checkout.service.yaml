@@ -8,6 +8,10 @@ imports:
     - shipping.service.yaml
     - cart.service.yaml
     - product.service.yaml
+    - checkout.service.implementation.yaml
+
+metadata:
+    vintner_generate: ansible::gcp, terraform::gcp, ansible::docker, terraform::docker, docker::docker, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
 
 capability_types:
     boutique.capabilities.Endpoint.Checkout:
@@ -31,18 +35,26 @@ node_types:
             application_name:
                 type: string
                 default: checkout
+                metadata:
+                    vintner_ignore: true
 
             application_port:
                 type: string
                 default: 7003
+                metadata:
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: grpc
+                metadata:
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-checkout:v6
+                metadata:
+                    vintner_ignore: true
 
             product_endpoint:
                 type: string

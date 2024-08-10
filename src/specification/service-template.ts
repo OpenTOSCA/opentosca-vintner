@@ -3,6 +3,7 @@
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969451}
  */
 import {ImportDefinition} from '#spec/import-definition'
+import {NodeType} from '#spec/node-type'
 import {GroupType} from './group-type'
 import {TopologyTemplate} from './topology-template'
 
@@ -20,5 +21,6 @@ export type ServiceTemplate = {
     metadata?: {[key: string]: string}
     description?: string
     topology_template?: TopologyTemplate
+    node_types?: {[key: string]: NodeType}
     group_types?: {[key: string]: GroupType}
 }

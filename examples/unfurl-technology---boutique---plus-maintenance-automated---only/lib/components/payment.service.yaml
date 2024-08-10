@@ -2,6 +2,10 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../base.yaml
+    - payment.service.implementation.yaml
+
+metadata:
+    vintner_generate: ansible::gcp, terraform::gcp, ansible::docker, terraform::docker, docker::docker, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
 
 capability_types:
     boutique.capabilities.Endpoint.Payment:
@@ -25,18 +29,26 @@ node_types:
             application_name:
                 type: string
                 default: payment
+                metadata:
+                    vintner_ignore: true
 
             application_port:
                 type: string
                 default: 7006
+                metadata:
+                    vintner_name: PORT
 
             application_protocol:
                 type: string
                 default: grpc
+                metadata:
+                    vintner_ignore: true
 
             application_image:
                 type: string
                 default: milesstoetzner/boutique-payment:v6
+                metadata:
+                    vintner_ignore: true
 
             optional_payment_feature:
                 type: boolean
