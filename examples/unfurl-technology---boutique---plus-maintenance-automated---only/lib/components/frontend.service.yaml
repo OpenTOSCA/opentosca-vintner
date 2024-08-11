@@ -96,6 +96,10 @@ node_types:
                 type: string
                 default: 0
 
+            SHOPPING_ASSISTANT_SERVICE_ADDR:
+                type: string
+                default: 'required-but-not-used'
+
         capabilities:
             frontend:
                 type: boutique.capabilities.Endpoint.Frontend

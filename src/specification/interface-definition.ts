@@ -4,7 +4,8 @@
  */
 
 export type InterfaceDefinition = {
-    operations: {[key: string]: OperationDefinition}
+    operations?: {[key: string]: OperationDefinition}
+    inputs?: {[key: string]: any}
 }
 
 export type OperationDefinition = {}
