@@ -22,7 +22,7 @@ export default async function (options: TypesGenerateOptions) {
         files.listDirectories(dir).forEach(it => dirs.add(path.resolve(dir, it)))
 
         for (const file of files.listFiles(dir)) {
-            if (!file.endsWith('.yaml') && !file.endsWith('.yml')) continue
+            if (!file.endsWith('.yaml')) continue
 
             const resolved = path.resolve(dir, file)
 
@@ -56,9 +56,7 @@ export default async function (options: TypesGenerateOptions) {
                         'python.application',
                         'dotnet.application',
                         'java.application',
-                    ].includes(type.derived_from) &&
-                    hosting.length === 1 &&
-                    ['gcp', 'docker'].includes(utils.first(hosting))
+                    ].includes(type.derived_from)
                 ) {
                     const plugin = registry.get(`software.application::${variant}`)
 

@@ -1,4 +1,4 @@
-import {mapProperties} from '#controller/types/plugins/utils'
+import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#controller/types/plugins/utils'
 import {TypePlugin} from '#controller/types/types'
 
 const plugin: TypePlugin = {
@@ -7,6 +7,7 @@ const plugin: TypePlugin = {
         return {
             derived_from: name,
             properties: {
+                ...secureApplicationProtocolPropertyDefinition(type),
                 gcp_service_account_file: {
                     type: 'string',
                     default: {
@@ -77,7 +78,7 @@ const plugin: TypePlugin = {
                                 ],
                                 application_endpoint: [
                                     {
-                                        value: '${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443',
+                                        value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443',
                                     },
                                 ],
                             },

@@ -44,6 +44,7 @@ node_types:
 
             application_endpoint:
                 type: string
+                default: {urljoin: [{eval: '.::application_protocol'}, {eval: '.::application_address'}, {eval: '.::application_port'}]}
 
     python.application:
         derived_from: software.application
@@ -66,6 +67,7 @@ node_types:
 
             application_endpoint:
                 type: string
+                default: {urljoin: [{eval: '.::application_protocol'}, {eval: '.::application_address'}, {eval: '.::application_port'}]}
 
     node.application:
         derived_from: software.application
@@ -88,6 +90,7 @@ node_types:
 
             application_endpoint:
                 type: string
+                default: {urljoin: [{eval: '.::application_protocol'}, {eval: '.::application_address'}, {eval: '.::application_port'}]}
 
     dotnet.application:
         derived_from: software.application
@@ -110,6 +113,7 @@ node_types:
 
             application_endpoint:
                 type: string
+                default: {urljoin: [{eval: '.::application_protocol'}, {eval: '.::application_address'}, {eval: '.::application_port'}]}
 
     java.application:
         derived_from: software.application
@@ -132,6 +136,7 @@ node_types:
 
             application_endpoint:
                 type: string
+                default: {urljoin: [{eval: '.::application_protocol'}, {eval: '.::application_address'}, {eval: '.::application_port'}]}
 
     ###################################################
     #

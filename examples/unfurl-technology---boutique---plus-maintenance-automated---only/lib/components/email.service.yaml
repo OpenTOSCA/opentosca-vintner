@@ -46,7 +46,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-email:v6
+                default: milesstoetzner/boutique-email:v7
                 metadata:
                     vintner_ignore: true
 

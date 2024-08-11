@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import {METADATA} from '#controller/types/types'
-import {NodeType} from '#spec/node-type'
+import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 
 export function mapProperties(type: NodeType, options: {quote?: boolean; format?: 'map' | 'list' | 'ini'} = {}) {
@@ -40,4 +40,20 @@ export function mapProperties(type: NodeType, options: {quote?: boolean; format?
     if (options.format === 'ini') return list.map(it => `${it.name}=${it.value}`)
 
     throw new UnexpectedError()
+}
+
+export function secureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
+    assert.isDefined(type.properties)
+
+    const definition = type.properties['application_protocol']
+    assert.isDefined(definition)
+    assert.isDefined(definition.default)
+    assert.isString(definition.default)
+
+    return {
+        application_property: {
+            type: 'string',
+            default: `${definition.default}s`,
+        },
+    }
 }

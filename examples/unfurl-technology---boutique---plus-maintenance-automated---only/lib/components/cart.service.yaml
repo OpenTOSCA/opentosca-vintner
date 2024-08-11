@@ -47,7 +47,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-cart:v6
+                default: milesstoetzner/boutique-cart:v7
                 metadata:
                     vintner_ignore: true
 

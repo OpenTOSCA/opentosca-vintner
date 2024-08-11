@@ -46,7 +46,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-payment:v6
+                default: milesstoetzner/boutique-payment:v7
                 metadata:
                     vintner_ignore: true
 

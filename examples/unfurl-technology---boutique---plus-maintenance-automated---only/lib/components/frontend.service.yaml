@@ -1,4 +1,4 @@
-# TODO: at gcp, application_port is internal but application is exposed by 443
+# TODO: at gcp, application_port is internal but application is exposed by 443 (also applies to application_protocol)
 
 tosca_definitions_version: tosca_simple_yaml_1_3
 
@@ -52,7 +52,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-frontend:v6
+                default: milesstoetzner/boutique-frontend:v7
                 metadata:
                     vintner_ignore: true
 
@@ -92,9 +92,9 @@ node_types:
                 type: boolean
                 default: {eval: '.::.requirements::[.name=checkout]::.target::premium_payment_feature'}
 
-            enable_profiler:
+            disable_profiler:
                 type: string
-                default: 0
+                default: 1
 
             SHOPPING_ASSISTANT_SERVICE_ADDR:
                 type: string
@@ -227,10 +227,8 @@ node_types:
                                                                       value: '1'
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: required-but-not-used
-                                                                    - name: ENABLE_PROFILER
-                                                                      value: '0'
-                                                                    - name: ENV_PLATFORM
-                                                                      value: gcp
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '1'
                                                                     - name: OPTIONAL_PAYMENT_FEATURE
                                                                       value: '"{{ SELF.optional_payment_feature }}"'
                                                                     - name: PREMIUM_PAYMENT_FEATURE
@@ -400,10 +398,8 @@ node_types:
                                                         value: '1'
                                                       - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                         value: required-but-not-used
-                                                      - name: ENABLE_PROFILER
-                                                        value: '{{ "0" | quote }}'
-                                                      - name: ENV_PLATFORM
-                                                        value: gcp
+                                                      - name: DISABLE_PROFILER
+                                                        value: '{{ "1" | quote }}'
                                                       - name: OPTIONAL_PAYMENT_FEATURE
                                                         value: '{{ SELF.optional_payment_feature | string }}'
                                                       - name: PREMIUM_PAYMENT_FEATURE
@@ -473,8 +469,7 @@ node_types:
                                               AD_SERVICE_ADDR: '{{ SELF.advertisement_endpoint }}'
                                               AD_SERVICE_SECURE: '{{ "0" | string }}'
                                               SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                              ENABLE_PROFILER: '{{ "0" | string }}'
-                                              ENV_PLATFORM: 'openstack'
+                                              DISABLE_PROFILER: '{{ "1" | string }}'
                                               OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
                                               PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
@@ -566,8 +561,7 @@ node_types:
                                           - 'AD_SERVICE_ADDR={{ SELF.advertisement_endpoint }}'
                                           - 'AD_SERVICE_SECURE=0'
                                           - "SHOPPING_ASSISTANT_SERVICE_ADDR='required-but-not-used"
-                                          - 'ENABLE_PROFILER=0'
-                                          - 'ENV_PLATFORM=openstack'
+                                          - 'DISABLE_PROFILER=1'
                                           - 'OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature | string }}'
                                           - 'PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature | string }}'
                                       image: '${docker_image.image.image_id}'
@@ -652,8 +646,7 @@ node_types:
                                                           AD_SERVICE_ADDR: '{{ SELF.advertisement_endpoint }}'
                                                           AD_SERVICE_SECURE: '0'
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
-                                                          ENABLE_PROFILER: '0'
-                                                          ENV_PLATFORM: 'openstack'
+                                                          DISABLE_PROFILER: '1'
                                                           OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
                                                           PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
 
@@ -789,11 +782,8 @@ node_types:
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: 'required-but-not-used'
 
-                                                                    - name: ENABLE_PROFILER
-                                                                      value: '{{ "0" | string }}'
-
-                                                                    - name: ENV_PLATFORM
-                                                                      value: 'kubernetes'
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '{{ "1" | string }}'
 
                                                                     - name: OPTIONAL_PAYMENT_FEATURE
                                                                       value: '{{ SELF.optional_payment_feature | string }}'
@@ -928,10 +918,8 @@ node_types:
                                                                     value: '{{ "0" | string }}'
                                                                   - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                     value: required-but-not-used
-                                                                  - name: ENABLE_PROFILER
-                                                                    value: '{{ "0" | string }}'
-                                                                  - name: ENV_PLATFORM
-                                                                    value: kubernetes
+                                                                  - name: DISABLE_PROFILER
+                                                                    value: '{{ "1" | string }}'
                                                                   - name: OPTIONAL_PAYMENT_FEATURE
                                                                     value: '{{ SELF.optional_payment_feature | string }}'
                                                                   - name: PREMIUM_PAYMENT_FEATURE
@@ -1061,11 +1049,8 @@ node_types:
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: 'required-but-not-used'
 
-                                                                    - name: ENABLE_PROFILER
-                                                                      value: '0'
-
-                                                                    - name: ENV_PLATFORM
-                                                                      value: 'kubernetes'
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '1'
 
                                                                     - name: OPTIONAL_PAYMENT_FEATURE
                                                                       value: '{{ SELF.optional_payment_feature }}'

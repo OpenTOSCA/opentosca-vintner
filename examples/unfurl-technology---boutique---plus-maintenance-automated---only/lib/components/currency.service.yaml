@@ -46,7 +46,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-currency:v6
+                default: milesstoetzner/boutique-currency:v7
                 metadata:
                     vintner_ignore: true
 

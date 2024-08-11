@@ -25,20 +25,6 @@ const plugin: TypePlugin = {
                     type: 'string',
                     default: '127.0.0.1',
                 },
-                application_endpoint: {
-                    type: 'string',
-                    default: {
-                        concat: [
-                            {
-                                eval: '.::application_address',
-                            },
-                            ':',
-                            {
-                                eval: '.::application_port',
-                            },
-                        ],
-                    },
-                },
             },
             interfaces: {
                 Standard: {
