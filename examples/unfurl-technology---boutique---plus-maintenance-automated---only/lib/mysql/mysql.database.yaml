@@ -29,7 +29,7 @@ node_types:
         attributes:
             application_address:
                 type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::application_endpoint'}
+                default: {eval: '.::.requirements::[.name=host]::.target::application_address'}
 
             application_port:
                 type: integer

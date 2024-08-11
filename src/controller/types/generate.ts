@@ -78,7 +78,7 @@ export default async function (options: TypesGenerateOptions) {
                 : []
             implementationImports.push(templateFilename)
 
-            const search = new RegExp(String.raw`# \[OPENTOSCA\_VINTNER\_GENERATION\_MARK\].*`, 'g')
+            const search = new RegExp(String.raw`\s\s\s\s#\s\[OPENTOSCA\_VINTNER\_GENERATION\_MARK\][\s\S]*`, 'm')
             const replace = indent(`${GENERATION_MARK}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(node_types)}`)
             const implementationString = search.test(templateString)
                 ? templateString.replace(search, replace)

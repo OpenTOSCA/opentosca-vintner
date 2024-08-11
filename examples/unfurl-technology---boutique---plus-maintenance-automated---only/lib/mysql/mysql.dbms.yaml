@@ -764,6 +764,7 @@ node_types:
                                           content: '{{ manifest | to_yaml }}'
                                       vars:
                                           manifest:
+                                              name: '{{ SELF.dbms_name }}'
                                               services:
                                                   application:
                                                       container_name: '{{ SELF.dbms_name }}'

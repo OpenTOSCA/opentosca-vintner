@@ -59,6 +59,7 @@ const plugin: TypePlugin = {
                                             },
                                             vars: {
                                                 manifest: {
+                                                    name: '{{ SELF.application_name }}',
                                                     services: {
                                                         application: {
                                                             container_name: '{{ SELF.application_name }}',

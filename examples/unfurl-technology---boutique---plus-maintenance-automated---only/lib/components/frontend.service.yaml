@@ -129,6 +129,10 @@ node_types:
                   capability: boutique.capabilities.Endpoint.Recommendation
                   relationship: boutique.relationships.ConnectsTo.Recommendation
 
+            - advertisement:
+                  capability: boutique.capabilities.Endpoint.Advertisement
+                  relationship: boutique.relationships.ConnectsTo.Advertisement
+
     ###################################################
     #
     # Ansible GCP
@@ -624,6 +628,7 @@ node_types:
                                           content: '{{ manifest | to_yaml }}'
                                       vars:
                                           manifest:
+                                              name: '{{ SELF.application_name }}'
                                               services:
                                                   application:
                                                       container_name: '{{ SELF.application_name }}'
@@ -647,8 +652,8 @@ node_types:
                                                           AD_SERVICE_SECURE: '0'
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
                                                           DISABLE_PROFILER: '1'
-                                                          OPTIONAL_PAYMENT_FEATURE: '{{ SELF.optional_payment_feature | string }}'
-                                                          PREMIUM_PAYMENT_FEATURE: '{{ SELF.premium_payment_feature | string }}'
+                                                          OPTIONAL_PAYMENT_FEATURE: '"{{ SELF.optional_payment_feature }}"'
+                                                          PREMIUM_PAYMENT_FEATURE: '"{{ SELF.premium_payment_feature }}"'
 
                                     - name: apply compose
                                       ansible.builtin.shell: |
