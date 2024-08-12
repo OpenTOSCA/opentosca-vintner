@@ -46,11 +46,11 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-recommendation:v7
+                default: milesstoetzner/boutique-recommendation:v8
                 metadata:
                     vintner_ignore: true
 
-            product_endpoint:
+            PRODUCT_CATALOG_SERVICE_ADDR:
                 type: string
                 default: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
 
@@ -142,8 +142,8 @@ node_types:
                                     env:
                                       - name: PORT
                                         value: '"{{ SELF.application_port }}"'
-                                      - name: PRODUCT_ENDPOINT
-                                        value: '"{{ SELF.product_endpoint }}"'
+                                      - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                        value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                       - name: DISABLE_PROFILER
                                         value: '"{{ SELF.disable_profiler }}"'
                     - name: apply service
@@ -260,8 +260,8 @@ node_types:
                               env:
                                 - name: PORT
                                   value: '"{{ SELF.application_port }}"'
-                                - name: PRODUCT_ENDPOINT
-                                  value: '"{{ SELF.product_endpoint }}"'
+                                - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                  value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                 - name: DISABLE_PROFILER
                                   value: '"{{ SELF.disable_profiler }}"'
     recommendation.service.ansible.docker:
@@ -300,7 +300,7 @@ node_types:
                         network_mode: host
                         env:
                           PORT: '"{{ SELF.application_port }}"'
-                          PRODUCT_ENDPOINT: '"{{ SELF.product_endpoint }}"'
+                          PRODUCT_CATALOG_SERVICE_ADDR: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                           DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
                 playbookArgs:
                   - '--become'
@@ -361,9 +361,9 @@ node_types:
                 docker_container:
                   application:
                     - env:
-                        - PORT="{{ SELF.application_port }}"
-                        - PRODUCT_ENDPOINT="{{ SELF.product_endpoint }}"
-                        - DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                        - PORT={{ SELF.application_port }}
+                        - PRODUCT_CATALOG_SERVICE_ADDR={{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}
+                        - DISABLE_PROFILER={{ SELF.disable_profiler }}
                       image: ${docker_image.image.image_id}
                       name: '{{ SELF.application_name }}'
                       network_mode: host
@@ -417,7 +417,7 @@ node_types:
                               network_mode: host
                               environment:
                                 PORT: '"{{ SELF.application_port }}"'
-                                PRODUCT_ENDPOINT: '"{{ SELF.product_endpoint }}"'
+                                PRODUCT_CATALOG_SERVICE_ADDR: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                 DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
                     - name: apply compose
                       ansible.builtin.shell: |
@@ -496,8 +496,8 @@ node_types:
                                     env:
                                       - name: PORT
                                         value: '"{{ SELF.application_port }}"'
-                                      - name: PRODUCT_ENDPOINT
-                                        value: '"{{ SELF.product_endpoint }}"'
+                                      - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                        value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                       - name: DISABLE_PROFILER
                                         value: '"{{ SELF.disable_profiler }}"'
                                     ports:
@@ -585,8 +585,8 @@ node_types:
                                     - env:
                                         - name: PORT
                                           value: '"{{ SELF.application_port }}"'
-                                        - name: PRODUCT_ENDPOINT
-                                          value: '"{{ SELF.product_endpoint }}"'
+                                        - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                          value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                         - name: DISABLE_PROFILER
                                           value: '"{{ SELF.disable_profiler }}"'
                                       image: '{{ SELF.application_image }}'
@@ -655,8 +655,8 @@ node_types:
                                     env:
                                       - name: PORT
                                         value: '"{{ SELF.application_port }}"'
-                                      - name: PRODUCT_ENDPOINT
-                                        value: '"{{ SELF.product_endpoint }}"'
+                                      - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                        value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
                                       - name: DISABLE_PROFILER
                                         value: '"{{ SELF.disable_profiler }}"'
                                     ports:

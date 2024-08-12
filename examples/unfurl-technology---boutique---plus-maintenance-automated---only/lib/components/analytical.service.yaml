@@ -39,7 +39,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-analytics:v7
+                default: milesstoetzner/boutique-analytics:v8
                 metadata:
                     vintner_ignore: true
 
@@ -359,10 +359,10 @@ node_types:
                 docker_container:
                   application:
                     - env:
-                        - PORT="{{ SELF.application_port }}"
-                        - CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
-                        - RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
-                        - DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                        - PORT={{ SELF.application_port }}
+                        - CHECKOUT_SERVICE_ADDR={{ SELF.CHECKOUT_SERVICE_ADDR }}
+                        - RECOMMENDATION_SERVICE_ADDR={{ SELF.RECOMMENDATION_SERVICE_ADDR }}
+                        - DISABLE_PROFILER={{ SELF.disable_profiler }}
                       image: ${docker_image.image.image_id}
                       name: '{{ SELF.application_name }}'
                       network_mode: host

@@ -45,7 +45,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-payment:v7
+                default: milesstoetzner/boutique-payment:v8
                 metadata:
                     vintner_ignore: true
 
@@ -363,10 +363,10 @@ node_types:
                 docker_container:
                   application:
                     - env:
-                        - PORT="{{ SELF.application_port }}"
-                        - OPTIONAL_PAYMENT_FEATURE="{{ SELF.optional_payment_feature }}"
-                        - PREMIUM_PAYMENT_FEATURE="{{ SELF.premium_payment_feature }}"
-                        - DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                        - PORT={{ SELF.application_port }}
+                        - OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature }}
+                        - PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature }}
+                        - DISABLE_PROFILER={{ SELF.disable_profiler }}
                       image: ${docker_image.image.image_id}
                       name: '{{ SELF.application_name }}'
                       network_mode: host

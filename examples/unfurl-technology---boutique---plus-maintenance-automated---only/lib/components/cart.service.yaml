@@ -46,7 +46,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-cart:v7
+                default: milesstoetzner/boutique-cart:v8
                 metadata:
                     vintner_ignore: true
 
@@ -411,15 +411,15 @@ node_types:
                 docker_container:
                   application:
                     - env:
-                        - PORT="{{ SELF.application_port }}"
-                        - MYSQL_HOST="{{ SELF.mysql_host }}"
-                        - MYSQL_PORT="{{ SELF.mysql_port }}"
-                        - MYSQL_DATABASE="{{ SELF.mysql_database }}"
-                        - MYSQL_USER="{{ SELF.mysql_user }}"
-                        - MYSQL_PASSWORD="{{ SELF.mysql_password }}"
-                        - MYSQL_TABLE="{{ SELF.mysql_table }}"
-                        - MYSQL_SSL_MODE="{{ SELF.mysql_ssl_mode }}"
-                        - DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                        - PORT={{ SELF.application_port }}
+                        - MYSQL_HOST={{ SELF.mysql_host }}
+                        - MYSQL_PORT={{ SELF.mysql_port }}
+                        - MYSQL_DATABASE={{ SELF.mysql_database }}
+                        - MYSQL_USER={{ SELF.mysql_user }}
+                        - MYSQL_PASSWORD={{ SELF.mysql_password }}
+                        - MYSQL_TABLE={{ SELF.mysql_table }}
+                        - MYSQL_SSL_MODE={{ SELF.mysql_ssl_mode }}
+                        - DISABLE_PROFILER={{ SELF.disable_profiler }}
                       image: ${docker_image.image.image_id}
                       name: '{{ SELF.application_name }}'
                       network_mode: host

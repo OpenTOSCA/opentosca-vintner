@@ -85,7 +85,7 @@ const plugin: TypePlugin = {
                                 docker_container: {
                                     application: [
                                         {
-                                            env: mapProperties(type, {format: 'ini'}),
+                                            env: mapProperties(type, {format: 'ini', quote: false}),
                                             image: '${docker_image.image.image_id}',
                                             name: '{{ SELF.application_name }}',
                                             network_mode: 'host',

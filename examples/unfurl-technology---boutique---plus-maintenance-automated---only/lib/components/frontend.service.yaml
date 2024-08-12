@@ -52,7 +52,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-frontend:v7
+                default: milesstoetzner/boutique-frontend:v8
                 metadata:
                     vintner_ignore: true
 
