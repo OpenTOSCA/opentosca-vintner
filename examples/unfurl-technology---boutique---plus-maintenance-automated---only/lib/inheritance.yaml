@@ -7,17 +7,17 @@ python.application: software.application
 dotnet.application: software.application
 java.application: software.application
 
-frontend.service: go.application
-checkout.service: go.application
-email.service: python.application
-payment.service: node.application
-currency.service: node.application
-shipping.service: go.application
-cart.service: dotnet.application
-product.service: go.application
-recommendation.service: python.application
-advertisement.service: java.application
-analytical.service: python.application
+frontend.component: go.application
+checkout.component: go.application
+email.component: python.application
+payment.component: node.application
+currency.component: node.application
+shipping.component: go.application
+cart.component: dotnet.application
+product.component: go.application
+recommendation.component: python.application
+advertisement.component: java.application
+analytical.component: python.application
 
 monitoring.agent: software.application
 logging.agent: software.application

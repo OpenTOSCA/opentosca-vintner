@@ -9,12 +9,12 @@ replace:
 merge:
     topology_template:
         node_templates:
-            analytical_service:
-                type: analytical.service.terraform.gcp
+            analytical_component:
+                type: analytical.component.terraform.gcp
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false
                 requirements:
-                    - checkout: checkout_service
-                    - recommendation: recommendation_service
+                    - checkout: checkout_component
+                    - recommendation: recommendation_component
                     - host: gcp_cloudrun

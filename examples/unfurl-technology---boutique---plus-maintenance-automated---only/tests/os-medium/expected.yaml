@@ -51,22 +51,22 @@ topology_template:
         #
         ###################################################
 
-        frontend_service:
-            type: frontend.service.docker.docker
+        frontend_component:
+            type: frontend.component.docker.docker
             requirements:
-                - checkout: checkout_service
-                - currency: currency_service
-                - shipping: shipping_service
-                - cart: cart_service
-                - product: product_service
-                - recommendation: recommendation_service
-                - advertisement: advertisement_service
+                - checkout: checkout_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - recommendation: recommendation_component
+                - advertisement: advertisement_component
                 - host: docker_runtime
 
         frontend_ingress:
             type: ingress.ansible.openstack
             requirements:
-                - application: frontend_service
+                - application: frontend_component
                 - host: virtual_machine
 
         ###################################################
@@ -75,15 +75,15 @@ topology_template:
         #
         ###################################################
 
-        checkout_service:
-            type: checkout.service.docker.docker
+        checkout_component:
+            type: checkout.component.docker.docker
             requirements:
-                - email: email_service
-                - payment: payment_service
-                - currency: currency_service
-                - shipping: shipping_service
-                - cart: cart_service
-                - product: product_service
+                - email: email_component
+                - payment: payment_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
                 - host: docker_runtime
 
         ###################################################
@@ -92,8 +92,8 @@ topology_template:
         #
         ###################################################
 
-        email_service:
-            type: email.service.docker.docker
+        email_component:
+            type: email.component.docker.docker
             requirements:
                 - host: docker_runtime
 
@@ -103,8 +103,8 @@ topology_template:
         #
         ###################################################
 
-        payment_service:
-            type: payment.service.docker.docker
+        payment_component:
+            type: payment.component.docker.docker
             properties:
                 optional_payment_feature: false
                 premium_payment_feature: false
@@ -117,8 +117,8 @@ topology_template:
         #
         ###################################################
 
-        currency_service:
-            type: currency.service.docker.docker
+        currency_component:
+            type: currency.component.docker.docker
             requirements:
                 - host: docker_runtime
 
@@ -128,8 +128,8 @@ topology_template:
         #
         ###################################################
 
-        shipping_service:
-            type: shipping.service.docker.docker
+        shipping_component:
+            type: shipping.component.docker.docker
             requirements:
                 - host: docker_runtime
 
@@ -139,25 +139,25 @@ topology_template:
         #
         ###################################################
 
-        cart_service:
-            type: cart.service.docker.docker
+        cart_component:
+            type: cart.component.docker.docker
             requirements:
-                - database: mysql_database
+                - database: cart_database
                 - host: docker_runtime
 
-        mysql_database:
+        cart_database:
             type: mysql.database.terraform.mysql.docker
             properties:
-                database_name: cart
-                database_user: cart
+                database_name: cart-database
+                database_user: cart-user
                 database_password: {get_input: database_password}
             requirements:
-                - host: mysql_dbms
+                - host: cart_dbms
 
-        mysql_dbms:
+        cart_dbms:
             type: mysql.dbms.docker.docker
             properties:
-                dbms_name: cart
+                dbms_name: cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_runtime
@@ -168,8 +168,8 @@ topology_template:
         #
         ###################################################
 
-        product_service:
-            type: product.service.docker.docker
+        product_component:
+            type: product.component.docker.docker
             requirements:
                 - host: docker_runtime
 
@@ -179,10 +179,10 @@ topology_template:
         #
         ###################################################
 
-        recommendation_service:
-            type: recommendation.service.docker.docker
+        recommendation_component:
+            type: recommendation.component.docker.docker
             requirements:
-                - product: product_service
+                - product: product_component
                 - host: docker_runtime
 
         ###################################################
@@ -191,8 +191,8 @@ topology_template:
         #
         ###################################################
 
-        advertisement_service:
-            type: advertisement.service.docker.docker
+        advertisement_component:
+            type: advertisement.component.docker.docker
             requirements:
                 - host: docker_runtime
 
@@ -226,7 +226,7 @@ topology_template:
             type: openstack.machine.terraform.openstack
             properties:
                 machine: unfurl-technology-boutique
-                ports: [80, 3000, 8000]
+                ports: [80, 9100]
                 flavor: m1.medium
                 os_network: {get_input: os_network}
                 os_ssh_key_name: {get_input: os_ssh_key_name}
