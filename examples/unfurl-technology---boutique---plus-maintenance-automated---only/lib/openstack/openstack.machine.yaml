@@ -79,7 +79,7 @@ node_types:
     #
     ###################################################
 
-    openstack.machine.ansible.openstack:
+    openstack.machine::ansible::openstack:
         derived_from: openstack.machine
 
         interfaces:
@@ -165,7 +165,7 @@ node_types:
     #
     ###################################################
 
-    openstack.machine.terraform.openstack:
+    openstack.machine::terraform::openstack:
         derived_from: openstack.machine
         interfaces:
             Standard:

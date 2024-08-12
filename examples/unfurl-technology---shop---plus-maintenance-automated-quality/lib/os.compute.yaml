@@ -76,7 +76,7 @@ node_types:
     #
     ###################################################
 
-    os.compute.ansible.os:
+    os.compute::ansible::os:
         derived_from: os.compute
 
         interfaces:
@@ -163,7 +163,7 @@ node_types:
     #
     ###################################################
 
-    os.compute.terraform.os:
+    os.compute::terraform::os:
         derived_from: os.compute
         interfaces:
             Standard:

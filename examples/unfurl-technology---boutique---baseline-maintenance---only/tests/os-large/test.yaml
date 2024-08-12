@@ -44,8 +44,8 @@ replace:
     - - analytical_component_docker
       - analytical_component
 
-    - - mysql.database.terraform.mysql
-      - mysql.database.terraform.mysql.docker
+    - - mysql.database::terraform::mysql
+      - mysql.database::terraform::mysql.docker
 merge:
     topology_template:
         inputs:
@@ -111,7 +111,7 @@ merge:
 
         node_templates:
             analytical_component:
-                type: analytical.component.docker.docker
+                type: analytical.component::docker::docker
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false

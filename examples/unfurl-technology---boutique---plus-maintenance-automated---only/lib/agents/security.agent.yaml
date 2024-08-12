@@ -24,7 +24,7 @@ node_types:
     #
     ###################################################
 
-    security.agent.ansible.openstack:
+    security.agent::ansible::openstack.machine:
         derived_from: security.agent
 
         properties:
@@ -77,7 +77,7 @@ node_types:
     #
     ###################################################
 
-    security.agent.terraform.openstack:
+    security.agent::terraform::openstack.machine:
         derived_from: security.agent
 
         properties:

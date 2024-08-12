@@ -45,7 +45,7 @@ node_types:
     #
     ###################################################
 
-    ingress.ansible.openstack:
+    ingress::ansible::openstack.machine:
         derived_from: ingress
 
         properties:
@@ -112,7 +112,7 @@ node_types:
     #
     ###################################################
 
-    ingress.terraform.openstack:
+    ingress::terraform::openstack.machine:
         derived_from: ingress
 
         properties:
@@ -176,7 +176,7 @@ node_types:
     #
     ###################################################
 
-    ingress.ansible.kubernetes:
+    ingress::ansible::kubernetes:
         derived_from: ingress
 
         properties:
@@ -240,7 +240,7 @@ node_types:
     #
     ###################################################
 
-    ingress.terraform.kubernetes:
+    ingress::terraform::kubernetes:
         derived_from: ingress
 
         # TODO: this
@@ -311,7 +311,7 @@ node_types:
     #
     ###################################################
 
-    ingress.kubernetes.kubernetes:
+    ingress::kubernetes::kubernetes:
         derived_from: ingress
 
         # TODO: this

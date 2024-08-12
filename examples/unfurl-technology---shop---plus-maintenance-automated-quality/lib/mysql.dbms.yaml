@@ -46,7 +46,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.ansible.os:
+    mysql.dbms::ansible::os:
         derived_from: mysql.dbms
 
         properties:
@@ -162,7 +162,7 @@ node_types:
     ###################################################
 
     # TODO: not required ...
-    mysql.dbms.ansible.kubernetes:
+    mysql.dbms::ansible::kubernetes:
         derived_from: tosca.nodes.Root
         properties:
             os_ssh_user:
@@ -273,7 +273,7 @@ node_types:
     ###################################################
 
     # TODO: inherit from mysql.dbms?
-    mysql.dbms.kubernetes.kubernetes:
+    mysql.dbms::kubernetes::kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
 
         attributes:
@@ -335,7 +335,7 @@ node_types:
                                           - containerPort: '{{ SELF.application_port }}'
                                             name: mysql
 
-    mysql.dbms.expose.kubernetes.kubernetes:
+    mysql.dbms.expose::kubernetes::kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
         properties:
             definition:
@@ -360,7 +360,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.terraform.os:
+    mysql.dbms::terraform::os:
         derived_from: mysql.dbms
 
         properties:

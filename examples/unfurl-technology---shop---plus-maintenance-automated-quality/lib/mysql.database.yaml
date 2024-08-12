@@ -47,7 +47,7 @@ node_types:
     ###################################################
 
     # TODO: not required ...
-    mysql.database.ansible.kubernetes:
+    mysql.database::ansible::kubernetes:
         derived_from: mysql.database
 
         properties:
@@ -86,7 +86,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.ansible.gcp:
+    mysql.database::ansible::gcp:
         derived_from: mysql.database
 
         properties:
@@ -129,7 +129,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.terraform.gcp:
+    mysql.database::terraform::gcp:
         derived_from: mysql.database
 
         properties:
@@ -207,7 +207,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.terraform.mysql:
+    mysql.database::terraform::mysql:
         derived_from: mysql.database
 
         interfaces:
@@ -278,7 +278,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.ansible.mysql:
+    mysql.database::ansible::mysql:
         derived_from: mysql.database
         interfaces:
             Standard:

@@ -1,3 +1,4 @@
+import {constructType} from '#/types/utils'
 import * as assert from '#assert'
 import * as check from '#check'
 import registry from '#controller/types/plugins'
@@ -42,7 +43,7 @@ export default async function (options: TypesGenerateOptions) {
             const [name, type] = utils.first(types)
             assert.isDefined(type.derived_from)
 
-            const node_types: {[key: string]: NodeType} = {}
+            const generated: {[key: string]: NodeType} = {}
 
             for (const variant of generate.split(', ')) {
                 const [technology, ...hosting] = variant.split('::')
@@ -59,10 +60,8 @@ export default async function (options: TypesGenerateOptions) {
                         'java.application',
                     ].includes(type.derived_from)
                 ) {
-                    const plugin = registry.get(`software.application::${variant}`)
-
-                    // TODO: migrate "." to "::"
-                    node_types[`${name}.${variant.replaceAll('::', '.')}`] = plugin.generate(name, type)
+                    const plugin = registry.get(constructType('software.application', technology, hosting))
+                    generated[constructType(name, technology, hosting)] = plugin.generate(name, type)
                 }
             }
 
@@ -79,7 +78,7 @@ export default async function (options: TypesGenerateOptions) {
             implementationImports.push(templateFilename)
 
             const search = new RegExp(String.raw`\s\s\s\s#\s\[OPENTOSCA\_VINTNER\_GENERATION\_MARK\][\s\S]*`, 'm')
-            const replace = indent(`${GENERATION_MARK}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(node_types)}`)
+            const replace = indent(`${GENERATION_MARK}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(generated)}`)
             const implementationString = search.test(templateString)
                 ? templateString.replace(search, replace)
                 : templateString + '\n' + replace

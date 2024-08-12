@@ -56,7 +56,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.ansible.gcp:
+    mysql.dbms::ansible::gcp.cloudsql:
         derived_from: mysql.dbms
 
         properties:
@@ -162,7 +162,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.terraform.gcp:
+    mysql.dbms::terraform::gcp.cloudsql:
         derived_from: mysql.dbms
 
         properties:
@@ -253,7 +253,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.terraform.kubernetes:
+    mysql.dbms::terraform::kubernetes:
         derived_from: mysql.dbms
 
         properties:
@@ -356,7 +356,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.ansible.kubernetes:
+    mysql.dbms::ansible::kubernetes:
         derived_from: mysql.dbms
 
         properties:
@@ -460,7 +460,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.kubernetes.kubernetes:
+    mysql.dbms::kubernetes::kubernetes:
         derived_from: mysql.dbms
 
         attributes:
@@ -561,7 +561,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.ansible.docker:
+    mysql.dbms::ansible::docker.engine:
         derived_from: mysql.dbms
 
         properties:
@@ -613,7 +613,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.terraform.docker:
+    mysql.dbms::terraform::docker.engine:
         derived_from: mysql.dbms
 
         properties:
@@ -702,7 +702,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms.docker.docker:
+    mysql.dbms::docker::docker.engine:
         derived_from: mysql.dbms
 
         properties:

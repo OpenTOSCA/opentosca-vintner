@@ -37,7 +37,7 @@ node_types:
     #
     ###################################################
 
-    gcp.cloudsql.ansible.gcp:
+    gcp.cloudsql::ansible::gcp:
         derived_from: gcp.cloudsql
 
         interfaces:
@@ -64,7 +64,7 @@ node_types:
     #
     ###################################################
 
-    gcp.cloudsql.terraform.gcp:
+    gcp.cloudsql::terraform:
         derived_from: gcp.cloudsql
 
         interfaces:

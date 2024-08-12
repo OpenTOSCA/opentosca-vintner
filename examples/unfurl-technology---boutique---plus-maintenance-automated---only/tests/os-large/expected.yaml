@@ -52,7 +52,7 @@ topology_template:
         ###################################################
 
         frontend_component:
-            type: frontend.component.docker.docker
+            type: frontend.component::docker::docker.engine
             requirements:
                 - checkout: checkout_component
                 - currency: currency_component
@@ -64,7 +64,7 @@ topology_template:
                 - host: docker_runtime
 
         frontend_ingress:
-            type: ingress.ansible.openstack
+            type: ingress::ansible::openstack.machine
             requirements:
                 - application: frontend_component
                 - host: virtual_machine
@@ -76,7 +76,7 @@ topology_template:
         ###################################################
 
         checkout_component:
-            type: checkout.component.docker.docker
+            type: checkout.component::docker::docker.engine
             requirements:
                 - email: email_component
                 - payment: payment_component
@@ -93,7 +93,7 @@ topology_template:
         ###################################################
 
         email_component:
-            type: email.component.docker.docker
+            type: email.component::docker::docker.engine
             requirements:
                 - host: docker_runtime
 
@@ -104,7 +104,7 @@ topology_template:
         ###################################################
 
         payment_component:
-            type: payment.component.docker.docker
+            type: payment.component::docker::docker.engine
             properties:
                 optional_payment_feature: false
                 premium_payment_feature: false
@@ -118,7 +118,7 @@ topology_template:
         ###################################################
 
         currency_component:
-            type: currency.component.docker.docker
+            type: currency.component::docker::docker.engine
             requirements:
                 - host: docker_runtime
 
@@ -129,7 +129,7 @@ topology_template:
         ###################################################
 
         shipping_component:
-            type: shipping.component.docker.docker
+            type: shipping.component::docker::docker.engine
             requirements:
                 - host: docker_runtime
 
@@ -140,13 +140,13 @@ topology_template:
         ###################################################
 
         cart_component:
-            type: cart.component.docker.docker
+            type: cart.component::docker::docker.engine
             requirements:
                 - database: cart_database
                 - host: docker_runtime
 
         cart_database:
-            type: mysql.database.terraform.mysql.docker
+            type: mysql.database::terraform::mysql.dbms::docker.engine
             properties:
                 database_name: cart-database
                 database_user: cart-user
@@ -155,7 +155,7 @@ topology_template:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms.docker.docker
+            type: mysql.dbms::docker::docker.engine
             properties:
                 dbms_name: cart-dbms
                 dbms_password: {get_input: dbms_password}
@@ -169,7 +169,7 @@ topology_template:
         ###################################################
 
         product_component:
-            type: product.component.docker.docker
+            type: product.component::docker::docker.engine
             requirements:
                 - host: docker_runtime
 
@@ -180,7 +180,7 @@ topology_template:
         ###################################################
 
         recommendation_component:
-            type: recommendation.component.docker.docker
+            type: recommendation.component::docker::docker.engine
             requirements:
                 - product: product_component
                 - host: docker_runtime
@@ -192,7 +192,7 @@ topology_template:
         ###################################################
 
         advertisement_component:
-            type: advertisement.component.docker.docker
+            type: advertisement.component::docker::docker.engine
             requirements:
                 - host: docker_runtime
 
@@ -203,27 +203,27 @@ topology_template:
         ###################################################
 
         docker_runtime:
-            type: docker.engine.ansible.openstack
+            type: docker.engine::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         monitoring_agent:
-            type: monitoring.agent.ansible.openstack
+            type: monitoring.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         logging_agent:
-            type: logging.agent.ansible.openstack
+            type: logging.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         security_agent:
-            type: security.agent.ansible.openstack
+            type: security.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: openstack.machine.terraform.openstack
+            type: openstack.machine::terraform
             properties:
                 machine: unfurl-technology-boutique
                 ports: [80, 9100]

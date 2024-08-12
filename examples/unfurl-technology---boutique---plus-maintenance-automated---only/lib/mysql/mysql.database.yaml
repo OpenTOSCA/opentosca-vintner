@@ -50,7 +50,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.ansible.mysql.kubernetes:
+    mysql.database::ansible::mysql.dbms::kubernetes:
         derived_from: mysql.database
 
         interfaces:
@@ -78,9 +78,9 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
 
-    # TODO: mysql.database.docker.mysql.docker
-    # TODO: mysql.database.terraform.mysql.kubernetes
-    # TODO: mysql.database.kubernetes.mysql.kubernetes
+    # TODO: mysql.database::docker::mysql.dbms::docker.engine
+    # TODO: mysql.database::terraform::mysql.dbms::kubernetes
+    # TODO: mysql.database::kubernetes::mysql.dbms::kubernetes
 
     ###################################################
     #
@@ -90,7 +90,7 @@ node_types:
 
     # TODO: some syntax error at create-user
 
-    mysql.database.kubernetes.mysql.kubernetes:
+    mysql.database::kubernetes::mysql.dbms::kubernetes:
         derived_from: mysql.database
 
         interfaces:
@@ -177,7 +177,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.ansible.mysql.gcp:
+    mysql.database::ansible::mysql.dbms::gcp.cloudsql:
         derived_from: mysql.database
 
         properties:
@@ -231,7 +231,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.terraform.mysql.gcp:
+    mysql.database::terraform::mysql.dbms::gcp.cloudsql:
         derived_from: mysql.database
 
         properties:
@@ -303,7 +303,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.terraform.mysql.docker:
+    mysql.database::terraform::mysql.dbms::docker.engine:
         derived_from: mysql.database
 
         properties:
@@ -377,7 +377,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database.ansible.mysql.docker:
+    mysql.database::ansible::mysql.dbms::docker.engine:
         derived_from: mysql.database
 
         properties:

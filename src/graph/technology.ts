@@ -1,3 +1,4 @@
+import {constructType} from '#/types/utils'
 import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
@@ -14,7 +15,7 @@ export default class Technology extends Element {
     readonly index: number
     readonly container: Node
     readonly weight: number
-    readonly assign?: string
+    readonly assign: string
 
     readonly defaultAlternative: boolean
 
@@ -25,7 +26,7 @@ export default class Technology extends Element {
         this.raw = data.raw
         this.container = data.container
         this.index = data.index
-        this.assign = data.raw.assign
+        this.assign = data.raw.assign ?? constructType(this.container.getType().name, this.name)
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false

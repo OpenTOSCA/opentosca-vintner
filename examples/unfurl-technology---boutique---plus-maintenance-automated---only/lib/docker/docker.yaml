@@ -33,7 +33,7 @@ node_types:
     #
     ###################################################
 
-    docker.engine.ansible.openstack:
+    docker.engine::ansible::openstack:
         derived_from: docker.engine
 
         properties:
@@ -80,7 +80,7 @@ node_types:
     #
     ###################################################
 
-    docker.engine.terraform.openstack:
+    docker.engine::terraform::openstack:
         derived_from: docker.engine
 
         properties:

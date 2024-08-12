@@ -79,7 +79,7 @@ node_types:
     ###################################################
 
     # TODO: not required ...
-    shop.component.ansible.kubernetes:
+    shop.component::ansible::kubernetes:
         derived_from: shop.component
 
         properties:
@@ -228,7 +228,7 @@ node_types:
     ###################################################
 
     # TODO: inherit from shop.component?
-    shop.component.kubernetes.kubernetes:
+    shop.component::kubernetes::kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
 
         properties:
@@ -312,7 +312,7 @@ node_types:
                   capability: tosca.capabilities.Endpoint.Database
                   relationship: tosca.relationships.ConnectsTo
 
-    shop.component.expose.kubernetes.kubernetes:
+    shop.component.expose::kubernetes::kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
         properties:
             definition:
@@ -337,7 +337,7 @@ node_types:
     #
     ###################################################
 
-    shop.component.ansible.os:
+    shop.component::ansible::os:
         derived_from: shop.component
 
         properties:
@@ -480,7 +480,7 @@ node_types:
     #
     ###################################################
 
-    shop.component.ansible.gcp:
+    shop.component::ansible::gcp:
         derived_from: shop.component
 
         properties:
@@ -561,7 +561,7 @@ node_types:
     #
     ###################################################
 
-    shop.component.terraform.gcp:
+    shop.component::terraform::gcp:
         derived_from: shop.component
 
         properties:
@@ -742,7 +742,7 @@ node_types:
     #
     ###################################################
 
-    shop.component.terraform.os:
+    shop.component::terraform::os:
         derived_from: shop.component
 
         properties:

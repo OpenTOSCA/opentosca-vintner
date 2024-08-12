@@ -2,7 +2,7 @@ import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#contr
 import {PROPERTIES, TypePlugin} from '#controller/types/types'
 
 const plugin: TypePlugin = {
-    id: 'software.application::ansible::gcp',
+    id: 'software.application::ansible::gcp.cloudrun',
     generate: (name, type) => {
         return {
             derived_from: name,

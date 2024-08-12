@@ -24,7 +24,7 @@ node_types:
     #
     ###################################################
 
-    monitoring.agent.ansible.openstack:
+    monitoring.agent::ansible::openstack.machine:
         derived_from: monitoring.agent
 
         properties:
@@ -117,7 +117,7 @@ node_types:
 
     # use https://registry.terraform.io/providers/neuspaces/system/latest/docs ?
 
-    monitoring.agent.terraform.openstack:
+    monitoring.agent::terraform::openstack.machine:
         derived_from: monitoring.agent
 
         properties:

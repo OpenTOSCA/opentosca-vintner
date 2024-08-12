@@ -41,8 +41,8 @@ replace:
     - - advertisement_component_docker
       - advertisement_component
 
-    - - mysql.database.terraform.mysql
-      - mysql.database.terraform.mysql.docker
+    - - mysql.database::terraform::mysql
+      - mysql.database::terraform::mysql.docker
 
 merge:
     topology_template:

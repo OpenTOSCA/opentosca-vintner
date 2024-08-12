@@ -25,7 +25,7 @@ topology_template:
 
     node_templates:
         shop:
-            type: shop.component.kubernetes.kubernetes
+            type: shop.component::kubernetes::kubernetes
             properties:
                 application_name: unfurl-technology
                 DB_NAME: unfurl-technology
@@ -39,12 +39,12 @@ topology_template:
                 - host: kubernetes
 
         shop_expose:
-            type: shop.component.expose.kubernetes.kubernetes
+            type: shop.component.expose::kubernetes::kubernetes
             requirements:
                 - host: kubernetes
 
         database:
-            type: mysql.database.ansible.mysql
+            type: mysql.database::ansible::mysql
             properties:
                 database_name: unfurl-technology
             requirements:
@@ -52,14 +52,14 @@ topology_template:
                 - depends: mysql_dbms_expose
 
         mysql_dbms:
-            type: mysql.dbms.kubernetes.kubernetes
+            type: mysql.dbms::kubernetes::kubernetes
             properties:
                 root_password: {get_input: database_password}
             requirements:
                 - host: kubernetes
 
         mysql_dbms_expose:
-            type: mysql.dbms.expose.kubernetes.kubernetes
+            type: mysql.dbms.expose::kubernetes::kubernetes
             requirements:
                 - host: kubernetes
 

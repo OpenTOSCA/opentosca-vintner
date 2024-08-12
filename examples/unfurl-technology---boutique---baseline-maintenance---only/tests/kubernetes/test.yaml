@@ -44,11 +44,11 @@ replace:
     - - analytical_component_kubernetes
       - analytical_component
 
-    - - mysql.database.terraform.mysql
-      - mysql.database.terraform.mysql.kubernetes
+    - - mysql.database::terraform::mysql
+      - mysql.database::terraform::mysql.kubernetes
 
-    - - mysql.database.ansible.mysql
-      - mysql.database.ansible.mysql.kubernetes
+    - - mysql.database::ansible::mysql
+      - mysql.database::ansible::mysql.kubernetes
 
 merge:
     topology_template:

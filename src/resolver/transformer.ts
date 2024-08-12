@@ -271,21 +271,7 @@ export default class Transformer {
         const technology = element.technologies.find(it => it.present)
         if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
 
-        if (check.isDefined(technology.assign)) {
-            template.type = technology.assign
-        } else {
-            let type = template.type
-            type += '.' + technology.name
-
-            const host = element.hosts.find(it => it.present)
-            if (check.isDefined(host)) {
-                type += '.' + host.getType().name.split('.')[0]
-            } else {
-                type += '.' + template.type.split('.')[0]
-            }
-
-            template.type = type
-        }
+        template.type = technology.assign
     }
 
     private transformProperties(

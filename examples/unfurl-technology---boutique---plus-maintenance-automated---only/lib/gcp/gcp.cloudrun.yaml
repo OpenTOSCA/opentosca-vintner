@@ -37,7 +37,7 @@ node_types:
     #
     ###################################################
 
-    gcp.cloudrun.ansible.gcp:
+    gcp.cloudrun::ansible::gcp:
         derived_from: gcp.cloudrun
 
         interfaces:
@@ -64,7 +64,7 @@ node_types:
     #
     ###################################################
 
-    gcp.cloudrun.terraform.gcp:
+    gcp.cloudrun::terraform:
         derived_from: gcp.cloudrun
 
         interfaces:

@@ -28,7 +28,7 @@ topology_template:
         ###################################################
 
         frontend_component:
-            type: frontend.component.terraform.gcp
+            type: frontend.component::terraform::gcp.cloudrun
             requirements:
                 - checkout: checkout_component
                 - currency: currency_component
@@ -46,7 +46,7 @@ topology_template:
         ###################################################
 
         checkout_component:
-            type: checkout.component.terraform.gcp
+            type: checkout.component::terraform::gcp.cloudrun
             requirements:
                 - email: email_component
                 - payment: payment_component
@@ -63,7 +63,7 @@ topology_template:
         ###################################################
 
         email_component:
-            type: email.component.terraform.gcp
+            type: email.component::terraform::gcp.cloudrun
             requirements:
                 - host: gcp_cloudrun
 
@@ -74,7 +74,7 @@ topology_template:
         ###################################################
 
         payment_component:
-            type: payment.component.terraform.gcp
+            type: payment.component::terraform::gcp.cloudrun
             properties:
                 optional_payment_feature: false
                 premium_payment_feature: false
@@ -88,7 +88,7 @@ topology_template:
         ###################################################
 
         currency_component:
-            type: currency.component.terraform.gcp
+            type: currency.component::terraform::gcp.cloudrun
             requirements:
                 - host: gcp_cloudrun
 
@@ -99,7 +99,7 @@ topology_template:
         ###################################################
 
         shipping_component:
-            type: shipping.component.terraform.gcp
+            type: shipping.component::terraform::gcp.cloudrun
             requirements:
                 - host: gcp_cloudrun
 
@@ -110,13 +110,13 @@ topology_template:
         ###################################################
 
         cart_component:
-            type: cart.component.terraform.gcp
+            type: cart.component::terraform::gcp.cloudrun
             requirements:
                 - database: cart_database
                 - host: gcp_cloudrun
 
         cart_database:
-            type: mysql.database.terraform.mysql.gcp
+            type: mysql.database::terraform::mysql.dbms::gcp.cloudsql
             properties:
                 database_name: cart-database
                 database_user: cart-user
@@ -125,7 +125,7 @@ topology_template:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms.terraform.gcp
+            type: mysql.dbms::terraform::gcp.cloudsql
             properties:
                 dbms_name: cart-dbms
                 dbms_password: {get_input: dbms_password}
@@ -139,7 +139,7 @@ topology_template:
         ###################################################
 
         product_component:
-            type: product.component.terraform.gcp
+            type: product.component::terraform::gcp.cloudrun
             requirements:
                 - host: gcp_cloudrun
 
@@ -150,7 +150,7 @@ topology_template:
         ###################################################
 
         recommendation_component:
-            type: recommendation.component.terraform.gcp
+            type: recommendation.component::terraform::gcp.cloudrun
             requirements:
                 - product: product_component
                 - host: gcp_cloudrun
@@ -162,7 +162,7 @@ topology_template:
         ###################################################
 
         advertisement_component:
-            type: advertisement.component.terraform.gcp
+            type: advertisement.component::terraform::gcp.cloudrun
             requirements:
                 - host: gcp_cloudrun
 
@@ -173,12 +173,12 @@ topology_template:
         ###################################################
 
         gcp_cloudrun:
-            type: gcp.cloudrun.terraform.gcp
+            type: gcp.cloudrun::terraform
             requirements:
                 - host: gcp_provider
 
         gcp_cloudsql:
-            type: gcp.cloudsql.terraform.gcp
+            type: gcp.cloudsql::terraform
             requirements:
                 - host: gcp_provider
 

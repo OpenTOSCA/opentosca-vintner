@@ -2,7 +2,7 @@ import {mapProperties} from '#controller/types/plugins/utils'
 import {TypePlugin} from '#controller/types/types'
 
 const plugin: TypePlugin = {
-    id: 'software.application::ansible::docker',
+    id: 'software.application::ansible::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,

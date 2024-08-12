@@ -1,3 +1,4 @@
+import {constructType} from '#/types/utils'
 import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
@@ -48,18 +49,22 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             const rules = utils.copy(map[technology])
 
             for (const rule of rules) {
+                assert.isArray(rule.hosting)
+
                 if (!node.isA(rule.component)) continue
-                if (check.isDefined(rule.hosting)) {
-                    assert.isArray(rule.hosting)
+
+                // TODO: merge then and else block
+                if (rule.hosting.length !== 0) {
                     const output: LogicExpression[][] = []
-                    this.search(node, rule.hosting, [], output)
+                    this.search(node, utils.copy(rule.hosting), [], output)
                     output.forEach(it => {
+                        assert.isArray(rule.hosting)
+
                         maps.push({
                             [technology]: {
                                 conditions: it,
                                 weight: rule.weight,
-                                // TODO: extend this to support depths in naming depending on hosting depth?
-                                assign: rule.assign,
+                                assign: rule.assign ?? constructType(node.getType().name, technology, rule.hosting),
                             },
                         })
                     })
@@ -68,7 +73,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         [technology]: {
                             conditions: rule.conditions,
                             weight: rule.weight,
-                            assign: rule.assign,
+                            assign: rule.assign ?? constructType(node.getType().name, technology, rule.hosting),
                         },
                     })
                 }

@@ -38,8 +38,8 @@ replace:
     - - advertisement_component_terraform
       - advertisement_component
 
-    - - mysql.database.terraform.mysql
-      - mysql.database.terraform.mysql.gcp
+    - - mysql.database::terraform::mysql
+      - mysql.database::terraform::mysql.gcp
 
 merge:
     topology_template:

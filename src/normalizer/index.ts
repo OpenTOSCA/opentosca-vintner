@@ -288,12 +288,12 @@ export default class Normalizer {
                     delete rule.host
                 }
 
-                if (check.isDefined(rule.hosting)) {
-                    if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
-
-                    assert.isArray(rule.hosting)
-                    rule.hosting.forEach(it => assert.isString(it))
-                }
+                /**
+                 * Ensure that hosting is always an array
+                 */
+                if (check.isUndefined(rule.hosting)) rule.hosting = []
+                if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
+                rule.hosting.forEach(it => assert.isString(it))
 
                 if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
                 if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)

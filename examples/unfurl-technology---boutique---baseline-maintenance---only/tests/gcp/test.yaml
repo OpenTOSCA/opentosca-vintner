@@ -41,8 +41,8 @@ replace:
     - - analytical_component_terraform
       - analytical_component
 
-    - - mysql.database.terraform.mysql
-      - mysql.database.terraform.mysql.gcp
+    - - mysql.database::terraform::mysql
+      - mysql.database::terraform::mysql.gcp
 
 merge:
     topology_template:
@@ -109,7 +109,7 @@ merge:
 
         node_templates:
             analytical_component:
-                type: analytical.component.terraform.gcp
+                type: analytical.component::terraform::gcp
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false

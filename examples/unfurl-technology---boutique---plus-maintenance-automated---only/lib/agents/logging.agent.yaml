@@ -24,7 +24,7 @@ node_types:
     #
     ###################################################
 
-    logging.agent.ansible.openstack:
+    logging.agent::ansible::openstack.machine:
         derived_from: logging.agent
 
         properties:
@@ -74,7 +74,7 @@ node_types:
     #
     ###################################################
 
-    logging.agent.terraform.openstack:
+    logging.agent::terraform::openstack.machine:
         derived_from: logging.agent
 
         properties:
