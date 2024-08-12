@@ -1,5 +1,5 @@
 import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#controller/types/plugins/utils'
-import {TypePlugin} from '#controller/types/types'
+import {PROPERTIES, TypePlugin} from '#controller/types/types'
 
 const plugin: TypePlugin = {
     id: 'software.application::ansible::gcp',
@@ -82,7 +82,9 @@ const plugin: TypePlugin = {
                                                                                     '{{ SELF.application_port }}',
                                                                             },
                                                                         ],
-                                                                        env: mapProperties(type),
+                                                                        env: mapProperties(type, {
+                                                                            ignore: [PROPERTIES.PORT],
+                                                                        }),
                                                                     },
                                                                 ],
                                                             },

@@ -1,11 +1,15 @@
 import * as assert from '#assert'
-import {METADATA} from '#controller/types/types'
+import {METADATA, PROPERTIES} from '#controller/types/types'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 
-export function mapProperties(type: NodeType, options: {quote?: boolean; format?: 'map' | 'list' | 'ini'} = {}) {
+export function mapProperties(
+    type: NodeType,
+    options: {quote?: boolean; format?: 'map' | 'list' | 'ini'; ignore?: string[]} = {}
+) {
     options.quote = options.quote ?? true
     options.format = options.format ?? 'list'
+    options.ignore = options.ignore ?? []
 
     const list = Object.entries(type.properties || {})
         .filter(([propertyName, propertyDefinition]) => {
@@ -26,6 +30,7 @@ export function mapProperties(type: NodeType, options: {quote?: boolean; format?
                 value,
             }
         })
+        .filter(it => !options.ignore!.includes(it.name))
 
     if (options.format === 'list') return list
 
@@ -45,13 +50,13 @@ export function mapProperties(type: NodeType, options: {quote?: boolean; format?
 export function secureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
     assert.isDefined(type.properties)
 
-    const definition = type.properties['application_protocol']
+    const definition = type.properties[PROPERTIES.APPLICATION_PROTOCOL]
     assert.isDefined(definition)
     assert.isDefined(definition.default)
     assert.isString(definition.default)
 
     return {
-        application_property: {
+        [PROPERTIES.APPLICATION_PROTOCOL]: {
             type: 'string',
             default: `${definition.default}s`,
         },

@@ -238,8 +238,8 @@ topology_template:
         mysql_database:
             type: mysql.database
             properties:
-                - database_name: cart
-                - database_user: cart
+                - database_name: cart-db
+                - database_user: cart-user
                 - database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms

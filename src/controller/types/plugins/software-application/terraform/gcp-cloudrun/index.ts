@@ -1,5 +1,5 @@
 import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#controller/types/plugins/utils'
-import {TypePlugin} from '#controller/types/types'
+import {PROPERTIES, TypePlugin} from '#controller/types/types'
 
 const plugin: TypePlugin = {
     id: 'software.application::terraform::gcp',
@@ -43,11 +43,11 @@ const plugin: TypePlugin = {
                     },
                 },
                 defaults: {
+                    outputs: {
+                        application_address: 'application_address',
+                        application_endpoint: 'application_endpoint',
+                    },
                     inputs: {
-                        outputs: {
-                            application_address: 'application_address',
-                            application_endpoint: 'application_endpoint',
-                        },
                         main: {
                             terraform: [
                                 {
@@ -83,16 +83,6 @@ const plugin: TypePlugin = {
                                 ],
                             },
                             resource: {
-                                google_cloud_run_service_iam_binding: {
-                                    application: [
-                                        {
-                                            location: '{{ SELF.gcp_region }}',
-                                            members: ['allUsers'],
-                                            role: 'roles/run.invoker',
-                                            service: '{{ SELF.application_name }}',
-                                        },
-                                    ],
-                                },
                                 google_cloud_run_v2_service: {
                                     application: [
                                         {
@@ -110,11 +100,21 @@ const plugin: TypePlugin = {
                                                                     container_port: '{{ SELF.application_port }}',
                                                                 },
                                                             ],
-                                                            env: mapProperties(type),
+                                                            env: mapProperties(type, {ignore: [PROPERTIES.PORT]}),
                                                         },
                                                     ],
                                                 },
                                             ],
+                                        },
+                                    ],
+                                },
+                                google_cloud_run_service_iam_binding: {
+                                    application: [
+                                        {
+                                            location: '{{ SELF.gcp_region }}',
+                                            members: ['allUsers'],
+                                            role: 'roles/run.invoker',
+                                            service: '{{ SELF.application_name }}',
                                         },
                                     ],
                                 },

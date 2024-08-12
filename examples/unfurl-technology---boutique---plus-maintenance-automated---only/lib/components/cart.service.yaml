@@ -106,7 +106,7 @@ node_types:
     cart.service.ansible.gcp:
       derived_from: cart.service
       properties:
-        application_property:
+        application_protocol:
           type: string
           default: grpcs
         gcp_service_account_file:
@@ -160,8 +160,6 @@ node_types:
                                       - name: http1
                                         containerPort: '{{ SELF.application_port }}'
                                     env:
-                                      - name: PORT
-                                        value: '"{{ SELF.application_port }}"'
                                       - name: MYSQL_HOST
                                         value: '"{{ SELF.mysql_host }}"'
                                       - name: MYSQL_PORT
@@ -225,7 +223,7 @@ node_types:
     cart.service.terraform.gcp:
       derived_from: cart.service
       properties:
-        application_property:
+        application_protocol:
           type: string
           default: grpcs
         gcp_service_account_file:
@@ -250,10 +248,10 @@ node_types:
               implementation:
                 primary: Terraform
         defaults:
+          outputs:
+            application_address: application_address
+            application_endpoint: application_endpoint
           inputs:
-            outputs:
-              application_address: application_address
-              application_endpoint: application_endpoint
             main:
               terraform:
                 - required_providers:
@@ -271,13 +269,6 @@ node_types:
                 application_endpoint:
                   - value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
               resource:
-                google_cloud_run_service_iam_binding:
-                  application:
-                    - location: '{{ SELF.gcp_region }}'
-                      members:
-                        - allUsers
-                      role: roles/run.invoker
-                      service: '{{ SELF.application_name }}'
                 google_cloud_run_v2_service:
                   application:
                     - ingress: INGRESS_TRAFFIC_ALL
@@ -290,8 +281,6 @@ node_types:
                                 - name: http1
                                   container_port: '{{ SELF.application_port }}'
                               env:
-                                - name: PORT
-                                  value: '"{{ SELF.application_port }}"'
                                 - name: MYSQL_HOST
                                   value: '"{{ SELF.mysql_host }}"'
                                 - name: MYSQL_PORT
@@ -308,6 +297,13 @@ node_types:
                                   value: '"{{ SELF.mysql_ssl_mode }}"'
                                 - name: DISABLE_PROFILER
                                   value: '"{{ SELF.disable_profiler }}"'
+                google_cloud_run_service_iam_binding:
+                  application:
+                    - location: '{{ SELF.gcp_region }}'
+                      members:
+                        - allUsers
+                      role: roles/run.invoker
+                      service: '{{ SELF.application_name }}'
     cart.service.ansible.docker:
       derived_from: cart.service
       properties:

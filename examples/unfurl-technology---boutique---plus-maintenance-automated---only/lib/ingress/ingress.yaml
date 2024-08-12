@@ -22,9 +22,9 @@ node_types:
                 type: string
                 default: {eval: '.::.requirements::[.name=application]::.target::application_port'}
 
-            application_endpoint:
+            application_protocol:
                 type: string
-                default: {eval: '.::.requirements::[.name=application]::.target::application_endpoint'}
+                default: {eval: '.::.requirements::[.name=application]::.target::application_protocol'}
 
         attributes:
             application_address:
@@ -227,7 +227,7 @@ node_types:
                                                   namespace: default
                                               spec:
                                                   ports:
-                                                      - name: '{{ SELF.application_endpoint }}'
+                                                      - name: '{{ SELF.application_protocol }}'
                                                         port: 80
                                                         targetPort: '{{ SELF.application_port }}'
                                                   selector:
@@ -298,7 +298,7 @@ node_types:
                                       wait_for_load_balancer: false
                                       spec:
                                           - port:
-                                                - name: '{{ SELF.application_endpoint }}'
+                                                - name: '{{ SELF.application_protocol }}'
                                                   port: 80
                                                   target_port: '{{ SELF.application_port }}'
                                             selector:
@@ -347,7 +347,7 @@ node_types:
                                                   name: '{{ SELF.application_name }}-external'
                                               spec:
                                                   ports:
-                                                      - name: '{{ SELF.application_endpoint }}'
+                                                      - name: '{{ SELF.application_protocol }}'
                                                         port: '{{ SELF.application_port }}'
                                                         targetPort: '{{ SELF.application_port }}'
                                                   selector:
