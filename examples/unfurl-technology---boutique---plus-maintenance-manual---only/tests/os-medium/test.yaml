@@ -6,12 +6,12 @@ replace:
 merge:
     topology_template:
         node_templates:
-            analytical_service:
-                type: analytical.service.docker.docker
+            analytical_component:
+                type: analytical.component.docker.docker
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false
                 requirements:
-                    - checkout: checkout_service
-                    - recommendation: recommendation_service
+                    - checkout: checkout_component
+                    - recommendation: recommendation_component
                     - host: docker_runtime

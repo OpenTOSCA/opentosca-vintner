@@ -30,14 +30,6 @@ ansible:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
-      weight: 1
-      assign: mysql.database.ansible.mysql.openstack
-      comment: Primary use case due to the specialization of Ansible.
-
-    - component: mysql.database
-      hosting:
-          - mysql.dbms
           - docker.engine
       weight: 1
       assign: mysql.database.ansible.mysql.docker
@@ -51,7 +43,6 @@ ansible:
       assign: mysql.database.ansible.mysql.kubernetes
       comment: Primary use case due to the specialization of Ansible.
 
-    # TODO: whats about google.cloud.gcp_sql_database?
     - component: mysql.database
       hosting:
           - mysql.dbms
@@ -60,11 +51,6 @@ ansible:
       assign: mysql.database.ansible.mysql.gcp
 
     # DBMS
-    - component: mysql.dbms
-      hosting: openstack.machine
-      weight: 1
-      comment: Primary use case due to the specialization of Ansible.
-
     - component: mysql.dbms
       hosting: docker.engine
       weight: 0.5
@@ -75,7 +61,6 @@ ansible:
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    # TODO: whats about google.cloud.gcp_sql_instance?
     - component: mysql.dbms
       hosting: gcp.cloudsql
       weight: 1
@@ -97,7 +82,6 @@ ansible:
       comment: Terraform is more specialized.
 
     # GCP Service
-    # TODO: what is about google.cloud.gcp_serviceusage_service?
     - component: gcp.service
       weight: 1
 
@@ -133,14 +117,6 @@ terraform:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
-      weight: 1
-      assign: mysql.database.terraform.mysql.openstack
-      comment: Terraform provides a declarative module.
-
-    - component: mysql.database
-      hosting:
-          - mysql.dbms
           - docker.engine
       weight: 1
       assign: mysql.database.terraform.mysql.docker
@@ -163,11 +139,6 @@ terraform:
       comment: Terraform provides a declarative module.
 
     # DBMS
-    - component: mysql.dbms
-      hosting: openstack.machine
-      weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
-
     - component: mysql.dbms
       hosting: docker.engine
       weight: 0.5

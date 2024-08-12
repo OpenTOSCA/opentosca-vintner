@@ -84,41 +84,41 @@ topology_template:
         #
         ###################################################
 
-        frontend_service_docker:
-            type: frontend.service
+        frontend_component_docker:
+            type: frontend.component
             persistent: true
             conditions: {logic_expression: is_openstack}
             technology: docker
             requirements:
-                - checkout: checkout_service_docker
-                - currency: currency_service_docker
-                - shipping: shipping_service_docker
-                - cart: cart_service_docker
-                - product: product_service_docker
-                - recommendation: recommendation_service_docker
-                - advertisement: advertisement_service_docker
+                - checkout: checkout_component_docker
+                - currency: currency_component_docker
+                - shipping: shipping_component_docker
+                - cart: cart_component_docker
+                - product: product_component_docker
+                - recommendation: recommendation_component_docker
+                - advertisement: advertisement_component_docker
                 - host: docker_runtime
 
-        frontend_service_terraform:
-            type: frontend.service
+        frontend_component_terraform:
+            type: frontend.component
             conditions: {logic_expression: is_gcp}
             persistent: true
             technology: terraform
             requirements:
-                - checkout: checkout_service_terraform
-                - currency: currency_service_terraform
-                - shipping: shipping_service_terraform
-                - cart: cart_service_terraform
-                - product: product_service_terraform
-                - recommendation: recommendation_service_terraform
-                - advertisement: advertisement_service_terraform
+                - checkout: checkout_component_terraform
+                - currency: currency_component_terraform
+                - shipping: shipping_component_terraform
+                - cart: cart_component_terraform
+                - product: product_component_terraform
+                - recommendation: recommendation_component_terraform
+                - advertisement: advertisement_component_terraform
                 - host: gcp_cloudrun
 
         frontend_ingress:
             type: ingress
             technology: ansible
             requirements:
-                - application: frontend_service_docker
+                - application: frontend_component_docker
                 - host: virtual_machine
 
         ###################################################
@@ -127,28 +127,28 @@ topology_template:
         #
         ###################################################
 
-        checkout_service_docker:
-            type: checkout.service
+        checkout_component_docker:
+            type: checkout.component
             technology: docker
             requirements:
-                - email: email_service_docker
-                - payment: payment_service_docker
-                - currency: currency_service_docker
-                - shipping: shipping_service_docker
-                - cart: cart_service_docker
-                - product: product_service_docker
+                - email: email_component_docker
+                - payment: payment_component_docker
+                - currency: currency_component_docker
+                - shipping: shipping_component_docker
+                - cart: cart_component_docker
+                - product: product_component_docker
                 - host: docker_runtime
 
-        checkout_service_terraform:
-            type: checkout.service
+        checkout_component_terraform:
+            type: checkout.component
             technology: terraform
             requirements:
-                - email: email_service_terraform
-                - payment: payment_service_terraform
-                - currency: currency_service_terraform
-                - shipping: shipping_service_terraform
-                - cart: cart_service_terraform
-                - product: product_service_terraform
+                - email: email_component_terraform
+                - payment: payment_component_terraform
+                - currency: currency_component_terraform
+                - shipping: shipping_component_terraform
+                - cart: cart_component_terraform
+                - product: product_component_terraform
                 - host: gcp_cloudrun
 
         ###################################################
@@ -157,14 +157,14 @@ topology_template:
         #
         ###################################################
 
-        email_service_docker:
-            type: email.service
+        email_component_docker:
+            type: email.component
             technology: docker
             requirements:
                 - host: docker_runtime
 
-        email_service_terraform:
-            type: email.service
+        email_component_terraform:
+            type: email.component
             technology: terraform
             requirements:
                 - host: gcp_cloudrun
@@ -175,8 +175,8 @@ topology_template:
         #
         ###################################################
 
-        payment_service_docker:
-            type: payment.service
+        payment_component_docker:
+            type: payment.component
             technology: docker
             properties:
                 - optional_payment_feature:
@@ -194,8 +194,8 @@ topology_template:
             requirements:
                 - host: docker_runtime
 
-        payment_service_terraform:
-            type: payment.service
+        payment_component_terraform:
+            type: payment.component
             technology: terraform
             properties:
                 - optional_payment_feature:
@@ -219,14 +219,14 @@ topology_template:
         #
         ###################################################
 
-        currency_service_docker:
-            type: currency.service
+        currency_component_docker:
+            type: currency.component
             technology: docker
             requirements:
                 - host: docker_runtime
 
-        currency_service_terraform:
-            type: currency.service
+        currency_component_terraform:
+            type: currency.component
             technology: terraform
             requirements:
                 - host: gcp_cloudrun
@@ -237,14 +237,14 @@ topology_template:
         #
         ###################################################
 
-        shipping_service_docker:
-            type: shipping.service
+        shipping_component_docker:
+            type: shipping.component
             technology: docker
             requirements:
                 - host: docker_runtime
 
-        shipping_service_terraform:
-            type: shipping.service
+        shipping_component_terraform:
+            type: shipping.component
             technology: terraform
             requirements:
                 - host: gcp_cloudrun
@@ -255,49 +255,49 @@ topology_template:
         #
         ###################################################
 
-        cart_service_docker:
-            type: cart.service
+        cart_component_docker:
+            type: cart.component
             technology: docker
             requirements:
-                - database: mysql_database
+                - database: cart_database
                 - host: docker_runtime
 
-        cart_service_terraform:
-            type: cart.service
+        cart_component_terraform:
+            type: cart.component
             technology: terraform
             requirements:
-                - database: mysql_database
+                - database: cart_database
                 - host: gcp_cloudrun
 
-        mysql_database:
+        cart_database:
             type: mysql.database
             technology: terraform
             properties:
-                - database_name: cart
-                - database_user: cart
+                - database_name: cart-database
+                - database_user: cart-user
                 - database_password: {get_input: database_password}
             requirements:
                 - host:
-                      node: mysql_dbms_docker
+                      node: cart_dbms_docker
                       conditions: {logic_expression: is_openstack}
                 - host:
-                      node: mysql_dbms_terraform
+                      node: cart_dbms_terraform
                       conditions: {logic_expression: is_gcp}
 
-        mysql_dbms_docker:
+        cart_dbms_docker:
             type: mysql.dbms
             technology: docker
             properties:
-                - dbms_name: cart
+                - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_runtime
 
-        mysql_dbms_terraform:
+        cart_dbms_terraform:
             type: mysql.dbms
             technology: terraform
             properties:
-                - dbms_name: cart
+                - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
@@ -308,14 +308,14 @@ topology_template:
         #
         ###################################################
 
-        product_service_docker:
-            type: product.service
+        product_component_docker:
+            type: product.component
             technology: docker
             requirements:
                 - host: docker_runtime
 
-        product_service_terraform:
-            type: product.service
+        product_component_terraform:
+            type: product.component
             technology: terraform
             requirements:
                 - host: gcp_cloudrun
@@ -326,18 +326,18 @@ topology_template:
         #
         ###################################################
 
-        recommendation_service_docker:
-            type: recommendation.service
+        recommendation_component_docker:
+            type: recommendation.component
             technology: docker
             requirements:
-                - product: product_service_docker
+                - product: product_component_docker
                 - host: docker_runtime
 
-        recommendation_service_terraform:
-            type: recommendation.service
+        recommendation_component_terraform:
+            type: recommendation.component
             technology: terraform
             requirements:
-                - product: product_service_terraform
+                - product: product_component_terraform
                 - host: gcp_cloudrun
 
         ###################################################
@@ -346,14 +346,14 @@ topology_template:
         #
         ###################################################
 
-        advertisement_service_docker:
-            type: advertisement.service
+        advertisement_component_docker:
+            type: advertisement.component
             technology: docker
             requirements:
                 - host: docker_runtime
 
-        advertisement_service_terraform:
-            type: advertisement.service
+        advertisement_component_terraform:
+            type: advertisement.component
             technology: terraform
             requirements:
                 - host: gcp_cloudrun
@@ -393,7 +393,7 @@ topology_template:
             technology: terraform
             properties:
                 - machine: unfurl-technology-boutique
-                - ports: [80, 3000, 8000]
+                - ports: [80, 9100]
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}

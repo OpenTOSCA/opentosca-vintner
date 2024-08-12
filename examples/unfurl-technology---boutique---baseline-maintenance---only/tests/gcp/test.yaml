@@ -2,44 +2,44 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated---o
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated---only/tests/gcp/inputs.yaml
 
 replace:
-    - - frontend_service_terraform
-      - frontend_service
+    - - frontend_component_terraform
+      - frontend_component
 
-    - - checkout_service_terraform
-      - checkout_service
+    - - checkout_component_terraform
+      - checkout_component
 
-    - - email_service_terraform
-      - email_service
+    - - email_component_terraform
+      - email_component
 
-    - - payment_service_terraform
-      - payment_service
+    - - payment_component_terraform
+      - payment_component
 
-    - - currency_service_terraform
-      - currency_service
+    - - currency_component_terraform
+      - currency_component
 
-    - - shipping_service_terraform
-      - shipping_service
+    - - shipping_component_terraform
+      - shipping_component
 
-    - - cart_service_terraform
-      - cart_service
+    - - cart_component_terraform
+      - cart_component
 
-    - - mysql_database_terraform
-      - mysql_database
+    - - cart_database_terraform
+      - cart_database
 
-    - - mysql_dbms_terraform
-      - mysql_dbms
+    - - cart_dbms_terraform
+      - cart_dbms
 
-    - - product_service_terraform
-      - product_service
+    - - product_component_terraform
+      - product_component
 
-    - - recommendation_service_terraform
-      - recommendation_service
+    - - recommendation_component_terraform
+      - recommendation_component
 
-    - - advertisement_service_terraform
-      - advertisement_service
+    - - advertisement_component_terraform
+      - advertisement_component
 
-    - - analytical_service_terraform
-      - analytical_service
+    - - analytical_component_terraform
+      - analytical_component
 
     - - mysql.database.terraform.mysql
       - mysql.database.terraform.mysql.gcp
@@ -95,10 +95,7 @@ merge:
             gcp_project:
                 type: string
 
-            k8s_api_address:
-                type: string
-
-            k8s_api_port:
+            k8s_host:
                 type: string
 
             k8s_ca_cert_file:
@@ -111,12 +108,12 @@ merge:
                 type: string
 
         node_templates:
-            analytical_service:
-                type: analytical.service.terraform.gcp
+            analytical_component:
+                type: analytical.component.terraform.gcp
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false
                 requirements:
-                    - checkout: checkout_service
-                    - recommendation: recommendation_service
+                    - checkout: checkout_component
+                    - recommendation: recommendation_component
                     - host: gcp_cloudrun

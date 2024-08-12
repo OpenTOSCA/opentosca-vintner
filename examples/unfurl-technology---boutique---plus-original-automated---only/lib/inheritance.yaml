@@ -7,17 +7,17 @@ python.application: software.application
 dotnet.application: software.application
 java.application: software.application
 
-frontend.service: go.application
-checkout.service: go.application
-email.service: python.application
-payment.service: node.application
-currency.service: node.application
-shipping.service: go.application
-cart.service: dotnet.application
-product.service: go.application
-recommendation.service: python.application
-advertisement.service: java.application
-analytical.service: node.application
+frontend.component: go.application
+checkout.component: go.application
+email.component: python.application
+payment.component: node.application
+currency.component: node.application
+shipping.component: go.application
+cart.component: dotnet.application
+product.component: go.application
+recommendation.component: python.application
+advertisement.component: java.application
+analytical.component: python.application
 
 monitoring.agent: software.application
 logging.agent: software.application
@@ -25,14 +25,18 @@ security.agent: software.application
 
 relational.database: root
 mysql.database: relational.database
+
+relational.dbms: root
 mysql.dbms: relational.dbms
-#gcp.cloudsql: relational.dbms
 
 computing: root
-openstack.machine: computing
+openstack.machine: compute
 
 ingress: root
 
 gcp.service: root
 gcp.cloudrun: gcp.service
 gcp.cloudsql: gcp.service
+
+docker.engine: root
+kubernetes: root

@@ -2,44 +2,44 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated---o
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated---only/tests/os-large/inputs.yaml
 
 replace:
-    - - frontend_service_docker
-      - frontend_service
+    - - frontend_component_docker
+      - frontend_component
 
     - - frontend_ingress_docker
       - frontend_ingress
 
-    - - checkout_service_docker
-      - checkout_service
+    - - checkout_component_docker
+      - checkout_component
 
-    - - email_service_docker
-      - email_service
+    - - email_component_docker
+      - email_component
 
-    - - payment_service_docker
-      - payment_service
+    - - payment_component_docker
+      - payment_component
 
-    - - currency_service_docker
-      - currency_service
+    - - currency_component_docker
+      - currency_component
 
-    - - shipping_service_docker
-      - shipping_service
+    - - shipping_component_docker
+      - shipping_component
 
-    - - cart_service_docker
-      - cart_service
+    - - cart_component_docker
+      - cart_component
 
-    - - mysql_database_docker
-      - mysql_database
+    - - cart_database_docker
+      - cart_database
 
-    - - mysql_dbms_docker
-      - mysql_dbms
+    - - cart_dbms_docker
+      - cart_dbms
 
-    - - product_service_docker
-      - product_service
+    - - product_component_docker
+      - product_component
 
-    - - recommendation_service_docker
-      - recommendation_service
+    - - recommendation_component_docker
+      - recommendation_component
 
-    - - advertisement_service_docker
-      - advertisement_service
+    - - advertisement_component_docker
+      - advertisement_component
 
     - - mysql.database.terraform.mysql
       - mysql.database.terraform.mysql.docker

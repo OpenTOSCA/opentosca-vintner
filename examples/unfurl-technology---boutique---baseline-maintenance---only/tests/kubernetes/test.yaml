@@ -2,47 +2,47 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated---o
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated---only/tests/kubernetes/inputs.yaml
 
 replace:
-    - - frontend_service_kubernetes
-      - frontend_service
+    - - frontend_component_kubernetes
+      - frontend_component
 
     - - frontend_ingress_kubernetes
       - frontend_ingress
 
-    - - checkout_service_kubernetes
-      - checkout_service
+    - - checkout_component_kubernetes
+      - checkout_component
 
-    - - email_service_kubernetes
-      - email_service
+    - - email_component_kubernetes
+      - email_component
 
-    - - payment_service_kubernetes
-      - payment_service
+    - - payment_component_kubernetes
+      - payment_component
 
-    - - currency_service_kubernetes
-      - currency_service
+    - - currency_component_kubernetes
+      - currency_component
 
-    - - shipping_service_kubernetes
-      - shipping_service
+    - - shipping_component_kubernetes
+      - shipping_component
 
-    - - cart_service_kubernetes
-      - cart_service
+    - - cart_component_kubernetes
+      - cart_component
 
-    - - mysql_database_ansible
-      - mysql_database
+    - - cart_database_ansible
+      - cart_database
 
-    - - mysql_dbms_kubernetes
-      - mysql_dbms
+    - - cart_dbms_kubernetes
+      - cart_dbms
 
-    - - product_service_kubernetes
-      - product_service
+    - - product_component_kubernetes
+      - product_component
 
-    - - recommendation_service_kubernetes
-      - recommendation_service
+    - - recommendation_component_kubernetes
+      - recommendation_component
 
-    - - advertisement_service_kubernetes
-      - advertisement_service
+    - - advertisement_component_kubernetes
+      - advertisement_component
 
-    - - analytical_service_kubernetes
-      - analytical_service
+    - - analytical_component_kubernetes
+      - analytical_component
 
     - - mysql.database.terraform.mysql
       - mysql.database.terraform.mysql.kubernetes
@@ -101,10 +101,7 @@ merge:
             gcp_project:
                 type: string
 
-            k8s_api_address:
-                type: string
-
-            k8s_api_port:
+            k8s_host:
                 type: string
 
             k8s_ca_cert_file:

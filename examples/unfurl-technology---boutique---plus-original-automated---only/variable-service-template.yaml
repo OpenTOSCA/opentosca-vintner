@@ -90,24 +90,24 @@ topology_template:
         #
         ###################################################
 
-        frontend_service:
-            type: frontend.service
+        frontend_component:
+            type: frontend.component
             persistent: true
             requirements:
-                - checkout: checkout_service
-                - currency: currency_service
-                - shipping: shipping_service
-                - cart: cart_service
-                - product: product_service
-                - recommendation: recommendation_service
-                - advertisement: advertisement_service
+                - checkout: checkout_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - recommendation: recommendation_component
+                - advertisement: advertisement_component
                 - host: docker_runtime
                 - host: gcp_cloudrun
 
         frontend_ingress:
             type: ingress
             requirements:
-                - application: frontend_service
+                - application: frontend_component
                 - host: virtual_machine
 
         ###################################################
@@ -116,15 +116,15 @@ topology_template:
         #
         ###################################################
 
-        checkout_service:
-            type: checkout.service
+        checkout_component:
+            type: checkout.component
             requirements:
-                - email: email_service
-                - payment: payment_service
-                - currency: currency_service
-                - shipping: shipping_service
-                - cart: cart_service
-                - product: product_service
+                - email: email_component
+                - payment: payment_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
                 - host: docker_runtime
                 - host: gcp_cloudrun
 
@@ -134,8 +134,8 @@ topology_template:
         #
         ###################################################
 
-        email_service:
-            type: email.service
+        email_component:
+            type: email.component
             requirements:
                 - host: docker_runtime
                 - host: gcp_cloudrun
@@ -146,8 +146,8 @@ topology_template:
         #
         ###################################################
 
-        payment_service:
-            type: payment.service
+        payment_component:
+            type: payment.component
             properties:
                 - optional_payment_feature:
                       value: true
@@ -171,8 +171,8 @@ topology_template:
         #
         ###################################################
 
-        currency_service:
-            type: currency.service
+        currency_component:
+            type: currency.component
             requirements:
                 - host: docker_runtime
                 - host: gcp_cloudrun
@@ -183,8 +183,8 @@ topology_template:
         #
         ###################################################
 
-        shipping_service:
-            type: shipping.service
+        shipping_component:
+            type: shipping.component
             requirements:
                 - host: docker_runtime
                 - host: gcp_cloudrun
@@ -195,26 +195,26 @@ topology_template:
         #
         ###################################################
 
-        cart_service:
-            type: cart.service
+        cart_component:
+            type: cart.component
             requirements:
-                - database: mysql_database
+                - database: cart_database
                 - host: docker_runtime
                 - host: gcp_cloudrun
 
-        mysql_database:
+        cart_database:
             type: mysql.database
             properties:
-                - database_name: cart
-                - database_user: cart
+                - database_name: cart-database
+                - database_user: cart-user
                 - database_password: {get_input: database_password}
             requirements:
-                - host: mysql_dbms
+                - host: cart_dbms
 
-        mysql_dbms:
+        cart_dbms:
             type: mysql.dbms
             properties:
-                - dbms_name: cart
+                - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_runtime
@@ -226,8 +226,8 @@ topology_template:
         #
         ###################################################
 
-        product_service:
-            type: product.service
+        product_component:
+            type: product.component
             requirements:
                 - host: docker_runtime
                 - host: gcp_cloudrun
@@ -238,10 +238,10 @@ topology_template:
         #
         ###################################################
 
-        recommendation_service:
-            type: recommendation.service
+        recommendation_component:
+            type: recommendation.component
             requirements:
-                - product: product_service
+                - product: product_component
                 - host: docker_runtime
                 - host: gcp_cloudrun
 
@@ -251,8 +251,8 @@ topology_template:
         #
         ###################################################
 
-        advertisement_service:
-            type: advertisement.service
+        advertisement_component:
+            type: advertisement.component
             requirements:
                 - host: docker_runtime
                 - host: gcp_cloudrun
@@ -287,7 +287,7 @@ topology_template:
             type: openstack.machine
             properties:
                 - machine: unfurl-technology-boutique
-                - ports: [80, 3000, 8000]
+                - ports: [80, 9100]
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
