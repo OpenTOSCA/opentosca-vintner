@@ -638,6 +638,10 @@ export default class Graph {
         })
     }
 
+    replaceTechnologies(node: Node, maps: TechnologyTemplateMap[]) {
+        node.raw.technology = maps
+    }
+
     regenerate() {
         return new Graph(this.serviceTemplate)
     }

@@ -9,4 +9,5 @@ topology_template:
               conditions: []
               technology:
                   - terraform:
+                        assign: application::terraform
                         conditions: []

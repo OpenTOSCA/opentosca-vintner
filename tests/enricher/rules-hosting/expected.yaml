@@ -20,6 +20,7 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
+                        assign: application::terraform::first_host::first_host_host::first_host_host_second_host
                         conditions:
                             - and:
                                   - node_presence: first_host
@@ -27,6 +28,7 @@ topology_template:
                                   - node_presence: first_host_host_second_host
                               _generated: true
                   - terraform:
+                        assign: application::terraform::second_host
                         conditions:
                             - node_presence: second_host
                               _generated: true

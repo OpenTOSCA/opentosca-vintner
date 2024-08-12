@@ -41,9 +41,6 @@ replace:
     - - advertisement_component_docker
       - advertisement_component
 
-    - - mysql.database::terraform::mysql
-      - mysql.database::terraform::mysql.dbms::docker.engine
-
 merge:
     topology_template:
         inputs:

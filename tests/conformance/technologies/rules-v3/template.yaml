@@ -13,6 +13,9 @@ topology_template:
                 - component: another
                   host: another_terraform_host
 
+                - component: database
+                - component: dbms
+
             ansible:
                 - component: application
                   host: ansible_host

@@ -19,18 +19,22 @@ topology_template:
               conditions: []
               technology:
                   - terraform:
+                        assign: application::terraform::terraform_host
                         conditions:
                             - {node_presence: terraform_host, _generated: true}
 
                   - terraform:
+                        assign: application::terraform::ansible_terraform_host
                         conditions:
                             - {node_presence: ansible_terraform_host, _generated: true}
 
                   - ansible:
+                        assign: application::ansible::ansible_host
                         conditions:
                             - {node_presence: ansible_host, _generated: true}
 
                   - ansible:
+                        assign: application::ansible::ansible_terraform_host
                         conditions:
                             - {node_presence: ansible_terraform_host, _generated: true}
 
@@ -58,6 +62,7 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
+                        assign: database::terraform
                         conditions: []
               requirements:
                   - host:
@@ -71,5 +76,6 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
+                        assign: dbms::terraform
                         conditions: []
               conditions: []

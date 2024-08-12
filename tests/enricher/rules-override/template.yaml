@@ -6,6 +6,10 @@ topology_template:
             terraform:
                 - component: application
 
+            override:
+                - component: application
+                  assign: override-assign
+
     node_templates:
         application:
             type: application

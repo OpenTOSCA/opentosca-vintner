@@ -9,4 +9,5 @@ topology_template:
               conditions: []
               technology:
                   - override:
+                        assign: override-assign
                         conditions: []

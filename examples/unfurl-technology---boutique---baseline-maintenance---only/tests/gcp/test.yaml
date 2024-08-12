@@ -41,9 +41,6 @@ replace:
     - - analytical_component_terraform
       - analytical_component
 
-    - - mysql.database::terraform::mysql
-      - mysql.database::terraform::mysql.gcp
-
 merge:
     topology_template:
         inputs:

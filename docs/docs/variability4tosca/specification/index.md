@@ -263,7 +263,7 @@ The following options are used to configure the normalizer.
 | technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
 
 
-### Normalization Options
+### Enricher Options
 
 The following options are used to configure the enricher.
 
