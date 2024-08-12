@@ -109,7 +109,7 @@ merge:
 
         node_templates:
             analytical_component:
-                type: analytical.component::terraform::gcp
+                type: analytical.component::terraform::gcp.cloudrun
                 properties:
                     optional_analytical_feature: false
                     premium_analytical_feature: false

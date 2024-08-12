@@ -42,7 +42,7 @@ replace:
       - advertisement_component
 
     - - mysql.database::terraform::mysql
-      - mysql.database::terraform::mysql.docker
+      - mysql.database::terraform::mysql.dbms::docker.engine
 
 merge:
     topology_template:
