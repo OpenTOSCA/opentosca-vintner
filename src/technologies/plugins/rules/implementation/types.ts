@@ -4,6 +4,8 @@ export enum METADATA {
     VINTNER_GENERATE = 'vintner_generate',
     VINTNER_IGNORE = 'vintner_ignore',
     VINTNER_NAME = 'vintner_name',
+    VINTNER_GENERATED = 'vintner_generated',
+    VINTNER_IMPLEMENTED = 'vintner_implemented',
 }
 
 export enum PROPERTIES {
@@ -11,7 +13,7 @@ export enum PROPERTIES {
     PORT = 'PORT',
 }
 
-export type TypePlugin = {
+export type ImplementationGenerator = {
     id: string
     generate: (name: string, type: NodeType) => NodeType
 }

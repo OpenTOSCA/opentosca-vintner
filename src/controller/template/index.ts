@@ -12,6 +12,7 @@ import _resolve from './resolve'
 import _sign from './sign'
 import _stats from './stats'
 import _test from './test'
+import _unimplement from './unimplement'
 import _unpackage from './unpackage'
 import _unpull from './unpull'
 import _verify from './verify'
@@ -21,6 +22,7 @@ export default {
     enrich: _enrich,
     init: _init,
     implement: _implement,
+    unimplement: _unimplement,
     package: _package,
     unpackage: _unpackage,
     resolve: _resolve,

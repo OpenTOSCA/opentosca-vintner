@@ -12,6 +12,8 @@ node_types:
 
     monitoring.agent:
         derived_from: software.application
+        metadata:
+            vintner_implemented: 'true'
 
         requirements:
             - host:

@@ -64,3 +64,7 @@ export function secureApplicationProtocolPropertyDefinition(type: NodeType): {[k
         },
     }
 }
+
+export function generatedMetadata() {
+    return {[METADATA.VINTNER_GENERATED]: 'true'}
+}

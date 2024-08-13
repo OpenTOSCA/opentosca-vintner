@@ -2,13 +2,14 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import {NodeType} from '#spec/node-type'
+import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
-import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
+import registry from '#technologies/plugins/rules/implementation'
+import {METADATA} from '#technologies/plugins/rules/implementation/types'
+import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {constructType} from '#technologies/utils'
 import * as utils from '#utils'
-import {NotImplemented} from 'http-errors'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
     build(graph: Graph) {
@@ -34,9 +35,28 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return check.isDefined(this.getRules())
     }
 
-    // TODO: implement this
-    implement(type: NodeType): NodeType {
-        throw new NotImplemented()
+    implement(name: string, type: NodeType): NodeTypeMap {
+        const map = this.getRules()
+        if (check.isUndefined(map)) return {}
+
+        const types: NodeTypeMap = {}
+
+        for (const technology of Object.keys(map)) {
+            const rules = utils.copy(map[technology])
+
+            for (const rule of rules) {
+                assert.isArray(rule.hosting)
+                if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
+                const generator = registry.get(constructType(rule.component, technology, rule.hosting))
+                if (check.isUndefined(generator)) continue
+
+                const implementation = generator.generate(name, type)
+                implementation.metadata = {...implementation.metadata, ...{[METADATA.VINTNER_GENERATED]: 'true'}}
+                types[constructType(name, technology, rule.hosting)] = implementation
+            }
+        }
+
+        return types
     }
 
     assign(node: Node): TechnologyTemplateMap[] {

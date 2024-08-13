@@ -1,7 +1,7 @@
-import {TypePlugin} from '#technologies/plugins/implementation/types'
-import {mapProperties} from '#technologies/plugins/implementation/utils'
+import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
+import {mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
-const plugin: TypePlugin = {
+const plugin: ImplementationGenerator = {
     id: 'software.application::docker::docker.engine',
     generate: (name, type) => {
         return {

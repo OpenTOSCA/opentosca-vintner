@@ -7,7 +7,6 @@ import QueryController from './query'
 import SensorsController from './sensors'
 import ServerController from './server'
 import SetupController from './setup'
-import TechnologiesController from './technologies'
 import TemplateController from './template'
 import TemplatesController from './templates'
 import UtilsController from './utils'
@@ -24,6 +23,5 @@ export default {
     setup: SetupController,
     template: TemplateController,
     templates: TemplatesController,
-    technologies: TechnologiesController,
     utils: UtilsController,
 }

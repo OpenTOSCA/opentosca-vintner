@@ -9,9 +9,6 @@ imports:
     - cart.service.yaml
     - product.service.yaml
 
-metadata:
-    vintner_generate: ansible::gcp.cloudrun, terraform::gcp.cloudrun, ansible::docker.engine, terraform::docker.engine, docker::docker.engine, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
-
 capability_types:
     boutique.capabilities.Endpoint.Checkout:
         derived_from: tosca.capabilities.Endpoint

@@ -5,9 +5,6 @@ imports:
     - checkout.service.yaml
     - recommendation.service.yaml
 
-metadata:
-    vintner_generate: ansible::gcp.cloudrun, terraform::gcp.cloudrun, ansible::docker.engine, terraform::docker.engine, docker::docker.engine, ansible::kubernetes, terraform::kubernetes, kubernetes::kubernetes
-
 node_types:
     ###################################################
     #

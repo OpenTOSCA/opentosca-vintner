@@ -1,6 +1,6 @@
 import Element from '#/graph/element'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
-import {TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
+import {TechnologyPluginBuilder} from '#technologies/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
 export type VariabilityDefinition = {

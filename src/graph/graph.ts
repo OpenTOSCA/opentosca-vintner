@@ -24,7 +24,7 @@ import {
     RelationTypePresenceArguments,
     TechnologyPresenceArguments,
 } from '#spec/variability'
-import {TechnologyPlugin} from '#technologies/plugins/assignment/types'
+import {TechnologyPlugin} from '#technologies/types'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'

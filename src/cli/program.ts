@@ -522,6 +522,16 @@ template
         })
     )
 
+template
+    .command('unimplement')
+    .description('unimplement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unimplement(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 puml.command('topology')
@@ -1077,31 +1087,6 @@ assets
     .action(
         hae.exit(async options => {
             await Controller.assets.clean(options)
-        })
-    )
-
-/**
- * Technologies
- */
-const technologies = program.command('technologies').description('handles technologies')
-
-technologies
-    .command('generate')
-    .description('generate types')
-    .requiredOption('--lib <string>', 'path to types library')
-    .action(
-        hae.exit(async options => {
-            await Controller.technologies.generate(options)
-        })
-    )
-
-technologies
-    .command('clean')
-    .description('clean types')
-    .requiredOption('--lib <string>', 'path to types library')
-    .action(
-        hae.exit(async options => {
-            await Controller.technologies.clean(options)
         })
     )
 

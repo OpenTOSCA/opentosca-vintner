@@ -381,6 +381,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/template/unimplement',
+    hae.express(async (req, res, next) => {
+        await Controller.template.unimplement(req.body)
+        res.json({})
+    })
+)
+
 /**
  * Templates
  */
@@ -629,18 +637,6 @@ resolvers.post(
     '/assets/clean',
     hae.express(async (req, res, next) => {
         await Controller.assets.clean(req.body)
-        res.json({})
-    })
-)
-
-/**
- * Technologies
- */
-
-resolvers.post(
-    '/technologies/generate',
-    hae.express(async (req, res, next) => {
-        await Controller.technologies.generate(req.body)
         res.json({})
     })
 )

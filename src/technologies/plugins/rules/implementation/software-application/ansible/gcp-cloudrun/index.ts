@@ -1,7 +1,10 @@
-import {PROPERTIES, TypePlugin} from '#technologies/plugins/implementation/types'
-import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#technologies/plugins/implementation/utils'
+import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/implementation/types'
+import {
+    mapProperties,
+    secureApplicationProtocolPropertyDefinition,
+} from '#technologies/plugins/rules/implementation/utils'
 
-const plugin: TypePlugin = {
+const plugin: ImplementationGenerator = {
     id: 'software.application::ansible::gcp.cloudrun',
     generate: (name, type) => {
         return {

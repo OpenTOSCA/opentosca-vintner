@@ -1,6 +1,6 @@
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import {NodeType} from '#spec/node-type'
+import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 
 export type TechnologyPluginBuilder = {
@@ -10,5 +10,5 @@ export type TechnologyPluginBuilder = {
 // TODO: update docs
 export type TechnologyPlugin = {
     assign: (node: Node) => TechnologyTemplateMap[]
-    implement: (type: NodeType) => NodeType
+    implement: (name: string, type: NodeType) => NodeTypeMap
 }

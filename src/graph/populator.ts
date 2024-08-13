@@ -14,7 +14,7 @@ import Relation, {Relationship} from '#graph/relation'
 import Technology from '#graph/technology'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {NodeTemplate} from '#spec/node-template'
-import {TechnologyRulePluginBuilder} from '#technologies/plugins/assignment/rules'
+import {TechnologyRulePluginBuilder} from '#technologies/plugins/rules'
 import * as utils from '#utils'
 
 export class Populator {

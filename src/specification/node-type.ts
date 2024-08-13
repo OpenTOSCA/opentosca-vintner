@@ -7,6 +7,8 @@ import {InterfaceDefinition} from './interface-definition'
 
 export const NODE_TYPE_ROOT = 'tosca.nodes.Root'
 
+export type NodeTypeMap = {[key: string]: NodeType}
+
 export type NodeType = {
     derived_from?: string
     metadata?: {[key: string]: string}
@@ -16,6 +18,7 @@ export type NodeType = {
     requirements?: {[key: string]: RequirementDefinition}
     interfaces?: {[key: string]: InterfaceDefinition}
     _loaded?: boolean
+    _file?: string
 }
 
 export type PropertyDefinition = {

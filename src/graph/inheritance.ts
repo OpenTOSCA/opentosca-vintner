@@ -13,6 +13,10 @@ export default class Inheritance {
         this.graph = graph
     }
 
+    hasNodeType(name: string) {
+        return Object.keys(this.graph.serviceTemplate.node_types ?? {}).includes(name)
+    }
+
     isNodeType(is: string, question: string) {
         const types = Object.entries(this.graph.serviceTemplate.node_types ?? {}).map(([name, type]) => ({
             name,

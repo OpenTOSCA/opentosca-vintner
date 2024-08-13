@@ -4,7 +4,7 @@ import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
-import {TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
+import {TechnologyPluginBuilder} from '#technologies/types'
 import _ from 'lodash'
 import path from 'path'
 
@@ -168,9 +168,12 @@ export default class Loader {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
         if (check.isUndefined(this.serviceTemplate.node_types)) this.serviceTemplate.node_types = {}
 
+        const lib = path.join(this.dir, 'lib')
+        if (!files.exists(lib)) return
+
         for (const file of [
             path.join(files.ASSETS_DIR, 'tosca-simple-profile.yaml'),
-            ...files.walkDirectory(path.join(this.dir, 'lib'), {extensions: ['yaml', 'yml']}),
+            ...files.walkDirectory(lib, {extensions: ['yaml', 'yml']}),
         ]) {
             const template = files.loadYAML<ServiceTemplate>(file)
             if (check.isUndefined(template.tosca_definitions_version)) continue
@@ -184,6 +187,7 @@ export default class Loader {
                     throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
 
                 type._loaded = true
+                type._file = file
                 this.serviceTemplate.node_types[name] = type
             }
         }
