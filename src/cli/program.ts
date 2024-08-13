@@ -1071,17 +1071,27 @@ assets
     )
 
 /**
- * Types
+ * Technologies
  */
-const types = program.command('types').description('handles types')
+const technologies = program.command('technologies').description('handles technologies')
 
-types
+technologies
     .command('generate')
     .description('generate types')
     .requiredOption('--lib <string>', 'path to types library')
     .action(
         hae.exit(async options => {
-            await Controller.types.generate(options)
+            await Controller.technologies.generate(options)
+        })
+    )
+
+technologies
+    .command('clean')
+    .description('clean types')
+    .requiredOption('--lib <string>', 'path to types library')
+    .action(
+        hae.exit(async options => {
+            await Controller.technologies.clean(options)
         })
     )
 

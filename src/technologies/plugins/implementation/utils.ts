@@ -1,7 +1,7 @@
 import * as assert from '#assert'
-import {METADATA, PROPERTIES} from '#controller/types/types'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
+import {METADATA, PROPERTIES} from './types'
 
 export function mapProperties(
     type: NodeType,

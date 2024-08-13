@@ -203,3 +203,11 @@ export function replace(data: string, entries: [find: string, replace: string][]
     }
     return data
 }
+
+export function indent(str: string, spaces = 4) {
+    const padding = ' '.repeat(spaces)
+    return str
+        .split('\n')
+        .map(line => padding + line)
+        .join('\n')
+}

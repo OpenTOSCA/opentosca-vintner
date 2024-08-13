@@ -1,5 +1,8 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+# See also https://github.com/UST-EDMM/edmm/blob/7f550a19155a702474f512e54ff2ddb148c003dd/docs/types.yml
+# and https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html
+
 node_types:
     ###################################################
     #

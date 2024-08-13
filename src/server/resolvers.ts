@@ -626,13 +626,13 @@ resolvers.post(
 )
 
 /**
- * Types
+ * Technologies
  */
 
 resolvers.post(
-    '/types/generate',
+    '/technologies/generate',
     hae.express(async (req, res, next) => {
-        await Controller.types.generate(req.body)
+        await Controller.technologies.generate(req.body)
         res.json({})
     })
 )

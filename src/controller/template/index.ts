@@ -1,4 +1,5 @@
 import _enrich from './enrich'
+import _implement from './implement'
 import _init from './init'
 import _inputs from './inputs'
 import _normalize from './normalize'
@@ -16,16 +17,17 @@ import _unpull from './unpull'
 import _verify from './verify'
 
 export default {
+    puml: PUMLController,
+    enrich: _enrich,
     init: _init,
+    implement: _implement,
     package: _package,
     unpackage: _unpackage,
     resolve: _resolve,
-    enrich: _enrich,
     query: _query,
     test: _test,
     inputs: _inputs,
     stats: _stats,
-    puml: PUMLController,
     normalize: _normalize,
     sign: _sign,
     verify: _verify,

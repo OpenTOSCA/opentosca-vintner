@@ -5,5 +5,5 @@ set -e
 source configuration.sh
 
 # Pull dependencies
-$VINTNER types generate --lib ${TEMPLATE_DIR}/lib
+$VINTNER template implement --dir ${TEMPLATE_DIR}
 

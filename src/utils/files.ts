@@ -1,5 +1,6 @@
 import * as check from '#check'
 import * as crypto from '#crypto'
+import Queue from '#utils/queue'
 import archiver from 'archiver'
 import axios from 'axios'
 import * as ejs from 'ejs'
@@ -132,6 +133,7 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
+// TODO: prettier!
 export function toYAML(obj: any, options?: yaml.DumpOptions) {
     return yaml.dump(
         obj,
@@ -191,6 +193,23 @@ export function listFiles(directory: string): string[] {
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isFile())
         .map(dirent => dirent.name.toString())
+}
+
+/**
+ * Recursively walks through directory and return absolute path of each found file
+ */
+export function walkDirectory(directory: string): string[] {
+    const files: string[] = []
+
+    const dirs = new Queue<string>()
+    dirs.add(path.resolve(directory))
+    while (!dirs.isEmpty()) {
+        const dir = dirs.next()
+        listDirectories(dir).forEach(it => dirs.add(path.resolve(dir, it)))
+        files.push(...listFiles(dir).map(it => path.join(dir, it)))
+    }
+
+    return []
 }
 
 export function createDirectory(directory: string) {
