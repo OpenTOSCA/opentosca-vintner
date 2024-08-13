@@ -12,6 +12,8 @@ import lnk from 'lnk'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
+// @ts-ignore
+import * as prettier from 'prettier'
 import * as syncDirectory from 'sync-directory'
 import xml2js from 'xml2js'
 import * as utils from './utils'
@@ -133,20 +135,32 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
-// TODO: prettier!
 export function toYAML(obj: any, options?: yaml.DumpOptions) {
-    return yaml.dump(
-        obj,
-        _.merge<yaml.DumpOptions, yaml.DumpOptions | undefined>(
-            {
-                lineWidth: -1,
-                noRefs: true,
-                styles: {
-                    '!!null': 'empty',
+    return prettier.format(
+        yaml.dump(
+            obj,
+            _.merge<yaml.DumpOptions, yaml.DumpOptions | undefined>(
+                {
+                    lineWidth: -1,
+                    noRefs: true,
+                    styles: {
+                        '!!null': 'empty',
+                    },
                 },
-            },
-            options
-        )
+                options
+            )
+        ),
+        {
+            parser: 'yaml',
+            endOfLine: 'lf',
+            bracketSpacing: false,
+            singleQuote: true,
+            trailingComma: 'es5',
+            arrowParens: 'avoid',
+            tabWidth: 4,
+            printWidth: 69420,
+            semi: false,
+        }
     )
 }
 
