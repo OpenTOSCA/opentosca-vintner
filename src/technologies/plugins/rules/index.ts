@@ -51,7 +51,9 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 if (check.isUndefined(generator)) continue
 
                 const implementation = generator.generate(name, type)
-                implementation.metadata = {...implementation.metadata, ...{[METADATA.VINTNER_GENERATED]: 'true'}}
+                assert.isDefined(implementation.metadata)
+                assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
+
                 types[constructType(name, technology, rule.hosting)] = implementation
             }
         }

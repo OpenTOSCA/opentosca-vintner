@@ -1,11 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {mapProperties} from '#technologies/plugins/rules/implementation/utils'
+import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
     id: 'software.application::kubernetes::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
+            metadata: {...generatedMetadata()},
             attributes: {
                 application_address: {
                     type: 'string',

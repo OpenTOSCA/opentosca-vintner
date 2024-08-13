@@ -1,5 +1,6 @@
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/implementation/types'
 import {
+    generatedMetadata,
     mapProperties,
     secureApplicationProtocolPropertyDefinition,
 } from '#technologies/plugins/rules/implementation/utils'
@@ -9,6 +10,7 @@ const plugin: ImplementationGenerator = {
     generate: (name, type) => {
         return {
             derived_from: name,
+            metadata: {...generatedMetadata()},
             properties: {
                 ...secureApplicationProtocolPropertyDefinition(type),
                 gcp_service_account_file: {

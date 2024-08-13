@@ -84,10 +84,6 @@ export default async function (options: TemplateImplementOptions) {
             ? templateString.trimEnd().replace(GENERATION_MARK_REGEX, replaceString)
             : templateString.trimEnd() + replaceString
 
-        // TODO: write this
-        //files.storeFile(file + '.another.yaml', resultString.trimEnd() + '\n')
-
-        // TODO: remove this
-        //return
+        files.storeFile(file, resultString.trimEnd() + '\n')
     }
 }

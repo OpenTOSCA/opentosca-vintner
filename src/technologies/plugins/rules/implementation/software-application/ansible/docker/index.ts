@@ -1,11 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {mapProperties} from '#technologies/plugins/rules/implementation/utils'
+import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
     id: 'software.application::ansible::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,
+            metadata: {...generatedMetadata()},
             properties: {
                 os_ssh_user: {
                     type: 'string',

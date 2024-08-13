@@ -1,11 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {mapProperties} from '#technologies/plugins/rules/implementation/utils'
+import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
     id: 'software.application::terraform::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
+            metadata: {...generatedMetadata()},
             properties: {
                 k8s_host: {
                     type: 'string',
