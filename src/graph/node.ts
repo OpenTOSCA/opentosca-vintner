@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Technology from '#graph/technology'
 import {NodeTemplate} from '#spec/node-template'
+import {NODE_TYPE_ROOT, NodeType} from '#spec/node-type'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -130,14 +131,22 @@ export default class Node extends Element {
         return this.types[0]
     }
 
+    // TODO: next: check in node_types
     isA(name: string) {
-        const inheritance = this.graph.serviceTemplate.topology_template?.variability?.inheritance ?? {}
-        let current: string | undefined = this.getType().name
+        const types = Object.entries(this.graph.serviceTemplate.node_types ?? {}).map(([name, type]) => ({
+            name,
+            type,
+        }))
+
+        let current: {name: string; type: NodeType} | undefined = types.find(it => it.name === this.getType().name)
+        assert.isDefined(current, `${this.getType().Display} has no definition`)
 
         do {
-            if (current === name) return true
-            current = inheritance[current]
-        } while (check.isDefined(current) && !utils.isEmpty(current))
+            if (current.name === name) return true
+            const next = types.find(it => it.name === current!.type.derived_from)
+            assert.isDefined(next, `${current.type.derived_from} has no definition`)
+            current = next
+        } while (current.name !== NODE_TYPE_ROOT && name !== NODE_TYPE_ROOT)
 
         return false
     }

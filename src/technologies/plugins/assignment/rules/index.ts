@@ -4,16 +4,9 @@ import Graph from '#graph/graph'
 import Node from '#graph/node'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
+import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
 import {constructType} from '#technologies/utils'
 import * as utils from '#utils'
-
-export type TechnologyPluginBuilder = {
-    build(graph: Graph): TechnologyPlugin
-}
-
-export type TechnologyPlugin = {
-    assign: (node: Node) => TechnologyTemplateMap[]
-}
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
     build(graph: Graph) {

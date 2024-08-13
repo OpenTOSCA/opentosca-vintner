@@ -4,20 +4,19 @@ import {GENERATION_MARK_REGEX, GENERATION_MARK_TEXT, GENERATION_NOTICE} from '#c
 import * as files from '#files'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import registry from '#technologies/plugins/implementation'
 import {METADATA} from '#technologies/plugins/implementation/types'
 import {constructType} from '#technologies/utils'
 import * as utils from '#utils'
+import path from 'path'
 
 export type TypesGenerateOptions = {lib: string}
 
-// TODO: generate types
 export default async function (options: TypesGenerateOptions) {
     assert.isDefined(options.lib)
 
-    for (const file of files.walkDirectory(options.lib)) {
-        if (!file.endsWith('.yaml') && !file.endsWith('.yml')) continue
-
+    for (const file of files.walkDirectory(options.lib, {extensions: ['yaml', 'yml']})) {
         const templateString = files.loadFile(file)
         const templateData: ServiceTemplate = files.loadYAML<ServiceTemplate>(file)
         if (check.isUndefined(templateData.tosca_definitions_version)) continue
@@ -25,17 +24,16 @@ export default async function (options: TypesGenerateOptions) {
 
         if (check.isUndefined(templateData.metadata)) continue
 
-        // TODO: get this from rules by simply checking if rule.component isA this.type
-        const generate = templateData.metadata[METADATA.VINTNER_GENERATE]
-        if (check.isUndefined(generate)) continue
-
         const types = Object.entries(templateData.node_types || {})
-        // TODO: if (types.length !== 1) throw new Error(`"${resolved}" has not exactly one node type defined`)
         const [name, type] = utils.first(types)
         assert.isDefined(type.derived_from)
 
         const generated: {[key: string]: NodeType} = {}
 
+        // TODO: for each fitting rule
+        // TODO: get this from rules by simply checking if rule.component isA this.type
+        const generate = templateData.metadata[METADATA.VINTNER_GENERATE]
+        if (check.isUndefined(generate)) continue
         for (const variant of generate.split(', ')) {
             const [technology, ...hosting] = variant.split('::')
             assert.isDefined(technology)
@@ -70,4 +68,11 @@ export default async function (options: TypesGenerateOptions) {
 
         files.storeFile(file, resultString.trimEnd() + '\n')
     }
+}
+
+async function loadTechnologyRules(lib: string) {
+    if (files.exists(path.join(lib, 'rules.yaml'))) {
+        return files.loadYAML<TechnologyAssignmentRulesMap>(path.join(lib, 'rules.yaml'))
+    }
+    return {}
 }

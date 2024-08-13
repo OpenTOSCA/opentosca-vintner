@@ -5,6 +5,8 @@ import {InterfaceDefinition} from './interface-definition'
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TYPE}
  */
 
+export const NODE_TYPE_ROOT = 'tosca.nodes.Root'
+
 export type NodeType = {
     derived_from?: string
     metadata?: {[key: string]: string}
@@ -13,6 +15,7 @@ export type NodeType = {
     capabilities?: {[key: string]: CapabilityDefinition}
     requirements?: {[key: string]: RequirementDefinition}
     interfaces?: {[key: string]: InterfaceDefinition}
+    _loaded?: boolean
 }
 
 export type PropertyDefinition = {

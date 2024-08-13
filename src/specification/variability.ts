@@ -1,6 +1,6 @@
 import Element from '#/graph/element'
-import {TechnologyPluginBuilder} from '#graph/plugin'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
 export type VariabilityDefinition = {
@@ -12,9 +12,6 @@ export type VariabilityDefinition = {
     type_specific_conditions?: string | TypeSpecificLogicExpressions
     technology_assignment_rules?: string | TechnologyAssignmentRulesMap
     plugins?: PluginDefinitionMap
-
-    // TODO: use tosca type system ...
-    inheritance?: Inheritance
 }
 
 export type Inheritance = {

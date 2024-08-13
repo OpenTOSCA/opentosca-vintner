@@ -1,11 +1,10 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
-import Graph from '#graph/graph'
-import {TechnologyPluginBuilder} from '#graph/plugin'
-import {ServiceTemplate} from '#spec/service-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
-import {Inheritance, TypeSpecificLogicExpressions} from '#spec/variability'
+import {TypeSpecificLogicExpressions} from '#spec/variability'
+import {TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
 import _ from 'lodash'
 import path from 'path'
 
@@ -14,7 +13,6 @@ export default class Loader {
     private readonly file: string
 
     private serviceTemplate?: ServiceTemplate
-    private graph?: Graph
     private readonly override?: Partial<ServiceTemplate>
 
     constructor(file: string, override?: Partial<ServiceTemplate>) {
@@ -53,9 +51,9 @@ export default class Loader {
         await this.loadTechnologyPluginBuilders()
 
         /**
-         * Load inheritance
+         * Load node types
          */
-        await this.loadInheritance()
+        await this.loadNodeTypes()
 
         return this.serviceTemplate
     }
@@ -166,22 +164,28 @@ export default class Loader {
         this.serviceTemplate.topology_template.variability.plugins.technology = builders
     }
 
-    // TODO: replace with tosca type system ...
-    private async loadInheritance() {
+    private async loadNodeTypes() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        if (check.isUndefined(this.serviceTemplate.topology_template)) return
+        if (check.isUndefined(this.serviceTemplate.node_types)) this.serviceTemplate.node_types = {}
 
-        /**
-         * Load inheritance from default file
-         */
-        const file = path.join(this.dir, 'lib', 'inheritance.yaml')
-        if (files.exists(file)) {
-            const inheritance = files.loadYAML<Inheritance>(file)
+        for (const file of [
+            path.join(files.ASSETS_DIR, 'tosca-simple-profile.yaml'),
+            ...files.walkDirectory(path.join(this.dir, 'lib'), {extensions: ['yaml', 'yml']}),
+        ]) {
+            const template = files.loadYAML<ServiceTemplate>(file)
+            if (check.isUndefined(template.tosca_definitions_version)) continue
 
-            if (check.isUndefined(this.serviceTemplate.topology_template.variability))
-                this.serviceTemplate.topology_template.variability = {}
+            if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
+                throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
 
-            this.serviceTemplate.topology_template.variability.inheritance = inheritance
+            if (check.isUndefined(template.node_types)) continue
+            for (const [name, type] of Object.entries(template.node_types)) {
+                if (Object.hasOwn(this.serviceTemplate.node_types, name))
+                    throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
+
+                type._loaded = true
+                this.serviceTemplate.node_types[name] = type
+            }
         }
     }
 }

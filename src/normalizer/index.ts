@@ -6,6 +6,7 @@ import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
 import {GroupTemplateMap} from '#spec/group-template'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {NODE_TYPE_ROOT} from '#spec/node-type'
 import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
@@ -46,6 +47,9 @@ export default class Normalizer {
 
         // Technology rules
         this.normalizeTechnologyRules()
+
+        // Node Types
+        this.normalizeNodeTypes()
 
         // Clean variability definition
         this.cleanVariabilityDefinition()
@@ -299,6 +303,12 @@ export default class Normalizer {
                 if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
                 if (check.isDefined(rule.assign)) assert.isString(rule.assign)
             }
+        }
+    }
+
+    private normalizeNodeTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.node_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = NODE_TYPE_ROOT
         }
     }
 

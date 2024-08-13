@@ -24,6 +24,9 @@ export default class Transformer {
 
         // Clean variability definition from pruning options
         this.cleanVariabilityDefinition()
+
+        // Remove loaded node types
+        this.cleanNodeTypes()
     }
 
     private removeVariabilityGroups() {
@@ -202,5 +205,15 @@ export default class Transformer {
 
         // Remove empty variability
         if (utils.isEmpty(this.topology.variability)) delete this.topology.variability
+    }
+
+    private cleanNodeTypes() {
+        if (check.isUndefined(this.graph.serviceTemplate.node_types)) return
+
+        for (const [name, type] of Object.entries(this.graph.serviceTemplate.node_types)) {
+            if (type._loaded) delete this.graph.serviceTemplate.node_types[name]
+        }
+
+        if (utils.isEmpty(this.graph.serviceTemplate.node_types)) delete this.graph.serviceTemplate.node_types
     }
 }

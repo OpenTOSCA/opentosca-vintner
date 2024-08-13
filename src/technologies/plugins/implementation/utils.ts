@@ -3,6 +3,8 @@ import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 import {METADATA, PROPERTIES} from './types'
 
+// TODO: does not consider inherited types
+
 export function mapProperties(
     type: NodeType,
     options: {quote?: boolean; format?: 'map' | 'list' | 'ini'; ignore?: string[]} = {}

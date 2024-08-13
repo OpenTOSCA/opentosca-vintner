@@ -203,17 +203,19 @@ export function listDirectories(directory: string): string[] {
         .map(dirent => dirent.name.toString())
 }
 
-export function listFiles(directory: string): string[] {
+export function listFiles(directory: string, options: {extensions?: string[]} = {}): string[] {
+    options.extensions = options.extensions ?? []
     return fss
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isFile())
         .map(dirent => dirent.name.toString())
+        .filter(it => options.extensions!.some(ext => !it.endsWith(ext)))
 }
 
 /**
  * Recursively walks through directory and return absolute path of each found file
  */
-export function walkDirectory(directory: string): string[] {
+export function walkDirectory(directory: string, options: {extensions?: string[]} = {}): string[] {
     const files: string[] = []
 
     const dirs = new Queue<string>()
@@ -221,7 +223,7 @@ export function walkDirectory(directory: string): string[] {
     while (!dirs.isEmpty()) {
         const dir = dirs.next()
         listDirectories(dir).forEach(it => dirs.add(path.resolve(dir, it)))
-        files.push(...listFiles(dir).map(it => path.join(dir, it)))
+        files.push(...listFiles(dir, {extensions: options.extensions}).map(it => path.join(dir, it)))
     }
 
     return files

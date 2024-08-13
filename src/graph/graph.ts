@@ -3,7 +3,6 @@ import * as check from '#check'
 import Import from '#graph/import'
 import {Options} from '#graph/options'
 import Output from '#graph/output'
-import {TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
 import {andify, generatify, simplify} from '#graph/utils'
@@ -24,6 +23,7 @@ import {
     RelationTypePresenceArguments,
     TechnologyPresenceArguments,
 } from '#spec/variability'
+import {TechnologyPlugin} from '#technologies/plugins/assignment/types'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
