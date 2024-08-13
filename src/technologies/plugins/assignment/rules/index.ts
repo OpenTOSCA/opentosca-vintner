@@ -2,11 +2,13 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
+import {NodeType} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/plugins/assignment/types'
 import {constructType} from '#technologies/utils'
 import * as utils from '#utils'
+import {NotImplemented} from 'http-errors'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
     build(graph: Graph) {
@@ -32,6 +34,11 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return check.isDefined(this.getRules())
     }
 
+    // TODO: implement this
+    implement(type: NodeType): NodeType {
+        throw new NotImplemented()
+    }
+
     assign(node: Node): TechnologyTemplateMap[] {
         const maps: TechnologyTemplateMap[] = []
 
@@ -44,7 +51,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             for (const rule of rules) {
                 assert.isArray(rule.hosting)
 
-                if (!node.isA(rule.component)) continue
+                if (!node.getType().isA(rule.component)) continue
 
                 // TODO: merge then and else block
                 if (rule.hosting.length !== 0) {
@@ -83,7 +90,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         assert.isDefined(search)
 
         // Conditional recursive breadth-first search
-        const hosts = node.hosts.filter(it => it.isA(search))
+        const hosts = node.hosts.filter(it => it.getType().isA(search))
         for (const host of hosts) {
             // Deep copy since every child call changes the state of history
             const historyCopy = utils.copy(history)

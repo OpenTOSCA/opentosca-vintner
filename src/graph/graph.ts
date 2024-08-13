@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
+import Inheritance from '#graph/inheritance'
 import {Options} from '#graph/options'
 import Output from '#graph/output'
 import {Populator} from '#graph/populator'
@@ -62,6 +63,7 @@ export default class Graph {
     elements: Element[] = []
 
     types: Type[] = []
+    inheritance: Inheritance
 
     nodes: Node[] = []
     nodesMap = new Map<string, Node>()
@@ -109,6 +111,11 @@ export default class Graph {
             ].includes(this.serviceTemplate.tosca_definitions_version)
         )
             throw new Error('Unsupported TOSCA definitions version')
+
+        /**
+         * Inheritance
+         */
+        this.inheritance = new Inheritance(this)
 
         /**
          * Normalizer
