@@ -57,7 +57,13 @@ export default async function (options: TypesGenerateOptions) {
         }
 
         const replaceString =
-            '\n\n' + utils.indent(`${GENERATION_MARK_TEXT}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(generated)}`)
+            '\n\n' +
+            utils.indent(GENERATION_MARK_TEXT) +
+            `\n\n` +
+            utils.indent(GENERATION_NOTICE) +
+            `\n\n` +
+            utils.indent(files.toYAML(generated))
+
         const resultString = GENERATION_MARK_REGEX.test(templateString)
             ? templateString.trimEnd().replace(GENERATION_MARK_REGEX, replaceString)
             : templateString.trimEnd() + replaceString
