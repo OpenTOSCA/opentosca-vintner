@@ -64,10 +64,6 @@ node_types:
                   capability: boutique.capabilities.Endpoint.Recommendation
                   relationship: boutique.relationships.ConnectsTo.Recommendation
 
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     # [OPENTOSCA_VINTNER_GENERATION_MARK]
     
     ################################################################
@@ -684,4 +680,3 @@ node_types:
                       args:
                         executable: /usr/bin/bash
             delete: exit 0
-    

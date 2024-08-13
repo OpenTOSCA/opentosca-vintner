@@ -56,13 +56,12 @@ export default async function (options: TypesGenerateOptions) {
             }
         }
 
-        const replaceString = utils.indent(
-            `${GENERATION_MARK_TEXT}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(generated)}`
-        )
+        const replaceString =
+            '\n\n' + utils.indent(`${GENERATION_MARK_TEXT}\n\n${GENERATION_NOTICE}\n\n${files.toYAML(generated)}`)
         const resultString = GENERATION_MARK_REGEX.test(templateString)
-            ? templateString.replace(GENERATION_MARK_REGEX, replaceString)
-            : templateString + '\n' + replaceString
+            ? templateString.trimEnd().replace(GENERATION_MARK_REGEX, replaceString)
+            : templateString.trimEnd() + replaceString
 
-        files.storeFile(file, resultString)
+        files.storeFile(file, resultString.trimEnd() + '\n')
     }
 }

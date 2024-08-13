@@ -856,4 +856,3 @@ node_types:
                       args:
                         executable: /usr/bin/bash
             delete: exit 0
-    

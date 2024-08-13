@@ -1,7 +1,7 @@
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 
 export const GENERATION_MARK_REGEX = new RegExp(
-    String.raw`\s\s\s\s#\s\[OPENTOSCA\_VINTNER\_GENERATION\_MARK\][\s\S]*`,
+    String.raw`[\s]*#\s\[OPENTOSCA\_VINTNER\_GENERATION\_MARK\][\s\S]*`,
     'm'
 )
 

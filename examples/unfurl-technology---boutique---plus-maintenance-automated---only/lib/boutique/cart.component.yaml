@@ -91,10 +91,6 @@ node_types:
                   capability: tosca.capabilities.Endpoint.Database
                   relationship: tosca.relationships.ConnectsTo
 
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     # [OPENTOSCA_VINTNER_GENERATION_MARK]
     
     ################################################################
@@ -776,4 +772,3 @@ node_types:
                       args:
                         executable: /usr/bin/bash
             delete: exit 0
-    

@@ -61,11 +61,6 @@ node_types:
             shipping:
                 type: boutique.capabilities.Endpoint.Shipping
 
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     # [OPENTOSCA_VINTNER_GENERATION_MARK]
     
     ################################################################
@@ -656,4 +651,3 @@ node_types:
                       args:
                         executable: /usr/bin/bash
             delete: exit 0
-    
