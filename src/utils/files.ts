@@ -12,6 +12,7 @@ import lnk from 'lnk'
 import _ from 'lodash'
 import os from 'os'
 import * as path from 'path'
+// TODO: fix import problem
 // @ts-ignore
 import * as prettier from 'prettier'
 import * as syncDirectory from 'sync-directory'

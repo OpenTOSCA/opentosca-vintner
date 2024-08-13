@@ -84,7 +84,6 @@
         "@types/node": "^18.15.11",
         "@types/node-cron": "^3.0.7",
         "@types/papaparse": "^5.3.7",
-        "@types/prettier": "^3.0.0",
         "@types/regression": "^2.0.2",
         "@types/semver": "^7.3.13",
         "@types/source-map-support": "^0.5.8",
