@@ -1,10 +1,10 @@
-import {constructType} from '#/types/utils'
 import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
+import {constructType} from '#technologies/utils'
 import * as utils from '#utils'
 
 export type TechnologyPluginBuilder = {

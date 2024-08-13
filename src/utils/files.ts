@@ -209,7 +209,7 @@ export function walkDirectory(directory: string): string[] {
         files.push(...listFiles(dir).map(it => path.join(dir, it)))
     }
 
-    return []
+    return files
 }
 
 export function createDirectory(directory: string) {

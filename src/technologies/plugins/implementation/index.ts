@@ -1,5 +1,4 @@
 import * as assert from '#assert'
-import {TypePlugin} from '#controller/types/types'
 import softwareApplicationAnsibleDocker from './software-application/ansible/docker'
 import softwareApplicationAnsibleGCPCloudRun from './software-application/ansible/gcp-cloudrun'
 import softwareApplicationAnsibleKubernetes from './software-application/ansible/kubernetes'
@@ -8,6 +7,7 @@ import softwareApplicationKubernetesKubernetes from './software-application/kube
 import softwareApplicationTerraformDocker from './software-application/terraform/docker'
 import softwareApplicationTerraformGCPCloudRun from './software-application/terraform/gcp-cloudrun'
 import softwareApplicationTerraformKubernetes from './software-application/terraform/kubernetes'
+import {TypePlugin} from './types'
 
 class Registry {
     readonly plugins = new Map<string, TypePlugin>()

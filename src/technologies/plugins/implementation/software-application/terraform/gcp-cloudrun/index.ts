@@ -1,5 +1,5 @@
-import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#controller/types/plugins/utils'
-import {PROPERTIES, TypePlugin} from '#controller/types/types'
+import {PROPERTIES, TypePlugin} from '#technologies/plugins/implementation/types'
+import {mapProperties, secureApplicationProtocolPropertyDefinition} from '#technologies/plugins/implementation/utils'
 
 const plugin: TypePlugin = {
     id: 'software.application::terraform::gcp.cloudrun',

@@ -1,5 +1,5 @@
-import {mapProperties} from '#controller/types/plugins/utils'
-import {TypePlugin} from '#controller/types/types'
+import {TypePlugin} from '#technologies/plugins/implementation/types'
+import {mapProperties} from '#technologies/plugins/implementation/utils'
 
 const plugin: TypePlugin = {
     id: 'software.application::ansible::kubernetes',

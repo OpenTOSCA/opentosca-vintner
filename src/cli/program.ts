@@ -512,6 +512,16 @@ template
         })
     )
 
+template
+    .command('implement')
+    .description('implement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.implement(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 puml.command('topology')
