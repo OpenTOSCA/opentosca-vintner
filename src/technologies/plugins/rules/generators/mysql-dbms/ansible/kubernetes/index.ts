@@ -1,12 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated} from '#technologies/plugins/rules/utils'
+import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.dbms::ansible::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {...KubernetesCredentials()},
             attributes: {
                 application_address: {

@@ -1,38 +1,21 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, mapProperties} from '#technologies/plugins/rules/utils'
+import {
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+    mapProperties,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'container.application::terraform::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
-            properties: {
-                k8s_host: {
-                    type: 'string',
-                    default: {
-                        get_input: 'k8s_host',
-                    },
-                },
-                k8s_ca_cert_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'k8s_ca_cert_file',
-                    },
-                },
-                k8s_client_cert_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'k8s_client_cert_file',
-                    },
-                },
-                k8s_client_key_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'k8s_client_key_file',
-                    },
-                },
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
             },
+            properties: {...KubernetesCredentials()},
             attributes: {
                 application_address: {
                     type: 'string',

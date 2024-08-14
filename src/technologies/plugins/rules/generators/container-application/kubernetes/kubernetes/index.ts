@@ -1,12 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, mapProperties} from '#technologies/plugins/rules/utils'
+import {MetadataGenerated, MetadataUnfurl, mapProperties} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'container.application::kubernetes::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             attributes: {
                 application_address: {
                     type: 'string',

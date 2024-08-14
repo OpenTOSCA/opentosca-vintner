@@ -1,12 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, OpenstackProviderCredentials} from '#technologies/plugins/rules/utils'
+import {MetadataGenerated, MetadataUnfurl, OpenstackProviderCredentials} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'openstack.machine::terraform',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {...OpenstackProviderCredentials()},
             interfaces: {
                 Standard: {

@@ -168,6 +168,7 @@ node_types:
         derived_from: ingress
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             os_ssh_user:
                 type: string
@@ -225,6 +226,7 @@ node_types:
         derived_from: ingress
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             k8s_host:
                 type: string
@@ -285,6 +287,7 @@ node_types:
         derived_from: ingress
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             os_ssh_user:
                 type: string
@@ -343,6 +346,7 @@ node_types:
         derived_from: ingress
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             k8s_host:
                 type: string
@@ -406,6 +410,7 @@ node_types:
         derived_from: ingress
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             k8s_host:
                 type: string

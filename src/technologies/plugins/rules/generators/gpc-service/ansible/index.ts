@@ -1,12 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {GCPProviderCredentials, MetadataGenerated} from '#technologies/plugins/rules/utils'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'gcp.service::ansible',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {...GCPProviderCredentials()},
             interfaces: {
                 Standard: {

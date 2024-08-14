@@ -5,6 +5,7 @@ export enum METADATA {
     VINTNER_IGNORE = 'vintner_ignore',
     VINTNER_NAME = 'vintner_name',
     VINTNER_GENERATED = 'vintner_generated',
+    VINTNER_ORCHESTRATOR = 'vintner_orchestrator',
     VINTNER_IMPLEMENTED = 'vintner_implemented',
 }
 

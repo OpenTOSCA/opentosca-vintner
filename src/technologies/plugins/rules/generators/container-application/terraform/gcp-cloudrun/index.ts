@@ -2,6 +2,7 @@ import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/t
 import {
     GCPProviderCredentials,
     MetadataGenerated,
+    MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
@@ -11,7 +12,10 @@ const generator: ImplementationGenerator = {
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {
                 ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),

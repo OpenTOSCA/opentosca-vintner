@@ -1,12 +1,20 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, OpenstackMachineCredentials, mapProperties} from '#technologies/plugins/rules/utils'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    mapProperties,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'container.application::ansible::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {...OpenstackMachineCredentials()},
             attributes: {
                 application_address: {

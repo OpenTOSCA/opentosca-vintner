@@ -1,12 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'docker.engine::ansible::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {...OpenstackMachineCredentials()},
             interfaces: {
                 Standard: {

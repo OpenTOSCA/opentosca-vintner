@@ -149,6 +149,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             os_ssh_user:
                 type: string
@@ -204,6 +205,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             k8s_host:
                 type: string
@@ -316,6 +318,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             application_protocol:
                 type: string
@@ -443,6 +446,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             os_ssh_user:
                 type: string
@@ -518,6 +522,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             k8s_host:
                 type: string
@@ -626,6 +631,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             application_protocol:
                 type: string
@@ -720,6 +726,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         attributes:
             application_address:
                 type: string
@@ -819,6 +826,7 @@ node_types:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
+            vintner_orchestrator: unfurl
         properties:
             os_ssh_user:
                 type: string

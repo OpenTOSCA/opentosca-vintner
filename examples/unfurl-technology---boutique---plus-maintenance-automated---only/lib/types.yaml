@@ -4,5 +4,4 @@ imports:
     - agents/types.yaml
     - boutique/types.yaml
     - gcp/types.yaml
-    - mysql/types.yaml
     - base.yaml

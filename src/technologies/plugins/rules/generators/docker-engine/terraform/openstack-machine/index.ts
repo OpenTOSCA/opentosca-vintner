@@ -1,20 +1,23 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'docker.engine::terraform::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...MetadataGenerated()},
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
             properties: {
                 ...OpenstackMachineCredentials(),
-                os_ssh_host: {
-                    type: 'string',
-                    default: {
-                        eval: '.::.requirements::[.name=host]::.target::management_address',
-                    },
-                },
+                ...OpenstackMachineHost(),
             },
             attributes: {
                 application_address: {

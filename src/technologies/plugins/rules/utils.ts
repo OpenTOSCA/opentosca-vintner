@@ -69,6 +69,10 @@ export function MetadataGenerated() {
     return {[METADATA.VINTNER_GENERATED]: 'true'}
 }
 
+export function MetadataUnfurl() {
+    return {[METADATA.VINTNER_ORCHESTRATOR]: 'unfurl'}
+}
+
 export function OpenstackMachineCredentials() {
     return {
         os_ssh_user: {
@@ -81,6 +85,17 @@ export function OpenstackMachineCredentials() {
             type: 'string',
             default: {
                 get_input: 'os_ssh_key_file',
+            },
+        },
+    }
+}
+
+export function OpenstackMachineHost() {
+    return {
+        os_ssh_host: {
+            type: 'string',
+            default: {
+                eval: '.::.requirements::[.name=host]::.target::management_address',
             },
         },
     }
