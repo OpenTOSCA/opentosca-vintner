@@ -193,6 +193,7 @@ node_types:
                                               OPTIONAL_PAYMENT_FEATURE: '"{{ SELF.optional_payment_feature }}"'
                                               PREMIUM_PAYMENT_FEATURE: '"{{ SELF.premium_payment_feature }}"'
                                               SHOPPING_ASSISTANT_SERVICE_ADDR: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                              ENV_PLATFORM: '"{{ SELF.ENV_PLATFORM }}"'
                                               DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
                             playbookArgs:
                                 - '--become'
@@ -288,6 +289,8 @@ node_types:
                                                                       value: '"{{ SELF.premium_payment_feature }}"'
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                                    - name: ENV_PLATFORM
+                                                                      value: '"{{ SELF.ENV_PLATFORM }}"'
                                                                     - name: DISABLE_PROFILER
                                                                       value: '"{{ SELF.disable_profiler }}"'
                                                                 ports:
@@ -388,6 +391,8 @@ node_types:
                                                                       value: '"{{ SELF.premium_payment_feature }}"'
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                                    - name: ENV_PLATFORM
+                                                                      value: '"{{ SELF.ENV_PLATFORM }}"'
                                                                     - name: DISABLE_PROFILER
                                                                       value: '"{{ SELF.disable_profiler }}"'
                                     - name: apply service
@@ -501,6 +506,7 @@ node_types:
                                           - OPTIONAL_PAYMENT_FEATURE={{ SELF.optional_payment_feature }}
                                           - PREMIUM_PAYMENT_FEATURE={{ SELF.premium_payment_feature }}
                                           - SHOPPING_ASSISTANT_SERVICE_ADDR={{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}
+                                          - ENV_PLATFORM={{ SELF.ENV_PLATFORM }}
                                           - DISABLE_PROFILER={{ SELF.disable_profiler }}
                                       image: ${docker_image.image.image_id}
                                       name: '{{ SELF.application_name }}'
@@ -596,6 +602,8 @@ node_types:
                                                                     value: '"{{ SELF.premium_payment_feature }}"'
                                                                   - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                     value: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                                  - name: ENV_PLATFORM
+                                                                    value: '"{{ SELF.ENV_PLATFORM }}"'
                                                                   - name: DISABLE_PROFILER
                                                                     value: '"{{ SELF.disable_profiler }}"'
                                                               image: '{{ SELF.application_image }}'
@@ -697,6 +705,8 @@ node_types:
                                                         value: '"{{ SELF.premium_payment_feature }}"'
                                                       - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                         value: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                      - name: ENV_PLATFORM
+                                                        value: '"{{ SELF.ENV_PLATFORM }}"'
                                                       - name: DISABLE_PROFILER
                                                         value: '"{{ SELF.disable_profiler }}"'
                             google_cloud_run_service_iam_binding:
@@ -778,6 +788,8 @@ node_types:
                                                                       value: '"{{ SELF.premium_payment_feature }}"'
                                                                     - name: SHOPPING_ASSISTANT_SERVICE_ADDR
                                                                       value: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                                    - name: ENV_PLATFORM
+                                                                      value: '"{{ SELF.ENV_PLATFORM }}"'
                                                                     - name: DISABLE_PROFILER
                                                                       value: '"{{ SELF.disable_profiler }}"'
                                                                 ports:
@@ -862,6 +874,7 @@ node_types:
                                                           OPTIONAL_PAYMENT_FEATURE: '"{{ SELF.optional_payment_feature }}"'
                                                           PREMIUM_PAYMENT_FEATURE: '"{{ SELF.premium_payment_feature }}"'
                                                           SHOPPING_ASSISTANT_SERVICE_ADDR: '"{{ SELF.SHOPPING_ASSISTANT_SERVICE_ADDR }}"'
+                                                          ENV_PLATFORM: '"{{ SELF.ENV_PLATFORM }}"'
                                                           DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
                                     - name: apply compose
                                       ansible.builtin.shell: |
