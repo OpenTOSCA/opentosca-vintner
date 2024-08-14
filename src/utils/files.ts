@@ -209,7 +209,7 @@ export function listFiles(directory: string, options: {extensions?: string[]} = 
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isFile())
         .map(dirent => dirent.name.toString())
-        .filter(it => options.extensions!.some(ext => !it.endsWith(ext)))
+        .filter(it => (utils.isEmpty(options.extensions) ? true : options.extensions!.some(ext => !it.endsWith(ext))))
 }
 
 /**

@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
-import {METADATA} from '#technologies/plugins/rules/implementation/types'
+import {METADATA} from '#technologies/plugins/rules/types'
 
 export const TYPE_DELIMITER = '::'
 

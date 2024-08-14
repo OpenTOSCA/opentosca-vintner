@@ -6,7 +6,7 @@ import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import std from '#std'
-import {METADATA} from '#technologies/plugins/rules/implementation/types'
+import {METADATA} from '#technologies/plugins/rules/types'
 import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
