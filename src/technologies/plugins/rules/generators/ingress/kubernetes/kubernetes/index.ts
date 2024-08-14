@@ -67,7 +67,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'apply manifest',
-                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}\n',
+                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

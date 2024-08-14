@@ -126,8 +126,15 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'apply manifest',
+                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        {
+                                            name: 'wait for deployment',
                                             'ansible.builtin.shell':
-                                                'kubectl apply -f {{ manifest.path }}\nkubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s\n',
+                                                'kubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

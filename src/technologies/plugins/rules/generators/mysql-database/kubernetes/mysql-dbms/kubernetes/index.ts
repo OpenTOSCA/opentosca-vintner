@@ -106,8 +106,24 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'apply manifest',
+                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+
+                                        {
+                                            name: 'wait for deployment',
                                             'ansible.builtin.shell':
-                                                'kubectl apply -f {{ manifest.path }}\nkubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}\n#kubectl delete -f {{ manifest.path }}\n',
+                                                'kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+
+                                        {
+                                            name: 'cleanup',
+                                            'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

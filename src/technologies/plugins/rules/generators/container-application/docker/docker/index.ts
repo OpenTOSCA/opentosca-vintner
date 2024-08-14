@@ -69,7 +69,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d\n',
+                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
