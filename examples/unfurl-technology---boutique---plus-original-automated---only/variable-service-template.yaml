@@ -269,17 +269,17 @@ topology_template:
                 - host: virtual_machine
 
         monitoring_agent:
-            type: monitoring.agent
+            type: node.agent
             requirements:
                 - host: virtual_machine
 
         logging_agent:
-            type: logging.agent
+            type: promtail.agent
             requirements:
                 - host: virtual_machine
 
         security_agent:
-            type: security.agent
+            type: falco.agent
             requirements:
                 - host: virtual_machine
 

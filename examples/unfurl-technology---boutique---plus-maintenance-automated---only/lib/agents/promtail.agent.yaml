@@ -10,8 +10,8 @@ node_types:
     #
     ###################################################
 
-    logging.agent:
-        derived_from: software.application
+    promtail.agent:
+        derived_from: logging.agent
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -23,8 +23,8 @@ node_types:
     #
     ###################################################
 
-    logging.agent::ansible::openstack.machine:
-        derived_from: logging.agent
+    promtail.agent::ansible::openstack.machine:
+        derived_from: promtail.agent
 
         properties:
             os_ssh_user:
@@ -73,8 +73,8 @@ node_types:
     #
     ###################################################
 
-    logging.agent::terraform::openstack.machine:
-        derived_from: logging.agent
+    promtail.agent::terraform::openstack.machine:
+        derived_from: promtail.agent
 
         properties:
             os_ssh_user:

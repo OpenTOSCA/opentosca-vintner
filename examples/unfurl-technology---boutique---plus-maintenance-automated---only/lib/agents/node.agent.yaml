@@ -10,8 +10,8 @@ node_types:
     #
     ###################################################
 
-    monitoring.agent:
-        derived_from: software.application
+    node.agent:
+        derived_from: monitoring.agent
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -23,8 +23,8 @@ node_types:
     #
     ###################################################
 
-    monitoring.agent::ansible::openstack.machine:
-        derived_from: monitoring.agent
+    node.agent::ansible::openstack.machine:
+        derived_from: node.agent
 
         properties:
             os_ssh_user:
@@ -116,8 +116,8 @@ node_types:
 
     # use https://registry.terraform.io/providers/neuspaces/system/latest/docs ?
 
-    monitoring.agent::terraform::openstack.machine:
-        derived_from: monitoring.agent
+    node.agent::terraform::openstack.machine:
+        derived_from: node.agent
 
         properties:
             os_ssh_user:

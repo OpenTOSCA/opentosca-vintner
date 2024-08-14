@@ -186,6 +186,8 @@ export default class Loader {
                 if (Object.hasOwn(this.serviceTemplate.node_types, name))
                     throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
 
+                if (type.derived_from === name) throw new Error(`Node type "${name}" is derived from itself ...`)
+
                 type._loaded = true
                 type._file = file
                 this.serviceTemplate.node_types[name] = type

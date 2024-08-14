@@ -208,17 +208,17 @@ topology_template:
                 - host: virtual_machine
 
         monitoring_agent:
-            type: monitoring.agent::ansible::openstack.machine
+            type: node.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         logging_agent:
-            type: logging.agent::ansible::openstack.machine
+            type: promtail.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 
         security_agent:
-            type: security.agent::ansible::openstack.machine
+            type: falco.agent::ansible::openstack.machine
             requirements:
                 - host: virtual_machine
 

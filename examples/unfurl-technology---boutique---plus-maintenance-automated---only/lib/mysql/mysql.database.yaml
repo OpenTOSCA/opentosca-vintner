@@ -4,46 +4,9 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - ../base.yaml
+    - ../extended.yaml
 
 node_types:
-    ###################################################
-    #
-    # Abstract
-    #
-    ###################################################
-
-    mysql.database:
-        derived_from: relational.database
-
-        properties:
-            database_name:
-                type: string
-
-            database_user:
-                type: string
-
-            database_password:
-                type: string
-
-        attributes:
-            application_address:
-                type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::application_address'}
-
-            application_port:
-                type: integer
-                default: {eval: '.::.requirements::[.name=host]::.target::application_port'}
-
-        capabilities:
-            database:
-                type: tosca.capabilities.Endpoint.Database
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     ###################################################
     #
     # Ansible Kubernetes

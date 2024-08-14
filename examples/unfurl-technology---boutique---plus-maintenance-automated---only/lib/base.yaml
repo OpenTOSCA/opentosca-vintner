@@ -63,6 +63,39 @@ node_types:
 
     ###################################################
     #
+    # Logging Agent
+    #
+    ###################################################
+
+    logging.agent:
+        derived_from: software.application
+        metadata:
+            vintner_generate: 'false'
+
+    ###################################################
+    #
+    # Monitoring Agent
+    #
+    ###################################################
+
+    monitoring.agent:
+        derived_from: software.application
+        metadata:
+            vintner_generate: 'false'
+
+    ###################################################
+    #
+    # Security Agent
+    #
+    ###################################################
+
+    security.agent:
+        derived_from: software.application
+        metadata:
+            vintner_generate: 'false'
+
+    ###################################################
+    #
     # Compute
     #
     ###################################################
@@ -87,3 +120,38 @@ node_types:
 
     relational.dbms:
         derived_from: dbms
+
+    ###################################################
+    #
+    # Ingress
+    #
+    ###################################################
+
+    ingress:
+        derived_from: root
+
+        properties:
+            application_name:
+                type: string
+                default: {eval: '.::.requirements::[.name=application]::.target::application_name'}
+
+            application_port:
+                type: string
+                default: {eval: '.::.requirements::[.name=application]::.target::application_port'}
+
+            application_protocol:
+                type: string
+                default: {eval: '.::.requirements::[.name=application]::.target::application_protocol'}
+
+        attributes:
+            application_address:
+                type: string
+
+        requirements:
+            - application:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

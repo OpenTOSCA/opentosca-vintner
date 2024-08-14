@@ -1,55 +1,9 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - ../base.yaml
+    - ../extended.yaml
 
 node_types:
-    ###################################################
-    #
-    # Abstract
-    #
-    ###################################################
-
-    mysql.dbms:
-        derived_from: relational.dbms
-
-        properties:
-            dbms_name:
-                type: string
-
-            dbms_image:
-                type: string
-                default: mysql:5.6
-
-            dbms_password:
-                type: string
-
-            dbms_ssl_mode:
-                type: string
-                default: None
-
-        attributes:
-            application_address:
-                type: string
-
-            application_port:
-                type: integer
-
-            management_address:
-                type: string
-
-            management_port:
-                type: integer
-
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
     ###################################################
     #
     # Ansible GCP

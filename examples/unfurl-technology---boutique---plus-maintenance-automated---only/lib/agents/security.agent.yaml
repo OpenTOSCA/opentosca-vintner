@@ -10,8 +10,8 @@ node_types:
     #
     ###################################################
 
-    security.agent:
-        derived_from: software.application
+    falco.agent:
+        derived_from: security.agent
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -23,8 +23,8 @@ node_types:
     #
     ###################################################
 
-    security.agent::ansible::openstack.machine:
-        derived_from: security.agent
+    falco.agent::ansible::openstack.machine:
+        derived_from: falco.agent
 
         properties:
             os_ssh_user:
@@ -76,8 +76,8 @@ node_types:
     #
     ###################################################
 
-    security.agent::terraform::openstack.machine:
-        derived_from: security.agent
+    falco.agent::terraform::openstack.machine:
+        derived_from: falco.agent
 
         properties:
             os_ssh_user:
