@@ -1,21 +1,20 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {
-    MetadataGenerated,
-    OpenstackMachineCredentials,
-    mapProperties,
-} from '#technologies/plugins/rules/implementation/utils'
+import {MetadataGenerated, OpenstackMachineCredentials} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::docker::docker.engine',
+    id: 'ingress::ansible::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
             metadata: {...MetadataGenerated()},
             properties: {...OpenstackMachineCredentials()},
             attributes: {
+                // TODO: implement this
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: {
+                        eval: '.::.requirements::[.name=host]::.target::application_address',
+                    },
                 },
             },
             interfaces: {
@@ -37,35 +36,24 @@ const generator: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            name: 'touch compose',
-                                            register: 'compose',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.application_name }}.compose.yaml',
+                                            name: 'install caddy',
+                                            'ansible.builtin.shell':
+                                                "apt install -y debian-keyring debian-archive-keyring apt-transport-https curl\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list\napt-get update\napt-get install caddy -y\n",
+                                            args: {
+                                                executable: '/usr/bin/bash',
                                             },
                                         },
                                         {
-                                            name: 'create compose',
+                                            name: 'configure caddy',
                                             'ansible.builtin.copy': {
-                                                dest: '{{ compose.path }}',
-                                                content: '{{ manifest | to_yaml }}',
-                                            },
-                                            vars: {
-                                                manifest: {
-                                                    name: '{{ SELF.application_name }}',
-                                                    services: {
-                                                        application: {
-                                                            container_name: '{{ SELF.application_name }}',
-                                                            image: '{{ SELF.application_image }}',
-                                                            network_mode: 'host',
-                                                            environment: mapProperties(type, {format: 'map'}),
-                                                        },
-                                                    },
-                                                },
+                                                dest: '/etc/caddy/Caddyfile',
+                                                content:
+                                                    ':80 {\n        reverse_proxy localhost:{{ SELF.application_port }}\n}\n',
                                             },
                                         },
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d\n',
+                                            name: 'restart caddy',
+                                            'ansible.builtin.shell': 'systemctl reload caddy',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

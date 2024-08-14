@@ -1,33 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
+import {GCPProviderCredentials, MetadataGenerated} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
     id: 'gcp.service::terraform',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...generatedMetadata()},
-            properties: {
-                gcp_service_account_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_service_account_file',
-                    },
-                },
-                gcp_region: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_region',
-                    },
-                },
-                gcp_project: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_project',
-                    },
-                },
-            },
-
+            metadata: {...MetadataGenerated()},
+            properties: {...GCPProviderCredentials()},
             interfaces: {
                 Standard: {
                     operations: {

@@ -1,8 +1,9 @@
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/implementation/types'
 import {
-    generatedMetadata,
+    GCPProviderCredentials,
+    MetadataGenerated,
+    SecureApplicationProtocolPropertyDefinition,
     mapProperties,
-    secureApplicationProtocolPropertyDefinition,
 } from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
@@ -10,27 +11,10 @@ const generator: ImplementationGenerator = {
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...generatedMetadata()},
+            metadata: {...MetadataGenerated()},
             properties: {
-                ...secureApplicationProtocolPropertyDefinition(type),
-                gcp_service_account_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_service_account_file',
-                    },
-                },
-                gcp_region: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_region',
-                    },
-                },
-                gcp_project: {
-                    type: 'string',
-                    default: {
-                        get_input: 'gcp_project',
-                    },
-                },
+                ...SecureApplicationProtocolPropertyDefinition(type),
+                ...GCPProviderCredentials(),
             },
             interfaces: {
                 Standard: {

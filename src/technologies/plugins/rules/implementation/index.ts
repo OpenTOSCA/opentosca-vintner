@@ -10,24 +10,34 @@ import dockerEngineAnsibleOpenstackMachine from './docker-engine/ansible/opensta
 import dockerEngineTerraformOpenstackMachine from './docker-engine/terraform/openstack-machine'
 import gcpServiceAnsible from './gpc-service/ansible'
 import gcpServiceTerraform from './gpc-service/terraform'
+import ingressAnsibleKubernetes from './ingress/ansible/kubernetes'
+import ingressAnsibleOpenstackMachine from './ingress/ansible/openstack-machine'
+import ingressKubernetesKubernetes from './ingress/kubernetes/kubernetes'
+import ingressTerraformKubernetes from './ingress/terraform/kubernetes'
+import ingressTerraformOpenstackMachine from './ingress/terraform/openstack-machine'
 import openstackMachineAnsible from './openstack-machine/ansible'
 import openstackMachineTerraform from './openstack-machine/terraform'
 
 import {ImplementationGenerator} from './types'
 
-class Registry {
-    readonly plugins = new Map<string, ImplementationGenerator>()
+// TODO: dynamically load generators? are they still part of compiled then?
 
-    constructor(plugins: ImplementationGenerator[]) {
-        plugins.forEach(it => this.plugins.set(it.id, it))
+class Registry {
+    readonly generators = new Map<string, ImplementationGenerator>()
+
+    constructor(generators: ImplementationGenerator[]) {
+        generators.forEach(it => {
+            if (this.generators.has(it.id)) throw new Error(`Generator "${it.id}" already registered`)
+            this.generators.set(it.id, it)
+        })
     }
 
     get(id: string) {
-        return this.plugins.get(id)
+        return this.generators.get(id)
     }
 }
 
-const registry = new Registry([
+const GeneratorRegistry = new Registry([
     // Container Application
     containerApplicationAnsibleDocker,
     containerApplicationAnsibleGCPCloudRun,
@@ -46,9 +56,16 @@ const registry = new Registry([
     gcpServiceAnsible,
     gcpServiceTerraform,
 
+    // Ingress
+    ingressAnsibleKubernetes,
+    ingressAnsibleOpenstackMachine,
+    ingressKubernetesKubernetes,
+    ingressTerraformKubernetes,
+    ingressTerraformOpenstackMachine,
+
     // Openstack Machine
     openstackMachineAnsible,
     openstackMachineTerraform,
 ])
 
-export default registry
+export default GeneratorRegistry

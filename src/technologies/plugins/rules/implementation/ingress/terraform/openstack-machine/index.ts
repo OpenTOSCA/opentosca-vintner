@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/implementatio
 import {MetadataGenerated, OpenstackMachineCredentials} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'docker.engine::terraform::openstack.machine',
+    id: 'ingress::terraform::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -17,9 +17,10 @@ const generator: ImplementationGenerator = {
                 },
             },
             attributes: {
+                // TODO: implement this
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: {eval: '.::.requirements::[.name=host]::.target::application_address'},
                 },
             },
 
@@ -38,7 +39,7 @@ const generator: ImplementationGenerator = {
                         main: {
                             resource: {
                                 terraform_data: {
-                                    docker: [
+                                    os: [
                                         {
                                             connection: [
                                                 {
@@ -49,13 +50,16 @@ const generator: ImplementationGenerator = {
                                                 },
                                             ],
                                             provisioner: {
+                                                file: [
+                                                    {
+                                                        content:
+                                                            'apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl\ncurl -1sLf \'https://dl.cloudsmith.io/public/caddy/stable/gpg.key\' | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg\ncurl -1sLf \'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt\' | tee /etc/apt/sources.list.d/caddy-stable.list\napt-get update\napt-get install caddy -y\n\necho > /etc/caddy/Caddyfile\necho ":80 {" >> /etc/caddy/Caddyfile\necho "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile\necho "}" >> /etc/caddy/Caddyfile\n\nsystemctl reload caddy\n',
+                                                        destination: '/tmp/install-ingress.sh',
+                                                    },
+                                                ],
                                                 'remote-exec': [
                                                     {
-                                                        inline: [
-                                                            'curl -sSL https://get.docker.com | sudo sh',
-                                                            'sudo groupadd -f docker',
-                                                            'sudo usermod -aG docker {{ SELF.os_ssh_user }}',
-                                                        ],
+                                                        inline: ['sudo bash /tmp/install-ingress.sh'],
                                                     },
                                                 ],
                                             },
@@ -64,7 +68,6 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
-                        delete: 'exit 0',
                     },
                 },
             },

@@ -1,12 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
+import {MetadataGenerated, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
     id: 'container.application::ansible::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...generatedMetadata()},
+            metadata: {...MetadataGenerated()},
             properties: {
                 k8s_host: {
                     type: 'string',

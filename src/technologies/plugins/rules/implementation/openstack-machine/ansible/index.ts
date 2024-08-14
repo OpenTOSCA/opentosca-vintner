@@ -1,56 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
+import {MetadataGenerated, OpenstackProviderCredentials} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
     id: 'openstack.machine::ansible',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...generatedMetadata()},
-            properties: {
-                os_region_name: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_region_name',
-                    },
-                },
-                os_auth_type: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_auth_type',
-                    },
-                },
-                os_auth_url: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_auth_url',
-                    },
-                },
-                os_identity_api_version: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_identity_api_version',
-                    },
-                },
-                os_interface: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_interface',
-                    },
-                },
-                os_application_credential_id: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_application_credential_id',
-                    },
-                },
-                os_application_credential_secret: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_application_credential_secret',
-                    },
-                },
-            },
+            metadata: {...MetadataGenerated()},
+            properties: {...OpenstackProviderCredentials()},
             interfaces: {
                 Standard: {
                     operations: {

@@ -49,7 +49,7 @@ export function mapProperties(
     throw new UnexpectedError()
 }
 
-export function secureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
+export function SecureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
     assert.isDefined(type.properties)
 
     const definition = type.properties[PROPERTIES.APPLICATION_PROTOCOL]
@@ -65,6 +65,122 @@ export function secureApplicationProtocolPropertyDefinition(type: NodeType): {[k
     }
 }
 
-export function generatedMetadata() {
+export function MetadataGenerated() {
     return {[METADATA.VINTNER_GENERATED]: 'true'}
+}
+
+export function OpenstackMachineCredentials() {
+    return {
+        os_ssh_user: {
+            type: 'string',
+            default: {
+                get_input: 'os_ssh_user',
+            },
+        },
+        os_ssh_key_file: {
+            type: 'string',
+            default: {
+                get_input: 'os_ssh_key_file',
+            },
+        },
+    }
+}
+
+export function OpenstackProviderCredentials() {
+    return {
+        os_region_name: {
+            type: 'string',
+            default: {
+                get_input: 'os_region_name',
+            },
+        },
+        os_auth_type: {
+            type: 'string',
+            default: {
+                get_input: 'os_auth_type',
+            },
+        },
+        os_auth_url: {
+            type: 'string',
+            default: {
+                get_input: 'os_auth_url',
+            },
+        },
+        os_identity_api_version: {
+            type: 'string',
+            default: {
+                get_input: 'os_identity_api_version',
+            },
+        },
+        os_interface: {
+            type: 'string',
+            default: {
+                get_input: 'os_interface',
+            },
+        },
+        os_application_credential_id: {
+            type: 'string',
+            default: {
+                get_input: 'os_application_credential_id',
+            },
+        },
+        os_application_credential_secret: {
+            type: 'string',
+            default: {
+                get_input: 'os_application_credential_secret',
+            },
+        },
+    }
+}
+
+export function GCPProviderCredentials() {
+    return {
+        gcp_service_account_file: {
+            type: 'string',
+            default: {
+                get_input: 'gcp_service_account_file',
+            },
+        },
+        gcp_region: {
+            type: 'string',
+            default: {
+                get_input: 'gcp_region',
+            },
+        },
+        gcp_project: {
+            type: 'string',
+            default: {
+                get_input: 'gcp_project',
+            },
+        },
+    }
+}
+
+export function KubernetesCredentials() {
+    return {
+        k8s_host: {
+            type: 'string',
+            default: {
+                get_input: 'k8s_host',
+            },
+        },
+        k8s_ca_cert_file: {
+            type: 'string',
+            default: {
+                get_input: 'k8s_ca_cert_file',
+            },
+        },
+        k8s_client_cert_file: {
+            type: 'string',
+            default: {
+                get_input: 'k8s_client_cert_file',
+            },
+        },
+        k8s_client_key_file: {
+            type: 'string',
+            default: {
+                get_input: 'k8s_client_key_file',
+            },
+        },
+    }
 }

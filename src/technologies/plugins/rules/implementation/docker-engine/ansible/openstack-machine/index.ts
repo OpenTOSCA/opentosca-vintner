@@ -1,26 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
+import {MetadataGenerated, OpenstackMachineCredentials} from '#technologies/plugins/rules/implementation/utils'
 
 const generator: ImplementationGenerator = {
     id: 'docker.engine::ansible::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
-            metadata: {...generatedMetadata()},
-            properties: {
-                os_ssh_user: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_ssh_user',
-                    },
-                },
-                os_ssh_key_file: {
-                    type: 'string',
-                    default: {
-                        get_input: 'os_ssh_key_file',
-                    },
-                },
-            },
+            metadata: {...MetadataGenerated()},
+            properties: {...OpenstackMachineCredentials()},
             interfaces: {
                 Standard: {
                     operations: {
